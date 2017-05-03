@@ -1,0 +1,280 @@
+../ZEN/gen.cmo :
+../ZEN/gen.cmx :
+../ZEN/list2.cmo :
+../ZEN/list2.cmx :
+../ZEN/word.cmo : ../ZEN/list2.cmo
+../ZEN/word.cmx : ../ZEN/list2.cmx
+../ZEN/share.cmi :
+../ZEN/share.cmo : ../ZEN/share.cmi
+../ZEN/share.cmx : ../ZEN/share.cmi
+../ZEN/unshare.cmo : ../ZEN/trie.cmo
+../ZEN/unshare.cmx : ../ZEN/trie.cmx
+../ZEN/trie.cmo : ../ZEN/word.cmo ../ZEN/list2.cmo ../ZEN/gen.cmo
+../ZEN/trie.cmx : ../ZEN/word.cmx ../ZEN/list2.cmx ../ZEN/gen.cmx
+../ZEN/mini.cmo : ../ZEN/trie.cmo ../ZEN/share.cmi ../ZEN/gen.cmo
+../ZEN/mini.cmx : ../ZEN/trie.cmx ../ZEN/share.cmx ../ZEN/gen.cmx
+../ZEN/deco.cmo : ../ZEN/word.cmo ../ZEN/trie.cmo ../ZEN/list2.cmo
+../ZEN/deco.cmx : ../ZEN/word.cmx ../ZEN/trie.cmx ../ZEN/list2.cmx
+../ZEN/lexmap.cmo : ../ZEN/word.cmo ../ZEN/list2.cmo ../ZEN/deco.cmo
+../ZEN/lexmap.cmx : ../ZEN/word.cmx ../ZEN/list2.cmx ../ZEN/deco.cmx
+../ZEN/minimap.cmi : ../ZEN/lexmap.cmo
+../ZEN/minimap.cmo : ../ZEN/share.cmi ../ZEN/lexmap.cmo ../ZEN/deco.cmo \
+    ../ZEN/minimap.cmi
+../ZEN/minimap.cmx : ../ZEN/share.cmx ../ZEN/lexmap.cmx ../ZEN/deco.cmx \
+    ../ZEN/minimap.cmi
+../ZEN/zen_lexer.cmo :
+../ZEN/zen_lexer.cmx :
+control.cmo :
+control.cmx :
+version.cmo :
+version.cmx :
+date.cmo : version.cmo
+date.cmx : version.cmx
+canon.cmo : ../ZEN/word.cmo
+canon.cmx : ../ZEN/word.cmx
+transduction.cmo : ../ZEN/zen_lexer.cmo
+transduction.cmx : ../ZEN/zen_lexer.cmx
+encode.cmo : ../ZEN/word.cmo transduction.cmo phonetics.cmo canon.cmo
+encode.cmx : ../ZEN/word.cmx transduction.cmx phonetics.cmx canon.cmx
+order.cmo :
+order.cmx :
+padapatha.cmo : ../ZEN/word.cmo phonetics.cmo encode.cmo
+padapatha.cmx : ../ZEN/word.cmx phonetics.cmx encode.cmx
+sanskrit.cmi : ../ZEN/word.cmo
+sanskrit.cmo : transduction.cmo skt_lexer.cmo padapatha.cmo encode.cmo \
+    canon.cmo sanskrit.cmi
+sanskrit.cmx : transduction.cmx skt_lexer.cmx padapatha.cmx encode.cmx \
+    canon.cmx sanskrit.cmi
+skt_lexer.cmo : encode.cmo
+skt_lexer.cmx : encode.cmx
+paths.cmo :
+paths.cmx :
+index.cmo : web.cmo ../ZEN/trie.cmo ../ZEN/list2.cmo ../ZEN/gen.cmo \
+    canon.cmo
+index.cmx : web.cmx ../ZEN/trie.cmx ../ZEN/list2.cmx ../ZEN/gen.cmx \
+    canon.cmx
+phonetics.cmo : ../ZEN/list2.cmo canon.cmo
+phonetics.cmx : ../ZEN/list2.cmx canon.cmx
+int_sandhi.cmo : ../ZEN/word.cmo phonetics.cmo encode.cmo canon.cmo
+int_sandhi.cmx : ../ZEN/word.cmx phonetics.cmx encode.cmx canon.cmx
+skt_morph.cmi :
+morphology.cmi : ../ZEN/word.cmo skt_morph.cmi ../ZEN/lexmap.cmo
+naming.cmo : ../ZEN/word.cmo web.cmo skt_morph.cmi ../ZEN/gen.cmo encode.cmo \
+    ../ZEN/deco.cmo
+naming.cmx : ../ZEN/word.cmx web.cmx skt_morph.cmi ../ZEN/gen.cmx encode.cmx \
+    ../ZEN/deco.cmx
+inflected.cmi : ../ZEN/word.cmo skt_morph.cmi naming.cmo morphology.cmi \
+    ../ZEN/deco.cmo
+inflected.cmo : ../ZEN/word.cmo skt_morph.cmi phonetics.cmo naming.cmo \
+    morphology.cmi ../ZEN/lexmap.cmo encode.cmo ../ZEN/deco.cmo inflected.cmi
+inflected.cmx : ../ZEN/word.cmx skt_morph.cmi phonetics.cmx naming.cmx \
+    morphology.cmi ../ZEN/lexmap.cmx encode.cmx ../ZEN/deco.cmx inflected.cmi
+sandhi.cmo : ../ZEN/word.cmo phonetics.cmo ../ZEN/list2.cmo encode.cmo \
+    canon.cmo
+sandhi.cmx : ../ZEN/word.cmx phonetics.cmx ../ZEN/list2.cmx encode.cmx \
+    canon.cmx
+sandhier.cmo : ../ZEN/word.cmo web.cmo transduction.cmo sandhi.cmo paths.cmo \
+    int_sandhi.cmo html.cmo encode.cmo control.cmo cgi.cmo canon.cmo
+sandhier.cmx : ../ZEN/word.cmx web.cmx transduction.cmx sandhi.cmx paths.cmx \
+    int_sandhi.cmx html.cmx encode.cmx control.cmx cgi.cmx canon.cmx
+pada.cmo :
+pada.cmx :
+nouns.cmi : ../ZEN/word.cmo skt_morph.cmi morphology.cmi
+nouns.cmo : ../ZEN/word.cmo skt_morph.cmi phonetics.cmo ../ZEN/list2.cmo \
+    int_sandhi.cmo inflected.cmi encode.cmo ../ZEN/deco.cmo control.cmo \
+    canon.cmo bank_lexer.cmo nouns.cmi
+nouns.cmx : ../ZEN/word.cmx skt_morph.cmi phonetics.cmx ../ZEN/list2.cmx \
+    int_sandhi.cmx inflected.cmx encode.cmx ../ZEN/deco.cmx control.cmx \
+    canon.cmx bank_lexer.cmx nouns.cmi
+verbs.cmi : ../ZEN/word.cmo skt_morph.cmi conj_infos.cmi
+verbs.cmo : ../ZEN/word.cmo skt_morph.cmi phonetics.cmo parts.cmo pada.cmo \
+    ../ZEN/list2.cmo int_sandhi.cmo inflected.cmi encode.cmo control.cmo \
+    conj_infos.cmi canon.cmo verbs.cmi
+verbs.cmx : ../ZEN/word.cmx skt_morph.cmi phonetics.cmx parts.cmx pada.cmx \
+    ../ZEN/list2.cmx int_sandhi.cmx inflected.cmx encode.cmx control.cmx \
+    conj_infos.cmi canon.cmx verbs.cmi
+parts.cmo : ../ZEN/word.cmo skt_morph.cmi phonetics.cmo ../ZEN/list2.cmo \
+    int_sandhi.cmo inflected.cmi encode.cmo canon.cmo
+parts.cmx : ../ZEN/word.cmx skt_morph.cmi phonetics.cmx ../ZEN/list2.cmx \
+    int_sandhi.cmx inflected.cmx encode.cmx canon.cmx
+conj_infos.cmi : ../ZEN/word.cmo
+morpho_string.cmo : skt_morph.cmi morphology.cmi
+morpho_string.cmx : skt_morph.cmi morphology.cmi
+morpho.cmo : ../ZEN/word.cmo skt_morph.cmi phonetics.cmo naming.cmo \
+    morphology.cmi morpho_string.cmo ../ZEN/list2.cmo html.cmo \
+    ../ZEN/deco.cmo canon.cmo
+morpho.cmx : ../ZEN/word.cmx skt_morph.cmi phonetics.cmx naming.cmx \
+    morphology.cmi morpho_string.cmx ../ZEN/list2.cmx html.cmx \
+    ../ZEN/deco.cmx canon.cmx
+declension.cmo : web.cmo skt_morph.cmi paths.cmo nouns.cmi multilingual.cmo \
+    morphology.cmi morpho_html.cmo index.cmo html.cmo encode.cmo \
+    ../ZEN/deco.cmo control.cmo cgi.cmo canon.cmo
+declension.cmx : web.cmx skt_morph.cmi paths.cmx nouns.cmx multilingual.cmx \
+    morphology.cmi morpho_html.cmx index.cmx html.cmx encode.cmx \
+    ../ZEN/deco.cmx control.cmx cgi.cmx canon.cmx
+conjugation.cmo : web.cmo verbs.cmi transduction.cmo skt_morph.cmi \
+    phonetics.cmo paths.cmo parts.cmo multilingual.cmo morphology.cmi \
+    morpho_html.cmo inflected.cmi index.cmo html.cmo ../ZEN/gen.cmo \
+    encode.cmo ../ZEN/deco.cmo control.cmo conj_infos.cmi cgi.cmo canon.cmo
+conjugation.cmx : web.cmx verbs.cmx transduction.cmx skt_morph.cmi \
+    phonetics.cmx paths.cmx parts.cmx multilingual.cmx morphology.cmi \
+    morpho_html.cmx inflected.cmx index.cmx html.cmx ../ZEN/gen.cmx \
+    encode.cmx ../ZEN/deco.cmx control.cmx conj_infos.cmi cgi.cmx canon.cmx
+indexer.cmo : web.cmo paths.cmo morphology.cmi morpho_html.cmo index.cmo \
+    html.cmo ../ZEN/gen.cmo encode.cmo ../ZEN/deco.cmo control.cmo cgi.cmo \
+    canon.cmo
+indexer.cmx : web.cmx paths.cmx morphology.cmi morpho_html.cmx index.cmx \
+    html.cmx ../ZEN/gen.cmx encode.cmx ../ZEN/deco.cmx control.cmx cgi.cmx \
+    canon.cmx
+indexerd.cmo : ../ZEN/word.cmo web.cmo morpho_html.cmo html.cmo \
+    ../ZEN/gen.cmo encode.cmo ../ZEN/deco.cmo control.cmo cgi.cmo canon.cmo
+indexerd.cmx : ../ZEN/word.cmx web.cmx morpho_html.cmx html.cmx \
+    ../ZEN/gen.cmx encode.cmx ../ZEN/deco.cmx control.cmx cgi.cmx canon.cmx
+phases.cmo : ../ZEN/word.cmo
+phases.cmx : ../ZEN/word.cmx
+lemmatizer.cmo : ../ZEN/word.cmo web.cmo transduction.cmo paths.cmo \
+    morphology.cmi morpho_html.cmo html.cmo ../ZEN/gen.cmo encode.cmo \
+    ../ZEN/deco.cmo control.cmo cgi.cmo canon.cmo
+lemmatizer.cmx : ../ZEN/word.cmx web.cmx transduction.cmx paths.cmx \
+    morphology.cmi morpho_html.cmx html.cmx ../ZEN/gen.cmx encode.cmx \
+    ../ZEN/deco.cmx control.cmx cgi.cmx canon.cmx
+auto.cmi : ../ZEN/word.cmo
+load_transducers.cmo : web.cmo morphology.cmi ../ZEN/gen.cmo ../ZEN/deco.cmo \
+    control.cmo auto.cmi
+load_transducers.cmx : web.cmx morphology.cmi ../ZEN/gen.cmx ../ZEN/deco.cmx \
+    control.cmx auto.cmi
+dispatcher.cmi : ../ZEN/word.cmo phases.cmo morphology.cmi \
+    load_transducers.cmo html.cmo ../ZEN/deco.cmo auto.cmi
+dispatcher.cmo : ../ZEN/word.cmo web.cmo skt_morph.cmi phonetics.cmo \
+    phases.cmo pada.cmo naming.cmo morphology.cmi load_transducers.cmo \
+    ../ZEN/list2.cmo html.cmo ../ZEN/gen.cmo encode.cmo ../ZEN/deco.cmo \
+    control.cmo canon.cmo auto.cmi dispatcher.cmi
+dispatcher.cmx : ../ZEN/word.cmx web.cmx skt_morph.cmi phonetics.cmx \
+    phases.cmx pada.cmx naming.cmx morphology.cmi load_transducers.cmx \
+    ../ZEN/list2.cmx html.cmx ../ZEN/gen.cmx encode.cmx ../ZEN/deco.cmx \
+    control.cmx canon.cmx auto.cmi dispatcher.cmi
+segmenter.cmo : ../ZEN/word.cmo web.cmo phonetics.cmo ../ZEN/list2.cmo \
+    ../ZEN/gen.cmo encode.cmo ../ZEN/deco.cmo auto.cmi
+segmenter.cmx : ../ZEN/word.cmx web.cmx phonetics.cmx ../ZEN/list2.cmx \
+    ../ZEN/gen.cmx encode.cmx ../ZEN/deco.cmx auto.cmi
+load_morphs.cmo : ../ZEN/word.cmo web.cmo morphology.cmi html.cmo \
+    ../ZEN/gen.cmo ../ZEN/deco.cmo control.cmo
+load_morphs.cmx : ../ZEN/word.cmx web.cmx morphology.cmi html.cmx \
+    ../ZEN/gen.cmx ../ZEN/deco.cmx control.cmx
+lexer.cmi : ../ZEN/word.cmo phases.cmo morphology.cmi load_transducers.cmo \
+    html.cmo dispatcher.cmi
+lexer.cmo : ../ZEN/word.cmo web.cmo transduction.cmo skt_morph.cmi \
+    segmenter.cmo phases.cmo naming.cmo morphology.cmi morpho_string.cmo \
+    morpho_html.cmo morpho_ext.cmo morpho.cmo load_transducers.cmo \
+    load_morphs.cmo html.cmo dispatcher.cmi ../ZEN/deco.cmo cgi.cmo canon.cmo \
+    auto.cmi lexer.cmi
+lexer.cmx : ../ZEN/word.cmx web.cmx transduction.cmx skt_morph.cmi \
+    segmenter.cmx phases.cmx naming.cmx morphology.cmi morpho_string.cmx \
+    morpho_html.cmx morpho_ext.cmx morpho.cmx load_transducers.cmx \
+    load_morphs.cmx html.cmx dispatcher.cmx ../ZEN/deco.cmx cgi.cmx canon.cmx \
+    auto.cmi lexer.cmi
+rank.cmo : ../ZEN/word.cmo web.cmo phases.cmo morphology.cmi \
+    ../ZEN/list2.cmo lexer.cmi constraints.cmi
+rank.cmx : ../ZEN/word.cmx web.cmx phases.cmx morphology.cmi \
+    ../ZEN/list2.cmx lexer.cmx constraints.cmx
+uoh_interface.cmo : ../ZEN/word.cmo web.cmo phases.cmo paths.cmo \
+    morphology.cmi morpho_html.cmo html.cmo dispatcher.cmi canon.cmo
+uoh_interface.cmx : ../ZEN/word.cmx web.cmx phases.cmx paths.cmx \
+    morphology.cmi morpho_html.cmx html.cmx dispatcher.cmx canon.cmx
+reader.cmo : web.cmo uoh_interface.cmo sanskrit.cmi rank.cmo phases.cmo \
+    paths.cmo html.cmo encode.cmo control.cmo checkpoints.cmo cgi.cmo \
+    canon.cmo
+reader.cmx : web.cmx uoh_interface.cmx sanskrit.cmx rank.cmx phases.cmx \
+    paths.cmx html.cmx encode.cmx control.cmx checkpoints.cmx cgi.cmx \
+    canon.cmx
+parser.cmo : ../ZEN/word.cmo web.cmo uoh_interface.cmo skt_morph.cmi \
+    sanskrit.cmi paths.cmo paraphrase.cmi ../ZEN/list2.cmo lexer.cmi \
+    inflected.cmi html.cmo ../ZEN/gen.cmo encode.cmo date.cmo control.cmo \
+    constraints.cmi checkpoints.cmo cgi.cmo canon.cmo
+parser.cmx : ../ZEN/word.cmx web.cmx uoh_interface.cmx skt_morph.cmi \
+    sanskrit.cmx paths.cmx paraphrase.cmx ../ZEN/list2.cmx lexer.cmx \
+    inflected.cmx html.cmx ../ZEN/gen.cmx encode.cmx date.cmx control.cmx \
+    constraints.cmx checkpoints.cmx cgi.cmx canon.cmx
+constraints.cmi : skt_morph.cmi morphology.cmi
+constraints.cmo : ../ZEN/word.cmo skt_morph.cmi morphology.cmi \
+    ../ZEN/list2.cmo html.cmo canon.cmo constraints.cmi
+constraints.cmx : ../ZEN/word.cmx skt_morph.cmi morphology.cmi \
+    ../ZEN/list2.cmx html.cmx canon.cmx constraints.cmi
+multilingual.cmo : skt_morph.cmi html.cmo encode.cmo
+multilingual.cmx : skt_morph.cmi html.cmx encode.cmx
+paraphrase.cmi : morphology.cmi constraints.cmi
+paraphrase.cmo : web.cmo skt_morph.cmi morphology.cmi html.cmo \
+    constraints.cmi paraphrase.cmi
+paraphrase.cmx : web.cmx skt_morph.cmi morphology.cmi html.cmx \
+    constraints.cmx paraphrase.cmi
+reader_plugin.cmo : ../ZEN/word.cmo web.cmo sanskrit.cmi phases.cmo \
+    morphology.cmi ../ZEN/list2.cmo lexer.cmi html.cmo encode.cmo control.cmo \
+    constraints.cmi cgi.cmo canon.cmo
+reader_plugin.cmx : ../ZEN/word.cmx web.cmx sanskrit.cmx phases.cmx \
+    morphology.cmi ../ZEN/list2.cmx lexer.cmx html.cmx encode.cmx control.cmx \
+    constraints.cmx cgi.cmx canon.cmx
+bank_lexer.cmo :
+bank_lexer.cmx :
+regression.cmo : web.cmo version.cmo sanskrit.cmi rank.cmo encode.cmo \
+    date.cmo constraints.cmi bank_lexer.cmo
+regression.cmx : web.cmx version.cmx sanskrit.cmx rank.cmx encode.cmx \
+    date.cmx constraints.cmx bank_lexer.cmx
+checkpoints.cmo : phases.cmo encode.cmo control.cmo canon.cmo bank_lexer.cmo
+checkpoints.cmx : phases.cmx encode.cmx control.cmx canon.cmx bank_lexer.cmx
+graph_segmenter.cmo : ../ZEN/word.cmo web.cmo phonetics.cmo ../ZEN/list2.cmo \
+    ../ZEN/gen.cmo encode.cmo ../ZEN/deco.cmo auto.cmi
+graph_segmenter.cmx : ../ZEN/word.cmx web.cmx phonetics.cmx ../ZEN/list2.cmx \
+    ../ZEN/gen.cmx encode.cmx ../ZEN/deco.cmx auto.cmi
+automaton.cmo : web.cmo ../ZEN/trie.cmo ../ZEN/share.cmi phonetics.cmo \
+    ../ZEN/list2.cmo ../ZEN/gen.cmo ../ZEN/deco.cmo canon.cmo auto.cmi
+automaton.cmx : web.cmx ../ZEN/trie.cmx ../ZEN/share.cmx phonetics.cmx \
+    ../ZEN/list2.cmx ../ZEN/gen.cmx ../ZEN/deco.cmx canon.cmx auto.cmi
+interface.cmi :
+interface.cmo : ../ZEN/word.cmo web.cmo sanskrit.cmi phases.cmo paths.cmo \
+    nouns.cmi morphology.cmi morpho_html.cmo ../ZEN/mini.cmo \
+    load_transducers.cmo load_morphs.cmo html.cmo graph_segmenter.cmo \
+    ../ZEN/gen.cmo encode.cmo dispatcher.cmi ../ZEN/deco.cmo control.cmo \
+    checkpoints.cmo cgi.cmo canon.cmo automaton.cmo interface.cmi
+interface.cmx : ../ZEN/word.cmx web.cmx sanskrit.cmx phases.cmx paths.cmx \
+    nouns.cmx morphology.cmi morpho_html.cmx ../ZEN/mini.cmx \
+    load_transducers.cmx load_morphs.cmx html.cmx graph_segmenter.cmx \
+    ../ZEN/gen.cmx encode.cmx dispatcher.cmx ../ZEN/deco.cmx control.cmx \
+    checkpoints.cmx cgi.cmx canon.cmx automaton.cmx interface.cmi
+user_aid.cmo : ../ZEN/word.cmo web.cmo sanskrit.cmi phases.cmo paths.cmo \
+    morpho_html.cmo html.cmo ../ZEN/gen.cmo encode.cmo ../ZEN/deco.cmo \
+    control.cmo checkpoints.cmo cgi.cmo canon.cmo
+user_aid.cmx : ../ZEN/word.cmx web.cmx sanskrit.cmx phases.cmx paths.cmx \
+    morpho_html.cmx html.cmx ../ZEN/gen.cmx encode.cmx ../ZEN/deco.cmx \
+    control.cmx checkpoints.cmx cgi.cmx canon.cmx
+reset_caches.cmo : web.cmo morphology.cmi ../ZEN/gen.cmo ../ZEN/deco.cmo \
+    auto.cmi
+reset_caches.cmx : web.cmx morphology.cmi ../ZEN/gen.cmx ../ZEN/deco.cmx \
+    auto.cmi
+html.cmo : paths.cmo
+html.cmx : paths.cmx
+web.cmo : paths.cmo html.cmo date.cmo
+web.cmx : paths.cmx html.cmx date.cmx
+css.cmo : web.cmo html.cmo
+css.cmx : web.cmx html.cmx
+cgi.cmo :
+cgi.cmx :
+morpho_html.cmo : ../ZEN/word.cmo web.cmo transduction.cmo multilingual.cmo \
+    morpho.cmo html.cmo ../ZEN/gen.cmo encode.cmo ../ZEN/deco.cmo \
+    chapters.cmo canon.cmo
+morpho_html.cmx : ../ZEN/word.cmx web.cmx transduction.cmx multilingual.cmx \
+    morpho.cmx html.cmx ../ZEN/gen.cmx encode.cmx ../ZEN/deco.cmx \
+    chapters.cmx canon.cmx
+chapters.cmo : ../ZEN/word.cmo order.cmo encode.cmo ../ZEN/deco.cmo
+chapters.cmx : ../ZEN/word.cmx order.cmx encode.cmx ../ZEN/deco.cmx
+mk_index_page.cmo : web.cmo html.cmo
+mk_index_page.cmx : web.cmx html.cmx
+mk_grammar_page.cmo : web.cmo paths.cmo html.cmo
+mk_grammar_page.cmx : web.cmx paths.cmx html.cmx
+mk_reader_page.cmo : web.cmo paths.cmo html.cmo control.cmo cgi.cmo
+mk_reader_page.cmx : web.cmx paths.cmx html.cmx control.cmx cgi.cmx
+mk_sandhi_page.cmo : web.cmo html.cmo
+mk_sandhi_page.cmx : web.cmx html.cmx
+morpho_ext.cmo : ../ZEN/word.cmo skt_morph.cmi phonetics.cmo naming.cmo \
+    morphology.cmi ../ZEN/list2.cmo ../ZEN/deco.cmo canon.cmo
+morpho_ext.cmx : ../ZEN/word.cmx skt_morph.cmi phonetics.cmx naming.cmx \
+    morphology.cmi ../ZEN/list2.cmx ../ZEN/deco.cmx canon.cmx

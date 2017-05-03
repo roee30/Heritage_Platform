@@ -1,0 +1,38 @@
+digraph lexer {
+	size="10"; 
+	S -> Verb;
+	S -> Inde;
+	S -> Subst;
+	S -> Pron;
+	Verb -> Root;
+	Verb -> Pv;
+	Verb -> Abstva;
+	Verb -> Iiv;
+	Pv -> Root;
+	Root -> Accept;
+	Subst -> Iic;
+	Subst -> Noun;
+	Iic -> Subst;
+	Iic -> Ifc;
+	Noun -> Accept;
+	Ifc -> Accept;
+	Iiv -> Auxi;
+	Pron -> Accept;
+	Pv -> Absya;
+	Auxi -> Accept;
+	Absya -> Accept;
+	Abstva -> Accept;
+	Inde -> Accept;
+	Accept -> S;
+        Iic[style=filled; fillcolor = Yellow];
+        Ifc[style=filled; fillcolor = Cyan3];
+        Noun[style=filled; fillcolor = Dodgerblue3];
+        Pron[style=filled; fillcolor = Skyblue];
+        Root[style=filled; fillcolor = Red];
+        Iiv[style=filled; fillcolor = Orange];
+        Auxi[style=filled; fillcolor = Red];
+        Inde[style=filled; fillcolor = Violet];
+        Absya[style=filled; fillcolor = Violet];
+        Abstva[style=filled; fillcolor = Violet];
+        Pv[style=filled; fillcolor = Pink];
+}

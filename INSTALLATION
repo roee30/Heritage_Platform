@@ -1,0 +1,46 @@
+############################################################################
+#                                                                          #
+#                      The Sanskrit Heritage Platform                      #
+#                                                                          #
+#                               Gérard Huet                                #
+#                                                                          #
+############################################################################
+# Installation instructions                     Copyright Gérard Huet 2016 #
+############################################################################
+
+This is just a reminder for quick installation.
+The complete installation procedure is described in file SETUP/INSTALL.
+
+0) Install Objective Caml 4.02 distribution 
+(available from http://ocaml.org).
+Then install the Camplp4 processor in its 4.02 distribution
+(available from https://github.com/ocaml/camlp4). 
+
+1) Edit your configuration file.
+
+   Look at the SETUP/CONFIGS directory to find examples.
+   SETUP/config_help.txt explains all the fields.
+
+2) Create symbolic link to your configuration file in SETUP dir
+
+   ln -s config.you.txt config
+   The "config" link has to be located into the SETUP directory.
+
+3) Launch configuration in main dir
+   
+   ./configure
+
+4) Launch compilation
+
+   make
+
+5) Install it
+If first installation of server, first:
+   sudo make cold
+Afterward, only:
+   sudo make install
+
+6) Enjoy :-)
+
+Report all problems to Gerard.Huet@inria.fr
+

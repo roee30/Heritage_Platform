@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+
+<title>The Sanskrit Heritage Site FAQ</title>
+<meta name="author" content="G&#233;rard Huet">
+<meta property="dc:datecopyrighted" content="2017">
+<meta property="dc:rightsholder" content="G&#233;rard Huet">
+<meta name ="keywords" content="india,dictionary,indology,sanskrit,lexicography,linguistics,indo-european,dictionnaire,sanscrit,panini,indology,linguistics">
+<meta name="description" content="This site provides tools for Sanskrit processing: dictionary search, morphology generation and analysis, segmentation, tagging and parsing.">
+
+<link rel="shortcut icon" href="IMAGES/favicon.ico">
+<link rel="stylesheet" type="text/css" href="DICO/style.css" media="screen,tv">
+</head>
+
+<body class="pink_back"> <!-- Pale_rose --> 
+<table class="body">
+
+<tr><td>
+
+<h1 class="title">Frequently asked questions about the Sanskrit engine</h1>
+
+<div class="center">
+<img src="IMAGES/sarasvati.jpg" alt="Sarasvati">
+</div>
+
+<h2 class="b2" id="menu">Why is the green menu bar inconveniently placed?</h2>
+
+<p>
+The green menu bar is supposed to stick at the bottom of the page. If it appears
+in the middle of the page, sometimes hiding essential dialog boxes and buttons,
+it is that your browser is not XHTML compliant. Normally the sliding bar allows
+all the text to be pulled and made visible. If you encounter difficulties with
+either Safari, Chrome or Firefox, please report the precise problem with the
+precise versions of browser and OS used. 
+<p>
+
+<h2 class="b2" id="unicode">Is the interface compliant with the Unicode standard?</h2>
+
+<p>
+Yes. The Sanskrit printed by the system is encoded as strings of Unicode,
+in two flavors - romanisations, rendered as roman script with
+diacritic marks, such as <span class="red">vai&#347;e&#7779;ika&#7717;</span>,
+and devan&#257;gar&#299; representations,
+rendered with proper ligatures if your browser has appropriate fonts loaded,
+such as
+<span class="red">&#x0935;&#x0948;&#x0936;&#x0947;&#x0937;&#x093F;&#x0915;&#x0903;</span>
+<p>
+The input windows may accept Unicode input under UFT-8 encoding,
+either in <i>devan&#257;gar&#299;</i>, or in Indological romanization script.
+It accepts alos transliterated encoding, where diacritics are special characters such as quotation signs and periods, 
+long vowels are noted by duplication, and the whole phoneme stream should be
+represented as an ASCII string, such as <span class="red">vaize.sika.h</span>.
+<p>
+
+<h2 class="b2" id="transliteration">What is the default transliteration convention?</h2>
+
+<p>
+The default roman transliteration scheme stems from Velthuis' devnag TeX input conventions.
+The left table gives you the transliteration convention for each Sanskrit letter,
+the right table shows its rendering with usual diacritic conventions:
+<p>
+<div class="center">
+<table class="mauve_cent">
+<tr><th class="cell10">
+<table class ="yellow_cent">
+<tr><th class="cell5"><span class="blue"><i>a</i></span></th>
+    <th class="cell5"><span class="blue"><i>aa</i></span></th>
+    <th class="cell5"><span class="blue"><i>i</i></span></th>
+    <th class="cell5"><span class="blue"><i>ii</i></span></th>
+    <th class="cell5"><span class="blue"><i>u</i></span></th>
+    <th class="cell5"><span class="blue"><i>uu</i></span></th>
+    <th class="cell5"><span class="blue"><i>.r</i></span></th>
+    <th class="cell5"><span class="blue"><i>.rr</i></span></th> 
+    <th class="cell5"><span class="blue"><i>.l</i></span></th> 
+    <th class="cell5"><span class="blue"><i>e</i></span></th>
+    <th class="cell5"><span class="blue"><i>ai</i></span></th>
+    <th class="cell5"><span class="blue"><i>o</i></span></th>
+    <th class="cell5"><span class="blue"><i>au</i></span></th></tr>
+<tr><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th>
+    <th class="cell5"><span class="blue"><i>.m</i></span></th>
+    <th class="cell5"><span class="blue"><i>.h</i></span></th></tr>
+<tr><th class="cell5"></th><th class="cell5"></th>
+    <th class="cell5"></th><th class="cell5"></th>
+    <th class="cell5"><span class="blue"><i>k</i></span></th>
+    <th class="cell5"><span class="blue"><i>kh</i></span></th>
+    <th class="cell5"><span class="blue"><i>g</i></span></th>
+    <th class="cell5"><span class="blue"><i>gh</i></span></th>
+    <th class="cell5"><span class="blue"><i>f</i></span></th>
+    <th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th></tr>
+<tr><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th>
+    <th class="cell5"><span class="blue"><i>c</i></span></th>
+    <th class="cell5"><span class="blue"><i>ch</i></span></th>
+    <th class="cell5"><span class="blue"><i>j</i></span></th>
+    <th class="cell5"><span class="blue"><i>jh</i></span></th>
+    <th class="cell5"><span class="blue"><i>~n</i></span></th>
+    <th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th></tr>
+<tr><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th>
+    <th class="cell5"><span class="blue"><i>.t</i></span></th>
+    <th class="cell5"><span class="blue"><i>.th</i></span></th>
+    <th class="cell5"><span class="blue"><i>.d</i></span></th>
+    <th class="cell5"><span class="blue"><i>.dh</i></span></th>
+    <th class="cell5"><span class="blue"><i>.n</i></span></th>
+    <th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th></tr>
+<tr><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th>
+    <th class="cell5"><span class="blue"><i>t</i></span></th>
+    <th class="cell5"><span class="blue"><i>th</i></span></th>
+    <th class="cell5"><span class="blue"><i>d</i></span></th>
+    <th class="cell5"><span class="blue"><i>dh</i></span></th>
+    <th class="cell5"><span class="blue"><i>n</i></span></th>
+    <th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th></tr>
+<tr><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th>
+    <th class="cell5"><span class="blue"><i>p</i></span></th>
+    <th class="cell5"><span class="blue"><i>ph</i></span></th>
+    <th class="cell5"><span class="blue"><i>b</i></span></th>
+    <th class="cell5"><span class="blue"><i>bh</i></span></th>
+    <th class="cell5"><span class="blue"><i>m</i></span></th>
+    <th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th></tr>
+<tr><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th>
+    <th class="cell5"><span class="blue"><i>y</i></span></th>
+    <th class="cell5"><span class="blue"><i>r</i></span></th>
+    <th class="cell5"><span class="blue"><i>l</i></span></th>
+    <th class="cell5"><span class="blue"><i>v</i></span></th>
+    <th class="cell5"><span class="blue"><i>z</i></span></th>
+    <th class="cell5"><span class="blue"><i>.s</i></span></th>
+    <th class="cell5"><span class="blue"><i>s</i></span></th>
+    <th class="cell5"><span class="blue"><i>h</i></span></th>
+    <th class="cell5"></th><th class="cell5"></th></tr>
+</table>
+</th><th class="cell10">
+<table class ="lavender_cent">
+<tr><th class="cell5"><span class="blue"><i>a</i></span></th>
+    <th class="cell5"><span class="blue"><i>&#257;</i></span></th>
+    <th class="cell5"><span class="blue"><i>i</i></span></th>
+    <th class="cell5"><span class="blue"><i>&#299;</i></span></th>
+    <th class="cell5"><span class="blue"><i>u</i></span></th>
+    <th class="cell5"><span class="blue"><i>&#363;</i></span></th>
+    <th class="cell5"><span class="blue"><i>&#7771;</i></span></th>
+    <th class="cell5"><span class="blue"><i>&#7773;</i></span></th>
+    <th class="cell5"><span class="blue"><i>&#7735;</i></span></th>
+    <th class="cell5"><span class="blue"><i>e</i></span></th>
+    <th class="cell5"><span class="blue"><i>ai</i></span></th>
+    <th class="cell5"><span class="blue"><i>o</i></span></th>
+    <th class="cell5"><span class="blue"><i>au</i></span></th></tr>
+<tr><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th>
+    <th class="cell5"><span class="blue"><i>&#7747;</i></span></th>
+    <th class="cell5"><span class="blue"><i>&#7717;</i></span></th></tr>
+<tr><th class="cell5"></th><th class="cell5"></th>
+    <th class="cell5"></th><th class="cell5"></th>
+    <th class="cell5"><span class="blue"><i>k</i></span></th>
+    <th class="cell5"><span class="blue"><i>kh</i></span></th>
+    <th class="cell5"><span class="blue"><i>g</i></span></th>
+    <th class="cell5"><span class="blue"><i>gh</i></span></th>
+    <th class="cell5"><span class="blue"><i>&#7749;</i></span></th>
+    <th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th></tr>
+<tr><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th>
+    <th class="cell5"><span class="blue"><i>c</i></span></th>
+    <th class="cell5"><span class="blue"><i>ch</i></span></th>
+    <th class="cell5"><span class="blue"><i>j</i></span></th>
+    <th class="cell5"><span class="blue"><i>jh</i></span></th>
+    <th class="cell5"><span class="blue"><i>&#241;</i></span></th>
+    <th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th></tr>
+<tr><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th>
+    <th class="cell5"><span class="blue"><i>&#7789;</i></span></th>
+    <th class="cell5"><span class="blue"><i>&#7789;h</i></span></th>
+    <th class="cell5"><span class="blue"><i>&#7693;</i></span></th>
+    <th class="cell5"><span class="blue"><i>&#7693;h</i></span></th>
+    <th class="cell5"><span class="blue"><i>&#7751;</i></span></th>
+    <th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th></tr>
+<tr><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th>
+    <th class="cell5"><span class="blue"><i>t</i></span></th>
+    <th class="cell5"><span class="blue"><i>th</i></span></th>
+    <th class="cell5"><span class="blue"><i>d</i></span></th>
+    <th class="cell5"><span class="blue"><i>dh</i></span></th>
+    <th class="cell5"><span class="blue"><i>n</i></span></th>
+    <th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th></tr>
+<tr><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th>
+    <th class="cell5"><span class="blue"><i>p</i></span></th>
+    <th class="cell5"><span class="blue"><i>ph</i></span></th>
+    <th class="cell5"><span class="blue"><i>b</i></span></th>
+    <th class="cell5"><span class="blue"><i>bh</i></span></th>
+    <th class="cell5"><span class="blue"><i>m</i></span></th>
+    <th class="cell5"></th><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th></tr>
+<tr><th class="cell5"></th><th class="cell5"></th><th class="cell5"></th>
+    <th class="cell5"><span class="blue"><i>y</i></span></th>
+    <th class="cell5"><span class="blue"><i>r</i></span></th>
+    <th class="cell5"><span class="blue"><i>l</i></span></th>
+    <th class="cell5"><span class="blue"><i>v</i></span></th>
+    <th class="cell5"><span class="blue"><i>&#347;</i></span></th>
+    <th class="cell5"><span class="blue"><i>&#7779;</i></span></th>
+    <th class="cell5"><span class="blue"><i>s</i></span></th>
+    <th class="cell5"><span class="blue"><i>h</i></span></th>
+    <th class="cell5"></th><th class="cell5"></th></tr>
+</table>
+</th></tr></table>
+</div>
+
+<p>
+Alternatively, you may write <i>"s</i> instead of <i>z</i>
+and <i>"n</i> instead of <i>f</i>.
+Note that upper case letters are reserved for initial capitals in proper nouns.
+Thus A is <b>NOT</b> equivalent to aa (however read the next section for alternative schemes).
+Such proper nouns are accepted only in the "Sanskrit made easy"
+search engine. See <a href="faq.html#proper_names">proper names</a> below.
+<p>
+
+<h2 class="b2">Other known transliteration schemes</h2>
+
+<p>
+The Sanskrit platform allows the optional use of three other transliteration
+schemes, the so-called Kyoto-Harvard scheme KH usual for Western indologists,
+the WX scheme used at University of Hyderabad and other Indian sites,
+and the SLP1 scheme of the Sanskrit Library. 
+Thus for instance the word <i>tacchrutv&#257;</i> may be input as <i>tacchrutvaa</i> in the default Velthuis scheme,
+as <i>tacchrutvA</i> in the Kyoto-Harvard scheme, as <i>wacCruwvA</i> in the WX scheme, or as <i>tacCrutvA</i> in the SLP1 scheme.
+Similarly <i>vai&#347;e&#7779;ika&#7717;</i> may be input as <i>vaize.sika.h</i> in the default Velthuis scheme,
+as <i>vaizeSikaH</i> in the Kyoto-Harvard scheme, as <i>vESeRikaH</i> in the WX
+scheme, or as <i>vESezikaH</i> in the SLP1 scheme.
+A convenient <a href="DOC/transliterations.pdf">table</a>
+compares the various encodings. 
+In order to choose a transliteration scheme other than the default,
+click on the corresponding radio button in the interface pages. 
+<p>
+
+<h2 class="b2"><i>devan&#257;gar&#299;</i> input</h2>
+
+<p>
+It is now possible to enter Unicode representation of
+<i>devan&#257;gar&#299;</i> in UTF8 encoding.
+Just press the Deva button associated with the input window. 
+Try for instance searching for:
+&#x0926;&#x0947;&#x0935;&#x0928;&#x093E;&#x0917;&#x0930;&#x0940; 
+or for devan&#257;gar&#299;.
+<p>
+
+<h2 class="b2" id="bad_rendering">How come the <i>devan&#257;gar&#299;</i> rendering I see is wrong?</h2>
+
+<p>
+This question is complex.
+It depends on your browser and its proper parameterization, on the 
+rendering engine of the operating system and its windowing library run
+on your station, and on the fonts which are actually available in ts library.
+In particular, it is the rendering engine that compiles the
+ligatures into actual glyphs displayed on your screen.
+Thus this site may be seen more or less correctly according to your local
+configuration. Do not blame me if you get garbage on Explorer or Netscape.
+I personally use Safari on MacOSX, and the rendering is generally good,
+although there are still bugs in the displaying of complex ligatures
+like for instance
+<i>tacchrutv&#257;</i>, rendered incorrectly as <i>taccharutv&#257;</i>,
+in spite of numerous anomaly reports to Apple.
+I occasionally check on Firefox and Chrome for interoperability, and I try to
+insure that my Web pages are compliant with the W3C specification for HTML5.
+I give some indications about proper fonts to load on the entry page of the site.
+<p>
+
+<h2 class="b2" id="grammarian_input">How should I present stems to the grammarian?</h2>
+
+<p>
+The grammatical engine has two interfaces, one for the declension of nouns,
+adjectives, pronouns and numbers, the other for the conjugation of verbs.
+When it is activated from links in the dictionary, the results are displayed in Roman
+script with diacritics. When it is activated directly (from the Grammar link in the
+green menu at the bottom of the page), it gives you as option to display in 
+<i>devan&#257;gar&#299;</i>. Note that for declensions the first person is listed first
+in Roman, consistently with Western tradition, whereas in <i>devan&#257;gar&#299;</i> the
+<i>prathama puru&#7779;a</i> is listed first, consistently with Indian tradition.
+<p>
+The parameters of the declension engine are the stem and the gender. The stem must be
+presented in the same style as in the dictionary. For instance, a present participle
+should be presented with its weak stem (e.g. <i>tudat</i>), and not with its
+strong stem (<i>tudant</i>). When the stem does not correspond to a dictionary entry,
+the declension table is given with the input stem marked with a question mark,
+indicating that this word is not known from the lexicon, and thus the displayed forms
+may not be trusted. For some combinations of stems and genders an error message may
+be displayed. When the entry does exist, the answer provides its link to the
+dictionary. In this case, however, the forms returned are not obtained by table lookup,
+but are recomputed on the fly.
+<p>
+The gender parameter may be Mas for masculine, Fem for feminin, Neu for neuter, or the 
+special parameter Any which is reserved for deictic pronouns (such as <i>aham</i>,
+<i>tvad</i>, <i>&#257;tman</i>) and numbers (<i>eka</i>, <i>dva</i>, ...)
+but also <i>kati</i>. 
+<p>
+The parameters of the conjugation engine are the stem and the present class.
+Here as in the declension engine, an attempt is made to guess a possible homonymy
+index from the parameters. Thus if you enter stem <i>vid</i> and press on the button
+marked 2, you will get the forms of root <i>vid_1</i> (such as <i>vetti</i>), whereas
+if you press on the button marked 6 you will get the forms of root <i>vid_2</i> 
+(such as <i>vindati</i>). If you want the forms of <i>vid_1</i> of class 6 
+(such as <i>vidati</i>) you have to enter explicitly <i>vid#1</i>.
+<p>
+The forms displayed are the forms of the present system in the indicated class,
+followed by all forms of other systems known to the machine, in the primary
+conjugation as well as in the derived conjugations. Not all seven forms of aorist
+are given for every root, only the ones that correspond to a paradigm explicitly
+listed (from 1 to 7) in the lexicon. In the present version, the only passive forms
+are those of the present system (plus the passive aorist 3rd person forms such
+as <i>ag&#257;mi</i>, listed in the middle/reflexive voice table). 
+<p>
+The participles section lists a collection of participial stems in the 3 genders.
+Their gender marks are mouse sensitive links, which call the nominal declension tool
+to display the corresponding adjectival stems. Thus a strongly generative root
+such as <i>n&#299;</i> may lead literally to thousands of forms.
+<p>
+Not all returned forms are attested, we have been rather generous in permitting
+both active and middle/reflexive voices for many roots. 
+<p>
+All the forms obtainable from the dictionary entries are listed in morphological bases,
+available both in XML and in pdf formats. We remark that in these tables the conversion
+of final <i>r</i> or <i>s</i> to <i>visarga</i> has <b>not</b> been effected. This
+is essential for the correct analysis by the segmenter of constituants such
+as <i>punarapi</i>, obtainable by external sandhi from forms <i>punar</i> and <i>api</i>.
+Thus the <i>visarga</i>-ended forms displayed by the grammatical engines,
+consistently with the Indian tradition, actually correspond to an information loss
+at the time of display. 
+
+<h2 class="b2" id="parser_input">How should I present sentences to the reader/parser?</h2>
+
+<p>
+Sanskrit input is presented to the parser in two possible forms.
+<br>
+The first form is the <i>sa&#7747;hit&#257;p&#257;&#7789;ha</i> continuous representation. All words are
+linked together via sandhi. A hiatus between vowels is noted by _ (underscore), and
+elision of an initial a is noted by ' (apostrophe) for avagraha.
+<br>
+It is also possible to represent the input in <i>padap&#257;&#7789;ha</i> separated form, where
+individual words, represented in terminal sandhi, are separated by spaces.
+<p>
+The Sanskrit Reader gives you a choice between the two input conventions
+by the control button Sandhied (<i>sa&#7747;hit&#257;p&#257;&#7789;ha</i>)
+or Unsandhied (<i>padap&#257;&#7789;ha</i>). The default is
+Sandhied. In this mode, spaces are allowed too to help the segmenter
+by indicating word limit places. Then, the successive <i>chunks</i>
+of input are not assumed to be in terminal sandhi form. Typically,
+a terminal <i>o</i> will be reverted as an <i>a&#7717;</i> if the first letter
+of the right chunk would turn it into <i>o</i> by sandhi. 
+Similarly an <i>anusv&#257;ra</i> <i>&#7747;</i> may occur instead of an <i>m</i>. 
+<p>
+In both modes, spaces may appear only at the frontier of full words -
+i.e., you cannot break a compound 
+with spaces, and you cannot put a space between a preverb and a verb form.
+<p>
+Example of input (in VH transliteration): 
+<br>
+<span class="blue">dvitiiyakak.syaayaa.mdvebaaliketrayobaalakaazcapa.thanti</span>
+<br>
+The same with a few spaces:
+<br>
+<span class="blue">dvitiiyakak.syaayaa.m dvebaaliketrayo baalakaaz ca pa.thanti</span> (in Sandhied mode) or
+<span class="blue">dvitiiyakak.syaayaam dvebaaliketraya.h baalakaa.h ca pa.thanti</span> (in Unsandhied mode).
+Note that we now have significantly less solutions (6 instead of 13).
+Fortunately, the parser is smart enough to propose only one solution
+in both cases. 
+<p>
+A phrase obtained by sandhi of <span class="blue">atas</span> and <span class="blue">atas</span> 
+may be represented as <span class="blue">ato'ta.h</span> in both modes, as
+<span class="blue">ato 'ta.h</span> or <span class="blue">ato ata.h</span>
+in Sandhied mode, but only as 
+<span class="blue">ata.h ata.h</span> in Unsandhied mode. 
+<p>
+Adding spaces may help the parser by giving segmentation hints.
+Also it helps focusing
+on the difficulty when a chunk is not analysable.
+The difficulty may be yours, such as a
+spelling or transliteration mistake.
+It may also be due to the limited coverage of our
+lexicon. 
+<p>
+In rare cases, it is not possible to split the input after the final <i>o</i> of forms such as
+vocatives of nouns in <i>u</i>.
+<!--Thus a phrase such as <span class="blue">guroniyufgdhi</span> 
+cannot be split as <span class="blue">guro niyufgdhi</span>. -->
+<p>
+Most hiatus situations may now be handled in Sandhied form with a space
+rather than an explicit underscore.
+For instance consider 
+<span class="blue">ti.s.thanbaalaka upaadhyaayasyapraznaanaamuttaraa.nikathayati</span>,
+equivalent to <span class="blue">ti.s.thanbaalaka_upaadhyaayasyapraznaanaamuttaraa.nikathayati</span>.
+Here the <i>padap&#257;&#7789;ha</i> input would be 
+<span class="blue">ti.s.thanbaalaka.h upaadhyaayasyapraznaanaamuttaraa.nikathayati</span>,
+and actually this last input will lead to less potential solutions considered, since the form
+<span class="blue">ti.s.thanbaalake</span> will not be considered as a possible potential segment. 
+Similarly <span class="blue">anya upavi.s.taa.h</span> will correctly interpret the first
+component as <span class="blue">anye</span>.
+<br>
+The only situation where an explicit underscore is still required is
+in VH transliteration, for words such as 
+<span class="blue">tita_u</span> and <span class="blue">pra_uga</span>.
+<p>
+The fully unsandhied <i>padap&#257;&#7789;ha</i> form, where each chunk is
+a <i>pada</i> (inflected form of a word) may be recognized by specifying the
+Text category as Word rather than Sentence,  using the corresponding
+radio button. In this mode, every chunk must be a single word.
+The best way to tag a single word is to input its form in Word Text category (either
+in Sandhied or Unsandhied mode, since the two differ only when there are
+several chunks).
+Thus, if you input
+<i>pravaran.rpamuku.tama.nimariicima~njariicayacarcitacara.nayugala.h</i>
+you get its unique decomposition as a 10 components compound, whereas you would
+get 16 possible segmentations in Sentence mode. 
+
+<h2 class="b2" id="strength">What is the meaning of the Strength argument to the parser/reader?</h2>
+<p>
+Our reader comes in two versions. The Complete version uses all possible
+participial forms of all roots and will recognize the so called <i>nan</i>
+compounds (nouns or adjectives using the privative prefix <i>a/an</i>).
+The Simplified version recognizes such forms only when they are explicitly
+lexicalized in the Sanskrit Heritage dictionary. Furthermore, only the
+Complete version allows vocatives. The default version is Simplified. It should
+be used first, since it is much more precise when it works than the Complete
+one, which may badly overgenerate. Thus the user should always attempt to read
+using the Simplified version, and switch to the Complete one only when the
+former does not find the intended analysis.
+<!--
+For instance, the participial form
+<i>paryupasitaaya</i> is only recognized by the Complete version. Pressing
+Word, Tagging and Complete you get the unique
+lemmatization of this form, whereas Sentence mode yields 9 possible
+segmentations, out of which 3 are kept by the parser. -->
+<p>
+The precise grammar used to recognize sentences in the Simplified version
+may be visualized as a local automaton graph:
+<a href="IMAGES/lexer10.jpg">Simple</a>.
+Compare with the <a href="IMAGES/lexer28.jpg">Complete</a> one.
+<p>
+<!--
+Finally, an "Experiment" parser strength is under test. It allows the recognition
+of certain <i>taddhita suffixes</i>. Since this option risks overgeneration,
+it is advised to use it only in Word text mode, in order to recognize
+complex compounds. -->
+
+<h2 class="b2" id="participles">Why does the system not recognize certain participial forms known to the stemmer?</h2>
+
+<p>
+Our Simplified reader/parser does not use all the participles generated
+by the grammatical engine, and recognized as such by the stemmer,
+but only the ones that are explicitly listed in the lexicon. If you want
+the full generative power, press the Complete strength button.
+
+<h2 class="b2">What is the use of the contextual topic argument?</h2>
+
+<p>
+It is now possible to specify a contextual topic argument as an ellipsed nominative. This indication is given to the parser by a radio button, allowing choice
+between a topic of a given gender and no topic (default value).
+By specifying a masculine topic (here corresponding to <i>R&#257;ma</i>),
+one may parse successfully sentences with an ellipsed topic. For instance,
+the phrase "jayati" parses as a finite verbal form, rather than the locative
+of the present participle "jayat".
+<br>
+This feature is still experimental. 
+
+<h2 class="b2" id="cut_and_paste">Can I cut in the system's output and paste in the system's input windows?</h2>
+
+<p>
+You can now input
+&#x0926;&#x0947;&#x0935;&#x0928;&#x093E;&#x0917;&#x0930;&#x0940; script in
+Unicode representation (UTF8 encoding), provided you press the Deva button
+in the corresponding input window. It is also possible to input romanisation
+script with diacritics, such as <i>devan&#257;gar&#299;</i>, by pressing
+the Roma button.
+
+<h2 class="b2" id="standalone">Is the Sanskrit engine available as standalone software?</h2>
+
+<p>
+Yes, please visit the <a href="manual.html#installation">Reference manual</a>.
+<!-- If you run a Windows box do not entertain hope. If you have a UNIX host, such as
+a PC running Linux, you could install Apache easily. If you use a Mac running OS X,
+Apache is actually preinstalled. All you need is to install Objective Caml.
+For such UNIX users a distribution of the Sanskrit Engine is possible. -->
+<p>
+
+<h2 class="b2" id="abbrevs">Where is the list of abbreviations defined?</h2>
+
+<p>
+The list of abbreviations, of the Heritage dictionary as well as the grammatical engine,
+is given at the end of the introduction of its book form. For the convenience
+of the Web site users, the list of abbreviations is available here
+as a standalone <a href="abrevs.pdf"><strong>pdf document</strong></a>. 
+<p>
+
+<h2 class="b2" id="proper_names">What is the policy regarding the rendering of proper names?</h2>
+
+<p>
+Proper names are indicated in the dictionary with an initial capital letter. 
+Proper names are currently allowed for input in the "Sanskrit made easy" interface only.
+When the initial is a long vowel, it should be doubled, like <i>AAtreya</i>
+for <i>&#256;treya</i>. 
+<p>
+Proper names are in general presented in the nominative case, except that a possible
+visarga is dropped. Thus we write <i>Agni</i> and not <i>Agni&#7717;</i>, and
+similarly <i>&#346;iva</i>, <i>Vi&#7779;&#7751;u</i> and <i>Lak&#7779;m&#299;</i>;
+also <i>Tva&#7779;&#7789;&#257;</i>, <i>M&#257;t&#257;</i>, <i>Brahm&#257;</i> 
+(the Creator God, distinct from the impersonal all-pervasive <i>brahman</i> principle).
+Also <i>Atharv&#257;</i>, <i>M&#257;tari&#347;v&#257;</i>, <i>Nand&#299;</i>,
+<i>A&#7749;gir&#257;</i>, <i>Vi&#347;vakarm&#257;</i>, <i>K&#7771;tavarm&#257;</i>,
+etc. But also <i>A&#7747;&#347;um&#257;n</i>, <i>Aryam&#257;n</i>, <i>Ketum&#257;n</i>, 
+<i>Garutm&#257;n</i> and <i>Hanum&#257;n</i>.
+Similarly <i>Irav&#257;n</i>, <i>Kak&#7779;&#299;v&#257;n</i>, 
+<i>J&#257;mbav&#257;n</i>, <i>Vivasv&#257;n</i>, <i>&#346;aradv&#257;n</i>, 
+<i>Satyav&#257;n</i> and <i>Himav&#257;n</i>.
+
+<h2 class="b2" id="piic">What is the meaning of Piic?</h2>
+
+<p>
+Piic is a lexical class, it is to participles (Part) what Iic is to nouns (Noun);
+that is, it stores the raw stems of participles, usable as first component of a 
+nominal compound. Participles are a special case of first level nominal
+derivatives from roots, called <i>k&#7771;dant&#257;&#7717;</i> in the
+traditional terminology.
+
+<h2 class="b2" id="ifc">What is the meaning of Ifc?</h2>
+
+<p>
+Ifc is a lexical class of nominal affixes that may only occur as second component
+of a nominal compound. More generally, the <i>phases</i> of the lexical analyser
+are explained as states of a finite automaton describing the Sanskrit morphology.
+Look at its (simplified)
+state transition graph <a href="IMAGES/lexer17.jpg">here</a>. 
+
+<h2 class="b2" id="gold">Who is using this site?</h2>
+
+<p>
+This site is used first of all by the researchers of the joint research team
+in <a href="http://yquem.inria.fr/~huet/EA/index.html">Sanskrit Computational
+Linguistics</a>, at the 
+<a href="http://sanskrit.uohyd.ernet.in/">Department of Sanskrit Studies,
+University of Hyderabad</a>, at the
+<a href="http://cse.iitkgp.ac.in/~pawang/">Department of Computer Science
+and Engineering, Indian Institute of Technology, Kharagpur</a>,
+and at the <a href="http://www.sanskritlibrary.org/">Sanskrit Library</a>.
+Many other users are attested worldwide.
+<!-- , as the
+<a href="http://sanskrit.inria.fr/usage/">usage statistics</a> show. -->
+Some of them are kind enough to send us their appreciations, please visit our
+<a href="gold.html">Golden book</a>.
+
+
+</td></tr>
+</table> <!-- End of main contents -->
+
+<table class="pad60">
+<tr><td></td></tr></table>
+<div class="enpied">
+<table class="bandeau"><tr><td>
+<a href="http://ocaml.org">
+<img src="IMAGES/icon_ocaml.png" alt="Objective Caml" height="50"></a>
+</td><td>
+<table class="center">
+<tr><td>
+<a href="index.html"><strong>Top</strong></a> | 
+<a href="DICO/index.#LANG.html"><strong>Index</strong></a> | 
+<a href="DICO/index.#LANG.html#stemmer"><strong>Stemmer</strong></a> | 
+<a href="DICO/grammar.#LANG.html"><strong>Grammar</strong></a> | 
+<a href="DICO/sandhi.#LANG.html"><strong>Sandhi</strong></a> | 
+<a href="DICO/reader.#LANG.html"><strong>Reader</strong></a> |
+<a href="faq.#LANG.html"><strong>Help</strong></a> |
+<a href="portal.#LANG.html"><strong>Portal</strong></a>
+</td></tr><tr><td>&#169; G&#233;rard Huet 1994-2017</td></tr></table></td><td>
+<a href="http://www.inria.fr/">
+<img src="IMAGES/logo_inria.png" alt="Logo Inria" height="50"></a>
+<br></td></tr></table></div>
+</body>
+</html> 
+

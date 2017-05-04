@@ -27,7 +27,7 @@ SKTRESOURCES=#SKTRESOURCES
 
 DATA=$(SKTRESOURCES)DATA# morphological data and transducers
 HERITAGE=$(SKTRESOURCES)DICO# hypertext Heritage read-only
-DICO=DICO# hypertext Heritage read-only
+DICO=DICO# hypertext Heritage 
 BOOK=$(SKTRESOURCES)BOOK# Heritage.pdf abrevs.pdf
 MW=$(SKTRESOURCES)MW# hypertext Monier-Williams
 GOLD=$(SKTRESOURCES)GOLD# Heritage in Goldendict format databases
@@ -353,8 +353,11 @@ XML_MORPHOLOGY=$(SL_XML_MORPHOLOGY) $(WX_XML_MORPHOLOGY) $(XML_DTD)
 # Sanskrit Heritage Platform site construction; release with "make release"
 all: ZEN
 	cd ZEN && $(MAKE) all
-	mkdir -p $(DICO) # local copy 
-	cp -Rp $(HERITAGE)/* $(DICO) 
+	cp -Rp $(HERITAGE) . # local copy of DICO
+	mkdir -p $(MW) # local copy 
+	cp -Rp $(MW) . # local copy of MW
+        ln -sf $(BOOK) BOOK
+        ln -sf $(DATA) DATA
 #	cd ML && $(MAKE) depend # reset dependencies (might be partial subset)
 	cd ML && $(MAKE) # make engine
 	$(MAKE) web_services # then all Web services

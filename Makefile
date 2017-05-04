@@ -23,11 +23,11 @@ VERSION=2.99
 DATE=2017-05-03
 
 # Sanskrit resources are defined at configuration time:
-SKTRESOURCES=/Users/huet/Sanskrit/Heritage_Resources/
+SKTRESOURCES=/home/huet/Sanskrit/Heritage_Resources/
 
 DATA=$(SKTRESOURCES)DATA# morphological data and transducers
 HERITAGE=$(SKTRESOURCES)DICO# hypertext Heritage read-only
-DICO=DICO# hypertext Heritage read-only
+DICO=DICO# hypertext Heritage 
 BOOK=$(SKTRESOURCES)BOOK# Heritage.pdf abrevs.pdf
 MW=$(SKTRESOURCES)MW# hypertext Monier-Williams
 GOLD=$(SKTRESOURCES)GOLD# Heritage in Goldendict format databases
@@ -188,7 +188,7 @@ MOUSEACTION=CLICK
 
 # Customisation of SCL platform interface
 SCLURL=http://localhost/SCL/SHMT/
-SCLINSTALLDIR=/Users/huet/Sanskrit/SCL/scl/
+SCLINSTALLDIR=
 OUTPUTFONT=ROMAN
 TEMPAREA=/private/tmp/SKT_TEMP/
 
@@ -227,19 +227,19 @@ ML/morpho_string.ml ML/segmenter.ml ML/load_morphs.ml ML/lexer.mli ML/lexer.ml \
 ML/rank.ml ML/uoh_interface.ml ML/reader.ml ML/parser.ml ML/constraints.mli \
 ML/constraints.ml ML/multilingual.ml ML/paraphrase.mli ML/paraphrase.ml \
 ML/reader_plugin.ml ML/bank_lexer.ml ML/regression.ml ML/checkpoints.ml \
-ML/graph_segmenter.ml \
-ML/interface.mli ML/interface.ml ML/user_aid.ml ML/reset_caches.ml 
+ML/graph_segmenter.ml ML/interface.mli ML/interface.ml ML/user_aid.ml \
+ML/reset_caches.ml 
 
 # WEB package - HTML, HTTP, CGI ad-hoc utilities for Web interface
-WEB=ML/html.ml ML/web.ml ML/css.ml ML/cgi.ml ML/morpho_html.ml \
-ML/chapters.ml ML/mk_index_page.ml ML/mk_grammar_page.ml ML/mk_reader_page.ml \
+WEB=ML/html.ml ML/web.ml ML/css.ml ML/cgi.ml ML/morpho_html.ml ML/chapters.ml \
+ML/mk_index_page.ml ML/mk_grammar_page.ml ML/mk_reader_page.ml \
 ML/mk_sandhi_page.ml ML/morpho_ext.ml ML/compute_mw_links.ml
 
-# TREE package - tree bank manager and syntax analyser - under development
+# TREE package - tree bank manager and syntax analyser - deprecated
 TREE=ML/stemmer.ml ML/parse_tree.ml ML/parse_apte.ml ML/tag_tree.ml \
 ML/tag_apte.ml 
 
-DEBUG= ML/morpho_debug.ml ML/debug.ml ML/contrasting.ml
+DEBUG= ML/morpho_debug.ml ML/debug.ml 
 
 # Historical versions of the segmenter, tagger and reader with single phase 
 OBSOLETE_ML=ML/segmenter1.ml ML/tagger1.ml ML/reader1.ml ML/tagger.ml \
@@ -353,8 +353,11 @@ XML_MORPHOLOGY=$(SL_XML_MORPHOLOGY) $(WX_XML_MORPHOLOGY) $(XML_DTD)
 # Sanskrit Heritage Platform site construction; release with "make release"
 all: ZEN
 	cd ZEN && $(MAKE) all
-	mkdir -p $(DICO) # local copy 
-	cp -Rp $(HERITAGE)/* $(DICO) 
+	cp -Rp $(HERITAGE) . # local copy of DICO
+	mkdir -p $(MW) # local copy 
+	cp -Rp $(MW) . # local copy of MW
+	ln -sf $(BOOK) BOOK
+	ln -sf $(DATA) DATA
 #	cd ML && $(MAKE) depend # reset dependencies (might be partial subset)
 	cd ML && $(MAKE) # make engine
 	$(MAKE) web_services # then all Web services

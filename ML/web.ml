@@ -87,8 +87,8 @@ value public_entries_file = public_dico_page "entries.rem"
 (* created by [make releasedata], read by [indexer] *)
 and public_dummies_file = public_dico_page "dummies.rem" 
 (* created by [make releasedata], read by [indexerd] *)
-;                         
-value sandhis_file = data "sandhis.rem"  
+;
+value sandhis_file = public_data "sandhis.rem"  
 ;                              
 value nouns_file = data "nouns.rem"  
     (* created by [make_nouns], read by [Print_inflected.read_nouns],

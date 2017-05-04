@@ -356,8 +356,8 @@ all: ZEN
 	cp -Rp $(HERITAGE) . # local copy of DICO
 	mkdir -p $(MW) # local copy 
 	cp -Rp $(MW) . # local copy of MW
-        ln -sf $(BOOK) BOOK
-        ln -sf $(DATA) DATA
+	ln -sf $(BOOK) BOOK
+	ln -sf $(DATA) DATA
 #	cd ML && $(MAKE) depend # reset dependencies (might be partial subset)
 	cd ML && $(MAKE) # make engine
 	$(MAKE) web_services # then all Web services

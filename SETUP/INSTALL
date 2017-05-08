@@ -1,17 +1,23 @@
-*********************************************************
-* Installation of the Sanskrit Heritage Engine/Platform *
-*********************************************************
+**************************************************
+* Installation of the Sanskrit Heritage Platform *
+**************************************************
 
 0. Generalities
 
-This library is developed on Unix/Linux, whereas the end products (Sanskrit 
-dictionary and Web site) are multi-platform.
+This library is developed on Unix/Linux, whereas the end product (Sanskrit 
+Platform) may run on any Web server. 
 UNIX tools such as make, tar, sed and gcc are assumed to exist.
-We also assume that python has been installed.
+We also assume that python and the git revision control system have been
+installed (they are pre-installed in most modern operating systems).
+Finally, we assume that a Web server such as Apache has been installed. 
+Most modern operating systems also provide a local Web server, allowing
+management of localhost Web sites. You'll need su privilege in order to
+install the site. 
 
 Installation assumes prior installation of Objective Caml available
-from site http://ocaml.org. The latest distribution version
-4.02 ought to be used, available in http://ocaml.org/releases/4.02.html
+from site http://ocaml.org. The distribution version
+4.02 ought to be used, available at"http://ocaml.org/releases/4.02.html".
+More recent distributions may work too, but this has not been tested. 
 
 The proper sequence of commands is:
 ./configure
@@ -28,32 +34,26 @@ sudo make install
 The following instructions assume installation under some version of the 
 Unix operating system, such as FreeBSD, Linux or MacOSX. 
 They may also apply under to versions of Windows under the Cigwin emulator, 
-but this has not been tested. 
+but this has not been tested.
 
-This software is distributed in two possible packages:
-A. Sanskrit Engine: permits execution of the Web services with fixed linguistic 
-resources distributed under the form of compiled databanks. 
-The gzipped tar file (46Mb) of current distribution version 2.96 may be 
-downloaded from URL:
-http://sanskrit.inria.fr/DISTRIB/SktEngine.2.96.tar.gz
+The Sanskrit Heritage Platform, implemented as a set of Web services,
+uses a separate package Heritage_resources that defines the Sanskrit
+linguistic data necessary for its operation.
+Both packages may be pulled as Git packages. In the installation directory,
+run successively:
+git clone git@gitlab.inria.fr:huet/Heritage_Resources.git
+git clone git@gitlab.inria.fr:huet/Heritage_Platform.git
+This will create two sub_directories, namely Heritage_Resources
+and Heritage_Platform. 
 
-B. Sanskrit Platform: this full distribution contains all sources, including
-the Sanskrit Heritage Dictionary and all relevant software. 
-This distribution is currently reserved to the team of developers. 
 
-Untarring the distribution tar file creates 
-a directory such as SktEngine.2.96, containing version 2.96 of the Sanskrit 
-Engine. You may rename this directory at will. We assume in the following 
-that its absolute path is called Main. Similarly for a full distribution
-such as SktPlatform.2.96.
+B. Sanskrit Platform installation.
 
-1. Installation of the SKT Engine
+This means installing a local mirror Web site of Sanskrit_platform.
 
-This means installing a mirror Web site with SKT Engine functionalities.
+1. Configuration
 
-1.1 Customization
-
-First the user should define a configuration file config.txt in the
+First the user should define a configuration file config in the
 directory SETUP. He should imitate the format of examples such as
 config.amrita.txt (local host) and config.sanskrit.txt (public server). 
 
@@ -89,6 +89,8 @@ DISPLAY is the default font for Sanskrit text output:
 or 'deva' for devanagarii.
 
 SERVERHOST should be the domain name (or IP address) of the target HTTP server.
+For instance, use SERVERHOST='127.0.0.1' for localhost service
+(SERVERHOST='localhost' should work too). 
 REMOTESERVERHOST should be the domain name (or IP address) of the target HTTP 
 server as seen from Internet (whereas SERVERHOST may be 127.0.0.1 for localhost).
 EXTERNALSERVERHOST should be the domain name (or IP address) of an external 
@@ -138,80 +140,42 @@ the MMakefile in directory SETUP, which is the Makefile source template.
 For instance, if you want to change the standard names of the cgis generated as 
 Sanskrit engine tools, you have to read the following.
 
-The various cgi-bin executables will be installed (by make releasecgi)
+The various cgi-bin executables will be installed 
 in CGIDIR under names declared as respectively
-CGIINDEX, CGIINDEXD, CGIDECL, CGICONJ, CGILEMMA, CGIREADER, CGIPARSER, CGITAGGER and CGISANDHI.
+CGIINDEX, CGIINDEXD, CGIDECL, CGICONJ, CGILEMMA, CGIREADER, CGIPARSER, CGITAGGER,
+CGISANDHI, CGIGRAPH and CGIUSER. 
 
-The various linguistic resources are installed by command 
-make releasedata. 
+2. Elaboration of the tools executables
 
-The complete installation is achieved by command
-make full_release.
+This is simply achieved by command:
+make
+
+This compiles the Zen linguistic platform, included in the distribution.
+Then it compiles the various Web services of the platform.
+
+3. Installation
 
 If Apache is not currently running on your station, you should initialise
 it with "sudo httpd -k start", and consider putting this command
 in the scheduling initialisation file of your operating system (crontable).
 
-Subsequent releases to the same server, as well as updates when any change 
-is done to the
-master make file SETUP/MMakefile, should only use the command ./configure. 
-
-1.2 Installation of the Zen toolkit
-
-The ZEN toolkit is an independent Ocaml library, distributed under the
-LGPL open source license, from site http://yquem.inria.fr/~huet/ZEN.
-It should be installed at path Main/ZEN. 
-For convenience, a copy of its current distribution is included with this
-distribution, and may be activated by running
-        make ZEN
-This will compile and install the Zen library.
-
-1.3 Installation proper of Heritage Engine
-        make 
-This compiles the various cgi-bin executables.
-
 At this point, make sure that the directory $(SERVERPUBLICDIR) exists on the
-server, with subdirectories ZEN, ML, DATA, DATA/XML, and IMAGES. You may need
-proper privilege to write in these directories.
+server.
 
-For the first installation on a given server, you must execute first:
-        sudo make cold
-
-For subsequent updates, you only need to execute:
+Then execute:
         sudo make install
 This installs the executables and their data on the server. 
 
-This concludes the installation of the SKT Engine.
-Try the web site by browsing http://$(SERVERHOST)/$(SKTDIRURL)index.html
+This concludes the installation of the SKT Platform. 
+Try the web site by browsing http://$(SERVERHOST)/$(SKTDIRURL)
 
-N.B. You may run into security problems preventing you from running the CGI services.
-This may be due to security concerns, with an overly cautious configuration
-of Apache. This may be corrected by editing Apache's configuration,
+N.B. You may run into security problems preventing you from running the CGI
+services. This may be due to security concerns, with an overly cautious
+configuration of Apache. This may be corrected by editing Apache's configuration,
 a complex and risky operation. Another route is to install the software
 with XAMPP, an open-source lightweight Apache distribution that makes 
 it easier for developers to install a local web server. 
 
-2. Installation of the full Sanskrit Heritage Platform.
-
-This requires a distribution tarball of the full Sanskrit Heritage Platform, including
-sources of the Sanskrit Heritage Dictionary. The distribution directory
-is similar to above, except that there are more modules in directory ML,
-and there is a source file Heritage.e containing the lexicographic database.
-
-After proper customization:
-
-        ./configure 
-        make all
-
-This should produce the dictionary under the various formats. 
-If "Double definitions" gets printed, it is normal, this is just a warning.
-However, if "Undefined references" gets printed, it means an inconsistency
-in the data base Dico, resulting in missing links in the web site.
-The file "STAT/undefs.txt" should be inspected to find the inconsistencies.
-
-If this step has been successful, you may now install the Sanskrit Platform
-Web site as above:
-        sudo make install
 ______________
 
 If you successfully install this package, please notify

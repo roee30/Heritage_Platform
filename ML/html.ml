@@ -416,7 +416,7 @@ value styles = fun
     ]
 ;
 (* Compiles a class into its style for non-css compliant browsers *)
-(* Used by Css *)
+(* Mostly used by Css to compile the css style sheet *)
 value style cla = String.concat "; " (List.map style_sheet (styles cla)) 
 ; 
 value class_of = fun

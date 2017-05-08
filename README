@@ -70,4 +70,8 @@ productive use of the platform, that may now accommodate long sentences.
 
 In 2017 A rehaul of the global architecture was achieved, separating
 the production of linguistic data resources issued from the generating lexicon
-and the platform Web services operations proper.
+and the platform Web services operations proper. The two packages
+are available at git repositories, namely
+git@gitlab.inria.fr:huet/Heritage_Resources.git
+git@gitlab.inria.fr:huet/Heritage_Platform.git
+

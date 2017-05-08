@@ -9,12 +9,14 @@
 
 (****************************************************************)
 (* Beware - remove foo.mli and make depend before debugging foo *)
+(* Better yet - remove *.mli (saving them) to get transparency. *) 
 (****************************************************************)
 
-(* debugging context building *)
+(* debugging context building - to adapt according to needs *)
 
 #load "../ZEN/list2.cmo"; 
-#load "../ZEN/gen.cmo"; open Gen;
+#load "../ZEN/gen.cmo";
+open Gen;
 #load "../ZEN/word.cmo"; open Word;
 #load "../ZEN/share.cmo";    
 #load "../ZEN/trie.cmo";    
@@ -23,17 +25,19 @@
 #load "../ZEN/zen_lexer.cmo";  
 
 #load "paths.cmo"; 
-#load "version.cmo"; open Version;
+#load "version.cmo";
+open Version;
 #load "date.cmo"; 
-#load "install.cmo"; open Install;
-#load "cgi.cmo"; 
 #load "html.cmo"; 
-#load "canon.cmo"; open Canon;
-#load "phonetics.cmo"; open Phonetics;   
+#load "web.cmo";
+open Web;
+#load "cgi.cmo"; 
+#load "canon.cmo";
+open Canon;
+#load "phonetics.cmo";
+open Phonetics;   
 
 open List;
-open Dico;
-open Dictionary;
 #load "transduction.cmo"; 
 open Transduction;
 #load "encode.cmo"; 
@@ -50,8 +54,22 @@ open Sanskrit;
 
 #load "int_sandhi.cmo"; 
 open Int_sandhi; 
+#load "order.cmo"; 
+#load "sandhi.cmo"; 
+#load "inflected.cmo"; 
 
-(*
+#load "parts.cmo";  
+
+#load "control.cmo";  
+
+#load "pada.cmo";  
+
+#load "verbs.cmo";  
+open Verbs; 
+
+(* 
+#load "int_sandhi.cmo"; 
+open Int_sandhi; 
 #load "order.cmo"; 
 #load "sandhi.cmo"; 
 #load "inflected.cmo"; 

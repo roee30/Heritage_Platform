@@ -4874,7 +4874,7 @@ $\ocwlowerid{value}~\ocwlowerid{platform}~=~$\ocwstring{"Station"}\ocweol
 \ocwindent{0.00em}
 \ocwkw{and}~$\ocwlowerid{skt\_install\_dir}~=~$\ocwstring{"/Users/huet/Sanskrit/Heritage\_Platform/"}\ocweol
 \ocwindent{0.00em}
-\ocwkw{and}~$\ocwlowerid{skt\_resources\_dir}~=~$\ocwstring{"/Users/huet/Sanskrit/Heritage\_Resources/"}\ocweol
+\ocwkw{and}~$\ocwlowerid{skt\_resources\_dir}~=~$\ocwstring{"/home/huet/Sanskrit/Heritage\_Resources/"}\ocweol
 \ocwindent{0.00em}
 \ocwkw{and}~$\ocwlowerid{public\_skt\_dir}~=~$\ocwstring{"/Library/WebServer/Documents/SKT/"}\ocweol
 \ocwindent{0.00em}
@@ -4916,7 +4916,7 @@ $\ocwlowerid{value}~\ocwlowerid{platform}~=~$\ocwstring{"Station"}\ocweol
 \ocwindent{0.00em}
 \ocwkw{and}~$\ocwlowerid{offline\_dir}~=~$\ocwstring{"/private/tmp/SKT\_TEMP/"}\ocweol
 \ocwindent{0.00em}
-\ocwkw{and}~$\ocwlowerid{scl\_install\_dir}~=~$\ocwstring{"/Users/huet/Sanskrit/SCL/scl/"};\ocweol
+\ocwkw{and}~$\ocwlowerid{scl\_install\_dir}~=~$\ocwstring{""};\ocweol
 \ocweol
 \ocwendcode{}\typeout{OcamlWeb file Index.ml}
 \ocwmodule{Index}
@@ -53697,9 +53697,9 @@ $\ocwlowerid{value}~\ocwlowerid{public\_entries\_file}~=~\ocwlowerid{public\_dic
 \ocwindent{0.00em}
 \ocwbc{} created by \ocwbegindcode{}$\ocwlowerid{make}~\ocwlowerid{releasedata}$\ocwenddcode{}, read by \ocwbegindcode{}$\ocwlowerid{indexerd}$\ocwenddcode{} \ocwec{}\ocweol
 \ocwindent{0.00em}
-;~\ocweol
+;\ocweol
 \ocwindent{0.00em}
-$\ocwlowerid{value}~\ocwlowerid{sandhis\_file}~=~\ocwlowerid{data}~$\ocwstring{"sandhis.rem"}~\ocweol
+$\ocwlowerid{value}~\ocwlowerid{sandhis\_file}~=~\ocwlowerid{public\_data}~$\ocwstring{"sandhis.rem"}~\ocweol
 \ocwindent{0.00em}
 ;~\ocweol
 \ocwindent{0.00em}
@@ -53819,7 +53819,7 @@ NB The \ocwbegindcode{}$\ocwlowerid{transxxx\_file}$\ocwenddcode{} identifiers a
    But \ocwbegindcode{}$\ocwlowerid{public\_transxxx\_file}$\ocwenddcode{} is read by \ocwbegindcode{}$\ocwupperid{Load\_transducers}$\ocwenddcode{}. 
    It would be clearer to have a module \ocwbegindcode{}$\ocwupperid{Dump\_transducers}$\ocwenddcode{} using them. 
 \ocweol
-\label{web.ml:7951}%
+\label{web.ml:7933}%
 \medskip
 \ocwbegincode{}\ocwindent{0.00em}
 \ocwkw{and}~$\ocwlowerid{transn\_file}~=~\ocwlowerid{data}~$\ocwstring{"transn.rem"}~\ocwbc{} \ocwbegindcode{}$\ocwlowerid{noun\_automaton}$\ocwenddcode{} \ocwec{}~\ocweol
@@ -53990,7 +53990,7 @@ $\ocwlowerid{value}~\ocwlowerid{public\_nouns\_file}~=~\ocwlowerid{public\_data}
 \ocwindent{0.00em}
 \ocwkw{and}~$\ocwlowerid{public\_verblinks\_file}~=~\ocwlowerid{public\_data}~$\ocwstring{"verblinks.rem"}\medskip
 
-\label{web.ml:13487}%
+\label{web.ml:13469}%
 \ocwindent{0.00em}
 \ocwkw{and}~$\ocwlowerid{public\_mw\_exc\_file}~=~\ocwlowerid{public\_data}~$\ocwstring{"mw\_exceptions.rem"}\ocweol
 \ocwindent{0.00em}
@@ -54589,7 +54589,7 @@ $\ocwlowerid{value}~\ocwlowerid{indexer\_page}~\ocwlowerid{l}~=~\ocwlowerid{dico
 \ocwindent{0.00em}
 ;\medskip
 
-\label{web.ml:25273}%
+\label{web.ml:25255}%
 \ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{print\_site\_map}~\ocwlowerid{dyn}~\ocwlowerid{lang}~=~$\ocwbc{} the various Web services of the site \ocwec{}\ocweol
 \ocwindent{1.00em}
@@ -54850,7 +54850,7 @@ $[~($\ocwstring{"id"},\ocwstring{"this\_form"}$);~($\ocwstring{"action"},$\ocwlo
 \ocwendcode{}\ocwindent{0.00em}
 Failsafe aborting of cgi invocation 
 \ocweol
-\label{web.ml:29653}%
+\label{web.ml:29635}%
 \medskip
 \ocwbegincode{}\ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{abort}~\ocwlowerid{lang}~\ocwlowerid{s1}~\ocwlowerid{s2}~=~$\ocwkw{do}~\ocweol
@@ -54923,7 +54923,7 @@ $[~($\ocwstring{"a"},$\ocwupperid{Blue\_});~($\ocwstring{"a"},$\ocwupperid{Green
 ;~$($\ocwstring{"body"},$\ocwupperid{Mauve\_back});~($\ocwstring{"body"},$\ocwupperid{Pink\_back});~($\ocwstring{"body"},$\ocwupperid{Chamois\_back})$\ocweol
 \ocwindent{0.00em}
 \ocwbc{};\ocwbegindcode{}$($\ocwstring{"body"},$\ocwupperid{Pict\_om});~($\ocwstring{"body"},$\ocwupperid{Pict\_om2});~($\ocwstring{"body"},$\ocwupperid{Pict\_om3});~($\ocwstring{"body"},$\ocwupperid{Pict\_om4})
-~;~($\ocwstring{"body"},$\ocwupperid{Pict\_gan});~($\ocwstring{"body"},$\ocwupperid{Pict\_hare});~($\ocwstring{"body"},$\ocwupperid{Pict\_geo})$\ocwenddcode{} \ocwec{}\ocweol
+~;~($\ocwstring{"body"},$\ocwupperid{Pict\_gan});~($\ocwstring{"body"},$\ocwupperid{Pict\_hare});~($\ocwstring{"body"},$\ocwupperid{Pict\_geo})$\ocwenddcode{} deprecated \ocwec{}\ocweol
 \ocwindent{1.00em}
 ;~$($\ocwstring{"table"},$\ocwupperid{Bandeau});~($\ocwstring{"table"},$\ocwupperid{Center\_});~($\ocwstring{"table"},$\ocwupperid{Body});~($\ocwstring{"table"},$\ocwupperid{Pad60})~$\ocweol
 \ocwindent{1.00em}
@@ -54953,7 +54953,7 @@ $[~($\ocwstring{"a"},$\ocwupperid{Blue\_});~($\ocwstring{"a"},$\ocwupperid{Green
 \ocwindent{1.00em}
 $];$\medskip
 
-\label{css.ml:2690}%
+\label{css.ml:2701}%
 \ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{css\_decls}~=$\ocweol
 \ocwindent{1.00em}

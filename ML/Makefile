@@ -32,9 +32,9 @@ VPATH=$(ZEN)
 # $(MAKE) clean; $(MAKE) depend; $(MAKE) all
 
 # CORE package - utilities, transducers, sanskrit and french lexers, dico spec
-CORE=$(DISTR_CORE) paths.ml
-DISTR_CORE= control.ml version.ml date.ml canon.ml transduction.ml \
-encode.ml order.ml padapatha.ml sanskrit.mli sanskrit.ml skt_lexer.ml 
+CORE=$(DISTR_CORE) paths.ml 
+DISTR_CORE= control.ml version.ml date.ml canon.ml transduction.ml encode.ml \
+order.ml padapatha.ml sanskrit.mli sanskrit.ml skt_lexer.ml test_stamp.ml 
 
 # GRAM package - phonetics, morphology, segmentation and tagging engines
 GRAM=index.ml phonetics.ml int_sandhi.ml skt_morph.mli morphology.mli naming.ml \
@@ -54,7 +54,7 @@ mk_index_page.ml mk_grammar_page.ml mk_reader_page.ml mk_sandhi_page.ml \
 morpho_ext.ml 
 
 # TREE package - tree bank manager and syntax analyser - legacy
-TREE= parse_tree.ml parse_apte.ml stemmer.ml tag_tree.ml tag_apte.ml 
+TREE=parse_tree.ml parse_apte.ml stemmer.ml tag_tree.ml tag_apte.ml 
 
 DEBUG=debug.ml 
 
@@ -73,10 +73,15 @@ COMPILEI=ocamlc -pp "camlp4r pa_extend.cmo" -I $(ZEN) -I +camlp4 -c
 
 LINK=ocamlopt -I $(ZEN) -I +camlp4  dynlink.cmxa camlp4lib.cmxa
 
-# standard distribution of Sanskrit Heritage platform - assumes ZEN library
+# standard installation of Sanskrit Heritage platform - assumes ZEN library
 
-engine: cgis reset_caches static_pages regression reader_plugin # parse_apte
+engine: test_version cgis reset_caches static_pages regression reader_plugin # parse_apte
 
+# testing consistency of Heritage_resources and Heritage_platform
+test_version: paths.cmx gen.cmx version.cmx control.cmx test_stamp.cmx
+	$(LINK) paths.cmx gen.cmx version.cmx control.cmx  test_stamp.cmx \
+-o test_stamp
+        
 static_pages: css mk_index_page mk_grammar_page mk_sandhi_page mk_reader_page 
 
 all: engine static_pages reset_caches reader_plugin sandhi_test
@@ -288,7 +293,7 @@ debug: gen.cmo version.cmo date.cmo word.cmo zen_lexer.cmo order.cmo \
 canon.cmo phonetics.cmo transduction.cmo padapatha.cmo sanskrit.cmo \
 sandhi.cmo share.cmo trie.cmo deco.cmo skt_lexer.cmo \
 encode.cmo order.cmo lexmap.cmo sandhi.cmo \
-morpho_html.cmo cgi.cmo html.cmo indexer.cmo declension.cmo 
+morpho_html.cmo cgi.cmo html.cmo web.cmo indexer.cmo declension.cmo 
 	(cat debug.ml ; cat -) | ocaml -I +camlp4 -I . -I $(ZEN)
 
 morpho_debug: list2.cmo word.cmo deco.cmo morpho_string.cmo paths.cmo \
@@ -298,8 +303,7 @@ encode.cmo naming.cmo version.cmo date.cmo html.cmo morpho.cmo
 
 # Documentation of the ML library - all packages 
 doc: 
-	make Heritage_Platform.pdf
-#	make doc.html
+	$(MAKE) Heritage_Platform.pdf
 
 Heritage_Platform.pdf: $(ENGINE) 
 	$(NOWEB) --noweb --tex ../DOC/docintro.tex $(ENGINE) -o ../DOC/Heritage_Platform.tex

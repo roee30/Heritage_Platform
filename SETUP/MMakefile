@@ -12,7 +12,7 @@
 # This software presupposes a Unix-like OS environment, with c, make and sed
 # Also python is assumed for package management, and javascript for scripts.
 # Stand-alone distribution ought to include Zen and Ocaml/Camlp4 distributions.
-# Also TeX for typesetting the book, and Apache2 for managing the Web site.
+# Also Apache2 for managing the Web site.
 
 ############################ VERSIONING ####################################
 
@@ -351,15 +351,16 @@ XML_MORPHOLOGY=$(SL_XML_MORPHOLOGY) $(WX_XML_MORPHOLOGY) $(XML_DTD)
 ###########
 
 # Sanskrit Heritage Platform site construction; release with "make release"
-all: ZEN
+all: ZEN 
+	test -e $(DATA) && echo "Heritage_Resources detected" && exit 0 \
+|| echo "You should first install Heritage_Resources at $(DATA)" && exit 1 
 	cd ZEN && $(MAKE) all
-	cp -Rp $(HERITAGE) . # local copy of DICO
-	mkdir -p $(MW) # local copy 
+	cp -Rp $(HERITAGE) . # local copy of DICO with up-to-date resources
 	cp -Rp $(MW) . # local copy of MW
-	ln -sf $(BOOK) BOOK
-	ln -sf $(DATA) DATA
 #	cd ML && $(MAKE) depend # reset dependencies (might be partial subset)
-	cd ML && $(MAKE) # make engine
+	cd ML && $(MAKE) test_version
+	ML/test_stamp
+	cd ML && $(MAKE) # make engine (testing the data stamp)
 	$(MAKE) web_services # then all Web services
 
 # When master Makefile SETUP/MMakefile has been changed, do manually:
@@ -472,8 +473,7 @@ releasecgi:
 abrevs:
 	cp $(BOOK)/abrevs.pdf SITE # for documenting the Website with abbreviations
 
-# if one does not rebuild morphological resources with make scratch, this will
-# just release the new lexical data base and Web resources
+# This releases on the server the new lexical data base and Web resources
 # must be done after releaseMW for links adjustments
 releasedata: $(DICO) $(DATA) abrevs 
 	cp $(WEBSOURCES) $(SERVERPUBLICDIR)
@@ -535,12 +535,13 @@ indexers: ML/indexer ML/indexerd
 	cp ML/indexer $(CGIDIR)$(CGIINDEX)
 	cp ML/indexerd $(CGIDIR)$(CGIINDEXD)
 
+#### Version Management and Distribution are now managed by Git ####
+
 ##############################
-####  Version Management  ####
+####  Version Management  #### Obsolete
 ##############################
 
-# For release of the SktEngine, make distrib_engine
-# For release of the SktPlatform, make distrib_platform
+# For release of Heritage_Platform, make distrib_platform
 
 # next operations to perform on http server platform for site update
 platform_unload: SktPlatform.$(VERSION).tar.gz
@@ -551,7 +552,7 @@ software_doc: # needs ocamlweb installed
 	cd ML && $(MAKE) doc
 
 ########################
-####  Distribution  ####
+####  Distribution  #### Obsolete
 ########################
 
 # customise LICENSEs above before distributing
@@ -593,7 +594,7 @@ distr_automata: # distribution of data derived from Heritage Dictionary
 	cp -p $(DATA)/XML/*.gz $(DATA)/XML/index.html DISTR/$(DATA)/XML 
 	cp -p $(DATA_LICENSE) DISTR/$(DATA_LICENSE) # customised data license
 	cp -p $(XMLDATA)/SL_morph.dtd $(XMLDATA)/WX_morph.dtd DISTR/$(DATA)/XML
-	cp -p $(AUTOMATA) DISTR/$(DATA)   # Data for Skt Engine cgi executables 
+	cp -p $(AUTOMATA) DISTR/$(DATA)   # Data for Skt_Platform cgi executables
 	cp -p $(DATAMW) DISTR/$(DATA) # MW alignment
 #	touch DISTR/automata   # for make automata to succeed vacuously
 
@@ -605,8 +606,8 @@ distrib: # distribution of ZEN, and of derived Heritage under HTML & PDF formats
 	mkdir DISTR/BOOK
 	cp -p $(BOOKPRINTS) DISTR/BOOK # Heritage Skt Dictionary for printing
 	mkdir DISTR/DOC
-	cd ML; $(MAKE) Heritage_engine_documentation.pdf; 
-	cp -p DOC/Heritage_engine_documentation.pdf DISTR/DOC
+	cd ML; $(MAKE) doc
+	cp -p DOC/Heritage_platform.pdf DISTR/DOC
 	cp -p DOC/transliterations.pdf DISTR/DOC 
 	cp -p $(MANUAL) DISTR/SITE # user's manual 
 #	cp -p $(ROBOTS) DISTR/SITE # robots permissions
@@ -614,16 +615,6 @@ distrib: # distribution of ZEN, and of derived Heritage under HTML & PDF formats
 	cp -p $(STAT)/regression_template DISTR/$(STAT) # for regression analysis suite
 	touch DISTR/dictionary # for make dictionary to succeed vacuously
 	touch DISTR/xmlmorphology # for make xmlmorphology to succeed vacuously
-
-distribution: # distribution of the engine with precompiled data
-	test -e SktEngine.$(VERSION) && echo "Distribution dir exists" \
-&& exit 1 || echo "OK"
-	$(MAKE) distrib
-	mv DISTR SktEngine.$(VERSION)   # SktEngine.$(VERSION) ready for release
-
-distrib_engine: distribution# create distribution tar file of SktEngine
-	tar czvf SktEngine.$(VERSION).tar.gz SktEngine.$(VERSION) 
-	rm -rf SktEngine.$(VERSION) 
 
 # creates an archive SktPlatform.$(VERSION) with the full distribution (55Mb)
 distrib_full: distrib# assumes distrib has been run, and thus directory DISTR exists
@@ -649,11 +640,12 @@ distrib_full: distrib# assumes distrib has been run, and thus directory DISTR ex
 	touch DISTR/dictionary # for make dictionary to succeed vacuously
 	mv DISTR SktPlatform.$(VERSION)   # SktPlatform.$(VERSION) fresh
 
+# deprecated: now we may use Git for distribution 
 distrib_platform: distrib_full # create distribution tar file of full SktPlatform
 	tar czvf SktPlatform.$(VERSION).tar.gz SktPlatform.$(VERSION) 
 	rm -rf SktPlatform.$(VERSION) 
 
-depot: # depot ANL - only SktEngine, no linguistic data
+depot: # depot ANL - only SktPlatform, no linguistic data
 	mkdir DISTR                # Distribution directory
 	mkdir DISTR/ML             # Source code library for all packages
 	mkdir DISTR/SETUP          # SETUP dir
@@ -670,20 +662,20 @@ depot: # depot ANL - only SktEngine, no linguistic data
 	cp -p $(DOCS) DISTR/DOC           # Various documentation and articles
 	cp -p $(LEX) DISTR/ML             # Skt Engine Compiling ML source code
 	cp -p $(TREE) DISTR/ML            # Skt Treebank and Syntax manager
-	mv DISTR SktEngine_$(VERSION)     # SktEngine distribution
+	mv DISTR SktPlatform_$(VERSION)     # Skt_Platform distribution
 
 install: #after distribution to host site: "./configure; make; sudo make install"
-#	SETUP/issudo.sh
-	test -f $(SERVERPUBLICDIR)$(DATA)/cache.txt && echo "cold install" || $(MAKE) cold 
+	SETUP/issudo.sh
+	test -f $(SERVERPUBLICDIR)DATA/cache.txt && echo "cold install" || $(MAKE) cold 
 	test -f $(SERVERPUBLICDIR)$(VAR)/regression.txt && echo "regression install" || $(MAKE) install_regression
 	$(MAKE) release
 
 # for first installation, do "sudo make cold" before "make install"
 cold: # for first install
 	mkdir -p $(SERVERPUBLICDIR)IMAGES
-	mkdir -p $(SERVERPUBLICDIR)$(DATA)
+	mkdir -p $(SERVERPUBLICDIR)DATA
 	mkdir -p $(SERVERPUBLICDIR)DOC
-	cd $(SERVERPUBLICDIR)$(DATA); touch $(CACHES); chmod a+w $(CACHES) 
+	cd $(SERVERPUBLICDIR)DATA; touch $(CACHES); chmod a+w $(CACHES) 
 	cp -R $(IMAGES) $(SERVERPUBLICDIR)IMAGES 
 	cp -p $(SCRIPTS) $(SERVERPUBLICDIR) 
 	$(MAKE) empty_caches

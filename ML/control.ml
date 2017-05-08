@@ -23,3 +23,7 @@ and anomaly_err_mess = "Anomaly " ^ report_mess
 and sys_err_mess     = "System error " ^ report_mess 
 and stream_err_mess  = "Stream error - wrong input ? " 
 ;
+
+(* change if Morphology data type changes *)
+value data_format_version = 1
+; 

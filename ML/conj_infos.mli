@@ -13,9 +13,9 @@
 
 type vmorph =
   [ Prim of int and bool and Word.word  (* primary conjugation *)
-         (* gana    pada     form of present 3rd sg *)
-  | Causa of Word.word          (* causative 3rd sg conjugation *)
-  | Inten of Word.word          (* intensive 3rd sg conjugation *)
+         (* gana    pada     form of present 3rd sg for checking   *)
+  | Causa of Word.word          (* causative 3rd sg conjugation    *)
+  | Inten of Word.word          (* intensive 3rd sg conjugation    *)
   | Desid of Word.word          (* desiderative 3rd sg conjugation *)
   ]
 ;

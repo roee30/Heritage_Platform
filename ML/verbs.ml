@@ -2517,7 +2517,7 @@ value compute_ppp_stems entry rstem =
     [ (* we first filter out roots with no attested ppp *)
       "ak.s" (* vedic a.s.ta overgenerates with a.s.tan *) | "as#1" | "kan" 
     | "k.si" | "gaa#1" | "paz" | "paa#2" | "praa#1" (* vedic praata omitted *)
-    | "bal" | "vaz" | "vyac" | "zaz" | "zam#2" | "sac" (* | "spaz#1" *)
+    | "bal" | "ma.mh" | "vaz" | "vyac" | "zaz" | "zam#2" | "sac" (* | "spaz#1" *)
     | "h.r#2" 
       -> []
       (* now participles in -na *) 
@@ -2807,8 +2807,9 @@ value admits_passive = fun
     "an#2" | "av" | "as#1" | "iiz#1" | "uc" | "kan" | "kuu" | "k.lp"| "k.si" 
   | "kha.n.d" | "dyut#1" | "dru#1" | "pat#2" | "paz" | "paa#2" | "pi#2" 
   | "praa#1" | "ruc#1" | "vas#4" | "vidh#1" | "vip" | "vyac" | "zam#1"
-  | "zrambh" | "zvit" | "siiv" | "spaz#1" | "spardh" | "h.r#2" | "hrii#1" 
-      -> False
+  | "zrambh" | "zvit" | "siiv" | "spaz#1" | "spardh" | "h.r#2" | "hrii#1"
+  | "ma.mh" (* supplied by "mah" *)
+      -> False 
 (* But "iiz#1" "uc" "kuu" "k.lp" "dru#1" "pi#2" "ruc#1" "vip" "zam#1" 
        "zrambh" "siiv" "spardh" "hrii#1" admit ppp. and "k.lp" admits pfp. *)
   | _ -> True 
@@ -2950,7 +2951,6 @@ value redup_perf root =
       | "cit#1"  -> stems "kit"      (* idem *)
       | "umbh"   -> stems "ubh"   (* remove penultimate nasal *)
       | "nand"   -> stems "nad"      (* idem *)
-      | "ma.mh"  -> stems "mah"      (* idem *)
       | "sva~nj" -> stems "svaj"     (* idem *)
       | "han#1"  -> stems "ghan"  (* velar h -> gh *)
       | "hi#2"   -> stems "ghi"      (* idem *)
@@ -3025,7 +3025,7 @@ value redup_perf root =
           | "vyath" | "vyadh" | "vyaa" | "jyaa#1" | "pyaa" | "syand" | "dyut#1"
                     -> 3
             (* Whitney§785 also "vyac" and ved. "tyaj#1"; "vyaa" treated other *)
-          | "kan" | "ma.mh" -> 2 (* ved lengthened redup vow Whitney§786a *)
+          | "kan" | "mah" -> 2 (* ved lengthened redup vow Whitney§786a *)
           | _ -> short v (* reduplicated vowel is short *)
           ]
       and rc = (* reduplicating consonant *) match c with
@@ -3056,7 +3056,7 @@ value redup_perf root =
           | None -> if rc=c || root="bhaj" then match r with
             [ [ 1 :: w ] -> match root with
               [ "jan" -> (glue (revcode "j~n"),True,True)
-              | "val" -> (glue revw,False,False) 
+              | "val" | "mah" -> (glue revw,False,False) 
               | _ -> match w with
                 [ [ c' ] when consonant c' -> 
                      (revaffix [ 10 (* e *); c ] w,True,True)
@@ -3445,8 +3445,10 @@ value compute_perfect entry =
     | "i" -> let (strong, weak,_,_,_) = redup_perf entry in
              compute_perfect_v strong weak entry
     | "indh" -> compute_perfectm Primary (revcode "iidh") entry
-    | _ -> let (strong, weak, olong, eweak, iopt) = redup_perf entry in
-           match weak with
+    | "mah" -> let (strong, weak, _, _, _) = redup_perf entry in
+               compute_perfectm Primary strong entry (* ZZ Atma for Para root *)
+    | _ -> let (strong, weak, olong, eweak, iopt) = redup_perf entry in 
+           match weak with 
            [ [ c :: rest ] -> 
              if c=2 (* aa *) || (c>9 && c<14) (* e ai o au *)
              then compute_perfect_aa rest entry (* shortened weak stem *)
@@ -5448,7 +5450,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do
    ; (* Perfect *) 
      if gana=10 then () (* use periphrastic perfect *)
      else match entry with
-          [ "paz"  (* d.rz *) | "bruu" (* vac *) 
+          [ "paz"  (* d.rz *) | "bruu" (* vac *) | "ma.mh" (* mah *)
           | "ind" | "indh" | "inv" | "cakaas" | "vidh#1" -> () (* no perfect *)
           | _ -> compute_perfect entry
           ]
@@ -5471,7 +5473,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do
              -> (st,True)
          | [ 10 :: [ 32 :: [ 1 :: st ] ] ] (* remove -ate *)
              -> (st,False)
-           (* We loose some information, but generate both active and middle *)
+           (* We lose some information, but generate both active and middle *)
          | _ -> failwith ("Weird causative " ^ Canon.decode third)
          ] in
      let cpstem = match cstem with

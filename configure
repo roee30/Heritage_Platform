@@ -25,7 +25,7 @@ makefile_keys=["TEMPLATE","PLATFORM","TRANSLIT","LEXICON","DISPLAY","WARN",
 "SERVERHOST","REMOTESERVERHOST","EXTERNALSERVERHOST","EXTERNALINVOCATION",
 "SERVERPUBLICDIR","SKTDIRURL","CGIBINURL","CGIDIR","CGIEXT","MOUSEACTION",
 "SCLURL","SCLINSTALLDIR","TEMPAREA","OUTPUTFONT","SKTRESOURCES"]     
-counter_keys=["COUNTER","ZEN","PORTAL"]
+counter_keys=["COUNTER","ZEN","RESOURCES","PORTAL"]
 version_keys=["VERSION","DATE"]
 TEMPLATE='#'
 WARN='# WARNING - Produced from MMakefile by configure - Do not edit manually'
@@ -132,7 +132,7 @@ def generate(config_path):
     portal_page_fr.close()
     print portal_page_fr_path, "(fr) generated"
     
-    # XML
+    # XML - obsolete, now managed by Resources
     xml_entry_page = open(xml_entry_page_path,'r')
     xml_entry_page_content = xml_entry_page.read()
     xml_entry_page.close()

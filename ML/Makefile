@@ -322,8 +322,8 @@ clean:
 	rm -f *.cmo *.cmi *.cmx *.ppi *.ppo *.o
 	rm -f css indexer indexerd sandhier reader parser tagger lemmatizer \
 declension conjugation mk_index_page mk_grammar_page mk_reader_page regression \
-mk_sandhi_page sandhi_test \
-reset_caches parse_apte tag_apte interface user_aid
+mk_sandhi_page sandhi_test reader_plugin reset_caches interface user_aid \
+parse_apte tag_apte 
 #	make dico.cmi auto.cmi conj_infos.cmi # needed to get dependencies right 
 
 .SUFFIXES: .ml .mli .cmx .cmo .cmi

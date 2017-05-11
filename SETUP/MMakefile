@@ -274,13 +274,13 @@ FAQPAGES=$(FAQPAGE_FR) $(FAQPAGE_EN)
 MANUAL=SITE/manual.html
 ROBOTS=SITE/robots.txt # currently disabled to allow Google access
 GOLD=SITE/gold.html
-# Goldendict data banks
+# Goldendict data banks - now distributed from sanskrit.inria.fr
 GOLDENDICT=SITE/Heritage_du_sanskrit_san-fra.tar.gz SITE/Declension-heritage_du_sanskrit_san-eng.tar.gz SITE/Grammar-heritage_du_sanskrit_san-eng.tar.gz SITE/mw-heritage_du_sanskrit_san-eng.tar.gz
 
-XMLPAGE=SITE/xml.html # at installation time moved to DATA/XML
+# OBS XMLPAGE=SITE/xml.html # at installation time moved to DATA/XML
 WEBSOURCES=SITE/portal.html SITE/faq.html SITE/abrevs.pdf $(GOLD) SITE/goldendict.html $(MANUAL) # $(ROBOTS) 
 #ZENSITESOURCE=SITE/ZEN/index.html 
-ALLWEBSOURCES=$(SITESOURCE) $(WEBSOURCES) $(XMLPAGE) # $(ZENSITESOURCE) 
+ALLWEBSOURCES=$(SITESOURCE) $(WEBSOURCES) # $(XMLPAGE) $(ZENSITESOURCE) 
 # Sources of morphology documents
 XMLDATA=$(DATA)/XML
 DATASOURCE=$(DATA)/titn.tex $(DATA)/titpn.tex $(DATA)/titr.tex $(DATA)/titp.tex \
@@ -338,6 +338,9 @@ CACHES=cache.txt cache.rem minica.rem transca.rem
 
 # Linguistic resources: Sanskrit morphology documents
 
+PDF_MORPHOLOGY=$(DATA)/nouns.pdf $(DATA)/roots.pdf $(DATA)/parts.pdf \
+$(DATA)/indecls.pdf $(DATA)/final.pdf # enormous, useless
+
 SL_XML_MORPHOLOGY=$(XMLDATA)/SL_morph.tar.gz
 WX_XML_MORPHOLOGY=$(XMLDATA)/WX_morph.tar.gz
 XML_DTD=$(XMLDATA)/SL_morph.dtd $(XMLDATA)/WX_morph.dtd
@@ -355,7 +358,7 @@ all: ZEN
 	test -e $(DATA) && echo "Heritage_Resources detected" && exit 0 \
 || echo "You should first install Heritage_Resources at $(DATA)" && exit 1 
 	cd ZEN && $(MAKE) all
-	cp -Rp $(HERITAGE) . # local copy of DICO with up-to-date resources
+	cp -Rp $(HERITAGE) . # local copy of DICO from Resources/DICO
 	cp -Rp $(MW) . # local copy of MW
 #	cd ML && $(MAKE) depend # reset dependencies (might be partial subset)
 	cd ML && $(MAKE) test_version
@@ -456,7 +459,9 @@ Makefile: SETUP/MMakefile
 web_services: # Will write localized site pages in DICO and export cgis
 	cd ML && $(MAKE) cgis site_pages 
 
-release: $(DICO) web_services releasecgi releaseMW releasedata releasedoc 
+release: $(DICO) web_services releasecgi releaseMW releasedata releasedoc \
+releasebook releasexml
+# releasepdf disabled at present as bulky and un-finished
 	echo "Version $(VERSION) of Sanskrit site released on $(SERVERHOST)"
 
 
@@ -497,6 +502,17 @@ rm temp ); done
 #	cp $(DOC_IMAGES) $(SERVERPUBLICDIR)IMAGES 
 
 BOOKPRINTS=$(BOOK)/Heritage.pdf $(BOOK)/abrevs.pdf
+
+releasebook: 
+	cp $(BOOKPRINTS) $(SERVERPUBLICDIR)
+
+releasexml: # Sanskrit morphology in xml copied from Resources to Server
+	mkdir -p $(SERVERPUBLICDIR)$(DATA)/XML
+	cp $(XML_MORPHOLOGY) $(SERVERPUBLICDIR)$(DATA)/XML
+#OBS	cp $(XMLPAGE) $(SERVERPUBLICDIR)$(DATA)/XML/index.html
+
+releasepdf: pdfmorphology # very big - useless
+	cp $(PDF_MORPHOLOGY) $(SERVERPUBLICDIR)$(DATA)
 
 releaseMW: 
 	cp -Rp $(MW) $(SERVERPUBLICDIR) # MW pages linked to decl/conjug cgis

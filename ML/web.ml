@@ -591,7 +591,7 @@ value print_bandeau_enpied_dyn dyn lang color = do
   ; ps table_end
   ; ps td_end
   ; pl td_begin
-  ; pl (inria_inside dyn) (* ; [html_valid dyn] *)
+  ; pl (inria_inside dyn)
   ; ps html_break 
   ; ps td_end
   ; ps tr_end 

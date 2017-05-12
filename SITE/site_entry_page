@@ -31,7 +31,7 @@
 </h1>
 
 <h3 class="c3">Version #VERSION [#DATE] (#LANG)<br>
-#COUNTER <!-- (since 1/9/03) -->
+#CAPTION <!-- (since 01/09/2003) -->
 </h3>
 
 <p>

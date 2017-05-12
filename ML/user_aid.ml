@@ -10,7 +10,7 @@
 (* Sanskrit Reader summarizing interface. User aid with unrecognized segs. *)
 
 open Html;
-open Web; (* ps pl abort etc. *)
+open Web; (* ps pl abort etc. [remote_server_host] *)
 open Cgi;
 open Phases;
 open Checkpoints; (* [phase_encode] *) 
@@ -26,7 +26,7 @@ module Prel = struct (* Interface's lexer prelude *)
  ;
  end (* Prel *)
 ;
-value rpc = Paths.remote_server_host 
+value rpc = remote_server_host 
 and remote = ref False (* local invocation of cgi by default *)
 ;
 value string_point (offset,len_chunk) (k,(phase,rword),select) =

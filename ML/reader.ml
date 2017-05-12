@@ -27,7 +27,7 @@
 open Encode; (* [switch_code] *)
 open Canon;
 open Html; 
-open Web; (* ps pl abort etc. *)
+open Web; (* ps pl abort etc. [remote_server_host] *)
 open Cgi; (* [get decode_url] *)
 open Phases; (* [Phases] *)
 open Rank; (* [Prel Lex segment_all iterate] *) 
@@ -42,7 +42,7 @@ module Ext = UOH Lex (* [print_ext print_nn] *)
 (* Nyaaya is a deprecated mode for analysing nyaaya compounds. *)
 type mode = [ Tag | Parse | Analyse | Nyaaya ]
 ;
-value rpc = Paths.remote_server_host  
+value rpc = remote_server_host  
 and remote = ref False (* local invocation of cgi by default *)
 ;
 value call_parser text sol = 

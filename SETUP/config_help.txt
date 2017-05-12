@@ -17,29 +17,20 @@ DISPLAY='roma'
 # URL of host server -- '127.0.0.1' for localhost
 SERVERHOST='127.0.0.1'
 
-# Remote server
-REMOTESERVERHOST='http://sanskrit.inria.fr/# remote host INRIA'
-
-# External server of UoH software 
-EXTERNALSERVERHOST='http://sanskrit.uohyd.ac.in/#external host UoH'
-
-# Experimental for UoH software - leave blank if not concerned 
-EXTERNALINVOCATION='/cgi-bin/scl/SHMT/test_xml.cgi?encoding=WX;out_encoding=Devanagari;text=#external host UoH'
+# IMPORTANT: in SERVERPUBLICDIR as well as CGIDIR below, you must plan on
+# creating the directories in the Apache area /var/www, in supervisor mode
 
 # Path of installation on http server area. For instance, on Linux:
-SERVERPUBLICDIR='/var/www/html/sanskrit/'
+SERVERPUBLICDIR='/var/www/html/Heritage_Platform/'
+
+# Access URL
+SKTDIRURL='/Heritage_Platform/'
 
 # Path of executables. For instance, on Linux (need su privilege)
-CGIDIR='/var/www/cgi-bin/sanskrit/'
-
-# Access Url
-SKTDIRURL='/sanskrit/'
-
-# Directory where the Heritage_Resources linguistic data have been released
-SKTRESOURCES='/.../Heritage_Resources/'
+CGIDIR='/var/www/cgi-bin/Heritage_Platform/'
 
 # URL of cgi executables on server
-CGIBINURL='/cgi-bin/sanskrit/'
+CGIBINURL='/cgi-bin/Heritage_Platform/'
 
 # Extension of executables (if requested by httpd configuration, eg '.cgi')
 CGIEXT=''
@@ -48,23 +39,9 @@ CGIEXT=''
 # or 'OVER' if you want the morphology jump and display on mouse over
 MOUSEACTION='CLICK'
 
-# For interface with SCL platform - fill only if SCL distribution available
-SCLURL=''
-SCLINSTALLDIR='' # local path of scl dir
-# Next is for printing dependency graph - can be DEV for Devanagari or VH
-OUTPUTFONT='VH'
+# site identification caption, possibly Html code to display counter or image
+CAPTION='Mirror site XXX'
 
-# site identification, possibly Html code to display counter
-COUNTER='Mirror site XXX'
-
-# Zen distribution homepage
-ZEN='http://yquem.inria.fr/~huet/ZEN/zen.html'
-
-# Path of xml data
-RESOURCES='DATA/XML/'
-
-# URL to Sanskrit Heritage portal
-PORTAL='portal.html'
-
-# Temporary files area 
-TEMPAREA='/tmp/SKT_TEMP/'
+# Directory where the Heritage_Resources linguistic data have been installed
+# usually in your development area, parallel to Heritage_Platform
+SKTRESOURCES='/.../Heritage_Resources/'

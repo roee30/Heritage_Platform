@@ -22,10 +22,10 @@ goldendict_path="SITE/goldendict.html"
 meta_docintro_path="DOC/docintro"
 docintro_path="DOC/docintro.tex"
 makefile_keys=["TEMPLATE","PLATFORM","TRANSLIT","LEXICON","DISPLAY","WARN",
-"SERVERHOST","REMOTESERVERHOST","EXTERNALSERVERHOST","EXTERNALINVOCATION",
-"SERVERPUBLICDIR","SKTDIRURL","CGIBINURL","CGIDIR","CGIEXT","MOUSEACTION",
-"SCLURL","SCLINSTALLDIR","TEMPAREA","OUTPUTFONT","SKTRESOURCES"]     
-counter_keys=["COUNTER","ZEN","RESOURCES","PORTAL"]
+"SERVERHOST","SERVERPUBLICDIR","SKTDIRURL","SKTRESOURCES","CGIBINURL","CGIDIR",
+"CGIEXT","MOUSEACTION"]
+#"SCLURL","SCLINSTALLDIR","TEMPAREA","OUTPUTFONT",
+counter_keys=["CAPTION"]
 version_keys=["VERSION","DATE"]
 TEMPLATE='#'
 WARN='# WARNING - Produced from MMakefile by configure - Do not edit manually'
@@ -35,7 +35,7 @@ import sys,re,shutil,os,os.path,subprocess
 def verif_config():
     if not os.path.exists(config_link_path):
         print "Error : symbolic link", config_link_path  ,"is missing"
-        print "Please first create a symbolic link to your config.*.txt file."
+        print "Please first create a symbolic link to your xxx_config.txt file."
         print """You can find examples of different configurations in
 SETUP/CONFIGS directory."""
         exit(1)

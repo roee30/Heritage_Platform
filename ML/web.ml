@@ -74,10 +74,7 @@ and var_dir           = top_site_dir "VAR" (* Parser dynamic regression suites *
 (* This file is accessible only from Station clients in [var_dir] *)
 value regression_file_name = "regression" (* regression analysis stuff *)
 ;
-(* This toogle controls accessibility of University of Hyderabad tools *)
-value scl_toggle = (* should be separate parameter in profile *)
-  not (Paths.scl_url="") (* set to True if SCL tools are installed *) 
-;
+
 value data name = data_dir ^ name
 and dico_page name = dico_dir ^ name
 and public_data name = public_data_dir ^ name
@@ -327,16 +324,6 @@ and favicon            = image "favicon.ico"
 and hare_jpg = image "hare.jpg" (* http://www.bvml.org/grfx/chadar.jpg *)
 and geo_gif  = image "geopattern.gif" (* http://www.unc.edu/%7Ecernst/geopattern1.gif *)
 ;   
-value interaction_modes_default mode = 
-  [ (" Summary ","g",mode="g") 
-  ; (" Tagging ","t",mode="t") 
-  ; (" Parsing ","p",mode="p") 
-  ] @ if scl_toggle then (* Needs the SCL tools *)
-  [ (" Analysis ","o",mode="o") ] else []
-;
-value interaction_modes = 
-  interaction_modes_default "g" (* default summary mode *)
-;
 (* was in html *)
 value reader_meta_title = title "Sanskrit Reader Companion"
 and parser_meta_title = title "Sanskrit Reader Assistant"
@@ -640,6 +627,42 @@ value http_header = "Content-Type: text/html\n"
 ;
 value javascript_tooltip ="wz_tooltip.js"
 ;
+(* This could be any absolute server where Platform is installed *)
+(* Maybe should be put back in config? but versioning problem... *)
+value remote_server_host = "http://sanskrit.inria.fr/" 
+;
+(* SCL configuration begin *)
+value scl_url = "" (* Used to be set in Paths - needs SCL configure *)
+and scl_install_dir = ""
+and offline_dir = "" (* eg "/private/tmp/SKT_TEMP/" for vomit *) 
+;
+(* This toogle controls accessibility of University of Hyderabad tools *)
+value scl_toggle = (* should be [exists scl_profile] *)
+  not (scl_url="") (* True if SCL tools are installed *) 
+;
+value default_output_font = "ROMAN" (* could be "DEV" *)
+;
+value scl_dir = scl_install_dir ^ "SHMT/prog/"
+and offline name = offline_dir ^ name (* problematic file output *)
+;
+value offline_file = offline "1.txt" (* owner [_www] Apache=httpd *)
+and tmp_in = offline "tmp_in"
+  ;
+value default_output_font = "ROMAN" (* could be "DEV" *)
+;
+
+(* SCL configuration end *)
+value interaction_modes_default mode = 
+  [ (" Summary ","g",mode="g") 
+  ; (" Tagging ","t",mode="t") 
+  ; (" Parsing ","p",mode="p") 
+  ] @ if scl_toggle then (* Needs the SCL tools *)
+  [ (" Analysis ","o",mode="o") ] else []
+;
+value interaction_modes = 
+  interaction_modes_default "g" (* default summary mode *)
+;
+
 (* NB Interface and Parser have their own prelude. *)
 (* [reader_prelude] is invoked by Parser through Rank and by [Mk_reader_page] *)
 value reader_prelude title = do 
@@ -647,7 +670,7 @@ value reader_prelude title = do
   ; page_begin reader_meta_title 
   ; pl (body_begin Chamois_back)
   ; if scl_toggle then (* external call SCL (experimental) *)
-       pl (javascript (Paths.scl_url ^ javascript_tooltip))
+       pl (javascript (scl_url ^ javascript_tooltip))
     else ()
   ; pl title 
   ; open_page_with_margin 15

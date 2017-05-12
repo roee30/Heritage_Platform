@@ -91,11 +91,7 @@ or 'deva' for devanagarii.
 SERVERHOST should be the domain name (or IP address) of the target HTTP server.
 For instance, use SERVERHOST='127.0.0.1' for localhost service
 (SERVERHOST='localhost' should work too). 
-REMOTESERVERHOST should be the domain name (or IP address) of the target HTTP 
-server as seen from Internet (whereas SERVERHOST may be 127.0.0.1 for localhost).
-EXTERNALSERVERHOST should be the domain name (or IP address) of an external 
-Web service invoked for experiments (ignore)
-EXTERNALINVOCATION is the cgi invocation of the external Web service (ignore)
+
 SERVERPUBLICDIR should be the absolute path on the server file system of the data
 to be used by its cgi-bin executables - it should be allowed as readable from 
 all. The fields of the configuration file relevant to the Apache server
@@ -104,34 +100,38 @@ for Apache's configuration file, called httpd.conf. The directory where
 HTML documents are found is named DocumentRoot. A good practice is
 to declare SERVERPUBLICDIR as a subdirectory of DocumentRoot (created in
 super-user mode). Thus, if DocumentRoot is /var/www/html, as in many Linux
-installations, declare SERVERPUBLICDIR as /var/www/html/SktEngine. 
+installations, declare SERVERPUBLICDIR as /var/www/html/Heritage_Platform. 
+
+# IMPORTANT: in SERVERPUBLICDIR as well as CGIDIR below, you must plan on
+# creating the directories in the Apache area /var/www, in supervisor mode
 
 SKTDIRURL should be its local url on the server - typically a relative address 
-in the httpd area such as /SktEngine/
+in the httpd area such as /Heritage_Platform/
 or possibly a readable sub-directory of user's xxx public_html directory  
-such as /~xxx/skt/.
+such as /~xxx/Heritage_Platform/.
+
 CGIDIR should be the absolute path on the server file system of its CGI 
 executables, typically on Linux /var/www/cgi-bin/ (or some other directory 
 indicated as possibly containing cgis in Apache's configuration file).
-CGIEXT is the extension of cgi executables, if needed.
 
-Parameter MOUSEACTION controls the morphology printing of the
+CGIBINURL is the corresponding URL, such as '/cgi-bin/Heritage_Platform/'
+
+CGIEXT is the extension of cgi executables,
+if needed by the Apache configuration.
+
+MOUSEACTION controls the morphology printing of the
 interface segments. It may be 'CLICK' or 'OVER'.
 
-Parameters SCLURL, SCLINSTALLDIR, OUTPUTFONT and TEMPAREA should be ignored, 
-they concern experimental integration of University 
-of Hyderabad software.
-OUTPUTFONT is the default font used in the printing of dependency graphs by this 
-software: 'ROMAN' for romanized font, 'DEV' for devanagarii.
+CAPTION is the localisation message on the site entry page.
 
-COUNTER is the localisation message on the site entry page.
-ZEN should be left at the standard url for Zen downloading.
-RESOURCES is the local path to the distribution directory for morphological resources.
-PORTAL should be left to portal.html.
+SKTRESOURCES is the local path to the distribution directory where
+the Heritage_Resources linguistic data have been installed.
 
-When the config file is ready, store it in directory SETUP/CONFIGS as config.xxx.txt 
-with xxx the name of your site, and in directory SETUP execute the command
+When the config file is ready, store it in directory SETUP/CONFIGS as
+xxx_config.txt with xxx the name of your site, and in directory SETUP
+execute the command
 ln -s CONFIGS/config.xxx.txt config
+
 Then execute in directory Main the command
 ./configure 
 
@@ -155,19 +155,19 @@ Then it compiles the various Web services of the platform.
 
 3. Installation
 
-If Apache is not currently running on your station, you should initialise
+If Apache is not currently running on your station, you should start
 it with "sudo httpd -k start", and consider putting this command
 in the scheduling initialisation file of your operating system (crontable).
 
-At this point, make sure that the directory $(SERVERPUBLICDIR) exists on the
-server.
+At this point, make sure that the directories SERVERPUBLICDIR and CGIDIR
+exists on the server, or create them in supervisor mode. 
 
 Then execute:
         sudo make install
 This installs the executables and their data on the server. 
 
 This concludes the installation of the SKT Platform. 
-Try the web site by browsing http://$(SERVERHOST)/$(SKTDIRURL)
+Try the web site by browsing http://SERVERHOST/SKTDIRURL
 
 N.B. You may run into security problems preventing you from running the CGI
 services. This may be due to security concerns, with an overly cautious

@@ -10,7 +10,7 @@
 (* Interface with UoH dependency parser *)
 
 open Html; 
-open Web; (* ps pl etc. *)
+open Web; (* ps pl etc. [scl_url] *)
 open Morphology; (* inflected lemma morphology *)
 open Phases.Phases; (* phase etc. *)
 open Dispatcher; 
@@ -83,13 +83,13 @@ value print_callback_solution counter solution =
         "?filename=./tmp_in") (* call-back to svg interface UoH *) 
   ; ps pid
   ; ps "&amp;outscript="
-  ; ps Paths.default_output_font
+  ; ps default_output_font
   ; ps "&amp;rel=''"
   ; ps "&amp;sentnum="
   ; ps segmentations
   ; ps "&amp;save=no\""
   ; ps "&amp;translate=no\""
-  ; ps (" onmouseover=\"Tip('<img src=" ^ Paths.scl_url ^ "DEMO/tmp_in")
+  ; ps (" onmouseover=\"Tip('<img src=" ^ scl_url ^ "DEMO/tmp_in")
   ; ps pid
   ; ps "/"
   ; ps segmentations
@@ -113,26 +113,20 @@ value print_callback =
 value print_ext_solutions cho = 
   List.iter (print_ext_output cho) 
 ;
-value scl_dir = Paths.scl_install_dir ^ "SHMT/prog/"
-and offline name = Paths.offline_dir ^ name (* problematic file output *)
-;
-value offline_file = offline "1.txt" (* owner [_www] Apache=httpd *)
-and tmp_in = offline "tmp_in"
-;
 (* External call-back to Amba Kulkarni's parser (from [Reader.print_ext] *)
 value amba_invoke pid = (* Experimental - assumes amrita configuration *)
   "mkdir -p " ^ tmp_in ^ pid ^ "; " ^ 
   scl_dir ^ "Heritage_morph_interface/Heritage2anusaaraka_morph.sh <" ^ 
   offline_file ^ " > " ^ tmp_in ^ pid ^ "/in" ^ pid ^ ".out; " ^
   scl_dir ^ "kAraka/shabdabodha.sh YES " ^ tmp_in ^ pid ^ " in" ^ 
-  pid ^ ".out" ^ " in" ^ pid ^ ".kAraka " ^ Paths.default_output_font ^  
+  pid ^ ".out" ^ " in" ^ pid ^ ".kAraka " ^ default_output_font ^  
   " Full Prose NOECHO ND 2> " ^ offline ("err" ^ pid) ^ ";"
 ;
 
 (* Prints all segmentations in [offline_file]  
    and prepares invocation of UoH's CSL parser for dependency graph display *)
 value print_ext solutions =
-  let cmd = "mkdir -p " ^ Paths.offline_dir in
+  let cmd = "mkdir -p " ^ offline_dir in
   let _ = Sys.command cmd in (* call it *)
   let cho = open_out offline_file in do
   { print_ext_solutions cho solutions

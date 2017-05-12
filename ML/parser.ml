@@ -17,7 +17,7 @@ a specific solution. It basically replays reading until this specific solution *
 open Encode;
 open Canon;
 open Html;
-open Web; (* ps pl abort truncation etc. *)
+open Web; (* ps pl abort truncation etc. [remote_server_host] *)
 open Cgi; (* get *)
 open Checkpoints;
 open Uoh_interface; (* Interface with UoH dependency parser *)
@@ -30,7 +30,7 @@ value prelude () = do
   ; page_begin parser_meta_title 
   ; pl (body_begin Chamois_back)
   ; if scl_toggle then (* external call SCL (experimental) *)
-       pl (javascript (Paths.scl_url ^ javascript_tooltip))
+       pl (javascript (scl_url ^ javascript_tooltip))
     else ()
   ; pl parser_title
   ; open_page_with_margin 15
@@ -54,7 +54,7 @@ module Lex = Lexer.Lexer Prel Lexer_control
 ;
 module Ext = UOH Lex 
 ; 
-value rpc = Paths.remote_server_host 
+value rpc = remote_server_host 
 and remote = ref False (* local invocation of cgi by default *) 
 ;
 open Skt_morph;

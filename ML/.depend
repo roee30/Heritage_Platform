@@ -47,6 +47,8 @@ sanskrit.cmx : transduction.cmx skt_lexer.cmx padapatha.cmx encode.cmx \
     canon.cmx sanskrit.cmi
 skt_lexer.cmo : encode.cmo
 skt_lexer.cmx : encode.cmx
+test_stamp.cmo : version.cmo paths.cmo ../ZEN/gen.cmo control.cmo
+test_stamp.cmx : version.cmx paths.cmx ../ZEN/gen.cmx control.cmx
 paths.cmo :
 paths.cmx :
 index.cmo : web.cmo ../ZEN/trie.cmo ../ZEN/list2.cmo ../ZEN/gen.cmo \

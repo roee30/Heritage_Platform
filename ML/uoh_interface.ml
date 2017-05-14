@@ -55,6 +55,18 @@ value print_ext_output cho (n,output) =
   }
 ;
 
+(* Temporary - should be set by SCL configure, as well as [Web.scl_url] *)
+value scl_install_dir = "" 
+and offline_dir = "/private/tmp/SKT_TEMP/" (* vamana *) 
+and default_output_font = "ROMAN" (* could be "DEV" *)
+;
+value scl_dir = scl_install_dir ^ "SHMT/prog/"
+and offline name = offline_dir ^ name (* problematic file output *)
+;
+value offline_file = offline "1.txt" (* owner [_www] Apache=httpd *)
+and tmp_in = offline "tmp_in"
+;
+
 (* Prints a solution with its index, returns the bumped index ignoring sandhi *)
 (* Prints on [std_out], as usual for a cgi. *)
 value print_callback_solution counter solution =

@@ -632,27 +632,15 @@ value javascript_tooltip ="wz_tooltip.js"
 value remote_server_host = "http://sanskrit.inria.fr/" 
 ;
 (* SCL configuration begin *)
-value scl_url = "" (* Used to be set in Paths - needs SCL configure *)
-and scl_install_dir = ""
-and offline_dir = "" (* eg "/private/tmp/SKT_TEMP/" for vomit *) 
+value scl_url = "http://localhost/SCL/SHMT/" (* Used to be set in Paths *)
 ;
 (* This toogle controls accessibility of University of Hyderabad tools *)
 value scl_toggle = (* should be [exists scl_profile] *)
-  not (scl_url="") (* True if SCL tools are installed *) 
+  not (scl_url="") (* True if SCL tools are installed *)
 ;
-value default_output_font = "ROMAN" (* could be "DEV" *)
-;
-value scl_dir = scl_install_dir ^ "SHMT/prog/"
-and offline name = offline_dir ^ name (* problematic file output *)
-;
-value offline_file = offline "1.txt" (* owner [_www] Apache=httpd *)
-and tmp_in = offline "tmp_in"
-  ;
-value default_output_font = "ROMAN" (* could be "DEV" *)
-;
+(* SCL configuration begin *)
 
-(* SCL configuration end *)
-value interaction_modes_default mode = 
+value interaction_modes_default mode =  
   [ (" Summary ","g",mode="g") 
   ; (" Tagging ","t",mode="t") 
   ; (" Parsing ","p",mode="p") 

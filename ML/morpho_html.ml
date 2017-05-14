@@ -140,7 +140,6 @@ value html_blue_off offset text =
   (* should be replaced by data-offset in future HTML 5 compliance. *)
   (* This is only needed for the SL annotator interface. *)
   (* It has the unpleasant side effect of showing offsets on mouse over. *)
-  (* This is deprecated, and might soon disappear *)
   let offset_attr offset = ("title",string_of_int offset) in
   (elt_begin_attrs [ offset_attr offset ] "span" Blue_)  ^ text ^ span_end 
 ;

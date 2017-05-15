@@ -179,9 +179,9 @@ rank.cmo : ../ZEN/word.cmo web.cmo phases.cmo morphology.cmi \
     ../ZEN/list2.cmo lexer.cmi constraints.cmi
 rank.cmx : ../ZEN/word.cmx web.cmx phases.cmx morphology.cmi \
     ../ZEN/list2.cmx lexer.cmx constraints.cmx
-uoh_interface.cmo : ../ZEN/word.cmo web.cmo phases.cmo paths.cmo \
+uoh_interface.cmo : ../ZEN/word.cmo web.cmo SCLpaths.cmo phases.cmo \
     morphology.cmi morpho_html.cmo html.cmo dispatcher.cmi canon.cmo
-uoh_interface.cmx : ../ZEN/word.cmx web.cmx phases.cmx paths.cmx \
+uoh_interface.cmx : ../ZEN/word.cmx web.cmx SCLpaths.cmx phases.cmx \
     morphology.cmi morpho_html.cmx html.cmx dispatcher.cmx canon.cmx
 reader.cmo : web.cmo uoh_interface.cmo sanskrit.cmi rank.cmo phases.cmo \
     paths.cmo html.cmo encode.cmo control.cmo checkpoints.cmo cgi.cmo \
@@ -254,8 +254,8 @@ reset_caches.cmx : web.cmx morphology.cmi ../ZEN/gen.cmx ../ZEN/deco.cmx \
     auto.cmi
 html.cmo : paths.cmo
 html.cmx : paths.cmx
-web.cmo : paths.cmo html.cmo date.cmo
-web.cmx : paths.cmx html.cmx date.cmx
+web.cmo : SCLpaths.cmo paths.cmo html.cmo date.cmo
+web.cmx : SCLpaths.cmx paths.cmx html.cmx date.cmx
 css.cmo : web.cmo html.cmo
 css.cmx : web.cmx html.cmx
 cgi.cmo :

@@ -16,7 +16,7 @@
 
 module Interface = struct
 
-open Graph_segmenter; (* [Segment cur_chunk set_cur_offset graph visual ] *)
+open Graph_segmenter; (* [Segment cur_chunk set_cur_offset graph visual] *)
 open Phases; (* [Phases] *) 
 open Phases; (* [phase is_cache generative] *) 
 open Dispatcher; (* [transducer_vect phase Dispatch transition trim_tags] *) 

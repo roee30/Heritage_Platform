@@ -636,7 +636,7 @@ value scl_url = "http://localhost/SCL/SHMT/" (* Used to be set in Paths *)
 ;
 (* This toogle controls accessibility of University of Hyderabad tools *)
 value scl_toggle = (* should be [exists scl_profile] *)
-  not (scl_url="") (* True if SCL tools are installed *)
+  not (SCLpaths.scl_url="") (* True if SCL tools are installed *)
 ;
 (* SCL configuration begin *)
 

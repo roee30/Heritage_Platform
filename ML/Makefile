@@ -51,7 +51,8 @@ user_aid.ml reset_caches.ml
 # WEB package - HTML, HTTP, CGI utilities for Web interface
 WEB=html.ml web.ml css.ml cgi.ml morpho_html.ml chapters.ml \
 mk_index_page.ml mk_grammar_page.ml mk_reader_page.ml mk_sandhi_page.ml \
-morpho_ext.ml 
+morpho_ext.ml
+# extra file SCLpaths.ml for SCL interfacing - not distributed.
 
 # TREE package - tree bank manager and syntax analyser - legacy
 TREE=parse_tree.ml parse_apte.ml stemmer.ml tag_tree.ml tag_apte.ml 
@@ -89,7 +90,7 @@ all: engine static_pages reset_caches reader_plugin sandhi_test
 # legacy in need of re-design
 regression: rank.cmx regression.cmx
 	$(LINK) $(CORENATIVES) unix.cmxa date.cmx control.cmx deco.cmx \
-lexmap.cmx inflected.cmx html.cmx web.cmx naming.cmx morpho_string.cmx \
+lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx \
 morpho.cmx load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx chapters.cmx \
 morpho_html.cmx bank_lexer.cmx cgi.cmx segmenter.cmx morpho_ext.cmx \
 load_morphs.cmx lexer.cmx constraints.cmx rank.cmx regression.cmx -o regression
@@ -104,7 +105,7 @@ install:
 
 reset_caches: reset_caches.cmx
 	$(LINK) $(CORENATIVES) unix.cmxa trie.cmx deco.cmx html.cmx date.cmx \
-web.cmx reset_caches.cmx -o reset_caches
+SCLpaths.cmx web.cmx reset_caches.cmx -o reset_caches
 
 # clears the cached lexicon (irreversible operation)
 clear_cache: reset_caches
@@ -137,27 +138,27 @@ lemmatizer reader parser sandhier reader interface user_aid
 indexer: indexer.cmx
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
 control.cmx word.cmx canon.cmx trie.cmx deco.cmx zen_lexer.cmx phonetics.cmx \
-transduction.cmx encode.cmx html.cmx web.cmx cgi.cmx index.cmx \
+transduction.cmx encode.cmx html.cmx SCLpaths.cmx web.cmx cgi.cmx index.cmx \
 naming.cmx morpho_string.cmx morpho.cmx order.cmx chapters.cmx morpho_html.cmx \
 indexer.cmx -o indexer
 
 indexerd: indexerd.cmx 
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx date.cmx control.cmx \
 word.cmx zen_lexer.cmx canon.cmx phonetics.cmx transduction.cmx encode.cmx \
-deco.cmx html.cmx web.cmx naming.cmx cgi.cmx morpho_string.cmx \
+deco.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx cgi.cmx morpho_string.cmx \
 morpho.cmx order.cmx chapters.cmx morpho_html.cmx indexerd.cmx -o indexerd
 
 lemmatizer: lemmatizer.cmx 
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx date.cmx control.cmx \
 word.cmx deco.cmx zen_lexer.cmx canon.cmx phonetics.cmx transduction.cmx \
-encode.cmx html.cmx web.cmx cgi.cmx naming.cmx morpho_string.cmx \
+encode.cmx html.cmx SCLpaths.cmx web.cmx cgi.cmx naming.cmx morpho_string.cmx \
 morpho.cmx order.cmx chapters.cmx morpho_html.cmx lemmatizer.cmx -o lemmatizer
 
 declension: declension.cmx
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx date.cmx control.cmx \
 word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx \
 deco.cmx int_sandhi.cmx lexmap.cmx inflected.cmx bank_lexer.cmx html.cmx \
-web.cmx nouns.cmx naming.cmx morpho_string.cmx morpho.cmx order.cmx \
+SCLpaths.cmx web.cmx nouns.cmx naming.cmx morpho_string.cmx morpho.cmx order.cmx \
 chapters.cmx morpho_html.cmx cgi.cmx share.cmx trie.cmx index.cmx \
 multilingual.cmx declension.cmx -o declension
 
@@ -165,21 +166,21 @@ conjugation: conjugation.cmx
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx date.cmx control.cmx \
 word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx \
 deco.cmx int_sandhi.cmx lexmap.cmx inflected.cmx parts.cmx pada.cmx verbs.cmx \
-html.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx order.cmx \
+html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx order.cmx \
 chapters.cmx morpho_html.cmx cgi.cmx share.cmx trie.cmx index.cmx \
 multilingual.cmx conjugation.cmx -o conjugation
 
 sandhier: sandhier.cmx
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx control.cmx word.cmx \
 zen_lexer.cmx canon.cmx phonetics.cmx transduction.cmx encode.cmx sandhi.cmx \
-int_sandhi.cmx date.cmx html.cmx web.cmx cgi.cmx sandhier.cmx \
+int_sandhi.cmx date.cmx html.cmx SCLpaths.cmx web.cmx cgi.cmx sandhier.cmx \
 -o sandhier
 
 reader: reader.cmx 
 	$(LINK) unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
 control.cmx word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx \
 encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx \
-inflected.cmx html.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
+inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
 load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
 chapters.cmx morpho_html.cmx cgi.cmx segmenter.cmx morpho_ext.cmx \
 load_morphs.cmx lexer.cmx constraints.cmx rank.cmx bank_lexer.cmx \
@@ -189,7 +190,7 @@ reader_plugin: reader_plugin.cmx
 	$(LINK) unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
 control.cmx word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx \
 encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx \
-inflected.cmx html.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
+inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
 load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
 chapters.cmx morpho_html.cmx cgi.cmx segmenter.cmx morpho_ext.cmx \
 load_morphs.cmx lexer.cmx constraints.cmx reader_plugin.cmx -o reader_plugin
@@ -198,7 +199,7 @@ interface: interface.cmx
 	$(LINK) unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
 control.cmx word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx \
 encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx \
-inflected.cmx html.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
+inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
 load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
 chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx load_morphs.cmx \
 int_sandhi.cmx nouns.cmx share.cmx minimap.cmx mini.cmx nums.cmxa \
@@ -208,7 +209,7 @@ user_aid: user_aid.cmx
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
 control.cmx word.cmx canon.cmx deco.cmx zen_lexer.cmx phonetics.cmx \
 transduction.cmx encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx html.cmx \
-web.cmx naming.cmx morpho_string.cmx morpho.cmx order.cmx chapters.cmx \
+SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx order.cmx chapters.cmx \
 morpho_html.cmx bank_lexer.cmx cgi.cmx phases.cmx checkpoints.cmx user_aid.cmx \
 -o user_aid
 
@@ -216,7 +217,7 @@ parser: parser.cmx
 	$(LINK) unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
 control.cmx word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx \
 encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx \
-inflected.cmx html.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
+inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
 load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
 chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx segmenter.cmx \
 morpho_ext.cmx load_morphs.cmx lexer.cmx constraints.cmx checkpoints.cmx \
@@ -226,33 +227,33 @@ tagger: tagger.cmx
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx date.cmx install.cmx \
 word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx \
 skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx inflected.cmx \
-html.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx pada.cmx \
+html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx pada.cmx \
 dispatcher.cmx order.cmx chapters.cmx morpho_html.cmx cgi.cmx \
 segmenter.cmx morpho_ext.cmx lexer.cmx constraints.cmx tagger.cmx -o tagger
 
 css: css.cmx
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx html.cmx \
-web.cmx css.cmx -o css
+SCLpaths.cmx web.cmx css.cmx -o css
 
 mk_index_page: mk_index_page.cmx 
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx html.cmx \
-web.cmx mk_index_page.cmx -o mk_index_page
+SCLpaths.cmx web.cmx mk_index_page.cmx -o mk_index_page
 
 mk_grammar_page: mk_grammar_page.cmx 
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx html.cmx \
-web.cmx mk_grammar_page.cmx -o mk_grammar_page
+SCLpaths.cmx web.cmx mk_grammar_page.cmx -o mk_grammar_page
 
 mk_reader_page: mk_reader_page.cmx
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx control.cmx \
-html.cmx web.cmx cgi.cmx mk_reader_page.cmx -o mk_reader_page
+html.cmx SCLpaths.cmx web.cmx cgi.cmx mk_reader_page.cmx -o mk_reader_page
 
 mk_nyaaya_page: mk_nyaaya_page.cmx
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx \
-html.cmx web.cmx cgi.cmx mk_nyaaya_page.cmx -o mk_nyaaya_page
+html.cmx SCLpaths.cmx web.cmx cgi.cmx mk_nyaaya_page.cmx -o mk_nyaaya_page
 
 mk_sandhi_page: mk_sandhi_page.cmx
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx html.cmx \
-web.cmx mk_sandhi_page.cmx -o mk_sandhi_page
+SCLpaths.cmx web.cmx mk_sandhi_page.cmx -o mk_sandhi_page
 
 # site_pages must be recomputed after configuration and creation of DICO dir
 # the style sheet must be recomputed, since it contains absolute URLs as well

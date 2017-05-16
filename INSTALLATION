@@ -11,28 +11,39 @@
 This is just a reminder for quick installation.
 A more complete installation procedure is described in file SETUP/INSTALL.
 
-0) Install Objective Caml 4.02 distribution 
-(available from http://ocaml.org).
-Then install the Camplp4 processor in its 4.02 distribution
-(available from https://github.com/ocaml/camlp4). 
+0) Install OCaml (>= 4.02). See http://ocaml.org for installation
+instructions.
+
+Then install the Camplp4 processor in the corresponding distribution.
+If OCaml has been installed through the OPAM package manager, then:
+
+   opam install camlp4
+
+should do the job. Alternatively, see https://github.com/ocaml/camlp4
+for download and installation instructions.
 
 1) Install the Heritage_resources package:
-git clone git@gitlab.inria.fr:huet/Heritage_Resources.git
 
-2) Create your configuration file my_config.txt
+   git clone https://gitlab.inria.fr/huet/Heritage_Resources.git
 
-   Look at the SETUP/CONFIGS directory to find examples.
-   SETUP/config_help.txt explains all the fields.
+2) Create your configuration file SETUP/CONFIGS/my_config.txt
+
+Look at the SETUP/CONFIGS directory to find examples. All fields are
+explained in SETUP/config_help.txt.
+
 Then make a symbolic link to your configuration file in SETUP dir:
 
-   ln -s my_config.txt config
-   The "config" link has to be located in the SETUP directory,
-   the path of my_config.txt is arbitrary, either outside the Platform area,
-   or possibly inside the CONFIGS directory if you plan to update regularly,
-   and signaling it to the developers in order to include it in the Git distrib
+   cd SETUP
+   ln -s CONFIGS/my_config.txt ./config
+
+The "config" link has to be located in the SETUP directory, the path
+of my_config.txt is arbitrary, either outside the Platform area, or
+possibly inside the CONFIGS directory if you plan to update regularly,
+and signaling it to the developers in order to include it in the Git
+distrib
 
 3) Launch configuration in main dir
-   
+
    ./configure
 
 4) Launch compilation
@@ -40,9 +51,9 @@ Then make a symbolic link to your configuration file in SETUP dir:
    make
 
 5) Install it
+
    sudo make install
 
 6) Enjoy :-)
 
 Report all problems to Gerard.Huet@inria.fr
-

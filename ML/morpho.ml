@@ -21,7 +21,7 @@ module Morpho_out (Chan: sig value chan: ref out_channel; end)
 
 value ps s = output_string Chan.chan.val s 
 ; 
-value pl s = do { ps s; ps "\n" } 
+value pl s = ps (s ^ "\n")
 ;
 value pr_word w = ps (Canon.decode w)
 ;
@@ -96,9 +96,9 @@ value print_inv_morpho_link pvs pe pne pu form =
      if pv = [] then print e 
                 else do { ps (Canon.decode pvs ^ "-"); print e } in
   print_inv_morpho (encaps pe) (encaps pne) pu form 
-(* possible overgeneration when derivative of a root non attested with pv 
-   since only existential test in [Dispatcher.validate_pv]
-eg anusandhiiyate should keep only [dhaa#1], not [dhaa#2], [dhii#1] or [dhyaa] *)
+(* Possible overgeneration when derivative of a root non attested with pv 
+   since only existential test in [Dispatcher.validate_pv]. Thus
+   [anusandhiiyate] should show [dhaa#1], not [dhaa#2], [dhii#1] or [dhyaa] *)
 ;
 value print_inv_morpho_tad pv pe pne pu stem sfx_form (seg_num,sub)  
                            generative (delta,morphs) = 

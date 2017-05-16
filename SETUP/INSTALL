@@ -127,12 +127,8 @@ CAPTION is the localisation message on the site entry page.
 SKTRESOURCES is the local path to the distribution directory where
 the Heritage_Resources linguistic data have been installed.
 
-When the config file is ready, store it in directory SETUP/CONFIGS as
-xxx_config.txt with xxx the name of your site, and in directory SETUP
-execute the command
-ln -s CONFIGS/config.xxx.txt config
-
-Then execute in directory Main the command
+When the config file is ready, store it in directory SETUP, then execute
+in directory Main the command
 ./configure 
 
 The localization is complete. More complex localizations may be obtained by changes of

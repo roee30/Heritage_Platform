@@ -4641,7 +4641,7 @@ value build_dva entry =
 value build_tri entry = 
   let decline case suff = 
      (case,fix (revcode "tr") suff)
-  and declinn case suff = 
+  and declinf case suff = 
      (case,fix (revcode "tis") suff) in 
   enter entry 
    [ Declined Noun Mas
@@ -4670,18 +4670,19 @@ value build_tri entry =
    ]
    ; Declined Noun Fem
    [ (Plural,
-        [ declinn Voc "ras"
-        ; declinn Nom "ras"
-        ; declinn Acc "ras"
-        ; declinn Ins ".rbhis"
-        ; declinn Dat ".rbhyas"
-        ; declinn Abl ".rbhyas"
-        ; declinn Gen ".r.naam"
-        ; declinn Loc ".r.su"
+        [ declinf Voc "ras"
+        ; declinf Nom "ras"
+        ; declinf Acc "ras"
+        ; declinf Ins ".rbhis"
+        ; declinf Dat ".rbhyas"
+        ; declinf Abl ".rbhyas"
+        ; declinf Gen ".r.naam"
+        ; declinf Loc ".r.su"
         ])
    ]             
    ; Bare Noun (code "tri")
-   ]
+   ; Bare Noun (code "tis.r") (* tis.rdhanva Whitney§482f *)
+   ] 
 ;
 value build_catur entry = 
   let decline case suff = 
@@ -5575,25 +5576,25 @@ value compute_decls word genders =
 ;
 value iic_indecl = (* should be lexicalized *)
 (* indeclinable stems used as iic of non-avyayiibhaava cpd *)
-  [ "atra" (* atrabhavat *)
-  ; "adhas" (* adha.hzaakha adhazcara.nam *)
-  ; "antar" (* antarafga *)
-  ; "alam" (* (gati) ala.mk.rta *)
-  ; "iti" (* ityukta *)  
-  ; "upari" (* uparicara *)  
+  [ "atra"      (* atrabhavat *)
+  ; "adhas"     (* adha.hzaakha adhazcara.nam *)
+  ; "antar"     (* antarafga *)
+  ; "alam"      (* (gati) ala.mk.rta *)
+  ; "iti"       (* ityukta *)  
+  ; "upari"     (* uparicara *)  
   ; "ubhayatas" (* ubhayata.hsasya *)
-  ; "tatra" (* tatrabhavat *)
-  ; "na~n" (* na~nvaada *)
-  ; "naanaa" (* naanaaruupa *)
-  ; "param" (* para.mtapa *)
-  ; "punar" (* punarukta *)
-  ; "puras" (* (gati) pura.hstha *)
-  ; "mithyaa" (* mithyaak.rta *)
-  ; "tathaa" (* tathaagata *)
-  ; "yathaa" (* yathaanirdi.s.ta *)
-  ; "vinaa" (* vinaabhava *)
-  ; "satraa" (* satraajit *)
-  ; "saha"  (* problematic -- overgenerates  *)
+  ; "tatra"     (* tatrabhavat *)
+  ; "na~n"      (* na~nvaada *)
+  ; "naanaa"    (* naanaaruupa *)
+  ; "param"     (* para.mtapa *)
+  ; "punar"     (* punarukta *)
+  ; "puras"     (* (gati) pura.hstha *)
+  ; "mithyaa"   (* mithyaak.rta *)
+  ; "tathaa"    (* tathaagata *)
+  ; "yathaa"    (* yathaanirdi.s.ta *)
+  ; "vinaa"     (* vinaabhava *)
+  ; "satraa"    (* satraajit *)
+  ; "saha"      (* problematic -- overgenerates  *)
   ; "saak.saat"
   ; "saaci"
   ]
@@ -5676,8 +5677,8 @@ value enter_iic entry =
 value compute_extra_iic = iter enter_iic  
 ;
 (* Glitch to allow Cvi construction to kridanta entries, even though
-   [Inflected.enter_form] called from [Parts] does not allow it *)
-(* incomplete for compounds anyway: si.mh'avyaaghraami.siik.r *)
+   [Inflected.enter_form] called from [Parts] does not allow it. *)
+(* Incomplete for compounds anyway: "si.mh'avyaaghraami.siik.r" *)
 value iiv_krids = 
   [ "gupta"
   ; "yuddha"
@@ -5703,18 +5704,18 @@ value enter_iiy entry =
 ;
 value tasil_preserve () = do (* Whitney§1098 *)
   (* needed since -tas etymology induces skipping the entry *)
-  { enter1 "tad" (Indecl Tas (code "tatas")) (* tasil on tad \Pan{5,3,7} *) 
-  ; enter1 "ya#1" (Indecl Tas (code "yatas")) (* tasil on ya \Pan{5,3,7} *) 
-  ; enter1 "ku#1" (Indecl Tas (code "kutas")) (* tasil on ku \Pan{5,3,7-8} *)
-  ; enter1 "abhi" (Indecl Tas (code "abhitas")) (* tasil on abhi \Pan{5,3,9} *)
-  ; enter1 "pari" (Indecl Tas (code "paritas")) (* tasil on pari \Pan{5,3,9} *)
-  ; enter1 "anti" (Indecl Tas (code "antitas")) (* tasil on pn \Pan{5,3,7} *)
-  ; enter1 "adas" (Indecl Tas (code "amutas"))    (* id *)
-  ; enter1 "anya" (Indecl Tas (code "anyatas"))   (* id *)
-  ; enter1 "avara" (Indecl Tas (code "avaratas")) (* id *)  
-  ; enter1 "para" (Indecl Tas (code "paratas"))   (* id *) 
-  ; enter1 "vizva" (Indecl Tas (code "vizvatas")) (* id *) 
-  ; enter1 "sva" (Indecl Tas (code "svatas"))     (* id *) 
+  { enter1 "tad"    (Indecl Tas (code "tatas"))   (* tasil on tad \Pan{5,3,7} *) 
+  ; enter1 "ya#1"   (Indecl Tas (code "yatas"))   (* tasil on ya \Pan{5,3,7} *) 
+  ; enter1 "ku#1"   (Indecl Tas (code "kutas"))   (* tasil on ku \Pan{5,3,7-8} *)
+  ; enter1 "abhi"   (Indecl Tas (code "abhitas")) (* tasil on abhi \Pan{5,3,9} *)
+  ; enter1 "pari"   (Indecl Tas (code "paritas")) (* tasil on pari \Pan{5,3,9} *)
+  ; enter1 "anti"   (Indecl Tas (code "antitas")) (* tasil on pn \Pan{5,3,7} *)
+  ; enter1 "adas"   (Indecl Tas (code "amutas"))    (* id *)
+  ; enter1 "anya"   (Indecl Tas (code "anyatas"))   (* id *)
+  ; enter1 "avara"  (Indecl Tas (code "avaratas"))  (* id *)  
+  ; enter1 "para"   (Indecl Tas (code "paratas"))   (* id *) 
+  ; enter1 "vizva"  (Indecl Tas (code "vizvatas"))  (* id *) 
+  ; enter1 "sva"    (Indecl Tas (code "svatas"))    (* id *) 
   ; enter1 "puurva" (Indecl Tas (code "puurvatas")) (* id *) 
   ; enter1 "aze.sa" (Indecl Tas (code "aze.satas")) (* tasil on privative cpd *)
   }
@@ -5746,7 +5747,7 @@ value compute_extra iic_only_stems = do
     where decl = Declined Noun Mas [ (Singular,[ (Dat,code "bhuumaaya") ]) ]
   ; enter1 "sudhii" (* Monier *) decl
     where decl = Declined Noun Mas [ (Singular,[ (Nom,code "sudhi") ]) ]
-  ; enter1 "viz#2" (* vedic Whitney§218a *) decl
+  ; enter1 "viz#2" (* Vedic Whitney§218a *) decl
     where decl = Declined Noun Fem [ (Plural,[ (Loc,code "vik.su") ]) ]
   ; iter enter_iiy iic_avya
   ; tasil_preserve ()

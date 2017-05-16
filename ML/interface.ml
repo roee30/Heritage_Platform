@@ -78,7 +78,7 @@ open Viccheda (* [segment_all visual_width] etc. *)
 ;
 (* At this point we have the sandhi inverser segmenting engine *)
 
-(* separates tags of homophonous segments vertically *)
+(* Separates tags of homophonous segments vertically *)
 value fold_vert f = fold 1 where rec fold n = fun
   [ [] -> () 
   | [ x ] -> f n x
@@ -88,14 +88,13 @@ value fold_vert f = fold 1 where rec fold n = fun
 value print_morph pvs seg_num cached gen form n tag = 
   Morpho_html.print_graph_link pvs cached form (seg_num,n) gen tag 
 ;
-(* tags is the multi-tag of the form of a given phase *)
-(* tags : Morphology.multitag) *)
+(* tags : Morphology.multitag is the multi-tag of the form of a given phase *)
 value print_tags pvs seg_num phase form tags =
   let gen = generative phase 
   and cached = is_cache phase in 
   let ok_tags = if pvs = [] then tags 
                 else trim_tags (generative phase) form (Canon.decode pvs) tags
-  (* NB Existence of the segment guarantees that [ok_tags] is not empty *)
+  (* NB Existence of the segment warrants that [ok_tags] is not empty *)
   and ptag = print_morph pvs seg_num cached gen form in 
   fold_vert ptag ok_tags  
 ;
@@ -333,9 +332,9 @@ value rec print_first text cpts chunk_orig chunk chunk_ind =
 value rec print_all text cpts chunks index = match chunks with
   [ [] -> ()
   | [ chunk :: rest ] -> do
-    { print_first text cpts chunk chunk index
-    ; print_all text cpts rest (succ (Word.length chunk))
-    }
+      { print_first text cpts chunk chunk index
+      ; print_all text cpts rest (succ (Word.length chunk))
+      }
   ]
 ;
 value print_word last_ind text cpts (rword,phase,k,conflict) = 

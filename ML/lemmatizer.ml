@@ -10,7 +10,7 @@
 (* CGI-bin lemmatizer for searching the inflected forms databases         *)
 (* This CGI is triggered by page [index_page] in [dico_dir].              *)
 (* Reads its input in shell variable [QUERY_STRING] URI-encoded.          *)
-(* Prints an html document of lemma information on [stdout].              *)
+(* Prints an HTML document of lemma information on [stdout].              *)
 (*i Test: (csh): setenv QUERY_STRING "q=eti&c=Verb"; lemmatizer          i*)
 (*i Web: http://skt_server_url/cgi-bin/sktlemmatizer?q=eti&c=Verb        i*)
 
@@ -35,10 +35,8 @@ value prelude lang = do
   ; print_title_solid Mauve (Some lang) stem_title_en
   }
 ; 
-value postlude lang = do
-  { ()
-  ; page_end lang True 
-  }
+value postlude lang = 
+  page_end lang True 
 ;
 value abor = abort default_language
 ;

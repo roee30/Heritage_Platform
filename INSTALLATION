@@ -26,21 +26,10 @@ for download and installation instructions.
 
    git clone https://gitlab.inria.fr/huet/Heritage_Resources.git
 
-2) Create your configuration file SETUP/CONFIGS/my_config.txt
+2) Create your configuration file "config" in directory SETUP.
 
 Look at the SETUP/CONFIGS directory to find examples. All fields are
 explained in SETUP/config_help.txt.
-
-Then make a symbolic link to your configuration file in SETUP dir:
-
-   cd SETUP
-   ln -s CONFIGS/my_config.txt ./config
-
-The "config" link has to be located in the SETUP directory, the path
-of my_config.txt is arbitrary, either outside the Platform area, or
-possibly inside the CONFIGS directory if you plan to update regularly,
-and signaling it to the developers in order to include it in the Git
-distrib
 
 3) Launch configuration in main dir
 

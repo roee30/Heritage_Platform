@@ -626,9 +626,9 @@ distrib: # distribution of ZEN, and of derived Heritage under HTML & PDF formats
 	cp -p $(MANUAL) DISTR/SITE # user's manual 
 #	cp -p $(ROBOTS) DISTR/SITE # robots permissions
 	mkdir DISTR/$(STAT)
-	cp -p $(STAT)/regression_template DISTR/$(STAT) # for regression analysis suite
-	touch DISTR/dictionary # for make dictionary to succeed vacuously
-	touch DISTR/xmlmorphology # for make xmlmorphology to succeed vacuously
+#	cp -p $(STAT)/regression_template DISTR/$(STAT) # for regression analysis suite
+#	touch DISTR/dictionary # for make dictionary to succeed vacuously
+#	touch DISTR/xmlmorphology # for make xmlmorphology to succeed vacuously
 
 # creates an archive SktPlatform.$(VERSION) with the full distribution (55Mb)
 distrib_full: distrib# assumes distrib has been run, and thus directory DISTR exists
@@ -651,7 +651,7 @@ distrib_full: distrib# assumes distrib has been run, and thus directory DISTR ex
 	cp -Rp $(DATASOURCE) DISTR/$(DATA) # Morphology introduction
 	cp -Rp CORPUS DISTR # Corpus - under development
 	cp -Rp $(STAT) DISTR              # Statistical data, logs, notes
-	touch DISTR/dictionary # for make dictionary to succeed vacuously
+#	touch DISTR/dictionary # for make dictionary to succeed vacuously
 	mv DISTR SktPlatform.$(VERSION)   # SktPlatform.$(VERSION) fresh
 
 # deprecated: now we may use Git for distribution 
@@ -698,7 +698,7 @@ cold: # for first install
 install_regression: # for initialisation of regression suite - su privilege
 	mkdir -p $(SERVERPUBLICDIR)$(VAR)
 	chmod a+rw $(SERVERPUBLICDIR)$(VAR)
-	cp -p $(STAT)/regression_template $(SERVERPUBLICDIR)$(VAR)/regression.txt
+#TODO	cp -p $(STAT)/regression_template $(SERVERPUBLICDIR)$(VAR)/regression.txt
 	chmod a+rw $(SERVERPUBLICDIR)$(VAR)/regression.txt
 
 empty_caches: ML/reset_caches # caution: will reset the caches

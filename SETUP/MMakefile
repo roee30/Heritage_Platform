@@ -17,7 +17,7 @@
 ############################ VERSIONING ####################################
 
 # If you change VERSION/DATE: ./configure (triggering make version)
-# and separately update lexicon version counter in Heritage.e 
+# and separately update lexicon version counter in Heritage.e
 VERSION=#VERSION
 # DATE ought to be of the form YYYY-MM-DD, consistently with ISO 8601
 DATE=#DATE
@@ -27,7 +27,7 @@ SKTRESOURCES=#SKTRESOURCES
 
 DATA=$(SKTRESOURCES)DATA# morphological data and transducers
 HERITAGE=$(SKTRESOURCES)DICO# hypertext Heritage read-only
-DICO=DICO# hypertext Heritage 
+DICO=DICO# hypertext Heritage
 BOOK=$(SKTRESOURCES)BOOK# Heritage.pdf abrevs.pdf
 MW=$(SKTRESOURCES)MW# hypertext Monier-Williams
 GOLD=$(SKTRESOURCES)GOLD# Heritage in Goldendict format databases
@@ -42,19 +42,19 @@ SHELL=/bin/sh
 
 ############### Distribution Parameterization Begin #########################
 
-# Distribution licenses - depends on the packages selection 
+# Distribution licenses - depends on the packages selection
 # LGPL distribution Kerala workshop 25-12-2011 Happy Christmas !
 # LGPL distribution WSC Conference Bangkok 25-06-2015
 # GitLab archive 15-04-2017
 
 SOFT_LICENSE=LEGAL/LGPL/LICENSE # Free software license LGPL
 #SOFT_LICENSE=LEGAL/UoH/LICENSE # University of Hyderabad distribution
-DATA_LICENSE=$(DATA)/LGPLLR.pdf 
+DATA_LICENSE=$(DATA)/LGPLLR.pdf
 DATA_LICENSES=$(DATA)/LGPLLR.pdf $(DATA)/LGPLLR.tex $(DATA)/LGPLLR.html
 LICENSES=$(SOFT_LICENSE) $(DATA_LICENSE)
 
 ML_COPYRIGHT=ML/COPYRIGHT
-LEGAL=$(ML_COPYRIGHT) $(LICENSES) 
+LEGAL=$(ML_COPYRIGHT) $(LICENSES)
 
 CONFIGS=SETUP/CONFIGS SETUP/config_help.txt
 
@@ -82,20 +82,20 @@ DOC_IMAGES=IMAGES/lexer10.jpg IMAGES/lexer17.jpg IMAGES/lexer40.jpg # Copy GH
 # NB. Use of gif vs others formats such as jpg is due to browser compatibility
 
 # Scripts
-SCRIPTS=JAVA/utf82VH.js 
+SCRIPTS=JAVA/utf82VH.js
 
-# Next are copyright specific images 
+# Next are copyright specific images
 SITE_IMAGES=IMAGES/yinyang.gif IMAGES/panini.jpg IMAGES/spin-new.gif \
-IMAGES/arrw01_06a.gif IMAGES/arrw01_16a.gif 
-TOP_IMAGES=IMAGES/sanskrit.gif IMAGES/borderl.jpg IMAGES/borderr.jpg 
-BACK_IMAGES=IMAGES/om.jpg IMAGES/om1.jpg IMAGES/om2.jpg IMAGES/om3.jpg IMAGES/om4.jpg 
+IMAGES/arrw01_06a.gif IMAGES/arrw01_16a.gif
+TOP_IMAGES=IMAGES/sanskrit.gif IMAGES/borderl.jpg IMAGES/borderr.jpg
+BACK_IMAGES=IMAGES/om.jpg IMAGES/om1.jpg IMAGES/om2.jpg IMAGES/om3.jpg IMAGES/om4.jpg
 MISC_IMAGES=IMAGES/ganesh.gif IMAGES/ganesh.jpg IMAGES/jagannath.jpg \
 IMAGES/hare.jpg IMAGES/ganeshgannath.jpg IMAGES/krishnagannath.jpg \
 IMAGES/jagannath2.jpg IMAGES/sarasvati.jpg IMAGES/Panini2.jpg \
 IMAGES/jaganyantra.png IMAGES/geopattern.gif IMAGES/vajra.jpg \
 IMAGES/kaadambarii.png IMAGES/vajra.png
 
-# Distributed images for mirror Web site 
+# Distributed images for mirror Web site
 #IMAGES= # no image in distribution
 IMAGES=$(INRIA_IMAGES) $(GH_IMAGES) $(SITE_IMAGES) $(TOP_IMAGES) \
 $(BACK_IMAGES) $(DOC_IMAGES) $(MISC_IMAGES)
@@ -105,7 +105,7 @@ $(BACK_IMAGES) $(DOC_IMAGES) $(MISC_IMAGES)
 # devanagari: it99otf.zip 'Sanskrit 99' font courtesy Ulrich Stiehl, Heidelberg
 # FONTS=FONTS/tim-iu.zip FONTS/it99otf.zip
 
-# Lexical databases 
+# Lexical databases
 DIC_PDF=Heritage.pdf
 DIC_HTML=Heritage.html #in 1 page! (used for Goldendict format translation)
 
@@ -119,16 +119,16 @@ PLATFORM=#PLATFORM# Computer or Station -- no blank character in such strings
 # PLATFORM=Simputer# Amida Simputer handheld device - historical
 
 TRANSLIT=#TRANSLIT# Transliteration scheme VH, KH or WX
-LEXICON=#LEXICON# Lexicon toggle default 
+LEXICON=#LEXICON# Lexicon toggle default
 DISPLAY=#DISPLAY# Default display font deva or roma
 
 # Main directory, where the sanskrit tools are installed
-SKTINSTALLDIR=#SKTINSTALLDIR# To be set at configuration time 
+SKTINSTALLDIR=#SKTINSTALLDIR# To be set at configuration time
 
 # Host name of the server - used only for installation message below
 SERVERHOST=#SERVERHOST
 # SERVERHOST=sanskrit.inria.fr# quincy sanskrit [official site]
-# SERVERHOST=pauillac.inria.fr# pauillac 
+# SERVERHOST=pauillac.inria.fr# pauillac
 # SERVERHOST=213.41.153.152# dhruva gerardh.net1.nerim.net [legacy]
 
 # For remote invocation of cgi services (eg Sanskrit Library)
@@ -172,7 +172,7 @@ CGIREADER=sktreader$(CGIEXT)
 # cgi name under which the sanskrit parser is installed on the server
 CGIPARSER=sktparser$(CGIEXT)
 # cgi name reserved for sanskrit tagger (* unused in current version *)
-CGITAGGER=skttagger$(CGIEXT) 
+CGITAGGER=skttagger$(CGIEXT)
 # cgi name under which the sanskrit sandhi segmenter is installed on the server
 CGISANDHI=sktsandhier$(CGIEXT)
 # cgi name under which the sanskrit tagging summarizer is installed on the server
@@ -204,19 +204,19 @@ TEMPAREA=#TEMPAREA
 
 # CORE is needed by all other packages - as well as the ZEN library
 # GRAM is needed to generate the Sanskrit Heritage Engine
-# WEB is needed to create the web pages and cgi-bin executables 
+# WEB is needed to create the web pages and cgi-bin executables
 
-# Les packages de modules - Tous dans la bibliothèque ML 
+# Les packages de modules - Tous dans la bibliothèque ML
 # Linked to the ZEN library (generic Ocaml computational linguistic library)
 
 # UTIL utilities for ML folder
-UTIL=ML/Makefile $(ML_COPYRIGHT) ML/.ocamlinit ML/.depend 
+UTIL=ML/Makefile $(ML_COPYRIGHT) ML/.ocamlinit ML/.depend
 
 # CORE package - utilities, transducers, sanskrit and french lexers, dico spec
 DISTR_CORE=ML/control.ml ML/dico.mli ML/version.ml ML/date.ml ML/install.ml \
 ML/canon.ml ML/transduction.ml ML/encode.ml ML/order.ml ML/padapatha \
 ML/sanskrit.mli ML/sanskrit.ml ML/french.mli ML/french.ml ML/skt_lexer.ml
-CORE=$(DISTR_CORE) ML/paths.ml 
+CORE=$(DISTR_CORE) ML/paths.ml
 
 # GRAM package - phonetics, morphology, segmentation and tagging engines
 GRAM=ML/index.ml ML/phonetics.ml ML/int_sandhi.ml ML/morphology.mli \
@@ -230,7 +230,7 @@ ML/rank.ml ML/uoh_interface.ml ML/reader.ml ML/parser.ml ML/constraints.mli \
 ML/constraints.ml ML/multilingual.ml ML/paraphrase.mli ML/paraphrase.ml \
 ML/reader_plugin.ml ML/bank_lexer.ml ML/regression.ml ML/checkpoints.ml \
 ML/graph_segmenter.ml ML/interface.mli ML/interface.ml ML/user_aid.ml \
-ML/reset_caches.ml 
+ML/reset_caches.ml
 
 # WEB package - HTML, HTTP, CGI ad-hoc utilities for Web interface
 WEB=ML/html.ml ML/web.ml ML/css.ml ML/cgi.ml ML/morpho_html.ml ML/chapters.ml \
@@ -239,17 +239,17 @@ ML/mk_sandhi_page.ml ML/morpho_ext.ml ML/compute_mw_links.ml
 
 # TREE package - tree bank manager and syntax analyser - deprecated
 TREE=ML/stemmer.ml ML/parse_tree.ml ML/parse_apte.ml ML/tag_tree.ml \
-ML/tag_apte.ml 
+ML/tag_apte.ml
 
-DEBUG= ML/morpho_debug.ml ML/debug.ml 
+DEBUG= ML/morpho_debug.ml ML/debug.ml
 
-# Historical versions of the segmenter, tagger and reader with single phase 
+# Historical versions of the segmenter, tagger and reader with single phase
 OBSOLETE_ML=ML/segmenter1.ml ML/tagger1.ml ML/reader1.ml ML/tagger.ml \
 ML/nyaaya.ml ML/mk_nyaaya_page.ml \
 ML/patch_auto.ml # awful hack for patching automata structures - now unused
 
 # Modules of all software packages are in library ML (besides the ZEN library)
-ML=$(UTIL) $(CORE) $(GRAM) $(WEB) $(TREE) $(LEGAL) 
+ML=$(UTIL) $(CORE) $(GRAM) $(WEB) $(TREE) $(LEGAL)
 
 # Directory STAT contains a few log and regression files like regression_template
 # Also files mw_exc.txt and mw_index_txt_file.txt for Monier-Williams alignment
@@ -258,21 +258,21 @@ STAT=STAT
 # dynamic statistics such as current regression file
 VAR=VAR
 
-# System documentation 
-DOC=DOC/doc.ps DOC/doc.html DOC/doc.pdf 
+# System documentation
+DOC=DOC/doc.ps DOC/doc.html DOC/doc.pdf
 # documentation source # needs ocamlweb and hevea to create documentation
 DOCSOURCE=DOC/docintro DOC/ocamlweb.sty DOC/lexer10.dot DOC/lexer17.dot DOC/lexer40.dot
 # Site entry page and XML entry page
 SITESOURCE=SITE/site_entry_page SITE/xml_entry_page SITE/goldendict_entry_page
 SITEPAGE_FR=SITE/index.fr.html
 SITEPAGE_EN=SITE/index.en.html
-SITEPAGES=$(SITEPAGE_FR) $(SITEPAGE_EN) 
+SITEPAGES=$(SITEPAGE_FR) $(SITEPAGE_EN)
 PORTALPAGE_FR=SITE/portal.fr.html
 PORTALPAGE_EN=SITE/portal.en.html
-PORTALPAGES=$(PORTALPAGE_FR) $(PORTALPAGE_EN) 
+PORTALPAGES=$(PORTALPAGE_FR) $(PORTALPAGE_EN)
 FAQPAGE_FR=SITE/faq.fr.html
 FAQPAGE_EN=SITE/faq.en.html
-FAQPAGES=$(FAQPAGE_FR) $(FAQPAGE_EN) 
+FAQPAGES=$(FAQPAGE_FR) $(FAQPAGE_EN)
 MANUAL=SITE/manual.html
 ROBOTS=SITE/robots.txt # currently disabled to allow Google access
 GOLD=SITE/gold.html
@@ -280,24 +280,24 @@ GOLD=SITE/gold.html
 # Goldendict data banks are now distributed from sanskrit.inria.fr
 #GOLDENDICT=SITE/Heritage_du_sanskrit_san-fra.tar.gz SITE/Declension-heritage_du_sanskrit_san-eng.tar.gz SITE/Grammar-heritage_du_sanskrit_san-eng.tar.gz SITE/mw-heritage_du_sanskrit_san-eng.tar.gz
 
-WEBSOURCES=SITE/portal.html SITE/faq.html SITE/abrevs.pdf $(GOLD) SITE/goldendict.html $(MANUAL) # $(ROBOTS) 
-ALLWEBSOURCES=$(SITESOURCE) $(WEBSOURCES) 
+WEBSOURCES=SITE/portal.html SITE/faq.html SITE/abrevs.pdf $(GOLD) SITE/goldendict.html $(MANUAL) # $(ROBOTS)
+ALLWEBSOURCES=$(SITESOURCE) $(WEBSOURCES)
 # Sources of morphology documents
 XMLDATA=$(DATA)/XML
 DATASOURCE=$(DATA)/titn.tex $(DATA)/titpn.tex $(DATA)/titr.tex $(DATA)/titp.tex \
 $(DATA)/tita.tex $(DATA)/titb.tex $(DATA)/titf.tex $(DATA)/titi.tex \
 $(DATA)/titv.tex $(DATA)/tity.tex $(DATA)/titc.tex \
 $(XMLDATA)/SL_morph.dtd $(XMLDATA)/WX_morph.dtd \
-$(DATA_LICENSES) $(DATA)/Makefile 
-# All data sources 
-SOURCE=$(DOCSOURCE) $(DATASOURCE) $(ALLWEBSOURCES) 
+$(DATA_LICENSES) $(DATA)/Makefile
+# All data sources
+SOURCE=$(DOCSOURCE) $(DATASOURCE) $(ALLWEBSOURCES)
 
-# Miscellaneous documentation 
-OBSOLETE_DOCS=DOC/sanskrit.pdf 
+# Miscellaneous documentation
+OBSOLETE_DOCS=DOC/sanskrit.pdf
 DOCS=DOC/sanskrit.pdf DOC/wsc.pdf DOC/tagger.pdf DOC/wcre.pdf DOC/coling.pdf \
-DOC/Mumbai.pdf DOC/Brown.pdf DOC/IWRIDL.pdf DOC/COLING_2012.pdf DOC/WSC13.pdf 
+DOC/Mumbai.pdf DOC/Brown.pdf DOC/IWRIDL.pdf DOC/COLING_2012.pdf DOC/WSC13.pdf
 DOC_ML=DOC/Heritage_Platform.pdf
-# Automata databases for use by the Sanskrit Engine 
+# Automata databases for use by the Sanskrit Engine
 
 AUTOMATA=$(DATA)/nouns.rem $(DATA)/roots.rem $(DATA)/preverbs.rem \
 $(DATA)/lopas.rem $(DATA)/pronouns.rem $(DATA)/transpn.rem $(DATA)/parts.rem \
@@ -324,13 +324,13 @@ $(DATA)/roots_infos.rem $(DATA)/roots_usage.rem \
 $(DATA)/sandhis_id.rem $(DATA)/unique_kridantas.rem $(DATA)/lexical_kridantas.rem
 
 # roots_infos.rem is used at run time for generating abs and ger of verbs
-# roots_usage.rem is used at run time by Dispatcher.validate 
+# roots_usage.rem is used at run time by Dispatcher.validate
 # sandhis_id.rem is used at run time by Segmenter
 # lexical_kridantas.rem is used at run time by the loading of inflected.cmx
-# by cgis declension and conjugation 
+# by cgis declension and conjugation
 
-# Persistent Ocaml values files stored in DICO dir for indexing purposes 
-DICOREMS=entries.rem defs.rem dummies.rem 
+# Persistent Ocaml values files stored in DICO dir for indexing purposes
+DICOREMS=entries.rem defs.rem dummies.rem
 # data files for MW linking
 DATAMW=$(DATA)/mw_exceptions.rem $(DATA)/mw_index.rem $(DATA)/guess_index.rem
 
@@ -347,7 +347,7 @@ WX_XML_MORPHOLOGY=$(XMLDATA)/WX_morph.tar.gz
 XML_DTD=$(XMLDATA)/SL_morph.dtd $(XMLDATA)/WX_morph.dtd
 XML_MORPHOLOGY=$(SL_XML_MORPHOLOGY) $(WX_XML_MORPHOLOGY) $(XML_DTD)
 
-# Various test examples 
+# Various test examples
 # CORPUS=CORPUS/APTE CORPUS/Baladarza CORPUS/NN CORPUS/S_Raama CORPUS/REGRESSION
 
 ###########
@@ -355,15 +355,15 @@ XML_MORPHOLOGY=$(SL_XML_MORPHOLOGY) $(WX_XML_MORPHOLOGY) $(XML_DTD)
 ###########
 
 # Sanskrit Heritage Platform site construction; release with "make release"
-all: ZEN 
+all: ZEN
 	test -e $(DATA) && echo "Heritage_Resources detected" && exit 0 \
-|| echo "You should first install Heritage_Resources at $(DATA)" && exit 1 
+|| echo "You should first install Heritage_Resources at $(DATA)" && exit 1
 	cd ZEN && $(MAKE) all
 	cp -Rp $(HERITAGE) . # local copy of DICO from Resources/DICO
 	cp -Rp $(MW) . # local copy of MW
 #	cd ML && $(MAKE) depend # reset dependencies (might be partial subset)
 	test -e ML/SCLpaths.ml && echo "SCL config detected" \
-|| mv SETUP/dummy_SCLpaths.ml ML/SCLpaths.ml 
+|| mv SETUP/dummy_SCLpaths.ml ML/SCLpaths.ml
 	cd ML && $(MAKE) test_version
 	ML/test_stamp
 	cd ML && $(MAKE) # make engine (testing the data stamp)
@@ -375,7 +375,7 @@ new:
 	$(MAKE) all
 
 # following obsolete, now ZEN is distributed as sub-directory, not tar file
-ZEN: #SETUP/zen.tar 
+ZEN: #SETUP/zen.tar
 	mkdir ZEN
 	cp -p SETUP/zen.tar ZEN
 	cd ZEN && tar xvf zen.tar
@@ -385,9 +385,9 @@ ZEN: #SETUP/zen.tar
 zen.tar:
 	echo "Download zen.tar from Zen site http://sanskrit.inria.fr/ZEN"
 
-# After updating installation parameters above, the python script configure 
+# After updating installation parameters above, the python script configure
 # regenerates Makefile from SETUP/MMakefile and does "make configuration"
-configuration: 
+configuration:
 	(cat $(ML_COPYRIGHT) ; \
 echo "(* Do not edit by hand - generated by configuration script - see main Makefile *)"; \
 echo 'value platform = "$(PLATFORM)"'; \
@@ -425,7 +425,7 @@ full: ZEN
 	$(MAKE) all
 	$(MAKE) supplements
 
-supplements: 
+supplements:
 	cd $(DATA) && $(MAKE) statistics
 	cd $(DATA) && $(MAKE) pdf
 	cd $(XMLDATA) && $(MAKE) xml
@@ -449,14 +449,14 @@ style.css: css
 
 Makefile: SETUP/MMakefile
 	./configure
-        
+
 ## Following entry points make partial update/installation on the local server
-## they need su privilege for writing in the server area 
+## they need su privilege for writing in the server area
 
 # beware - make web_services on server architecture after DICO before releasecgi
 # necessary if mk_*_page.ml has been updated
 web_services: # Will write localized site pages in DICO and export cgis
-	cd ML && $(MAKE) cgis site_pages 
+	cd ML && $(MAKE) cgis site_pages
 
 release: $(DICO) web_services releasecgi releaseMW releasedata releasedoc \
 releasebook releasexml
@@ -466,8 +466,8 @@ releasebook releasexml
 
 # if one does not rebuild morphologic resources with make scratch, this will
 # just release the new software on the old data - convenient for debug/test.
-releasecgi:	
-	mkdir -p $(CGIDIR) 
+releasecgi:
+	mkdir -p $(CGIDIR)
 	$(MAKE) grammar
 	$(MAKE) indexers
 	$(MAKE) stemmer
@@ -479,7 +479,7 @@ abrevs:
 
 # This releases on the server the new lexical data base and Web resources
 # must be done after releaseMW for links adjustments
-releasedata: $(DICO) $(DATA) abrevs 
+releasedata: $(DICO) $(DATA) abrevs
 	cp $(WEBSOURCES) $(SERVERPUBLICDIR)
 	cp $(SITEPAGES) $(SERVERPUBLICDIR) # site main pages made by configure
 #	cp $(GOLDENDICT) $(SERVERPUBLICDIR) # Goldendict version now separated
@@ -498,11 +498,11 @@ rm temp ); done
 	cp $(AUTOMATA) $(SERVERPUBLICDIR)DATA # Sanskrit Engine data
 	cp $(DATAMW) $(SERVERPUBLICDIR)DATA # MW links
 	cp $(SCRIPTS) $(SERVERPUBLICDIR)DICO # Javascript in DICO dir
-#	cp $(DOC_IMAGES) $(SERVERPUBLICDIR)IMAGES 
+#	cp $(DOC_IMAGES) $(SERVERPUBLICDIR)IMAGES
 
 BOOKPRINTS=$(BOOK)/Heritage.pdf $(BOOK)/abrevs.pdf
 
-releasebook: 
+releasebook:
 	cp $(BOOKPRINTS) $(SERVERPUBLICDIR)
 
 releasexml: # Sanskrit morphology in xml copied from Resources to Server
@@ -512,15 +512,15 @@ releasexml: # Sanskrit morphology in xml copied from Resources to Server
 releasepdf: pdfmorphology # very big - useless
 	cp $(PDF_MORPHOLOGY) $(SERVERPUBLICDIR)$(DATA)
 
-releaseMW: 
+releaseMW:
 	cp -Rp $(MW) $(SERVERPUBLICDIR) # MW pages linked to decl/conjug cgis
 
-releasedoc: 
+releasedoc:
 	cp $(PORTALPAGES) $(SERVERPUBLICDIR) # portal pages made by configure
 	cp $(PORTALPAGE_FR) $(SERVERPUBLICDIR)portal.html # compatibility default
 	cp $(FAQPAGES) $(SERVERPUBLICDIR) # faq pages made by configure
 	cp $(FAQPAGE_FR) $(SERVERPUBLICDIR)faq.html # compatibility default fr
-	cp $(MANUAL) $(SERVERPUBLICDIR) # user's manual 
+	cp $(MANUAL) $(SERVERPUBLICDIR) # user's manual
 #	cp $(ROBOTS) $(SERVERPUBLICDIR) # robots permissions
 	cp $(GOLD) $(SERVERPUBLICDIR) # Heritage's Hall of Fame
 	cp $(DOC_ML) $(SERVERPUBLICDIR)DOC
@@ -536,14 +536,14 @@ stemmer: ML/lemmatizer
 sandhi: ML/sandhier
 	cp ML/sandhier $(CGIDIR)$(CGISANDHI)
 
-analyser: ML/reader ML/parser ML/interface ML/user_aid 
-#	cp ML/reader1cgi $(CGIDIR)$(CGIREADER) 
-	cp ML/reader $(CGIDIR)$(CGIREADER) 
-	cp ML/parser $(CGIDIR)$(CGIPARSER) 
-	cp ML/interface $(CGIDIR)$(CGIGRAPH) 
-	cp ML/user_aid $(CGIDIR)$(CGIUSER) 
-	cp ML/mk_reader_page $(CGIDIR)skt_heritage # $(CGIINTERFACE) 
-#	cp ML/tagger $(CGIDIR)$(CGITAGGER) 
+analyser: ML/reader ML/parser ML/interface ML/user_aid
+#	cp ML/reader1cgi $(CGIDIR)$(CGIREADER)
+	cp ML/reader $(CGIDIR)$(CGIREADER)
+	cp ML/parser $(CGIDIR)$(CGIPARSER)
+	cp ML/interface $(CGIDIR)$(CGIGRAPH)
+	cp ML/user_aid $(CGIDIR)$(CGIUSER)
+	cp ML/mk_reader_page $(CGIDIR)skt_heritage # $(CGIINTERFACE)
+#	cp ML/tagger $(CGIDIR)$(CGITAGGER)
 
 indexers: ML/indexer ML/indexerd
 	cp ML/indexer $(CGIDIR)$(CGIINDEX)
@@ -560,7 +560,7 @@ indexers: ML/indexer ML/indexerd
 # next operations to perform on http server platform for site update
 platform_unload: SktPlatform.$(VERSION).tar.gz
 	gunzip SktPlatform.$(VERSION).tar.gz
-	tar xvf SktPlatform.$(VERSION).tar 
+	tar xvf SktPlatform.$(VERSION).tar
 
 software_doc: # needs to have ocamlweb installed
 	cd ML && $(MAKE) doc
@@ -571,10 +571,10 @@ software_doc: # needs to have ocamlweb installed
 
 # customise LICENSEs above before distributing
 # Directory DISTR should not exist for next 4 scripts
-# Note cp -p used instead of tar for incrementality 
-distr_engine:  # distribution of packages CORE GRAM abd WEB under SOFT_LICENSE 
+# Note cp -p used instead of tar for incrementality
+distr_engine:  # distribution of packages CORE GRAM abd WEB under SOFT_LICENSE
 	rm -rf DISTR
-	cd $(STAT); cat stats.txt >> distribs # recording of statistics 
+	cd $(STAT); cat stats.txt >> distribs # recording of statistics
 	mkdir DISTR                # Distribution directory
 	mkdir DISTR/ML             # Source code library for all packages
 	mkdir DISTR/SETUP          # SETUP directory
@@ -583,14 +583,14 @@ distr_engine:  # distribution of packages CORE GRAM abd WEB under SOFT_LICENSE
 	cp -p $(DISTR_CORE) DISTR/ML     # Skt Core Engine ML source code
 	cp -p $(GRAM) DISTR/ML     # Skt Grammatical Engine ML source code
 	cp -p $(WEB) DISTR/ML      # Skt Site Manager ML source code
-	cp -p $(AUT) DISTR/ML      # Skt Automaton production source code 
+	cp -p $(AUT) DISTR/ML      # Skt Automaton production source code
 	cp -p $(SCRIPTS) DISTR/JAVA # Scripts
-	cp -Rp $(SYSTEM_SETUP) DISTR/SETUP  # SETUP 
+	cp -Rp $(SYSTEM_SETUP) DISTR/SETUP  # SETUP
 	cp -p $(SYSTEM_configure) DISTR # configure at top level
-#	cp -Rp $(SYSTEM_supplements) DISTR/SETUP  # supplements 
+#	cp -Rp $(SYSTEM_supplements) DISTR/SETUP  # supplements
 	cp -p $(INFOS) DISTR # installation instructions, scripts
 	cp -p $(SOFT_LICENSE) DISTR/ML/LICENSE # customised software license
-	mkdir DISTR/SITE           # For Skt Platform portal 
+	mkdir DISTR/SITE           # For Skt Platform portal
 	cp -p $(WEBSOURCES) DISTR/SITE       # Skt site entry page
 #	cp -p $(ZENSITESOURCE) DISTR/SITE/ZEN  # Zen site entry page
 	cp -p $(SITESOURCE) DISTR/SITE
@@ -603,9 +603,9 @@ distr_engine:  # distribution of packages CORE GRAM abd WEB under SOFT_LICENSE
 
 distr_automata: # distribution of data derived from Heritage Dictionary
 	$(MAKE) distr_engine
-	mkdir -p DISTR/$(DATA)            # Linguistic data and derived automata 
+	mkdir -p DISTR/$(DATA)            # Linguistic data and derived automata
 	mkdir -p DISTR/$(DATA)/XML        # Linguistic data in XML - empty now
-	cp -p $(DATA)/XML/*.gz $(DATA)/XML/index.html DISTR/$(DATA)/XML 
+	cp -p $(DATA)/XML/*.gz $(DATA)/XML/index.html DISTR/$(DATA)/XML
 	cp -p $(DATA_LICENSE) DISTR/$(DATA_LICENSE) # customised data license
 	cp -p $(XMLDATA)/SL_morph.dtd $(XMLDATA)/WX_morph.dtd DISTR/$(DATA)/XML
 	cp -p $(AUTOMATA) DISTR/$(DATA)   # Data for Skt_Platform cgi executables
@@ -615,15 +615,15 @@ distr_automata: # distribution of data derived from Heritage Dictionary
 distrib: # distribution of ZEN, and of derived Heritage under HTML & PDF formats
 	$(MAKE) distr_automata
 	cp -p SETUP/zen.tar DISTR/SETUP # Zen toolkit distribution included
-# DICO is assumed to be customized for the distribution site         
+# DICO is assumed to be customized for the distribution site
 	cp -Rp $(DICO) DISTR     # Hypertext Heritage Dictionary for browsing
 	mkdir DISTR/BOOK
 	cp -p $(BOOKPRINTS) DISTR/BOOK # Heritage Skt Dictionary for printing
 	mkdir DISTR/DOC
 	cd ML; $(MAKE) doc
 	cp -p DOC/Heritage_platform.pdf DISTR/DOC
-	cp -p DOC/transliterations.pdf DISTR/DOC 
-	cp -p $(MANUAL) DISTR/SITE # user's manual 
+	cp -p DOC/transliterations.pdf DISTR/DOC
+	cp -p $(MANUAL) DISTR/SITE # user's manual
 #	cp -p $(ROBOTS) DISTR/SITE # robots permissions
 	mkdir DISTR/$(STAT)
 #	cp -p $(STAT)/regression_template DISTR/$(STAT) # for regression analysis suite
@@ -635,12 +635,12 @@ distrib_full: distrib# assumes distrib has been run, and thus directory DISTR ex
 	test -e DISTR || (echo "DISTR inexistant"; exit 1)
 	test -e SktPlatform.$(VERSION) && echo "Distribution dir exists" \
 && exit 1 || echo "OK"
-	cd DISTR && mkdir $(DATA)/ML 
+	cd DISTR && mkdir $(DATA)/ML
 	cp -p DOC/doc.pdf DISTR/DOC       # Skt Platform pdf documentation
 	cp -p $(DOCS) DISTR/DOC           # Various documentation and articles
 	cp -p $(DIC) DISTR                # Sanskrit Heritage Dictionary source
 	cp -p $(LEX) DISTR/ML             # Skt Engine Compiling ML source code
-	cp -p $(AUT) DISTR/ML             # Skt Automaton 
+	cp -p $(AUT) DISTR/ML             # Skt Automaton
 	cp -p $(AUT1) DISTR/ML            # Skt Automaton experimental
 	cp -p $(TREE) DISTR/ML            # Skt Treebank and Syntax manager
 	cp -p $(DEBUG) DISTR/ML           # Debugging tools
@@ -654,10 +654,10 @@ distrib_full: distrib# assumes distrib has been run, and thus directory DISTR ex
 #	touch DISTR/dictionary # for make dictionary to succeed vacuously
 	mv DISTR SktPlatform.$(VERSION)   # SktPlatform.$(VERSION) fresh
 
-# deprecated: now we may use Git for distribution 
+# deprecated: now we may use Git for distribution
 distrib_platform: distrib_full # create distribution tar file of full SktPlatform
-	tar czvf SktPlatform.$(VERSION).tar.gz SktPlatform.$(VERSION) 
-	rm -rf SktPlatform.$(VERSION) 
+	tar czvf SktPlatform.$(VERSION).tar.gz SktPlatform.$(VERSION)
+	rm -rf SktPlatform.$(VERSION)
 
 depot: # depot ANL - only SktPlatform, no linguistic data
 	mkdir DISTR                # Distribution directory
@@ -667,11 +667,11 @@ depot: # depot ANL - only SktPlatform, no linguistic data
 	cp $(CORE) DISTR/ML        # Skt Core Engine ML source code
 	cp $(GRAM) DISTR/ML        # Skt Grammatical Engine ML source code
 	cp $(WEB) DISTR/ML         # Skt Site Manager ML source code
-	cp -Rp $(SYSTEM_SETUP) DISTR/SETUP  # SETUP 
+	cp -Rp $(SYSTEM_SETUP) DISTR/SETUP  # SETUP
 	cp -p $(SYSTEM_configure) DISTR # configure at top level
 	cp $(INFOS) DISTR          # installation instructions, scripts
 	cp $(SOFT_LICENSE) DISTR/ML/LICENSE # customised software license
-	mkdir DISTR/DOC 
+	mkdir DISTR/DOC
 	cp -p DOC/doc.pdf DISTR/DOC       # Skt Engine pdf documentation
 	cp -p $(DOCS) DISTR/DOC           # Various documentation and articles
 	cp -p $(LEX) DISTR/ML             # Skt Engine Compiling ML source code
@@ -680,7 +680,7 @@ depot: # depot ANL - only SktPlatform, no linguistic data
 
 install: #after distribution to host site: "./configure; make; sudo make install"
 	SETUP/issudo.sh
-	test -f $(SERVERPUBLICDIR)DATA/cache.txt && echo "cold install" || $(MAKE) cold 
+	test -f $(SERVERPUBLICDIR)DATA/cache.txt && echo "cold install" || $(MAKE) cold
 	test -f $(SERVERPUBLICDIR)$(VAR)/regression.txt && echo "regression install" || $(MAKE) install_regression
 	$(MAKE) release
 
@@ -689,9 +689,9 @@ cold: # for first install
 	mkdir -p $(SERVERPUBLICDIR)IMAGES
 	mkdir -p $(SERVERPUBLICDIR)DATA
 	mkdir -p $(SERVERPUBLICDIR)DOC
-	cd $(SERVERPUBLICDIR)DATA; touch $(CACHES); chmod a+w $(CACHES) 
-	cp -R $(IMAGES) $(SERVERPUBLICDIR)IMAGES 
-	cp -p $(SCRIPTS) $(SERVERPUBLICDIR) 
+	cd $(SERVERPUBLICDIR)DATA; touch $(CACHES); chmod a+w $(CACHES)
+	cp -R $(IMAGES) $(SERVERPUBLICDIR)IMAGES
+	cp -p $(SCRIPTS) $(SERVERPUBLICDIR)
 	$(MAKE) empty_caches
 #	$(MAKE) install_counter # only for master site migration
 
@@ -699,7 +699,7 @@ install_regression: # for initialisation of regression suite - su privilege
 	mkdir -p $(SERVERPUBLICDIR)$(VAR)
 	chmod a+rw $(SERVERPUBLICDIR)$(VAR)
 #TODO	cp -p $(STAT)/regression_template $(SERVERPUBLICDIR)$(VAR)/regression.txt
-	chmod a+rw $(SERVERPUBLICDIR)$(VAR)/regression.txt
+#TODO	chmod a+rw $(SERVERPUBLICDIR)$(VAR)/regression.txt
 
 empty_caches: ML/reset_caches # caution: will reset the caches
 	ML/reset_caches
@@ -713,12 +713,10 @@ install_counter: counter
 
 # Update of Amrita site page - reserved to webmaster
 amrita_sitepage:
-	cd /Library/WebServer/Documents/index.html.fr && cp -p SITE/amrita_server.index.html.fr index.html.fr 
+	cd /Library/WebServer/Documents/index.html.fr && cp -p SITE/amrita_server.index.html.fr index.html.fr
 
 counter:
 	cd SETUP && tar xzvf wwwcount2.5.tar.gz
 	cd SETUP && ./counter.py
 	cd SETUP/wwwcount2.5 && ./configure
 	cd SETUP/wwwcount2.5 && make all
-
-

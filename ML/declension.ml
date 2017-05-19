@@ -244,9 +244,9 @@ value resolve_homonym stem = match stem with
   | "luu" | "viraaj" | "viz" | "vii" | "zubh" | "sa" | "sah" | "saa" | "s.rj" 
   | "snih" | "snuh" | "han" 
     -> stem ^ "#2"
-  | "agha" | "afga" | "aja" | "aaza" | "ka" | "kara" | "tapas" | "dhaavat" 
-  | "nimita" | "pa" | "bhavat" | "bhaama" | "ya" | "yama" | "yaat.r" (* 1/2 *) 
-  | "vaasa" | "zaava" | "zrava.na" | "zvan" | "sthaa"
+  | "agha" | "afga" | "aja" | "aaza" | "e.sa"  | "ka" | "kara" | "tapas"
+  | "dhaavat" | "nimita" | "pa" | "bhavat" | "bhaama" | "ya" | "yama"
+  | "yaat.r" (* 1/2 *) | "vaasa" | "zaava" | "zrava.na" | "zvan" | "sthaa"
     -> stem ^ "#1"
   | "paa" -> stem ^ "#3"
   | _ -> stem

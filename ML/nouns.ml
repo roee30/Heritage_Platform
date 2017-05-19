@@ -4057,7 +4057,7 @@ value build_sa_tad g stem entry =
   enter entry (
    [ Declined Pron g
    [ (Singular, let l =
-        [ decline Nom (if g=Mas then if stem = [] then "sas" else ".sas"
+        [ decline Nom (if g=Mas then "sas" (* gives e.sa.h for etad *)
                                 else "tat") (* final *)
         ; decline Acc (if g=Mas then "tam" else "tat")
         ; decline Ins "tena"
@@ -4067,9 +4067,9 @@ value build_sa_tad g stem entry =
         ; decline Gen "tasya"
         ; decline Loc "tasmin"
         ] in if g=Mas then 
-        [ decline Nom (if stem = [] then "sa" else ".sa") :: l ]
-                      else l)
-   ; (Dual,
+        [ decline Nom "sa" :: l ] (* usable before vowels, see Dispatcher *)
+             else l) 
+   ; (Dual, 
         [ decline Nom (if g=Mas then "tau" else "te")
         ; decline Acc (if g=Mas then "tau" else "te")
         ; decline Ins "taabhyaam"
@@ -4860,8 +4860,10 @@ value compute_nouns_stem_form e stem d p =
             | [ 45; 46; 3; 45 ] (* vizva *) 
             | [ 45; 48 ] (* sva *) -> build_pron_a Mas r1 e
             | [ 36; 10 ] (* ena *) -> build_ena Mas e
-            | [ 47; 10 ] (* e.sa *) when e="etad" -> build_sa_tad Mas [10] e
-            | [ 48 ] (* sa *) -> build_sa_tad Mas [] e
+            | [ 47; 10 ] (* e.sa *) when (e="etad" || e="e.sa#1" || e="e.sa")
+                 -> build_sa_tad Mas [ 10 ] e 
+            | [ 48 ] (* sa *) when (e="tad" || e="sa#2" || e="sa")
+                 -> build_sa_tad Mas [] e 
             | [ 42; 48 ] (* sya *) -> build_sya_tyad Mas e
             | [ 41; 12; 44; 5; 29; 13 ] (* au.duloma *) -> (* Kale 26 *)
               let ps = revcode "u.duloma" in build_auduloma Mas r1 ps e
@@ -5315,8 +5317,9 @@ value compute_nouns_stem_form e stem d p =
             | [ 45; 46; 3; 45 ]        (* vizvaa *)
             | [ 45; 48 ]               (* svaa *) -> build_pron_aa r1 e
             | [ 36; 10 ] (* enaa *)  -> build_ena Fem e 
-            | [ 47; 10 ] (* e.saa *) when e="etad" -> build_saa [ 10 ] e 
-            | [ 48 ] (* saa *)       -> build_saa [] e
+            | [ 47; 10 ] (* e.saa *) when e="etad" || e="e.saa"
+                  -> build_saa [ 10 ] e  
+            | [ 48 ] (* saa *)       -> build_saa [] e 
             | [ 42 ; 48 ] (* syaa *) -> build_syaa [] e
             | _ -> build_fem_aa r1 e
             ]

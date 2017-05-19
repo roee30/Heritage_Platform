@@ -77,6 +77,7 @@ value voices_of = fun
 (*| "kan"    Atma needed for kaayamaana *)
 (*| "van"    Atma needed for vanute *)
 (*| "mah" also Atma for pft. maamahe *)
+(*| "cit#1" also Atma for pft. cikite *)
 (*| "kaafk.s" | "han#1" occur also in Atma in BhG: kaafk.se hani.sye *)
 (*| "a~nj" also Atma afkte | "naath" "praz" "sp.rz#1" idem *)
       -> Para (* active only *)

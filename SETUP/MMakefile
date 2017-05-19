@@ -274,13 +274,18 @@ FAQPAGE_FR=SITE/faq.fr.html
 FAQPAGE_EN=SITE/faq.en.html
 FAQPAGES=$(FAQPAGE_FR) $(FAQPAGE_EN)
 MANUAL=SITE/manual.html
-ROBOTS=SITE/robots.txt # currently disabled to allow Google access
+XMLPAGE=SITE/xml.html
+FAQ=SITE/faq.html
+PORTAL=SITE/portal.html
 GOLD=SITE/gold.html
+GOLDEN=SITE/goldendict.html
+ABREVS=SITE/abrevs.pdf
+ROBOTS=SITE/robots.txt # currently disabled to allow Google access
 
 # Goldendict data banks are now distributed from sanskrit.inria.fr
 #GOLDENDICT=SITE/Heritage_du_sanskrit_san-fra.tar.gz SITE/Declension-heritage_du_sanskrit_san-eng.tar.gz SITE/Grammar-heritage_du_sanskrit_san-eng.tar.gz SITE/mw-heritage_du_sanskrit_san-eng.tar.gz
 
-WEBSOURCES=SITE/portal.html SITE/faq.html SITE/abrevs.pdf $(GOLD) SITE/goldendict.html $(MANUAL) # $(ROBOTS)
+WEBSOURCES=$(PORTAL) $(FAQ) $(ABREVS) $(GOLD) $(GOLDEN) $(MANUAL) $(XMLPAGE) 
 ALLWEBSOURCES=$(SITESOURCE) $(WEBSOURCES)
 # Sources of morphology documents
 XMLDATA=$(DATA)/XML
@@ -457,9 +462,11 @@ Makefile: SETUP/MMakefile
 # necessary if mk_*_page.ml has been updated
 web_services: # Will write localized site pages in DICO and export cgis
 	cd ML && $(MAKE) cgis site_pages
+	cp -p SITE/xml.html DICO
 
 release: $(DICO) web_services releasecgi releaseMW releasedata releasedoc \
-releasebook releasexml
+releasebook
+# releasexml - no XML release on server - lookup Heritage_Resources
 # releasepdf disabled at present as bulky and un-finished
 	echo "Version $(VERSION) of Sanskrit site released on $(SERVERHOST)"
 

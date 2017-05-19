@@ -223,7 +223,7 @@ as we shall see below.
 
 A dictionary of inflected forms of Sanskrit words is provided
 in XML form under various transliteration schemes.
-Please visit the <a href="#RESOURCES">Sanskrit linguistic resources site</a>.
+Please visit the <a href="xml.html">Sanskrit linguistic resources page</a>.
 
 <a id="reader"></a>
 <h2 class="b2"> Sanskrit Reader </h2>
@@ -429,7 +429,7 @@ of programs implemented in Pidgin ML, functional core of the
 <a href="http://ocaml.org">Objective Caml</a> 
 programming language. The Zen library and its documentation are available
 as free software under the Gnu Lesser General Public License (LGPL) from the
-<a href="#ZEN">Zen site.</a>
+<a href="http://pauillac.inria.fr/~huet/ZEN/">Zen site.</a>
 </p>
 <!-- Forum closed 
 Please visit the <a href="http://sanskrit.inria.fr/zf/">Zen Forum</a> for
@@ -438,28 +438,32 @@ announcements and discussions concerning the ZEN toolkit. -->
 <h2 class="b2"><img src="IMAGES/ganesh.jpg" alt="Ganesh">
 The Sanskrit Portal</h2>
 
-Please visit our <a href="#PORTAL">Sanskrit Portal</a>
-to find links to other Sanskrit resources. 
+Please visit our <a href="portal.html">Sanskrit Portal</a>
+to find links to other Sanskrit resources.
+<p>
+If you are reading this from a mirror site, don't forget to regularly update
+this server with the development Git site 
+"https://gitlab.inria.fr/huet/Heritage_Platform".
 
 <h2 class="b2"><img src="IMAGES/om1.jpg" alt="Om">
 Artwork credits</h2>
 
 <span class="green">Orissan artwork at this site courtesy of Shauraj Rath.
-&copy; Screenex, Bhubaneshwar, Ekamra, Orissa. All rights reserved.
+© Screenex, Bhubaneshwar, Ekamra, Orissa. All rights reserved.
 </span><br>
 <span class="green">Wallpaper om images courtesy of 
 <a href="http://www.vishvarupa.com/aum-om-omkara-pranava.html">Vishvarupa.com</a>.
 </span><br>
 <span class="green">Ganesh wallpaper courtesy of 
-<a href="http://www.math-info.univ-paris5.fr/~patte/">Fran&ccedil;ois Patte</a>.
+<a href="http://www.math-info.univ-paris5.fr/~patte/">François Patte</a>.
 </span><br>
-<span class="green">Shri Yantra design &copy; 
-<a href="http://pauillac.inria.fr/~huet">G&eacute;rard Huet</a> 1990.<br>
+<span class="green">Shri Yantra design © 
+<a href="MAGES/Yantra.jpg">Gérard Huet</a> 1990.<br>
 </span>
 </td></tr>
 </table> <!-- body -->
 
-<table class="pad60">
+<table class="pad60"> <!--padding for bandeau -->
 <tr><td></td></tr></table>
 <div class="enpied">
 <table class="bandeau"><tr><td>

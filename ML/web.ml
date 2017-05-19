@@ -631,15 +631,10 @@ value javascript_tooltip ="wz_tooltip.js"
 (* Maybe should be put back in config? but versioning problem... *)
 value remote_server_host = "http://sanskrit.inria.fr/" 
 ;
-(* SCL configuration begin *)
-value scl_url = "http://localhost/SCL/SHMT/" (* Used to be set in Paths *)
-;
 (* This toogle controls accessibility of University of Hyderabad tools *)
 value scl_toggle = (* should be [exists scl_profile] *)
   not (SCLpaths.scl_url="") (* True if SCL tools are installed *)
 ;
-(* SCL configuration begin *)
-
 value interaction_modes_default mode =  
   [ (" Summary ","g",mode="g") 
   ; (" Tagging ","t",mode="t") 
@@ -658,7 +653,7 @@ value reader_prelude title = do
   ; page_begin reader_meta_title 
   ; pl (body_begin Chamois_back)
   ; if scl_toggle then (* external call SCL (experimental) *)
-       pl (javascript (scl_url ^ javascript_tooltip))
+       pl (javascript (SCLpaths.scl_url ^ javascript_tooltip))
     else ()
   ; pl title 
   ; open_page_with_margin 15

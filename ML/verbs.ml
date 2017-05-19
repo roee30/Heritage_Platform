@@ -3008,7 +3008,7 @@ value redup_perf root =
       let c = if sibilant c1 then match r with
                  [ [] -> error_vowel 3
                  | [ c2 :: _ ] -> if stop c2 then c2 else c1
-                     (*      if vowel c2 then c1
+                     (* =    if vowel c2 then c1
                         else if nasal c2 then c1
                         else if stop  c2 then c2
                         else (* semivowel c2 *) c1 *)
@@ -3149,8 +3149,15 @@ value compute_perfectm conj stem entry =
 ;
 value compute_perfect_c strong weak olengthened eweak iopt entry =
   match voices_of entry with
-  [ Para -> compute_perfecta Primary strong weak olengthened eweak iopt entry
-  | Atma -> let stem = match entry with
+  [ Para -> do
+      { compute_perfecta Primary strong weak olengthened eweak iopt entry
+      ; if entry = "cit#1" then do
+           { compute_perfectm Primary weak entry
+           ; compute_perfectm Primary (revcode "cikitr") entry (* WR *)
+           }
+        else ()    
+      }
+  | Atma -> let stem = match entry with 
                        [ "cak.s" | "ba.mh" -> strong
                        | _ -> weak
                        ] in 

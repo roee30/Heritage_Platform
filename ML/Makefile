@@ -269,6 +269,7 @@ site_pages: mk_index_page mk_grammar_page mk_reader_page mk_sandhi_page css
 	cd ../DICO; ln -f reader.fr.html reader.html # id
 	./mk_sandhi_page
 	cd ../DICO; ln -f sandhi.fr.html sandhi.html # id
+# XML info file copied in DICO by make web_services in main Makefile
 	./css 
 # but install sets index.html to .fr. ou .en. according to config lexicon choice 
 

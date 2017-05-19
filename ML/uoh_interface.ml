@@ -32,8 +32,8 @@ module UOH
 (****************************************************************)
 
 (* Paths - to move to configuration time *)
-value svg_interface_url = "http://localhost/cgi-bin/SCL/SHMT/"
-and nn_parser_url = "http://localhost/cgi-bin/SCL/NN/parser/generate.cgi"
+value svg_interface_url = "http://localhost/cgi-bin/scl/SHMT/"
+and nn_parser_url = "http://localhost/cgi-bin/scl/NN/parser/generate.cgi"
 and show_parses_path = "prog/interface/call_parser_summary.cgi"
 ;
 
@@ -74,30 +74,24 @@ value print_callback_solution counter solution =
      ; ps table_end
      ; ps td_end (* end segment *)
      ; ps (delimitor phase) 
-     } 
-  and pid = string_of_int (Unix.getpid ()) (* process-id stamp *)
-  and segmentations = string_of_int counter in do
+     } in do
   { ps tr_begin
   ; ps td_begin 
-  (* TODO rewrite as [ps (let url= ... and link = ... in anchor_ref url link)] *)
-  ; ps ("<a href=\"" ^ svg_interface_url ^ show_parses_path ^ 
-        "?filename=./tmp_in") (* call-back to svg interface UoH *) 
-  ; ps pid
-  ; ps "&amp;outscript="
-  ; ps default_output_font
-  ; ps "&amp;rel=''"
-  ; ps "&amp;sentnum="
-  ; ps segmentations
-  ; ps "&amp;save=no\""
-  ; ps "&amp;translate=no\""
-  ; ps (" onmouseover=\"Tip('<img src=" ^ scl_url ^ "DEMO/tmp_in")
-  ; ps pid
-  ; ps "/"
-  ; ps segmentations
-  ; ps ".1.svg height=100%; width=100%;>')\" onmouseout=\"UnTip()\">" 
-  ; ps (html_latin12 "Solve dependencies ")
-  ; ps (xml_end "a")
   ; List.iter print_segment_cbk solution
+  ; ps td_end
+  ; ps tr_end
+  ; ps (html_latin12 "Verse Order")
+  ; ps table_end
+  ; print_string "<form name=\"word-order\" method=\"get\" action = \"http://localhost/cgi-bin/scl/SHMT/prog/Word_order/call_heritage2anu.cgi\">"
+  ; print_newline
+  ; print_string "<table>"
+  ; ps tr_begin
+  ; ps td_begin 
+  ; ps (html_latin12 "Prose Order")
+  ; ps (xml_begin_with_att "textarea"
+      [ ("name","word-order"); ("rows","1"); ("cols","50") ] ^
+       xml_end "textarea")
+  ; ps (submit_input "Submit")
   ; ps td_end
   ; ps tr_end 
   ; counter+1
@@ -115,14 +109,14 @@ value print_ext_solutions cho =
   List.iter (print_ext_output cho) 
 ;
 (* External call-back to Amba Kulkarni's parser (from [Reader.print_ext] *)
-value amba_invoke pid = (* Experimental - assumes amrita configuration *)
+(*[value amba_invoke pid = (* Experimental - assumes amrita configuration *)
   "mkdir -p " ^ tmp_in ^ pid ^ "; " ^ 
   scl_dir ^ "Heritage_morph_interface/Heritage2anusaaraka_morph.sh <" ^ 
   offline_file ^ " > " ^ tmp_in ^ pid ^ "/in" ^ pid ^ ".out; " ^
   scl_dir ^ "kAraka/shabdabodha.sh YES " ^ tmp_in ^ pid ^ " in" ^ 
   pid ^ ".out" ^ " in" ^ pid ^ ".kAraka " ^ default_output_font ^  
   " Full Prose NOECHO ND 2> " ^ offline ("err" ^ pid) ^ ";"
-;
+;]*)
 
 (* Prints all segmentations in [offline_file]  
    and prepares invocation of UoH's CSL parser for dependency graph display *)
@@ -135,11 +129,11 @@ value print_ext solutions =
     (* System call to Amba Kulkarni's parser - fragile *)
   ; ps table_end 
   ; ps (xml_begin "table") 
-  ; let pid = string_of_int (Unix.getpid ()) in (* stamp with process id *)
-    let cmd = amba_invoke pid in (* prepare cryptic UNIX command *) 
-    let _ = Sys.command cmd in () (* call it *) 
+  (*[; let pid = string_of_int (Unix.getpid ()) in (* stamp with process id *) 
+       let cmd = amba_invoke pid in (* prepare cryptic UNIX command *) 
+       let _ = Sys.command cmd in () (* call it *) ]*)
   ; let _ = print_callback solutions in () (* print dependency graphs *) 
-  ; ps table_end  
+  (*[; ps table_end ] (?) *)
   }
 ;
 (* Now for processing of navya-nyaaya compounds in Experimental mode *)

@@ -5599,7 +5599,11 @@ value iic_indecl = (* should be lexicalized *)
   ; "saaci"
   ]
 ;
-(* feminine stems iic for productive adjectives *)
+(* Feminine stems iic for productive adjectives                       *)
+(* This is a generic weakness, to be remedied.                        *)
+(* Generative stems are not inspected for feminine stems              *)
+(* attested as substantives, and thus incurring a feminine iic stem.  *)
+(* This concerns privative compounds and participles.                 *)
 value iicf_extra = 
   [ "abalaa" (* a-bala with fem abalaa *)  
   ; "kaantaa" (* kaanta pp *)
@@ -5775,6 +5779,7 @@ value enter_extra_ifcs () = do
 value enter_extra_iifcs () = do
   { let entry = "ahan" in (* for -aha- like pu.nyaahavaacanam *)
     enter1 entry (Bare Noun (code "aha"))
+    (* more entries are potentially concerned - TODO *)
   } 
 ;
 (* called by [Declension.emit_decls] and [Morpho_debug.emit_decls] *)

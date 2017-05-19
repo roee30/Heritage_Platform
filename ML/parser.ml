@@ -30,7 +30,7 @@ value prelude () = do
   ; page_begin parser_meta_title 
   ; pl (body_begin Chamois_back)
   ; if scl_toggle then (* external call SCL (experimental) *)
-       pl (javascript (scl_url ^ javascript_tooltip))
+       pl (javascript (SCLpaths.scl_url ^ javascript_tooltip))
     else ()
   ; pl parser_title
   ; open_page_with_margin 15

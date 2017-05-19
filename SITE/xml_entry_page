@@ -60,11 +60,7 @@ University of Hyderabad</a>
 and SLP1, used by the 
 <a href="http://sanskritlibrary.org/">Sanskrit Library</a>.
 
-The respective data banks are given in compressed archives (6Mo each, gz format)
-"WX_morph.tar.gz" (WX) and
-"SL_morph.tar.gz" (SLP1. After downloading these documents,
-and uncompressing them (typically with the utility gunzip),
-you get a UNIX tar archive containing the following data.
+The respective data banks are listed in directories WX and SL.
 
 The morphological lemmas are distributed in 6 files in 
 XML format, conformant to a common DTD.

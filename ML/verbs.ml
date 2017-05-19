@@ -5237,11 +5237,11 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
    | "nau#1"  -> [ 45 :: [ 2 :: trunc rstem ] ] (* au -> aav  Kale§642 *)
    | "raajan" -> [ 4 :: trunc (trunc rstem) ]   (* nasal amui Kale§642 *)
      (* now the general case: keep the nominal stem - to cause (transitive) *)
-   | "a.mza" | "afka" | "afkha" | "andha" | "amitra" | "aakar.na" | "aakula" 
-   | "aavila" | "i.sa" | "upahasta" | "kadartha" | "kar.na" | "kalafka"
-   | "kalu.sa" | "kavala" | "ku.t.ta" | "kusuma" | "kha.da" | "garva" | "gopaa"
-   | "carca" | "cuur.na" | "chala" | "chidra" | "tantra" | "tarafga" 
-   | "taru.na" | "tuhina" | "da.n.da" | "deva" | "dola" | "dhiira#1" 
+   | "a.mza" | "afka" | "afkha" | "andha" | "aparok.sa" | "amitra" | "aakar.na"
+   | "aakula" | "aavila" | "i.sa" | "upahasta" | "kadartha" | "kar.na"
+   | "kalafka" | "kalu.sa" | "kavala" | "ku.t.ta" | "kusuma" | "kha.da"
+   | "garva" | "gopaa" | "carca" | "cuur.na" | "chala" | "chidra" | "tantra"
+   | "tarafga" | "taru.na" | "tuhina" | "da.n.da" | "deva" | "dola" | "dhiira#1" 
    | "nuutana" | "pa.tapa.taa" | "pallava" | "pavitra" | "paaza" | "pi.n.da" 
    | "pulaka" | "puula" | "pratikuula" | "prati.sedha" | "pradak.si.na" 
    | "prasaada" | "bhi.saj" | "mantra" | "malina" | "mizra" | "mukula" 

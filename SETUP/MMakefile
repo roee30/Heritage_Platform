@@ -509,7 +509,7 @@ rm temp ); done
 
 BOOKPRINTS=$(BOOK)/Heritage.pdf $(BOOK)/abrevs.pdf
 
-releasebook:
+releasebook: 
 	cp $(BOOKPRINTS) $(SERVERPUBLICDIR)
 
 releasexml: # Sanskrit morphology in xml copied from Resources to Server

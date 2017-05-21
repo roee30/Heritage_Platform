@@ -39,8 +39,7 @@ module Ext = UOH Lex (* [print_ext print_nn] *)
 (* Mode parameter of the reader. Controled by service Reader for respectively
    tagging, shallow parsing, or dependency analysis with the UoH parser.  *)
 (* Note that Summary/Interface is not a Reader/Parser mode. *)
-(* Nyaaya is a deprecated mode for analysing nyaaya compounds. *)
-type mode = [ Tag | Parse | Analyse | Nyaaya ]
+type mode = [ Tag | Parse | Analyse ]
 ;
 value rpc = remote_server_host  
 and remote = ref False (* local invocation of cgi by default *)
@@ -90,7 +89,7 @@ value display limit mode text saved = fun
     let kept = List.length best_sols
     and max = match limit with 
               [ Some n -> n | None -> truncation ] in do
-    { if mode = Analyse || mode = Nyaaya then () 
+    { if mode = Analyse then () 
       else do
          { print_sols text (*kept,max*) best_sols
          ; pl html_break
@@ -136,12 +135,6 @@ value display limit mode text saved = fun
            let zero_pen = List.append best_sols (List.rev min_buck) in
            Ext.print_ext zero_pen
          ]
-      | Nyaaya -> match saved with 
-         [ [] -> Ext.print_nn best_sols
-         | [ (_,min_buck) :: _ ] -> 
-           let zero_pen = List.append best_sols (List.rev min_buck) in
-           Ext.print_nn zero_pen
-         ]
       | _ -> ()
       ]
     }
@@ -173,13 +166,13 @@ value process_input text us mode topic (input:string) encode cpts =
   ; pl "Sentence: "
   ; ps (deva16_blue devainput) (* devanagari *)
   ; pl html_break
-  ; if mode = Analyse || mode = Nyaaya then () else ps "may be analysed as:"
+  ; if mode = Analyse then () else ps "may be analysed as:"
   ; ps div_end (* Latin16 *)
   ; let all_chunks = match topic with
         [ Some topic -> chunks @ [ code_string topic ]
         | None -> chunks
         ] in
-    let filter_mode = mode=Parse || mode=Analyse || mode=Nyaaya in
+    let filter_mode = mode=Parse || mode=Analyse in
     try segment_all filter_mode all_chunks cpts with
         [ Solutions limit revsols saved ->  
            let sols = List.rev revsols in 
@@ -235,7 +228,6 @@ value reader_engine () = do
         [ "t" -> Tag
         | "p" -> Parse
         | "o" -> Analyse (* Analyse mode of UoH parser *) 
-        | "n" -> Nyaaya  (* Nyaaya Cpds Analysis mode of UoH system *) 
         | s -> raise (Failure ("Unknown mode " ^ s))  
         ] 
     (* Contextual information from past discourse *)

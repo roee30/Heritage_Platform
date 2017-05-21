@@ -31,12 +31,6 @@ module UOH
 (* Interface with Amba Kulkarni's parser at UoH - Analysis mode *)
 (****************************************************************)
 
-(* Paths - to move to configuration time *)
-value svg_interface_url = "http://localhost/cgi-bin/scl/SHMT/"
-and nn_parser_url = "http://localhost/cgi-bin/scl/NN/parser/generate.cgi"
-and show_parses_path = "prog/interface/call_parser_summary.cgi"
-;
-
 (* Delimitor for offline printing and piping into UoH's parser *)
 value delimitor = fun
   [ Iic | Iic2 | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif | Iiy -> "-"
@@ -82,9 +76,9 @@ value print_callback_solution counter solution =
   ; ps tr_end
   ; ps (html_latin12 "Verse Order")
   ; ps table_end
-  ; print_string "<form name=\"word-order\" method=\"get\" action = \"http://localhost/cgi-bin/scl/SHMT/prog/Word_order/call_heritage2anu.cgi\">"
-  ; print_newline
-  ; print_string "<table>"
+  ; ps ("<form name=\"word-order\" method=\"get\" action = \""
+       ^ svg_interface_url ^ "prog/Word_order/call_heritage2anu.cgi\">\n")
+  ; ps "<table>"
   ; ps tr_begin
   ; ps td_begin 
   ; ps (html_latin12 "Prose Order")
@@ -105,18 +99,8 @@ value print_callback_output counter (_,output) =
 value print_callback = 
   List.fold_left print_callback_output 1  
 ;
-value print_ext_solutions cho = 
-  List.iter (print_ext_output cho) 
+value print_ext_solutions cho = List.iter (print_ext_output cho) 
 ;
-(* External call-back to Amba Kulkarni's parser (from [Reader.print_ext] *)
-(*[value amba_invoke pid = (* Experimental - assumes amrita configuration *)
-  "mkdir -p " ^ tmp_in ^ pid ^ "; " ^ 
-  scl_dir ^ "Heritage_morph_interface/Heritage2anusaaraka_morph.sh <" ^ 
-  offline_file ^ " > " ^ tmp_in ^ pid ^ "/in" ^ pid ^ ".out; " ^
-  scl_dir ^ "kAraka/shabdabodha.sh YES " ^ tmp_in ^ pid ^ " in" ^ 
-  pid ^ ".out" ^ " in" ^ pid ^ ".kAraka " ^ default_output_font ^  
-  " Full Prose NOECHO ND 2> " ^ offline ("err" ^ pid) ^ ";"
-;]*)
 
 (* Prints all segmentations in [offline_file]  
    and prepares invocation of UoH's CSL parser for dependency graph display *)
@@ -129,50 +113,9 @@ value print_ext solutions =
     (* System call to Amba Kulkarni's parser - fragile *)
   ; ps table_end 
   ; ps (xml_begin "table") 
-  (*[; let pid = string_of_int (Unix.getpid ()) in (* stamp with process id *) 
-       let cmd = amba_invoke pid in (* prepare cryptic UNIX command *) 
-       let _ = Sys.command cmd in () (* call it *) ]*)
   ; let _ = print_callback solutions in () (* print dependency graphs *) 
   (*[; ps table_end ] (?) *)
   }
 ;
-(* Now for processing of navya-nyaaya compounds in Experimental mode *)
-value print_nnparser_solution counter solution = 
-let rec nnsegment acc solution = 
-  match solution with
-    [ [] -> acc
-    | [ (phase,rword,_)] -> let word = Morpho_html.visargify rword in
-                            acc ^ (Canon.unidevcode word)
-    | [ (phase,rword,_) :: t ] -> 
-                            let word = Morpho_html.visargify rword in
-                            nnsegment (acc ^ (Canon.unidevcode word) ^ "-") t
-                      ] in
-  let nnstring = nnsegment "" solution in do
-  { ps tr_begin
-  ; ps td_begin 
-  ; ps ("<a href=\"" ^ nn_parser_url ^ "?text=")
-  ; ps nnstring
-  ; ps ("&encoding=Unicode\">")
-  ; ps (html_latin12 "NN Constituency Parser ")
-  ; ps (xml_end "a")
-  ; ps nnstring
-  ; ps td_end
-  ; ps tr_end 
-  ; counter+1
-  }
-;
-value print_nnparser_output counter (_,output) = 
-  let solution = List.rev output in
-  print_nnparser_solution counter solution
-;
-(* New: processing of NN compounds - called from Reader *)
- value print_nnparser solutions = let _ = 
-  List.fold_left print_nnparser_output 1 solutions in ()
-;
-value print_nn solutions = do 
-  { ps (xml_begin "table")
-  ; print_nnparser solutions
-  ; ps table_end
-  }
-;
+
 end;

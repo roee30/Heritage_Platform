@@ -1836,7 +1836,10 @@ value compute_athematic_impft7m weak entry =
    ])
 ;
 value compute_athematic_optative7a weak entry =
-  let conjugw person suff = (person,fix weak suff) in
+  let glue = if entry = "hi.ms" then fun w s -> 
+                List2.unstack w (code s) (* no retroflexion Whitney§183a *)
+             else fix in 
+  let conjugw person suff = (person,glue weak suff) in 
   enter1 entry (conjug_opt_ath_a 7 conjugw)
 ;
 value compute_athematic_optative7m weak entry =
@@ -4483,7 +4486,7 @@ value record_abs_ya entry rstem w = do
             | "zii#1" -> revcode "zay" (* \Pan{7,4,22} *)
             | _ -> w
             ] in match entry with
-                 [ "hi.ms" -> code "hi.msya" (* no retroflex s Whitney§279c *)
+                 [ "hi.ms" -> code "hi.msya" (* no retroflex s Whitney§183 *)
                  | _ -> fix rst "ya" 
                  ] in
     record_abso_ya absya entry

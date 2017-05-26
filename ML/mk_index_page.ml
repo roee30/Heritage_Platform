@@ -15,11 +15,20 @@
 open Html;
 open Web; (* ps pl abort etc. *)
 
+value deva = (Paths.default_display_font="deva") 
+;
 value print_query lang cgi = do
   { pl (cgi_begin cgi "convert")
   ; print_lexicon_select (lexicon_of lang)
   ; pl html_break
-  ; pl (text_input "focus" "q")
+(*[ ; ps "Output font for inflexion tool"
+  ; pl (hidden_input "font" Paths.default_display_font) 
+  ; pl (option_select_default "font"  
+        [ (" Roman","roma",not deva)  (* default roma - Computer *)
+        ; (" Devanagari","deva",deva) (* default deva - Simputer *) 
+        ])
+  ; pl html_break ] TODO: switch to specific version of dictionaries *)
+  ; pl (text_input "focus" "q")  
   ; print_transliteration_switch "trans"
   ; pl html_break
   ; pl (submit_input "Search")  

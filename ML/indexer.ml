@@ -109,6 +109,7 @@ value index_engine () = do
   let env = create_env query in
   let translit = get "t" env Paths.default_transliteration 
   and lex = get "lex" env Paths.default_lexicon (* default by config *)
+  and font = get "font" env Paths.default_display_font 
   and url_encoded_entry = get "q" env "" in
   let lang = language_of lex in do
   { print_title_solid Mauve (Some lang) (dico_title lang)
@@ -147,7 +148,7 @@ value index_engine () = do
                       ; try_declensions word last
                       }
                   ]
-	                      }
+	    }
           | _ -> failwith "Unknown lexicon"
           ]
         ; ps div_end (* Latin12 *)

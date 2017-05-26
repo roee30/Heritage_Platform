@@ -5382,7 +5382,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do
      match entry with
      [ "ifg" | "paz" | "cint" (* d.rz cit *)
      | "bruu" (* vac *)
-     | "cud" | "pat#2" |"praa#1" | "vidh#1" | "zlath"
+     | "cud" | "dhii#1" | "pat#2" |"praa#1" | "vidh#1" | "zlath"
         -> () (* no future *)
      | "tud#1" | "cakaas" -> () (* only periphrastic *)
      | "bharts" -> compute_future_gen rstem entry (* exception gana 10 *)
@@ -5401,7 +5401,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do
      if gana=10 then () (* see [process10] above *)
      else match entry with
           [ "ifg" | "paz" (* d.rz *) | "bruu" (* vac *) 
-          | "cud" | "pat#2" | "praa#1" | "vidh#1"
+          | "cud" | "dhii#1" | "pat#2" | "praa#1" | "vidh#1"
           | "haa#2" -> () (* no perif *)
           | "saa#1" -> do { compute_perif (revcode "si") entry 
                           ; compute_perif rstem entry
@@ -5461,8 +5461,9 @@ value compute_conjugs_stems entry (vmorph,aa) = do
      if gana=10 then () (* use periphrastic perfect *)
      else match entry with
           [ "paz"  (* d.rz *) | "bruu" (* vac *) | "ma.mh" (* mah *)
-          | "ind" | "indh" | "inv" | "cakaas" | "vidh#1" -> () (* no perfect *)
-          | _ -> compute_perfect entry
+          | "ind" | "indh" | "inv" | "cakaas" | "dhii#1" | "vidh#1" -> ()
+            (* no perfect *)
+          | _ -> compute_perfect entry 
           ]
    ; (* Periphrastic Perfect *) (* on demand - except gana 10 above *)
      try let stem = peri_perf entry in

@@ -129,17 +129,17 @@ value rec str_phase = fun
   | Tad (ph,_)  _ _ -> "taddhita " ^ str_phase ph
   ]
 ;
-value print_ext_morph pvs ps gen form tag = do
+value print_ext_morph pvs gen form tag = do
   { ps (xml_begin "tag")
-  ; Morpho_ext.print_ext_inflected_link pvs ps form gen tag 
+  ; Morpho_ext.print_ext_inflected_link pvs form gen tag 
   ; ps (xml_end "tag")
   }
 ;
-value print_ext_tags pvs ps phase form tags = 
+value print_ext_tags pvs phase form tags = 
   let table_ext phase = 
       xml_begin_with_att "tags" [ ("phase",str_phase phase) ] in do
   { ps (table_ext phase) 
-  ; List.iter (print_ext_morph pvs ps (generative phase) form) tags 
+  ; List.iter (print_ext_morph pvs (generative phase) form) tags 
   ; ps (xml_end "tags")
   }
 ;
@@ -240,28 +240,45 @@ value print_segment offset (phase,rword,transition) = do
   }
 ;
 (* Similarly for [Reader_plugin] mode (without offset) *)
-value print_ext_segment ps (phase,rword,_) =  
+value print_ext_segment counter (phase,rword,_) =  
   let print_pada rword = 
      let word = Morpho_html.visargify rword in 
-     ps ("<form wx=\"" ^ Canon.decode_WX word ^ "\"/>") in do
-  { print_pada rword 
+     let ic = string_of_int counter in
+     ps ("<input type=\"hidden\" name=\"field"^ ic ^"\" value='<form wx=\"" ^ Canon.decode_WX word ^ "\"/>") in do
+  { let solid = background (Disp.color_of_phase phase) in
+    pl (td_begin_class solid)
+  (*;  ps td_begin*)
+  ; print_pada rword
   ; let word = mirror rword in 
        match tags_of phase word with 
        [ Atomic tags -> 
-          print_ext_tags [] ps phase word tags 
+          print_ext_tags [] phase word tags 
        | Preverbed (_,phase) pvs form tags ->
          let ok_tags = 
            if pvs = [] then tags 
            else trim_tags (generative phase) form (Canon.decode pvs) tags in 
-          print_ext_tags pvs ps phase form ok_tags
+          print_ext_tags pvs phase form ok_tags
        | Taddhita _ _ sfx_phase sfx_tags -> 
           let taddhita_phase = match sfx_phase with 
               [ Sfx -> Noun
               | Isfx -> Iic
               | _ -> failwith "Wrong taddhita structure"
               ] in
-          print_ext_tags [] ps taddhita_phase word sfx_tags
-       ] 
+          print_ext_tags [] taddhita_phase word sfx_tags
+       ]
+  ; ps ("'>")
+  (*; let solid = background (Disp.color_of_phase phase) in
+    pl (table_begin solid)
+  ; ps tr_begin
+  ; ps td_begin *)
+   ; let word = Morpho_html.visargify rword in 
+       ps (Canon.unidevcode word)
+   (*  ; ps td_end
+     ; ps tr_end
+     ; ps table_end *)
+     ; ps td_end
+     ; ps ("\n")
+  ; counter+1
   } 
 ; 
 value cell item = do (* residual of Html *)

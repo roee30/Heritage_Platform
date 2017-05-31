@@ -130,11 +130,11 @@ value display limit mode text saved = fun
            ]
          }
       | Analyse -> match saved with 
-         [ [] -> Ext.print_ext best_sols
-         | [ (_,min_buck) :: _ ] -> 
-           let zero_pen = List.append best_sols (List.rev min_buck) in
-           Ext.print_ext zero_pen
-         ]
+        [ [] -> Ext.print_ext (best_sols:list (int * list Rank.Lex.Disp.segment))
+        | [ (_,min_buck) :: _ ] -> 
+          let zero_pen = List.append best_sols (List.rev min_buck) in
+          Ext.print_ext zero_pen
+        ]
       | _ -> ()
       ]
     }

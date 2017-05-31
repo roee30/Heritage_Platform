@@ -72,10 +72,10 @@ value minimum_penalty output =
 (* Same as [UoH_interface.print_ext_output] *)
 value print_offline_output cho (n,output) = 
   let ps = output_string cho in  
-  let print_segment = Lex.print_ext_segment ps in do
+  let print_segment = Lex.print_ext_segment in do
   { ps (xml_begin_with_att "solution" [ ("num", string_of_int n) ])
   ; ps "\n"
-  ; List.iter print_segment (List.rev output) 
+  ; let _ = List.fold_left Lex.print_ext_segment 1 (List.rev output) in ()
   ; ps (xml_end "solution")
   ; ps "\n"
   }

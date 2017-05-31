@@ -12,24 +12,51 @@
 open Html; 
 open Web; (* ps pl etc. [scl_url] *)
 open Morphology; (* inflected lemma morphology *)
-open Phases.Phases; (* phase etc. *)
-open Dispatcher;
-open SCLpaths; (* [svg_interface_url] *) 
+open Phases; (* Phases *)
+open Dispatcher; (* Dispatch *)
+open SCLpaths; (* [scl_url scl_cgi] *) 
+
+value svg_interface_url = scl_cgi ^ "SHMT/" 
+and nn_parser_url = scl_cgi ^ "NN/parser/generate.cgi"
+and show_parses_path = "prog/interface/call_parser_summary.cgi"
+;
+
+module Prel = struct (* similar to Interface's lexer prelude *)
+
+ value prelude () = do
+  { pl http_header
+  ; page_begin graph_meta_title 
+  ; pl (body_begin Chamois_back)
+  ; open_page_with_margin 15
+  }
+;
+ end (* Prel *)
+;
+(* Service routines for morphological query, loading the morphology banks *)
+module Lemmas = Load_morphs.Morphs Prel Phases 
+;
+open Lemmas (* [tags_of morpho] *)
+;
+open Phases; (* phase etc. *)
 
 module UOH 
   (Lex: sig 
-  module Disp : 
+  module Disp :
       sig
       type transition;
       value color_of_phase: phase -> color; 
       type segment = (phase * Word.word * transition);
       end; 
-  value print_ext_segment: (string -> unit) -> Disp.segment -> unit; 
+  value print_ext_segment: int -> Disp.segment -> int; 
   end) = struct
 
 (****************************************************************)
 (* Interface with Amba Kulkarni's parser at UoH - Analysis mode *)
 (****************************************************************)
+
+value print_ext_output (_,output) = 
+  List.fold_left Lex.print_ext_segment 1 (List.rev output) 
+;
 
 (* Delimitor for offline printing and piping into UoH's parser *)
 value delimitor = fun
@@ -38,84 +65,27 @@ value delimitor = fun
   | Pv | Pvk | Pvkc | Pvkv -> failwith "No more Pv segments" 
   | _ -> " "
   ]
-; 
-value print_ext_output cho (n,output) = 
-  let ps = output_string cho in 
-  let print_segment = Lex.print_ext_segment ps in do
-  { ps (xml_begin_with_att "solution" [ ("num", string_of_int n) ])
-  ; ps "\n"
-  ; List.iter print_segment (List.rev output) 
-  ; ps (xml_end "solution") 
-  ; ps "\n"
-  }
+;
+value print_ext_solutions s =
+   let _ = print_ext_output s in ()
 ;
 
-(* Prints a solution with its index, returns the bumped index ignoring sandhi *)
-(* Prints on [std_out], as usual for a cgi. *)
-value print_callback_solution counter solution =
-  let print_pada rword = 
-     let word = Morpho_html.visargify rword in
-     ps (Canon.unidevcode word) in 
-  let print_segment_cbk (phase,rword,_) = do (* follows [Lex.print_segment] *)
-     { ps td_begin (* begin segment *)
-     ; let solid = background (Lex.Disp.color_of_phase phase) in
-       pl (table_begin solid)
-     ; ps tr_begin 
-     ; ps td_begin  
-     ; print_pada rword
-     ; ps td_end
-     ; ps tr_end 
-     ; ps table_end
-     ; ps td_end (* end segment *)
-     ; ps (delimitor phase) 
-     } in do
-  { ps tr_begin
-  ; ps td_begin 
-  ; List.iter print_segment_cbk solution
-  ; ps td_end
-  ; ps tr_end
-  ; ps (html_latin12 "Verse Order")
-  ; ps table_end
-  ; ps ("<form name=\"word-order\" method=\"get\" action = \""
+(* Invocation of UoH's CSL parser for dependency graph display *)
+value print_ext1 (solutions : (int * list Lex.Disp.segment)) = do
+  { ps ("<script type=\"text/javascript\" src=\"" ^ scl_url ^ "js_files/dragtable.js\"></script>")
+  ; ps ("<form name=\"word-order\" method=\"POST\" action = \""
        ^ svg_interface_url ^ "prog/Word_order/call_heritage2anu.cgi\">\n")
-  ; ps "<table>"
+  ; ps ("<table class=\"draggable\">")
   ; ps tr_begin
-  ; ps td_begin 
-  ; ps (html_latin12 "Prose Order")
-  ; ps (xml_begin_with_att "textarea"
-      [ ("name","word-order"); ("rows","1"); ("cols","50") ] ^
-       xml_end "textarea")
-  ; ps (submit_input "Submit")
-  ; ps td_end
-  ; ps tr_end 
-  ; counter+1
-  }
-;
-value print_callback_output counter (_,output) = 
-  let solution = List.rev output in
-  print_callback_solution counter solution
-;
-(* Print solutions as call backs to the SCL dependency graph display cgi *) 
-value print_callback = 
-  List.fold_left print_callback_output 1  
-;
-value print_ext_solutions cho = List.iter (print_ext_output cho) 
-;
-
-(* Prints all segmentations in [offline_file]  
-   and prepares invocation of UoH's CSL parser for dependency graph display *)
-value print_ext solutions =
-  let cmd = "mkdir -p " ^ offline_dir in
-  let _ = Sys.command cmd in (* call it *)
-  let cho = open_out offline_file in do
-  { print_ext_solutions cho solutions
-  ; close_out cho 
-    (* System call to Amba Kulkarni's parser - fragile *)
+  ; print_ext_solutions solutions
+  ; ps tr_end
   ; ps table_end 
-  ; ps (xml_begin "table") 
-  ; let _ = print_callback solutions in () (* print dependency graphs *) 
-  (*[; ps table_end ] (?) *)
-  }
+  ; ps (submit_input "Submit")
+  } 
 ;
-
+value print_ext sols = match sols with
+  [ [] -> failwith "No sol"
+  | [ s :: _ ] -> print_ext1 s
+  ]
+;
 end;

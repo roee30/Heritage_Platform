@@ -68,8 +68,8 @@ SYSTEM_supplements=SETUP/TEX SETUP/wwwcount2.5.tar.gz
 # General information
 INFOS=README INSTALLATION
 
-INRIA_IMAGES=IMAGES/icon_ocaml.png IMAGES/JoeCaml.png IMAGES/logo_inria.png # C. Inria
-# IMAGES/inria.gif # Copyright INRIA (old logo)
+INRIA_IMAGES=IMAGES/icon_ocaml.png IMAGES/JoeCaml.png \
+IMAGES/logo_inria.png # Copyright Inria
 # W3C_IMAGES=IMAGES/valid-xhtml10.png # Copy W3C - obsolete
 GH_IMAGES=IMAGES/smallyantra.gif IMAGES/Yantra.jpg IMAGES/favicon.ico \
 IMAGES/apple-touch-icon-ipad-76x76.png \
@@ -82,7 +82,7 @@ DOC_IMAGES=IMAGES/lexer10.jpg IMAGES/lexer17.jpg IMAGES/lexer40.jpg # Copy GH
 # NB. Use of gif vs others formats such as jpg is due to browser compatibility
 
 # Scripts
-SCRIPTS=JAVA/utf82VH.js
+SCRIPTS=JAVASCRIPT/utf82VH.js JAVASCRIPT/dragtable.js 
 
 # Next are copyright specific images
 SITE_IMAGES=IMAGES/yinyang.gif IMAGES/panini.jpg IMAGES/spin-new.gif \
@@ -585,13 +585,13 @@ distr_engine:  # distribution of packages CORE GRAM abd WEB under SOFT_LICENSE
 	mkdir DISTR                # Distribution directory
 	mkdir DISTR/ML             # Source code library for all packages
 	mkdir DISTR/SETUP          # SETUP directory
-	mkdir DISTR/JAVA           # JAVA scripts directory
+	mkdir DISTR/JAVASCRIPT     # JAVASCRIPT scripts directory
 	cp -p $(UTIL) DISTR/ML     # Skt script utilities
 	cp -p $(DISTR_CORE) DISTR/ML     # Skt Core Engine ML source code
 	cp -p $(GRAM) DISTR/ML     # Skt Grammatical Engine ML source code
 	cp -p $(WEB) DISTR/ML      # Skt Site Manager ML source code
 	cp -p $(AUT) DISTR/ML      # Skt Automaton production source code
-	cp -p $(SCRIPTS) DISTR/JAVA # Scripts
+	cp -p $(SCRIPTS) DISTR/JAVASCRIPT # Scripts
 	cp -Rp $(SYSTEM_SETUP) DISTR/SETUP  # SETUP
 	cp -p $(SYSTEM_configure) DISTR # configure at top level
 #	cp -Rp $(SYSTEM_supplements) DISTR/SETUP  # supplements

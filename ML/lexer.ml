@@ -242,15 +242,15 @@ value print_segment offset (phase,rword,transition) = do
 (* Similarly for [Reader_plugin] mode (without offset) *)
 value print_ext_segment counter (phase,rword,_) =  
   let print_pada rword = 
-     let word = Morpho_html.visargify rword in 
-     let ic = string_of_int counter in
-     ps ("<input type=\"hidden\" name=\"field"^ ic ^"\" value='<form wx=\"" ^ Canon.decode_WX word ^ "\"/>") in do
-  { let solid = background (Disp.color_of_phase phase) in
-    pl (td_begin_class solid)
-  (*;  ps td_begin*)
-  ; print_pada rword
-  ; let word = mirror rword in 
-       match tags_of phase word with 
+    let word = Morpho_html.visargify rword in 
+    let ic = string_of_int counter in
+    ps ("<input type=\"hidden\" name=\"field" ^ ic ^ "\" value='<form wx=\""
+        ^ Canon.decode_WX word ^ "\"/>") in do
+    { let solid = background (Disp.color_of_phase phase) in
+      pl (td_begin_class solid)
+    ; print_pada rword
+    ; let word = mirror rword in 
+      match tags_of phase word with 
        [ Atomic tags -> 
           print_ext_tags [] phase word tags 
        | Preverbed (_,phase) pvs form tags ->
@@ -266,18 +266,11 @@ value print_ext_segment counter (phase,rword,_) =
               ] in
           print_ext_tags [] taddhita_phase word sfx_tags
        ]
-  ; ps ("'>")
-  (*; let solid = background (Disp.color_of_phase phase) in
-    pl (table_begin solid)
-  ; ps tr_begin
-  ; ps td_begin *)
-   ; let word = Morpho_html.visargify rword in 
-       ps (Canon.unidevcode word)
-   (*  ; ps td_end
-     ; ps tr_end
-     ; ps table_end *)
-     ; ps td_end
-     ; ps ("\n")
+  ; ps "'>"
+  ; let word = Morpho_html.visargify rword in 
+    ps (Canon.unidevcode word)
+  ; ps td_end
+  ; ps "\n"
   ; counter+1
   } 
 ; 

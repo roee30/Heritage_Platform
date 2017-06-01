@@ -46,7 +46,6 @@ git clone git@gitlab.inria.fr:huet/Heritage_Platform.git
 This will create two sub_directories, namely Heritage_Resources
 and Heritage_Platform. 
 
-
 B. Sanskrit Platform installation.
 
 This means installing a local mirror Web site of Sanskrit_platform.

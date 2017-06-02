@@ -36,7 +36,7 @@ open Web; (* ps pl abort etc. *)
 open Cgi;
 
 open Phases; (* Phases *) 
-open Phases; (* [phase] *) 
+open Phases; (* phase *) 
 
 module Lemmas = Load_morphs.Morphs Prel Phases
 ;
@@ -129,21 +129,21 @@ value rec str_phase = fun
   | Tad (ph,_)  _ _ -> "taddhita " ^ str_phase ph
   ]
 ;
-value print_ext_morph pvs gen form tag = do
+value print_scl_morph pvs gen form tag = do
   { ps (xml_begin "tag")
-  ; Morpho_ext.print_ext_inflected_link pvs form gen tag 
+  ; Morpho_scl.print_ext_inflected_link pvs form gen tag 
   ; ps (xml_end "tag")
   }
 ;
-value print_ext_tags pvs phase form tags = 
+value print_scl_tags pvs phase form tags = 
   let table_ext phase = 
       xml_begin_with_att "tags" [ ("phase",str_phase phase) ] in do
   { ps (table_ext phase) 
-  ; List.iter (print_ext_morph pvs (generative phase) form) tags 
+  ; List.iter (print_scl_morph pvs (generative phase) form) tags 
   ; ps (xml_end "tags")
   }
 ;
-(* used in Parser *)
+(* Used in Parser *)
 value extract_lemma phase word = 
  match tags_of phase word with  
  [ Atomic tags -> tags 
@@ -153,7 +153,7 @@ value extract_lemma phase word =
  | Taddhita  _ _ _ tags -> tags
  ]
 ; 
-(* returns the offset correction (used by SL interface) *)
+(* Returns the offset correction (used by SL interface) *)
 value process_transition = fun  
   [ Euphony (w,u,v) ->   
     let off = if w=[] then 1 (* amui/lopa from Lopa/Lopak *)
@@ -239,8 +239,8 @@ value print_segment offset (phase,rword,transition) = do
       }
   }
 ;
-(* Similarly for [Reader_plugin] mode (without offset) *)
-value print_ext_segment counter (phase,rword) =  
+(* Similarly for [Reader_plugin] mode (without offset and transitions) *)
+value print_scl_segment counter (phase,rword) =  
   let print_pada rword = 
     let word = Morpho_html.visargify rword in 
     let ic = string_of_int counter in
@@ -252,41 +252,33 @@ value print_ext_segment counter (phase,rword) =
     ; let word = mirror rword in 
       match tags_of phase word with 
        [ Atomic tags -> 
-          print_ext_tags [] phase word tags 
+          print_scl_tags [] phase word tags 
        | Preverbed (_,phase) pvs form tags ->
          let ok_tags = 
            if pvs = [] then tags 
            else trim_tags (generative phase) form (Canon.decode pvs) tags in 
-          print_ext_tags pvs phase form ok_tags
+          print_scl_tags pvs phase form ok_tags
        | Taddhita _ _ sfx_phase sfx_tags -> 
           let taddhita_phase = match sfx_phase with 
               [ Sfx -> Noun
               | Isfx -> Iic
               | _ -> failwith "Wrong taddhita structure"
               ] in
-          print_ext_tags [] taddhita_phase word sfx_tags
+          print_scl_tags [] taddhita_phase word sfx_tags
        ]
   ; ps "'>" (* closes <input *)
-  ; let word = Morpho_html.visargify rword in 
+  ; let word = Morpho_html.visargify rword in  
     ps (Canon.unidevcode word)
   ; ps td_end
   ; ps "\n"
   ; counter+1
   } 
 ; 
-value cell item = do (* residual of Html *)
-  { ps tr_begin 
-  ; ps th_begin 
-  ; ps item
-  ; ps th_end 
-  ; pl tr_end 
-  }
-;
 value print_labels tags seg_num = do
     { ps th_begin  (* begin labels *) 
     ; pl table_labels
     ; let print_label n _ = do
-        { cell (html_red (string_of_int seg_num ^ "." ^ string_of_int n))
+        { ps (cell (html_red (string_of_int seg_num ^ "." ^ string_of_int n)))
         ; n+1
         } in 
       let _ = List.fold_left print_label 1 tags in () 

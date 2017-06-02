@@ -34,12 +34,10 @@ module Lexer_control = struct
 end (* [Lexer_control] *)
 ;
 (* Multi-phase lexer *)
-module Lex = Lexer.Lexer Prel Lexer_control (* [print_ext] *)
-;
-value print_scl_segment = Lex.print_ext_segment
+module Lex = Lexer.Lexer Prel Lexer_control (* [print_scl_segment] *)
 ;
 value print_scl_output output = 
-  List.fold_left print_scl_segment 1 (List.rev output) 
+  List.fold_left Lex.print_scl_segment 1 (List.rev output) 
 ;
 value print_scl_solutions s =
    let _ = print_scl_output s in ()
@@ -53,6 +51,7 @@ value print_scl1 (solutions : list (Phases.phase * Word.word)) =
   ; ps ("<table class=\"draggable\">")
   ; ps tr_begin
   ; print_scl_solutions solutions
+  ; ps ("<td><input type=\"hidden\" name=\"DISPLAY\" value=\"" ^ default_output_font ^"\"/></td>")
   ; ps tr_end
   ; ps table_end 
   ; ps (submit_input "Submit")

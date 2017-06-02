@@ -274,11 +274,7 @@ value process_until sol_index query topic mode_sent translit sentence
           | Some p -> ()
 	  ]
         }
-    with [ Truncation -> do
-           { pl (html_red "Solution not found")
-           ; pl html_break 
-           }
-         ]
+    with [ Truncation -> pl (html_red "Solution not found" ^ html_break) ]
   }
 ;
 
@@ -322,12 +318,13 @@ value parser_engine () = do
         | "f" -> Some "saa"
         | "n" -> Some "tat"
         | _ -> None
-        ] 
-    (* File where to store locally the taggings - only for [Station] platform *)
-    and corpus_file = (* optionally transmitted by argument "out_file" *)
+        ] in
+ (* Corpus interaction disabled 
+   (* File where to store locally the taggings - only for [Station] platform *)
+   [let corpus_file = (* optionally transmitted by argument "out_file" *)
         try let file_name = List.assoc "out_file" alist (* do not use get *) in 
             Some file_name  
-        with [ Not_found -> Some regression_file_name ] in
+        with [ Not_found -> Some regression_file_name ] in] *)
 (* Regression disabled
    [let () = if Paths.platform = "Station" then match corpus_file with 
                 [ Some file_name -> 

@@ -49,9 +49,8 @@ checkpoints.ml graph_segmenter.ml automaton.ml interface.mli interface.ml \
 user_aid.ml reset_caches.ml 
 
 # WEB package - HTML, HTTP, CGI utilities for Web interface
-WEB=html.ml web.ml css.ml cgi.ml morpho_html.ml chapters.ml \
-mk_index_page.ml mk_grammar_page.ml mk_reader_page.ml mk_sandhi_page.ml \
-morpho_ext.ml
+WEB=html.ml web.ml css.ml cgi.ml morpho_html.ml chapters.ml morpho_scl.ml \
+mk_index_page.ml mk_grammar_page.ml mk_reader_page.ml mk_sandhi_page.ml 
 # extra file SCLpaths.ml for SCL interfacing - not distributed.
 
 # TREE package - tree bank manager and syntax analyser - legacy
@@ -91,10 +90,11 @@ all: engine static_pages reset_caches sandhi_test
 # legacy in need of re-design
 regression: rank.cmx regression.cmx
 	$(LINK) $(CORENATIVES) unix.cmxa date.cmx control.cmx deco.cmx \
-lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx \
-morpho.cmx load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx chapters.cmx \
-morpho_html.cmx bank_lexer.cmx cgi.cmx segmenter.cmx morpho_ext.cmx \
-load_morphs.cmx lexer.cmx constraints.cmx rank.cmx regression.cmx -o regression
+lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx \
+morpho_string.cmx morpho.cmx load_transducers.cmx pada.cmx phases.cmx \
+dispatcher.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx \
+segmenter.cmx morpho_scl.cmx load_morphs.cmx lexer.cmx constraints.cmx \
+rank.cmx regression.cmx -o regression
 
 obsolete: tagger panini
 
@@ -183,7 +183,7 @@ control.cmx word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx \
 encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx \
 inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
 load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
-chapters.cmx morpho_html.cmx cgi.cmx segmenter.cmx morpho_ext.cmx \
+chapters.cmx morpho_html.cmx cgi.cmx segmenter.cmx morpho_scl.cmx \
 load_morphs.cmx lexer.cmx constraints.cmx rank.cmx bank_lexer.cmx \
 scl_parser.cmx checkpoints.cmx reader.cmx -o reader 
 
@@ -212,16 +212,8 @@ encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx \
 inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
 load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
 chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx segmenter.cmx \
-morpho_ext.cmx load_morphs.cmx lexer.cmx constraints.cmx checkpoints.cmx \
+morpho_scl.cmx load_morphs.cmx lexer.cmx constraints.cmx checkpoints.cmx \
 paraphrase.cmx scl_parser.cmx parser.cmx -o parser
-
-tagger: tagger.cmx
-	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx date.cmx install.cmx \
-word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx \
-skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx inflected.cmx \
-html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx pada.cmx \
-dispatcher.cmx order.cmx chapters.cmx morpho_html.cmx cgi.cmx \
-segmenter.cmx morpho_ext.cmx lexer.cmx constraints.cmx tagger.cmx -o tagger
 
 css: css.cmx
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx html.cmx \
@@ -314,7 +306,7 @@ Heritage_Platform.pdf: $(ENGINE)
 
 clean:
 	rm -f *.cmo *.cmi *.cmx *.ppi *.ppo *.o
-	rm -f css indexer indexerd sandhier reader parser tagger lemmatizer \
+	rm -f css indexer indexerd sandhier reader parser lemmatizer \
 declension conjugation mk_index_page mk_grammar_page mk_reader_page regression \
 mk_sandhi_page sandhi_test reset_caches interface user_aid \
 parse_apte tag_apte 

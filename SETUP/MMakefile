@@ -236,7 +236,7 @@ ML/reset_caches.ml
 # WEB package - HTML, HTTP, CGI ad-hoc utilities for Web interface
 WEB=ML/html.ml ML/web.ml ML/css.ml ML/cgi.ml ML/morpho_html.ml ML/chapters.ml \
 ML/mk_index_page.ml ML/mk_grammar_page.ml ML/mk_reader_page.ml \
-ML/mk_sandhi_page.ml ML/morpho_ext.ml ML/compute_mw_links.ml
+ML/mk_sandhi_page.ml ML/morpho_scl.ml ML/compute_mw_links.ml
 
 # TREE package - tree bank manager and syntax analyser - deprecated
 TREE=ML/stemmer.ml ML/parse_tree.ml ML/parse_apte.ml ML/tag_tree.ml \

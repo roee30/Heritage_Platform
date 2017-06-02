@@ -52,7 +52,7 @@ module Lexer : functor (* takes its prelude and iterator control as parameters *
   value all_checks : ref (list Viccheda.check); 
   value un_analyzable : Word.word -> (list Disp.segment * Viccheda.resumption); 
   value set_offset : (int * list Viccheda.check) -> unit;
-  value print_ext_segment : int -> (Phases.phase * Word.word) -> int;
+  value print_scl_segment : int -> (Phases.phase * Word.word) -> int;
   value record_tagging : bool -> bool -> string -> int -> string -> 
     list (Phases.phase * Word.word * 'a) -> list (int * int) -> unit;
   value return_tagging : 

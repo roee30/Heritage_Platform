@@ -7,7 +7,7 @@
 (* ©2017 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-(*i module Morpho_ext = struct i*)
+(*i module Morpho_scl = struct i*)
 
 (* Prints lists of inflected forms in XML for use by external Web services. *)
 (* Adapted from [Morpho_xml] *)

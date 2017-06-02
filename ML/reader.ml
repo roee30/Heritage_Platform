@@ -127,13 +127,13 @@ value display limit mode text saved = fun
            ]
          }
       | Analyse -> (* [best_sols: list (int * list Rank.Lex.Disp.segment)] *)
-         let solutions = match saved with 
+         let solutions = match saved with  
              [ [] -> best_sols
              | [ (_,min_buck) :: _ ] -> List.append best_sols (List.rev min_buck)
              ] in
          let forget_transitions (phase,word,_) = (phase,word) in
          let forget_index (_,segments) = List.map forget_transitions segments in
-         let segmentations = List.map forget_index best_sols in
+         let segmentations = List.map forget_index solutions in
          Scl_parser.print_scl segmentations
       | _ -> ()
       ]

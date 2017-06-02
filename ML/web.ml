@@ -305,26 +305,10 @@ and sandhi_page_url l  = dico_page_url (dico_sandhi_page l)
 ; 
 value image name = web_images_url ^ name
 ;
-value ocaml_logo  = image "icon_ocaml.png" 
-and inria_logo    = image "logo_inria.png"
+value ocaml_logo = image "icon_ocaml.png" 
+and inria_logo   = image "logo_inria.png"
+and favicon      = image "favicon.ico"
 ;
-(* miscellaneous graphics - check rights before distributing *)
-value sanskrit_gif     = image "sanskrit.gif"
-and ganesh_gif         = image "ganesh.gif"
-and jagannath_jpg      = image "jagannath.jpg"
-and ganeshgannath_jpg  = image "ganeshgannath.jpg"
-and krishnagannath_jpg = image "krishnagannath.jpg"
-and sarasvati_jpg      = image "sarasvati.jpg"
-and kadambari_png      = image "kaadambarii.png"
-and om_jpg             = image "om.jpg"
-and om2_jpg            = image "om2.jpg"
-and om3_jpg            = image "om3.jpg"
-and om4_jpg            = image "om4.jpg"
-and favicon            = image "favicon.ico"
-and hare_jpg = image "hare.jpg" (* http://www.bvml.org/grfx/chadar.jpg *)
-and geo_gif  = image "geopattern.gif" (* http://www.unc.edu/%7Ecernst/geopattern1.gif *)
-;   
-(* was in html *)
 value reader_meta_title = title "Sanskrit Reader Companion"
 and parser_meta_title = title "Sanskrit Reader Assistant"
 and dico_title_fr = h1_title "Dictionnaire H&eacute;ritage du Sanscrit"
@@ -632,7 +616,7 @@ value javascript_tooltip ="wz_tooltip.js"
 value remote_server_host = "http://sanskrit.inria.fr/" 
 ;
 (* This toogle controls accessibility of University of Hyderabad tools *)
-value scl_toggle = (* should be [exists scl_profile] *)
+value scl_toggle = 
   not (SCLpaths.scl_url="") (* True if SCL tools are installed *)
 ;
 value interaction_modes_default mode =  

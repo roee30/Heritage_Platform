@@ -48,6 +48,7 @@ and   td_end   = xml_end "td"
 and   td       = xml_empty_with_att "td"
 ;
 value td_wrap text = td_begin ^ text ^ td_end
+and cell item = tr_begin ^ th_begin ^ item ^ th_end ^ tr_end
 ;
 (* Dynamic colors depending on mouse position *)
 value tr_mouse_begin color_over color_out = 

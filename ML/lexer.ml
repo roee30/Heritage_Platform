@@ -240,7 +240,7 @@ value print_segment offset (phase,rword,transition) = do
   }
 ;
 (* Similarly for [Reader_plugin] mode (without offset) *)
-value print_ext_segment counter (phase,rword,_) =  
+value print_ext_segment counter (phase,rword) =  
   let print_pada rword = 
     let word = Morpho_html.visargify rword in 
     let ic = string_of_int counter in
@@ -266,7 +266,7 @@ value print_ext_segment counter (phase,rword,_) =
               ] in
           print_ext_tags [] taddhita_phase word sfx_tags
        ]
-  ; ps "'>"
+  ; ps "'>" (* closes <input *)
   ; let word = Morpho_html.visargify rword in 
     ps (Canon.unidevcode word)
   ; ps td_end

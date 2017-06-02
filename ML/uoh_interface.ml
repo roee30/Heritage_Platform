@@ -54,22 +54,21 @@ module UOH
 (* Interface with Amba Kulkarni's parser at UoH - Analysis mode *)
 (****************************************************************)
 
-value print_ext_output (_,output) = 
-  List.fold_left Lex.print_ext_segment 1 (List.rev output) 
-;
-
-(* Delimitor for offline printing and piping into UoH's parser *)
+(* UNUSED Delimitor for offline printing and piping into UoH's parser 
 value delimitor = fun
   [ Iic | Iic2 | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif | Iiy -> "-"
   | Iiv | Iivv | Iivc -> "++"
   | Pv | Pvk | Pvkc | Pvkv -> failwith "No more Pv segments" 
   | _ -> " "
   ]
+; *)
+
+value print_ext_output (_,output) = 
+  List.fold_left Lex.print_ext_segment 1 (List.rev output) 
 ;
 value print_ext_solutions s =
    let _ = print_ext_output s in ()
 ;
-
 (* Invocation of UoH's CSL parser for dependency graph display *)
 value print_ext1 (solutions : (int * list Lex.Disp.segment)) = do
   { ps ("<script type=\"text/javascript\" src=\"" ^ scl_url ^ "js_files/dragtable.js\"></script>")
@@ -83,7 +82,8 @@ value print_ext1 (solutions : (int * list Lex.Disp.segment)) = do
   ; ps (submit_input "Submit")
   } 
 ;
-value print_ext sols = match sols with
+(* We restrict to the first solution - TEMPORARY *)
+value print_ext sols = match sols with 
   [ [] -> failwith "No sol"
   | [ s :: _ ] -> print_ext1 s
   ]

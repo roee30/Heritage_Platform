@@ -179,14 +179,14 @@ rank.cmo : ../ZEN/word.cmo web.cmo phases.cmo morphology.cmi \
     ../ZEN/list2.cmo lexer.cmi constraints.cmi
 rank.cmx : ../ZEN/word.cmx web.cmx phases.cmx morphology.cmi \
     ../ZEN/list2.cmx lexer.cmx constraints.cmx
-uoh_interface.cmo : ../ZEN/word.cmo web.cmo SCLpaths.cmo phases.cmo \
-    morphology.cmi load_morphs.cmo html.cmo dispatcher.cmi
-uoh_interface.cmx : ../ZEN/word.cmx web.cmx SCLpaths.cmx phases.cmx \
-    morphology.cmi load_morphs.cmx html.cmx dispatcher.cmx
-reader.cmo : web.cmo uoh_interface.cmo sanskrit.cmi rank.cmo phases.cmo \
+scl_parser.cmo : ../ZEN/word.cmo web.cmo SCLpaths.cmo phases.cmo \
+    morphology.cmi lexer.cmi html.cmo dispatcher.cmi
+scl_parser.cmx : ../ZEN/word.cmx web.cmx SCLpaths.cmx phases.cmx \
+    morphology.cmi lexer.cmx html.cmx dispatcher.cmx
+reader.cmo : web.cmo scl_parser.cmo sanskrit.cmi rank.cmo phases.cmo \
     paths.cmo html.cmo encode.cmo control.cmo checkpoints.cmo cgi.cmo \
     canon.cmo
-reader.cmx : web.cmx uoh_interface.cmx sanskrit.cmx rank.cmx phases.cmx \
+reader.cmx : web.cmx scl_parser.cmx sanskrit.cmx rank.cmx phases.cmx \
     paths.cmx html.cmx encode.cmx control.cmx checkpoints.cmx cgi.cmx \
     canon.cmx
 parser.cmo : ../ZEN/word.cmo web.cmo uoh_interface.cmo skt_morph.cmi \

@@ -31,10 +31,7 @@ open Web; (* ps pl abort etc. [remote_server_host] *)
 open Cgi; (* [get decode_url] *)
 open Phases; (* [Phases] *)
 open Rank; (* [Prel Lex segment_all iterate] *) 
-open Uoh_interface; (* Interface with UoH dependency parser *) 
 
-module Ext = UOH Lex (* [print_ext print_nn] *)
-;
 (* Reader interface *)
 (* Mode parameter of the reader. Controled by service Reader for respectively
    tagging, shallow parsing, or dependency analysis with the UoH parser.  *)
@@ -129,19 +126,22 @@ value display limit mode text saved = fun
              }
            ]
          }
-      | Analyse -> match saved with 
-        [ [] -> Ext.print_ext (best_sols:list (int * list Rank.Lex.Disp.segment))
-        | [ (_,min_buck) :: _ ] -> 
-          let zero_pen = List.append best_sols (List.rev min_buck) in
-          Ext.print_ext zero_pen
-        ]
+      | Analyse -> (* [best_sols: list (int * list Rank.Lex.Disp.segment)] *)
+         let solutions = match saved with 
+             [ [] -> best_sols
+             | [ (_,min_buck) :: _ ] -> List.append best_sols (List.rev min_buck)
+             ] in
+         let forget_transitions (phase,word,_) = (phase,word) in
+         let forget_index (_,segments) = List.map forget_transitions segments in
+         let segmentations = List.map forget_index best_sols in
+         Scl_parser.print_scl segmentations
       | _ -> ()
       ]
     }
   ]
 ;
 
-(* NB This reader is parametrized by an encoding function, that parses the
+(* NB This reader is parameterized by an encoding function, that parses the
    input as a list of words, according to various transliteration schemes.
    However, the use of "decode" below to compute the romanisation and devanagari
    renderings does a conversion through VH transliteration which may not be

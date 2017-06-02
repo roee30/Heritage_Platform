@@ -5,7 +5,7 @@
 #                        Gérard Huet & Pawan Goyal                         #
 #                                                                          #
 ############################################################################
-# Makefile of Sanskrit Heritage Software  02-05-2017  Copyright INRIA 2017 #
+# Makefile of Sanskrit Heritage Software  02-06-2017  Copyright INRIA 2017 #
 ############################################################################
 # Prerequisites: Ocaml and Camlp4 preprocessor
 
@@ -42,9 +42,9 @@ inflected.mli inflected.ml sandhi.ml sandhier.ml pada.ml nouns.mli nouns.ml \
 verbs.mli verbs.ml parts.ml conj_infos.mli morpho_string.ml morpho.ml \
 declension.ml conjugation.ml indexer.ml indexerd.ml phases.ml lemmatizer.ml \
 auto.mli load_transducers.ml dispatcher.mli dispatcher.ml segmenter.ml \
-load_morphs.ml lexer.mli lexer.ml rank.ml uoh_interface.ml \
+load_morphs.ml lexer.mli lexer.ml rank.ml scl_parser.ml \
 reader.ml parser.ml constraints.mli constraints.ml multilingual.ml \
-paraphrase.mli paraphrase.ml reader_plugin.ml bank_lexer.ml regression.ml \
+paraphrase.mli paraphrase.ml bank_lexer.ml regression.ml \
 checkpoints.ml graph_segmenter.ml automaton.ml interface.mli interface.ml \
 user_aid.ml reset_caches.ml 
 
@@ -76,7 +76,8 @@ LINK=ocamlopt -I $(ZEN) -I +camlp4  dynlink.cmxa camlp4lib.cmxa
 
 # standard installation of Sanskrit Heritage platform - assumes ZEN library
 
-engine: test_version cgis reset_caches static_pages regression reader_plugin # parse_apte
+engine: test_version cgis reset_caches static_pages regression
+# reader_plugin  parse_apte
 
 # testing consistency of Heritage_resources and Heritage_platform
 test_version: paths.cmx gen.cmx version.cmx control.cmx test_stamp.cmx
@@ -85,7 +86,7 @@ test_version: paths.cmx gen.cmx version.cmx control.cmx test_stamp.cmx
         
 static_pages: css mk_index_page mk_grammar_page mk_sandhi_page mk_reader_page 
 
-all: engine static_pages reset_caches reader_plugin sandhi_test
+all: engine static_pages reset_caches sandhi_test
 
 # legacy in need of re-design
 regression: rank.cmx regression.cmx
@@ -184,16 +185,7 @@ inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.
 load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
 chapters.cmx morpho_html.cmx cgi.cmx segmenter.cmx morpho_ext.cmx \
 load_morphs.cmx lexer.cmx constraints.cmx rank.cmx bank_lexer.cmx \
-uoh_interface.cmx checkpoints.cmx reader.cmx -o reader 
-
-reader_plugin: reader_plugin.cmx 
-	$(LINK) unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
-control.cmx word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx \
-encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx \
-inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
-load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
-chapters.cmx morpho_html.cmx cgi.cmx segmenter.cmx morpho_ext.cmx \
-load_morphs.cmx lexer.cmx constraints.cmx reader_plugin.cmx -o reader_plugin
+scl_parser.cmx checkpoints.cmx reader.cmx -o reader 
 
 interface: interface.cmx
 	$(LINK) unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
@@ -221,7 +213,7 @@ inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.
 load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
 chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx segmenter.cmx \
 morpho_ext.cmx load_morphs.cmx lexer.cmx constraints.cmx checkpoints.cmx \
-paraphrase.cmx uoh_interface.cmx parser.cmx -o parser
+paraphrase.cmx scl_parser.cmx parser.cmx -o parser
 
 tagger: tagger.cmx
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx date.cmx install.cmx \
@@ -324,7 +316,7 @@ clean:
 	rm -f *.cmo *.cmi *.cmx *.ppi *.ppo *.o
 	rm -f css indexer indexerd sandhier reader parser tagger lemmatizer \
 declension conjugation mk_index_page mk_grammar_page mk_reader_page regression \
-mk_sandhi_page sandhi_test reader_plugin reset_caches interface user_aid \
+mk_sandhi_page sandhi_test reset_caches interface user_aid \
 parse_apte tag_apte 
 #	make dico.cmi auto.cmi conj_infos.cmi # needed to get dependencies right 
 

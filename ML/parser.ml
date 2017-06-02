@@ -20,7 +20,7 @@ open Html;
 open Web; (* ps pl abort truncation etc. [remote_server_host] *)
 open Cgi; (* get *)
 open Checkpoints;
-open Uoh_interface; (* Interface with UoH dependency parser *)
+open Scl_parser; (* Interface with UoH dependency parser *)
 
 module Prel = struct (* Parser's lexer prelude *)
 
@@ -52,8 +52,6 @@ end (* [Lexer_control] *)
 module Lex = Lexer.Lexer Prel Lexer_control 
 (* [print_proj print_segment_roles print_ext_segment extract_lemma] *)
 ;
-module Ext = UOH Lex 
-; 
 value rpc = remote_server_host 
 and remote = ref False (* local invocation of cgi by default *) 
 ;
@@ -117,8 +115,9 @@ value analyse query output =
              ^ ";p=','" ^ string_of_int (find_len top_groups) ^ "')" )
            ] ^ html_break)
   ; pl (xml_empty "p") 
-  ; if scl_toggle then (* Call SCL parser *) 
-       Ext.print_ext [ (1,List.rev output) ] 
+  ; if scl_toggle then (* Call SCL parser *)
+       let segments = List.map (fun (ph,w,_) -> (ph,w)) output in
+       Scl_parser.print_scl [ List.rev segments ] 
        else () 
   (*i DEBUG ; Sys.command "ls -l > /tmp/SKT_TEMP/junk" i*)
   ; List.iter print_bucket top_groups  

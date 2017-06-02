@@ -46,6 +46,7 @@ SHELL=/bin/sh
 # LGPL distribution Kerala workshop 25-12-2011 Happy Christmas !
 # LGPL distribution WSC Conference Bangkok 25-06-2015
 # GitLab archive 15-04-2017
+# SCL parser interface 02-06-2017
 
 SOFT_LICENSE=LEGAL/LGPL/LICENSE # Free software license LGPL
 #SOFT_LICENSE=LEGAL/UoH/LICENSE # University of Hyderabad distribution
@@ -226,9 +227,9 @@ ML/verbs.mli ML/verbs.ml ML/parts.ml ML/morpho.ml ML/declension.ml \
 ML/conjugation.ml ML/indexer.ml ML/indexerd.ml ML/phases.ml ML/lemmatizer.ml \
 ML/auto.mli ML/load_transducers.ml ML/dispatcher.mli ML/dispatcher.ml \
 ML/morpho_string.ml ML/segmenter.ml ML/load_morphs.ml ML/lexer.mli ML/lexer.ml \
-ML/rank.ml ML/uoh_interface.ml ML/reader.ml ML/parser.ml ML/constraints.mli \
+ML/rank.ml ML/scl_parser.ml ML/reader.ml ML/parser.ml ML/constraints.mli \
 ML/constraints.ml ML/multilingual.ml ML/paraphrase.mli ML/paraphrase.ml \
-ML/reader_plugin.ml ML/bank_lexer.ml ML/regression.ml ML/checkpoints.ml \
+ML/bank_lexer.ml ML/regression.ml ML/checkpoints.ml \
 ML/graph_segmenter.ml ML/interface.mli ML/interface.ml ML/user_aid.ml \
 ML/reset_caches.ml
 

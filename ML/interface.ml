@@ -21,7 +21,7 @@ open Phases; (* [Phases] *)
 open Phases; (* [phase is_cache generative] *) 
 open Dispatcher; (* [transducer_vect phase Dispatch transition trim_tags] *) 
 open Html; 
-open Web; (* ps pl abort etc. *)
+open Web; (* [ps pl abort reader_cgi] etc. *)
 open Cgi; 
 
 module Prel = struct (* Interface's lexer prelude *)
@@ -431,30 +431,24 @@ value check_sentence translit us text_orig checkpoints sentence
   ; pl (table_begin Spacing20)
   ; pl tr_begin
   ; ps (td_wrap (call_undo text checkpoints ^ "Undo"))
-  ; let invoke_web_services n =  (* call SCL and SL services *)
-        if scl_toggle then do 
-            { if (not iterate.val) && (List.length chunks = 1) then
-                  ps (td_wrap (call_reader text cpts "n" ^ "UoH Nyaya Analysis"))
-              else ps (td_wrap (call_reader text cpts "o" ^ "UoH Analysis Mode"))
-            ; match corpus with 
-              [ "" -> ()
-              | id -> invoke_SL sentence cpts id n sent_id link_num
-              ]
-            }
-        else () (* these services are not visible unless toggle is set *) in
-    match count with
-    [ Num.Int n -> if n=1 (* Unique remaining solution *) then do
-                  { ps (td_wrap (call_parser text cpts ^ "Unique Solution"))
-                  ; invoke_web_services 1
-                  }
-               else if n < max_count then do
+  ; let call_scl_parser n = (* invocation of scl parser *)
+        if scl_toggle then
+           ps (td_wrap (call_reader text cpts "o" ^ "UoH Analysis Mode"))
+        else () (* [scl_parser] is not visible unless toggle is set *) in
+    match count with 
+    [ Num.Int n -> if n > max_count then 
+                      (* too many solutions would choke the parsers *) 
+                      ps (td_wrap ("(" ^ string_of_int n ^ " Solutions)"))
+                   else if n=1 (* Unique remaining solution *) then do
+                       { ps (td_wrap (call_parser text cpts ^ "Unique Solution"))
+                       ; call_scl_parser 1
+                       }
+                   else do
         { ps (td_wrap (call_reader text cpts "p" ^ "Filtered Solutions"))
         ; let info = string_of_int n ^ if flag then "" else " Partial" in 
           ps (td_wrap (call_reader text cpts "t" ^ "All " ^ info ^ " Solutions"))
-        ; invoke_web_services n
+        ; call_scl_parser n
         } 
-               else (* too many solutions would choke the reader service *) 
-                    ps (td_wrap ("(" ^ string_of_int n ^ " Solutions)"))
     | _ -> ps (td_wrap "(More than 2^32 Solutions!)")
     ]
   ; pl tr_end

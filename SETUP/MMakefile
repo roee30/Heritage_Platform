@@ -369,7 +369,7 @@ all: ZEN
 	cp -Rp $(MW) . # local copy of MW
 #	cd ML && $(MAKE) depend # reset dependencies (might be partial subset)
 	test -e ML/SCLpaths.ml && echo "SCL config detected" \
-|| mv SETUP/dummy_SCLpaths.ml ML/SCLpaths.ml
+|| cp SETUP/dummy_SCLpaths.ml ML/SCLpaths.ml
 	cd ML && $(MAKE) test_version
 	ML/test_stamp
 	cd ML && $(MAKE) # make engine (testing the data stamp)

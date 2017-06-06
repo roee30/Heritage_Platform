@@ -83,7 +83,7 @@ DOC_IMAGES=IMAGES/lexer10.jpg IMAGES/lexer17.jpg IMAGES/lexer40.jpg # Copy GH
 # NB. Use of gif vs others formats such as jpg is due to browser compatibility
 
 # Scripts
-SCRIPTS=JAVASCRIPT/utf82VH.js JAVASCRIPT/dragtable.js 
+SCRIPTS=JAVASCRIPT/utf82VH.js JAVASCRIPT/dragtable.js
 
 # Next are copyright specific images
 SITE_IMAGES=IMAGES/yinyang.gif IMAGES/panini.jpg IMAGES/spin-new.gif \
@@ -286,7 +286,7 @@ ROBOTS=SITE/robots.txt # currently disabled to allow Google access
 # Goldendict data banks are now distributed from sanskrit.inria.fr
 #GOLDENDICT=SITE/Heritage_du_sanskrit_san-fra.tar.gz SITE/Declension-heritage_du_sanskrit_san-eng.tar.gz SITE/Grammar-heritage_du_sanskrit_san-eng.tar.gz SITE/mw-heritage_du_sanskrit_san-eng.tar.gz
 
-WEBSOURCES=$(PORTAL) $(FAQ) $(ABREVS) $(GOLD) $(GOLDEN) $(MANUAL) $(XMLPAGE) 
+WEBSOURCES=$(PORTAL) $(FAQ) $(ABREVS) $(GOLD) $(GOLDEN) $(MANUAL) $(XMLPAGE)
 ALLWEBSOURCES=$(SITESOURCE) $(WEBSOURCES)
 # Sources of morphology documents
 XMLDATA=$(DATA)/XML
@@ -491,7 +491,11 @@ releasedata: $(DICO) $(DATA) abrevs
 	cp $(WEBSOURCES) $(SERVERPUBLICDIR)
 	cp $(SITEPAGES) $(SERVERPUBLICDIR) # site main pages made by configure
 #	cp $(GOLDENDICT) $(SERVERPUBLICDIR) # Goldendict version now separated
-	if [ "$(LEXICON)" == "SH" ]; then cp $(SITEPAGE_FR) $(SERVERPUBLICDIR)index.html; else cp $(SITEPAGE_EN) $(SERVERPUBLICDIR)index.html; fi # default language from lexicon parameter
+	if [ "$(LEXICON)" = "SH" ]; then			\
+		cp $(SITEPAGE_FR) $(SERVERPUBLICDIR)index.html;	\
+	else							\
+		cp $(SITEPAGE_EN) $(SERVERPUBLICDIR)index.html;	\
+	fi # default language from lexicon parameter
 	cp -R $(DICO) $(SERVERPUBLICDIR) # hypertext Heritage dictionary
 # so that cgis invocations in DICO pages are relocated consistently with config:
 	cd $(SERVERPUBLICDIR) && for i in `ls DICO/*.html`; do (\
@@ -510,7 +514,7 @@ rm temp ); done
 
 BOOKPRINTS=$(BOOK)/Heritage.pdf $(BOOK)/abrevs.pdf
 
-releasebook: 
+releasebook:
 	cp $(BOOKPRINTS) $(SERVERPUBLICDIR)
 
 releasexml: # Sanskrit morphology in xml copied from Resources to Server

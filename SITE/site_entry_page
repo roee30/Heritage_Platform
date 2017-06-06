@@ -11,7 +11,7 @@
 <meta name="description" content="This site provides tools for Sanskrit processing: dictionary search, morphology generation and analysis, segmentation, tagging and parsing.">
 
 <link rel="shortcut icon" href="IMAGES/favicon.ico">
-<link rel="apple-touch-icon" href="IMAGES/touch-icon-iphone-60x60.png"> 
+<link rel="apple-touch-icon" href="IMAGES/touch-icon-iphone-60x60.png">
 <link rel="apple-touch-icon" sizes="60x60" href="IMAGES/touch-icon-ipad-76x76.png">
 <link rel="apple-touch-icon" sizes="114x114" href="IMAGES/touch-icon-iphone-retina-120x120.png">
 <link rel="apple-touch-icon" sizes="144x144" href="IMAGES/touch-icon-ipad-retina-152x152.png">
@@ -19,10 +19,10 @@
 <link rel="stylesheet" type="text/css" href="DICO/style.css" media="screen,tv">
 </head>
 
-<body class="pink_back"> <!-- Pale_rose --> 
+<body class="pink_back"> <!-- Pale_rose -->
 <table class="body">
 <tr><td>
-  
+
 <h1 class="title">The Sanskrit Heritage Site
 <br>
 <a href="IMAGES/Yantra.jpg">
@@ -35,7 +35,7 @@
 </h3>
 
 <p>
-Welcome to the Sanskrit Heritage site. 
+Welcome to the Sanskrit Heritage site.
 It provides various services for the computational treatment of Sanskrit.
 <p>
 
@@ -67,7 +67,7 @@ respectively <a href="DICO/index.fr.html">
 <p>
 This site offers a number of linguistic services for the Sanskrit language, such
 as a <a href="DICO/reader.html">Sanskrit Reader</a> that parses Sanskrit
-text under various formats into Sanskrit banks of tagged hypertext. 
+text under various formats into Sanskrit banks of tagged hypertext.
 Various phonological and morphological tools are also provided.
 </p>
 <p>
@@ -78,14 +78,14 @@ to use the various facilities.
 <h2 class="b2"> Sanskrit Heritage dictionary in book form </h2>
 
 You may download the Heritage dictionary as a pdf document from
-<a href="Heritage.pdf">PDF</a>. 
+<a href="Heritage.pdf">PDF</a>.
 This document is readable through Acrobat Reader,
 a well-known document management software from Adobe freely available on Internet.
-Since the document is rather large, you have to account for some delay 
+Since the document is rather large, you have to account for some delay
 in loading its 5 Mb. This is a still on-going effort, lexical acquisition
 implies quick obsolescense of this document which grows along with versions.
 
-<br> 
+<br>
 The Sanskrit Heritage dictionary is also available in an ebook format,
 usable with the Babyloo, Stardict or Goldendict software.
 Please visit the <a href="goldendict.html">Golden Sanskrit Heritage</a> page.
@@ -106,19 +106,19 @@ Your browser must be HTML5 compliant, and for proper viewing
 of Sanskrit text you must have installed on your system open type fonts
 for roman transliteration with diacritics, and for devan&#257;gar&#299;.
 A Unicode-compliant font for devan&#257;gar&#299; with proper ligatures
-is Apple's Devanagari MT for Macintosh OS X stations. For Windows users, 
+is Apple's Devanagari MT for Macintosh OS X stations. For Windows users,
 installation of font 'Arial MS Unicode' is advised for proper rendering.
 </p>
 <p>
 You may have to fiddle with the controls of your browser, so that the font
 declarations from the dictionary pages get precedence over the standard
-selection, and thus encoding is specified as Unicode compliant (UTF-8 encoding). 
+selection, and thus encoding is specified as Unicode compliant (UTF-8 encoding).
 </p>
 <p>
 Note that many words are given with their etymology as hypertext links. You
-may thus navigate from a word to is morphological components, down to its roots. 
-Also, the gender declarations of 
-the main entries are mouse-sensitive, and give you direct access to the 
+may thus navigate from a word to is morphological components, down to its roots.
+Also, the gender declarations of
+the main entries are mouse-sensitive, and give you direct access to the
 relevant declension table. Similarly, the present class mark of the verbal roots
 gives access to the conjugation schemes. Also for verb entries, preverbs
 lead you to the correspondingly prefixed derived verbs.
@@ -135,32 +135,32 @@ facilities.
 <p>
 If you want to search for a Sanskrit word
 without knowing its exact transliteration, go to section "Sanskrit made easy"
-of the index page, which allows you to search for words without knowing 
-precise diacritics usage. 
+of the index page, which allows you to search for words without knowing
+precise diacritics usage.
 For instance, search Vishnou, Siva, or the grammarian Panini. This
 interface is limited for the moment to the Sanskrit Heritage dictionary.
 </p>
 
-<h2 class="b2"> Sanskrit Grammarian 
+<h2 class="b2"> Sanskrit Grammarian
 <br>
 <img src="IMAGES/panini.jpg" alt="Panini">
 </h2>
 <p>
-This interface gives the declension tables for Sanskrit substantives. 
-Try out this 
+This interface gives the declension tables for Sanskrit substantives.
+Try out this
 <a href="DICO/grammar.html">declension engine</a> by submitting Sanskrit stems
 with intended gender. The same transliteration conventions as for the
 dictionary index apply. For instance, submit "deva" with gender Mas,
 or (assuming Velthuis transliteration) "devii" with gender Fem,
 or "brahman" with gender Neu. The fourth
 button, labeled "Any", may be used for the words which take their
-gender from the context, such as deictic personal pronouns ("aham", "tvad"), 
-or numeral words such as "dva", "tri", etc. 
+gender from the context, such as deictic personal pronouns ("aham", "tvad"),
+or numeral words such as "dva", "tri", etc.
 </p>
 <p>
-A conjugation engine for roots is also available. It handles 
-the full present system: present indicative, imperfect, imperative and 
-optative, as well as the passive present system, the perfect, the aorist 
+A conjugation engine for roots is also available. It handles
+the full present system: present indicative, imperfect, imperative and
+optative, as well as the passive present system, the perfect, the aorist
 and the future.
 Participial stems, absolutives and infinitives are listed as well.
 Some secondary conjugations (causative, intensive,
@@ -168,7 +168,7 @@ desiderative) are also generated, for the full present and future systems.
 Try out this <a href="DICO/grammar.html#roots">conjugation engine</a>
 with data such as "bhuu" 1, "as" 2, "m.rj" 2, "han" 2, "haa" 3, "hu" 3,
 "daa" 4, "su" 5, "p.r" 6, "yuj" 7, "k.r" 8, "j~naa" 9, "cur" 10, "namas" 11.
-In order to get the secondary conjugations of a root, enter code 0. 
+In order to get the secondary conjugations of a root, enter code 0.
 You may cascade by generating declensions of the generated participial stems.
 </p>
 <p>
@@ -192,8 +192,8 @@ parameters may yield random results or error messages.
 
 <h2 class="b2"> Lemmatizer </h2>
 <p>
-Conversely, a 
-<a href="DICO/index.html#stemmer">lemmatiser</a> 
+Conversely, a
+<a href="DICO/index.html#stemmer">lemmatiser</a>
 attempts to tag inflected words.
 Try for instance (in Velthuis format)
 "devaat", "jagmivaan", "a.s.tau" (selecting Noun)
@@ -201,21 +201,21 @@ or "apibat", "akaar.siit", "dudoha", "vaahyate" (selecting Verb).
 This lemmatizer knows about inflected forms of derived stems in some
 secondary derivations.
 For instance, "darzayi.syati" is found as conjugated form:
-{ ca. fut. ac. sg. 3 }[dṛś_1], 
+{ ca. fut. ac. sg. 3 }[dṛś_1],
 "dariid.rzyate" yields { int. pr. md. sg. 3 }[dṛś_1],
 "did.rk.sate" yields { des. pr. md. sg. 3 }[dṛś_1]
 and "bibhik.se" yields { des. pft. md. sg. 3 | des. pft. md. sg. 1 }[bhaj].
-Please note the multitag notation of this ambiguous form. 
+Please note the multitag notation of this ambiguous form.
 </p>
 Other lexical categories are available, such as Part for participles.
 For instance, "bhikṣitavyānām" (selecting IAST transliteration and the Part
 lexical category, yields { g. pl. f. | g. pl. n. | g. pl. m. }[bhikṣitavya { des. pfp. [3] }[bhaj]].
 <p>
 The various grammatical abbreviations used in these lemmas are available
-<a href="abbrevs.pdf">here</a>.
+<a href="abrevs.pdf">here</a>.
 
 N.B. Do not attempt to lemmatize verbal forms with preverbs - this will
-not work, it knows only how to invert root forms. Lemmatizing 
+not work, it knows only how to invert root forms. Lemmatizing
 more complex forms is possible through the Sanskrit Reader interface,
 as we shall see below.
 
@@ -229,16 +229,16 @@ Please visit the <a href="xml.html">Sanskrit linguistic resources page</a>.
 <h2 class="b2"> Sanskrit Reader </h2>
 
 <p>
-Try our interactive <a href="DICO/reader.html">Sanskrit Reader</a>. 
+Try our interactive <a href="DICO/reader.html">Sanskrit Reader</a>.
 It is able to segment simple sentences.
 Try for instance to segment "tryambaka.myajaamahesugandhi.mpu.s.tivardhanam"
-(we assume Velthuis transliteration here). 
+(we assume Velthuis transliteration here).
 Then push the "Tagging" button and get the fully tagged sentence.
 You will see two segmentations, one with an identified compound form
 "tri-ambakam", the second with a compounded segment "tryambakam".
 Note that each segment is indicated with a lemma giving its stem
 and the set of morphological parameters that may generate the segment form
-from its stem. The stem is hyperlinked to the dictionary of choice. 
+from its stem. The stem is hyperlinked to the dictionary of choice.
 <!-- "vana.mgatvaadhyaana.mkaroti" "maarjaarodugdha.mpibati", -->
 </p><p>
 
@@ -250,11 +250,11 @@ explains the compound "tryambakam" as the sandhi of segments "tri" and
 </p>
 <p>
 The reader may be helped by inserting blanks in the input at word junction.
-For instance, the above mantra may be entered as 
+For instance, the above mantra may be entered as
 "tryambaka.m yajaamahe sugandhi.m pu.s.tivardhanam".
 But compounds should stay in one piece.
-Spaces are also needed for hiatus, in sentences such as: 
-"tacchrutvaasa~njaya uvaaca". 
+Spaces are also needed for hiatus, in sentences such as:
+"tacchrutvaasa~njaya uvaaca".
 </p>
 <p>
 Many options are provided in the menu of the Reader page. For instance,
@@ -270,8 +270,8 @@ It may however return so many solutions that listing all solutions is
 impractical, and other facilities must be used.
 </p>
 <p>
-The grammar used to recognize sentences is explained 
-as a local automaton state transition graph 
+The grammar used to recognize sentences is explained
+as a local automaton state transition graph
 <a href="IMAGES/lexer17.jpg">Lexer automaton</a>.
 This is actually a simplification of the segmenter automaton control.
 A simpler one, close to the Simplified mode of the reader, is
@@ -281,13 +281,13 @@ A fuller one, close to the Complete mode of the reader, is
 The color codes of these diagrams explain the output conventions of the tags.
 </p>
 <p>
-In these diagrams, transparent nodes are non generative, and colored nodes 
+In these diagrams, transparent nodes are non generative, and colored nodes
 correspond to the lexical categories recognized by the lemmatizer. The
 category Auxi is the subset of Verb consisting of conjugated forms of
 roots "k.r", "as" and "bhuu" used as auxiliaries in periphrastic constructions.
 <!--  The category Krid corresponds to root participles or primary derivatives
 ({\sl k{\d r}dantas}). -->
-Pv denotes sequences of preverbs. 
+Pv denotes sequences of preverbs.
 </p>
 
 <h2 class="b2"> Sanskrit Parser </h2>
@@ -332,7 +332,7 @@ More documentation on these facilities are described in the
 <h2 class="b2"> Sanskrit Tagger </h2>
 
 <p>
-The semantic analysis may be still ambiguous, since a given segment may be 
+The semantic analysis may be still ambiguous, since a given segment may be
 decorated by several morphological categories. All interpretations are
 presented under the role matrix, sorted by increasing penalty. Check for
 your favorite interpretation in this list, and select it by clicking on its
@@ -358,7 +358,7 @@ on small Sanskrit sentences, it is time to try to analyse more complex
 sentences. Obviously the listing of all solutions is out of the question with
 long sentences in Complete mode. A new visual interface is offered for
 semi-automatic segmentation. This new Summary mode is actually now proposed as a
-default in the Reader page. 
+default in the Reader page.
 </p>
 <p>
 Try for instance
@@ -376,7 +376,7 @@ Now only one choice remains, between brūyāt and brūyām.
 Clicking on the first one will finish the job.
 Indeed only one solution remains, as indicated by the "Unique Solution" link.
 Clicking on its check sign, you are now viewing the same output as given by the
-Reader in Tagging mode, but constrained to use only segments checked in the Summary. 
+Reader in Tagging mode, but constrained to use only segments checked in the Summary.
 </p>
 
 <h2 class="b2"> Other Sanskrit Resources </h2>
@@ -392,11 +392,11 @@ multi-platform Web services.
 </p>
 <p>
 In october 2007 we organized the First International Sanskrit Computational
-Linguistics Symposium. Please visit 
+Linguistics Symposium. Please visit
 the <a href= "Symposium/">Symposium Site</a>.
-This was followed by the Second Symposium in may 2008 at 
+This was followed by the Second Symposium in may 2008 at
 <a href="http://sanskritlibrary.org/Symposium/">Brown University</a>,
-by a third one in january 2009 at 
+by a third one in january 2009 at
 <a href="http://sanskrit.uohyd.ernet.in/Symposium/">Hyderabad University</a>,
 a fourth one in december 2010 at
 <a href="http://sanskrit.jnu.ac.in/conf/4iscls/index.jsp">JNU</a>.
@@ -412,7 +412,7 @@ at Banaras Hindu University, at the occasion of the ICON 2016 conference.
 The computational tools for Sanskrit developed at University of Hyderabad
 are available here as a <a href= "~anusaaraka/">Mirror Site</a>. -->
 
-<div class="center"> 
+<div class="center">
 <img src="IMAGES/yinyang.gif" alt="Yinyang">
 </div>
 
@@ -421,17 +421,17 @@ The Zen Library</h2>
 
 <p>
 This site reflects an ongoing project of Sanskrit processing
-on a comprehensive software platform. 
+on a comprehensive software platform.
 The project is based on a structured lexicographic database, compiled from
 the Sanskrit Heritage dictionary, and on
-the Zen computational linguistics toolkit. This toolkit is a library 
-of programs implemented in Pidgin ML, functional core of the 
-<a href="http://ocaml.org">Objective Caml</a> 
+the Zen computational linguistics toolkit. This toolkit is a library
+of programs implemented in Pidgin ML, functional core of the
+<a href="http://ocaml.org">Objective Caml</a>
 programming language. The Zen library and its documentation are available
 as free software under the Gnu Lesser General Public License (LGPL) from the
 <a href="http://pauillac.inria.fr/~huet/ZEN/">Zen site.</a>
 </p>
-<!-- Forum closed 
+<!-- Forum closed
 Please visit the <a href="http://sanskrit.inria.fr/zf/">Zen Forum</a> for
 announcements and discussions concerning the ZEN toolkit. -->
 
@@ -442,7 +442,7 @@ Please visit our <a href="portal.html">Sanskrit Portal</a>
 to find links to other Sanskrit resources.
 <p>
 If you are reading this from a mirror site, don't forget to regularly update
-this server with the development Git site 
+this server with the development Git site
 "https://gitlab.inria.fr/huet/Heritage_Platform".
 
 <h2 class="b2"><img src="IMAGES/om1.jpg" alt="Om">
@@ -451,13 +451,13 @@ Artwork credits</h2>
 <span class="green">Orissan artwork at this site courtesy of Shauraj Rath.
 © Screenex, Bhubaneshwar, Ekamra, Orissa. All rights reserved.
 </span><br>
-<span class="green">Wallpaper om images courtesy of 
+<span class="green">Wallpaper om images courtesy of
 <a href="http://www.vishvarupa.com/aum-om-omkara-pranava.html">Vishvarupa.com</a>.
 </span><br>
-<span class="green">Ganesh wallpaper courtesy of 
+<span class="green">Ganesh wallpaper courtesy of
 <a href="http://www.math-info.univ-paris5.fr/~patte/">François Patte</a>.
 </span><br>
-<span class="green">Shri Yantra design © 
+<span class="green">Shri Yantra design ©
 <a href="MAGES/Yantra.jpg">Gérard Huet</a> 1990.<br>
 </span>
 </td></tr>
@@ -472,11 +472,11 @@ Artwork credits</h2>
 </td><td>
 <table class="center">
 <tr><td>
-<a href="index.html"><strong>Top</strong></a> | 
-<a href="DICO/index.#LANG.html"><strong>Index</strong></a> | 
-<a href="DICO/index.#LANG.html#stemmer"><strong>Stemmer</strong></a> | 
-<a href="DICO/grammar.#LANG.html"><strong>Grammar</strong></a> | 
-<a href="DICO/sandhi.#LANG.html"><strong>Sandhi</strong></a> | 
+<a href="index.html"><strong>Top</strong></a> |
+<a href="DICO/index.#LANG.html"><strong>Index</strong></a> |
+<a href="DICO/index.#LANG.html#stemmer"><strong>Stemmer</strong></a> |
+<a href="DICO/grammar.#LANG.html"><strong>Grammar</strong></a> |
+<a href="DICO/sandhi.#LANG.html"><strong>Sandhi</strong></a> |
 <a href="DICO/reader.#LANG.html"><strong>Reader</strong></a> |
 <a href="faq.#LANG.html"><strong>Help</strong></a> |
 <a href="portal.#LANG.html"><strong>Portal</strong></a>
@@ -485,6 +485,4 @@ Artwork credits</h2>
 <img src="IMAGES/logo_inria.png" alt="Logo Inria" height="50"></a>
 <br></td></tr></table></div>
 </body>
-</html> 
-
-
+</html>

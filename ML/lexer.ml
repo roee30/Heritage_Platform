@@ -131,14 +131,14 @@ value rec str_phase = fun
 ;
 value print_scl_morph pvs gen form tag = do
   { ps (xml_begin "tag")
-  ; Morpho_scl.print_ext_inflected_link pvs form gen tag 
+  ; Morpho_scl.print_scl_inflected pvs form gen tag 
   ; ps (xml_end "tag")
   }
 ;
 value print_scl_tags pvs phase form tags = 
-  let table_ext phase = 
+  let table phase = 
       xml_begin_with_att "tags" [ ("phase",str_phase phase) ] in do
-  { ps (table_ext phase) 
+  { ps (table phase) 
   ; List.iter (print_scl_morph pvs (generative phase) form) tags 
   ; ps (xml_end "tags")
   }
@@ -239,7 +239,7 @@ value print_segment offset (phase,rword,transition) = do
       }
   }
 ;
-(* Similarly for [Reader_plugin] mode (without offset and transitions) *)
+(* Similarly for [scl_plugin] mode (without offset and transitions) *)
 value print_scl_segment counter (phase,rword) =  
   let print_pada rword = 
     let word = Morpho_html.visargify rword in 

@@ -175,7 +175,8 @@ value tags_of phase word =
       let sfx_tag = Deco.assoc sfx (morpho_tags sfx_ph) in
       Taddhita (ph,form) [ 0 :: sfx ] sfx_ph sfx_tag
   | _ -> Atomic (Deco.assoc word (morpho_tags phase)) 
-(* NB Atomic comprises tin verbal forms of roots as well as sup atomic forms *)
+    (* NB Atomic comprises tin verbal forms of roots as well as sup atomic forms
+       and all the pure stems collections Iic Iiv etc. *)
   ]
 ;
 

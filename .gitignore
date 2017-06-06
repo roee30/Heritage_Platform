@@ -50,6 +50,7 @@ SITE/index.en.html
 SITE/index.fr.html
 SITE/portal.en.html
 SITE/portal.fr.html
+SITE/xml.html
 
 # Mechanically OCaml generated files from ZEN/example.aut
 ZEN/example_dispatch.ml

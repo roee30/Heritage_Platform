@@ -16,7 +16,7 @@ open Skt_morph;
 
 (* module Morphology : sig *)
 
-type inflexion_tag =
+type inflexion_tag = (* vibhakti *)
   [ Noun_form of gender and number and case             (* declined nominal *)
   | Part_form of verbal and gender and number and case  (* declined participle *)
   | Bare_stem (* iic forms *)

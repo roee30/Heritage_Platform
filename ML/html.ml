@@ -366,13 +366,6 @@ value styles = fun
     | Green_back      -> [ Bgcolor Green ]
     | Light_blue_back -> [ Bgcolor Light_blue ]
     | Lavender_back   -> [ Bgcolor Lavender ]
-(*[ | Pict_om      -> [ Bgpict Om; No_margin ]
-    | Pict_om2     -> [ Bgpict Om2; No_margin ]
-    | Pict_om3     -> [ Bgpict Om3; No_margin ]
-    | Pict_om4     -> [ Bgpict Om4; No_margin ]
-    | Pict_gan     -> [ Bgpict Gan; No_margin ]
-    | Pict_hare    -> [ Bgpict Hare; No_margin ]
-    | Pict_geo     -> [ Bgpict Geo; No_margin ] ]*)
     | Blue_        -> [ trans_font; Color Blue ] 
     | Green_       -> [ trans_font; Color Green ]
     | Navy_        -> [ trans_font; Color Navy ]
@@ -450,13 +443,6 @@ value class_of = fun
     | Lawngreen_back  -> "lawngreen_back"
     | Aquamarine_back -> "aquamarine_back"
     | Grey_back    -> "grey_back"
-(*[ | Pict_om      -> "pict_om"
-    | Pict_om2     -> "pict_om2"
-    | Pict_om3     -> "pict_om3"
-    | Pict_om4     -> "pict_om4"
-    | Pict_gan     -> "pict_gan"
-    | Pict_hare    -> "pict_hare"
-    | Pict_geo     -> "pict_geo" ]*)
     | Blue_        -> "blue" 
     | Green_       -> "green"
     | Navy_        -> "navy"

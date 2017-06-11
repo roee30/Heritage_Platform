@@ -2914,12 +2914,12 @@ value compute_passive_system conj root pastem = do
   }
 ;
 value compute_passive conj root stem = 
-  let pastem = affix_y stem (* "y" marks passive *) in 
-  compute_passive_system conj root pastem 
+  let ps_stem = affix_y stem (* "y" marks passive *) in 
+  compute_passive_system conj root ps_stem 
 ;
 value compute_passive_raw root =
-  let pstem = passive_stem root (revstem root) in 
-  compute_passive Primary root pstem 
+  let ps_stem = passive_stem root (revstem root) in 
+  compute_passive Primary root ps_stem 
 ;
 value compute_passive_10 root ps_stem =
   match root with
@@ -4285,7 +4285,6 @@ value compute_peri_fut conj perstem entry =
         ])
    ])
 ;
-
 value record_pfp_tavya conj perstem entry = 
   let pfp_stem = fix perstem "tavya" in
   record_part (Pfutp_ conj (rev pfp_stem) entry) (* rev compat entry by Pfpart *)
@@ -4615,13 +4614,11 @@ value record_ppp_abs_stems entry rstem ppstems =
     ] in 
   iter process_ppstem ppstems
 ;
-(* Simple version for denominatives *)
-value record_ppp_abs_den ystem entry =
-  let ppstem = trunc (revstem entry) in do  
-  { record_part_ppp (rfix ppstem "ita") entry 
+(* Simple version for denominatives - tentative *)
+value record_ppp_abs_den ystem entry = do  
+  { record_part_ppp (rfix ystem "ita") entry 
   ; record_abso_tvaa (fix ystem "itvaa") entry  
-  ; record_abso_ya (fix ppstem "ya") entry (* ? *)
-  (*i TODO pfp inf etc. i*)
+  (* no [record_abso_ya] *)
   }
 ;
 (* Absolutive in -am - Macdonell§166 Stenzler§288 \Pan{3,4,22} .namul          *)
@@ -5302,19 +5299,23 @@ value den_stem_m entry = (* in general intransitive or reflexive Whitney§1059c 
    | _ -> failwith ("Unknown denominative " ^ entry)
    ] 
 ;
-value compute_denom stem ystem entry = do (* other than present system *)
+value compute_denom stem ystem entry = do (* other than present system - rare *)
   { build_perpft Primary ystem entry 
   ; let fsuf = revcode "i.sy" in (* rare - similar to [compute_future_10] *)
     compute_future (fsuf @ ystem) entry 
   ; let perstem = [ 3 :: ystem ] (* -yi *) in  
     perif Primary perstem entry 
- ; let ps_stem = trunc stem (* experimental *) in match entry with
-   [ "udan" | "asuuya" -> () (* wrong udaya asya *)
-   | _ -> do 
-          { compute_passive_11 entry ps_stem 
-          ; record_pfp_10 entry ps_stem (* dubious - eg clash viirya *)
-          }
-   ]
+  ; match stem with
+    [ [ 1 :: rest ] -> 
+        match entry with
+        [ "asuuya" -> () (* wrong asya *)
+        | _ -> do (* experimental - rare acc. to Whitney *)
+               { compute_passive_11 entry rest
+               ; record_pfp_10 entry rest
+               }
+        ]
+    | _ -> () (* specially wrong for consonant stems *)
+    ]
   }
 ;
 value compute_denominative_a entry third = 
@@ -5368,12 +5369,11 @@ value compute_denominative entry pada third =
 value compute_conjugs_stems entry (vmorph,aa) = do
   { admits_aa.val := aa (* sets the flag for phantom forms for aa- preverb *)
   ; match vmorph with 
- [ Conj_infos.Prim gana pada third -> 
+ [ Conj_infos.Prim 11 pada third -> 
+      (* note: pada of denominative verbs is lexicalized *)
+      compute_denominative entry pada third
+ | Conj_infos.Prim gana pada third -> 
    (* gana is root class, pada is True for Para, False for Atma of third form *)
-      if gana=11 (* denominative verb, special treatment *)
-      then compute_denominative entry pada third
-           (* note: pada of denominative verbs is lexicalized *)
-      else (* root entry *)
    (* Primary conjugation *)
    let rstem = revstem entry in (* root stem reversed *)  
    try do
@@ -5599,9 +5599,9 @@ value compute_auxi_kridantas () =
       ] in do (* A few auxiliary action nouns are generative for cvi compounds *)
   { let (rst,st) = stems "kara.na" in 
     build_part_a_n (Primary,Action_noun) rst st "k.r#1" 
-  ; let (rst,st) = stems "kaara" in 
-    build_part_a_m (Primary,Action_noun) rst st "k.r#1"
-  ; let (rst,st) = stems "bhaavana" in 
+  ; let (rst,st) = stems "kaara" in (* actually, should be [Agent_noun] *)
+    build_part_a_m (Primary,Action_noun) rst st "k.r#1" (* also fem in -ii? *)
+  ; let (rst,st) = stems "bhaavana" in
     build_part_a_m (Primary,Action_noun) rst st "bhuu#1"
   ; let (rst,st) = stems "bhaava" in 
     build_part_a_m (Primary,Action_noun) rst st "bhuu#1"

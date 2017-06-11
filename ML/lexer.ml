@@ -31,10 +31,9 @@ module Lexer (* takes its prelude and control arguments as module parameters *)
                 value out_chan : ref out_channel; (* output channel *)
             end) = struct 
 
-open Html; 
+open Html;
 open Web; (* ps pl abort etc. *)
 open Cgi;
-
 open Phases; (* Phases *) 
 open Phases; (* phase *) 
 
@@ -106,7 +105,7 @@ value print_tags pvs seg_num phase form tags =
   let ptag = print_morph pvs (is_cache phase) seg_num (generative phase) form in 
   let _ = List.fold_left ptag 1 tags in ()
 ;
-value rec str_phase = fun
+value rec scl_phase = fun
   [ Pv | Pvk | Pvkc | Pvkv -> "pv"
   | Noun | Noun2 | Nouc | Nouv | Krid | Kriv | Kric | Lopak | Pron | Auxik 
     -> "noun"
@@ -125,8 +124,8 @@ value rec str_phase = fun
   | Ifc | Ifc2 -> "ifc"
   | Unknown -> "unknown"
   | Cache -> "Cache" 
-  | Comp (_,ph) _ _ -> "preverbed " ^ str_phase ph
-  | Tad (ph,_)  _ _ -> "taddhita " ^ str_phase ph
+  | Comp (_,ph) _ _ -> "preverbed " ^ scl_phase ph
+  | Tad (ph,_)  _ _ -> "taddhita " ^ scl_phase ph
   ]
 ;
 value print_scl_morph pvs gen form tag = do
@@ -137,7 +136,7 @@ value print_scl_morph pvs gen form tag = do
 ;
 value print_scl_tags pvs phase form tags = 
   let table phase = 
-      xml_begin_with_att "tags" [ ("phase",str_phase phase) ] in do
+      xml_begin_with_att "tags" [ ("phase",scl_phase phase) ] in do
   { ps (table phase) 
   ; List.iter (print_scl_morph pvs (generative phase) form) tags 
   ; ps (xml_end "tags")
@@ -215,7 +214,7 @@ value print_morpho phase word = do
               process_taddhita [] 0 ph form sfx_phase sfx sfx_tags 
             | Preverbed _ pvs _ _ -> (* stem, tagged as iic *)
               process_taddhita pvs 0 ph form sfx_phase sfx sfx_tags 
-            | _ -> failwith "taddhita recursion unavailable"
+            | _ -> failwith "Anomaly: taddhita recursion"
             ]
        ] in ()
   ; ps span_end  
@@ -228,7 +227,7 @@ value print_morpho phase word = do
 value print_segment offset (phase,rword,transition) = do
   { ps "[ "
   ; Morpho_html.print_signifiant_off rword offset
-  ; let word = mirror rword in print_morpho phase word
+  ; print_morpho phase (mirror rword)
   (* Now we print the sandhi transition *)
   ; ps "&lang;" (* < *) 
   ; let correction = process_transition transition in do  
@@ -238,37 +237,98 @@ value print_segment offset (phase,rword,transition) = do
       ; offset+correction+length rword
       }
   }
+; 
+(* TODO 
+type vakti =
+  [ Stem of pratipad (* forms nominal compounds *)
+  | Cvi of pratipad (* forms verbal compounds *)
+  | Avyayii of pratipad (* forms nominal invariable compounds *)
+  | Subanta of pratipad and inflexion_tag (* nominal padas *)
+  | Tinanta of kriya and inflexion_tag (* verbal padas *)
+  | Peri of kriya (* forms verbal compounds *)
+  | Absolutive of kriya (* verbal padas *)
+  | Infinitive of kriya (* verbal padas *)
+  | Indecli of inflexion_tag (* indeclinables *)
+  | Anartha (* unanalysed chunk *)
+  ]
+and pratipad =
+  [ Koza of word (* atomic nominal stems *)
+  | Nan (* privative prefix a- an- *) 
+  | Kridanta of verbal and kriya 
+  | Taddhitanta of pratipad and taddhita
+  ]
+and kriya = list preverb and word (* optional upasarga sequence and root *)
+; 
+(* Improved version of [Load_morphs.tags_of] *)
+value scl_tags phase word = match phase with
+  [ Pv | Pvk | Pvkc | Pvkv -> failwith "Preverb in scl_tags" 
+  | A | Ai | An | Ani -> Stem Nan
+  | Unknown -> Anartha
+  | Iic | Iicv | Iicc | Iic2 | Iiif | Auxiick -> Stem (Koza word)
+  | Auxiick -> Stem (Kridanta (?,?) 
+  | Iiv | Iivv | Iivc  -> Cvi (Koza word)
+  | Peri -> Peripft (word)
+  | Iiy -> Avyayi (Koza word)
+  | Krid | Kriv | Kric | Lopak | Auxik -> Kridanta of verbal and kriya 
+  | Comp ((_,ph) as sort) pv form ->
+      let tag = Deco.assoc form (morpho_tags ph) in
+      match ph with
+        [ Abso ->
+        | Peri ->
+        | Inftu ->
+        | Lopa ->
+        | Root -> Tinanta () tag 
+        | ph when vkrid_phase ph -> Tinanta () tag
+        | ph when ikrid_phase ph -> Stem ()
+        | ph when krid_phase ph -> Subanta (Kridanta of verbal and kriya 
+        ]
+      Preverbed sort pv form tag
+  | Tad (ph,sfx_ph) form sfx -> 
+      match sfx_ph with
+      [ Sfx -> Subanta (Taddhitanta form sfx) sfx_tag
+               where sfx_tag = Deco.assoc sfx (morpho_tags sfx_ph) in
+      | Isfx -> Stem (Taddhitanta form sfx)
+      | _ -> failwith "Wrong taddhita structure"
+      ] 
+  | Nouv | Nouc | Noun2 | Pron | Vocv | Vokc ->
+         Subanta (Stem ?) (Deco.assoc word (morpho_tags phase)) 
+  | Root | Lopa | Auxi -> Tinanta (Stem ?) (Deco.assoc word (morpho_tags phase))
+  | Absv | Absc | Abso -> Absolutive ?
+  | Inde | Inv -> Indecli (Deco.assoc word (morpho_tags phase)) 
+  ]
 ;
+value print_scl_tags _ = () (* whatever xml printing TODO *)
+; *)
+
 (* Similarly for [scl_plugin] mode (without offset and transitions) *)
+(* Called from [Scl_parser.print_scl_output] *)
 value print_scl_segment counter (phase,rword) =  
-  let print_pada rword = 
-    let word = Morpho_html.visargify rword in 
-    let ic = string_of_int counter in
+  let word = Morpho_html.visargify rword in do
+  { let solid = background (Disp.color_of_phase phase) in
+    pl (td_begin_class solid)
+  ; let ic = string_of_int counter in
     ps ("<input type=\"hidden\" name=\"field" ^ ic ^ "\" value='<form wx=\""
-        ^ Canon.decode_WX word ^ "\"/>") in do
-    { let solid = background (Disp.color_of_phase phase) in
-      pl (td_begin_class solid)
-    ; print_pada rword
-    ; let word = mirror rword in 
-      match tags_of phase word with 
-       [ Atomic tags -> 
+        ^ Canon.decode_WX word ^ "\"/>")
+(*  ; print_scl_tags (scl_tags phase (mirror rword)) TODO *)
+(* DEPRECATED
+  ; match tags_of phase (mirror rword) with 
+    [ Atomic tags -> 
           print_scl_tags [] phase word tags 
-       | Preverbed (_,phase) pvs form tags ->
+    | Preverbed (_,phase) pvs form tags ->
          let ok_tags = 
            if pvs = [] then tags 
            else trim_tags (generative phase) form (Canon.decode pvs) tags in 
           print_scl_tags pvs phase form ok_tags
-       | Taddhita _ _ sfx_phase sfx_tags -> 
+    | Taddhita _ _ sfx_phase sfx_tags -> 
           let taddhita_phase = match sfx_phase with 
               [ Sfx -> Noun
               | Isfx -> Iic
               | _ -> failwith "Wrong taddhita structure"
               ] in
           print_scl_tags [] taddhita_phase word sfx_tags
-       ]
-  ; ps "'>" (* closes <input *)
-  ; let word = Morpho_html.visargify rword in  
-    ps (Canon.unidevcode word)
+    ] *)
+  ; ps "'>" (* closes <input *) 
+  ; ps (Canon.unidevcode word)
   ; ps td_end
   ; ps "\n"
   ; counter+1
@@ -348,7 +408,7 @@ value print_uni_taddhita pvs m phase stem sfx sfx_phase = fun
     ; pl (table_morph_of sfx_phase)      (* table begin *)
     ; let _ = print_morph_tad pvs cached 0 gen stem sfx 0 (delta,unitag) in ()
     ; ps table_end                       (* table end *) 
-    ; ps th_end  
+    ; ps th_end
     }
   | _ -> failwith "Multiple sfx tag"
   ]
@@ -374,9 +434,9 @@ value print_projection phase rword ((_,m) as index) = do
 value print_proj phase rword = fun 
    [ [] -> failwith "Projection missing"
    | [ n_m :: rest ] -> do
-     { print_projection phase rword n_m 
-     ; rest (* returns the rest of projections stream *)
-     }
+       { print_projection phase rword n_m 
+       ; rest (* returns the rest of projections stream *)
+       }
    ]
 ;
 

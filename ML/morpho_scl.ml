@@ -160,32 +160,27 @@ value print_inv_morpho_scl pe form generative (delta,morphs) =
         let (homo,bare_stem) = homo_undo stem in
         let krid_infos = Deco.assoc bare_stem unique_kridantas in 
         try let (verbal,root) = look_up_homo homo krid_infos in do
-        { match Deco.assoc bare_stem lexical_kridantas with
-          [ [] (* not in lexicon *) -> pe bare_stem
-          | entries (* bare stem is lexicalized *) -> 
-              if List.exists (fun (_,h) -> h=homo) entries
-                 then pe stem (* stem with exact homo is lexical entry *)
-              else pe bare_stem
-          ]
+        { pe bare_stem
         ; ps "<krid>"; print_scl_verbal verbal
         ; ps "</krid><root>"; pe root; ps "</root>"
         } with [ _ -> pe bare_stem ]
       else pe stem
     ; ps "</morpho_gen>"
     }
+      ;
+value print_scl_entry w = (* ps offline in WX notation for UoH interface *)
+  ps ("<entry wx=\"" ^ Canon.decode_WX w ^ "\"/>")
 ;
-value print_inv_morpho_scl pvs pe form = 
+value print_inv_morpho_scl pvs form = 
   let pv = if Phonetics.phantomatic form then [ 2 ] (* aa- *) 
            else pvs in
-  let encaps print e = if pv = [] then pe e
-  else do { ps (Canon.decode_WX pvs ^ "-"); pe e } in
-  print_inv_morpho_scl (encaps pe) form 
-and print_scl_entry w = (* ps offline in WX notation for UoH interface *)
-  ps ("<entry wx=\"" ^ Canon.decode_WX w ^ "\"/>") 
+  let encaps e = if pv = [] then print_scl_entry e
+                 else do { ps (Canon.decode_WX pvs ^ "-"); print_scl_entry e } in
+  print_inv_morpho_scl encaps form 
 ;
 (* Used in [Lexer.print_scl_morph] *)
 value print_scl_inflected pvs = 
-  print_inv_morpho_scl pvs print_scl_entry 
+  print_inv_morpho_scl pvs 
 ;
 
 (*i end; i*)

@@ -18,7 +18,6 @@ open Web; (* ps pl abort etc. *)
 open Cgi; (* [create_env get] *)
  
 value back_ground = background Chamois
-  (*[ obs if Install.narrow_screen then background Chamois else Pict_hare ]*)
 ;
 value out_mode = ref None
 ;
@@ -86,7 +85,6 @@ value reader_page () = do
   ; pl (option_select_default "cp"
         [ ("  Full  ","t",cp="t") 
         ; (" Simple ","f",cp="f")
-(*      ; ("Experiment","e",cp="e")  deprecated *)
         ])
   ; pl html_break  
   ; ps (reader_input_area_default text)

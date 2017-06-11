@@ -5,10 +5,11 @@
 PLATFORM='Computer'
 
 # Default transliteration : 'VH', 'WX', 'KH' or 'SL'
+# or possibly Unicode input under UTF-8, 'DN' forDevanagari and ‘RN’ for IAST romanization
 # See meaning in http://sanskrit.inria.fr/faq.en.html#transliteration 
 TRANSLIT='VH'
 
-# Default lexicon: SH for Sanskrit Heritage (French), MW for Monier-Williams 
+# Default lexicon: SH for Sanskrit Heritage (French), MW for Monier-Williams (English)
 LEXICON='SH'
 
 # Default display font : 'roma', 'deva'

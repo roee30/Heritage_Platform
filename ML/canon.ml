@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©201 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Canon = struct i*)

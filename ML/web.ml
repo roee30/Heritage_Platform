@@ -331,18 +331,18 @@ and user_aid_title = h1_title (if narrow_screen then "User Feedback"
 ;
 value dico_title = fun
   [ French  -> dico_title_fr
-  | English -> dico_title_en
+  | English -> dico_title_en 
   ]
 ;
 (* We set and reset [output_channel] to designate either a static html file
    under creation or [stdout] to produce a cgi output dynamic page.
    This is awful and should be fixed one day.
 *)
-value output_channel = ref stdout 
+value output_channel = ref stdout
 ;
-value ps s = output_string output_channel.val s
-and pc c = output_char output_channel.val c
-and pi i = output_string output_channel.val (string_of_int i)
+value ps s = output_string output_channel.val s 
+and pc c = output_char output_channel.val c 
+and pi i = output_string output_channel.val (string_of_int i) 
 ;
 value line () = pc '\n'
 and sp () = ps " "

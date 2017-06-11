@@ -15,7 +15,7 @@
 <link rel="stylesheet" type="text/css" href="DICO/style.css" media="screen,tv"/>
 </head>
 
-<body class="pink_back"> <!-- Pale_rose --> 
+<body class="pink_back"> <!-- Pale_rose -->
 <table class="body">
 
 <table border="0pt" cellpadding="0" cellspacing="15pt" width="100%">
@@ -23,11 +23,11 @@
 
 <h1 class=b1>Sanskrit linguistic resources</h1>
 
-<br> 
-<img src="IMAGES/Panini2.jpg" alt="Panini"/> 
+<br>
+<img src="IMAGES/Panini2.jpg" alt="Panini"/>
 <br>
 
-<div class="latin12"> 
+<div class="latin12">
 
 <h2 class=b2>Sanskrit Morphology</h2>
 
@@ -42,7 +42,7 @@ generation is available <a href="Heritage.pdf">here</a> as a PDF document.
 
 These databanks are regularly updated. They are available for public download
 as a public git archive in the Sanskrit Heritage development site:
-"https://gitlab.inria.fr/huet/Heritage_Resources". 
+"https://gitlab.inria.fr/huet/Heritage_Resources".
 
 <h3 class=b3>Databanks description</h3>
 
@@ -51,24 +51,24 @@ defined in the
 <a href="DICO/index.html">Sanskrit Heritage Dictionary</a>. These forms are
 presented as lemmas linking each form to its stem entry by possible morpho-phonetic
 operations. We limit ourselves to classical Sanskrit, and do not cover precative,
-subjunctive, injunctive and conditional forms of the verbs. 
+subjunctive, injunctive and conditional forms of the verbs.
 
 At present, we provide for two transliteration schemas, respectively
 WX, used by the
 <a href="http://sanskrit.uohyd.ernet.in/">Department of Sanskrit Studies at
 University of Hyderabad</a>
-and SLP1, used by the 
+and SLP1, used by the
 <a href="http://sanskritlibrary.org/">Sanskrit Library</a>.
 
 The respective data banks are listed in directories WX and SL.
 
-The morphological lemmas are distributed in 6 files in 
+The morphological lemmas are distributed in 6 files in
 XML format, conformant to a common DTD.
 The nominal morphological declensions of nouns, adjectives and numbers,
 are covered in "T_nouns.xml" (where T is respectively WX or SL).
-Those of pronouns are covered in "T_pronouns.xml". 
+Those of pronouns are covered in "T_pronouns.xml".
 The conjugated forms of roots in the present, imperfect, imperative, optative,
-perfect, aorist 
+perfect, aorist
 and future tenses, as well as passives of the present system,
 for the primary conjugation and for some secondary conjugations
 (causative, intensive, desiderative) are covered in "T_roots.xml".
@@ -78,13 +78,13 @@ are listed in "T_adverbs.xml". In addition, "T_final.xml" gives additional
 generative morphemes. The files are conformant to the DTD "T_morph.dtd".
 <p>
 Finally, the text file "X_preverbs.txt" lists common
-preverb sequences, given with their sandhi analysis. 
+preverb sequences, given with their sandhi analysis.
 
 <h3 class=b2>Intellectual Property</h3>
 
 All these linguistic data banks are Copyrighted Gérard Huet 1994-2017.
 They are derived from the Sanskrit Heritage Dictionary
-version 2.99 dated 2017-06-02.
+version 2.99 dated 2017-06-11.
 <p>
 Use of these linguistic resources is granted according to the
 Lesser General Public Licence for Linguistic Resources.
@@ -94,14 +94,14 @@ Thank you for referencing the origin of this data if you use it in your own work
 
 <h2 class=b2>Methodology</h2>
 
-We deal here with a mixture of derivational and inflexional morphology. 
+We deal here with a mixture of derivational and inflexional morphology.
 For instance, from the roots we generate verbal and propositional stems, and from
 these stems we generate in turn inflected forms: conjugated forms from the
 verbal stems, and declined forms from the participial stems. But at present
 we do not generate mechanically primary nominal stems from roots,
 nor secondary nominal stems from primary ones, because of overgeneration.
-The nominal stems, as well as the undeclinable forms, are taken from the 
-lexicon, that lists also some frequent participles. 
+The nominal stems, as well as the undeclinable forms, are taken from the
+lexicon, that lists also some frequent participles.
 <p>
 This organization entails a different role in our morphological data bases.
 The <i>basic</i> morphological categories correspond to lexical phases,
@@ -120,7 +120,7 @@ perfect forms of the auxiliary roots <i>as</i>, <i>bhū</i> and
 <i>kṛ]</i> which are duplicated in a specific auxiliary lexicon).
 Here is a simplified diagram of the current state space of our lexer.
 
-<div class="center"> 
+<div class="center">
 <img src="IMAGES/lexer17.jpg" alt="Lexer automaton">
 </div>
 
@@ -134,41 +134,41 @@ and the corresponding articles are also available freely on my
 (papers [78], [87], [88], [94], [95], [105], [106] and [110]
 are specially relevant).
 This material will not be repeated here. Let us just explain a few difficulties
-of the large-scale implementation of this Sanskrit analyser. 
+of the large-scale implementation of this Sanskrit analyser.
 <p>
 As usual in a non-deterministic search algorithm (here all the possible parsings
 of a sentence as a sandhied stream of forms), we have two pitfalls, silence and noise.
 Silence (lack of recall) means incompleteness. Some legal Sanskrit sentences
-may fail to be recognized. 
+may fail to be recognized.
 Typicallly, some root word may be missing from the base lexicon,
 or some Vedic form may use some construction rare in the later language,
 like precative or subjunctive.
 Compounding gives rise to two complications, the raising of new cases by
-<i>bahuvrīhi</i> compounding, 
+<i>bahuvrīhi</i> compounding,
 and the formation of <i>avyayībhava</i> compounds. Some of these
 constructions are treated incompletely.
-<p> 
-The opposite of silence is noise (lack of precision), that is overgeneration. 
-We deal with overgeneration 
+<p>
+The opposite of silence is noise (lack of precision), that is overgeneration.
+We deal with overgeneration
 in the syntactico-semantic layer of our tagger, which filters out combinations of
 tags inconsistent with semantic role assignments.
 We shall not discuss this technology
 further in this note on morphology, and refer the interested reader to our
-<a href="/DICO/reader.html"><strong>Sanskrit reader
+<a href="DICO/reader.html"><strong>Sanskrit reader
 demonstration page</strong></a> and its <a href="manual.html">
 <strong>Reference manual</strong></a>
-<p> 
-We remark that the respective data bases can be interrogated online by our 
+<p>
+We remark that the respective data bases can be interrogated online by our
 <a href="http://sanskrit.inria.fr/DICO/index.html#stemmer"><strong>stemmer
 interface</strong></a>. But note that verbal forms prefixed by preverbs
 are analysed by the tagger as non-atomic words, and only root forms and
-their secondary conjugations are recognized by the stemmer. 
+their secondary conjugations are recognized by the stemmer.
 
 <h2 class=b2>Help</h2>
 
-Questions concerning these resources should be addressed to 
+Questions concerning these resources should be addressed to
 <a href="mailto:Gerard.Huet@inria.fr">Gérard Huet</a>.
-All suggestions for improvements will be gratefully considered. 
+All suggestions for improvements will be gratefully considered.
 </td></tr>
 </table>
 </div>
@@ -182,11 +182,11 @@ All suggestions for improvements will be gratefully considered.
 </td><td>
 <table class="center">
 <tr><td>
-<a href="index.html"><strong>Top</strong></a> | 
-<a href="DICO/index.en.html"><strong>Index</strong></a> | 
-<a href="DICO/index.en.html#stemmer"><strong>Stemmer</strong></a> | 
-<a href="DICO/grammar.en.html"><strong>Grammar</strong></a> | 
-<a href="DICO/sandhi.en.html"><strong>Sandhi</strong></a> | 
+<a href="index.html"><strong>Top</strong></a> |
+<a href="DICO/index.en.html"><strong>Index</strong></a> |
+<a href="DICO/index.en.html#stemmer"><strong>Stemmer</strong></a> |
+<a href="DICO/grammar.en.html"><strong>Grammar</strong></a> |
+<a href="DICO/sandhi.en.html"><strong>Sandhi</strong></a> |
 <a href="DICO/reader.en.html"><strong>Reader</strong></a> |
 <a href="faq.en.html"><strong>Help</strong></a> |
 <a href="portal.en.html"><strong>Portal</strong></a>
@@ -197,6 +197,4 @@ All suggestions for improvements will be gratefully considered.
 <img src="IMAGES/logo_inria.png" alt="Logo Inria" height="50"></a>
 <br></td></tr></table></div>
 </body>
-</html> 
-
-
+</html>

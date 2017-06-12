@@ -1,3 +1,11 @@
+# This configuration is compatible with the default configuration of
+# Apache under Debian 8.  You just have to configure Apache to allow CGI
+# execution.  You can do this by entering the two following commands in
+# a terminal:
+#
+#   sudo a2enmod cgi
+#   sudo service apache2 restart
+
 PLATFORM='Station'
 TRANSLIT='VH'
 LEXICON='SH'

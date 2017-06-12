@@ -173,7 +173,7 @@ value tags_of phase word =
    as sup kridanta forms with preverbs. The preverbs are packed in pv. *)
   | Tad (ph,sfx_ph) form sfx -> (* tag inherited from fake suffix entry *)
       let sfx_tag = Deco.assoc sfx (morpho_tags sfx_ph) in
-      Taddhita (ph,form) [ 0 :: sfx ] sfx_ph sfx_tag
+      Taddhita (ph,form) [ 0 :: sfx ] sfx_ph sfx_tag (* 0 = "-" *)
   | _ -> Atomic (Deco.assoc word (morpho_tags phase)) 
     (* NB Atomic comprises tin verbal forms of roots as well as sup atomic forms
        and all the pure stems collections Iic Iiv etc. *)

@@ -432,10 +432,12 @@ value apply_sandhi rleft right = fun
 (* [validate : output -> output] - dynamic consistency check in Segmenter.
    It refines the regular language of dispatch by contextual conditions
    expressing that preverbs are consistent with the following verbal form. 
-   The forms are then compounded. *)
+   The forms are then compounded, otherwise rejected. *)
 (* Things would be much simpler if we generated forms of verbs and kridantas
- with (valid) preverbs attached, since this check would be unnecessary.
+ with (only valid) preverbs attached, since this check would be unnecessary.
  On the other hand, we would have to solve the ihehi problem. *)
+(* A similar kind of aggregation is effected for a few generative taddhitas,
+   but this is still experimental. *)
 value validate out = match out with
   [ [] -> []
   | [ (Root,rev_root_form,s) :: [ (Pv,prev,sv) :: r ] ] ->

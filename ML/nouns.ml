@@ -5065,6 +5065,7 @@ value compute_nouns_stem_form e stem d p =
                    | _       (* other ppf *) -> build_mas_vas r3 e
                    ]
                | [ 43 :: [ 48 :: _ ]] (* -sras *) -> build_root Mas stem e
+(*             | [[ 46; 1; 33; 17; 5 ] (* ukthazas *) -> build_ukthazas Mas e] *)
 (*             | [[ 46 :: _ ] (* -zas *) -> build_root Mas stem e] *)
                | _  -> build_as Mas r2 e
                ] 
@@ -5653,6 +5654,7 @@ value iic_avya =
    ifc. -prati: sukhaprati zaakaprati
    ifc. kridanta yathaav.rddham yathe.s.tam yaavacchakyam (TODO)
    ifc. also pv-kridanta (-aagata) yathaagatam 
+   ifc. yatham: yathaayatham
 3. misc: ti.s.thadgu anu.svadham var.sabhogye.na (retroflexion) *)
 ;
 (*i Derivational morphology - unplugged at present 

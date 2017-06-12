@@ -142,6 +142,15 @@ value print_scl_tags pvs phase form tags =
   ; ps (xml_end "tags")
   }
 ;
+value print_scl_tags_tad pvs ph form sfx_tags =
+  let table phase = 
+      xml_begin_with_att "tags" [ ("phase",scl_phase phase) ] in do
+  { ps (table ph) 
+  ; List.iter (print_scl_morph pvs False form) sfx_tags 
+  ; ps (xml_end "tags")
+  }
+;
+
 (* Used in Parser *)
 value extract_lemma phase word = 
  match tags_of phase word with  
@@ -238,68 +247,6 @@ value print_segment offset (phase,rword,transition) = do
       }
   }
 ; 
-(* TODO 
-type vakti =
-  [ Stem of pratipad (* forms nominal compounds *)
-  | Cvi of pratipad (* forms verbal compounds *)
-  | Avyayii of pratipad (* forms nominal invariable compounds *)
-  | Subanta of pratipad and inflexion_tag (* nominal padas *)
-  | Tinanta of kriya and inflexion_tag (* verbal padas *)
-  | Peri of kriya (* forms verbal compounds *)
-  | Absolutive of kriya (* verbal padas *)
-  | Infinitive of kriya (* verbal padas *)
-  | Indecli of inflexion_tag (* indeclinables *)
-  | Anartha (* unanalysed chunk *)
-  ]
-and pratipad =
-  [ Koza of word (* atomic nominal stems *)
-  | Nan (* privative prefix a- an- *) 
-  | Kridanta of verbal and kriya 
-  | Taddhitanta of pratipad and taddhita
-  ]
-and kriya = list preverb and word (* optional upasarga sequence and root *)
-; 
-(* Improved version of [Load_morphs.tags_of] *)
-value scl_tags phase word = match phase with
-  [ Pv | Pvk | Pvkc | Pvkv -> failwith "Preverb in scl_tags" 
-  | A | Ai | An | Ani -> Stem Nan
-  | Unknown -> Anartha
-  | Iic | Iicv | Iicc | Iic2 | Iiif | Auxiick -> Stem (Koza word)
-  | Auxiick -> Stem (Kridanta (?,?) 
-  | Iiv | Iivv | Iivc  -> Cvi (Koza word)
-  | Peri -> Peripft (word)
-  | Iiy -> Avyayi (Koza word)
-  | Krid | Kriv | Kric | Lopak | Auxik -> Kridanta of verbal and kriya 
-  | Comp ((_,ph) as sort) pv form ->
-      let tag = Deco.assoc form (morpho_tags ph) in
-      match ph with
-        [ Abso ->
-        | Peri ->
-        | Inftu ->
-        | Lopa ->
-        | Root -> Tinanta () tag 
-        | ph when vkrid_phase ph -> Tinanta () tag
-        | ph when ikrid_phase ph -> Stem ()
-        | ph when krid_phase ph -> Subanta (Kridanta of verbal and kriya 
-        ]
-      Preverbed sort pv form tag
-  | Tad (ph,sfx_ph) form sfx -> 
-      match sfx_ph with
-      [ Sfx -> Subanta (Taddhitanta form sfx) sfx_tag
-               where sfx_tag = Deco.assoc sfx (morpho_tags sfx_ph) in
-      | Isfx -> Stem (Taddhitanta form sfx)
-      | _ -> failwith "Wrong taddhita structure"
-      ] 
-  | Nouv | Nouc | Noun2 | Pron | Vocv | Vokc ->
-         Subanta (Stem ?) (Deco.assoc word (morpho_tags phase)) 
-  | Root | Lopa | Auxi -> Tinanta (Stem ?) (Deco.assoc word (morpho_tags phase))
-  | Absv | Absc | Abso -> Absolutive ?
-  | Inde | Inv -> Indecli (Deco.assoc word (morpho_tags phase)) 
-  ]
-;
-value print_scl_tags _ = () (* whatever xml printing TODO *)
-; *)
-
 (* Similarly for [scl_plugin] mode (without offset and transitions) *)
 (* Called from [Scl_parser.print_scl_output] *)
 value print_scl_segment counter (phase,rword) =  
@@ -309,24 +256,23 @@ value print_scl_segment counter (phase,rword) =
   ; let ic = string_of_int counter in
     ps ("<input type=\"hidden\" name=\"field" ^ ic ^ "\" value='<form wx=\""
         ^ Canon.decode_WX word ^ "\"/>")
-(*  ; print_scl_tags (scl_tags phase (mirror rword)) TODO *)
-(* DEPRECATED
   ; match tags_of phase (mirror rword) with 
-    [ Atomic tags -> 
-          print_scl_tags [] phase word tags 
-    | Preverbed (_,phase) pvs form tags ->
+    [ Atomic tags ->
+          print_scl_tags [] phase word tags
+    | Preverbed (_,phase) pvs form tags -> 
          let ok_tags = 
            if pvs = [] then tags 
-           else trim_tags (generative phase) form (Canon.decode pvs) tags in 
+           else trim_tags (generative phase) form (Canon.decode pvs) tags in
           print_scl_tags pvs phase form ok_tags
-    | Taddhita _ _ sfx_phase sfx_tags -> 
-          let taddhita_phase = match sfx_phase with 
-              [ Sfx -> Noun
-              | Isfx -> Iic
-              | _ -> failwith "Wrong taddhita structure"
-              ] in
-          print_scl_tags [] taddhita_phase word sfx_tags
-    ] *)
+    | Taddhita (ph,form) _ _ sfx_tags ->
+            match tags_of ph form with 
+            [ Atomic _ -> (* stem, tagged as iic *)
+              print_scl_tags_tad [] ph form sfx_tags 
+            | Preverbed _ pvs _ _ -> (* stem, tagged as iic *)
+              print_scl_tags_tad pvs ph form sfx_tags 
+            | _ -> failwith "Anomaly: taddhita recursion"
+            ]
+    ]
   ; ps "'>" (* closes <input *) 
   ; ps (Canon.unidevcode word)
   ; ps td_end

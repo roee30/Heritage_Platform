@@ -49,6 +49,9 @@ skt_lexer.cmo : encode.cmo
 skt_lexer.cmx : encode.cmx
 test_stamp.cmo : version.cmo paths.cmo ../ZEN/gen.cmo control.cmo
 test_stamp.cmx : version.cmx paths.cmx ../ZEN/gen.cmx control.cmx
+dir.cmi :
+dir.cmo : dir.cmi
+dir.cmx : dir.cmi
 paths.cmo :
 paths.cmx :
 index.cmo : web.cmo ../ZEN/trie.cmo ../ZEN/list2.cmo ../ZEN/gen.cmo \

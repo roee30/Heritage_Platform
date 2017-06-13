@@ -33,8 +33,9 @@ VPATH=$(ZEN)
 
 # CORE package - utilities, transducers, sanskrit and french lexers, dico spec
 CORE=$(DISTR_CORE) paths.ml 
-DISTR_CORE= control.ml version.ml date.ml canon.ml transduction.ml encode.ml \
-order.ml padapatha.ml sanskrit.mli sanskrit.ml skt_lexer.ml test_stamp.ml 
+DISTR_CORE = control.ml version.ml date.ml canon.ml transduction.ml	\
+		encode.ml order.ml padapatha.ml sanskrit.mli		\
+		sanskrit.ml skt_lexer.ml test_stamp.ml dir.mli dir.ml
 
 # GRAM package - phonetics, morphology, segmentation and tagging engines
 GRAM=index.ml phonetics.ml int_sandhi.ml skt_morph.mli morphology.mli naming.ml \

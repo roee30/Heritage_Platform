@@ -43,14 +43,14 @@ type phase =
   | Cache   (* Lexicon acquisition *)  
   | Unknown (* Unrecognized chunk *)
   (* now pseudo phase tagging root/kridanta forms with preverbs *)
-  | Comp of tag and (* pv *) Word.word and (* root/krid *) Word.word 
+  | Comp of tag and (* pv *) Word.word and (* root/krid in tag *) Word.word 
   (* finally pseudo-phase tagging nominal forms/stems with taddhita suffixes *)
-  | Tad of tag and Word.word (* nominal form *) and Word.word (* sfx *)
+  | Tad of tag and Word.word (* nominal form in tag *) and Word.word (* sfx *)
   ] 
 and tag = (phase * phase) (* preverb phase and root/taddhita phase *)
-(* It is essential to keep both phases to identify transition checkpoints *)
+(* NB. It is essential to keep both phases to identify transition checkpoints *)
 and phases = list phase
-(* NB. In simplified mode, we use only 10 phases:
+(* NB. In Simplified mode, we use only 10 phases:
    [[ Noun2; Pron; Iic2; Ifc2; Root; Inde; Pv; Iiv; Abso; Lopa ]] *)
 ;
 (* Marshalling for cgi invocations *)

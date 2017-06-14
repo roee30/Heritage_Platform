@@ -21,7 +21,7 @@ open Phases; (* [Phases] *)
 open Phases; (* [phase is_cache generative] *) 
 open Dispatcher; (* [transducer_vect phase Dispatch transition trim_tags] *) 
 open Html; 
-open Web; (* [ps pl abort reader_cgi] etc. *)
+open Web; (* [ps pl abort reader_cgi scl_toggle] etc. *)
 open Cgi; 
 
 module Prel = struct (* Interface's lexer prelude *)

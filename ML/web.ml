@@ -615,8 +615,10 @@ value javascript_tooltip ="wz_tooltip.js"
 (* Maybe should be put back in config? but versioning problem... *)
 value remote_server_host = "http://sanskrit.inria.fr/" 
 ;
-(* This toogle controls accessibility of University of Hyderabad tools *)
-value scl_toggle = 
+(* This toogle controls accessibility of University of Hyderabad tools.
+   It is controled by [ML/SCLpaths.ml], which is not part of the git repository,
+   and is initialised by default to [SETUP/dummy_SCLpaths.ml] at make time. *)
+value scl_toggle =
   not (SCLpaths.scl_url="") (* True if SCL tools are installed *)
 ;
 value interaction_modes_default mode =  

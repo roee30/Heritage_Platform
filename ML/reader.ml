@@ -145,7 +145,7 @@ value display limit mode text saved = fun
    input as a list of words, according to various transliteration schemes.
    However, the use of "decode" below to compute the romanisation and devanagari
    renderings does a conversion through VH transliteration which may not be
-   faithful to encodings which represent the sequence of phonemes t and h. *)
+   faithful to encodings which represent eg the sequence of phonemes t and h. *)
 value process_input text us mode topic (input:string) encode cpts = 
   let pieces = Sanskrit.read_raw_sanskrit encode input in
   let romapieces = List.map Canon.uniromcode pieces in

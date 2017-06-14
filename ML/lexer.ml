@@ -264,14 +264,14 @@ value print_scl_segment counter (phase,rword) =
            if pvs = [] then tags 
            else trim_tags (generative phase) form (Canon.decode pvs) tags in
           print_scl_tags pvs phase form ok_tags
-    | Taddhita (ph,form) _ _ sfx_tags ->
-            match tags_of ph form with 
-            [ Atomic _ -> (* stem, tagged as iic *)
-              print_scl_tags_tad [] ph form sfx_tags 
-            | Preverbed _ pvs _ _ -> (* stem, tagged as iic *)
-              print_scl_tags_tad pvs ph form sfx_tags 
-            | _ -> failwith "Anomaly: taddhita recursion"
-            ]
+    | Taddhita (_,form) sfx sfx_phase sfx_tags ->
+            let taddhitanta_phase = match sfx_phase with 
+                [ Sfx -> Noun
+                | Isfx -> Iic
+                | _ -> failwith "Wrong taddhita structure"
+                ] 
+            and taddhitanta_stem = form @ sfx (* very experimental *) in
+            print_scl_tags [] taddhitanta_phase taddhitanta_stem sfx_tags 
     ]
   ; ps "'>" (* closes <input *) 
   ; ps (Canon.unidevcode word)

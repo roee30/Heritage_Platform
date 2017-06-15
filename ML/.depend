@@ -279,3 +279,5 @@ mk_sandhi_page.cmo : web.cmo html.cmo
 mk_sandhi_page.cmx : web.cmx html.cmx
 manager.cmo : web.cmo html.cmo dir.cmi cgi.cmo
 manager.cmx : web.cmx html.cmx dir.cmx cgi.cmx
+add_corpus.cmo : web.cmo html.cmo
+add_corpus.cmx : web.cmx html.cmx

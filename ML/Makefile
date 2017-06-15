@@ -52,7 +52,7 @@ user_aid.ml reset_caches.ml
 # WEB package - HTML, HTTP, CGI utilities for Web interface
 WEB=html.ml web.ml css.ml cgi.ml morpho_html.ml chapters.ml morpho_scl.ml \
 mk_index_page.ml mk_grammar_page.ml mk_reader_page.ml mk_sandhi_page.ml \
-manager.ml
+manager.ml add_corpus.ml
 # extra file SCLpaths.ml for SCL interfacing - not distributed.
 
 # TREE package - tree bank manager and syntax analyser - legacy
@@ -136,7 +136,7 @@ bank_lexer.cmo tag_tree.cmo tag_apte.cmo
 	(cat debug_apte.ml ; cat -) | ocaml -I +camlp4 -I . -I $(ZEN)
 
 cgis: skt_morph.cmi auto.cmi indexer indexerd declension conjugation \
-lemmatizer reader parser sandhier reader interface user_aid manager
+lemmatizer reader parser sandhier reader interface user_aid manager add_corpus
 
 indexer: indexer.cmx
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
@@ -220,6 +220,10 @@ paraphrase.cmx scl_parser.cmx parser.cmx -o parser
 manager: manager.cmx
 	$(LINK) paths.cmx version.cmx date.cmx html.cmx SCLpaths.cmx	\
 		web.cmx cgi.cmx dir.cmx $< -o $@
+
+add_corpus: add_corpus.cmx
+	$(LINK) paths.cmx version.cmx date.cmx html.cmx SCLpaths.cmx	\
+		web.cmx cgi.cmx $< -o $@
 
 css: css.cmx
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx html.cmx \
@@ -314,7 +318,7 @@ clean:
 	rm -f *.cmo *.cmi *.cmx *.ppi *.ppo *.o
 	rm -f css indexer indexerd sandhier reader parser lemmatizer \
 declension conjugation mk_index_page mk_grammar_page mk_reader_page regression \
-mk_sandhi_page sandhi_test reset_caches interface user_aid manager \
+mk_sandhi_page sandhi_test reset_caches interface user_aid manager add_corpus \
 parse_apte tag_apte 
 #	make dico.cmi auto.cmi conj_infos.cmi # needed to get dependencies right 
 

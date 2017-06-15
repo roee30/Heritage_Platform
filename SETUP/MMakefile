@@ -182,6 +182,9 @@ CGIGRAPH=sktgraph$(CGIEXT)
 CGIUSER=sktuser$(CGIEXT)
 # CGI name under which the corpus manager is installed on the server.
 CGIMANAGER = manager$(CGIEXT)
+# CGI name under which the program that enriches the corpus is installed
+# on the server.
+CGIADDCORPUS = addcorpus$(CGIEXT)
 
 # what mouse action to use for viewing lemmatization
 MOUSEACTION=#MOUSEACTION
@@ -240,7 +243,8 @@ ML/reset_caches.ml
 # WEB package - HTML, HTTP, CGI ad-hoc utilities for Web interface
 WEB=ML/html.ml ML/web.ml ML/css.ml ML/cgi.ml ML/morpho_html.ml ML/chapters.ml \
 ML/mk_index_page.ml ML/mk_grammar_page.ml ML/mk_reader_page.ml \
-ML/mk_sandhi_page.ml ML/morpho_scl.ml ML/compute_mw_links.ml ML/manager.ml
+ML/mk_sandhi_page.ml ML/morpho_scl.ml ML/compute_mw_links.ml ML/manager.ml \
+ML/add_corpus.ml
 
 # TREE package - tree bank manager and syntax analyser - deprecated
 TREE=ML/stemmer.ml ML/parse_tree.ml ML/parse_apte.ml ML/tag_tree.ml \
@@ -411,6 +415,7 @@ echo 'and cgi_sandhier = "$(CGISANDHI)"'; \
 echo 'and cgi_graph = "$(CGIGRAPH)"'; \
 echo 'and cgi_user_aid = "$(CGIUSER)"'; \
 echo 'and cgi_manager = "$(CGIMANAGER)"'; \
+echo 'and cgi_add_corpus = "$(CGIADDCORPUS)"'; \
 echo 'and mouse_action = "$(MOUSEACTION)";') > ML/paths.ml
 	$(MAKE) version
 
@@ -475,6 +480,7 @@ releasecgi:
 	$(MAKE) analyser
 	$(MAKE) sandhi
 	$(MAKE) manager
+	$(MAKE) addcorpus
 
 abrevs:
 	cp $(BOOK)/abrevs.pdf SITE # for documenting the Website with abbreviations
@@ -559,6 +565,10 @@ indexers: ML/indexer ML/indexerd
 .PHONY: manager
 manager: ML/manager
 	cp $< $(CGIDIR)$(CGIMANAGER)
+
+.PHONY: addcorpus
+addcorpus: ML/add_corpus
+	cp $< $(CGIDIR)$(CGIADDCORPUS)
 
 #### Version Management and Distribution are now managed by Git ####
 

@@ -5,6 +5,7 @@
 *.o
 
 # Executables
+ML/add_corpus
 ML/conjugation
 ML/css
 ML/declension

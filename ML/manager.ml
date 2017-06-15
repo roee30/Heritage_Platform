@@ -1,5 +1,6 @@
-(* CGI script [manager] for corpus management, i.e. for listing and
-   adding sentences to the corpus.  *)
+(* CGI script [manager] for corpus management, i.e. for listing
+   sentences of the corpus and calling [add_corpus] to add a sentence to
+   the corpus.  *)
 
 (*i module Manager = struct i*)
 
@@ -16,7 +17,12 @@ value subdir_selection dir subdirs =
 ;
 value body dir subdirs =
   match subdirs with
-  [ [] -> sentence_links dir |> List.iter Web.pl
+  [ [] ->
+    do
+    { sentence_links dir |> List.iter Web.pl
+    ; Web.cgi_begin Web.add_corpus_cgi "" |> Web.pl
+    ; Html.submit_input "Add" |> Web.pl
+    ; Web.cgi_end |> Web.pl }
   | _ ->
     do
     { Web.cgi_begin Web.manager_cgi "" |> Web.pl

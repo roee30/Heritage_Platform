@@ -90,5 +90,10 @@ value create_env s =
 value get key alist default = 
   try List.assoc key alist with [ Not_found -> default ] 
 ;
+value query_string () =
+  try Sys.getenv "QUERY_STRING" with [
+    Not_found -> assert False   (* By RFC 3875 section 4.1.7 *)
+  ]
+;
 
 (*i end; i*)

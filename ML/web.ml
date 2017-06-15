@@ -51,6 +51,7 @@ and parser_cgi     = cgi_bin Paths.cgi_parser     (* parser *)
 and graph_cgi      = cgi_bin Paths.cgi_graph      (* summarizer graphical interface *) 
 and user_aid_cgi   = cgi_bin Paths.cgi_user_aid   (* unknown chunks processing *) 
 and sandhier_cgi   = cgi_bin Paths.cgi_sandhier   (* sandhier *) 
+and manager_cgi    = cgi_bin Paths.cgi_manager    (* Corpus manager *)
 ;
 (* Absolute paths on development site *)
 value resources name = Paths.skt_resources_dir ^ name ^ "/"
@@ -70,6 +71,7 @@ value top_site_dir name = Paths.public_skt_dir ^ name ^ "/"
 value public_dico_dir = top_site_dir "DICO" (* hypertext dictionary *)
 and public_data_dir   = top_site_dir "DATA" (* linguistic data for cgis *)
 and var_dir           = top_site_dir "VAR" (* Parser dynamic regression suites *)
+and corpus_dir        = top_site_dir "CORPUS" (* Corpus tree *)
 ;
 (* This file is accessible only from Station clients in [var_dir] *)
 value regression_file_name = "regression" (* regression analysis stuff *)
@@ -281,6 +283,7 @@ value skt_dir_url = Paths.skt_dir_url
 value web_dico_url = skt_dir_url ^ "DICO/"
 and mw_dico_url    = skt_dir_url ^ "MW/"
 and web_images_url = skt_dir_url ^ "IMAGES/" 
+and corpus_url     = skt_dir_url ^ "CORPUS/"
 and sanskrit_page_url l = skt_dir_url ^ (site_entry_page l)
 and faq_page_url l      = skt_dir_url ^ (faq_page l)
 and portal_page_url l   = skt_dir_url ^ (portal_page l)

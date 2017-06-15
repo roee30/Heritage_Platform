@@ -12,6 +12,7 @@ ML/indexer
 ML/indexerd
 ML/interface
 ML/lemmatizer
+ML/manager
 ML/mk_grammar_page
 ML/mk_index_page
 ML/mk_reader_page

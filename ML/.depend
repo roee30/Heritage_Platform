@@ -277,3 +277,5 @@ mk_reader_page.cmo : web.cmo paths.cmo html.cmo control.cmo cgi.cmo
 mk_reader_page.cmx : web.cmx paths.cmx html.cmx control.cmx cgi.cmx
 mk_sandhi_page.cmo : web.cmo html.cmo
 mk_sandhi_page.cmx : web.cmx html.cmx
+manager.cmo : web.cmo html.cmo dir.cmi cgi.cmo
+manager.cmx : web.cmx html.cmx dir.cmx cgi.cmx

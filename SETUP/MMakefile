@@ -180,6 +180,9 @@ CGISANDHI=sktsandhier$(CGIEXT)
 CGIGRAPH=sktgraph$(CGIEXT)
 # cgi name under which the user aid for unknown chunks is installed on the server
 CGIUSER=sktuser$(CGIEXT)
+# CGI name under which the corpus manager is installed on the server.
+CGIMANAGER = manager$(CGIEXT)
+
 # what mouse action to use for viewing lemmatization
 MOUSEACTION=#MOUSEACTION
 # MOUSEACTION='CLICK'#amrita
@@ -216,7 +219,8 @@ UTIL=ML/Makefile $(ML_COPYRIGHT) ML/.ocamlinit ML/.depend
 # CORE package - utilities, transducers, sanskrit and french lexers, dico spec
 DISTR_CORE=ML/control.ml ML/dico.mli ML/version.ml ML/date.ml ML/install.ml \
 ML/canon.ml ML/transduction.ml ML/encode.ml ML/order.ml ML/padapatha \
-ML/sanskrit.mli ML/sanskrit.ml ML/french.mli ML/french.ml ML/skt_lexer.ml
+ML/sanskrit.mli ML/sanskrit.ml ML/french.mli ML/french.ml ML/skt_lexer.ml \
+ML/dir.mli ML/dir.ml
 CORE=$(DISTR_CORE) ML/paths.ml
 
 # GRAM package - phonetics, morphology, segmentation and tagging engines
@@ -236,7 +240,7 @@ ML/reset_caches.ml
 # WEB package - HTML, HTTP, CGI ad-hoc utilities for Web interface
 WEB=ML/html.ml ML/web.ml ML/css.ml ML/cgi.ml ML/morpho_html.ml ML/chapters.ml \
 ML/mk_index_page.ml ML/mk_grammar_page.ml ML/mk_reader_page.ml \
-ML/mk_sandhi_page.ml ML/morpho_scl.ml ML/compute_mw_links.ml
+ML/mk_sandhi_page.ml ML/morpho_scl.ml ML/compute_mw_links.ml ML/manager.ml
 
 # TREE package - tree bank manager and syntax analyser - deprecated
 TREE=ML/stemmer.ml ML/parse_tree.ml ML/parse_apte.ml ML/tag_tree.ml \
@@ -406,6 +410,7 @@ echo 'and cgi_conj = "$(CGICONJ)"'; \
 echo 'and cgi_sandhier = "$(CGISANDHI)"'; \
 echo 'and cgi_graph = "$(CGIGRAPH)"'; \
 echo 'and cgi_user_aid = "$(CGIUSER)"'; \
+echo 'and cgi_manager = "$(CGIMANAGER)"'; \
 echo 'and mouse_action = "$(MOUSEACTION)";') > ML/paths.ml
 	$(MAKE) version
 
@@ -469,6 +474,7 @@ releasecgi:
 	$(MAKE) stemmer
 	$(MAKE) analyser
 	$(MAKE) sandhi
+	$(MAKE) manager
 
 abrevs:
 	cp $(BOOK)/abrevs.pdf SITE # for documenting the Website with abbreviations
@@ -549,6 +555,10 @@ analyser: ML/reader ML/parser ML/interface ML/user_aid
 indexers: ML/indexer ML/indexerd
 	cp ML/indexer $(CGIDIR)$(CGIINDEX)
 	cp ML/indexerd $(CGIDIR)$(CGIINDEXD)
+
+.PHONY: manager
+manager: ML/manager
+	cp $< $(CGIDIR)$(CGIMANAGER)
 
 #### Version Management and Distribution are now managed by Git ####
 

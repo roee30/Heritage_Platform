@@ -1,4 +1,4 @@
-(* Directory operations.  *)
+(* Directory operations *)
 
 (*i module Dir : sig i*)
 

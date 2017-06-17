@@ -142,14 +142,6 @@ value print_scl_tags pvs phase form tags =
   ; ps (xml_end "tags")
   }
 ;
-value print_scl_tags_tad pvs ph form sfx_tags =
-  let table phase = 
-      xml_begin_with_att "tags" [ ("phase",scl_phase phase) ] in do
-  { ps (table ph) 
-  ; List.iter (print_scl_morph pvs False form) sfx_tags 
-  ; ps (xml_end "tags")
-  }
-;
 
 (* Used in Parser *)
 value extract_lemma phase word = 

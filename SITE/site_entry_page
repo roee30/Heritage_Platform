@@ -224,11 +224,23 @@ as we shall see below.
 A dictionary of inflected forms of Sanskrit words is provided
 in XML form under various transliteration schemes.
 Please visit the <a href="xml.html">Sanskrit linguistic resources page</a>.
+This resource may now be downloaded as a git repository, using command:<br/>
+<span class="Green">
+git clone https://gitlab.inria.fr/huet/Heritage_Resources.git
+</span>
 
 <a id="reader"></a>
 <h2 class="b2"> Sanskrit Reader </h2>
 
 <p>
+The main tool provided by this site is a
+<span class="Green">Sanskrit Reader</span> that allows machine-assisted
+analysis of Sanskrit sentences, that is segmentation
+(including sandhi viccheda), morphological tagging, and several parsers.
+Please consult the <a href="manual.html">Reference manual</a> for learning how
+to use these tools.
+
+<!-- 
 Try our interactive <a href="DICO/reader.html">Sanskrit Reader</a>.
 It is able to segment simple sentences.
 Try for instance to segment "tryambaka.myajaamahesugandhi.mpu.s.tivardhanam"
@@ -239,7 +251,6 @@ You will see two segmentations, one with an identified compound form
 Note that each segment is indicated with a lemma giving its stem
 and the set of morphological parameters that may generate the segment form
 from its stem. The stem is hyperlinked to the dictionary of choice.
-<!-- "vana.mgatvaadhyaana.mkaroti" "maarjaarodugdha.mpibati", -->
 </p><p>
 
 Note also that segments are separated by phonological information
@@ -285,8 +296,6 @@ In these diagrams, transparent nodes are non generative, and colored nodes
 correspond to the lexical categories recognized by the lemmatizer. The
 category Auxi is the subset of Verb consisting of conjugated forms of
 roots "k.r", "as" and "bhuu" used as auxiliaries in periphrastic constructions.
-<!--  The category Krid corresponds to root participles or primary derivatives
-({\sl k{\d r}dantas}). -->
 Pv denotes sequences of preverbs.
 </p>
 
@@ -408,14 +417,13 @@ the gap between Sanskrit computational linguistics tools
 and management of Sanskrit digital libraries</a> was organized in December 2016
 at Banaras Hindu University, at the occasion of the ICON 2016 conference.
 
-<!--
 The computational tools for Sanskrit developed at University of Hyderabad
-are available here as a <a href= "~anusaaraka/">Mirror Site</a>. -->
+are available here as a <a href= "~anusaaraka/">Mirror Site</a>. 
 
 <div class="center">
 <img src="IMAGES/yinyang.gif" alt="Yinyang">
 </div>
-
+-->
 <h2 class="b2"><img src="IMAGES/JoeCaml.png" alt="Cool Joe Caml">
 The Zen Library</h2>
 
@@ -425,7 +433,7 @@ on a comprehensive software platform.
 The project is based on a structured lexicographic database, compiled from
 the Sanskrit Heritage dictionary, and on
 the Zen computational linguistics toolkit. This toolkit is a library
-of programs implemented in Pidgin ML, functional core of the
+of programs implemented in the 
 <a href="http://ocaml.org">Objective Caml</a>
 programming language. The Zen library and its documentation are available
 as free software under the Gnu Lesser General Public License (LGPL) from the
@@ -441,10 +449,11 @@ The Sanskrit Portal</h2>
 Please visit our <a href="portal.html">Sanskrit Portal</a>
 to find links to other Sanskrit resources.
 <p>
+<!--
 If you are reading this from a mirror site, don't forget to regularly update
 this server with the development Git site
-"https://gitlab.inria.fr/huet/Heritage_Platform".
-
+"https://gitlab.inria.fr/huet/Heritage_Platform". -->
+<!--
 <h2 class="b2"><img src="IMAGES/om1.jpg" alt="Om">
 Artwork credits</h2>
 
@@ -459,7 +468,7 @@ Artwork credits</h2>
 </span><br>
 <span class="green">Shri Yantra design ©
 <a href="MAGES/Yantra.jpg">Gérard Huet</a> 1990.<br>
-</span>
+</span> -->
 </td></tr>
 </table> <!-- body -->
 

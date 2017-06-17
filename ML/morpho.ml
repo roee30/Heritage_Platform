@@ -93,9 +93,8 @@ value print_inv_morpho_link pvs pe pne pu form =
   let pv = if Phonetics.phantomatic form then [ 2 ] (* aa- *)
            else pvs in
   let encaps print e = (* encapsulates prefixing with possible preverbs *)
-     if pv = [] then print e 
-                else do { ps (Canon.decode pvs ^ "-"); print e } in
-  print_inv_morpho (encaps pe) (encaps pne) pu form 
+     if pv = [] then print e else do { pe pvs; ps "-"; print e } in
+  print_inv_morpho (encaps pe) (encaps pne) pu form
 (* Possible overgeneration when derivative of a root non attested with pv 
    since only existential test in [Dispatcher.validate_pv]. Thus
    [anusandhiiyate] should show [dhaa#1], not [dhaa#2], [dhii#1] or [dhyaa] *)

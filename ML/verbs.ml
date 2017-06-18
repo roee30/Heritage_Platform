@@ -4615,10 +4615,11 @@ value record_ppp_abs_stems entry rstem ppstems =
   iter process_ppstem ppstems
 ;
 (* Simple version for denominatives - tentative *)
-value record_ppp_abs_den ystem entry = do  
-  { record_part_ppp (rfix ystem "ita") entry 
+value record_ppp_abs_den ystem entry = 
+ let ppstem = trunc (revstem entry) in do  
+  { record_part_ppp (rfix ppstem "ita") entry 
   ; record_abso_tvaa (fix ystem "itvaa") entry  
-  (* no [record_abso_ya] *)
+  (* no [record_abso_ya] since usually no preverb to denominatives *)
   }
 ;
 (* Absolutive in -am - Macdonell§166 Stenzler§288 \Pan{3,4,22} .namul          *)

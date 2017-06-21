@@ -33,6 +33,12 @@ MW=$(SKTRESOURCES)MW# hypertext Monier-Williams
 GOLD=$(SKTRESOURCES)GOLD# Heritage in Goldendict format databases
 XMLBANKS=$(SKTRESOURCES)XML# Heritage Sanskrit morphology in XML databases
 
+# Path to global Sanskrit corpus downloaded from Git.
+SKTCORPUS = #SKTCORPUS
+
+# Path to the corpus in the server area.
+SERVERCORPUS = $(SERVERPUBLICDIR)CORPUS
+
 # Virtual path for make
 VPATH=ML
 
@@ -238,7 +244,7 @@ ML/rank.ml ML/scl_parser.ml ML/reader.ml ML/parser.ml ML/constraints.mli \
 ML/constraints.ml ML/multilingual.ml ML/paraphrase.mli ML/paraphrase.ml \
 ML/bank_lexer.ml ML/regression.ml ML/checkpoints.ml \
 ML/graph_segmenter.ml ML/interface.mli ML/interface.ml ML/user_aid.ml \
-ML/reset_caches.ml
+ML/reset_caches.ml ML/interfaceParams.mli ML/InterfaceParams.ml
 
 # WEB package - HTML, HTTP, CGI ad-hoc utilities for Web interface
 WEB=ML/html.ml ML/web.ml ML/css.ml ML/cgi.ml ML/morpho_html.ml ML/chapters.ml \
@@ -398,6 +404,7 @@ echo 'and default_lexicon = "$(LEXICON)"'; \
 echo 'and default_display_font = "$(DISPLAY)"'; \
 echo 'and skt_install_dir = "$(SKTINSTALLDIR)"'; \
 echo 'and skt_resources_dir = "$(SKTRESOURCES)"'; \
+echo 'and skt_corpus_dir = "$(SKTCORPUS)"'; \
 echo 'and public_skt_dir = "$(SERVERPUBLICDIR)"'; \
 echo 'and skt_dir_url = "$(SKTDIRURL)"'; \
 echo 'and server_host = "$(SERVERHOST)"'; \
@@ -497,6 +504,10 @@ releasedata: abrevs
 		cp $(SITEPAGE_EN) $(SERVERPUBLICDIR)index.html;	\
 	fi # default language from lexicon parameter
 	cp -R $(DICO) $(SERVERPUBLICDIR) # hypertext Heritage dictionary
+	if [ $(SKTCORPUS) ]; then			\
+		cp -R $(SKTCORPUS) $(SERVERCORPUS);	\
+		chown -R www-data $(SERVERCORPUS);	\
+	fi			# Sanskrit corpus
 # so that cgis invocations in DICO pages are relocated consistently with config:
 	cd $(SERVERPUBLICDIR) && for i in `ls DICO/*.html`; do (\
 sed '1,$$s|!CGIDECL|$(CGIBINURL)$(CGIDECL)|g' < $$i >temp; \

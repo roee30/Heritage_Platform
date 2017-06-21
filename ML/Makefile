@@ -47,7 +47,7 @@ load_morphs.ml lexer.mli lexer.ml rank.ml scl_parser.ml \
 reader.ml parser.ml constraints.mli constraints.ml multilingual.ml \
 paraphrase.mli paraphrase.ml bank_lexer.ml regression.ml \
 checkpoints.ml graph_segmenter.ml automaton.ml interface.mli interface.ml \
-user_aid.ml reset_caches.ml 
+user_aid.ml reset_caches.ml interfaceParams.mli interfaceParams.ml
 
 # WEB package - HTML, HTTP, CGI utilities for Web interface
 WEB=html.ml web.ml css.ml cgi.ml morpho_html.ml chapters.ml morpho_scl.ml \
@@ -197,7 +197,8 @@ inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.
 load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
 chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx load_morphs.cmx \
 int_sandhi.cmx nouns.cmx share.cmx minimap.cmx mini.cmx nums.cmxa \
-graph_segmenter.cmx checkpoints.cmx automaton.cmx interface.cmx -o interface
+graph_segmenter.cmx checkpoints.cmx automaton.cmx interfaceParams.cmx \
+interface.cmx -o interface
 
 user_aid: user_aid.cmx
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
@@ -218,8 +219,9 @@ morpho_scl.cmx load_morphs.cmx lexer.cmx constraints.cmx checkpoints.cmx \
 paraphrase.cmx scl_parser.cmx parser.cmx -o parser
 
 manager: manager.cmx
-	$(LINK) paths.cmx version.cmx date.cmx html.cmx SCLpaths.cmx	\
-		web.cmx cgi.cmx dir.cmx $< -o $@
+	$(LINK) str.cmxa paths.cmx version.cmx date.cmx html.cmx	\
+		SCLpaths.cmx web.cmx cgi.cmx dir.cmx			\
+		interfaceParams.cmx $< -o $@
 
 add_corpus: add_corpus.cmx
 	$(LINK) paths.cmx version.cmx date.cmx html.cmx SCLpaths.cmx	\
@@ -238,8 +240,10 @@ mk_grammar_page: mk_grammar_page.cmx
 SCLpaths.cmx web.cmx mk_grammar_page.cmx -o mk_grammar_page
 
 mk_reader_page: mk_reader_page.cmx
-	$(LINK) gen.cmx paths.cmx version.cmx date.cmx control.cmx \
-html.cmx SCLpaths.cmx web.cmx cgi.cmx mk_reader_page.cmx -o mk_reader_page
+	$(LINK) gen.cmx paths.cmx version.cmx date.cmx control.cmx	\
+		html.cmx SCLpaths.cmx web.cmx cgi.cmx			\
+		interfaceParams.cmx mk_reader_page.cmx			\
+		-o mk_reader_page
 
 mk_nyaaya_page: mk_nyaaya_page.cmx
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx \

@@ -521,6 +521,7 @@ value print_site_map dyn lang = (* the various Web services of the site *)
   ; ps (anchor_ref (grammar_page_url lang) (emph "Grammar")); pl " | "
   ; ps (anchor_ref (sandhi_page_url lang) (emph "Sandhi")); pl " | "
   ; ps (anchor_ref (reader_page_url lang) (emph "Reader")); pl " | "
+  ; ps (anchor_ref manager_cgi (emph "Manager")); pl " | "
   ; ps (anchor_ref (faq_page_url lang) (emph "Help")); pl " | "
   ; pl (anchor_ref (portal_page_url lang) (emph "Portal"))
   }
@@ -531,6 +532,7 @@ value print_site_map dyn lang = (* the various Web services of the site *)
   ; ps (anchor_ref (dico_grammar_page lang) (emph "Grammar")); pl " | "
   ; ps (anchor_ref (dico_sandhi_page lang) (emph "Sandhi")); pl " | "
   ; ps (anchor_ref (dico_reader_page lang) (emph "Reader")); pl " | "
+  ; ps (anchor_ref manager_cgi (emph "Manager")); pl " | "
   ; ps (anchor_ref (rel_faq_page_url lang) (emph "Help")); pl " | "
   ; pl (anchor_ref (rel_portal_page_url lang) (emph "Portal"))
   }

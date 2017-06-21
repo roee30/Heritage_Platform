@@ -1,14 +1,11 @@
 (* Directory operations *)
 
-(*i module Dir : sig i*)
-
-(* [subdirs dirname] returns the list of subdirectories of [dirname].
-   This list is sorted alphabetically.  *)
-value subdirs : string -> list string
+(* [subdirs dir cmp] returns the list of subdirectories of [dir] sorted
+   according to the function [cmp].  *)
+value subdirs : string -> (string -> string -> int) -> list string
 ;
-(* [files_with_ext ext dirname] returns the list of files in [dirname]
-   with the extension [ext].  This list is sorted alphabetically.  *)
-value files_with_ext : string -> string -> list string
+(* [files_with_ext ext dir cmp] returns the list of files in [dir] with
+   the extension [ext] sorted according to the function [cmp].  *)
+value files_with_ext :
+  string -> string -> (string -> string -> int) -> list string
 ;
-
-(*i end; i*)

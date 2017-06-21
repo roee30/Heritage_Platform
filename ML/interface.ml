@@ -473,7 +473,8 @@ value check_sentence translit us text_orig checkpoints sentence
   ; max_col.val := 0
   }
 ;
-value arguments trans lex cache st us cp input topic abs sol_num corpus id ln =
+value arguments trans lex cache st us cp input topic abs sol_num corpus id ln
+                outdir outfile =
   "t=" ^ trans ^ ";lex=" ^ lex ^ ";cache=" ^ cache ^ ";st=" ^ st ^ ";us=" ^ us ^
   ";cp=" ^ cp ^ ";text=" ^ input ^ ";topic=" ^ topic ^ ";abs=" ^ abs ^ 
   match sol_num with
@@ -483,7 +484,9 @@ value arguments trans lex cache st us cp input topic abs sol_num corpus id ln =
   match corpus with
     [ "" -> ""
     | c -> ";corpus=" ^ c ^ ";sentenceNumber=" ^ id ^ ";linkNumber=" ^ ln
-    ]
+    ] ^
+  ";" ^ InterfaceParams.outdir ^ "=" ^ outdir ^
+  ";" ^ InterfaceParams.outfile ^ "=" ^ outfile
 ;
 
 (* Cache management *)
@@ -527,8 +530,11 @@ value graph_engine () = do
     and sent_id = get "sentenceNumber" env "0" 
     and link_num = get "linkNumber" env "0" (* is there a better default? *)
     and sol_num = get "allSol" env "0" in (* Needed for Validate mode *)
+    let outdir = Cgi.get InterfaceParams.outdir  env "" in
+    let outfile = Cgi.get InterfaceParams.outfile env "" in
     let text = arguments translit lex cache st us cp url_encoded_input
                          url_encoded_topic abs sol_num corpus sent_id link_num
+                         outdir outfile
     and checkpoints = 
       try let url_encoded_cpts = List.assoc "cpts" env in (* do not use get *)
           parse_cpts (decode_url url_encoded_cpts)
@@ -578,6 +584,7 @@ value graph_engine () = do
          List.map revise checkpoints
        and updated_text = arguments translit lex cache st us cp updated_input
                             url_encoded_topic abs sol_num corpus sent_id link_num
+                            outdir outfile
        and new_input = decode_url updated_input in
        check_sentence translit uns updated_text revised_check 
                                   new_input sol_num corpus sent_id link_num

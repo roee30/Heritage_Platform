@@ -168,7 +168,7 @@ value rec string_word sol_st word = fun
   ]
 ;
 
-(* Need to replace the following function by a more standard function *)
+(* We should replace the following function by a more standard primitive *)
 value normalize_end = fun
   [ [ a :: rest ] -> 
     let normalized_a = match a with
@@ -232,7 +232,7 @@ value aid_using translit checkpts sentence topic st cp us lex cache abs
            [ [] -> String.sub init 0 ((String.length init)-1)
            | [ a :: rest ] -> 
                if cur_ind = chunk_ind then decoded init (cur_ind+1) rest
-                else decoded (init ^ (decode a) ^ "+") (cur_ind+1) rest
+               else decoded (init ^ (decode a) ^ "+") (cur_ind+1) rest
            ] in
        let updated_text = decoded "" 1 chunks in
        let arg_string = arguments translit lex cache st us cp updated_text topic

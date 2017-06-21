@@ -21,9 +21,10 @@ Heritage Engine tools.">
 
 <h1 class="title"> The Sanskrit Heritage Engine Reference Manual</h1>
 
+<!--
 <div class="center">
 <img src="IMAGES/jaganyantra.png" alt="Jagannath in Lotus Yantra">
-</div>
+</div> -->
 
 <h2 class="b2" id="history">About the Sanskrit Heritage Site</h2>
 
@@ -393,9 +394,10 @@ in Word mode.
 The next parameter "Format" is a toggle between reading sandhied text and reading
 text which has already been analysed in words (padapāṭha).
 Thus the sentence "si.mhovyaakara.nasyakarturaharatpraa.naanmune.hpaa.nine.h"
-my be parsed in sandhied mode (yelding 58 solutions), or may be presented
-in padapāṭha form as "si.mha.h vyaakara.nasya kartu.h aharat praa.naat mune.h
-paa.nine.h" (yielding only 24 solutions).
+my be parsed in sandhied mode (yelding 58 potential solutions),
+or may be presented in padapāṭha form as
+"si.mha.h vyaakara.nasya kartu.h aharat praa.naat mune.h paa.nine.h"
+(yielding only 24 solutions).
 <p>
 
 The parameter "Parser strengh" is by default set at "Full". It may be
@@ -405,8 +407,8 @@ segmentation should be reserved to small sentences explained to learners.
 <p>
 
 The "Input convention" parameter allows a number of formats. Transliteration
-using ascii characters is possible in 4 varieties: Velthuis, WX (UoH),
-KH (Kyoto-Harvard), and SLP1 (Sanskrit Library). These various
+using ASCII characters is possible in 4 varieties: Velthuis, WX (University of
+Hyderabad), KH (Kyoto-Harvard), and SLP1 (Sanskrit Library). These various
 conventions are presented in a 
 <a href="DOC/transliterations.pdf">synthetic document</a>.
 Thus <i>vaiśeṣikaḥ</i> may be input as <i>vaize.sika.h</i> in the default Velthuis scheme,
@@ -426,7 +428,8 @@ Finally, the "Mode" parameter offers several modes of operation of the Engine.
 We saw the default Summary mode. Other modes are provided to display
 all solutions sequentially. These modes are mostly deprecated, since they
 produce enormous pages when there are many solutions. It is possible to access
-these modes from the graphical Summary mode, when there remain only few solutions.
+these modes from the graphical Summary mode, when there remain only a
+few solutions.
 
 <h3 class="b3" id="parser1">Shallow parsing, a first approach</h3>
 
@@ -434,7 +437,7 @@ Let us call the Reader with a simple sentence such as:
 <i>vana.mgatvaadhyaana.mkaroti</i> (in Velthuis).
 The summary interface returns a page
 showing you your input sentence in blue devanāgarī, then a line with a number
-of check marks, the first one being labeled Undo, then the graphical
+of green check marks, the first one being labeled Undo, then the graphical
 display where segments may be selected or discarded, as explained above.
 The third button is labeled "All 28 Solutions". It indicates that there is a
 total of 28 segmentation solutions at this initial stage. Indeed, when you
@@ -484,11 +487,13 @@ Thus at best this representation is some approximation of syntax.
 <p>
 
 Below the three columns you find a button labeled Submit. You may press it
-to validate the morphological choices, and the resulting page gives
-you a unique parse as a hypertext <i>padapāṭha</i> which you may save in user space.
+to validate the morphological choices, and the resulting page gives you
+a unique parse as a hypertext <i>padapāṭha</i> which you may save in user space.
+<!--
 Actually, if you install the software on your own workstation, by configuring it
 in mode Station you will have in the page a Validate button
-usable to record this solution in a non-regression suite. 
+usable to record this solution in a non-regression suite. -->
+
 <p>
 
 Returning to the Parser Assistant page, you will notice some cryptic
@@ -504,8 +509,9 @@ entering <i>vana.mgatvaadhyaana.mkaroti</i>. We notice in the first menu line
 a button labeled "Filtered Solutions". If you click on it, you see a listing
 of solutions similar to what we saw in the last section, but now
 solutions are listed according to some constraint satisfaction ranking.
-Luckily on this example it proposes a unique best solution, which is
-actually the intended one. You may select it and go directly to the Parser
+The first one (labeled 4) is the intended one, followed by another one,
+proposing <i>ādhyānam</i> in place of <i>dhyānam</i>.
+You may select the one you prefer, and go directly to the Parser
 Assistant page as seen above. You may also go back to the graphical summary
 interface, allowing mutual interaction between the two modes of operation.
 <p>
@@ -551,7 +557,7 @@ segmentation candidates is below a threshold set by default to 100.
 This is in contrast with the situation with the graphical interface, which
 is fast and robust. Thus entering the following verse from Kālidāsa, we obtain
 very quicky a display factorizing an astronomical number
-(11963315062702080) of solutions:
+(37680373292728320) of solutions:
 <i>yaa tapovize.saparizafkitasya sukumaaramprahara.nam mahendrasyapratyaadeza.h ruupagarvitaayaa.h zriya.h ala.mkaara.h svargasyasaana.h priyasakhyurvazii kuberabhavanaat pratinivartamaanaasamaapattid.r.s.tena kezinaadaanavenacitralekhaadvitiiyaa bandigraaha.mg.rhiitaa</i>.
 
 <h3 class="b3" id="parser3">Lexical categories</h3>
@@ -570,15 +576,15 @@ For instance, enter in the Reader the following input (Velthuis)
 <i>pravaran.rpamuku.tama.nimariicima~njariicayacarcitacara.nayugala.h</i>
 or प्रवरनृपमुकुटमणिमरीचिमञ्जरीचयचर्चितचरणयुगलः (Devanagari). The returned display
 exhibits 96 solutions in Sentence mode. But if you select Word rather than
-Sentence as Text mode, you get only 6 solutions, which denote various
+Sentence as Text mode parameter, you get only 6 solutions, which denote various
 nominal compounds with many components. Actually, there are remaining
 ambiguities concerning the bracketing of their constituents. Let us examine
 a few typical situations. <p>
 
 First of all, some of the constituents may constitute a <i>dvandva</i>
-compound. For instance, consider <i>yak.sagandharvanaagaa.h</i>.
-It is a <i>dvandva</i> compound with 3 components <i>yak.sa</i>,
-<i>gandharva</i>, and <i>naagaa.h</i>. The first two are bare stems, only
+compound. For instance, consider <i>yakṣagandharvanāgāḥ</i>.
+It is a <i>dvandva</i> compound with 3 components <i>yakṣa</i>,
+<i>gandharva</i>, and <i>nāgāḥ</i>. The first two are bare stems, only
 the third one bears declension (<i>vibhakti</i>). Note that actually we
 distinguish two cases of the last segment: a blue one for nominative,
 and a green one for vocative. This distinction between vocatives
@@ -589,10 +595,10 @@ communicative structure.
 
 Let us now consider binary branching compounds. A three component display
 A-B-C may actually represent the compounding structure (A-B)-C
-(for instance <i>viśvarūpadarśana</i>) or (less commmonly) the structure A-(B-C)
+(for instance <i>viśvarūpadarśanam</i>) or (less commmonly) the structure A-(B-C)
 (for instance <i>ubhayacakravartī</i>). Thus long compounds are represented
-in ambiguous ways, since the mechanical reader cannot choose between them
-on the sole basis of grammatical dependencies.
+in ambiguous ways, since the mechanical reader does not know how to choose
+between them on the sole basis of grammatical dependencies.
 <p>
 
 Now consider the compound stem <i>pitāmbara</i>. It may denote a determinative
@@ -602,7 +608,8 @@ compound (<i>bahuvrīhi</i>), of adjectival meaning "who wears a yellow garment"
 Thus, on input <i>pitāmbaram</i>, in mode Word, we have two solutions,
 sharing the yellow initial component <i>pitā</i>. The first solution proposes
 a blue neuter nominal segment <i>ambaram</i>, analysed as accusative or
-nominative. The second <i>ambaram</i> however is of a distinct cyan colour,
+nominative of stem <i>ambara</i>.
+The second <i>ambaram</i> however is of a distinct cyan colour,
 and is analysed as masculine accusative. This second solution is mandatorily
 the exocentric compound "he who wears a yellow garment", typically an
 epithet of Lord Viṣṇu. The cyan colour segment may not occur stand-alone,
@@ -623,13 +630,13 @@ as stand-alone input. Please also note on this example
 that an unrecognized chunk of input yields a grey rectangle. 
 
 <p>
-Verbal compounds exist like the periphrastic perfect construction,
+Verbal compounds exist, such as the periphrastic perfect construction,
 used for secondary conjugations and nominative verbs. It builds
 a special stem in <i>-ām</i>, suffixed by a perfect form of
 one of the auxiliaries <i>kṛ</i>, <i>as</i> and <i>bhū</i>.
 Try for instance <i>āmantrayāṃcakre</i>. You see the periphrastic form
 displayed as two segments, an orange <i>āmantrayām</i>, and the red
-<i>cakre</i> of the perfect of root <i>kṛ</i>: "he summoned". The orange
+<i>cakre</i> of the perfect of root <i>kṛ</i>: "he/I summoned". The orange
 and red segments are mutually linked, selecting one selects automatically
 the other.
 <p>
@@ -708,9 +715,9 @@ and not yet publicly released.
 
 Our generating lexicon is not an extensive dictionary of Sanskrit.
 Occasionally you will encounter forms that are not recognized.
-For instance, assume you enter <i>patama.m z.r.noti</i> in the Reader.
+For instance, assume you enter <i>patamaṃ śṛṇoti</i> in the Reader.
 The result is a two segment solution attempt, where  <i>śṛṇoti</i> is
-a red recognized verbal form of root  <i>śru</i>, but <i>patamam</i>
+a red recognized verbal form of root <i>śru</i>, but <i>patamam</i>
 appears as a grey unrecognized form. Its segment is available for selection with
 a red spade symbol. If you click on it, you get to a help page labeled
 "Feedback for Unknown Chunks". This page comprises 3 zones.
@@ -734,8 +741,8 @@ input.
 
 Furthermore, your choice has entered the stem <i>patama</i> to a local
 cached lexicon on your platform. Thus, if later you encounter sentence
-<i>patamaa.h zruuyante</i>, the segment <i>patamaa.h</i> will be
-recognized as a form of stem <i>patama</i>. 
+<i>patamāḥ śrūyante</i>, the segment <i>patamāḥ</i> will be
+recognized as a bona fide form of stem <i>patama</i>. 
 <p>
 
 It may also happen that a chunk of text is successfully analysed, but none
@@ -747,8 +754,8 @@ right segmentation, if it is a nominal form obtainable as the inflected form
 of a nominal item lexicalized in the Monier-Williams dictionary.
 <p>
 
-This facility, as well as the following one, are objective reasons to install
-the Sanskrit Heritage Engine on your own server.
+This facility is an objective reason to install
+the Sanskrit Heritage Engine on your own workstation.
 
 <p>
 The lexicon cache is reset by command "make empty_caches" in the installation
@@ -759,25 +766,25 @@ directory.
 We already discussed above the parameters Format and Input conventions.
 In the "Sandhied" format, blanks are necessary only when there is an
 actual hiatus in the devanāgarī representation. For instance, in 
-<i>vanaad graamam adyopetyaudana aazvapatenaapaaci</i>, only the third
+<i>vanād grāmam adyopetyaudana aazvapatenāpāci</i>, only the third
 blank space is mandatory. The others may be removed. They are just
 help for the segmenter, in indicating pada boundaries. Of course, if you remove
 them, the number of potential solutions may increase, since the system
 will attempt analyses not respecting these word boundaries. The third space
 above
 is mandatory, and actually gives rise to two distinct segmentations, one with
-the form <i>odana.h</i>, the other with the form <i>odane</i>.
+the form <i>odanaḥ</i>, the other with the form <i>odane</i>.
 <p>
 Note that in the system's rendering, the mandatory space is indicated by
 an underscore symbol. Indeed, the user may use underscore to mark the
 necessary pauses, and thus the above example may be entered without any
-space as <i>vanaadgraamamadyopetyaudana_aazvapatenaapaaci</i>.
+space as <i>vanādgrāmamadyopetyaudana_aazvapatenāpāci</i>.
 On the other hand, a blank may be inserted between letters even though
-the separate chunks are not in final sandhi, like after <i>vanaad</i> above,
-or in <i>vana.m gacchati</i>. Thus Sandhied format with optional blanks
+the separate chunks are not in final sandhi, like after <i>vanād</i> above,
+or in <i>vanaṃ gacchati</i>. Thus Sandhied format with optional blanks
 is completely different from Unsandhied format, where each chunk of input must
 be a pada in final sandhi form, like in:
-<i>vanaat graamam adya upetya odana.h aazvapatena apaaci</i>.
+<i>vanāt grāmam adya upetya odanaḥ aazvapatena apāci</i>.
 When entering digitalized corpus in our machinery, one must understand well
 this distinction, and possibly restore a consistent input.
 <p>
@@ -808,9 +815,23 @@ Madhva's interpretation (with <i>abhāvaḥ</i>) has to be made explicit as
 <p>
 Finally, the system does not currently support degemination of stems,
 such as modern renditions of <i>tattva</i> as <i>tatva</i>
-or <i>vaarttaa</i> as <i>vaartaa</i>; only a few common stems such as 
-<i>chatra</i>, <i>chaatra</i> and <i>patra</i> are recognized. 
+or <i>vārttā</i> as <i>vārtā</i>; only a few common stems such as 
+<i>chatra</i>, <i>chātra</i> and <i>patra</i> are recognized. 
 
+<h3 class="b3" id="zloka_input">Entering full verses (<i>śloka</i>).</h3>
+
+It is possible to enter longer pieces of text than a single line.
+Verses (<i>śloka</i>) may be entered as lists of lines ended with the vertical
+bar | (<i>daṇḍa</i>), terminated by a line ended with two vertical
+bars || (<i>pūrṇavirāma</i>). Thus, for instance:
+<p>
+d.r.s.tvaa tu paa.n.davaaniika.m vyuu.dha.m duryodhanastadaa |<br>
+aacaaryamupasafgamya raajaa vacanamabraviit ||<br>
+<p>
+Please note that this notation is mandatory for such examples, where the
+first verse should not be glued by sandhi to the second one. 
+
+<!-- Undocumented 
 <h2 class="b2" id="regression">Regression analysis</h2>
 
 If you install
@@ -822,7 +843,7 @@ The regression suite tool is installed by executing "make install_regression",
 which is executed at install time.
 <p>
 We do not further document this facility, which
-is useful mostly for the developers of the system.
+is useful mostly for the developers of the system. -->
 
 <h2 class="b2" id="software">Software and its documentation</h2>
 
@@ -839,29 +860,30 @@ It may be considered as our vyākaraṇasūtrasaṃgraha.
 <h2 class="b2" id="installation">How to install the Heritage Engine on your own server</h2>
 
 The Heritage Engine is distributed as a stand-alone software for
-workstations running versions of UNIX such as Linux or Apple's MacOSX,
-by contacting Gerard.Huet@inria.fr.
+workstations running versions of UNIX such as Linux or Apple's MacOSX.
 <p>
-In order to install it, you must read the Installation Manual.
-It is located in the SETUP directory of the distribution as a text file INSTALL.
-It will tell you how to write a configuration file, how to configure
-your server, and how to compile the software.
-Then you may install the services;
-you will need to have permission to write in the server area.
+In order to install it, you must download two git repositories:<br>
+<a href="https://gitlab.inria.fr/huet/Heritage_Resources.git">
+<strong>https://gitlab.inria.fr/huet/Heritage_Resources.git</strong></a>
+and <a href="https://gitlab.inria.fr/huet/Heritage_Platform.git">
+<strong>https://gitlab.inria.fr/huet/Heritage_Platform.git</strong></a>. 
 <p>
 
 Your first installation may be tricky if you are not familiar with the
 UNIX/Apache technology.
 But once your config file is correct, it will be very easy to install
 updates, as summarized in the document INSTALLATION in the top distribution
-directory. 
+directory of the Platform.
+<p>
+Signal installation difficulties and relate your experiences with these tools
+to Gerard.Huet@inria.fr.
+
 <p>
 Authors of interesting feedbacks will be entered in the
 <a href="gold.html">Heritage Hall of Fame</a>.
 
 <p>
-In case of difficulty with the use of these various tools, please consult 
-our page of frequently asked questions
+A useful supplement to this manual is our page of frequently asked questions
 <a href="faq.html"><strong>Faq</strong></a>, also available from the "Help"
 button on the site control bar. 
 

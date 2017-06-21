@@ -52,7 +52,7 @@ user_aid.ml reset_caches.ml interfaceParams.mli interfaceParams.ml
 # WEB package - HTML, HTTP, CGI utilities for Web interface
 WEB=html.ml web.ml css.ml cgi.ml morpho_html.ml chapters.ml morpho_scl.ml \
 mk_index_page.ml mk_grammar_page.ml mk_reader_page.ml mk_sandhi_page.ml \
-manager.ml add_corpus.ml
+manager.ml save_corpus.ml
 # extra file SCLpaths.ml for SCL interfacing - not distributed.
 
 # TREE package - tree bank manager and syntax analyser - legacy
@@ -136,7 +136,7 @@ bank_lexer.cmo tag_tree.cmo tag_apte.cmo
 	(cat debug_apte.ml ; cat -) | ocaml -I +camlp4 -I . -I $(ZEN)
 
 cgis: skt_morph.cmi auto.cmi indexer indexerd declension conjugation \
-lemmatizer reader parser sandhier reader interface user_aid manager add_corpus
+lemmatizer reader parser sandhier reader interface user_aid manager save_corpus
 
 indexer: indexer.cmx
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
@@ -223,9 +223,18 @@ manager: manager.cmx
 		SCLpaths.cmx web.cmx cgi.cmx dir.cmx			\
 		interfaceParams.cmx $< -o $@
 
-add_corpus: add_corpus.cmx
-	$(LINK) paths.cmx version.cmx date.cmx html.cmx SCLpaths.cmx	\
-		web.cmx cgi.cmx $< -o $@
+save_corpus: save_corpus.cmx
+	$(LINK) unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx		\
+control.cmx word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx		\
+encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx			\
+inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx	\
+load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx			\
+chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx load_morphs.cmx			\
+int_sandhi.cmx nouns.cmx share.cmx minimap.cmx mini.cmx nums.cmxa			\
+graph_segmenter.cmx checkpoints.cmx automaton.cmx interfaceParams.cmx			\
+interface.cmx $< -o $@
+# $(LINK) paths.cmx version.cmx date.cmx html.cmx SCLpaths.cmx	\
+# 		web.cmx cgi.cmx interfaceParams.cmx $< -o $@
 
 css: css.cmx
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx html.cmx \
@@ -322,7 +331,7 @@ clean:
 	rm -f *.cmo *.cmi *.cmx *.ppi *.ppo *.o
 	rm -f css indexer indexerd sandhier reader parser lemmatizer \
 declension conjugation mk_index_page mk_grammar_page mk_reader_page regression \
-mk_sandhi_page sandhi_test reset_caches interface user_aid manager add_corpus \
+mk_sandhi_page sandhi_test reset_caches interface user_aid manager save_corpus \
 parse_apte tag_apte 
 #	make dico.cmi auto.cmi conj_infos.cmi # needed to get dependencies right 
 

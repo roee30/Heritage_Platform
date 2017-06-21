@@ -530,7 +530,7 @@ value graph_engine () = do
     and sent_id = get "sentenceNumber" env "0" 
     and link_num = get "linkNumber" env "0" (* is there a better default? *)
     and sol_num = get "allSol" env "0" in (* Needed for Validate mode *)
-    let outdir = Cgi.get InterfaceParams.outdir  env "" in
+    let outdir = Cgi.get InterfaceParams.outdir env "" in
     let outfile = Cgi.get InterfaceParams.outfile env "" in
     let text = arguments translit lex cache st us cp url_encoded_input
                          url_encoded_topic abs sol_num corpus sent_id link_num
@@ -595,6 +595,24 @@ value graph_engine () = do
             graph_cgi ^ "?" ^ text ^  
             ";cpts=" ^ (string_points checkpoints) ^ "\";}\n</script>")
      else ()
+
+     (* Save sentence button *)
+   ; Web.cgi_begin Web.save_corpus_cgi "" |> Web.pl
+   ; Html.hidden_input InterfaceParams.outdir (Cgi.decode_url outdir) |> Web.pl
+   ; Html.hidden_input InterfaceParams.outfile (Cgi.decode_url outfile)
+     |> Web.pl
+   ; Html.hidden_input "text" input |> Web.pl
+   ; Html.hidden_input "lex" lex |> Web.pl
+   ; Html.hidden_input "cache" cache |> Web.pl
+   ; Html.hidden_input "st" st |> Web.pl
+   ; Html.hidden_input "us" us |> Web.pl
+   ; Html.hidden_input "cp" cp |> Web.pl
+   ; Html.hidden_input "t" translit |> Web.pl
+     (* TODO: Pass missing parameters like checkpoints.  *)
+     (* ; Html.hidden_input "topic" url_encoded_topic |> Web.pl *)
+   ; Html.submit_input "Save sentence" |> Web.pl
+   ; Web.cgi_end |> Web.pl
+
    ; close_page_with_margin ()
    ; page_end lang True
    }

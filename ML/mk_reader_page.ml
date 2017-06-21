@@ -63,8 +63,8 @@ value reader_page () = do
     (* Contextual information from past discourse *)
     let topic_mark = decode_url url_encoded_topic 
     and text = decode_url url_encoded_input in
-    let outdir = Cgi.get InterfaceParams.outdir env "" in
-    let outfile = Cgi.get InterfaceParams.outfile env "" in do
+    let outdir = Cgi.decoded_get InterfaceParams.outdir env "" in
+    let outfile = Cgi.decoded_get InterfaceParams.outfile env "" in do
   { pl (body_begin back_ground) 
   ; print_title (Some lang) reader_title
   ; pl center_begin 

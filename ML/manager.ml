@@ -1,6 +1,5 @@
-(* CGI script [manager] for corpus management, i.e. for listing
-   sentences of the corpus and calling [add_corpus] to add a sentence to
-   the corpus.  *)
+(* CGI script [manager] for corpus management, i.e. for listing and
+   adding sentences of the corpus.  *)
 
 (*************)
 (* Utilities *)
@@ -21,7 +20,7 @@ value split file = Str.split (Str.regexp Filename.dir_sep) file
 ;
 value rec first_gap = fun
   [ [] -> 1
-  | [ h ] -> h
+  | [ h ] -> h + 1
   | [ x ; y :: t ] -> if y = x + 1 then first_gap [ y :: t ] else x + 1
   ]
 ;
@@ -90,7 +89,7 @@ value make () =
   let style = Html.background Html.Chamois in
   let query = Cgi.query_string () in
   let env = Cgi.create_env query in
-  let dir = Cgi.decode_url (Cgi.get dir_param env "") in
+  let dir = Cgi.decoded_get dir_param env "" in
   do
   { Web.http_header |> Web.pl
   ; Web.page_begin meta_title

@@ -52,7 +52,7 @@ and graph_cgi      = cgi_bin Paths.cgi_graph      (* summarizer graphical interf
 and user_aid_cgi   = cgi_bin Paths.cgi_user_aid   (* unknown chunks processing *) 
 and sandhier_cgi   = cgi_bin Paths.cgi_sandhier   (* sandhier *) 
 and manager_cgi    = cgi_bin Paths.cgi_manager    (* Corpus manager *)
-and add_corpus_cgi = cgi_bin Paths.cgi_add_corpus
+and save_corpus_cgi = cgi_bin Paths.cgi_save_corpus
 ;
 (* Absolute paths on development site *)
 value resources name = Paths.skt_resources_dir ^ name ^ "/"

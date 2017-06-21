@@ -5,7 +5,6 @@
 *.o
 
 # Executables
-ML/add_corpus
 ML/conjugation
 ML/css
 ML/declension
@@ -23,6 +22,7 @@ ML/reader
 ML/regression
 ML/reset_caches
 ML/sandhier
+ML/save_corpus
 ML/test_stamp
 ML/user_aid
 ZEN/dagify

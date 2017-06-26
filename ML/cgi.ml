@@ -90,7 +90,7 @@ value create_env s =
 value get key alist default = 
   try List.assoc key alist with [ Not_found -> default ] 
 ;
-value decoded_get key alist default = decode_url (get key alist default)
+value decoded_get key default alist = decode_url (get key alist default)
 ;
 value query_string () =
   try Sys.getenv "QUERY_STRING" with [

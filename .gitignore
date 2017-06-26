@@ -1,18 +1,21 @@
 # Generic patterns
+*.annot
 *.cmi
 *.cmo
+*.cmt
+*.cmti
 *.cmx
 *.o
 
 # Executables
 ML/conjugation
+ML/corpus_manager
 ML/css
 ML/declension
 ML/indexer
 ML/indexerd
 ML/interface
 ML/lemmatizer
-ML/manager
 ML/mk_grammar_page
 ML/mk_index_page
 ML/mk_reader_page

@@ -78,9 +78,11 @@ SOURCES=$(ML_SOURCES) $(SPECIFIC_AUTOMATA_SOURCES)
 INSTALL_DIR = `ocamlc -where`/zen
 #INSTALL_DIR = $(HOME)/lib/ocaml/zen
 
-COMPILE=ocamlopt -pp "camlp4rf" -I +camlp4 -c
+ANNOTFLAGS = -annot -bin-annot
 
-COMPILEI=ocamlc -pp "camlp4rf" -I +camlp4 -c 
+COMPILE=ocamlopt -pp "camlp4rf" -I +camlp4 -c $(ANNOTFLAGS)
+
+COMPILEI=ocamlc -pp "camlp4rf" -I +camlp4 -c $(ANNOTFLAGS)
 
 LINK=ocamlopt -I +camlp4 
 LINKG=ocamlopt -I +camlp4 dynlink.cmxa camlp4lib.cmxa
@@ -271,7 +273,8 @@ oug.weight: dsort.txt
 	scp yquem:oug-weight.png .
 
 clean:
-	rm -f *.cmo *.cmi *.cmx *.ppi *.ppo *.o *.cma *.a *.cmxa *~ .order 
+	rm -f *.cmo *.cmi *.cmx *.ppi *.ppo *.o *.cma *.a *.cmxa *~	\
+		*.annot *.cmt *.cmti .order
 	-rm -f dagify list_iso make_french_lexicon make_english_lexicon terdagify test timeshare unshare $(GEN_CODE)
 
 .SUFFIXES: .ml .mli .cmx .cmo .cmi

@@ -69,9 +69,13 @@ CORENATIVES=list2.cmx gen.cmx paths.cmx version.cmx word.cmx canon.cmx \
 zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx skt_lexer.cmx \
 padapatha.cmx sanskrit.cmx order.cmx
 
-COMPILE=ocamlopt -pp "camlp4r pa_extend.cmo" -I $(ZEN) -I +camlp4 -c
+ANNOTFLAGS = -annot -bin-annot
 
-COMPILEI=ocamlc -pp "camlp4r pa_extend.cmo" -I $(ZEN) -I +camlp4 -c
+COMPILE=ocamlopt -pp "camlp4r pa_extend.cmo" -I $(ZEN) -I +camlp4 -c	\
+		$(ANNOTFLAGS)
+
+COMPILEI=ocamlc -pp "camlp4r pa_extend.cmo" -I $(ZEN) -I +camlp4 -c	\
+		$(ANNOTFLAGS)
 
 LINK=ocamlopt -I $(ZEN) -I +camlp4  dynlink.cmxa camlp4lib.cmxa
 
@@ -328,7 +332,7 @@ Heritage_Platform.pdf: $(ENGINE)
 	mv .depend.new .depend
 
 clean:
-	rm -f *.cmo *.cmi *.cmx *.ppi *.ppo *.o
+	rm -f *.cmo *.cmi *.cmx *.ppi *.ppo *.o *.annot *.cmt *.cmti
 	rm -f css indexer indexerd sandhier reader parser lemmatizer \
 declension conjugation mk_index_page mk_grammar_page mk_reader_page regression \
 mk_sandhi_page sandhi_test reset_caches interface user_aid manager save_corpus \

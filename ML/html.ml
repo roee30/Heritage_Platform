@@ -109,27 +109,17 @@ value option_select_default_id id label list_options =
 value text_input id control = 
   xml_empty_with_att "input" [ ("id",id); ("type","text"); ("name",control) ]
 ;
-type int_input_attrs = {
-  step : int;
-  min : int;
-  max : int;
-  default : int
-}
-;
-value int_input id control extra_attrs =
-  let attrs = [ ("id", id); ("type", "number"); ("name", control) ] in
-  let extra_attrs =
-    match extra_attrs with
-    [ None -> []
-    | Some attrs ->
-        [ ("step", string_of_int attrs.step);
-          ("min", string_of_int attrs.min) ;
-          ("max", string_of_int attrs.max);
-          ("value", string_of_int attrs.default) ]]
+value int_input ~id:id ~name:name ~step:step ~min:min ~max:max ~val:val =
+  let attrs =
+    [ ("type", "number")
+    ; ("id", id)
+    ; ("name", name)
+    ; ("step", string_of_int step)
+    ; ("min", string_of_int min)
+    ; ("max", string_of_int max)
+    ; ("value", string_of_int val) ]
   in
-  xml_empty_with_att "input" (attrs @ extra_attrs)
-;
-value int_input' control extra_attrs = int_input control control extra_attrs
+  xml_empty_with_att "input" attrs
 ;
 value radio_input control v label = 
   let attrs =  [ ("type","radio"); ("name",control); ("value",v) ] in

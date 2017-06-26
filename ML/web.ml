@@ -51,7 +51,7 @@ and parser_cgi     = cgi_bin Paths.cgi_parser     (* parser *)
 and graph_cgi      = cgi_bin Paths.cgi_graph      (* summarizer graphical interface *) 
 and user_aid_cgi   = cgi_bin Paths.cgi_user_aid   (* unknown chunks processing *) 
 and sandhier_cgi   = cgi_bin Paths.cgi_sandhier   (* sandhier *) 
-and manager_cgi    = cgi_bin Paths.cgi_manager    (* Corpus manager *)
+and corpus_manager_cgi = cgi_bin Paths.cgi_corpus_manager (* Corpus manager *)
 and save_corpus_cgi = cgi_bin Paths.cgi_save_corpus
 ;
 (* Absolute paths on development site *)
@@ -521,7 +521,7 @@ value print_site_map dyn lang = (* the various Web services of the site *)
   ; ps (anchor_ref (grammar_page_url lang) (emph "Grammar")); pl " | "
   ; ps (anchor_ref (sandhi_page_url lang) (emph "Sandhi")); pl " | "
   ; ps (anchor_ref (reader_page_url lang) (emph "Reader")); pl " | "
-  ; ps (anchor_ref manager_cgi (emph "Manager")); pl " | "
+  ; ps (anchor_ref corpus_manager_cgi (emph "Corpus")); pl " | "
   ; ps (anchor_ref (faq_page_url lang) (emph "Help")); pl " | "
   ; pl (anchor_ref (portal_page_url lang) (emph "Portal"))
   }
@@ -532,7 +532,7 @@ value print_site_map dyn lang = (* the various Web services of the site *)
   ; ps (anchor_ref (dico_grammar_page lang) (emph "Grammar")); pl " | "
   ; ps (anchor_ref (dico_sandhi_page lang) (emph "Sandhi")); pl " | "
   ; ps (anchor_ref (dico_reader_page lang) (emph "Reader")); pl " | "
-  ; ps (anchor_ref manager_cgi (emph "Manager")); pl " | "
+  ; ps (anchor_ref corpus_manager_cgi (emph "Corpus")); pl " | "
   ; ps (anchor_ref (rel_faq_page_url lang) (emph "Help")); pl " | "
   ; pl (anchor_ref (rel_portal_page_url lang) (emph "Portal"))
   }
@@ -614,6 +614,11 @@ value close_html_file lang b = do
 value close_html_dico () = close_html_file Html.French True 
 ;
 value http_header = "Content-Type: text/html\n"
+;
+(* Print the HTTP header only when it is required, i.e. only if it is
+   a CGI output.  *)
+value maybe_http_header () =
+  if output_channel.val = stdout then pl http_header else ()
 ;
 value javascript_tooltip ="wz_tooltip.js"
 ;

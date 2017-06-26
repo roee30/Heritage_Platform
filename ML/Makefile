@@ -47,12 +47,17 @@ load_morphs.ml lexer.mli lexer.ml rank.ml scl_parser.ml \
 reader.ml parser.ml constraints.mli constraints.ml multilingual.ml \
 paraphrase.mli paraphrase.ml bank_lexer.ml regression.ml \
 checkpoints.ml graph_segmenter.ml automaton.ml interface.mli interface.ml \
-user_aid.ml reset_caches.ml interfaceParams.mli interfaceParams.ml
+user_aid.ml reset_caches.ml params.mli params.ml interface_cgi.ml
 
 # WEB package - HTML, HTTP, CGI utilities for Web interface
 WEB=html.ml web.ml css.ml cgi.ml morpho_html.ml chapters.ml morpho_scl.ml \
-mk_index_page.ml mk_grammar_page.ml mk_reader_page.ml mk_sandhi_page.ml \
-manager.ml save_corpus.ml
+mk_index_page.ml mk_grammar_page.ml mk_reader_page.ml mk_sandhi_page.ml
+
+# CORPUS package - corpus manager
+CORPUS = corpus.mli corpus.ml corpus_manager.mli corpus_manager.ml	\
+	corpus_manager_cgi.ml save_corpus.mli save_corpus.ml		\
+	save_corpus_cgi.ml
+
 # extra file SCLpaths.ml for SCL interfacing - not distributed.
 
 # TREE package - tree bank manager and syntax analyser - legacy
@@ -60,7 +65,7 @@ TREE=parse_tree.ml parse_apte.ml stemmer.ml tag_tree.ml tag_apte.ml
 
 DEBUG=debug.ml 
 
-ENGINE=$(CORE) $(GRAM) $(WEB) 
+ENGINE=$(CORE) $(GRAM) $(WEB) $(CORPUS)
 INACTIVE=$(TREE) nyaaya.ml mk_nyaaya_page.ml 
 
 SOURCES=$(ENGINE) $(DEBUG) $(INACTIVE) 
@@ -140,7 +145,8 @@ bank_lexer.cmo tag_tree.cmo tag_apte.cmo
 	(cat debug_apte.ml ; cat -) | ocaml -I +camlp4 -I . -I $(ZEN)
 
 cgis: skt_morph.cmi auto.cmi indexer indexerd declension conjugation \
-lemmatizer reader parser sandhier reader interface user_aid manager save_corpus
+lemmatizer reader parser sandhier reader interface user_aid \
+corpus_manager save_corpus
 
 indexer: indexer.cmx
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
@@ -193,7 +199,7 @@ chapters.cmx morpho_html.cmx cgi.cmx segmenter.cmx morpho_scl.cmx \
 load_morphs.cmx lexer.cmx constraints.cmx rank.cmx bank_lexer.cmx \
 scl_parser.cmx checkpoints.cmx reader.cmx -o reader 
 
-interface: interface.cmx
+interface: interface_cgi.cmx
 	$(LINK) unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
 control.cmx word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx \
 encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx \
@@ -201,8 +207,8 @@ inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.
 load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
 chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx load_morphs.cmx \
 int_sandhi.cmx nouns.cmx share.cmx minimap.cmx mini.cmx nums.cmxa \
-graph_segmenter.cmx checkpoints.cmx automaton.cmx interfaceParams.cmx \
-interface.cmx -o interface
+graph_segmenter.cmx checkpoints.cmx automaton.cmx params.cmx \
+interface.cmx interface_cgi.cmx -o interface
 
 user_aid: user_aid.cmx
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
@@ -222,23 +228,35 @@ chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx segmenter.cmx \
 morpho_scl.cmx load_morphs.cmx lexer.cmx constraints.cmx checkpoints.cmx \
 paraphrase.cmx scl_parser.cmx parser.cmx -o parser
 
-manager: manager.cmx
-	$(LINK) str.cmxa paths.cmx version.cmx date.cmx html.cmx	\
-		SCLpaths.cmx web.cmx cgi.cmx dir.cmx			\
-		interfaceParams.cmx $< -o $@
+corpus_manager: corpus_manager_cgi.cmx
+	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
+		version.cmx date.cmx control.cmx word.cmx canon.cmx	\
+		zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
+		skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx	\
+		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx web.cmx	\
+		naming.cmx morpho_string.cmx morpho.cmx			\
+		load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx	\
+		order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx	\
+		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
+		share.cmx minimap.cmx mini.cmx nums.cmxa		\
+		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
+		params.cmx interface.cmx multilingual.cmx dir.cmx	\
+		corpus.cmx corpus_manager.cmx $< -o $@
 
-save_corpus: save_corpus.cmx
-	$(LINK) unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx		\
-control.cmx word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx		\
-encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx			\
-inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx	\
-load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx			\
-chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx load_morphs.cmx			\
-int_sandhi.cmx nouns.cmx share.cmx minimap.cmx mini.cmx nums.cmxa			\
-graph_segmenter.cmx checkpoints.cmx automaton.cmx interfaceParams.cmx			\
-interface.cmx $< -o $@
-# $(LINK) paths.cmx version.cmx date.cmx html.cmx SCLpaths.cmx	\
-# 		web.cmx cgi.cmx interfaceParams.cmx $< -o $@
+save_corpus: save_corpus_cgi.cmx
+	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
+		version.cmx date.cmx control.cmx word.cmx canon.cmx	\
+		zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
+		skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx	\
+		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx web.cmx	\
+		naming.cmx morpho_string.cmx morpho.cmx			\
+		load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx	\
+		order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx	\
+		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
+		share.cmx minimap.cmx mini.cmx nums.cmxa		\
+		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
+		params.cmx interface.cmx multilingual.cmx dir.cmx	\
+		corpus.cmx corpus_manager.cmx save_corpus.cmx $< -o $@
 
 css: css.cmx
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx html.cmx \
@@ -254,8 +272,8 @@ SCLpaths.cmx web.cmx mk_grammar_page.cmx -o mk_grammar_page
 
 mk_reader_page: mk_reader_page.cmx
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx control.cmx	\
-		html.cmx SCLpaths.cmx web.cmx cgi.cmx			\
-		interfaceParams.cmx mk_reader_page.cmx			\
+		html.cmx SCLpaths.cmx web.cmx cgi.cmx params.cmx	\
+		mk_reader_page.cmx					\
 		-o mk_reader_page
 
 mk_nyaaya_page: mk_nyaaya_page.cmx
@@ -335,8 +353,8 @@ clean:
 	rm -f *.cmo *.cmi *.cmx *.ppi *.ppo *.o *.annot *.cmt *.cmti
 	rm -f css indexer indexerd sandhier reader parser lemmatizer \
 declension conjugation mk_index_page mk_grammar_page mk_reader_page regression \
-mk_sandhi_page sandhi_test reset_caches interface user_aid manager save_corpus \
-parse_apte tag_apte 
+mk_sandhi_page sandhi_test reset_caches interface user_aid \
+parse_apte tag_apte corpus_manager save_corpus
 #	make dico.cmi auto.cmi conj_infos.cmi # needed to get dependencies right 
 
 .SUFFIXES: .ml .mli .cmx .cmo .cmi

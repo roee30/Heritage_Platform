@@ -187,7 +187,7 @@ CGIGRAPH=sktgraph$(CGIEXT)
 # cgi name under which the user aid for unknown chunks is installed on the server
 CGIUSER=sktuser$(CGIEXT)
 # CGI name under which the corpus manager is installed on the server.
-CGIMANAGER = manager$(CGIEXT)
+CGIMANAGER = sktcorpus$(CGIEXT)
 # CGI name under which the program that enriches the corpus is installed
 # on the server.
 CGISAVECORPUS = savecorpus$(CGIEXT)
@@ -244,17 +244,21 @@ ML/rank.ml ML/scl_parser.ml ML/reader.ml ML/parser.ml ML/constraints.mli \
 ML/constraints.ml ML/multilingual.ml ML/paraphrase.mli ML/paraphrase.ml \
 ML/bank_lexer.ml ML/regression.ml ML/checkpoints.ml \
 ML/graph_segmenter.ml ML/interface.mli ML/interface.ml ML/user_aid.ml \
-ML/reset_caches.ml ML/interfaceParams.mli ML/InterfaceParams.ml
+ML/reset_caches.ml ML/params.mli ML/params.ml ML/interface_cgi.ml
 
 # WEB package - HTML, HTTP, CGI ad-hoc utilities for Web interface
 WEB=ML/html.ml ML/web.ml ML/css.ml ML/cgi.ml ML/morpho_html.ml ML/chapters.ml \
 ML/mk_index_page.ml ML/mk_grammar_page.ml ML/mk_reader_page.ml \
-ML/mk_sandhi_page.ml ML/morpho_scl.ml ML/compute_mw_links.ml ML/manager.ml \
-ML/save_corpus.ml
+ML/mk_sandhi_page.ml ML/morpho_scl.ml ML/compute_mw_links.ml
 
 # TREE package - tree bank manager and syntax analyser - deprecated
 TREE=ML/stemmer.ml ML/parse_tree.ml ML/parse_apte.ml ML/tag_tree.ml \
 ML/tag_apte.ml
+
+# CORPUS package - corpus manager
+CORPUS = ML/corpus.mli ML/corpus.ml ML/corpus_manager.mli		\
+	ML/corpus_manager.ml ML/corpus_manager_cgi.ml			\
+	ML/save_corpus.mli ML/save_corpus.ml ML/save_corpus_cgi.ml
 
 DEBUG= ML/morpho_debug.ml ML/debug.ml
 
@@ -264,7 +268,7 @@ ML/nyaaya.ml ML/mk_nyaaya_page.ml \
 ML/patch_auto.ml # awful hack for patching automata structures - now unused
 
 # Modules of all software packages are in library ML (besides the ZEN library)
-ML=$(UTIL) $(CORE) $(GRAM) $(WEB) $(TREE) $(LEGAL)
+ML=$(UTIL) $(CORE) $(GRAM) $(WEB) $(TREE) $(LEGAL) $(CORPUS)
 
 # Directory STAT contains a few log and regression files like regression_template
 # Also files mw_exc.txt and mw_index_txt_file.txt for Monier-Williams alignment
@@ -421,7 +425,7 @@ echo 'and cgi_conj = "$(CGICONJ)"'; \
 echo 'and cgi_sandhier = "$(CGISANDHI)"'; \
 echo 'and cgi_graph = "$(CGIGRAPH)"'; \
 echo 'and cgi_user_aid = "$(CGIUSER)"'; \
-echo 'and cgi_manager = "$(CGIMANAGER)"'; \
+echo 'and cgi_corpus_manager = "$(CGIMANAGER)"'; \
 echo 'and cgi_save_corpus = "$(CGISAVECORPUS)"'; \
 echo 'and mouse_action = "$(MOUSEACTION)";') > ML/paths.ml
 	$(MAKE) version
@@ -486,8 +490,8 @@ releasecgi:
 	$(MAKE) stemmer
 	$(MAKE) analyser
 	$(MAKE) sandhi
-	$(MAKE) manager
-	$(MAKE) savecorpus
+	$(MAKE) corpus_manager
+	$(MAKE) save_corpus
 
 abrevs:
 	cp $(BOOK)/abrevs.pdf SITE # for documenting the Website with abbreviations
@@ -573,12 +577,12 @@ indexers: ML/indexer ML/indexerd
 	cp ML/indexer $(CGIDIR)$(CGIINDEX)
 	cp ML/indexerd $(CGIDIR)$(CGIINDEXD)
 
-.PHONY: manager
-manager: ML/manager
+.PHONY: corpus_manager
+corpus_manager: ML/corpus_manager
 	cp $< $(CGIDIR)$(CGIMANAGER)
 
-.PHONY: savecorpus
-savecorpus: ML/save_corpus
+.PHONY: save_corpus
+save_corpus: ML/save_corpus
 	cp $< $(CGIDIR)$(CGISAVECORPUS)
 
 #### Version Management and Distribution are now managed by Git ####

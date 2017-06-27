@@ -1,37 +1,27 @@
-(* CGI script [save_corpus] for saving a sentence into the corpus.  *)
-
-value make () =
-  let style = Html.background Html.Chamois in
-  let query = Cgi.query_string () in
-  let env = Cgi.create_env query in
-  let outdir = Cgi.decoded_get InterfaceParams.outdir env "" in
-  let outfile = Cgi.decoded_get InterfaceParams.outfile env "" in
-  let file = Web.corpus_dir ^ outdir ^ outfile ^ ".html" in
-  let title = "File " ^ file ^ " created." in
-  let meta_title = Html.title title in
-  let write_file file =
+value make ~corpus_dir:corpus_dir ~sentence_no:sentence_no ~translit:translit
+  ~unsandhied:unsandhied ~text:text =
+  let sentence_no = string_of_int sentence_no in
+  let file = Web.corpus_dir ^ corpus_dir ^ sentence_no ^ ".html" in
+  let metadata_file = Web.corpus_dir ^ corpus_dir ^ "." ^ sentence_no in
+  let sentence =
+    let encode = Encode.switch_code translit in
+    let chunker =
+      if unsandhied then        (* sandhi undone *)
+        Sanskrit.read_raw_sanskrit
+      else                      (* blanks non-significant *)
+        Sanskrit.read_sanskrit
+    in
+    chunker encode text
+  in
+  let save_sentence file =
     do
-    { Unix.putenv "QUERY_STRING" query
-    ; Web.output_channel.val := open_out file
-    ; Interface.Interface.safe_engine ()
+    { Web.output_channel.val := open_out file
+    ; Interface.safe_engine ()
+    ; Gen.dump sentence metadata_file
     ; close_out Web.output_channel.val
     ; Web.output_channel.val := stdout }
   in
-  let mk_page () =
-    do
-    { Web.http_header |> Web.pl
-    ; Web.page_begin meta_title
-    ; Html.body_begin style |> Web.pl
-    ; Html.h1_title title |> Web.pl
-    ; Web.page_end Html.default_language True }
-  in
   do
-  { write_file file
-  ; mk_page () }
-;
-
-(***************)
-(* Entry point *)
-(***************)
-value main = make ()
+  { save_sentence file
+  ; Corpus_manager.make corpus_dir }
 ;

@@ -14,8 +14,6 @@
    call the standard displaying of all, or of preferred solutions consistent 
    with the current checkpoints. An undo button allows backtracking. *)
 
-module Interface = struct
-
 open Graph_segmenter; (* [Segment cur_chunk set_cur_offset graph visual] *)
 open Phases; (* [Phases] *) 
 open Phases; (* [phase is_cache generative] *) 
@@ -27,7 +25,7 @@ open Cgi;
 module Prel = struct (* Interface's lexer prelude *)
 
  value prelude () = do
-  { pl http_header
+  { maybe_http_header ()
   ; page_begin graph_meta_title 
   ; pl (body_begin Chamois_back)
   ; pl interface_title
@@ -474,7 +472,7 @@ value check_sentence translit us text_orig checkpoints sentence
   }
 ;
 value arguments trans lex cache st us cp input topic abs sol_num corpus id ln
-                outdir outfile =
+                corpus_dir sentence_no =
   "t=" ^ trans ^ ";lex=" ^ lex ^ ";cache=" ^ cache ^ ";st=" ^ st ^ ";us=" ^ us ^
   ";cp=" ^ cp ^ ";text=" ^ input ^ ";topic=" ^ topic ^ ";abs=" ^ abs ^ 
   match sol_num with
@@ -485,8 +483,8 @@ value arguments trans lex cache st us cp input topic abs sol_num corpus id ln
     [ "" -> ""
     | c -> ";corpus=" ^ c ^ ";sentenceNumber=" ^ id ^ ";linkNumber=" ^ ln
     ] ^
-  ";" ^ InterfaceParams.outdir ^ "=" ^ outdir ^
-  ";" ^ InterfaceParams.outfile ^ "=" ^ outfile
+  ";" ^ Params.corpus_dir ^ "=" ^ corpus_dir ^
+  ";" ^ Params.sentence_no ^ "=" ^ sentence_no
 ;
 
 (* Cache management *)
@@ -530,11 +528,11 @@ value graph_engine () = do
     and sent_id = get "sentenceNumber" env "0" 
     and link_num = get "linkNumber" env "0" (* is there a better default? *)
     and sol_num = get "allSol" env "0" in (* Needed for Validate mode *)
-    let outdir = Cgi.get InterfaceParams.outdir env "" in
-    let outfile = Cgi.get InterfaceParams.outfile env "" in
+    let corpus_dir = Cgi.get Params.corpus_dir env "" in
+    let sentence_no = Cgi.get Params.sentence_no env "" in
     let text = arguments translit lex cache st us cp url_encoded_input
                          url_encoded_topic abs sol_num corpus sent_id link_num
-                         outdir outfile
+                         corpus_dir sentence_no
     and checkpoints = 
       try let url_encoded_cpts = List.assoc "cpts" env in (* do not use get *)
           parse_cpts (decode_url url_encoded_cpts)
@@ -584,7 +582,7 @@ value graph_engine () = do
          List.map revise checkpoints
        and updated_text = arguments translit lex cache st us cp updated_input
                             url_encoded_topic abs sol_num corpus sent_id link_num
-                            outdir outfile
+                            corpus_dir sentence_no
        and new_input = decode_url updated_input in
        check_sentence translit uns updated_text revised_check 
                                   new_input sol_num corpus sent_id link_num
@@ -598,18 +596,19 @@ value graph_engine () = do
 
      (* Save sentence button *)
    ; Web.cgi_begin Web.save_corpus_cgi "" |> Web.pl
-   ; Html.hidden_input InterfaceParams.outdir (Cgi.decode_url outdir) |> Web.pl
-   ; Html.hidden_input InterfaceParams.outfile (Cgi.decode_url outfile)
-     |> Web.pl
-   ; Html.hidden_input "text" input |> Web.pl
+   ; Html.hidden_input "t" translit |> Web.pl
    ; Html.hidden_input "lex" lex |> Web.pl
    ; Html.hidden_input "cache" cache |> Web.pl
    ; Html.hidden_input "st" st |> Web.pl
    ; Html.hidden_input "us" us |> Web.pl
    ; Html.hidden_input "cp" cp |> Web.pl
-   ; Html.hidden_input "t" translit |> Web.pl
-     (* TODO: Pass missing parameters like checkpoints.  *)
-     (* ; Html.hidden_input "topic" url_encoded_topic |> Web.pl *)
+   ; Html.hidden_input "text" input |> Web.pl
+   ; Html.hidden_input "topic" (Cgi.decode_url url_encoded_topic) |> Web.pl
+   ; Html.hidden_input "abs" (Cgi.decode_url abs) |> Web.pl
+   ; Html.hidden_input "allSol" (Cgi.decode_url sol_num) |> Web.pl
+   ; Html.hidden_input Params.corpus_dir (Cgi.decode_url corpus_dir) |> Web.pl
+   ; Html.hidden_input Params.sentence_no (Cgi.decode_url sentence_no) |> Web.pl
+   ; Html.hidden_input "cpts" (Cgi.decoded_get "cpts" "" env) |> Web.pl
    ; Html.submit_input "Save sentence" |> Web.pl
    ; Web.cgi_end |> Web.pl
 
@@ -641,8 +640,3 @@ value safe_engine () =
   | _ -> abor Control.fatal_err_mess "Unexpected anomaly - broken session" 
   ]
 ;
-end (* Interface *)
-;
-Interface.safe_engine () (* Should always produce a compliant xhtml page *)
-;
-

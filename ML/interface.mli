@@ -12,6 +12,4 @@
   represented in a shared graph with their offset with respect to the input 
   sentence. *)
 
-module Interface : sig
 value safe_engine : unit -> unit;
-end;

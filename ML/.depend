@@ -230,17 +230,15 @@ automaton.cmx : web.cmx ../ZEN/trie.cmx ../ZEN/share.cmx phonetics.cmx \
     ../ZEN/list2.cmx ../ZEN/gen.cmx ../ZEN/deco.cmx canon.cmx auto.cmi
 interface.cmi :
 interface.cmo : ../ZEN/word.cmo web.cmo sanskrit.cmi phases.cmo paths.cmo \
-    nouns.cmi morphology.cmi morpho_html.cmo ../ZEN/mini.cmo \
-    load_transducers.cmo load_morphs.cmo interfaceParams.cmi html.cmo \
-    graph_segmenter.cmo ../ZEN/gen.cmo encode.cmo dispatcher.cmi \
-    ../ZEN/deco.cmo control.cmo checkpoints.cmo cgi.cmo canon.cmo \
-    automaton.cmo interface.cmi
+    params.cmi nouns.cmi morphology.cmi morpho_html.cmo ../ZEN/mini.cmo \
+    load_transducers.cmo load_morphs.cmo html.cmo graph_segmenter.cmo \
+    ../ZEN/gen.cmo encode.cmo dispatcher.cmi ../ZEN/deco.cmo control.cmo \
+    checkpoints.cmo cgi.cmo canon.cmo automaton.cmo interface.cmi
 interface.cmx : ../ZEN/word.cmx web.cmx sanskrit.cmx phases.cmx paths.cmx \
-    nouns.cmx morphology.cmi morpho_html.cmx ../ZEN/mini.cmx \
-    load_transducers.cmx load_morphs.cmx interfaceParams.cmx html.cmx \
-    graph_segmenter.cmx ../ZEN/gen.cmx encode.cmx dispatcher.cmx \
-    ../ZEN/deco.cmx control.cmx checkpoints.cmx cgi.cmx canon.cmx \
-    automaton.cmx interface.cmi
+    params.cmx nouns.cmx morphology.cmi morpho_html.cmx ../ZEN/mini.cmx \
+    load_transducers.cmx load_morphs.cmx html.cmx graph_segmenter.cmx \
+    ../ZEN/gen.cmx encode.cmx dispatcher.cmx ../ZEN/deco.cmx control.cmx \
+    checkpoints.cmx cgi.cmx canon.cmx automaton.cmx interface.cmi
 user_aid.cmo : ../ZEN/word.cmo web.cmo sanskrit.cmi phases.cmo paths.cmo \
     morpho_html.cmo html.cmo ../ZEN/gen.cmo encode.cmo ../ZEN/deco.cmo \
     control.cmo checkpoints.cmo cgi.cmo canon.cmo
@@ -251,9 +249,11 @@ reset_caches.cmo : web.cmo morphology.cmi ../ZEN/gen.cmo ../ZEN/deco.cmo \
     auto.cmi
 reset_caches.cmx : web.cmx morphology.cmi ../ZEN/gen.cmx ../ZEN/deco.cmx \
     auto.cmi
-interfaceParams.cmi :
-interfaceParams.cmo : interfaceParams.cmi
-interfaceParams.cmx : interfaceParams.cmi
+params.cmi :
+params.cmo : params.cmi
+params.cmx : params.cmi
+interface_cgi.cmo : interface.cmi
+interface_cgi.cmx : interface.cmx
 html.cmo : paths.cmo
 html.cmx : paths.cmx
 web.cmo : SCLpaths.cmo paths.cmo html.cmo date.cmo
@@ -278,13 +278,28 @@ mk_index_page.cmo : web.cmo paths.cmo html.cmo
 mk_index_page.cmx : web.cmx paths.cmx html.cmx
 mk_grammar_page.cmo : web.cmo paths.cmo html.cmo
 mk_grammar_page.cmx : web.cmx paths.cmx html.cmx
-mk_reader_page.cmo : web.cmo paths.cmo interfaceParams.cmi html.cmo \
-    control.cmo cgi.cmo
-mk_reader_page.cmx : web.cmx paths.cmx interfaceParams.cmx html.cmx \
-    control.cmx cgi.cmx
+mk_reader_page.cmo : web.cmo paths.cmo params.cmi html.cmo control.cmo \
+    cgi.cmo
+mk_reader_page.cmx : web.cmx paths.cmx params.cmx html.cmx control.cmx \
+    cgi.cmx
 mk_sandhi_page.cmo : web.cmo html.cmo
 mk_sandhi_page.cmx : web.cmx html.cmx
-manager.cmo : web.cmo interfaceParams.cmi html.cmo dir.cmi cgi.cmo
-manager.cmx : web.cmx interfaceParams.cmx html.cmx dir.cmx cgi.cmx
-save_corpus.cmo : web.cmo interfaceParams.cmi interface.cmi html.cmo cgi.cmo
-save_corpus.cmx : web.cmx interfaceParams.cmx interface.cmx html.cmx cgi.cmx
+corpus.cmi :
+corpus.cmo : web.cmo dir.cmi corpus.cmi
+corpus.cmx : web.cmx dir.cmx corpus.cmi
+corpus_manager.cmi :
+corpus_manager.cmo : ../ZEN/word.cmo web.cmo paths.cmo params.cmi \
+    multilingual.cmo html.cmo ../ZEN/gen.cmo corpus.cmi canon.cmo \
+    corpus_manager.cmi
+corpus_manager.cmx : ../ZEN/word.cmx web.cmx paths.cmx params.cmx \
+    multilingual.cmx html.cmx ../ZEN/gen.cmx corpus.cmx canon.cmx \
+    corpus_manager.cmi
+corpus_manager_cgi.cmo : params.cmi corpus_manager.cmi cgi.cmo
+corpus_manager_cgi.cmx : params.cmx corpus_manager.cmx cgi.cmx
+save_corpus.cmi :
+save_corpus.cmo : web.cmo sanskrit.cmi interface.cmi ../ZEN/gen.cmo \
+    encode.cmo corpus_manager.cmi save_corpus.cmi
+save_corpus.cmx : web.cmx sanskrit.cmx interface.cmx ../ZEN/gen.cmx \
+    encode.cmx corpus_manager.cmx save_corpus.cmi
+save_corpus_cgi.cmo : save_corpus.cmi params.cmi cgi.cmo
+save_corpus_cgi.cmx : save_corpus.cmx params.cmx cgi.cmx

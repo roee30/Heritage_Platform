@@ -63,8 +63,11 @@ value reader_page () = do
     (* Contextual information from past discourse *)
     let topic_mark = decode_url url_encoded_topic 
     and text = decode_url url_encoded_input in
-    let outdir = Cgi.decoded_get InterfaceParams.outdir env "" in
-    let outfile = Cgi.decoded_get InterfaceParams.outfile env "" in do
+
+    (* Corpus parameters *)
+    let corpus_dir = Cgi.decoded_get Params.corpus_dir "" env in
+    let sentence_no = Cgi.decoded_get Params.sentence_no "" env in do
+
   { pl (body_begin back_ground) 
   ; print_title (Some lang) reader_title
   ; pl center_begin 
@@ -103,8 +106,11 @@ value reader_page () = do
   ; pl " Mode "
   ; pl (option_select_default_id "mode_id" "mode"
         (interaction_modes_default url_encoded_mode))
-  ; Html.hidden_input InterfaceParams.outdir outdir |> Web.pl
-  ; Html.hidden_input InterfaceParams.outfile outfile |> Web.pl
+
+  (* Corpus parameters *)
+  ; Html.hidden_input Params.corpus_dir corpus_dir |> Web.pl
+  ; Html.hidden_input Params.sentence_no sentence_no |> Web.pl
+
   ; pl html_break 
   ; pl (submit_input "Read") 
   ; pl (reset_input "Reset")

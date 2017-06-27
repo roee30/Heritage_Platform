@@ -9,3 +9,7 @@ value subdirs : string -> (string -> string -> int) -> list string
 value files_with_ext :
   string -> string -> (string -> string -> int) -> list string
 ;
+(* [split path] splits [path] into substrings corresponding to the
+   subdirectories of [path].  *)
+value split : string -> list string
+;

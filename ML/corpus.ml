@@ -14,9 +14,7 @@ value int_of_file file =
 value cmp_section_file file file' =
   compare (int_of_file file) (int_of_file file')
 ;
-value section path =
-  let split file = Str.split (Str.regexp Filename.dir_sep) file in
-  List.length (split path) > 1
+value section path = List.length (Dir.split path) > 1
 ;
 value content subdir =
   let cmp_subdir =

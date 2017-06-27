@@ -17,3 +17,5 @@ value files_with_ext ext dir cmp =
   let files = List.filter (file_with_ext ext) (abs_files dir) in
   files |> basenames |> List.sort cmp
 ;
+value split path = Str.split (Str.regexp Filename.dir_sep) path
+;

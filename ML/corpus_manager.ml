@@ -68,14 +68,16 @@ value make dir =
   let meta_title = Html.title title in
   let style = Html.background Html.Chamois in
   do
-  { Web.maybe_http_header |> Web.pl
+  { Web.maybe_http_header ()
   ; Web.page_begin meta_title
   ; Html.body_begin style |> Web.pl
   ; Html.h1_title title |> Web.pl
+  ; Html.center_begin |> Web.pl
   (* ; Html.center_begin |> Web.pl *)
   (* add links at the top to navigate quickly in the corpus *)
   (* ; split dir |> List.iter Web.pl *)
   ; body dir
+  ; Html.center_end |> Web.pl
   (* ; Html.center_end |> Web.pl *)
   ; Web.page_end Html.default_language True }
 ;

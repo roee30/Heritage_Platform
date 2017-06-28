@@ -109,7 +109,7 @@ value option_select_default_id id label list_options =
 value text_input id control = 
   xml_empty_with_att "input" [ ("id",id); ("type","text"); ("name",control) ]
 ;
-value int_input ~id:id ~name:name ~step:step ~min:min ~max:max ~val:val =
+value int_input ~id ~name ~step ~min ~max ~val =
   let attrs =
     [ ("type", "number")
     ; ("id", id)
@@ -145,6 +145,21 @@ value reset_input label =
 value hidden_input name label = 
   xml_empty_with_att "input" [ ("type","hidden"); ("name",name); ("value",label) ]
 ;
+
+(*********)
+(* Lists *)
+(*********)
+
+(* List item *)
+value li item = xml_empty "li" ^ item
+;
+(* Ordered list *)
+value ol ~start items =
+  let ol = "ol" in
+  let list = String.concat "\n" (List.map li items) in
+  xml_begin_with_att ol [ ("start", string_of_int start) ] ^ list ^ xml_end ol
+;
+
 value fieldn name content = [ ("name",name); ("content",content) ]
 and fieldp name content = [ ("property",name); ("content",content) ]
 ;

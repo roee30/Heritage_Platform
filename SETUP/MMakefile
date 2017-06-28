@@ -509,7 +509,7 @@ releasedata: abrevs
 	fi # default language from lexicon parameter
 	cp -R $(DICO) $(SERVERPUBLICDIR) # hypertext Heritage dictionary
 	if [ $(SKTCORPUS) ]; then			\
-		cp -R $(SKTCORPUS) $(SERVERCORPUS);	\
+		cp -RT $(SKTCORPUS) $(SERVERCORPUS);	\
 		chown -R www-data $(SERVERCORPUS);	\
 	fi			# Sanskrit corpus
 # so that cgis invocations in DICO pages are relocated consistently with config:

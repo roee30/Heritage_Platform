@@ -13,3 +13,9 @@ value files_with_ext :
    subdirectories of [path].  *)
 value split : string -> list string
 ;
+(* URL-encode the given path (i.e. encode the directory separators).  *)
+value url_encode : string -> string
+;
+(* URL-decode the given path (i.e. decode the directory separators).  *)
+value url_decode : string -> string
+;

@@ -19,3 +19,19 @@ value files_with_ext ext dir cmp =
 ;
 value split path = Str.split (Str.regexp Filename.dir_sep) path
 ;
+value dir_sep_regexp = Str.regexp (Filename.dir_sep)
+;
+value url_encoded_dir_sep =
+  match Filename.dir_sep with
+  [ "/" -> "%2F"
+  | ":" -> "%3A"
+  | s -> s ]
+;
+value url_encoded_dir_sep_regexp = Str.regexp_case_fold url_encoded_dir_sep
+;
+value url_encode path =
+  Str.global_replace dir_sep_regexp url_encoded_dir_sep path
+;
+value url_decode path =
+  Str.global_replace url_encoded_dir_sep_regexp Filename.dir_sep path
+;

@@ -14,8 +14,9 @@ value make ~corpus_dir:corpus_dir ~sentence_no:sentence_no ~translit:translit
     chunker encode text
   in
   let save_sentence file =
+    let mode = [ Open_wronly; Open_creat; Open_trunc; Open_text ] in
     do
-    { Web.output_channel.val := open_out file
+    { Web.output_channel.val := open_out_gen mode 0o666 file
     ; Interface.safe_engine ()
     ; Gen.dump sentence metadata_file
     ; close_out Web.output_channel.val

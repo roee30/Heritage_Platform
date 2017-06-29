@@ -27,6 +27,7 @@ makefile_keys=["TEMPLATE","PLATFORM","TRANSLIT","LEXICON","DISPLAY","WARN",
 #"SCLURL","SCLINSTALLDIR","TEMPAREA","OUTPUTFONT",
 counter_keys=["CAPTION"]
 version_keys=["VERSION","DATE"]
+cgi_keys = ["CGIBINURL", "CGIEXT"]
 TEMPLATE='#'
 WARN='# WARNING - Produced from MMakefile by configure - Do not edit manually'
 
@@ -78,6 +79,8 @@ def generate(config_path):
     for key in counter_keys:
         site_entry_page_content = site_entry_page_content.replace('#'+key,items[key])
     for key in version_keys:
+        site_entry_page_content = site_entry_page_content.replace('#'+key,items[key])
+    for key in cgi_keys:
         site_entry_page_content = site_entry_page_content.replace('#'+key,items[key])
 
     # ENGLISH INDEX PAGE

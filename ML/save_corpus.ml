@@ -2,7 +2,6 @@ value make ~corpus_dir:corpus_dir ~sentence_no:sentence_no ~translit:translit
   ~unsandhied:unsandhied ~text:text =
   let sentence_no = string_of_int sentence_no in
   let file = Web.corpus_dir ^ corpus_dir ^ sentence_no ^ ".html" in
-  let metadata_file = Web.corpus_dir ^ corpus_dir ^ "." ^ sentence_no in
   let sentence =
     let encode = Encode.switch_code translit in
     let chunker =
@@ -11,13 +10,13 @@ value make ~corpus_dir:corpus_dir ~sentence_no:sentence_no ~translit:translit
       else                      (* blanks non-significant *)
         Sanskrit.read_sanskrit
     in
-    chunker encode text
+    { Corpus.text = chunker encode text }
   in
   let save_sentence file =
     do
     { Web.output_channel.val := open_out file
     ; Interface.safe_engine ()
-    ; Gen.dump sentence metadata_file
+    ; Corpus.dump_sentence_metadata sentence corpus_dir sentence_no
     ; close_out Web.output_channel.val
     ; Web.output_channel.val := stdout }
   in

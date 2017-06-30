@@ -39,6 +39,14 @@ SKTCORPUS = #SKTCORPUS
 # Path to the corpus in the server area.
 SERVERCORPUS = $(SERVERPUBLICDIR)CORPUS
 
+# Macro to extract information from the Apache configuration.
+apache_config_extract = $(shell apachectl -S | grep $(1) |		\
+				cut -d ' ' -f 2 | cut -d '=' -f 2)
+
+# User and group under which CGIs are executed.
+APACHE_USER = $(call apache_config_extract,"User")
+APACHE_GROUP = $(call apache_config_extract,"Group")
+
 # Virtual path for make
 VPATH=ML
 
@@ -509,8 +517,10 @@ releasedata: abrevs
 	fi # default language from lexicon parameter
 	cp -R $(DICO) $(SERVERPUBLICDIR) # hypertext Heritage dictionary
 	if [ $(SKTCORPUS) ]; then			\
-		cp -RT $(SKTCORPUS) $(SERVERCORPUS);	\
-		chown -R www-data $(SERVERCORPUS);	\
+		mkdir -p $(SERVERCORPUS);		\
+		cp -R $(SKTCORPUS)* $(SERVERCORPUS);	\
+		chown -R $(APACHE_USER):$(APACHE_GROUP)	\
+			$(SERVERCORPUS);		\
 	fi			# Sanskrit corpus
 # so that cgis invocations in DICO pages are relocated consistently with config:
 	cd $(SERVERPUBLICDIR) && for i in `ls DICO/*.html`; do (\

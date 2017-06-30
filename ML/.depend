@@ -289,10 +289,10 @@ corpus.cmo : web.cmo dir.cmi corpus.cmi
 corpus.cmx : web.cmx dir.cmx corpus.cmi
 corpus_manager.cmi :
 corpus_manager.cmo : ../ZEN/word.cmo web.cmo paths.cmo params.cmi \
-    multilingual.cmo html.cmo ../ZEN/gen.cmo corpus.cmi canon.cmo \
+    multilingual.cmo html.cmo ../ZEN/gen.cmo dir.cmi corpus.cmi canon.cmo \
     corpus_manager.cmi
 corpus_manager.cmx : ../ZEN/word.cmx web.cmx paths.cmx params.cmx \
-    multilingual.cmx html.cmx ../ZEN/gen.cmx corpus.cmx canon.cmx \
+    multilingual.cmx html.cmx ../ZEN/gen.cmx dir.cmx corpus.cmx canon.cmx \
     corpus_manager.cmi
 corpus_manager_cgi.cmo : params.cmi corpus_manager.cmi cgi.cmo
 corpus_manager_cgi.cmx : params.cmx corpus_manager.cmx cgi.cmx

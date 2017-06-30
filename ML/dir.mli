@@ -19,3 +19,5 @@ value url_encode : string -> string
 (* URL-decode the given path (i.e. decode the directory separators).  *)
 value url_decode : string -> string
 ;
+value url_encoded_dir_sep : string
+;

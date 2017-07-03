@@ -595,6 +595,7 @@ value graph_engine () = do
      else ()
 
      (* Save sentence button *)
+   ; Html.center_begin |> Web.pl
    ; Web.cgi_begin Web.save_corpus_cgi "" |> Web.pl
    ; Html.hidden_input "t" translit |> Web.pl
    ; Html.hidden_input "lex" lex |> Web.pl
@@ -611,6 +612,7 @@ value graph_engine () = do
    ; Html.hidden_input "cpts" (Cgi.decoded_get "cpts" "" env) |> Web.pl
    ; Html.submit_input "Save sentence" |> Web.pl
    ; Web.cgi_end |> Web.pl
+   ; Html.center_end |> Web.pl
 
    ; close_page_with_margin ()
    ; page_end lang True

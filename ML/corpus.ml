@@ -5,7 +5,7 @@ type content =
 value chop_extension file =
   try Filename.chop_extension file with [ Invalid_argument _ -> file ]
 ;
-value int_of_file file =
+value sentence_id file =
   file
   |> Filename.basename
   |> chop_extension
@@ -14,7 +14,7 @@ value int_of_file file =
 value content subdir =
   match Dir.subdirs (Web.corpus_dir ^ subdir) String.compare with
   [ [] ->
-    let cmp file file' = compare (int_of_file file) (int_of_file file') in
+    let cmp file file' = compare (sentence_id file) (sentence_id file') in
     Sentences (Dir.files_with_ext "html" (Web.corpus_dir ^ subdir) cmp)
   | subdirs -> Sections subdirs ]
 ;

@@ -17,3 +17,6 @@ value gobble_sentence_metadata : string -> string -> sentence_metadata
 ;
 value dump_sentence_metadata : sentence_metadata -> string -> string -> unit
 ;
+(* Return the identifier of the sentence stored in the given file.  *)
+value sentence_id : string -> int
+;

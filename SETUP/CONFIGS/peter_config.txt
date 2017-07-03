@@ -8,6 +8,6 @@ SKTDIRURL='/SKT/'
 SKTRESOURCES='/your_path_to/Heritage_Resources/'
 CGIBINURL='/cgi-bin/SKT/'
 CGIDIR='/Library/WebServer/CGI-Executables/SKT/'
-CGIEXT=‘.cgi’
+CGIEXT='.cgi'
 MOUSEACTION='OVER'
 CAPTION='Mirror site Sanskrit Library'

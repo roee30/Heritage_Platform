@@ -254,8 +254,8 @@ params.cmo : params.cmi
 params.cmx : params.cmi
 interface_cgi.cmo : interface.cmi
 interface_cgi.cmx : interface.cmx
-html.cmo : paths.cmo
-html.cmx : paths.cmx
+html.cmo : paths.cmo ../ZEN/gen.cmo
+html.cmx : paths.cmx ../ZEN/gen.cmx
 web.cmo : SCLpaths.cmo paths.cmo html.cmo date.cmo
 web.cmx : SCLpaths.cmx paths.cmx html.cmx date.cmx
 css.cmo : web.cmo html.cmo
@@ -284,22 +284,21 @@ mk_reader_page.cmx : web.cmx paths.cmx params.cmx html.cmx control.cmx \
     cgi.cmx
 mk_sandhi_page.cmo : web.cmo html.cmo
 mk_sandhi_page.cmx : web.cmx html.cmx
-corpus.cmi :
-corpus.cmo : web.cmo dir.cmi corpus.cmi
-corpus.cmx : web.cmx dir.cmx corpus.cmi
+mk_corpus_page.cmo : web.cmo html.cmo
+mk_corpus_page.cmx : web.cmx html.cmx
+corpus.cmi : ../ZEN/word.cmo
+corpus.cmo : ../ZEN/word.cmo web.cmo sanskrit.cmi interface.cmi \
+    ../ZEN/gen.cmo encode.cmo dir.cmi corpus.cmi
+corpus.cmx : ../ZEN/word.cmx web.cmx sanskrit.cmx interface.cmx \
+    ../ZEN/gen.cmx encode.cmx dir.cmx corpus.cmi
 corpus_manager.cmi :
-corpus_manager.cmo : ../ZEN/word.cmo web.cmo paths.cmo params.cmi \
-    multilingual.cmo html.cmo ../ZEN/gen.cmo dir.cmi corpus.cmi canon.cmo \
-    corpus_manager.cmi
-corpus_manager.cmx : ../ZEN/word.cmx web.cmx paths.cmx params.cmx \
-    multilingual.cmx html.cmx ../ZEN/gen.cmx dir.cmx corpus.cmx canon.cmx \
-    corpus_manager.cmi
+corpus_manager.cmo : web.cmo paths.cmo params.cmi multilingual.cmo html.cmo \
+    dir.cmi corpus.cmi canon.cmo corpus_manager.cmi
+corpus_manager.cmx : web.cmx paths.cmx params.cmx multilingual.cmx html.cmx \
+    dir.cmx corpus.cmx canon.cmx corpus_manager.cmi
 corpus_manager_cgi.cmo : params.cmi corpus_manager.cmi cgi.cmo
 corpus_manager_cgi.cmx : params.cmx corpus_manager.cmx cgi.cmx
-save_corpus.cmi :
-save_corpus.cmo : web.cmo sanskrit.cmi interface.cmi ../ZEN/gen.cmo \
-    encode.cmo corpus_manager.cmi save_corpus.cmi
-save_corpus.cmx : web.cmx sanskrit.cmx interface.cmx ../ZEN/gen.cmx \
-    encode.cmx corpus_manager.cmx save_corpus.cmi
-save_corpus_cgi.cmo : save_corpus.cmi params.cmi cgi.cmo
-save_corpus_cgi.cmx : save_corpus.cmx params.cmx cgi.cmx
+save_corpus_cgi.cmo : web.cmo params.cmi corpus_manager.cmi corpus.cmi \
+    cgi.cmo
+save_corpus_cgi.cmx : web.cmx params.cmx corpus_manager.cmx corpus.cmx \
+    cgi.cmx

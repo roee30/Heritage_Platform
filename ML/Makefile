@@ -301,8 +301,8 @@ mk_sandhi_page: mk_sandhi_page.cmx
 SCLpaths.cmx web.cmx mk_sandhi_page.cmx -o mk_sandhi_page
 
 mk_corpus_page: mk_corpus_page.cmx
-	$(LINK) paths.cmx version.cmx date.cmx SCLpaths.cmx html.cmx	\
-		web.cmx $< -o $@
+	$(LINK) gen.cmx paths.cmx version.cmx date.cmx SCLpaths.cmx	\
+		html.cmx web.cmx $< -o $@
 
 # site_pages must be recomputed after configuration and creation of DICO dir
 # the style sheet must be recomputed, since it contains absolute URLs as well

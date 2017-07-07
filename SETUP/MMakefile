@@ -97,7 +97,7 @@ DOC_IMAGES=IMAGES/lexer10.jpg IMAGES/lexer17.jpg IMAGES/lexer40.jpg # Copy GH
 # NB. Use of gif vs others formats such as jpg is due to browser compatibility
 
 # Scripts
-SCRIPTS=JAVASCRIPT/utf82VH.js JAVASCRIPT/dragtable.js
+SCRIPTS=JAVASCRIPT/utf82VH.js JAVASCRIPT/dragtable.js JAVASCRIPT/util.js
 
 # Next are copyright specific images
 SITE_IMAGES=IMAGES/yinyang.gif IMAGES/panini.jpg IMAGES/spin-new.gif \

@@ -366,6 +366,11 @@ value deva_read_script dyn =
                    else deva_reader in
   javascript ref
 ;
+value js_util_script dyn =
+  let js_util_file = "util.js" in
+  let prefix = if dyn then dico_page_url else (fun x -> x) in
+  javascript (prefix js_util_file)
+;
 value css_link dyn = 
   let ref = if dyn then style_sheet_url (* dynamic page, absolute URL *)
             else style_sheet (* static page in DICO, relative URL *) in
@@ -397,6 +402,7 @@ value page_begin_dyn dyn title = do
   ; pl (css_link dyn)                               (* . *)
   ; pl (favicon dyn)                                (* . *)
   ; pl (deva_read_script dyn) (* devanagari input *)(* . *)
+  ; pl (js_util_script dyn)
   ; pl (xml_end "head")                             (* ) *)
   }
 ;

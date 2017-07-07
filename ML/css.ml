@@ -51,7 +51,7 @@ value sheets = (* cascading style sheets data *)
   ; ("td",Grey_back); ("td",Pink_back); ("td",Spacing20)
   ; ("td",Light_blue_back); ("td",Lavender_back); ("td",Lawngreen_back)
   ; ("th",Cell5); ("th",Cell10); ("th",Border2); ("td",Center_)
-  ; ("table",Centered); ("table",Tcenter)
+  ; ("table",Centered); ("table",Tcenter) ; ("", Hidden_)
   ];
 
 value css_decls =

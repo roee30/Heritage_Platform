@@ -56,8 +56,7 @@ mk_corpus_page.ml
 
 # CORPUS package - corpus manager
 CORPUS = corpus.mli corpus.ml corpus_manager.mli corpus_manager.ml	\
-	corpus_manager_cgi.ml save_corpus.mli save_corpus.ml		\
-	save_corpus_cgi.ml
+	corpus_manager_cgi.ml save_corpus_cgi.ml
 
 # extra file SCLpaths.ml for SCL interfacing - not distributed.
 
@@ -258,7 +257,7 @@ save_corpus: save_corpus_cgi.cmx
 		share.cmx minimap.cmx mini.cmx nums.cmxa		\
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx interface.cmx multilingual.cmx dir.cmx	\
-		corpus.cmx corpus_manager.cmx save_corpus.cmx $< -o $@
+		corpus.cmx corpus_manager.cmx $< -o $@
 
 mk_corpus: mk_corpus.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\

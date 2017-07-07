@@ -306,6 +306,7 @@ and indexer_page_url l = dico_page_url (dico_index_page l)
 and reader_page_url l  = dico_page_url (dico_reader_page l)
 and grammar_page_url l = dico_page_url (dico_grammar_page l)
 and sandhi_page_url l  = dico_page_url (dico_sandhi_page l)
+and corpus_page_url l  = dico_page_url (dico_corpus_page l)
 ; 
 value image name = web_images_url ^ name
 ;
@@ -511,6 +512,7 @@ value indexer_page l = dico_page (dico_index_page l) (* [mk_index_page]   *)
 and grammar_page l = dico_page (dico_grammar_page l) (* [mk_grammar_page] *) 
 and reader_page l = dico_page (dico_reader_page l)   (* [mk_reader_page]  *) 
 and sandhi_page l = dico_page (dico_sandhi_page l)   (* [mk_sandhi_page]  *) 
+and corpus_page l = dico_page (dico_corpus_page l)   (* [mk_corpus_page]  *)
 ; 
 
 value print_site_map dyn lang = (* the various Web services of the site *)
@@ -521,7 +523,7 @@ value print_site_map dyn lang = (* the various Web services of the site *)
   ; ps (anchor_ref (grammar_page_url lang) (emph "Grammar")); pl " | "
   ; ps (anchor_ref (sandhi_page_url lang) (emph "Sandhi")); pl " | "
   ; ps (anchor_ref (reader_page_url lang) (emph "Reader")); pl " | "
-  ; ps (anchor_ref corpus_manager_cgi (emph "Corpus")); pl " | "
+  ; ps (anchor_ref (corpus_page_url lang) (emph "Corpus")); pl " | "
   ; ps (anchor_ref (faq_page_url lang) (emph "Help")); pl " | "
   ; pl (anchor_ref (portal_page_url lang) (emph "Portal"))
   }
@@ -532,7 +534,7 @@ value print_site_map dyn lang = (* the various Web services of the site *)
   ; ps (anchor_ref (dico_grammar_page lang) (emph "Grammar")); pl " | "
   ; ps (anchor_ref (dico_sandhi_page lang) (emph "Sandhi")); pl " | "
   ; ps (anchor_ref (dico_reader_page lang) (emph "Reader")); pl " | "
-  ; ps (anchor_ref corpus_manager_cgi (emph "Corpus")); pl " | "
+  ; ps (anchor_ref (dico_corpus_page lang) (emph "Corpus")); pl " | "
   ; ps (anchor_ref (rel_faq_page_url lang) (emph "Help")); pl " | "
   ; pl (anchor_ref (rel_portal_page_url lang) (emph "Portal"))
   }

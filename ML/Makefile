@@ -51,7 +51,8 @@ user_aid.ml reset_caches.ml params.mli params.ml interface_cgi.ml
 
 # WEB package - HTML, HTTP, CGI utilities for Web interface
 WEB=html.ml web.ml css.ml cgi.ml morpho_html.ml chapters.ml morpho_scl.ml \
-mk_index_page.ml mk_grammar_page.ml mk_reader_page.ml mk_sandhi_page.ml
+mk_index_page.ml mk_grammar_page.ml mk_reader_page.ml mk_sandhi_page.ml \
+mk_corpus_page.ml
 
 # CORPUS package - corpus manager
 CORPUS = corpus.mli corpus.ml corpus_manager.mli corpus_manager.ml	\
@@ -94,7 +95,8 @@ test_version: paths.cmx gen.cmx version.cmx control.cmx test_stamp.cmx
 	$(LINK) paths.cmx gen.cmx version.cmx control.cmx  test_stamp.cmx \
 -o test_stamp
         
-static_pages: css mk_index_page mk_grammar_page mk_sandhi_page mk_reader_page 
+static_pages: css mk_index_page mk_grammar_page mk_sandhi_page mk_reader_page \
+		mk_corpus_page
 
 all: engine static_pages reset_caches sandhi_test
 
@@ -258,6 +260,21 @@ save_corpus: save_corpus_cgi.cmx
 		params.cmx interface.cmx multilingual.cmx dir.cmx	\
 		corpus.cmx corpus_manager.cmx save_corpus.cmx $< -o $@
 
+mk_corpus: mk_corpus.cmx
+	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
+		version.cmx date.cmx control.cmx word.cmx canon.cmx	\
+		zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
+		skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx	\
+		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx web.cmx	\
+		naming.cmx morpho_string.cmx morpho.cmx			\
+		load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx	\
+		order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx	\
+		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
+		share.cmx minimap.cmx mini.cmx nums.cmxa		\
+		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
+		params.cmx interface.cmx multilingual.cmx dir.cmx	\
+		corpus.cmx corpus_manager.cmx $< -o $@
+
 css: css.cmx
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx html.cmx \
 SCLpaths.cmx web.cmx css.cmx -o css
@@ -284,9 +301,14 @@ mk_sandhi_page: mk_sandhi_page.cmx
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx html.cmx \
 SCLpaths.cmx web.cmx mk_sandhi_page.cmx -o mk_sandhi_page
 
+mk_corpus_page: mk_corpus_page.cmx
+	$(LINK) paths.cmx version.cmx date.cmx SCLpaths.cmx html.cmx	\
+		web.cmx $< -o $@
+
 # site_pages must be recomputed after configuration and creation of DICO dir
 # the style sheet must be recomputed, since it contains absolute URLs as well
-site_pages: mk_index_page mk_grammar_page mk_reader_page mk_sandhi_page css
+site_pages: mk_index_page mk_grammar_page mk_reader_page mk_sandhi_page	\
+		mk_corpus_page css
 	./mk_index_page
 	cd ../DICO; ln -f index.fr.html index.html # backward compatibility
 	./mk_grammar_page
@@ -298,6 +320,8 @@ site_pages: mk_index_page mk_grammar_page mk_reader_page mk_sandhi_page css
 	cd ../DICO; ln -f reader.fr.html reader.html # id
 	./mk_sandhi_page
 	cd ../DICO; ln -f sandhi.fr.html sandhi.html # id
+	./mk_corpus_page
+	cd ../DICO; ln -f corpus.fr.html corpus.html # id
 # XML info file copied in DICO by make web_services in main Makefile
 	./css 
 # but install sets index.html to .fr. ou .en. according to config lexicon choice 
@@ -353,7 +377,7 @@ clean:
 	rm -f *.cmo *.cmi *.cmx *.ppi *.ppo *.o *.annot *.cmt *.cmti
 	rm -f css indexer indexerd sandhier reader parser lemmatizer \
 declension conjugation mk_index_page mk_grammar_page mk_reader_page regression \
-mk_sandhi_page sandhi_test reset_caches interface user_aid \
+mk_sandhi_page mk_corpus_page sandhi_test reset_caches interface user_aid \
 parse_apte tag_apte corpus_manager save_corpus
 #	make dico.cmi auto.cmi conj_infos.cmi # needed to get dependencies right 
 

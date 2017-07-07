@@ -257,7 +257,8 @@ ML/reset_caches.ml ML/params.mli ML/params.ml ML/interface_cgi.ml
 # WEB package - HTML, HTTP, CGI ad-hoc utilities for Web interface
 WEB=ML/html.ml ML/web.ml ML/css.ml ML/cgi.ml ML/morpho_html.ml ML/chapters.ml \
 ML/mk_index_page.ml ML/mk_grammar_page.ml ML/mk_reader_page.ml \
-ML/mk_sandhi_page.ml ML/morpho_scl.ml ML/compute_mw_links.ml
+ML/mk_sandhi_page.ml ML/mk_corpus_page.ml ML/morpho_scl.ml \
+ML/compute_mw_links.ml
 
 # TREE package - tree bank manager and syntax analyser - deprecated
 TREE=ML/stemmer.ml ML/parse_tree.ml ML/parse_apte.ml ML/tag_tree.ml \
@@ -466,6 +467,9 @@ grammar.html: mk_grammar_page
 
 sandhi.html: mk_sandhi_page
 	ML/mk_sandhi_page
+
+corpus.html: mk_corpus_page
+	ML/mk_corpus_page
 
 style.css: css
 	ML/css

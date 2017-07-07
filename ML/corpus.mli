@@ -5,7 +5,8 @@
    [Sections]).  *)
 type content =
   [ Sections of list string
-  | Sentences of list string ]
+  | Sentences of list string
+  ]
 ;
 (* List the content of the given corpus subdirectory.  *)
 value content : string -> content
@@ -19,4 +20,8 @@ value dump_sentence_metadata : sentence_metadata -> string -> string -> unit
 ;
 (* Return the identifier of the sentence stored in the given file.  *)
 value sentence_id : string -> int
+;
+value save_sentence :
+  ~corpus_dir:string -> ~sentence_no:int -> ~translit:string ->
+  ~unsandhied:bool -> ~text:string -> unit
 ;

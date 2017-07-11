@@ -199,6 +199,9 @@ CGIMANAGER = sktcorpus$(CGIEXT)
 # CGI name under which the program that enriches the corpus is installed
 # on the server.
 CGISAVECORPUS = savecorpus$(CGIEXT)
+# CGI name under which the program that creates a corpus subdirectory is
+# installed on the server.
+CGIMKDIRCORPUS = mkdircorpus$(CGIEXT)
 
 # what mouse action to use for viewing lemmatization
 MOUSEACTION=#MOUSEACTION
@@ -267,7 +270,8 @@ ML/tag_apte.ml
 # CORPUS package - corpus manager
 CORPUS = ML/corpus.mli ML/corpus.ml ML/corpus_manager.mli	\
 	ML/corpus_manager.ml ML/corpus_manager_cgi.ml		\
-	ML/save_corpus_cgi.ml ML/mk_corpus.ml
+	ML/save_corpus_cgi.ml ML/mkdir_corpus_cgi.ml		\
+	ML/mk_corpus.ml
 
 DEBUG= ML/morpho_debug.ml ML/debug.ml
 
@@ -436,6 +440,7 @@ echo 'and cgi_graph = "$(CGIGRAPH)"'; \
 echo 'and cgi_user_aid = "$(CGIUSER)"'; \
 echo 'and cgi_corpus_manager = "$(CGIMANAGER)"'; \
 echo 'and cgi_save_corpus = "$(CGISAVECORPUS)"'; \
+echo 'and cgi_mkdir_corpus = "$(CGIMKDIRCORPUS)"'; \
 echo 'and mouse_action = "$(MOUSEACTION)";') > ML/paths.ml
 	$(MAKE) version
 
@@ -504,6 +509,7 @@ releasecgi:
 	$(MAKE) sandhi
 	$(MAKE) corpus_manager
 	$(MAKE) save_corpus
+	$(MAKE) mkdir_corpus
 
 abrevs:
 	cp $(BOOK)/abrevs.pdf SITE # for documenting the Website with abbreviations
@@ -598,6 +604,10 @@ corpus_manager: ML/corpus_manager
 .PHONY: save_corpus
 save_corpus: ML/save_corpus
 	cp $< $(CGIDIR)$(CGISAVECORPUS)
+
+.PHONY: mkdir_corpus
+mkdir_corpus: ML/mkdir_corpus
+	cp $< $(CGIDIR)$(CGIMKDIRCORPUS)
 
 #### Version Management and Distribution are now managed by Git ####
 

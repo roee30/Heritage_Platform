@@ -292,15 +292,24 @@ corpus.cmo : ../ZEN/word.cmo web.cmo sanskrit.cmi params.cmi interface.cmi \
 corpus.cmx : ../ZEN/word.cmx web.cmx sanskrit.cmx params.cmx interface.cmx \
     ../ZEN/gen.cmx encode.cmx dir.cmx cgi.cmx corpus.cmi
 corpus_manager.cmi :
-corpus_manager.cmo : web.cmo paths.cmo params.cmi multilingual.cmo html.cmo \
-    dir.cmi corpus.cmi canon.cmo corpus_manager.cmi
-corpus_manager.cmx : web.cmx paths.cmx params.cmx multilingual.cmx html.cmx \
-    dir.cmx corpus.cmx canon.cmx corpus_manager.cmi
+corpus_manager.cmo : web.cmo paths.cmo params.cmi multilingual.cmo \
+    mkdir_corpus_params.cmi html.cmo dir.cmi corpus.cmi canon.cmo \
+    corpus_manager.cmi
+corpus_manager.cmx : web.cmx paths.cmx params.cmx multilingual.cmx \
+    mkdir_corpus_params.cmx html.cmx dir.cmx corpus.cmx canon.cmx \
+    corpus_manager.cmi
 corpus_manager_cgi.cmo : params.cmi corpus_manager.cmi cgi.cmo
 corpus_manager_cgi.cmx : params.cmx corpus_manager.cmx cgi.cmx
 save_corpus_cgi.cmo : web.cmo params.cmi corpus_manager.cmi corpus.cmi \
     cgi.cmo
 save_corpus_cgi.cmx : web.cmx params.cmx corpus_manager.cmx corpus.cmx \
     cgi.cmx
+mkdir_corpus_params.cmi :
+mkdir_corpus_params.cmo : params.cmi mkdir_corpus_params.cmi
+mkdir_corpus_params.cmx : params.cmx mkdir_corpus_params.cmi
+mkdir_corpus_cgi.cmo : web.cmo mkdir_corpus_params.cmi corpus_manager.cmi \
+    corpus.cmi cgi.cmo
+mkdir_corpus_cgi.cmx : web.cmx mkdir_corpus_params.cmx corpus_manager.cmx \
+    corpus.cmx cgi.cmx
 mk_corpus.cmo : paths.cmo params.cmi corpus.cmi
 mk_corpus.cmx : paths.cmx params.cmx corpus.cmx

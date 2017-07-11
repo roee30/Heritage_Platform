@@ -21,8 +21,7 @@ value dump_sentence_metadata : sentence_metadata -> string -> string -> unit
 (* Return the identifier of the sentence stored in the given file.  *)
 value sentence_id : string -> int
 ;
-value save_sentence :
-  ~corpus_location:string -> ~query:string -> unit
-(* ~corpus_dir:string -> ~sentence_no:int -> *)
-  (* ~translit:string -> ~unsandhied:bool -> ~text:string -> unit *)
+value save_sentence : ~corpus_location:string -> ~query:string -> unit
+;
+value mkdir : ~corpus_location:string -> ~dirname:string -> unit
 ;

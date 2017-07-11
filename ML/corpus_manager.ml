@@ -92,7 +92,7 @@ value uplinks' dir =
    in
    List.map uplink updirs
 ;
-value uplinks dir final_sep =
+value uplinks dir =
   let dir_sep = " / " in
   let links = uplinks' dir in
   let cur_dir =
@@ -101,7 +101,7 @@ value uplinks dir final_sep =
     | _ -> dir_sep ^ Filename.basename dir
     ]
   in
-  String.concat dir_sep links ^ cur_dir ^ if final_sep then dir_sep else ""
+  String.concat dir_sep links ^ cur_dir
 ;
 (* Display sentences with format "sentence || sentno" like in citations
    file.  *)
@@ -141,7 +141,7 @@ value subdir_selection dir subdirs =
 ;
 value add_sentence_form dir gap =
   Web.cgi_begin (Web.cgi_bin "skt_heritage") "" ^
-  uplinks dir True ^ "Sentence number: " ^
+  uplinks dir ^ " / Sentence number: " ^
   Html.hidden_input Params.corpus_dir dir ^
   Html.int_input
     ~name:Params.sentence_no
@@ -187,26 +187,39 @@ value group_sentences dir files =
 ;
 value body dir =
   match Corpus.content (Web.corpus_dir ^ dir) with
+  (* When files = [], it is possible to create a subdir or add a sentence...  *)
   [ Corpus.Sentences files ->
     let groups = group_sentences dir files in
     do
     { Html.h2_begin Html.B2 |> Web.pl
-    ; uplinks dir False |> Web.pl
+    ; uplinks dir |> Web.pl
     ; Html.h2_end |> Web.pl
     ; groups |> List.map (htmlify_group dir) |> List.iter Web.pl
     ; Html.html_break |> Web.pl
     }
   | Corpus.Sections subdirs ->
     let selection_prompt =
-      uplinks dir (dir <> "") ^ subdir_selection dir subdirs  ^ " " ^
-      Html.submit_input "Select"
+      "Explore " ^ subdir_selection dir subdirs  ^ " " ^ Html.submit_input "Go"
     in
     do
-    { Web.cgi_begin Web.corpus_manager_cgi "" |> Web.pl
-    ; Html.h2_begin Html.C2 |> Web.pl
-    ; selection_prompt |> Web.pl
+    { Html.center_begin |> Web.pl
+    ; Html.h2_begin Html.B2 |> Web.pl
+    ; uplinks dir |> Web.pl
     ; Html.h2_end |> Web.pl
+    ; Web.cgi_begin Web.corpus_manager_cgi "" |> Web.pl
+    ; Html.h3_begin Html.B3 |> Web.pl
+    ; selection_prompt |> Web.pl
+    ; Html.h3_end |> Web.pl
     ; Web.cgi_end |> Web.pl
+    ; Web.cgi_begin Web.mkdir_corpus_cgi "" |> Web.pl
+    ; Html.h3_begin Html.B3 |> Web.pl
+    ; "New heading: " |> Web.pl
+    ; Html.hidden_input Mkdir_corpus_params.parent_dir dir |> Web.pl
+    ; Html.text_input "foo" Mkdir_corpus_params.dirname |> Web.pl
+    ; Html.submit_input "Create" |> Web.pl
+    ; Html.h3_end |> Web.pl
+    ; Web.cgi_end |> Web.pl
+    ; Html.center_end |> Web.pl
     }
   ]
 ;

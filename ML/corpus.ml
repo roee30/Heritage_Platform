@@ -61,3 +61,6 @@ value save_sentence ~corpus_location ~query =
   ; Web.output_channel.val := stdout
   }
 ;
+value mkdir ~corpus_location ~dirname =
+  Unix.mkdir (corpus_location ^ dirname) 0o755
+;

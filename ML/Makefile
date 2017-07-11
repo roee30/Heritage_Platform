@@ -56,7 +56,9 @@ mk_corpus_page.ml
 
 # CORPUS package - corpus manager
 CORPUS = corpus.mli corpus.ml corpus_manager.mli corpus_manager.ml	\
-	corpus_manager_cgi.ml save_corpus_cgi.ml mk_corpus.ml
+	corpus_manager_cgi.ml save_corpus_cgi.ml			\
+	mkdir_corpus_params.mli mkdir_corpus_params.ml			\
+	mkdir_corpus_cgi.ml mk_corpus.ml
 
 # extra file SCLpaths.ml for SCL interfacing - not distributed.
 
@@ -147,7 +149,7 @@ bank_lexer.cmo tag_tree.cmo tag_apte.cmo
 
 cgis: skt_morph.cmi auto.cmi indexer indexerd declension conjugation \
 lemmatizer reader parser sandhier reader interface user_aid \
-corpus_manager save_corpus
+corpus_manager save_corpus mkdir_corpus
 
 indexer: indexer.cmx
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
@@ -242,7 +244,7 @@ corpus_manager: corpus_manager_cgi.cmx
 		share.cmx minimap.cmx mini.cmx nums.cmxa		\
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx interface.cmx multilingual.cmx dir.cmx	\
-		corpus.cmx corpus_manager.cmx $< -o $@
+		corpus.cmx mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
 
 save_corpus: save_corpus_cgi.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
@@ -257,7 +259,22 @@ save_corpus: save_corpus_cgi.cmx
 		share.cmx minimap.cmx mini.cmx nums.cmxa		\
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx interface.cmx multilingual.cmx dir.cmx	\
-		corpus.cmx corpus_manager.cmx $< -o $@
+		corpus.cmx mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
+
+mkdir_corpus: mkdir_corpus_cgi.cmx
+	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
+		version.cmx date.cmx control.cmx word.cmx canon.cmx	\
+		zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
+		skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx	\
+		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx web.cmx	\
+		naming.cmx morpho_string.cmx morpho.cmx			\
+		load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx	\
+		order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx	\
+		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
+		share.cmx minimap.cmx mini.cmx nums.cmxa		\
+		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
+		params.cmx interface.cmx multilingual.cmx dir.cmx	\
+		corpus.cmx mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
 
 mk_corpus: mk_corpus.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
@@ -272,7 +289,7 @@ mk_corpus: mk_corpus.cmx
 		share.cmx minimap.cmx mini.cmx nums.cmxa		\
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx interface.cmx multilingual.cmx dir.cmx	\
-		corpus.cmx corpus_manager.cmx $< -o $@
+		corpus.cmx mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
 
 css: css.cmx
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx html.cmx \
@@ -377,7 +394,7 @@ clean:
 	rm -f css indexer indexerd sandhier reader parser lemmatizer \
 declension conjugation mk_index_page mk_grammar_page mk_reader_page regression \
 mk_sandhi_page mk_corpus_page sandhi_test reset_caches interface user_aid \
-parse_apte tag_apte corpus_manager save_corpus mk_corpus
+parse_apte tag_apte corpus_manager save_corpus mkdir_corpus mk_corpus
 #	make dico.cmi auto.cmi conj_infos.cmi # needed to get dependencies right 
 
 .SUFFIXES: .ml .mli .cmx .cmo .cmi

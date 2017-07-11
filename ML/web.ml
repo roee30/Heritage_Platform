@@ -53,6 +53,7 @@ and user_aid_cgi   = cgi_bin Paths.cgi_user_aid   (* unknown chunks processing *
 and sandhier_cgi   = cgi_bin Paths.cgi_sandhier   (* sandhier *) 
 and corpus_manager_cgi = cgi_bin Paths.cgi_corpus_manager (* Corpus manager *)
 and save_corpus_cgi = cgi_bin Paths.cgi_save_corpus
+and mkdir_corpus_cgi = cgi_bin Paths.cgi_mkdir_corpus
 ;
 (* Absolute paths on development site *)
 value resources name = Paths.skt_resources_dir ^ name ^ "/"

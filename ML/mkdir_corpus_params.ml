@@ -1,0 +1,4 @@
+value dirname = "dirname"
+;
+value parent_dir = Params.corpus_dir
+;

@@ -780,3 +780,12 @@ counter:
 	cd SETUP && ./counter.py
 	cd SETUP/wwwcount2.5 && ./configure
 	cd SETUP/wwwcount2.5 && make all
+
+.PHONY: uninstall
+uninstall:
+	SETUP/issudo.sh
+	rm -rf $(SERVERPUBLICDIR)* $(CGIDIR)*
+
+.PHONY: reinstall
+reinstall: uninstall
+	$(MAKE) install

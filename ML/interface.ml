@@ -597,19 +597,7 @@ value graph_engine () = do
      (* Save sentence button *)
    ; Html.center_begin |> Web.pl
    ; Web.cgi_begin Web.save_corpus_cgi "" |> Web.pl
-   ; Html.hidden_input "t" translit |> Web.pl
-   ; Html.hidden_input "lex" lex |> Web.pl
-   ; Html.hidden_input "cache" cache |> Web.pl
-   ; Html.hidden_input "st" st |> Web.pl
-   ; Html.hidden_input "us" us |> Web.pl
-   ; Html.hidden_input "cp" cp |> Web.pl
-   ; Html.hidden_input "text" input |> Web.pl
-   ; Html.hidden_input "topic" (Cgi.decode_url url_encoded_topic) |> Web.pl
-   ; Html.hidden_input "abs" (Cgi.decode_url abs) |> Web.pl
-   ; Html.hidden_input "allSol" (Cgi.decode_url sol_num) |> Web.pl
-   ; Html.hidden_input Params.corpus_dir (Cgi.decode_url corpus_dir) |> Web.pl
-   ; Html.hidden_input Params.sentence_no (Cgi.decode_url sentence_no) |> Web.pl
-   ; Html.hidden_input "cpts" (Cgi.decoded_get "cpts" "" env) |> Web.pl
+   ; Html.hidden_input "q" query |> Web.pl
    ; Html.submit_input "Save sentence" |> Web.pl
    ; Web.cgi_end |> Web.pl
    ; Html.center_end |> Web.pl

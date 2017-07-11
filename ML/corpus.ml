@@ -30,9 +30,18 @@ value gobble_sentence_metadata dir file =
 value dump_sentence_metadata metadata dir file =
   Gen.dump metadata (sentence_metadata_file dir file)
 ;
-value save_sentence ~corpus_dir ~sentence_no ~translit ~unsandhied ~text =
-  let sentence_no = string_of_int sentence_no in
-  let file = corpus_dir ^ sentence_no ^ ".html" in
+value save_sentence ~corpus_location ~query =
+  let env = Cgi.create_env query in
+  let corpus_dir = Cgi.decoded_get Params.corpus_dir "" env in
+  let sentence_no = Cgi.decoded_get Params.sentence_no "" env in
+  let translit = Cgi.decoded_get "t" "" env in
+  let unsandhied = Cgi.decoded_get "us" "" env = "t" in
+  let text = Cgi.decoded_get "text" "" env in
+  let corpus_abs_dir = corpus_location ^ corpus_dir in
+  let sentence_no =
+    sentence_no |> float_of_string |> int_of_float |> string_of_int
+  in
+  let file = corpus_abs_dir ^ sentence_no ^ ".html" in
   let sentence =
     let encode = Encode.switch_code translit in
     let chunker =
@@ -43,11 +52,12 @@ value save_sentence ~corpus_dir ~sentence_no ~translit ~unsandhied ~text =
     in
     { text = chunker encode text }
   in
-    do
-    { Web.output_channel.val := open_out file
-    ; Interface.safe_engine ()
-    ; dump_sentence_metadata sentence corpus_dir sentence_no
-    ; close_out Web.output_channel.val
-    ; Web.output_channel.val := stdout
-    }
+  do
+  { Unix.putenv Cgi.query_string_env_var query
+  ; Web.output_channel.val := open_out file
+  ; Interface.safe_engine ()
+  ; dump_sentence_metadata sentence corpus_abs_dir sentence_no
+  ; close_out Web.output_channel.val
+  ; Web.output_channel.val := stdout
+  }
 ;

@@ -56,7 +56,7 @@ mk_corpus_page.ml
 
 # CORPUS package - corpus manager
 CORPUS = corpus.mli corpus.ml corpus_manager.mli corpus_manager.ml	\
-	corpus_manager_cgi.ml save_corpus_cgi.ml
+	corpus_manager_cgi.ml save_corpus_cgi.ml mk_corpus.ml
 
 # extra file SCLpaths.ml for SCL interfacing - not distributed.
 
@@ -97,7 +97,7 @@ test_version: paths.cmx gen.cmx version.cmx control.cmx test_stamp.cmx
 static_pages: css mk_index_page mk_grammar_page mk_sandhi_page mk_reader_page \
 		mk_corpus_page
 
-all: engine static_pages reset_caches sandhi_test
+all: engine static_pages reset_caches sandhi_test mk_corpus
 
 # legacy in need of re-design
 regression: rank.cmx regression.cmx
@@ -377,7 +377,7 @@ clean:
 	rm -f css indexer indexerd sandhier reader parser lemmatizer \
 declension conjugation mk_index_page mk_grammar_page mk_reader_page regression \
 mk_sandhi_page mk_corpus_page sandhi_test reset_caches interface user_aid \
-parse_apte tag_apte corpus_manager save_corpus
+parse_apte tag_apte corpus_manager save_corpus mk_corpus
 #	make dico.cmi auto.cmi conj_infos.cmi # needed to get dependencies right 
 
 .SUFFIXES: .ml .mli .cmx .cmo .cmi

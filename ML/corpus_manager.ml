@@ -110,7 +110,7 @@ value sentence_links dir files =
     let metadata =
       Corpus.gobble_sentence_metadata (Web.corpus_dir ^ dir) file
     in
-    let font = Multilingual.font_of_string (Paths.default_display_font) in
+    let font = Multilingual.font_of_string Paths.default_display_font in
     let words =
       List.map (
         match font with
@@ -149,7 +149,7 @@ value add_sentence_form dir gap =
     ~min:gap.start
     ~max:gap.stop
     ~val:gap.start
-    ~id:Params.sentence_no ^
+    ~id:Params.sentence_no ^ " " ^
   Html.submit_input "Add" ^
   Web.cgi_end
 ;
@@ -198,7 +198,7 @@ value body dir =
     }
   | Corpus.Sections subdirs ->
     let selection_prompt =
-      uplinks dir (dir <> "") ^ subdir_selection dir subdirs  ^
+      uplinks dir (dir <> "") ^ subdir_selection dir subdirs  ^ " " ^
       Html.submit_input "Select"
     in
     do

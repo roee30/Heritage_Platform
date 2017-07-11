@@ -22,6 +22,7 @@ value dump_sentence_metadata : sentence_metadata -> string -> string -> unit
 value sentence_id : string -> int
 ;
 value save_sentence :
-  ~corpus_dir:string -> ~sentence_no:int -> ~translit:string ->
-  ~unsandhied:bool -> ~text:string -> unit
+  ~corpus_location:string -> ~query:string -> unit
+(* ~corpus_dir:string -> ~sentence_no:int -> *)
+  (* ~translit:string -> ~unsandhied:bool -> ~text:string -> unit *)
 ;

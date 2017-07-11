@@ -267,7 +267,7 @@ ML/tag_apte.ml
 # CORPUS package - corpus manager
 CORPUS = ML/corpus.mli ML/corpus.ml ML/corpus_manager.mli	\
 	ML/corpus_manager.ml ML/corpus_manager_cgi.ml		\
-	ML/save_corpus_cgi.ml
+	ML/save_corpus_cgi.ml ML/mk_corpus.ml
 
 DEBUG= ML/morpho_debug.ml ML/debug.ml
 

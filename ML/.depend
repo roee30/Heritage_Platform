@@ -287,10 +287,10 @@ mk_sandhi_page.cmx : web.cmx html.cmx
 mk_corpus_page.cmo : web.cmo html.cmo
 mk_corpus_page.cmx : web.cmx html.cmx
 corpus.cmi : ../ZEN/word.cmo
-corpus.cmo : ../ZEN/word.cmo web.cmo sanskrit.cmi interface.cmi \
-    ../ZEN/gen.cmo encode.cmo dir.cmi corpus.cmi
-corpus.cmx : ../ZEN/word.cmx web.cmx sanskrit.cmx interface.cmx \
-    ../ZEN/gen.cmx encode.cmx dir.cmx corpus.cmi
+corpus.cmo : ../ZEN/word.cmo web.cmo sanskrit.cmi params.cmi interface.cmi \
+    ../ZEN/gen.cmo encode.cmo dir.cmi cgi.cmo corpus.cmi
+corpus.cmx : ../ZEN/word.cmx web.cmx sanskrit.cmx params.cmx interface.cmx \
+    ../ZEN/gen.cmx encode.cmx dir.cmx cgi.cmx corpus.cmi
 corpus_manager.cmi :
 corpus_manager.cmo : web.cmo paths.cmo params.cmi multilingual.cmo html.cmo \
     dir.cmi corpus.cmi canon.cmo corpus_manager.cmi
@@ -302,3 +302,5 @@ save_corpus_cgi.cmo : web.cmo params.cmi corpus_manager.cmi corpus.cmi \
     cgi.cmo
 save_corpus_cgi.cmx : web.cmx params.cmx corpus_manager.cmx corpus.cmx \
     cgi.cmx
+mk_corpus.cmo : paths.cmo params.cmi corpus.cmi
+mk_corpus.cmx : paths.cmx params.cmx corpus.cmx

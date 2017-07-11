@@ -86,7 +86,7 @@ LINK=ocamlopt -I $(ZEN) -I +camlp4  dynlink.cmxa camlp4lib.cmxa
 
 # standard installation of Sanskrit Heritage platform - assumes ZEN library
 
-engine: test_version cgis reset_caches static_pages regression
+engine: test_version cgis reset_caches static_pages regression mk_corpus
 # reader_plugin  parse_apte
 
 # testing consistency of Heritage_resources and Heritage_platform
@@ -97,7 +97,7 @@ test_version: paths.cmx gen.cmx version.cmx control.cmx test_stamp.cmx
 static_pages: css mk_index_page mk_grammar_page mk_sandhi_page mk_reader_page \
 		mk_corpus_page
 
-all: engine static_pages reset_caches sandhi_test mk_corpus
+all: engine static_pages reset_caches sandhi_test
 
 # legacy in need of re-design
 regression: rank.cmx regression.cmx

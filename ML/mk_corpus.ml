@@ -35,7 +35,7 @@ value url_encode s =
   Str.global_substitute special_chars subst s
 ;
 value query_of_env env =
-  String.concat "&" (List.map (fun (k, v) -> k ^ "=" ^ url_encode v) env)
+  String.concat "&amp;" (List.map (fun (k, v) -> k ^ "=" ^ url_encode v) env)
 ;
 value abort report_error status =
   do

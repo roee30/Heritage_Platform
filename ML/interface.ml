@@ -503,6 +503,14 @@ value append_cache entry gender =
   ; close_out cho
   }
 ;
+value save_sentence_button query =
+  Html.center_begin ^
+  Web.cgi_begin Web.save_corpus_cgi "" ^
+  Html.hidden_input "q" query ^
+  Html.submit_input "Save sentence" ^
+  Web.cgi_end ^
+  Html.center_end
+;
 (* Main body of graph segmenter cgi *)
 value graph_engine () = do
   { Prel.prelude () 
@@ -595,12 +603,10 @@ value graph_engine () = do
      else ()
 
      (* Save sentence button *)
-   ; Html.center_begin |> Web.pl
-   ; Web.cgi_begin Web.save_corpus_cgi "" |> Web.pl
-   ; Html.hidden_input "q" query |> Web.pl
-   ; Html.submit_input "Save sentence" |> Web.pl
-   ; Web.cgi_end |> Web.pl
-   ; Html.center_end |> Web.pl
+   ; if not Web.corpus_read_only then
+       save_sentence_button query |> Web.pl
+     else
+       ()
 
    ; close_page_with_margin ()
    ; page_end lang True

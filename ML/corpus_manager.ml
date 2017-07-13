@@ -164,22 +164,38 @@ value htmlify_group dir (group, gap) =
     ]
   in
   let div_id = "group" ^ group_id in
-  ol ^
-  Html.button
-    ~id:"foo"
-    ~cl:Html.Center_
-    ~onclick:{ Html.js_funid = "hideShowElement"; Html.js_funargs = [ div_id ] }
-    ~label:"Hide/Show form to fill gap" ^
-  Html.elt_begin_attrs [ ("id", div_id) ] "div" Html.Hidden_ ^
-  Html.html_paragraph ^
-  add_sentence_form dir gap ^
-  Html.div_end
+  let add_sentence_form =
+    Html.button
+      ~id:"add_sentence"
+      ~cl:Html.Center_
+      ~onclick:
+        { Html.js_funid = "hideShowElement"
+        ; Html.js_funargs = [ div_id ]
+        }
+      ~label:"Hide/Show form to fill gap" ^
+    Html.elt_begin_attrs [ ("id", div_id) ] "div" Html.Hidden_ ^
+    Html.html_paragraph ^
+    add_sentence_form dir gap ^
+    Html.div_end
+  in
+  ol ^ if not Web.corpus_read_only then add_sentence_form else ""
+
 ;
 value group_sentences dir sentences =
   let ids = List.map Corpus.Sentence.id sentences in
   let dict = List.combine ids sentences in
   let groups = ids |> groups_with_gaps |> add_init_gap in
   List.map (fun (x, y) -> (List.map (fun x -> List.assoc x dict) x, y)) groups
+;
+value new_heading_form dir =
+  Web.cgi_begin Web.mkdir_corpus_cgi "" ^
+  Html.h3_begin Html.B3 ^
+  "New heading: " ^
+  Html.hidden_input Mkdir_corpus_params.parent_dir dir ^
+  Html.text_input "new_heading" Mkdir_corpus_params.dirname ^
+  Html.submit_input "Create" ^
+  Html.h3_end ^
+  Web.cgi_end
 ;
 value body dir =
   match Web_corpus.contents (Web.corpus_dir ^ dir) with
@@ -210,14 +226,7 @@ value body dir =
     ; selection_prompt |> Web.pl
     ; Html.h3_end |> Web.pl
     ; Web.cgi_end |> Web.pl
-    ; Web.cgi_begin Web.mkdir_corpus_cgi "" |> Web.pl
-    ; Html.h3_begin Html.B3 |> Web.pl
-    ; "New heading: " |> Web.pl
-    ; Html.hidden_input Mkdir_corpus_params.parent_dir dir |> Web.pl
-    ; Html.text_input "foo" Mkdir_corpus_params.dirname |> Web.pl
-    ; Html.submit_input "Create" |> Web.pl
-    ; Html.h3_end |> Web.pl
-    ; Web.cgi_end |> Web.pl
+    ; if not Web.corpus_read_only then new_heading_form dir |> Web.pl else ()
     ; Html.center_end |> Web.pl
     }
   ]

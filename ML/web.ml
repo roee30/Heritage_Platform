@@ -641,6 +641,14 @@ value remote_server_host = "http://sanskrit.inria.fr/"
 value scl_toggle =
   not (SCLpaths.scl_url="") (* True if SCL tools are installed *)
 ;
+value corpus_toggle = Paths.skt_corpus_dir <> ""
+;
+value corpus_read_only =
+  match Html.target with
+  [ Html.Station -> False
+  | Html.Computer | Html.Server | Html.Simputer -> True
+  ]
+;
 value interaction_modes_default mode =  
   [ (" Summary ","g",mode="g") 
   ; (" Tagging ","t",mode="t") 

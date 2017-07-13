@@ -7,7 +7,7 @@ value main =
   let env = Cgi.create_env query in
   let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
   do
-  { Corpus.save_sentence ~corpus_location:Web.corpus_dir ~query:query
+  { Web_corpus.save_sentence query
   ; Corpus_manager.make corpdir
   }
 ;

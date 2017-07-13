@@ -1,13 +1,13 @@
 (* Directory operations *)
 
-(* [subdirs dir cmp] returns the list of subdirectories of [dir] sorted
-   according to the function [cmp].  *)
-value subdirs : string -> (string -> string -> int) -> list string
+(* [subdirs dir] returns the list of subdirectories of [dir].  The order
+   of the returned list is unspecified.  *)
+value subdirs : string -> list string
 ;
-(* [files_with_ext ext dir cmp] returns the list of files in [dir] with
-   the extension [ext] sorted according to the function [cmp].  *)
-value files_with_ext :
-  string -> string -> (string -> string -> int) -> list string
+(* [files_with_ext ext dir] returns the list of files in [dir] with the
+   extension [ext] (e.g. ["txt"]).  The order of the returned list is
+   unspecified.*)
+value files_with_ext : string -> string -> list string
 ;
 (* [split path] splits [path] into substrings corresponding to the
    subdirectories of [path].  *)

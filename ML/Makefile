@@ -55,10 +55,10 @@ mk_index_page.ml mk_grammar_page.ml mk_reader_page.ml mk_sandhi_page.ml \
 mk_corpus_page.ml
 
 # CORPUS package - corpus manager
-CORPUS = corpus.mli corpus.ml corpus_manager.mli corpus_manager.ml	\
-	corpus_manager_cgi.ml save_corpus_cgi.ml			\
-	mkdir_corpus_params.mli mkdir_corpus_params.ml			\
-	mkdir_corpus_cgi.ml mk_corpus.ml
+CORPUS = corpus.mli corpus.ml web_corpus.mli web_corpus.ml		\
+	corpus_manager.mli corpus_manager.ml corpus_manager_cgi.ml	\
+	save_corpus_cgi.ml mkdir_corpus_params.mli			\
+	mkdir_corpus_params.ml mkdir_corpus_cgi.ml mk_corpus.ml
 
 # extra file SCLpaths.ml for SCL interfacing - not distributed.
 
@@ -244,7 +244,8 @@ corpus_manager: corpus_manager_cgi.cmx
 		share.cmx minimap.cmx mini.cmx nums.cmxa		\
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx interface.cmx multilingual.cmx dir.cmx	\
-		corpus.cmx mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
+		corpus.cmx web_corpus.cmx mkdir_corpus_params.cmx	\
+		corpus_manager.cmx $< -o $@
 
 save_corpus: save_corpus_cgi.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
@@ -259,7 +260,8 @@ save_corpus: save_corpus_cgi.cmx
 		share.cmx minimap.cmx mini.cmx nums.cmxa		\
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx interface.cmx multilingual.cmx dir.cmx	\
-		corpus.cmx mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
+		corpus.cmx web_corpus.cmx mkdir_corpus_params.cmx	\
+		corpus_manager.cmx $< -o $@
 
 mkdir_corpus: mkdir_corpus_cgi.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
@@ -274,7 +276,8 @@ mkdir_corpus: mkdir_corpus_cgi.cmx
 		share.cmx minimap.cmx mini.cmx nums.cmxa		\
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx interface.cmx multilingual.cmx dir.cmx	\
-		corpus.cmx mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
+		corpus.cmx web_corpus.cmx mkdir_corpus_params.cmx	\
+		corpus_manager.cmx $< -o $@
 
 mk_corpus: mk_corpus.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
@@ -289,7 +292,7 @@ mk_corpus: mk_corpus.cmx
 		share.cmx minimap.cmx mini.cmx nums.cmxa		\
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx interface.cmx multilingual.cmx dir.cmx	\
-		corpus.cmx mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
+		corpus.cmx mkdir_corpus_params.cmx $< -o $@
 
 css: css.cmx
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx html.cmx \

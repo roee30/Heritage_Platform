@@ -268,10 +268,10 @@ TREE=ML/stemmer.ml ML/parse_tree.ml ML/parse_apte.ml ML/tag_tree.ml \
 ML/tag_apte.ml
 
 # CORPUS package - corpus manager
-CORPUS = ML/corpus.mli ML/corpus.ml ML/corpus_manager.mli	\
-	ML/corpus_manager.ml ML/corpus_manager_cgi.ml		\
-	ML/save_corpus_cgi.ml ML/mkdir_corpus_cgi.ml		\
-	ML/mk_corpus.ml
+CORPUS = ML/corpus.mli ML/corpus.ml ML/web_corpus.mli ML/web_corpus.ml	\
+	ML/corpus_manager.mli ML/corpus_manager.ml			\
+	ML/corpus_manager_cgi.ml ML/save_corpus_cgi.ml			\
+	ML/mkdir_corpus_cgi.ml ML/mk_corpus.ml
 
 DEBUG= ML/morpho_debug.ml ML/debug.ml
 

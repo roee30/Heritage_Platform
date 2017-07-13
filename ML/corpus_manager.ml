@@ -105,10 +105,10 @@ value uplinks dir =
 ;
 (* Display sentences with format "sentence || sentno" like in citations
    file.  *)
-value sentence_links dir files =
-  let to_anchor_ref file =
+value sentence_links dir sentences =
+  let to_anchor_ref sentence =
     let metadata =
-      Corpus.gobble_sentence_metadata (Web.corpus_dir ^ dir) file
+      Web_corpus.gobble_metadata (Web.corpus_dir ^ dir) sentence
     in
     let font = Multilingual.font_of_string Paths.default_display_font in
     let words =
@@ -117,7 +117,7 @@ value sentence_links dir files =
         [ Multilingual.Deva -> Canon.unidevcode
         | Multilingual.Roma -> Canon.uniromcode
         ]
-      ) metadata.Corpus.text
+      ) metadata.Corpus.Sentence.text
     in
     let display =
       match font with
@@ -125,17 +125,18 @@ value sentence_links dir files =
       | Multilingual.Roma -> Html.span Html.Trans16
       ]
     in
-    let sentence = String.concat " " words in
-    Html.anchor_ref (Web.corpus_url ^ dir ^ file) sentence |> display
+    let sentence_str = String.concat " " words in
+    Html.anchor_ref (Corpus.Sentence.url sentence) sentence_str
+    |> display
   in
-  List.map to_anchor_ref files
+  List.map to_anchor_ref sentences
 ;
-value subdir_selection dir subdirs =
+value heading_selection dir headings =
   let options =
-    let prefixed_subdirs =
-      List.map (fun x -> dir ^ x ^ Filename.dir_sep) subdirs
+    let prefixes =
+      List.map (fun x -> dir ^ x ^ Filename.dir_sep) headings
     in
-    List.combine prefixed_subdirs subdirs
+    List.combine prefixes headings
   in
   Html.option_select_label Params.corpus_dir options
 ;
@@ -158,7 +159,7 @@ value htmlify_group dir (group, gap) =
     match group with
     [ [] -> ("", "")
     | [ h :: _ ] ->
-      let id = Corpus.sentence_id h in
+      let id = Corpus.Sentence.id h in
       (Html.ol ~start:id ~items:(sentence_links dir group), string_of_int id)
     ]
   in
@@ -174,22 +175,18 @@ value htmlify_group dir (group, gap) =
   add_sentence_form dir gap ^
   Html.div_end
 ;
-value sentence_file dir no = string_of_int no ^ ".html"
-;
-value group_sentences dir files =
-  let groups =
-    files
-    |> List.map Corpus.sentence_id
-    |> groups_with_gaps
-    |> add_init_gap
-  in
-  List.map (fun (x, y) -> (List.map (sentence_file dir) x, y)) groups
+value group_sentences dir sentences =
+  let ids = List.map Corpus.Sentence.id sentences in
+  let dict = List.combine ids sentences in
+  let groups = ids |> groups_with_gaps |> add_init_gap in
+  List.map (fun (x, y) -> (List.map (fun x -> List.assoc x dict) x, y)) groups
 ;
 value body dir =
-  match Corpus.content (Web.corpus_dir ^ dir) with
-  (* When files = [], it is possible to create a subdir or add a sentence...  *)
-  [ Corpus.Sentences files ->
-    let groups = group_sentences dir files in
+  match Web_corpus.contents (Web.corpus_dir ^ dir) with
+  (* When files = [], it is possible to create a heading or add
+     a sentence...  *)
+  [ Web_corpus.Sentences sentences ->
+    let groups = group_sentences dir sentences in
     do
     { Html.h2_begin Html.B2 |> Web.pl
     ; uplinks dir |> Web.pl
@@ -197,9 +194,11 @@ value body dir =
     ; groups |> List.map (htmlify_group dir) |> List.iter Web.pl
     ; Html.html_break |> Web.pl
     }
-  | Corpus.Sections subdirs ->
+  | Web_corpus.Headings headings ->
     let selection_prompt =
-      "Explore " ^ subdir_selection dir subdirs  ^ " " ^ Html.submit_input "Go"
+      "Explore " ^
+      heading_selection dir (List.map Corpus.Heading.label headings)  ^ " " ^
+      Html.submit_input "Go"
     in
     do
     { Html.center_begin |> Web.pl

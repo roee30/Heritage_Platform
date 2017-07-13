@@ -45,11 +45,11 @@ value abort report_error status =
 ;
 value citation_regexp = Str.regexp "\\\\citation{\\(.*\\)}"
 ;
-value extract_citation env corpus_location line line_no =
+value extract_citation env save_sentence line line_no =
   try
     if Str.string_match citation_regexp line 0 then
       let query = query_of_env [ ("text", Str.matched_group 1 line) :: env ] in
-      Corpus.save_sentence ~corpus_location ~query
+      save_sentence query
     else
       raise Exit
   with
@@ -72,6 +72,7 @@ value populate_corpus dirname file =
          Filename.basename dirname.val)
     in
     let dirname = dirname ^ Filename.dir_sep in
+    let module Corp = Corpus.Make (struct value dir = corpus_location; end) in
     let rec aux i =
       try
         let line = input_line ch in
@@ -82,14 +83,14 @@ value populate_corpus dirname file =
           ]
         in
         do
-        { extract_citation env corpus_location line i
+        { extract_citation env Corp.save_sentence line i
         ; aux (i + 1)
         }
       with
       [ End_of_file -> () ]
     in
     do
-    { Corpus.mkdir ~corpus_location ~dirname
+    { Corp.mkdir dirname
     ; aux 1
     ; close_in ch
     }

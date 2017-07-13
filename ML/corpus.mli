@@ -1,27 +1,52 @@
 (* Operations on the corpus tree *)
 
-(* Content of a corpus subdirectory: either we are on leaves of the tree
-   (constructor [Sentences]) or on branches (constructor
-   [Sections]).  *)
-type content =
-  [ Sections of list string
-  | Sentences of list string
-  ]
+module Heading : sig
+  type t
+  ;
+  value label : t -> string
+  ;
+end
 ;
-(* List the content of the given corpus subdirectory.  *)
-value content : string -> content
+module Sentence : sig
+  type t
+  ;
+  value id : t -> int
+  ;
+  value url : t -> string
+  ;
+  (* TODO: Determine all the fields.  *)
+  type metadata = { text : list Word.word }
+  ;
+end
 ;
-(* TODO: Determine all the fields.  *)
-type sentence_metadata = { text : list Word.word }
+module type Location = sig
+  value dir : string
+  ;
+end
 ;
-value gobble_sentence_metadata : string -> string -> sentence_metadata
+module type S = sig
+  (* Contents of a corpus subdirectory: either we are on leaves of the
+     tree (constructor [Sentences]) or on branches (constructor
+     [Headings]).  *)
+  type contents =
+    [ Headings of list Heading.t
+    | Sentences of list Sentence.t
+    ]
+  ;
+  (* List the contents of the given corpus subdirectory.  Note that the
+     returned elements are sorted according to [Heading.compare] or
+     [Sentence.compare] depending on the case.  *)
+  value contents : string -> contents
+  ;
+  value save_sentence : string -> unit
+  ;
+  value mkdir : string -> unit
+  ;
+  value gobble_metadata : string -> Sentence.t -> Sentence.metadata
+  ;
+  value dump_metadata : string -> Sentence.t -> Sentence.metadata -> unit
+  ;
+end
 ;
-value dump_sentence_metadata : sentence_metadata -> string -> string -> unit
-;
-(* Return the identifier of the sentence stored in the given file.  *)
-value sentence_id : string -> int
-;
-value save_sentence : ~corpus_location:string -> ~query:string -> unit
-;
-value mkdir : ~corpus_location:string -> ~dirname:string -> unit
+module Make (Loc : Location) : S
 ;

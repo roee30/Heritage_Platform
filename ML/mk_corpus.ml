@@ -1,42 +1,3 @@
-value url_encode s =
-  let conversion_tbl =
-    [ ("]", "5D") (* Must be the first element because of [Str.regexp].  *)
-    ; ("!", "21")
-    ; ("#", "23")
-    ; ("$", "24")
-    ; ("&", "26")
-    ; ("'", "27")
-    ; ("(", "28")
-    ; (")", "29")
-    ; ("*", "2A")
-    ; ("+", "2B")
-    ; (",", "2C")
-    ; ("/", "2F")
-    ; (":", "3A")
-    ; (";", "3B")
-    ; ("=", "3D")
-    ; ("?", "3F")
-    ; ("@", "40")
-    ; ("[", "5B")
-    ]
-  in
-  let url_encode = fun
-    [ " " -> "+"
-    | s ->
-      try "%" ^ List.assoc s conversion_tbl with [ Not_found -> s ]
-    ]
-  in
-  let special_chars =
-    Str.regexp (
-      "[" ^ String.concat "" (conversion_tbl |> List.split |> fst) ^ " " ^ "]"
-    )
-  in
-  let subst s = s |> Str.matched_string |> url_encode in
-  Str.global_substitute special_chars subst s
-;
-value query_of_env env =
-  String.concat "&amp;" (List.map (fun (k, v) -> k ^ "=" ^ url_encode v) env)
-;
 value abort report_error status =
   do
   { report_error ()
@@ -48,7 +9,9 @@ value citation_regexp = Str.regexp "\\\\citation{\\(.*\\)}"
 value extract_citation env save_sentence line line_no =
   try
     if Str.string_match citation_regexp line 0 then
-      let query = query_of_env [ ("text", Str.matched_group 1 line) :: env ] in
+      let query =
+        Cgi.query_of_env [ ("text", Str.matched_group 1 line) :: env ]
+      in
       save_sentence query
     else
       raise Exit
@@ -83,7 +46,7 @@ value populate_corpus dirname file =
           ]
         in
         do
-        { extract_citation env Corp.save_sentence line i
+        { extract_citation env (Corp.save_sentence True) line i
         ; aux (i + 1)
         }
       with

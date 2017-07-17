@@ -81,7 +81,9 @@ module type S = sig
      [Sentence.compare] depending on the case.  *)
   value contents : string -> contents
   ;
-  value save_sentence : string -> unit
+  exception Sentence_already_exists
+  ;
+  value save_sentence : bool -> string -> unit
   ;
   value mkdir : string -> unit
   ;
@@ -124,7 +126,9 @@ module Make (Loc : Location) : S = struct
   value dump_metadata dir sentence metadata =
     Gen.dump metadata (metadata_file dir (Sentence.id sentence))
   ;
-  value save_sentence state =
+  exception Sentence_already_exists
+  ;
+  value save_sentence force state =
     let env = Cgi.create_env state in
     let corpus_dir = Cgi.decoded_get Params.corpus_dir "" env in
     let sentence_no = Cgi.decoded_get Params.sentence_no "" env in
@@ -147,10 +151,13 @@ module Make (Loc : Location) : S = struct
       { Sentence.text = chunker encode text }
     in
     let sentence = Sentence.make sentence_no Web.graph_cgi state in
-    do
-    { dump_metadata corpus_abs_dir sentence metadata
-    ; Gen.dump sentence file
-    }
+    if not force && Sys.file_exists file then
+      raise Sentence_already_exists
+    else
+      do
+      { dump_metadata corpus_abs_dir sentence metadata
+      ; Gen.dump sentence file
+      }
   ;
   value mkdir dirname = Unix.mkdir (Loc.dir ^ dirname) 0o755
   ;

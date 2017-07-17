@@ -303,8 +303,10 @@ corpus_manager.cmx : web_corpus.cmx web.cmx paths.cmx params.cmx \
     canon.cmx corpus_manager.cmi
 corpus_manager_cgi.cmo : params.cmi corpus_manager.cmi cgi.cmo
 corpus_manager_cgi.cmx : params.cmx corpus_manager.cmx cgi.cmx
-save_corpus_cgi.cmo : web_corpus.cmi params.cmi corpus_manager.cmi cgi.cmo
-save_corpus_cgi.cmx : web_corpus.cmx params.cmx corpus_manager.cmx cgi.cmx
+save_corpus_cgi.cmo : web_corpus.cmi web.cmo params.cmi html.cmo \
+    corpus_manager.cmi cgi.cmo
+save_corpus_cgi.cmx : web_corpus.cmx web.cmx params.cmx html.cmx \
+    corpus_manager.cmx cgi.cmx
 mkdir_corpus_params.cmi :
 mkdir_corpus_params.cmo : params.cmi mkdir_corpus_params.cmi
 mkdir_corpus_params.cmx : params.cmx mkdir_corpus_params.cmi
@@ -312,5 +314,5 @@ mkdir_corpus_cgi.cmo : web_corpus.cmi mkdir_corpus_params.cmi \
     corpus_manager.cmi cgi.cmo
 mkdir_corpus_cgi.cmx : web_corpus.cmx mkdir_corpus_params.cmx \
     corpus_manager.cmx cgi.cmx
-mk_corpus.cmo : paths.cmo params.cmi corpus.cmi
-mk_corpus.cmx : paths.cmx params.cmx corpus.cmx
+mk_corpus.cmo : paths.cmo params.cmi corpus.cmi cgi.cmo
+mk_corpus.cmx : paths.cmx params.cmx corpus.cmx cgi.cmx

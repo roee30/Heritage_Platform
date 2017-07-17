@@ -38,7 +38,9 @@ module type S = sig
      [Sentence.compare] depending on the case.  *)
   value contents : string -> contents
   ;
-  value save_sentence : string -> unit
+  exception Sentence_already_exists
+  ;
+  value save_sentence : bool -> string -> unit
   ;
   value mkdir : string -> unit
   ;

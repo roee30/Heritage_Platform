@@ -126,7 +126,7 @@ value sentence_links dir sentences =
       ]
     in
     let sentence_str = String.concat " " words in
-    Html.anchor_ref (Corpus.Sentence.url sentence) sentence_str
+    Html.anchor_ref (Html.escape (Corpus.Sentence.url sentence)) sentence_str
     |> display
   in
   List.map to_anchor_ref sentences

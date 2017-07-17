@@ -506,7 +506,7 @@ value append_cache entry gender =
 value save_sentence_button query =
   Html.center_begin ^
   Web.cgi_begin Web.save_corpus_cgi "" ^
-  Html.hidden_input "q" query ^
+  Html.hidden_input "q" (Html.escape query) ^
   Html.submit_input "Save sentence" ^
   Web.cgi_end ^
   Html.center_end

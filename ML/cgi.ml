@@ -99,5 +99,44 @@ value query_string () =
     Not_found -> assert False   (* By RFC 3875 section 4.1.7 *)
   ]
 ;
-
+value url_encode s =
+  let conversion_tbl =
+    [ ("]", "5D") (* Must be the first element because of [Str.regexp].  *)
+    ; ("!", "21")
+    ; ("#", "23")
+    ; ("$", "24")
+    ; ("%", "25")
+    ; ("&", "26")
+    ; ("'", "27")
+    ; ("(", "28")
+    ; (")", "29")
+    ; ("*", "2A")
+    ; ("+", "2B")
+    ; (",", "2C")
+    ; ("/", "2F")
+    ; (":", "3A")
+    ; (";", "3B")
+    ; ("=", "3D")
+    ; ("?", "3F")
+    ; ("@", "40")
+    ; ("[", "5B")
+    ]
+  in
+  let url_encode = fun
+    [ " " -> "+"
+    | s ->
+      try "%" ^ List.assoc s conversion_tbl with [ Not_found -> s ]
+    ]
+  in
+  let special_chars =
+    Str.regexp (
+      "[" ^ String.concat "" (conversion_tbl |> List.split |> fst) ^ " " ^ "]"
+    )
+  in
+  let subst s = s |> Str.matched_string |> url_encode in
+  Str.global_substitute special_chars subst s
+;
+value query_of_env env =
+  String.concat "&" (List.map (fun (k, v) -> k ^ "=" ^ url_encode v) env)
+;
 (*i end; i*)

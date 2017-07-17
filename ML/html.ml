@@ -787,3 +787,26 @@ value button ?id ?cl ?onclick ~label =
   let button_end = xml_end button in
   button_begin ^ label ^ button_end
 ;
+(* Return a copy of the given string with special HTML characters
+   represented by escaped sequences (e.g. ['&'] is replaced with
+   ["&amp;"] ).  *)
+value escape s =
+  let conversion_tbl =
+    [ ("\"", "quot")
+    ; ("&", "amp")
+    ; ("'", "apos")
+    ; ("<", "lt")
+    ; (">", "gt")
+    ]
+  in
+  let escape s =
+    try "&" ^ List.assoc s conversion_tbl ^ ";" with [ Not_found -> s ]
+  in
+  let special_chars =
+    Str.regexp (
+      "[" ^ String.concat "" (conversion_tbl |> List.split |> fst) ^ " " ^ "]"
+    )
+  in
+  let subst s = s |> Str.matched_string |> escape in
+  Str.global_substitute special_chars subst s
+;

@@ -17,8 +17,8 @@ value confirmation_page query =
     |> Web.pl
   ; Html.h2_end |> Web.pl
   ; Web.cgi_begin Web.save_corpus_cgi "" |> Web.pl
-  ; Html.hidden_input "q" (Html.escape query) |> Web.pl
-  ; Html.hidden_input "force" (string_of_bool True) |> Web.pl
+  ; Html.hidden_input Save_corpus_params.state (Html.escape query) |> Web.pl
+  ; Html.hidden_input Save_corpus_params.force (string_of_bool True) |> Web.pl
   ; Html.submit_input "Yes" |> Web.pl
   ; Web.cgi_end |> Web.pl
   ; Html.html_break |> Web.pl
@@ -38,11 +38,11 @@ value confirmation_page query =
 value main =
   let query = Cgi.query_string () in
   let env = Cgi.create_env query in
-  let query = Cgi.decoded_get "q" "" env in
+  let query = Cgi.decoded_get Save_corpus_params.state "" env in
   let env' = Cgi.create_env query in
   let corpdir = Cgi.decoded_get Params.corpus_dir "" env' in
   let force =
-    Cgi.decoded_get "force" (string_of_bool False) env
+    Cgi.decoded_get Save_corpus_params.force (string_of_bool False) env
     |> bool_of_string
   in
   let error_page = Web.error_page "Corpus Manager" in

@@ -57,8 +57,9 @@ mk_corpus_page.ml
 # CORPUS package - corpus manager
 CORPUS = corpus.mli corpus.ml web_corpus.mli web_corpus.ml		\
 	corpus_manager.mli corpus_manager.ml corpus_manager_cgi.ml	\
-	save_corpus_cgi.ml mkdir_corpus_params.mli			\
-	mkdir_corpus_params.ml mkdir_corpus_cgi.ml mk_corpus.ml
+	save_corpus_params.mli save_corpus_params.ml save_corpus_cgi.ml	\
+	mkdir_corpus_params.mli mkdir_corpus_params.ml			\
+	mkdir_corpus_cgi.ml mk_corpus.ml
 
 # extra file SCLpaths.ml for SCL interfacing - not distributed.
 
@@ -211,7 +212,7 @@ load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
 chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx load_morphs.cmx \
 int_sandhi.cmx nouns.cmx share.cmx minimap.cmx mini.cmx nums.cmxa \
 graph_segmenter.cmx checkpoints.cmx automaton.cmx params.cmx \
-interface.cmx interface_cgi.cmx -o interface
+save_corpus_params.cmx interface.cmx interface_cgi.cmx -o interface
 
 user_aid: user_aid.cmx
 	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
@@ -243,9 +244,9 @@ corpus_manager: corpus_manager_cgi.cmx
 		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
 		share.cmx minimap.cmx mini.cmx nums.cmxa		\
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
-		params.cmx interface.cmx multilingual.cmx dir.cmx	\
-		corpus.cmx web_corpus.cmx mkdir_corpus_params.cmx	\
-		corpus_manager.cmx $< -o $@
+		params.cmx save_corpus_params.cmx interface.cmx		\
+		multilingual.cmx dir.cmx corpus.cmx web_corpus.cmx	\
+		mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
 
 save_corpus: save_corpus_cgi.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
@@ -259,9 +260,9 @@ save_corpus: save_corpus_cgi.cmx
 		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
 		share.cmx minimap.cmx mini.cmx nums.cmxa		\
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
-		params.cmx interface.cmx multilingual.cmx dir.cmx	\
-		corpus.cmx web_corpus.cmx mkdir_corpus_params.cmx	\
-		corpus_manager.cmx $< -o $@
+		params.cmx save_corpus_params.cmx interface.cmx		\
+		multilingual.cmx dir.cmx corpus.cmx web_corpus.cmx	\
+		mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
 
 mkdir_corpus: mkdir_corpus_cgi.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
@@ -275,9 +276,9 @@ mkdir_corpus: mkdir_corpus_cgi.cmx
 		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
 		share.cmx minimap.cmx mini.cmx nums.cmxa		\
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
-		params.cmx interface.cmx multilingual.cmx dir.cmx	\
-		corpus.cmx web_corpus.cmx mkdir_corpus_params.cmx	\
-		corpus_manager.cmx $< -o $@
+		params.cmx save_corpus_params.cmx interface.cmx		\
+		multilingual.cmx dir.cmx corpus.cmx web_corpus.cmx	\
+		mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
 
 mk_corpus: mk_corpus.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
@@ -291,8 +292,9 @@ mk_corpus: mk_corpus.cmx
 		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
 		share.cmx minimap.cmx mini.cmx nums.cmxa		\
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
-		params.cmx interface.cmx multilingual.cmx dir.cmx	\
-		corpus.cmx mkdir_corpus_params.cmx $< -o $@
+		params.cmx save_corpus_params.cmx interface.cmx		\
+		multilingual.cmx dir.cmx corpus.cmx			\
+		mkdir_corpus_params.cmx $< -o $@
 
 css: css.cmx
 	$(LINK) str.cmxa gen.cmx paths.cmx version.cmx date.cmx html.cmx \

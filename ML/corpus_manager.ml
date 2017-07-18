@@ -68,8 +68,8 @@ value add_init_gap groups =
 (*******************)
 value link dir =
   let url =
-    Web.corpus_manager_cgi ^ "?corpdir=" ^ Dir.url_encode dir ^
-    Dir.url_encoded_dir_sep
+    Web.corpus_manager_cgi ^ "?corpdir=" ^ Cgi.url_encode dir ^
+    Cgi.url_encode Filename.dir_sep
   in
   let label = Filename.basename dir in
   Html.anchor_ref url label

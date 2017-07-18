@@ -297,10 +297,10 @@ web_corpus.cmx : web.cmx corpus.cmx web_corpus.cmi
 corpus_manager.cmi :
 corpus_manager.cmo : web_corpus.cmi web.cmo paths.cmo params.cmi \
     multilingual.cmo mkdir_corpus_params.cmi html.cmo dir.cmi corpus.cmi \
-    control.cmo canon.cmo corpus_manager.cmi
+    control.cmo cgi.cmo canon.cmo corpus_manager.cmi
 corpus_manager.cmx : web_corpus.cmx web.cmx paths.cmx params.cmx \
     multilingual.cmx mkdir_corpus_params.cmx html.cmx dir.cmx corpus.cmx \
-    control.cmx canon.cmx corpus_manager.cmi
+    control.cmx cgi.cmx canon.cmx corpus_manager.cmi
 corpus_manager_cgi.cmo : params.cmi corpus_manager.cmi cgi.cmo
 corpus_manager_cgi.cmx : params.cmx corpus_manager.cmx cgi.cmx
 save_corpus_cgi.cmo : web_corpus.cmi web.cmo params.cmi html.cmo \

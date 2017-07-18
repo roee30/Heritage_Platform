@@ -233,14 +233,18 @@ value body dir =
 ;
 value make dir =
   let title = "Sanskrit Corpus" in
-  do
-  { Web.maybe_http_header ()
-  ; Web.page_begin (Html.title title)
-  ; Html.body_begin Html.Chamois_back |> Web.pl
-  ; Web.open_page_with_margin 15
-  ; Html.h1_title title |> Web.print_title (Some Html.default_language)
-  ; body dir
-  ; Web.close_page_with_margin ()
-  ; Web.page_end Html.default_language True
-  }
+  try
+    do
+    { Web.maybe_http_header ()
+    ; Web.page_begin (Html.title title)
+    ; Html.body_begin Html.Chamois_back |> Web.pl
+    ; Web.open_page_with_margin 15
+    ; Html.h1_title title |> Web.print_title (Some Html.default_language)
+    ; body dir
+    ; Web.close_page_with_margin ()
+    ; Web.page_end Html.default_language True
+    }
+  with
+  [ Sys_error msg -> Web.abort Html.default_language Control.sys_err_mess msg
+  ]
 ;

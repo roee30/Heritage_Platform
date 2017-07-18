@@ -85,6 +85,8 @@ module type S = sig
   ;
   value save_sentence : bool -> string -> unit
   ;
+  exception Heading_abbrev_already_exists of string
+  ;
   value mkdir : string -> unit
   ;
   value gobble_metadata : string -> Sentence.t -> Sentence.metadata
@@ -159,7 +161,13 @@ module Make (Loc : Location) : S = struct
       ; Gen.dump sentence file
       }
   ;
-  value mkdir dirname = Unix.mkdir (Loc.dir ^ dirname) 0o755
+  exception Heading_abbrev_already_exists of string
+  ;
+  value mkdir dirname =
+    try Unix.mkdir (Loc.dir ^ dirname) 0o755 with
+    [ Unix.Unix_error (Unix.EEXIST, _, _) ->
+      raise (Heading_abbrev_already_exists (Filename.basename dirname))
+    ]
   ;
 end
 ;

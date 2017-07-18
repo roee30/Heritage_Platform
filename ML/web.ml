@@ -701,5 +701,15 @@ value abort lang s1 s2 = do
   ; page_end lang True
   }
 ;
-
+(* Build an HTML page to report error.  *)
+value error_page title msg submsg =
+  do
+  { maybe_http_header ()
+  ; page_begin (Html.title title)
+  ; Html.body_begin Html.Chamois_back |> pl
+  ; open_page_with_margin 15
+  ; Html.h1_title title |> print_title (Some Html.default_language)
+  ; abort Html.default_language msg submsg
+  }
+;
 (*i end; i*)

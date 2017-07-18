@@ -29,6 +29,9 @@ value confirmation_page query =
   }
 
 ;
+(***************)
+(* Entry point *)
+(***************)
 value main =
   let query = Cgi.query_string () in
   let env = Cgi.create_env query in
@@ -44,5 +47,9 @@ value main =
     { Web_corpus.save_sentence force query
     ; Corpus_manager.make corpdir
     }
-  with [ Web_corpus.Sentence_already_exists -> confirmation_page query ]
+  with
+  [ Web_corpus.Sentence_already_exists -> confirmation_page query
+  | Sys_error msg ->
+    Web.error_page "Corpus Manager" Control.sys_err_mess msg
+  ]
 ;

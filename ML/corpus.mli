@@ -35,13 +35,21 @@ module type S = sig
   ;
   (* List the contents of the given corpus subdirectory.  Note that the
      returned elements are sorted according to [Heading.compare] or
-     [Sentence.compare] depending on the case.  *)
+     [Sentence.compare] depending on the case.  Raise [Sys_error] when
+     an operating system error occurs.  *)
   value contents : string -> contents
   ;
   exception Sentence_already_exists
   ;
+  (* Raise [Sentence_already_exists] if the sentence to be saved already
+     exists and [Sys_error] when an operating system error occurs.  *)
   value save_sentence : bool -> string -> unit
   ;
+  exception Heading_abbrev_already_exists of string
+  ;
+  (* Raise [Heading_abbrev_already_exists] if the given corpus directory
+     already exists and [Unix.Unix_error] when an operating system error
+     occurs.  *)
   value mkdir : string -> unit
   ;
   value gobble_metadata : string -> Sentence.t -> Sentence.metadata

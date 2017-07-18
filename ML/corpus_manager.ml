@@ -68,48 +68,25 @@ value add_init_gap groups =
 (*******************)
 value link dir =
   let url =
-    let corpdir =
-      match dir with
-      [ None -> ""
-      | Some dir -> "?corpdir=" ^ Dir.url_encode dir ^ Dir.url_encoded_dir_sep
-      ]
-    in
-    Web.corpus_manager_cgi ^ corpdir
+    Web.corpus_manager_cgi ^ "?corpdir=" ^ Dir.url_encode dir ^
+    Dir.url_encoded_dir_sep
   in
-  let label =
-    match dir with
-      [ None -> "Home"
-      | Some dir  -> Filename.basename dir
-      ]
-  in
+  let label = Filename.basename dir in
   Html.anchor_ref url label
 ;
-value uplink dir =
-    let updir = Filename.dirname dir in
-    let updir =
-      if updir = Filename.current_dir_name then None else Some updir
-    in
-    link updir
-;
-value uplinks' dir =
+value uplinks dir =
+  let aux dir =
    let updirs = Dir.split dir in
    let updirs =
      List.mapi (fun i x ->
          String.concat Filename.dir_sep (until_nth i updirs)
        ) updirs
    in
-   List.map uplink updirs
-;
-value uplinks dir =
-  let dir_sep = " / " in
-  let links = uplinks' dir in
-  let cur_dir =
-    match links with
-    [ [] -> ""
-    | _ -> dir_sep ^ Filename.basename dir
-    ]
+   List.map link updirs
   in
-  String.concat dir_sep links ^ cur_dir
+  dir
+  |> aux
+  |> String.concat " / "
 ;
 (* Display sentences with format "sentence || sentno" like in citations
    file.  *)
@@ -261,7 +238,8 @@ value make dir =
     ; Web.page_begin (Html.title title)
     ; Html.body_begin Html.Chamois_back |> Web.pl
     ; Web.open_page_with_margin 15
-    ; Html.h1_title title |> Web.print_title (Some Html.default_language)
+    ; Html.h1_title (Html.anchor_ref Web.corpus_manager_cgi title)
+      |> Web.print_title (Some Html.default_language)
     ; body dir
     ; Web.close_page_with_margin ()
     ; Web.page_end Html.default_language True

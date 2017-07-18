@@ -603,7 +603,7 @@ value graph_engine () = do
      else ()
 
      (* Save sentence button *)
-   ; if not Web.corpus_read_only then
+   ; if not Web.corpus_read_only && corpus_dir <> "" && sentence_no <> "" then
        save_sentence_button query |> Web.pl
      else
        ()

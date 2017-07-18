@@ -12,13 +12,16 @@ value confirmation_page query =
   ; Web.open_page_with_margin 15
   ; Html.h1_title title |> Web.print_title (Some Html.default_language)
   ; Html.center_begin |> Web.pl
+  ; Html.h2_begin Html.B2 |> Web.pl
   ; Printf.sprintf "Confirm changes for sentence no. %s of %s ?" sentno corpdir
     |> Web.pl
+  ; Html.h2_end |> Web.pl
   ; Web.cgi_begin Web.save_corpus_cgi "" |> Web.pl
   ; Html.hidden_input "q" (Html.escape query) |> Web.pl
   ; Html.hidden_input "force" (string_of_bool True) |> Web.pl
   ; Html.submit_input "Yes" |> Web.pl
   ; Web.cgi_end |> Web.pl
+  ; Html.html_break |> Web.pl
   ; Web.cgi_begin Web.corpus_manager_cgi "" |> Web.pl
   ; Html.hidden_input Params.corpus_dir corpdir |> Web.pl
   ; Html.submit_input "No" |> Web.pl
@@ -42,6 +45,7 @@ value main =
     Cgi.decoded_get "force" (string_of_bool False) env
     |> bool_of_string
   in
+  let error_page = Web.error_page "Corpus Manager" in
   try
     do
     { Web_corpus.save_sentence force query
@@ -49,7 +53,7 @@ value main =
     }
   with
   [ Web_corpus.Sentence_already_exists -> confirmation_page query
-  | Sys_error msg ->
-    Web.error_page "Corpus Manager" Control.sys_err_mess msg
+  | Sys_error msg -> error_page Control.sys_err_mess msg
+  | Failure msg -> error_page Control.fatal_err_mess msg
   ]
 ;

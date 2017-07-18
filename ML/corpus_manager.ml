@@ -17,6 +17,14 @@ type gap = { start : int; stop : int }
    greatest at most [max_int]).  We call "group" a list of consecutive
    integers.  *)
 
+value max_gap = { start = 1; stop = max_int }
+;
+value string_of_gap gap =
+  let right_bound =
+    if gap.stop = max_int then "..." else string_of_int gap.stop
+  in
+  Printf.sprintf "%d - %s" gap.start right_bound
+;
 (* Return a triple [(g, gap, rest)] where [g] is the first group of the
    given list, [gap] the gap to the next group and [rest] the given
    list without its first group.  *)
@@ -27,7 +35,7 @@ value rec first_group = fun
       ([ x :: group ], gap, rest)
     else
       ([ x ], { start = x + 1; stop = y - 1 }, t)
-  | [] -> ([], { start = 1; stop = max_int }, [])
+  | [] -> ([], max_gap, [])
   | [ x ] as l ->
     (l, { start = x + 1; stop = max_int }, [])
   ]
@@ -142,7 +150,8 @@ value heading_selection dir headings =
 ;
 value add_sentence_form dir gap =
   Web.cgi_begin (Web.cgi_bin "skt_heritage") "" ^
-  uplinks dir ^ " / Sentence number: " ^
+  Html.h3_begin Html.B3 ^
+  uplinks dir ^ " / Sentence no. " ^
   Html.hidden_input Params.corpus_dir dir ^
   Html.int_input
     ~name:Params.sentence_no
@@ -152,6 +161,7 @@ value add_sentence_form dir gap =
     ~val:gap.start
     ~id:Params.sentence_no ^ " " ^
   Html.submit_input "Add" ^
+  Html.h3_end ^
   Web.cgi_end
 ;
 value htmlify_group dir (group, gap) =
@@ -172,7 +182,7 @@ value htmlify_group dir (group, gap) =
         { Html.js_funid = "hideShowElement"
         ; Html.js_funargs = [ div_id ]
         }
-      ~label:"Hide/Show form to fill gap" ^
+      ~label:("Hide/Show form to fill gap " ^ string_of_gap gap) ^
     Html.elt_begin_attrs [ ("id", div_id) ] "div" Html.Hidden_ ^
     Html.html_paragraph ^
     add_sentence_form dir gap ^
@@ -192,16 +202,28 @@ value new_heading_form dir =
   Html.h3_begin Html.B3 ^
   "New heading: " ^
   Html.hidden_input Mkdir_corpus_params.parent_dir dir ^
-  Html.text_input "new_heading" Mkdir_corpus_params.dirname ^
+  Html.text_input "new_heading" Mkdir_corpus_params.dirname ^ " " ^
   Html.submit_input "Create" ^
   Html.h3_end ^
   Web.cgi_end
 ;
 value body dir =
   match Web_corpus.contents (Web.corpus_dir ^ dir) with
-  (* When files = [], it is possible to create a heading or add
-     a sentence...  *)
-  [ Web_corpus.Sentences sentences ->
+  [ Web_corpus.Empty ->
+    if not Web.corpus_read_only then
+      do
+        { Html.center_begin |> Web.pl
+        ; add_sentence_form dir max_gap |> Web.pl
+        ; new_heading_form dir |> Web.pl
+        ; Html.center_end |> Web.pl
+        }
+    else
+      do
+      { Html.h2_begin Html.B2 |> Web.pl
+      ; "Empty corpus" |> Web.pl
+      ; Html.h2_end |> Web.pl
+      }
+  | Web_corpus.Sentences sentences ->
     let groups = group_sentences dir sentences in
     do
     { Html.h2_begin Html.B2 |> Web.pl

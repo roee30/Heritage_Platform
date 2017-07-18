@@ -25,11 +25,12 @@ module type Location = sig
 end
 ;
 module type S = sig
-  (* Contents of a corpus subdirectory: either we are on leaves of the
-     tree (constructor [Sentences]) or on branches (constructor
-     [Headings]).  *)
+  (* Contents of a corpus subdirectory: either it is empty (constructor
+     [Empty]), otherwise we are on leaves of the tree (constructor
+     [Sentences]) or on branches (constructor [Headings]).  *)
   type contents =
-    [ Headings of list Heading.t
+    [ Empty
+    | Headings of list Heading.t
     | Sentences of list Sentence.t
     ]
   ;
@@ -42,7 +43,8 @@ module type S = sig
   exception Sentence_already_exists
   ;
   (* Raise [Sentence_already_exists] if the sentence to be saved already
-     exists and [Sys_error] when an operating system error occurs.  *)
+     exists, [Failure "save_sentence"] if the given state is invalid and
+     [Sys_error] when an operating system error occurs.  *)
   value save_sentence : bool -> string -> unit
   ;
   exception Heading_abbrev_already_exists of string

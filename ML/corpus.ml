@@ -72,7 +72,8 @@ module type S = sig
      tree (constructor [Sentences]) or on branches (constructor
      [Headings]).  *)
   type contents =
-    [ Headings of list Heading.t
+    [ Empty
+    | Headings of list Heading.t
     | Sentences of list Sentence.t
     ]
   ;
@@ -97,7 +98,8 @@ end
 ;
 module Make (Loc : Location) : S = struct
   type contents =
-    [ Headings of list Heading.t
+    [ Empty
+    | Headings of list Heading.t
     | Sentences of list Sentence.t
     ]
   ;
@@ -110,7 +112,7 @@ module Make (Loc : Location) : S = struct
         |> List.map (fun x -> (Gen.gobble (subdir ^ x) : Sentence.t))
         |> List.sort Sentence.compare
       in
-      Sentences sentences
+      match sentences with [ [] -> Empty | sentences -> Sentences sentences ]
     | subdirs ->
       let headings =
         subdirs
@@ -139,7 +141,10 @@ module Make (Loc : Location) : S = struct
     let text = Cgi.decoded_get "text" "" env in
     let corpus_abs_dir = Loc.dir ^ corpus_dir in
     let sentence_no =
-      sentence_no |> float_of_string |> int_of_float
+      try
+        sentence_no |> float_of_string |> int_of_float
+      with
+      [ Failure s -> failwith "save_sentence"]
     in
     let file = corpus_abs_dir ^ string_of_int sentence_no ^ ".rem" in
     let metadata =

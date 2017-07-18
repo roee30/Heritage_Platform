@@ -8,7 +8,7 @@ value main =
   let error_page = Web.error_page "Corpus Manager" in
   try
     do
-    { Web_corpus.mkdir (parent_dir ^ dirname)
+    { Web_corpus.mkdir (Filename.concat parent_dir dirname)
     ; Corpus_manager.make parent_dir
     }
   with

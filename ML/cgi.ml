@@ -139,4 +139,6 @@ value url_encode s =
 value query_of_env env =
   String.concat "&" (List.map (fun (k, v) -> k ^ "=" ^ url_encode v) env)
 ;
+value url path query = path ^ "?" ^ query
+;
 (*i end; i*)

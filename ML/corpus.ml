@@ -58,7 +58,7 @@ end = struct
   ;
   type metadata = { text : list Word.word }
   ;
-  value url sentence = analyzer sentence ^ "?" ^ state sentence
+  value url sentence = Cgi.url (analyzer sentence) (state sentence)
   ;
 end
 ;
@@ -103,13 +103,18 @@ module Make (Loc : Location) : S = struct
     | Sentences of list Sentence.t
     ]
   ;
+  value ( /^ ) = Filename.concat
+  ;
+  value ( ~/ ) file = Loc.dir /^ file
+  ;
   value contents subdir =
+    let subdir = ~/subdir in
     match Dir.subdirs subdir with
     [ [] ->
       let sentences =
         subdir
         |> Dir.files_with_ext "rem"
-        |> List.map (fun x -> (Gen.gobble (subdir ^ x) : Sentence.t))
+        |> List.map (fun x -> (Gen.gobble (subdir /^ x) : Sentence.t))
         |> List.sort Sentence.compare
       in
       match sentences with [ [] -> Empty | sentences -> Sentences sentences ]
@@ -122,7 +127,7 @@ module Make (Loc : Location) : S = struct
       Headings headings
     ]
   ;
-  value metadata_file dir id = dir ^ "." ^ string_of_int id
+  value metadata_file dir id = ~/dir /^ "." ^ string_of_int id
   ;
   value gobble_metadata dir sentence =
     (Gen.gobble (metadata_file dir (Sentence.id sentence)) : Sentence.metadata)
@@ -139,14 +144,13 @@ module Make (Loc : Location) : S = struct
     let translit = Cgi.decoded_get "t" "" env in
     let unsandhied = Cgi.decoded_get "us" "" env = "t" in
     let text = Cgi.decoded_get "text" "" env in
-    let corpus_abs_dir = Loc.dir ^ corpus_dir in
     let sentence_no =
       try
         sentence_no |> float_of_string |> int_of_float
       with
       [ Failure s -> failwith "save_sentence"]
     in
-    let file = corpus_abs_dir ^ string_of_int sentence_no ^ ".rem" in
+    let file = ~/corpus_dir /^ string_of_int sentence_no ^ ".rem" in
     let metadata =
       let encode = Encode.switch_code translit in
       let chunker =
@@ -162,14 +166,14 @@ module Make (Loc : Location) : S = struct
       raise Sentence_already_exists
     else
       do
-      { dump_metadata corpus_abs_dir sentence metadata
+      { dump_metadata corpus_dir sentence metadata
       ; Gen.dump sentence file
       }
   ;
   exception Heading_abbrev_already_exists of string
   ;
   value mkdir dirname =
-    try Unix.mkdir (Loc.dir ^ dirname) 0o755 with
+    try Unix.mkdir ~/dirname 0o755 with
     [ Unix.Unix_error (Unix.EEXIST, _, _) ->
       raise (Heading_abbrev_already_exists (Filename.basename dirname))
     ]

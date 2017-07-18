@@ -17,5 +17,5 @@ value files_with_ext ext dir =
   let files = List.filter (file_with_ext ext) (abs_files dir) in
   files |> basenames
 ;
-value split path = Str.split (Str.regexp Filename.dir_sep) path
+value split path = Str.split (Str.regexp_string Filename.dir_sep) path
 ;

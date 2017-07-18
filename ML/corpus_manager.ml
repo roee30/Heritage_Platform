@@ -68,8 +68,9 @@ value add_init_gap groups =
 (*******************)
 value link dir =
   let url =
-    Web.corpus_manager_cgi ^ "?corpdir=" ^ Cgi.url_encode dir ^
-    Cgi.url_encode Filename.dir_sep
+    [ (Params.corpus_dir, dir) ]
+    |> Cgi.query_of_env
+    |> Cgi.url Web.corpus_manager_cgi
   in
   let label = Filename.basename dir in
   Html.anchor_ref url label
@@ -93,7 +94,7 @@ value uplinks dir =
 value sentence_links dir sentences =
   let to_anchor_ref sentence =
     let metadata =
-      Web_corpus.gobble_metadata (Web.corpus_dir ^ dir) sentence
+      Web_corpus.gobble_metadata dir sentence
     in
     let font = Multilingual.font_of_string Paths.default_display_font in
     let words =
@@ -119,7 +120,7 @@ value sentence_links dir sentences =
 value heading_selection dir headings =
   let options =
     let prefixes =
-      List.map (fun x -> dir ^ x ^ Filename.dir_sep) headings
+      List.map (fun x -> Filename.concat dir x) headings
     in
     List.combine prefixes headings
   in
@@ -185,7 +186,7 @@ value new_heading_form dir =
   Web.cgi_end
 ;
 value body dir =
-  match Web_corpus.contents (Web.corpus_dir ^ dir) with
+  match Web_corpus.contents dir with
   [ Web_corpus.Empty ->
     if not Web.corpus_read_only then
       do

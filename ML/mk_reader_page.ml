@@ -66,13 +66,15 @@ value reader_page () = do
 
     (* Corpus parameters *)
     let corpus_dir = Cgi.decoded_get Params.corpus_dir "" env in
-    let sentence_no = Cgi.decoded_get Params.sentence_no "" env in
+    let sentence_no = Cgi.decoded_get Params.sentence_no "" env in do
 
-    let corpus_mode = corpus_dir <> "" && sentence_no <> "" in do
   { pl (body_begin back_ground) 
   ; print_title (Some lang) reader_title
   ; Html.h3_begin Html.C3 |> Web.pl
-  ; (if corpus_mode then "Corpus mode" else "") |> Web.pl
+  ; if Web.corpus_manager_mode corpus_dir sentence_no then
+      "Corpus manager mode" |> Web.pl
+    else
+      ()
   ; Html.h3_end |> Web.pl
   ; pl center_begin 
   ; pl (cgi_reader_begin reader_cgi "convert") 

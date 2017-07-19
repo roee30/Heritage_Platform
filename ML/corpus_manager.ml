@@ -131,7 +131,7 @@ value heading_selection dir headings =
 ;
 value add_sentence_form dir gap =
   Web.cgi_begin (Web.cgi_bin "skt_heritage") "" ^
-  uplinks dir ^ " / Sentence no. " ^
+  uplinks dir ^ " | Add sentence no. " ^
   Html.hidden_input Params.corpus_dir dir ^
   Html.int_input Params.sentence_no
     ~step:1

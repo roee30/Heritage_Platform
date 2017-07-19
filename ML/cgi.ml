@@ -100,41 +100,28 @@ value query_string () =
   ]
 ;
 value url_encode s =
-  let conversion_tbl =
-    [ ("]", "5D") (* Must be the first element because of [Str.regexp].  *)
-    ; ("!", "21")
-    ; ("#", "23")
-    ; ("$", "24")
-    ; ("%", "25")
-    ; ("&", "26")
-    ; ("'", "27")
-    ; ("(", "28")
-    ; (")", "29")
-    ; ("*", "2A")
-    ; ("+", "2B")
-    ; (",", "2C")
-    ; ("/", "2F")
-    ; (":", "3A")
-    ; (";", "3B")
-    ; ("=", "3D")
-    ; ("?", "3F")
-    ; ("@", "40")
-    ; ("[", "5B")
-    ]
-  in
+  let hexa_str c = Printf.sprintf "%X" (Char.code c) in
+
+  (* Reference: RFC 3986 appendix A *)
   let url_encode = fun
-    [ " " -> "+"
-    | s ->
-      try "%" ^ List.assoc s conversion_tbl with [ Not_found -> s ]
+    (* Unreserved characters *)
+    [ 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '-' | '.' | '_' | '~' as c ->
+      String.make 1 c
+
+    (* Special case of the space character *)
+    | ' ' -> "+"
+
+    (* Reserved characters *)
+    | c -> "%" ^ hexa_str c
     ]
   in
-  let special_chars =
-    Str.regexp (
-      "[" ^ String.concat "" (conversion_tbl |> List.split |> fst) ^ " " ^ "]"
-    )
+
+  let char_of_string s =
+    if String.length s = 1 then s.[0] else failwith "char_of_string"
   in
-  let subst s = s |> Str.matched_string |> url_encode in
-  Str.global_substitute special_chars subst s
+  let subst s = s |> Str.matched_string |> char_of_string |> url_encode in
+  let any_char = Str.regexp ".\\|\n" in
+  Str.global_substitute any_char subst s
 ;
 value query_of_env env =
   String.concat "&" (List.map (fun (k, v) -> k ^ "=" ^ url_encode v) env)

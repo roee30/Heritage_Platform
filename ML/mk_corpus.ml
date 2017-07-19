@@ -35,7 +35,7 @@ value populate_corpus dirname file =
          Filename.basename dirname.val)
     in
     let dirname = dirname ^ Filename.dir_sep in
-    let module Corp = Corpus.Make (struct value dir = corpus_location; end) in
+    let module Corp = Corpus.Make (struct value path = corpus_location; end) in
     let rec aux i =
       try
         let line = input_line ch in

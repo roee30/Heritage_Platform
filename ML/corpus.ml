@@ -63,7 +63,7 @@ end = struct
 end
 ;
 module type Location = sig
-  value dir : string
+  value path : string
   ;
 end
 ;
@@ -105,7 +105,7 @@ module Make (Loc : Location) : S = struct
   ;
   value ( /^ ) = Filename.concat
   ;
-  value ( ~/ ) file = Loc.dir /^ file
+  value ( ~/ ) file = Loc.path /^ file
   ;
   value contents subdir =
     let subdir = ~/subdir in

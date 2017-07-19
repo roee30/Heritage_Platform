@@ -20,7 +20,7 @@ module Sentence : sig
 end
 ;
 module type Location = sig
-  value dir : string
+  value path : string
   ;
 end
 ;

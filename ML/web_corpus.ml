@@ -1,2 +1,2 @@
-include Corpus.Make (struct value dir = Web.corpus_dir; end)
+include Corpus.Make (struct value path = Web.corpus_dir; end)
 ;

@@ -511,6 +511,9 @@ value save_sentence_button query =
   Web.cgi_end ^
   Html.center_end
 ;
+value corpus_manager_mode corpus_dir sentence_no =
+  not Web.corpus_read_only && corpus_dir <> "" && sentence_no <> ""
+;
 (* Main body of graph segmenter cgi *)
 value graph_engine () = do
   { Prel.prelude () 
@@ -603,7 +606,7 @@ value graph_engine () = do
      else ()
 
      (* Save sentence button *)
-   ; if not Web.corpus_read_only && corpus_dir <> "" && sentence_no <> "" then
+   ; if corpus_manager_mode corpus_dir sentence_no then
        save_sentence_button query |> Web.pl
      else
        ()

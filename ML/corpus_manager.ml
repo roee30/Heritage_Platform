@@ -66,6 +66,8 @@ value add_init_gap groups =
 (*******************)
 (* Page generation *)
 (*******************)
+value big text = Html.div Html.Latin16 text
+;
 value link dir =
   let url =
     [ (Params.corpus_dir, dir) ]
@@ -112,7 +114,8 @@ value sentence_links dir sentences =
       ]
     in
     let sentence_str = String.concat " " words in
-    Html.anchor_ref (Html.escape (Corpus.Sentence.url sentence)) sentence_str
+    sentence_str
+    |> Html.anchor_ref (sentence |> Corpus.Sentence.url |> Html.escape)
     |> display
   in
   List.map to_anchor_ref sentences
@@ -128,18 +131,15 @@ value heading_selection dir headings =
 ;
 value add_sentence_form dir gap =
   Web.cgi_begin (Web.cgi_bin "skt_heritage") "" ^
-  Html.h3_begin Html.B3 ^
   uplinks dir ^ " / Sentence no. " ^
   Html.hidden_input Params.corpus_dir dir ^
-  Html.int_input
-    ~name:Params.sentence_no
+  Html.int_input Params.sentence_no
     ~step:1
     ~min:gap.start
     ~max:gap.stop
     ~val:gap.start
     ~id:Params.sentence_no ^ " " ^
   Html.submit_input "Add" ^
-  Html.h3_end ^
   Web.cgi_end
 ;
 value htmlify_group dir (group, gap) =
@@ -148,19 +148,18 @@ value htmlify_group dir (group, gap) =
     [ [] -> ("", "")
     | [ h :: _ ] ->
       let id = Corpus.Sentence.id h in
-      (Html.ol ~start:id ~items:(sentence_links dir group), string_of_int id)
+      (Html.ol ~start:id (sentence_links dir group), string_of_int id)
     ]
   in
   let div_id = "group" ^ group_id in
   let add_sentence_form =
     Html.button
       ~id:"add_sentence"
-      ~cl:Html.Center_
       ~onclick:
         { Html.js_funid = "hideShowElement"
         ; Html.js_funargs = [ div_id ]
         }
-      ~label:("Hide/Show form to fill gap " ^ string_of_gap gap) ^
+    ("Hide/Show form to fill gap " ^ string_of_gap gap) ^
     Html.elt_begin_attrs [ ("id", div_id) ] "div" Html.Hidden_ ^
     Html.html_paragraph ^
     add_sentence_form dir gap ^
@@ -177,12 +176,20 @@ value group_sentences dir sentences =
 ;
 value new_heading_form dir =
   Web.cgi_begin Web.mkdir_corpus_cgi "" ^
-  Html.h3_begin Html.B3 ^
   "New heading: " ^
   Html.hidden_input Mkdir_corpus_params.parent_dir dir ^
   Html.text_input "new_heading" Mkdir_corpus_params.dirname ^ " " ^
   Html.submit_input "Create" ^
-  Html.h3_end ^
+  Web.cgi_end
+;
+value heading_selection_form dir headings =
+  let selection_prompt =
+    "Explore " ^
+    heading_selection dir (List.map Corpus.Heading.label headings)  ^ " " ^
+    Html.submit_input "Go"
+  in
+  Web.cgi_begin Web.corpus_manager_cgi "" ^
+  selection_prompt ^
   Web.cgi_end
 ;
 value body dir =
@@ -192,40 +199,25 @@ value body dir =
       do
         { Html.center_begin |> Web.pl
         ; add_sentence_form dir max_gap |> Web.pl
+        ; Html.html_break |> Web.pl
         ; new_heading_form dir |> Web.pl
         ; Html.center_end |> Web.pl
         }
     else
-      do
-      { Html.h2_begin Html.B2 |> Web.pl
-      ; "Empty corpus" |> Web.pl
-      ; Html.h2_end |> Web.pl
-      }
+      "Empty corpus" |> big |> Web.pl
   | Web_corpus.Sentences sentences ->
     let groups = group_sentences dir sentences in
     do
-    { Html.h2_begin Html.B2 |> Web.pl
-    ; uplinks dir |> Web.pl
-    ; Html.h2_end |> Web.pl
+    { uplinks dir |> big |> Web.pl
     ; groups |> List.map (htmlify_group dir) |> List.iter Web.pl
-    ; Html.html_break |> Web.pl
     }
   | Web_corpus.Headings headings ->
-    let selection_prompt =
-      "Explore " ^
-      heading_selection dir (List.map Corpus.Heading.label headings)  ^ " " ^
-      Html.submit_input "Go"
-    in
     do
     { Html.center_begin |> Web.pl
-    ; Html.h2_begin Html.B2 |> Web.pl
-    ; uplinks dir |> Web.pl
-    ; Html.h2_end |> Web.pl
-    ; Web.cgi_begin Web.corpus_manager_cgi "" |> Web.pl
-    ; Html.h3_begin Html.B3 |> Web.pl
-    ; selection_prompt |> Web.pl
-    ; Html.h3_end |> Web.pl
-    ; Web.cgi_end |> Web.pl
+    ; uplinks dir |> big |> Web.pl
+    ; Html.html_break |> Web.pl
+    ; heading_selection_form dir headings |> Web.pl
+    ; Html.html_break |> Web.pl
     ; if not Web.corpus_read_only then new_heading_form dir |> Web.pl else ()
     ; Html.center_end |> Web.pl
     }
@@ -233,14 +225,16 @@ value body dir =
 ;
 value make dir =
   let title = "Sanskrit Corpus" in
+  let clickable_title =
+    title |> Html.anchor_ref Web.corpus_manager_cgi |> Html.h1_title
+  in
   try
     do
     { Web.maybe_http_header ()
     ; Web.page_begin (Html.title title)
     ; Html.body_begin Html.Chamois_back |> Web.pl
     ; Web.open_page_with_margin 15
-    ; Html.h1_title (Html.anchor_ref Web.corpus_manager_cgi title)
-      |> Web.print_title (Some Html.default_language)
+    ; clickable_title |> Web.print_title (Some Html.default_language)
     ; body dir
     ; Web.close_page_with_margin ()
     ; Web.page_end Html.default_language True

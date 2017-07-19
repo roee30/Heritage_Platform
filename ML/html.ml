@@ -117,7 +117,7 @@ value add_opt_attrs opt_attrs attrs =
     ]
   ) attrs opt_attrs
 ;
-value int_input ?id ?val ?(step = 1) ?(min = min_int) ?(max = max_int) ~name =
+value int_input ?id ?val ?(step = 1) ?(min = min_int) ?(max = max_int) name =
   let attrs =
     [ ("type", "number")
     ; ("name", name)
@@ -167,7 +167,7 @@ value hidden_input name label =
 value li item = xml_empty "li" ^ item
 ;
 (* Ordered list *)
-value ol ?(start = 1) ~items =
+value ol ?(start = 1) items =
   let ol = "ol" in
   let list = String.concat "\n" (List.map li items) in
   xml_begin_with_att ol [ ("start", string_of_int start) ] ^ "\n" ^
@@ -774,7 +774,7 @@ value string_of_js_funcall f =
   let js_funargs = List.map js_string_arg f.js_funargs in
   f.js_funid ^ "(" ^ String.concat ", " js_funargs ^ ")"
 ;
-value button ?id ?cl ?onclick ~label =
+value button ?id ?cl ?onclick label =
   let button = "button" in
   let attrs =
     add_opt_attrs

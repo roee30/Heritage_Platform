@@ -5,6 +5,9 @@ value confirmation_page query =
   let env = Cgi.create_env query in
   let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
   let sentno = Cgi.decoded_get Params.sentence_no "" env in
+  let confirmation_msg =
+    Printf.sprintf "Confirm changes for sentence no. %s of %s ?" sentno corpdir
+  in
   do
   { Web.maybe_http_header ()
   ; Web.page_begin (Html.title title)
@@ -12,10 +15,8 @@ value confirmation_page query =
   ; Web.open_page_with_margin 15
   ; Html.h1_title title |> Web.print_title (Some Html.default_language)
   ; Html.center_begin |> Web.pl
-  ; Html.h2_begin Html.B2 |> Web.pl
-  ; Printf.sprintf "Confirm changes for sentence no. %s of %s ?" sentno corpdir
-    |> Web.pl
-  ; Html.h2_end |> Web.pl
+  ; Html.div Html.Latin16 confirmation_msg |> Web.pl
+  ; Html.html_break |> Web.pl
   ; Web.cgi_begin Web.save_corpus_cgi "" |> Web.pl
   ; Html.hidden_input Save_corpus_params.state (Html.escape query) |> Web.pl
   ; Html.hidden_input Save_corpus_params.force (string_of_bool True) |> Web.pl
@@ -42,7 +43,8 @@ value main =
   let env' = Cgi.create_env query in
   let corpdir = Cgi.decoded_get Params.corpus_dir "" env' in
   let force =
-    Cgi.decoded_get Save_corpus_params.force (string_of_bool False) env
+    env
+    |> Cgi.decoded_get Save_corpus_params.force (string_of_bool False)
     |> bool_of_string
   in
   let error_page = Web.error_page "Corpus Manager" in

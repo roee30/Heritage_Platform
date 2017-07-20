@@ -164,13 +164,28 @@ value hidden_input name label =
 (*********)
 
 (* List item *)
-value li item = xml_empty "li" ^ item
+value li ?id item =
+  let li = "li" in
+  let attrs = add_opt_attrs [ ("id", id) ] [] in
+  xml_begin_with_att li attrs ^ item ^ xml_end li
 ;
 (* Ordered list *)
-value ol ?(start = 1) items =
+value ol ?id ?li_id_prefix ?(start = 1) items =
   let ol = "ol" in
-  let list = String.concat "\n" (List.map li items) in
-  xml_begin_with_att ol [ ("start", string_of_int start) ] ^ "\n" ^
+  let items =
+    List.mapi (fun i item ->
+        let id =
+          let genid prefix = prefix ^ string_of_int (start + i) in
+          Gen.opt_app genid li_id_prefix
+        in
+        li ?id item
+      ) items
+  in
+  let list = String.concat "\n" items in
+  let attrs =
+    add_opt_attrs [ ("id", id) ] [ ("start", string_of_int start) ]
+  in
+  xml_begin_with_att ol attrs ^ "\n" ^
   list ^ "\n" ^
   xml_end ol
 ;

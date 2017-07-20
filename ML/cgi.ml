@@ -126,6 +126,14 @@ value url_encode s =
 value query_of_env env =
   String.concat "&" (List.map (fun (k, v) -> k ^ "=" ^ url_encode v) env)
 ;
-value url path query = path ^ "?" ^ query
+value url ?query ?fragment path =
+  let opt_part prefix = fun
+    [ None -> ""
+    | Some part -> prefix ^ part
+    ]
+  in
+  let query_part = opt_part "?" query in
+  let fragment_part = opt_part "#" fragment in
+  path ^ query_part ^ fragment_part
 ;
 (*i end; i*)

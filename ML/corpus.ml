@@ -58,7 +58,7 @@ end = struct
   ;
   type metadata = { text : list Word.word }
   ;
-  value url sentence = Cgi.url (analyzer sentence) (state sentence)
+  value url sentence = Cgi.url (analyzer sentence) ~query:(state sentence)
   ;
 end
 ;

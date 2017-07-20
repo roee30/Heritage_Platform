@@ -66,13 +66,13 @@ value add_init_gap groups =
 (*******************)
 (* Page generation *)
 (*******************)
-value big text = Html.div Html.Latin16 text
+value big text = Html.span Html.B1 text
 ;
 value link dir =
   let url =
     [ (Params.corpus_dir, dir) ]
     |> Cgi.query_of_env
-    |> Cgi.url Web.corpus_manager_cgi
+    |> fun query -> Cgi.url Web.corpus_manager_cgi ~query
   in
   let label = Filename.basename dir in
   Html.anchor_ref url label
@@ -148,7 +148,8 @@ value htmlify_group dir (group, gap) =
     [ [] -> ("", "")
     | [ h :: _ ] ->
       let id = Corpus.Sentence.id h in
-      (Html.ol ~start:id (sentence_links dir group), string_of_int id)
+      let group_id = string_of_int id in
+      (Html.ol ~li_id_prefix:"" ~start:id (sentence_links dir group), group_id)
     ]
   in
   let div_id = "group" ^ group_id in
@@ -209,7 +210,9 @@ value body dir =
     let groups = group_sentences dir sentences in
     do
     { uplinks dir |> big |> Web.pl
+    ; Web.open_page_with_margin 30
     ; groups |> List.map (htmlify_group dir) |> List.iter Web.pl
+    ; Web.close_page_with_margin ()
     }
   | Web_corpus.Headings headings ->
     do

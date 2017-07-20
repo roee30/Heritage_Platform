@@ -8,6 +8,7 @@ value confirmation_page query =
   let confirmation_msg =
     Printf.sprintf "Confirm changes for sentence no. %s of %s ?" sentno corpdir
   in
+  let specific_url path = Cgi.url path ~fragment:sentno in
   do
   { Web.maybe_http_header ()
   ; Web.page_begin (Html.title title)
@@ -17,13 +18,13 @@ value confirmation_page query =
   ; Html.center_begin |> Web.pl
   ; Html.div Html.Latin16 confirmation_msg |> Web.pl
   ; Html.html_break |> Web.pl
-  ; Web.cgi_begin Web.save_corpus_cgi "" |> Web.pl
+  ; Web.cgi_begin (specific_url Web.save_corpus_cgi) "" |> Web.pl
   ; Html.hidden_input Save_corpus_params.state (Html.escape query) |> Web.pl
   ; Html.hidden_input Save_corpus_params.force (string_of_bool True) |> Web.pl
   ; Html.submit_input "Yes" |> Web.pl
   ; Web.cgi_end |> Web.pl
   ; Html.html_break |> Web.pl
-  ; Web.cgi_begin Web.corpus_manager_cgi "" |> Web.pl
+  ; Web.cgi_begin (specific_url Web.corpus_manager_cgi) "" |> Web.pl
   ; Html.hidden_input Params.corpus_dir corpdir |> Web.pl
   ; Html.submit_input "No" |> Web.pl
   ; Web.cgi_end |> Web.pl

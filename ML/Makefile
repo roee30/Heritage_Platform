@@ -277,8 +277,8 @@ morpho.cmx segmenter1.cmx tagger1.cmx -o tagger1
 # NB best used by first hiding all .mli, make clean, make depend 
 debug: gen.cmo version.cmo date.cmo word.cmo zen_lexer.cmo order.cmo \
 canon.cmo phonetics.cmo transduction.cmo padapatha.cmo sanskrit.cmo \
-sandhi.cmo share.cmo trie.cmo deco.cmo skt_lexer.cmo \
-encode.cmo order.cmo lexmap.cmo sandhi.cmo \
+sandhi.cmo int_sandhi.cmo share.cmo trie.cmo deco.cmo skt_lexer.cmo \
+encode.cmo order.cmo lexmap.cmo inflected.cmo parts.cmo verbs.cmo \
 morpho_html.cmo cgi.cmo html.cmo web.cmo indexer.cmo declension.cmo 
 	(cat debug.ml ; cat -) | ocaml -I +camlp4 -I . -I $(ZEN)
 

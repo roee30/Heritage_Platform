@@ -511,6 +511,14 @@ value save_sentence_button query =
   Web.cgi_end ^
   Html.center_end
 ;
+value continue_reading_button corpdir sentno =
+  Html.center_begin ^
+  Web.cgi_begin (Cgi.url Web.corpus_manager_cgi ~fragment:sentno) "" ^
+  Html.hidden_input Params.corpus_dir corpdir ^
+  Html.submit_input "Continue reading" ^
+  Web.cgi_end ^
+  Html.center_end
+;
 (* Main body of graph segmenter cgi *)
 value graph_engine () = do
   { Prel.prelude () 
@@ -605,6 +613,15 @@ value graph_engine () = do
      (* Save sentence button *)
    ; if Web.corpus_manager_mode corpus_dir sentence_no then
        save_sentence_button query |> Web.pl
+     else
+       ()
+
+   ; Html.html_break |> Web.pl
+
+     (* Continue reading button *)
+   ; if Web.corpus_mode corpus_dir sentence_no then
+       continue_reading_button
+         (Cgi.decode_url corpus_dir) (Cgi.decode_url sentence_no) |> Web.pl
      else
        ()
 

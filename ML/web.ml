@@ -649,8 +649,10 @@ value corpus_read_only =
   | Html.Computer | Html.Server | Html.Simputer -> True
   ]
 ;
+value corpus_mode corpus_dir sentence_no = corpus_dir <> "" && sentence_no <> ""
+;
 value corpus_manager_mode corpus_dir sentence_no =
-  not corpus_read_only && corpus_dir <> "" && sentence_no <> ""
+  not corpus_read_only && corpus_mode corpus_dir sentence_no
 ;
 value interaction_modes_default mode =  
   [ (" Summary ","g",mode="g") 

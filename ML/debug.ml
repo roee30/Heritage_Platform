@@ -29,9 +29,9 @@ open Gen;
 open Version;
 #load "date.cmo"; 
 #load "html.cmo"; 
-#load "web.cmo";
+(* #load "web.cmo";
 open Web;
-#load "cgi.cmo"; 
+#load "cgi.cmo"; *)
 #load "canon.cmo";
 open Canon;
 #load "phonetics.cmo";

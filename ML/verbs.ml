@@ -3154,11 +3154,14 @@ value compute_perfect_c strong weak olengthened eweak iopt entry =
   match voices_of entry with
   [ Para -> do
       { compute_perfecta Primary strong weak olengthened eweak iopt entry
-      ; if entry = "cit#1" then do
+      ; match entry with 
+        [ "cit#1" -> do
            { compute_perfectm Primary weak entry
            ; compute_perfectm Primary (revcode "cikitr") entry (* WR *)
            }
-        else ()    
+        | "vac" -> record_part_m_ath ppftm weak entry (* anuucaana *)
+        | _ -> ()
+        ]
       }
   | Atma -> let stem = match entry with 
                        [ "cak.s" | "ba.mh" -> strong

@@ -139,7 +139,6 @@ module Make (Loc : Location) : S = struct
   exception Sentence_already_exists
   ;
   value save_sentence force state =
-    let state = state |> List.remove_assoc Params.corpus_read_only in
     let corpus_dir = Cgi.get Params.corpus_dir state "" in
     let sentence_no = Cgi.get Params.sentence_no state "" in
     let translit = Cgi.get "t" state "" in

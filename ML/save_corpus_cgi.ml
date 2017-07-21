@@ -41,17 +41,22 @@ value main =
   let query = Cgi.query_string () in
   let env = Cgi.create_env query in
   let query = Cgi.decoded_get Save_corpus_params.state "" env in
-  let env' = Cgi.create_env query in
-  let corpdir = Cgi.decoded_get Params.corpus_dir "" env' in
   let force =
     env
     |> Cgi.decoded_get Save_corpus_params.force (string_of_bool False)
     |> bool_of_string
   in
+  let env = Cgi.create_env query in
+  let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
   let error_page = Web.error_page "Corpus Manager" in
   try
+    let state =
+      env
+      |> List.remove_assoc Params.corpus_read_only
+      |> List.map (fun (k, v) -> (k, Cgi.decode_url v))
+    in
     do
-    { Web_corpus.save_sentence force query
+    { Web_corpus.save_sentence force state
     ; Corpus_manager.make corpdir
     }
   with

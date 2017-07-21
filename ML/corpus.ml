@@ -21,13 +21,13 @@ end
 module Sentence : sig
   type t
   ;
-  value make : int -> string -> string -> t
+  value make : int -> string -> list (string * string) -> t
   ;
   value id : t -> int
   ;
   value analyzer : t -> string
   ;
-  value state : t -> string
+  value state : t -> list (string * string)
   ;
   value compare : t -> t -> int
   ;
@@ -39,7 +39,7 @@ end = struct
   type t =
     { id : int
     ; analyzer : string
-    ; state : string
+    ; state : list (string * string)
     }
   ;
   value make id analyzer state =
@@ -58,7 +58,8 @@ end = struct
   ;
   type metadata = { text : list Word.word }
   ;
-  value url sentence = Cgi.url (analyzer sentence) ~query:(state sentence)
+  value url sentence =
+    Cgi.url (analyzer sentence) ~query:(sentence |> state |> Cgi.query_of_env)
   ;
 end
 ;
@@ -84,7 +85,7 @@ module type S = sig
   ;
   exception Sentence_already_exists
   ;
-  value save_sentence : bool -> string -> unit
+  value save_sentence : bool -> list (string * string) -> unit
   ;
   exception Heading_abbrev_already_exists of string
   ;
@@ -138,12 +139,12 @@ module Make (Loc : Location) : S = struct
   exception Sentence_already_exists
   ;
   value save_sentence force state =
-    let env = Cgi.create_env state in
-    let corpus_dir = Cgi.decoded_get Params.corpus_dir "" env in
-    let sentence_no = Cgi.decoded_get Params.sentence_no "" env in
-    let translit = Cgi.decoded_get "t" "" env in
-    let unsandhied = Cgi.decoded_get "us" "" env = "t" in
-    let text = Cgi.decoded_get "text" "" env in
+    let state = state |> List.remove_assoc Params.corpus_read_only in
+    let corpus_dir = Cgi.get Params.corpus_dir state "" in
+    let sentence_no = Cgi.get Params.sentence_no state "" in
+    let translit = Cgi.get "t" state "" in
+    let unsandhied = Cgi.get "us" state "" = "t" in
+    let text = Cgi.get "text" state "" in
     let sentence_no =
       try
         sentence_no |> float_of_string |> int_of_float

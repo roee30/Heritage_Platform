@@ -45,7 +45,7 @@ module type S = sig
   (* Raise [Sentence_already_exists] if the sentence to be saved already
      exists, [Failure "save_sentence"] if the given state is invalid and
      [Sys_error] when an operating system error occurs.  *)
-  value save_sentence : bool -> string -> unit
+  value save_sentence : bool -> list (string * string) -> unit
   ;
   exception Heading_abbrev_already_exists of string
   ;

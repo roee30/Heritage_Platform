@@ -49,7 +49,7 @@ value main =
   let env = Cgi.create_env query in
   let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
   let corpmode =
-    Web_corpus.mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
+    Web.corpus_mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
   in
   let error_page = Web.error_page "Corpus Manager" in
   try

@@ -717,4 +717,30 @@ value error_page title msg submsg =
   ; abort Html.default_language msg submsg
   }
 ;
+type corpus_mode = [ Reader | Annotator | Manager ]
+;
+value default_corpus_mode = Reader
+;
+value string_of_corpus_mode = fun
+  [ Reader -> "reader"
+  | Annotator -> "annotator"
+  | Manager -> "manager"
+  ]
+;
+value corpus_mode_of_string = fun
+  [ "annotator" -> Annotator
+  | "manager" -> Manager
+  | _ -> Reader
+  ]
+;
+(* [invalid_corpus_mode_page expected_mode current_mode] generates an HTML on
+   [output_channel] to notify the user that the requested operation
+   on the corpus is available only in [expected_mode] and not in
+   [current_mode].  *)
+value invalid_corpus_mode_page expected current =
+  error_page "Corpus Manager"
+    "Invalid mode "
+    ("Expected mode: " ^ string_of_corpus_mode expected ^
+     " | Current mode: " ^ string_of_corpus_mode current)
+;
 (*i end; i*)

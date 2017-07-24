@@ -7,11 +7,11 @@ value main =
   let parent_dir = Cgi.decoded_get Mkdir_corpus_params.parent_dir "" env in
   let mode =
     Cgi.decoded_get Mkdir_corpus_params.mode "" env
-    |> Web_corpus.mode_of_string
+    |> Web.corpus_mode_of_string
   in
   let error_page = Web.error_page "Corpus Manager" in
   match mode with
-  [ Web_corpus.Manager ->
+  [ Web.Manager ->
     try
       do
       { Web_corpus.mkdir (Filename.concat parent_dir dirname)
@@ -27,7 +27,7 @@ value main =
       in
       error_page Control.sys_err_mess submsg
     ]
-  | Web_corpus.Reader | Web_corpus.Annotator ->
-    Web_corpus.invalid_mode_page Web_corpus.Manager mode
+  | Web.Reader | Web.Annotator ->
+    Web.invalid_corpus_mode_page Web.Manager mode
   ]
 ;

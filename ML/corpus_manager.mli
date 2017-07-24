@@ -4,5 +4,5 @@
    The output channel is as always either [stdout] for CGI output or
    a static HTML file (according to the "magic switch"
    Web.output_channel).  *)
-value mk_page : string -> Web_corpus.mode -> unit
+value mk_page : string -> Web.corpus_mode -> unit
 ;

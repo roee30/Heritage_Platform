@@ -10,6 +10,8 @@ end
 module Sentence : sig
   type t
   ;
+  value make : int -> string -> list (string * string) -> t
+  ;
   value id : t -> int
   ;
   value analyzer : t -> string
@@ -55,6 +57,12 @@ module type S = sig
      already exists and [Unix.Unix_error] when an operating system error
      occurs.  *)
   value mkdir : string -> unit
+  ;
+  exception No_such_sentence
+  ;
+  (* Raise [No_such_sentence] if the requested sentence does not
+     exist.  *)
+  value sentence : string -> int -> Sentence.t
   ;
   value gobble_metadata : string -> Sentence.t -> Sentence.metadata
   ;

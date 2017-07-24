@@ -2,9 +2,9 @@
 
 value mode_selection =
   List.map (fun mode ->
-    let mode_str = Web_corpus.string_of_mode mode in
-    (String.capitalize mode_str, mode_str, mode = Web_corpus.Reader)
-  ) Web_corpus.[ Reader; Annotator; Manager ]
+    let mode_str = Web.string_of_corpus_mode mode in
+    (String.capitalize mode_str, mode_str, mode = Web.Reader)
+  ) Web.[ Reader; Annotator; Manager ]
 ;
 value make lang =
   let title =

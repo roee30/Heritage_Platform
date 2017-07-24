@@ -73,7 +73,7 @@ value link mode dir =
     let query =
       Cgi.query_of_env
         [ (Params.corpus_dir, dir)
-        ; (Params.corpus_mode, Web_corpus.string_of_mode mode)
+        ; (Params.corpus_mode, Web.string_of_corpus_mode mode)
         ]
     in
     Cgi.url Web.corpus_manager_cgi ~query |> Html.escape
@@ -137,7 +137,7 @@ value add_sentence_form dir mode gap =
   Web.cgi_begin (Web.cgi_bin "skt_heritage") "" ^
   "Add sentence: " ^ uplinks dir mode ^ " / " ^
   Html.hidden_input Params.corpus_dir dir ^
-  Html.hidden_input Params.corpus_mode (Web_corpus.string_of_mode mode) ^
+  Html.hidden_input Params.corpus_mode (Web.string_of_corpus_mode mode) ^
   Html.int_input Params.sentence_no
     ~step:1
     ~min:gap.start
@@ -173,7 +173,7 @@ value htmlify_group dir mode (group, gap) =
     add_sentence_form dir mode gap ^
     Html.div_end
   in
-  ol ^ if mode = Web_corpus.Annotator then add_sentence_form else ""
+  ol ^ if mode = Web.Annotator then add_sentence_form else ""
 
 ;
 value group_sentences dir sentences =
@@ -187,7 +187,7 @@ value new_heading_form dir mode =
   Web.cgi_begin Web.mkdir_corpus_cgi "" ^
   "New heading: " ^ uplinks ^ (if uplinks <> "" then " / " else "") ^
   Html.hidden_input Mkdir_corpus_params.parent_dir dir ^
-  Html.hidden_input Mkdir_corpus_params.mode (Web_corpus.string_of_mode mode) ^
+  Html.hidden_input Mkdir_corpus_params.mode (Web.string_of_corpus_mode mode) ^
   Html.text_input "new_heading" Mkdir_corpus_params.dirname ^ " " ^
   Html.submit_input "Create"
   ^
@@ -198,9 +198,9 @@ value heading_selection_form dir mode headings =
     let uplinks = uplinks dir mode in
     let submit_button_label =
       match mode with
-      [ Web_corpus.Reader -> "Read"
-      | Web_corpus.Annotator -> "Annotate"
-      | Web_corpus.Manager -> "Manage" ]
+      [ Web.Reader -> "Read"
+      | Web.Annotator -> "Annotate"
+      | Web.Manager -> "Manage" ]
     in
     uplinks ^ (if uplinks <> "" then " / " else "") ^
     heading_selection dir (List.map Corpus.Heading.label headings)  ^ " " ^
@@ -209,7 +209,7 @@ value heading_selection_form dir mode headings =
   Web.cgi_begin Web.corpus_manager_cgi "" ^
   big (
     selection_prompt ^
-    Html.hidden_input Params.corpus_mode (Web_corpus.string_of_mode mode)
+    Html.hidden_input Params.corpus_mode (Web.string_of_corpus_mode mode)
   ) ^
   Web.cgi_end
 ;
@@ -220,9 +220,9 @@ value body dir mode =
     { uplinks dir mode |> big |> Web.pl
     ; Web.open_page_with_margin 30
     ; match mode with
-        [ Web_corpus.Reader -> "Empty corpus"
-        | Web_corpus.Annotator -> add_sentence_form dir mode max_gap
-        | Web_corpus.Manager -> new_heading_form dir mode
+        [ Web.Reader -> "Empty corpus"
+        | Web.Annotator -> add_sentence_form dir mode max_gap
+        | Web.Manager -> new_heading_form dir mode
         ]
       |> Web.pl
     ; Web.close_page_with_margin ()
@@ -243,7 +243,7 @@ value body dir mode =
     { Html.center_begin |> Web.pl
     ; heading_selection_form dir mode headings |> Web.pl
     ; Html.html_break |> Web.pl
-    ; if mode = Web_corpus.Manager then
+    ; if mode = Web.Manager then
         new_heading_form dir mode |> Web.pl
       else ()
     ; Html.center_end |> Web.pl
@@ -253,11 +253,11 @@ value body dir mode =
 value mk_page dir mode =
   let title =
     "Sanskrit Corpus " ^
-    (mode |> Web_corpus.string_of_mode |> String.capitalize)
+    (mode |> Web.string_of_corpus_mode |> String.capitalize)
   in
   let clickable_title =
     let query =
-      Cgi.query_of_env [ (Params.corpus_mode, Web_corpus.string_of_mode mode) ]
+      Cgi.query_of_env [ (Params.corpus_mode, Web.string_of_corpus_mode mode) ]
     in
     title
     |> Html.anchor_ref (Cgi.url Web.corpus_manager_cgi ~query)

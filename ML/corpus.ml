@@ -86,6 +86,10 @@ module type S = sig
   ;
   value mkdir : string -> unit
   ;
+  exception No_such_sentence
+  ;
+  value sentence : string -> int -> Sentence.t
+  ;
   value gobble_metadata : string -> Sentence.t -> Sentence.metadata
   ;
   value dump_metadata : string -> Sentence.t -> Sentence.metadata -> unit
@@ -103,13 +107,25 @@ module Make (Loc : Location) : S = struct
   ;
   value ( ~/ ) file = Loc.path /^ file
   ;
+  value sentence_ext = "rem"
+  ;
+  value sentence_file subdir id =
+    ~/subdir /^ Printf.sprintf "%d.%s" id sentence_ext
+  ;
+  exception No_such_sentence
+  ;
+  value sentence subdir id =
+    let file = sentence_file subdir id in
+    if Sys.file_exists file then (Gen.gobble file : Sentence.t) else
+      raise No_such_sentence
+  ;
   value contents subdir =
     let subdir = ~/subdir in
     match Dir.subdirs subdir with
     [ [] ->
       let sentences =
         subdir
-        |> Dir.files_with_ext "rem"
+        |> Dir.files_with_ext sentence_ext
         |> List.map (fun x -> (Gen.gobble (subdir /^ x) : Sentence.t))
         |> List.sort Sentence.compare
       in
@@ -145,7 +161,7 @@ module Make (Loc : Location) : S = struct
       with
       [ Failure s -> failwith "save_sentence"]
     in
-    let file = ~/corpus_dir /^ string_of_int sentence_no ^ ".rem" in
+    let file = sentence_file corpus_dir sentence_no in
     let metadata =
       let encode = Encode.switch_code translit in
       let chunker =

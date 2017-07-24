@@ -515,8 +515,8 @@ value save_sentence_button query =
 value continue_reading_button mode corpdir sentno =
   let submit_button_label =
     match mode with
-    [ Web_corpus.Annotator -> "Quit without saving"
-    | Web_corpus.Reader | Web_corpus.Manager -> "Continue reading"
+    [ Web.Annotator -> "Quit without saving"
+    | Web.Reader | Web.Manager -> "Continue reading"
     ]
   in
   Html.center_begin ^
@@ -557,7 +557,7 @@ value graph_engine () = do
     let corpus_mode =
       url_enc_corpus_mode
       |> Cgi.decode_url
-      |> Web_corpus.mode_of_string
+      |> Web.corpus_mode_of_string
     in
     let corpus_dir = Cgi.get Params.corpus_dir env "" in
     let sentence_no = Cgi.get Params.sentence_no env "" in
@@ -627,7 +627,7 @@ value graph_engine () = do
 
      (* Save sentence button *)
    ; if Web.corpus_manager_mode corpus_dir sentence_no &&
-        corpus_mode = Web_corpus.Annotator then
+        corpus_mode = Web.Annotator then
        save_sentence_button query |> Web.pl
      else
        ()

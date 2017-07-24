@@ -6,13 +6,10 @@ value abort report_error status =
 ;
 value citation_regexp = Str.regexp "\\\\citation{\\(.*\\)}"
 ;
-value extract_citation env save_sentence line line_no =
+value extract_citation state save_sentence line line_no =
   try
     if Str.string_match citation_regexp line 0 then
-      let query =
-        Cgi.query_of_env [ ("text", Str.matched_group 1 line) :: env ]
-      in
-      save_sentence query
+      save_sentence [ ("text", Str.matched_group 1 line) :: state ]
     else
       raise Exit
   with
@@ -31,22 +28,26 @@ value populate_corpus dirname file =
       if Filename.is_relative dirname.val then
         ("", dirname.val)
       else
-        (Filename.dirname dirname.val ^ Filename.dir_sep,
-         Filename.basename dirname.val)
+        (Filename.dirname dirname.val, Filename.basename dirname.val)
     in
-    let dirname = dirname ^ Filename.dir_sep in
     let module Corp = Corpus.Make (struct value path = corpus_location; end) in
+    let dirname =
+      if Filename.check_suffix dirname Filename.dir_sep then
+        Filename.chop_suffix dirname Filename.dir_sep
+      else
+        dirname
+    in
     let rec aux i =
       try
         let line = input_line ch in
-        let env =
+        let state =
           [ (Params.corpus_dir, dirname)
           ; (Params.sentence_no, string_of_int i)
           ; ("t", Paths.default_transliteration)
           ]
         in
         do
-        { extract_citation env (Corp.save_sentence True) line i
+        { extract_citation state (Corp.save_sentence True Web.graph_cgi) line i
         ; aux (i + 1)
         }
       with

@@ -48,16 +48,19 @@ value main =
   in
   let env = Cgi.create_env query in
   let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
+  let corpmode =
+    Web_corpus.mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
+  in
   let error_page = Web.error_page "Corpus Manager" in
   try
     let state =
       env
-      |> List.remove_assoc Params.corpus_read_only
+      |> List.remove_assoc Params.corpus_mode
       |> List.map (fun (k, v) -> (k, Cgi.decode_url v))
     in
     do
-    { Web_corpus.save_sentence force state
-    ; Corpus_manager.make corpdir
+    { Web_corpus.save_sentence force Web.graph_cgi state
+    ; Corpus_manager.mk_page corpdir corpmode
     }
   with
   [ Web_corpus.Sentence_already_exists -> confirmation_page query

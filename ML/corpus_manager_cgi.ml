@@ -2,8 +2,10 @@
    adding sentences of the corpus.  *)
 
 value main =
-  Cgi.query_string ()
-  |> Cgi.create_env
-  |> Cgi.decoded_get Params.corpus_dir ""
-  |> Corpus_manager.make
+  let env = Cgi.create_env (Cgi.query_string ()) in
+  let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
+  let mode =
+    Web_corpus.mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
+  in
+  Corpus_manager.mk_page corpdir mode
 ;

@@ -472,7 +472,7 @@ value check_sentence translit us text_orig checkpoints sentence
   }
 ;
 value arguments trans lex cache st us cp input topic abs sol_num corpus id ln
-                corpus_dir sentence_no =
+                corpus_mode corpus_dir sentence_no =
   "t=" ^ trans ^ ";lex=" ^ lex ^ ";cache=" ^ cache ^ ";st=" ^ st ^ ";us=" ^ us ^
   ";cp=" ^ cp ^ ";text=" ^ input ^ ";topic=" ^ topic ^ ";abs=" ^ abs ^ 
   match sol_num with
@@ -483,6 +483,7 @@ value arguments trans lex cache st us cp input topic abs sol_num corpus id ln
     [ "" -> ""
     | c -> ";corpus=" ^ c ^ ";sentenceNumber=" ^ id ^ ";linkNumber=" ^ ln
     ] ^
+  ";" ^ Params.corpus_mode ^ "=" ^ corpus_mode ^
   ";" ^ Params.corpus_dir ^ "=" ^ corpus_dir ^
   ";" ^ Params.sentence_no ^ "=" ^ sentence_no
 ;
@@ -511,11 +512,17 @@ value save_sentence_button query =
   Web.cgi_end ^
   Html.center_end
 ;
-value continue_reading_button corpdir sentno =
+value continue_reading_button mode corpdir sentno =
+  let submit_button_label =
+    match mode with
+    [ Web_corpus.Annotator -> "Quit without saving"
+    | Web_corpus.Reader | Web_corpus.Manager -> "Continue reading"
+    ]
+  in
   Html.center_begin ^
   Web.cgi_begin (Cgi.url Web.corpus_manager_cgi ~fragment:sentno) "" ^
   Html.hidden_input Params.corpus_dir corpdir ^
-  Html.submit_input "Continue reading" ^
+  Html.submit_input submit_button_label ^
   Web.cgi_end ^
   Html.center_end
 ;
@@ -544,11 +551,19 @@ value graph_engine () = do
     and sent_id = get "sentenceNumber" env "0" 
     and link_num = get "linkNumber" env "0" (* is there a better default? *)
     and sol_num = get "allSol" env "0" in (* Needed for Validate mode *)
+    let url_enc_corpus_mode =
+      Cgi.get Params.corpus_mode env (string_of_bool True)
+    in
+    let corpus_mode =
+      url_enc_corpus_mode
+      |> Cgi.decode_url
+      |> Web_corpus.mode_of_string
+    in
     let corpus_dir = Cgi.get Params.corpus_dir env "" in
     let sentence_no = Cgi.get Params.sentence_no env "" in
     let text = arguments translit lex cache st us cp url_encoded_input
                          url_encoded_topic abs sol_num corpus sent_id link_num
-                         corpus_dir sentence_no
+                         url_enc_corpus_mode corpus_dir sentence_no
     and checkpoints = 
       try let url_encoded_cpts = List.assoc "cpts" env in (* do not use get *)
           parse_cpts (decode_url url_encoded_cpts)
@@ -598,7 +613,7 @@ value graph_engine () = do
          List.map revise checkpoints
        and updated_text = arguments translit lex cache st us cp updated_input
                             url_encoded_topic abs sol_num corpus sent_id link_num
-                            corpus_dir sentence_no
+                            url_enc_corpus_mode corpus_dir sentence_no
        and new_input = decode_url updated_input in
        check_sentence translit uns updated_text revised_check 
                                   new_input sol_num corpus sent_id link_num
@@ -611,7 +626,8 @@ value graph_engine () = do
      else ()
 
      (* Save sentence button *)
-   ; if Web.corpus_manager_mode corpus_dir sentence_no then
+   ; if Web.corpus_manager_mode corpus_dir sentence_no &&
+        corpus_mode = Web_corpus.Annotator then
        save_sentence_button query |> Web.pl
      else
        ()
@@ -620,7 +636,7 @@ value graph_engine () = do
 
      (* Continue reading button *)
    ; if Web.corpus_mode corpus_dir sentence_no then
-       continue_reading_button
+       continue_reading_button corpus_mode
          (Cgi.decode_url corpus_dir) (Cgi.decode_url sentence_no) |> Web.pl
      else
        ()

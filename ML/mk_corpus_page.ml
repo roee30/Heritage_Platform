@@ -1,13 +1,14 @@
 (* This program produces the pages corpus.html (Corpus interface).  *)
 
+value mode_selection =
+  List.map (fun mode ->
+    let mode_str = Web_corpus.string_of_mode mode in
+    (String.capitalize mode_str, mode_str, mode = Web_corpus.Reader)
+  ) Web_corpus.[ Reader; Annotator; Manager ]
+;
 value make lang =
   let title =
     if Web.corpus_toggle then "Sanskrit Corpus" else "No corpus available"
-  in
-  let corpus_manager_link =
-    "Explore corpus"
-    |> Html.anchor_ref Web.corpus_manager_cgi
-    |> Html.div Html.Latin16
   in
   do
   { Web.open_html_file (Web.corpus_page lang) (Html.title title)
@@ -15,7 +16,13 @@ value make lang =
   ; Web.open_page_with_margin 15
   ; Html.h1_title title |> Web.print_title (Some lang)
   ; Html.center_begin |> Web.pl
-  ; if Web.corpus_toggle then corpus_manager_link |> Web.pl else ()
+  ; if Web.corpus_toggle then
+      Web.cgi_begin Web.corpus_manager_cgi "" ^
+      "Mode: " ^
+      Html.option_select_default Params.corpus_mode mode_selection ^ " " ^
+      Html.submit_input "OK" ^
+      Web.cgi_end |> Web.pl
+    else ()
   ; Html.center_end |> Web.pl
   ; Web.close_page_with_margin ()
   ; Web.close_html_file lang True

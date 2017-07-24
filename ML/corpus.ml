@@ -33,8 +33,6 @@ module Sentence : sig
   ;
   type metadata = { text : list Word.word }
   ;
-  value url : t -> string
-  ;
 end = struct
   type t =
     { id : int
@@ -57,9 +55,6 @@ end = struct
   value compare s s' = compare (id s) (id s')
   ;
   type metadata = { text : list Word.word }
-  ;
-  value url sentence =
-    Cgi.url (analyzer sentence) ~query:(sentence |> state |> Cgi.query_of_env)
   ;
 end
 ;
@@ -85,7 +80,7 @@ module type S = sig
   ;
   exception Sentence_already_exists
   ;
-  value save_sentence : bool -> list (string * string) -> unit
+  value save_sentence : bool -> string -> list (string * string) -> unit
   ;
   exception Heading_abbrev_already_exists of string
   ;
@@ -138,7 +133,7 @@ module Make (Loc : Location) : S = struct
   ;
   exception Sentence_already_exists
   ;
-  value save_sentence force state =
+  value save_sentence force analyzer state =
     let corpus_dir = Cgi.get Params.corpus_dir state "" in
     let sentence_no = Cgi.get Params.sentence_no state "" in
     let translit = Cgi.get "t" state "" in
@@ -161,7 +156,7 @@ module Make (Loc : Location) : S = struct
       in
       { Sentence.text = chunker encode text }
     in
-    let sentence = Sentence.make sentence_no Web.graph_cgi state in
+    let sentence = Sentence.make sentence_no analyzer state in
     if not force && Sys.file_exists file then
       raise Sentence_already_exists
     else

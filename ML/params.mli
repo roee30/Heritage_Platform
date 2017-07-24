@@ -8,3 +8,7 @@ value corpus_dir : string
    enabled.  *)
 value sentence_no : string
 ;
+(* Parameter for specifying the mode of the corpus: ["reader"],
+   ["annotator"] or ["manager"].  *)
+value corpus_mode : string
+;

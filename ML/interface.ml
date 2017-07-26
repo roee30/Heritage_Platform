@@ -14,6 +14,8 @@
    call the standard displaying of all, or of preferred solutions consistent 
    with the current checkpoints. An undo button allows backtracking. *)
 
+module Interface = struct
+
 open Graph_segmenter; (* [Segment cur_chunk set_cur_offset graph visual] *)
 open Phases; (* [Phases] *) 
 open Phases; (* [phase is_cache generative] *) 
@@ -25,7 +27,7 @@ open Cgi;
 module Prel = struct (* Interface's lexer prelude *)
 
  value prelude () = do
-  { maybe_http_header ()
+  { pl http_header
   ; page_begin graph_meta_title 
   ; pl (body_begin Chamois_back)
   ; pl interface_title
@@ -671,3 +673,8 @@ value safe_engine () =
   | _ -> abor Control.fatal_err_mess "Unexpected anomaly - broken session" 
   ]
 ;
+end (* Interface *)
+;
+Interface.safe_engine () (* Should always produce a compliant xhtml page *)
+;
+

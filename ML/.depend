@@ -254,8 +254,6 @@ reset_caches.cmx : web.cmx morphology.cmi ../ZEN/gen.cmx ../ZEN/deco.cmx \
 params.cmi :
 params.cmo : params.cmi
 params.cmx : params.cmi
-interface_cgi.cmo : interface.cmi
-interface_cgi.cmx : interface.cmx
 html.cmo : paths.cmo ../ZEN/gen.cmo
 html.cmx : paths.cmx ../ZEN/gen.cmx
 web.cmo : SCLpaths.cmo paths.cmo html.cmo date.cmo

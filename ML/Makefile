@@ -47,7 +47,7 @@ load_morphs.ml lexer.mli lexer.ml rank.ml scl_parser.ml \
 reader.ml parser.ml constraints.mli constraints.ml multilingual.ml \
 paraphrase.mli paraphrase.ml bank_lexer.ml regression.ml \
 checkpoints.ml graph_segmenter.ml automaton.ml interface.mli interface.ml \
-user_aid.ml reset_caches.ml params.mli params.ml interface_cgi.ml
+user_aid.ml reset_caches.ml params.mli params.ml
 
 # WEB package - HTML, HTTP, CGI utilities for Web interface
 WEB=html.ml web.ml css.ml cgi.ml morpho_html.ml chapters.ml morpho_scl.ml \
@@ -203,7 +203,7 @@ chapters.cmx morpho_html.cmx cgi.cmx segmenter.cmx morpho_scl.cmx \
 load_morphs.cmx lexer.cmx constraints.cmx rank.cmx bank_lexer.cmx \
 scl_parser.cmx checkpoints.cmx reader.cmx -o reader 
 
-interface: interface_cgi.cmx
+interface: interface.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
 control.cmx word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx \
 encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx \
@@ -212,7 +212,7 @@ load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
 chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx load_morphs.cmx \
 int_sandhi.cmx nouns.cmx share.cmx minimap.cmx mini.cmx nums.cmxa \
 graph_segmenter.cmx checkpoints.cmx automaton.cmx params.cmx \
-save_corpus_params.cmx interface.cmx interface_cgi.cmx -o interface
+save_corpus_params.cmx interface.cmx -o interface
 
 user_aid: user_aid.cmx
 	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \

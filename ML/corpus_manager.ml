@@ -9,13 +9,7 @@
 (*************)
 (* Utilities *)
 (*************)
-value until_nth n l =
-  if n < 0 then invalid_arg "until_nth" else aux n l
-    where rec aux n = fun
-      [ [] -> []
-      | [ h :: t ] -> if n = 0 then [ h ] else [ h :: aux (n - 1) t ]
-      ]
-;
+
 (* Type representing interval of missing integers in a sorted list.  *)
 type gap = { start : int; stop : int }
 ;
@@ -94,7 +88,7 @@ value uplinks dir mode =
    let updirs = Dir.split dir in
    let updirs =
      List.mapi (fun i x ->
-         String.concat Filename.dir_sep (until_nth i updirs)
+         String.concat Filename.dir_sep (List2.take_prefix (i + 1) updirs)
        ) updirs
    in
    List.map (link mode) updirs

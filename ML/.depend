@@ -298,11 +298,11 @@ web_corpus.cmx : web.cmx paths.cmx params.cmx corpus.cmx cgi.cmx \
     web_corpus.cmi
 corpus_manager.cmi : web.cmo
 corpus_manager.cmo : web_corpus.cmi web.cmo paths.cmo params.cmi \
-    multilingual.cmo mkdir_corpus_params.cmi html.cmo dir.cmi corpus.cmi \
-    control.cmo cgi.cmo canon.cmo corpus_manager.cmi
+    multilingual.cmo mkdir_corpus_params.cmi ../ZEN/list2.cmo html.cmo \
+    dir.cmi corpus.cmi control.cmo cgi.cmo canon.cmo corpus_manager.cmi
 corpus_manager.cmx : web_corpus.cmx web.cmx paths.cmx params.cmx \
-    multilingual.cmx mkdir_corpus_params.cmx html.cmx dir.cmx corpus.cmx \
-    control.cmx cgi.cmx canon.cmx corpus_manager.cmi
+    multilingual.cmx mkdir_corpus_params.cmx ../ZEN/list2.cmx html.cmx \
+    dir.cmx corpus.cmx control.cmx cgi.cmx canon.cmx corpus_manager.cmi
 corpus_manager_cgi.cmo : web.cmo params.cmi corpus_manager.cmi cgi.cmo
 corpus_manager_cgi.cmx : web.cmx params.cmx corpus_manager.cmx cgi.cmx
 save_corpus_params.cmi :

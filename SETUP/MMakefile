@@ -789,3 +789,8 @@ uninstall:
 .PHONY: reinstall
 reinstall: uninstall
 	$(MAKE) install
+
+export SERVERCORPUS
+.PHONY: export-corpus
+export-corpus:
+	$(MAKE) -C $(SKTRESOURCES) commit-corpus

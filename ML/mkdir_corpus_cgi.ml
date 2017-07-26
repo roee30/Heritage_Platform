@@ -1,3 +1,11 @@
+(**************************************************************************)
+(*                     The Sanskrit Heritage Platform                     *)
+(*                                                                        *)
+(*                              Idir Lankri                               *)
+(*                                                                        *)
+(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(**************************************************************************)
+
 (* CGI script [mkdir_corpus] for creating a new corpus subdirectory.  *)
 
 value main =

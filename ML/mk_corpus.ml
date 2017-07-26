@@ -1,3 +1,11 @@
+(**************************************************************************)
+(*                     The Sanskrit Heritage Platform                     *)
+(*                                                                        *)
+(*                              Idir Lankri                               *)
+(*                                                                        *)
+(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(**************************************************************************)
+
 value abort report_error status =
   do
   { report_error ()

@@ -1,3 +1,11 @@
+(**************************************************************************)
+(*                     The Sanskrit Heritage Platform                     *)
+(*                                                                        *)
+(*                              Idir Lankri                               *)
+(*                                                                        *)
+(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(**************************************************************************)
+
 (* Generation of corpus manager's pages *)
 
 (* Generate the page displaying a view of the given corpus subdirectory.

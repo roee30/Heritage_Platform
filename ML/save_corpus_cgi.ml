@@ -1,3 +1,11 @@
+(**************************************************************************)
+(*                     The Sanskrit Heritage Platform                     *)
+(*                                                                        *)
+(*                              Idir Lankri                               *)
+(*                                                                        *)
+(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(**************************************************************************)
+
 (* CGI script [save_corpus] for saving a sentence into the corpus.  *)
 
 value confirmation_page query =

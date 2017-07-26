@@ -1,3 +1,11 @@
+(**************************************************************************)
+(*                     The Sanskrit Heritage Platform                     *)
+(*                                                                        *)
+(*                              Idir Lankri                               *)
+(*                                                                        *)
+(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(**************************************************************************)
+
 (* Common parameters of different CGIs related to the reader *)
 
 (* Parameter for specifying the corpus subdirectory when the corpus mode

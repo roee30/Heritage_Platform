@@ -12,6 +12,7 @@ value confirmation_page query =
   let title = "Sanskrit Corpus" in
   let env = Cgi.create_env query in
   let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
+  let corpmode = Cgi.decoded_get Params.corpus_mode "" env in
   let sentno = Cgi.decoded_get Params.sentence_no "" env in
   let confirmation_msg =
     Printf.sprintf "Confirm changes for sentence no. %s of %s ?" sentno corpdir
@@ -34,6 +35,7 @@ value confirmation_page query =
   ; Html.html_break |> Web.pl
   ; Web.cgi_begin (specific_url Web.corpus_manager_cgi) "" |> Web.pl
   ; Html.hidden_input Params.corpus_dir corpdir |> Web.pl
+  ; Html.hidden_input Params.corpus_mode corpmode |> Web.pl
   ; Html.submit_input "No" |> Web.pl
   ; Web.cgi_end |> Web.pl
   ; Html.center_end |> Web.pl

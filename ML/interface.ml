@@ -504,7 +504,7 @@ value append_cache entry gender =
   ; close_out cho
   }
 ;
-value save_sentence_button query =
+value save_button query =
   Html.center_begin ^
   Web.cgi_begin Web.save_corpus_cgi "" ^
   Html.hidden_input Save_corpus_params.state (Html.escape query) ^
@@ -512,16 +512,17 @@ value save_sentence_button query =
   Web.cgi_end ^
   Html.center_end
 ;
-value continue_reading_button mode corpdir sentno =
+value quit_button corpmode corpdir sentno =
   let submit_button_label =
-    match mode with
-    [ Web.Annotator -> "Quit without saving"
+    match corpmode with
+    [ Web.Annotator -> "Abort"
     | Web.Reader | Web.Manager -> "Continue reading"
     ]
   in
   Html.center_begin ^
   Web.cgi_begin (Cgi.url Web.corpus_manager_cgi ~fragment:sentno) "" ^
   Html.hidden_input Params.corpus_dir corpdir ^
+  Html.hidden_input Params.corpus_mode (Web.string_of_corpus_mode corpmode) ^
   Html.submit_input submit_button_label ^
   Web.cgi_end ^
   Html.center_end
@@ -628,15 +629,16 @@ value graph_engine () = do
      (* Save sentence button *)
    ; if Web.corpus_manager_mode corpus_dir sentence_no &&
         corpus_mode = Web.Annotator then
-       save_sentence_button query |> Web.pl
+       save_button query |> Web.pl
      else
        ()
 
    ; Html.html_break |> Web.pl
 
-     (* Continue reading button *)
+     (* Quit button: continue reading (reader mode) or quit without
+        saving (annotator mode).  *)
    ; if Web.corpus_mode corpus_dir sentence_no then
-       continue_reading_button corpus_mode
+       quit_button corpus_mode
          (Cgi.decode_url corpus_dir) (Cgi.decode_url sentence_no) |> Web.pl
      else
        ()

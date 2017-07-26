@@ -44,11 +44,14 @@ module type S = sig
      an operating system error occurs.  *)
   value contents : string -> contents
   ;
+  (* Exception raised by [save_sentence] when the sentence to be saved
+     already exists.  *)
   exception Sentence_already_exists
   ;
   (* Raise [Sentence_already_exists] if the sentence to be saved already
-     exists, [Failure "save_sentence"] if the given state is invalid and
-     [Sys_error] when an operating system error occurs.  *)
+     exists and [force] is [False], [Failure "save_sentence"] if the
+     given state is invalid and [Sys_error] when an operating system
+     error occurs.  *)
   value save_sentence : bool -> string -> list (string * string) -> unit
   ;
   exception Heading_abbrev_already_exists of string

@@ -245,7 +245,7 @@ corpus_manager: corpus_manager_cgi.cmx
 		share.cmx minimap.cmx mini.cmx nums.cmxa		\
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx save_corpus_params.cmx dir.cmx corpus.cmx	\
-		web_corpus.cmx interface.cmx multilingual.cmx		\
+		web_corpus.cmx multilingual.cmx				\
 		mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
 
 save_corpus: save_corpus_cgi.cmx
@@ -261,7 +261,7 @@ save_corpus: save_corpus_cgi.cmx
 		share.cmx minimap.cmx mini.cmx nums.cmxa		\
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx save_corpus_params.cmx dir.cmx corpus.cmx	\
-		web_corpus.cmx interface.cmx multilingual.cmx		\
+		web_corpus.cmx multilingual.cmx				\
 		mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
 
 mkdir_corpus: mkdir_corpus_cgi.cmx
@@ -277,7 +277,7 @@ mkdir_corpus: mkdir_corpus_cgi.cmx
 		share.cmx minimap.cmx mini.cmx nums.cmxa		\
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx save_corpus_params.cmx dir.cmx corpus.cmx	\
-		web_corpus.cmx interface.cmx multilingual.cmx		\
+		web_corpus.cmx multilingual.cmx				\
 		mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
 
 mk_corpus: mk_corpus.cmx
@@ -293,7 +293,7 @@ mk_corpus: mk_corpus.cmx
 		share.cmx minimap.cmx mini.cmx nums.cmxa		\
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx save_corpus_params.cmx dir.cmx corpus.cmx	\
-		web_corpus.cmx interface.cmx multilingual.cmx		\
+		web_corpus.cmx  multilingual.cmx			\
 		mkdir_corpus_params.cmx $< -o $@
 
 css: css.cmx

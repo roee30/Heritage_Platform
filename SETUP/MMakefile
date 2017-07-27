@@ -215,8 +215,8 @@ UTIL=ML/Makefile $(ML_COPYRIGHT) ML/.ocamlinit ML/.depend
 
 # CORE package - utilities, transducers, sanskrit and french lexers, dico spec
 DISTR_CORE=ML/control.ml ML/dico.mli ML/version.ml ML/date.ml ML/install.ml \
-ML/canon.ml ML/transduction.ml ML/encode.ml ML/order.ml ML/padapatha \
-ML/sanskrit.mli ML/sanskrit.ml ML/french.mli ML/french.ml ML/skt_lexer.ml
+ML/canon.ml ML/transduction.ml ML/encode.ml ML/order.ml ML/padapatha.ml \
+ML/sanskrit.mli ML/sanskrit.ml ML/skt_lexer.ml
 CORE=$(DISTR_CORE) ML/paths.ml
 
 # GRAM package - phonetics, morphology, segmentation and tagging engines
@@ -575,7 +575,7 @@ software_doc: # needs to have ocamlweb installed
 # Note cp -p used instead of tar for incrementality
 distr_engine:  # distribution of packages CORE GRAM abd WEB under SOFT_LICENSE
 	rm -rf DISTR
-	cd $(STAT); cat stats.txt >> distribs # recording of statistics
+#	cd $(STAT); cat stats.txt >> distribs # recording of statistics
 	mkdir DISTR                # Distribution directory
 	mkdir DISTR/ML             # Source code library for all packages
 	mkdir DISTR/SETUP          # SETUP directory

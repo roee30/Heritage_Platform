@@ -49,7 +49,7 @@ value reader_page () = do
       [ Some lang -> do 
        { open_html_file (reader_page lang) reader_meta_title; (lang,"") }
       | None -> do
-       { reader_prelude ""; (English,Sys.getenv "QUERY_STRING") }
+       { reader_prelude ""; (Html.default_language, Sys.getenv "QUERY_STRING") }
       ] in try 
     let env = create_env query in
     let url_encoded_input = get "text" env "" 
@@ -62,9 +62,21 @@ value reader_page () = do
     and translit = get "t" env Paths.default_transliteration in
     (* Contextual information from past discourse *)
     let topic_mark = decode_url url_encoded_topic 
-    and text = decode_url url_encoded_input in do
+    and text = decode_url url_encoded_input in
+
+    (* Corpus parameters *)
+    let corpus_mode = Cgi.decoded_get Params.corpus_mode "" env in
+    let corpus_dir = Cgi.decoded_get Params.corpus_dir "" env in
+    let sentence_no = Cgi.decoded_get Params.sentence_no "" env in do
+
   { pl (body_begin back_ground) 
   ; print_title (Some lang) reader_title
+  ; Html.h3_begin Html.C3 |> Web.pl
+  ; if Web.corpus_manager_mode corpus_dir sentence_no then
+      "Corpus annotator mode" |> Web.pl
+    else
+      ()
+  ; Html.h3_end |> Web.pl
   ; pl center_begin 
   ; pl (cgi_reader_begin reader_cgi "convert") 
   ; print_lexicon_select (lexicon_of lang)
@@ -101,6 +113,12 @@ value reader_page () = do
   ; pl " Mode "
   ; pl (option_select_default_id "mode_id" "mode"
         (interaction_modes_default url_encoded_mode))
+
+  (* Corpus parameters *)
+  ; Html.hidden_input Params.corpus_mode corpus_mode |> Web.pl
+  ; Html.hidden_input Params.corpus_dir corpus_dir |> Web.pl
+  ; Html.hidden_input Params.sentence_no sentence_no |> Web.pl
+
   ; pl html_break 
   ; pl (submit_input "Read") 
   ; pl (reset_input "Reset")
@@ -108,7 +126,8 @@ value reader_page () = do
   ; pl center_end 
   ; match out_mode.val with
     [ Some lang -> close_html_file lang True 
-    | None -> do { close_page_with_margin (); page_end English True }
+    | None ->
+      do { close_page_with_margin (); page_end Html.default_language True }
     ]
   }
     with 

@@ -1,26 +1,42 @@
+##########################################################################
+#                     The Sanskrit Heritage Platform                     #
+#                                                                        #
+#                              Idir Lankri                               #
+#                                                                        #
+# ©2017 Institut National de Recherche en Informatique et en Automatique #
+##########################################################################
+
 # Generic patterns
+*.annot
 *.cmi
 *.cmo
+*.cmt
+*.cmti
 *.cmx
 *.o
 
 # Executables
 ML/conjugation
+ML/corpus_manager
 ML/css
 ML/declension
 ML/indexer
 ML/indexerd
 ML/interface
 ML/lemmatizer
+ML/mk_corpus
+ML/mk_corpus_page
 ML/mk_grammar_page
 ML/mk_index_page
 ML/mk_reader_page
 ML/mk_sandhi_page
+ML/mkdir_corpus
 ML/parser
 ML/reader
 ML/regression
 ML/reset_caches
 ML/sandhier
+ML/save_corpus
 ML/test_stamp
 ML/user_aid
 ZEN/dagify
@@ -46,6 +62,7 @@ DOC/docintro.tex
 ML/paths.ml
 SITE/faq.en.html
 SITE/faq.fr.html
+SITE/goldendict.html
 SITE/index.en.html
 SITE/index.fr.html
 SITE/portal.en.html

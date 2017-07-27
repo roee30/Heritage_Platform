@@ -151,4 +151,16 @@ value in_bucket key element buckets = in_rec [] buckets
      ]
 ;
 
+(* [take_prefix n l] returns the first [n] elements of [l] (in the same
+   order of appearance in [l]).  If [n > List.length l], then it returns
+   the whole list [l].  Raise [Invalid_argument "take_prefix"] if [n <
+   0].  *)
+value take_prefix n l =
+  if n < 0 then invalid_arg "take_prefix" else aux n l
+    where rec aux n = fun
+      [ [] -> []
+      | [ h :: t ] -> if n = 0 then [] else [ h :: aux (n - 1) t ]
+      ]
+;
+
 (*i end; i*)

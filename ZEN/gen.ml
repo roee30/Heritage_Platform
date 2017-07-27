@@ -17,6 +17,8 @@ value optional f = fun [ None -> () | Some d -> f d ]
 ;
 value active = fun [ None -> False | Some _ -> True ]
 ;
+value opt_app f = fun [ Some x -> Some (f x) | None -> None ]
+;
 
 (* Dump value [v] on [file]. *)
 value dump v file = 

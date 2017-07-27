@@ -109,6 +109,31 @@ value option_select_default_id id label list_options =
 value text_input id control = 
   xml_empty_with_att "input" [ ("id",id); ("type","text"); ("name",control) ]
 ;
+value add_opt_attrs opt_attrs attrs =
+  List.fold_left (fun acc (label, v) ->
+    match v with
+    [ None -> acc
+    | Some v -> [ (label, v) :: acc ]
+    ]
+  ) attrs opt_attrs
+;
+value int_input ?id ?val ?(step = 1) ?(min = min_int) ?(max = max_int) name =
+  let attrs =
+    [ ("type", "number")
+    ; ("name", name)
+    ; ("step", string_of_int step)
+    ; ("min", string_of_int min)
+    ; ("max", string_of_int max)
+    ]
+  in
+  let opt_attrs =
+    [ ("id", id)
+    ; ("value", Gen.opt_app string_of_int val)
+    ]
+  in
+  let attrs = add_opt_attrs opt_attrs attrs in
+  xml_empty_with_att "input" attrs
+;
 value radio_input control v label = 
   let attrs =  [ ("type","radio"); ("name",control); ("value",v) ] in
   (xml_empty_with_att "input" attrs) ^ label
@@ -133,6 +158,38 @@ value reset_input label =
 value hidden_input name label = 
   xml_empty_with_att "input" [ ("type","hidden"); ("name",name); ("value",label) ]
 ;
+
+(*********)
+(* Lists *)
+(*********)
+
+(* List item *)
+value li ?id item =
+  let li = "li" in
+  let attrs = add_opt_attrs [ ("id", id) ] [] in
+  xml_begin_with_att li attrs ^ item ^ xml_end li
+;
+(* Ordered list *)
+value ol ?id ?li_id_prefix ?(start = 1) items =
+  let ol = "ol" in
+  let items =
+    List.mapi (fun i item ->
+        let id =
+          let genid prefix = prefix ^ string_of_int (start + i) in
+          Gen.opt_app genid li_id_prefix
+        in
+        li ?id item
+      ) items
+  in
+  let list = String.concat "\n" items in
+  let attrs =
+    add_opt_attrs [ ("id", id) ] [ ("start", string_of_int start) ]
+  in
+  xml_begin_with_att ol attrs ^ "\n" ^
+  list ^ "\n" ^
+  xml_end ol
+;
+
 value fieldn name content = [ ("name",name); ("content",content) ]
 and fieldp name content = [ ("property",name); ("content",content) ]
 ;
@@ -182,6 +239,7 @@ type basic_style =
   | Border_sep
   | Border_col
   | Border_sp of int
+  | Hidden
   ] (* font-weight not supported *)
 ; 
 value rgb = fun (* a few selected HTML colors in rgb data *)  
@@ -278,6 +336,7 @@ value style_sheet = fun
   | Border_sep -> "border-collapse:separate" 
   | Border_col -> "border-collapse:collapse" 
   | Border_sp n -> "border-spacing:" ^ points n 
+  | Hidden -> "display: none"
   ] 
 ; 
 (* Style of enpied bandeau with fixed position at bottom of page - fragile *)
@@ -297,7 +356,7 @@ type style_class =
     | Pink_back | Chamois_back | Cyan_back | Brown_back | Lime_back | Grey_back 
     | Deep_sky_back | Carmin_back | Orange_back | Red_back | Mauve_back 
     | Lavender_back | Lavender_cent | Green_back | Lawngreen_back | Magenta_back
-    | Aquamarine_back 
+    | Aquamarine_back | Hidden_
 (*[ | Pict_om | Pict_om2 | Pict_om3 | Pict_om4 | Pict_gan | Pict_hare | Pict_geo ]*)
     ]
 ;
@@ -407,6 +466,7 @@ value styles = fun
     | Cell5        -> [ Padding 5 ]
     | Cell10       -> [ Padding 10 ]
     | Border2      -> [ Border 2 ]
+    | Hidden_      -> [ Hidden ]
     ]
 ;
 (* Compiles a class into its style for non-css compliant browsers *)
@@ -482,6 +542,7 @@ value class_of = fun
     | Cell10       -> "cell10"
     | Border2      -> "border2"
     | Body         -> "body"
+    | Hidden_      -> "hidden"
     ]
 ; 
 (* Allows css style compiling even when browser does not support css *)
@@ -675,6 +736,7 @@ and dico_index_page   = wrap_ext "index"
 and dico_reader_page  = wrap_ext "reader" 
 and dico_grammar_page = wrap_ext "grammar" 
 and dico_sandhi_page  = wrap_ext "sandhi"  
+and dico_corpus_page  = wrap_ext "corpus"
 and faq_page          = wrap_ext "faq"  
 and portal_page       = wrap_ext "portal"  
 ;
@@ -712,4 +774,54 @@ value url dns = "http://" ^ dns;
 value ocaml_site = url "ocaml.org"
 and inria_site = url "www.inria.fr/"
 and tomcat = url "localhost:8080/" (* Sanskrit Library runs Tomcat *)
+;
+
+(**********)
+(* Button *)
+(**********)
+value js_string_arg s =
+  let delim delim s = delim ^ s ^ delim in
+  delim "'" s
+;
+type js_funcall = { js_funid : string; js_funargs : list string }
+;
+value string_of_js_funcall f =
+  let js_funargs = List.map js_string_arg f.js_funargs in
+  f.js_funid ^ "(" ^ String.concat ", " js_funargs ^ ")"
+;
+value button ?id ?cl ?onclick label =
+  let button = "button" in
+  let attrs =
+    add_opt_attrs
+      [ ("onclick", Gen.opt_app string_of_js_funcall onclick)
+      ; ("id", id)
+      ; ("class", Gen.opt_app class_of cl)
+      ] []
+  in
+  let button_begin = xml_begin_with_att button attrs in
+  let button_end = xml_end button in
+  button_begin ^ label ^ button_end
+;
+(* Return a copy of the given string with special HTML characters
+   represented by escaped sequences (e.g. ['&'] is replaced with
+   ["&amp;"] ).  *)
+value escape s =
+  let conversion_tbl =
+    [ ("\"", "quot")
+    ; ("&", "amp")
+    ; ("'", "apos")
+    ; ("<", "lt")
+    ; (">", "gt")
+    ]
+  in
+  let escape s =
+    try "&" ^ List.assoc s conversion_tbl ^ ";" with [ Not_found -> s ]
+  in
+  let special_chars =
+    Str.regexp (
+      "[" ^ String.concat "" (conversion_tbl |> List.split |> fst) ^ " " ^ "]"
+    )
+  in
+  let subst s = s |> Str.matched_string |> escape in
+  Str.global_substitute special_chars subst s
 ;

@@ -51,6 +51,9 @@ and parser_cgi     = cgi_bin Paths.cgi_parser     (* parser *)
 and graph_cgi      = cgi_bin Paths.cgi_graph      (* summarizer graphical interface *) 
 and user_aid_cgi   = cgi_bin Paths.cgi_user_aid   (* unknown chunks processing *) 
 and sandhier_cgi   = cgi_bin Paths.cgi_sandhier   (* sandhier *) 
+and corpus_manager_cgi = cgi_bin Paths.cgi_corpus_manager (* Corpus manager *)
+and save_corpus_cgi = cgi_bin Paths.cgi_save_corpus
+and mkdir_corpus_cgi = cgi_bin Paths.cgi_mkdir_corpus
 ;
 (* Absolute paths on development site *)
 value resources name = Paths.skt_resources_dir ^ name ^ "/"
@@ -70,6 +73,7 @@ value top_site_dir name = Paths.public_skt_dir ^ name ^ "/"
 value public_dico_dir = top_site_dir "DICO" (* hypertext dictionary *)
 and public_data_dir   = top_site_dir "DATA" (* linguistic data for cgis *)
 and var_dir           = top_site_dir "VAR" (* Parser dynamic regression suites *)
+and corpus_dir        = top_site_dir "CORPUS" (* Corpus tree *)
 ;
 (* This file is accessible only from Station clients in [var_dir] *)
 value regression_file_name = "regression" (* regression analysis stuff *)
@@ -281,6 +285,7 @@ value skt_dir_url = Paths.skt_dir_url
 value web_dico_url = skt_dir_url ^ "DICO/"
 and mw_dico_url    = skt_dir_url ^ "MW/"
 and web_images_url = skt_dir_url ^ "IMAGES/" 
+and corpus_url     = skt_dir_url ^ "CORPUS/"
 and sanskrit_page_url l = skt_dir_url ^ (site_entry_page l)
 and faq_page_url l      = skt_dir_url ^ (faq_page l)
 and portal_page_url l   = skt_dir_url ^ (portal_page l)
@@ -302,6 +307,7 @@ and indexer_page_url l = dico_page_url (dico_index_page l)
 and reader_page_url l  = dico_page_url (dico_reader_page l)
 and grammar_page_url l = dico_page_url (dico_grammar_page l)
 and sandhi_page_url l  = dico_page_url (dico_sandhi_page l)
+and corpus_page_url l  = dico_page_url (dico_corpus_page l)
 ; 
 value image name = web_images_url ^ name
 ;
@@ -361,6 +367,11 @@ value deva_read_script dyn =
                    else deva_reader in
   javascript ref
 ;
+value js_util_script dyn =
+  let js_util_file = "util.js" in
+  let prefix = if dyn then dico_page_url else (fun x -> x) in
+  javascript (prefix js_util_file)
+;
 value css_link dyn = 
   let ref = if dyn then style_sheet_url (* dynamic page, absolute URL *)
             else style_sheet (* static page in DICO, relative URL *) in
@@ -392,6 +403,7 @@ value page_begin_dyn dyn title = do
   ; pl (css_link dyn)                               (* . *)
   ; pl (favicon dyn)                                (* . *)
   ; pl (deva_read_script dyn) (* devanagari input *)(* . *)
+  ; pl (js_util_script dyn)
   ; pl (xml_end "head")                             (* ) *)
   }
 ;
@@ -507,6 +519,7 @@ value indexer_page l = dico_page (dico_index_page l) (* [mk_index_page]   *)
 and grammar_page l = dico_page (dico_grammar_page l) (* [mk_grammar_page] *) 
 and reader_page l = dico_page (dico_reader_page l)   (* [mk_reader_page]  *) 
 and sandhi_page l = dico_page (dico_sandhi_page l)   (* [mk_sandhi_page]  *) 
+and corpus_page l = dico_page (dico_corpus_page l)   (* [mk_corpus_page]  *)
 ; 
 
 value print_site_map dyn lang = (* the various Web services of the site *)
@@ -517,6 +530,7 @@ value print_site_map dyn lang = (* the various Web services of the site *)
   ; ps (anchor_ref (grammar_page_url lang) (emph "Grammar")); pl " | "
   ; ps (anchor_ref (sandhi_page_url lang) (emph "Sandhi")); pl " | "
   ; ps (anchor_ref (reader_page_url lang) (emph "Reader")); pl " | "
+  ; ps (anchor_ref (corpus_page_url lang) (emph "Corpus")); pl " | "
   ; ps (anchor_ref (faq_page_url lang) (emph "Help")); pl " | "
   ; pl (anchor_ref (portal_page_url lang) (emph "Portal"))
   }
@@ -527,6 +541,7 @@ value print_site_map dyn lang = (* the various Web services of the site *)
   ; ps (anchor_ref (dico_grammar_page lang) (emph "Grammar")); pl " | "
   ; ps (anchor_ref (dico_sandhi_page lang) (emph "Sandhi")); pl " | "
   ; ps (anchor_ref (dico_reader_page lang) (emph "Reader")); pl " | "
+  ; ps (anchor_ref (dico_corpus_page lang) (emph "Corpus")); pl " | "
   ; ps (anchor_ref (rel_faq_page_url lang) (emph "Help")); pl " | "
   ; pl (anchor_ref (rel_portal_page_url lang) (emph "Portal"))
   }
@@ -609,6 +624,11 @@ value close_html_dico () = close_html_file Html.French True
 ;
 value http_header = "Content-Type: text/html\n"
 ;
+(* Print the HTTP header only when it is required, i.e. only if it is
+   a CGI output.  *)
+value maybe_http_header () =
+  if output_channel.val = stdout then pl http_header else ()
+;
 value javascript_tooltip ="wz_tooltip.js"
 ;
 (* This could be any absolute server where Platform is installed *)
@@ -620,6 +640,19 @@ value remote_server_host = "http://sanskrit.inria.fr/"
    and is initialised by default to [SETUP/dummy_SCLpaths.ml] at make time. *)
 value scl_toggle =
   not (SCLpaths.scl_url="") (* True if SCL tools are installed *)
+;
+value corpus_toggle = Paths.skt_corpus_dir <> ""
+;
+value corpus_read_only =
+  match Html.target with
+  [ Html.Station -> False
+  | Html.Computer | Html.Server | Html.Simputer -> True
+  ]
+;
+value corpus_mode corpus_dir sentence_no = corpus_dir <> "" && sentence_no <> ""
+;
+value corpus_manager_mode corpus_dir sentence_no =
+  not corpus_read_only && corpus_mode corpus_dir sentence_no
 ;
 value interaction_modes_default mode =  
   [ (" Summary ","g",mode="g") 
@@ -673,5 +706,41 @@ value abort lang s1 s2 = do
   ; page_end lang True
   }
 ;
-
+(* Build an HTML page to report error.  *)
+value error_page title msg submsg =
+  do
+  { maybe_http_header ()
+  ; page_begin (Html.title title)
+  ; Html.body_begin Html.Chamois_back |> pl
+  ; open_page_with_margin 15
+  ; Html.h1_title title |> print_title (Some Html.default_language)
+  ; abort Html.default_language msg submsg
+  }
+;
+type corpus_mode = [ Reader | Annotator | Manager ]
+;
+value default_corpus_mode = Reader
+;
+value string_of_corpus_mode = fun
+  [ Reader -> "reader"
+  | Annotator -> "annotator"
+  | Manager -> "manager"
+  ]
+;
+value corpus_mode_of_string = fun
+  [ "annotator" -> Annotator
+  | "manager" -> Manager
+  | _ -> Reader
+  ]
+;
+(* [invalid_corpus_mode_page expected_mode current_mode] generates an HTML on
+   [output_channel] to notify the user that the requested operation
+   on the corpus is available only in [expected_mode] and not in
+   [current_mode].  *)
+value invalid_corpus_mode_page expected current =
+  error_page "Corpus Manager"
+    "Invalid mode "
+    ("Expected mode: " ^ string_of_corpus_mode expected ^
+     " | Current mode: " ^ string_of_corpus_mode current)
+;
 (*i end; i*)

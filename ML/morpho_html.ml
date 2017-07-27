@@ -15,8 +15,8 @@ open Html;
 open Web; (* ps etc. *)
 open Multilingual; (* Roma Deva *)
 
-module Std_out = struct value chan = ref stdout; end;
-module Morpho = Morpho.Morpho_out Std_out; 
+module Out_chan = struct value chan = Web.output_channel; end;
+module Morpho = Morpho.Morpho_out Out_chan;
 
 (* This loads dynamically the MW exceptions database *)
 value mw_defining_page s =

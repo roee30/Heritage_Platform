@@ -90,5 +90,50 @@ value create_env s =
 value get key alist default = 
   try List.assoc key alist with [ Not_found -> default ] 
 ;
+value decoded_get key default alist = decode_url (get key alist default)
+;
+value query_string_env_var = "QUERY_STRING"
+;
+value query_string () =
+  try Sys.getenv query_string_env_var with [
+    Not_found -> assert False   (* By RFC 3875 section 4.1.7 *)
+  ]
+;
+value url_encode s =
+  let hexa_str c = Printf.sprintf "%X" (Char.code c) in
 
+  (* Reference: RFC 3986 appendix A *)
+  let url_encode = fun
+    (* Unreserved characters *)
+    [ 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '-' | '.' | '_' | '~' as c ->
+      String.make 1 c
+
+    (* Special case of the space character *)
+    | ' ' -> "+"
+
+    (* Reserved characters *)
+    | c -> "%" ^ hexa_str c
+    ]
+  in
+
+  let char_of_string s =
+    if String.length s = 1 then s.[0] else failwith "char_of_string"
+  in
+  let subst s = s |> Str.matched_string |> char_of_string |> url_encode in
+  let any_char = Str.regexp ".\\|\n" in
+  Str.global_substitute any_char subst s
+;
+value query_of_env env =
+  String.concat "&" (List.map (fun (k, v) -> k ^ "=" ^ url_encode v) env)
+;
+value url ?query ?fragment path =
+  let opt_part prefix = fun
+    [ None -> ""
+    | Some part -> prefix ^ part
+    ]
+  in
+  let query_part = opt_part "?" query in
+  let fragment_part = opt_part "#" fragment in
+  path ^ query_part ^ fragment_part
+;
 (*i end; i*)

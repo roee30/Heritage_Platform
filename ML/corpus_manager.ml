@@ -7,6 +7,9 @@
 (* ©2017 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
+open Html;
+open Web;
+
 (*************)
 (* Utilities *)
 (*************)
@@ -69,20 +72,20 @@ value add_init_gap groups =
 (*******************)
 (* Page generation *)
 (*******************)
-value big text = Html.div Html.Latin16 text
+value big text = div Latin16 text
 ;
 value link mode dir =
   let url =
     let query =
       Cgi.query_of_env
         [ (Params.corpus_dir, dir)
-        ; (Params.corpus_mode, Web.string_of_corpus_mode mode)
+        ; (Params.corpus_mode, string_of_corpus_mode mode)
         ]
     in
-    Cgi.url Web.corpus_manager_cgi ~query |> Html.escape
+    Cgi.url corpus_manager_cgi ~query |> escape
   in
   let label = Filename.basename dir in
-  Html.anchor_ref url label
+  anchor_ref url label
 ;
 value uplinks dir mode =
   let aux dir =
@@ -116,13 +119,13 @@ value sentence_links dir mode sentences =
     in
     let display =
       match font with
-      [ Multilingual.Deva -> Html.deva16_blue
-      | Multilingual.Roma -> Html.span Html.Trans16
+      [ Multilingual.Deva -> deva16_blue
+      | Multilingual.Roma -> span Trans16
       ]
     in
     let sentence_str = String.concat " " words in
     sentence_str
-    |> Html.anchor_ref (sentence |> Web_corpus.url mode |> Html.escape)
+    |> anchor_ref (sentence |> Web_corpus.url mode |> escape)
     |> display
   in
   List.map to_anchor_ref sentences
@@ -134,22 +137,22 @@ value heading_selection dir headings =
     in
     List.combine prefixes headings
   in
-  Html.option_select_label Params.corpus_dir options
+  option_select_label Params.corpus_dir options
 ;
 value add_sentence_form dir mode gap =
-  Web.cgi_begin (Web.cgi_bin "skt_heritage") "" ^
+  cgi_begin (cgi_bin "skt_heritage") "" ^
   "Add sentence: " ^ uplinks dir mode ^ " / " ^
-  Html.hidden_input Params.corpus_dir dir ^
-  Html.hidden_input Params.corpus_mode (Web.string_of_corpus_mode mode) ^
-  Html.int_input Params.sentence_no
+  hidden_input Params.corpus_dir dir ^
+  hidden_input Params.corpus_mode (string_of_corpus_mode mode) ^
+  int_input Params.sentence_no
     ~step:1
     ~min:gap.start
     ~max:gap.stop
     ~val:gap.start
     ~id:Params.sentence_no ^ " " ^
-  Html.submit_input "Add"
+  submit_input "Add"
   ^
-  Web.cgi_end
+  cgi_end
   ;
 value htmlify_group dir mode (group, gap) =
   let (ol, group_id) =
@@ -158,25 +161,25 @@ value htmlify_group dir mode (group, gap) =
     | [ h :: _ ] ->
       let id = Corpus.Sentence.id h in
       let group_id = string_of_int id in
-      (Html.ol ~li_id_prefix:"" ~start:id (sentence_links dir mode group),
+      (ol ~li_id_prefix:"" ~start:id (sentence_links dir mode group),
        group_id)
     ]
   in
   let div_id = "group" ^ group_id in
   let add_sentence_form =
-    Html.button
+    button
       ~id:"add_sentence"
       ~onclick:
-        { Html.js_funid = "hideShowElement"
-        ; Html.js_funargs = [ div_id ]
+        { js_funid = "hideShowElement"
+        ; js_funargs = [ div_id ]
         }
     ("Hide/Show form to fill gap " ^ string_of_gap gap) ^
-    Html.elt_begin_attrs [ ("id", div_id) ] "div" Html.Hidden_ ^
-    Html.html_paragraph ^
+    elt_begin_attrs [ ("id", div_id) ] "div" Hidden_ ^
+    html_paragraph ^
     add_sentence_form dir mode gap ^
-    Html.div_end
+    div_end
   in
-  ol ^ if mode = Web.Annotator then add_sentence_form else ""
+  ol ^ if mode = Annotator then add_sentence_form else ""
 
 ;
 value group_sentences dir sentences =
@@ -187,97 +190,98 @@ value group_sentences dir sentences =
 ;
 value new_heading_form dir mode =
   let uplinks = uplinks dir mode in
-  Web.cgi_begin Web.mkdir_corpus_cgi "" ^
+  cgi_begin mkdir_corpus_cgi "" ^
   "New heading: " ^ uplinks ^ (if uplinks <> "" then " / " else "") ^
-  Html.hidden_input Mkdir_corpus_params.parent_dir dir ^
-  Html.hidden_input Mkdir_corpus_params.mode (Web.string_of_corpus_mode mode) ^
-  Html.text_input "new_heading" Mkdir_corpus_params.dirname ^ " " ^
-  Html.submit_input "Create"
+  hidden_input Mkdir_corpus_params.parent_dir dir ^
+  hidden_input Mkdir_corpus_params.mode (string_of_corpus_mode mode) ^
+  text_input "new_heading" Mkdir_corpus_params.dirname ^ " " ^
+  submit_input "Create"
   ^
-  Web.cgi_end
+  cgi_end
   ;
 value heading_selection_form dir mode headings =
   let selection_prompt =
     let uplinks = uplinks dir mode in
     let submit_button_label =
       match mode with
-      [ Web.Reader -> "Read"
-      | Web.Annotator -> "Annotate"
-      | Web.Manager -> "Manage" ]
+      [ Reader -> "Read"
+      | Annotator -> "Annotate"
+      | Manager -> "Manage"
+      ]
     in
     uplinks ^ (if uplinks <> "" then " / " else "") ^
     heading_selection dir (List.map Corpus.Heading.label headings)  ^ " " ^
-    Html.submit_input submit_button_label
+    submit_input submit_button_label
   in
-  Web.cgi_begin Web.corpus_manager_cgi "" ^
+  cgi_begin corpus_manager_cgi "" ^
   big (
     selection_prompt ^
-    Html.hidden_input Params.corpus_mode (Web.string_of_corpus_mode mode)
+    hidden_input Params.corpus_mode (string_of_corpus_mode mode)
   ) ^
-  Web.cgi_end
+  cgi_end
 ;
 value body dir mode =
   match Web_corpus.contents dir with
   [ Web_corpus.Empty ->
     do
-    { uplinks dir mode |> big |> Web.pl
-    ; Web.open_page_with_margin 30
+    { uplinks dir mode |> big |> pl
+    ; open_page_with_margin 30
     ; match mode with
-        [ Web.Reader -> "Empty corpus"
-        | Web.Annotator -> add_sentence_form dir mode max_gap
-        | Web.Manager -> new_heading_form dir mode
+        [ Reader -> "Empty corpus"
+        | Annotator -> add_sentence_form dir mode max_gap
+        | Manager -> new_heading_form dir mode
         ]
-      |> Web.pl
-    ; Web.close_page_with_margin ()
+      |> pl
+    ; close_page_with_margin ()
     }
 
 
   | Web_corpus.Sentences sentences ->
     let groups = group_sentences dir sentences in
     do
-    { uplinks dir mode |> big |> Web.pl
-    ; Web.open_page_with_margin 30
-    ; groups |> List.map (htmlify_group dir mode) |> List.iter Web.pl
-    ; Web.close_page_with_margin ()
+    { uplinks dir mode |> big |> pl
+    ; open_page_with_margin 30
+    ; groups |> List.map (htmlify_group dir mode) |> List.iter pl
+    ; close_page_with_margin ()
     }
 
   | Web_corpus.Headings headings ->
     do
-    { Html.center_begin |> Web.pl
-    ; heading_selection_form dir mode headings |> Web.pl
-    ; Html.html_break |> Web.pl
-    ; if mode = Web.Manager then
-        new_heading_form dir mode |> Web.pl
+    { center_begin |> pl
+    ; heading_selection_form dir mode headings |> pl
+    ; html_break |> pl
+    ; if mode = Manager then
+        new_heading_form dir mode |> pl
       else ()
-    ; Html.center_end |> Web.pl
+    ; center_end |> pl
     }
   ]
 ;
 value mk_page dir mode =
-  let title =
+  let title_str =
     "Sanskrit Corpus " ^
-    (mode |> Web.string_of_corpus_mode |> String.capitalize)
+    (mode |> string_of_corpus_mode |> String.capitalize)
   in
   let clickable_title =
     let query =
-      Cgi.query_of_env [ (Params.corpus_mode, Web.string_of_corpus_mode mode) ]
+      Cgi.query_of_env [ (Params.corpus_mode, string_of_corpus_mode mode) ]
     in
-    title
-    |> Html.anchor_ref (Cgi.url Web.corpus_manager_cgi ~query)
-    |> Html.h1_title
+    title_str
+    |> anchor_ref (Cgi.url corpus_manager_cgi ~query)
+    |> h1_title
   in
   try
     do
-    { Web.maybe_http_header ()
-    ; Web.page_begin (Html.title title)
-    ; Html.body_begin Html.Chamois_back |> Web.pl
-    ; Web.open_page_with_margin 15
-    ; clickable_title |> Web.print_title (Some Html.default_language)
+    { maybe_http_header ()
+    ; page_begin (title title_str)
+    ; body_begin Chamois_back |> pl
+    ; open_page_with_margin 15
+    ; clickable_title |> print_title (Some default_language)
     ; body dir mode
-    ; Web.close_page_with_margin ()
-    ; Web.page_end Html.default_language True
+    ; close_page_with_margin ()
+    ; page_end default_language True
     }
   with
-  [ Sys_error msg -> Web.abort Html.default_language Control.sys_err_mess msg
+  [ Sys_error msg -> abort default_language Control.sys_err_mess msg
   ]
 ;

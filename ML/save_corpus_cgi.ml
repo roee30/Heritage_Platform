@@ -9,8 +9,11 @@
 
 (* CGI script [save_corpus] for saving a sentence into the corpus.  *)
 
+open Html;
+open Web;
+
 value confirmation_page query =
-  let title = "Sanskrit Corpus" in
+  let title_str = "Sanskrit Corpus" in
   let env = Cgi.create_env query in
   let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
   let corpmode = Cgi.decoded_get Params.corpus_mode "" env in
@@ -20,28 +23,28 @@ value confirmation_page query =
   in
   let specific_url path = Cgi.url path ~fragment:sentno in
   do
-  { Web.maybe_http_header ()
-  ; Web.page_begin (Html.title title)
-  ; Html.body_begin Html.Chamois_back |> Web.pl
-  ; Web.open_page_with_margin 15
-  ; Html.h1_title title |> Web.print_title (Some Html.default_language)
-  ; Html.center_begin |> Web.pl
-  ; Html.div Html.Latin16 confirmation_msg |> Web.pl
-  ; Html.html_break |> Web.pl
-  ; Web.cgi_begin (specific_url Web.save_corpus_cgi) "" |> Web.pl
-  ; Html.hidden_input Save_corpus_params.state (Html.escape query) |> Web.pl
-  ; Html.hidden_input Save_corpus_params.force (string_of_bool True) |> Web.pl
-  ; Html.submit_input "Yes" |> Web.pl
-  ; Web.cgi_end |> Web.pl
-  ; Html.html_break |> Web.pl
-  ; Web.cgi_begin (specific_url Web.corpus_manager_cgi) "" |> Web.pl
-  ; Html.hidden_input Params.corpus_dir corpdir |> Web.pl
-  ; Html.hidden_input Params.corpus_mode corpmode |> Web.pl
-  ; Html.submit_input "No" |> Web.pl
-  ; Web.cgi_end |> Web.pl
-  ; Html.center_end |> Web.pl
-  ; Web.close_page_with_margin ()
-  ; Web.page_end Html.default_language True
+  { maybe_http_header ()
+  ; page_begin (title title_str)
+  ; body_begin Chamois_back |> pl
+  ; open_page_with_margin 15
+  ; h1_title title_str |> print_title (Some default_language)
+  ; center_begin |> pl
+  ; div Latin16 confirmation_msg |> pl
+  ; html_break |> pl
+  ; cgi_begin (specific_url save_corpus_cgi) "" |> pl
+  ; hidden_input Save_corpus_params.state (escape query) |> pl
+  ; hidden_input Save_corpus_params.force (string_of_bool True) |> pl
+  ; submit_input "Yes" |> pl
+  ; cgi_end |> pl
+  ; html_break |> pl
+  ; cgi_begin (specific_url corpus_manager_cgi) "" |> pl
+  ; hidden_input Params.corpus_dir corpdir |> pl
+  ; hidden_input Params.corpus_mode corpmode |> pl
+  ; submit_input "No" |> pl
+  ; cgi_end |> pl
+  ; center_end |> pl
+  ; close_page_with_margin ()
+  ; page_end default_language True
   }
 
 ;
@@ -60,9 +63,9 @@ value main =
   let env = Cgi.create_env query in
   let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
   let corpmode =
-    Web.corpus_mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
+    corpus_mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
   in
-  let error_page = Web.error_page "Corpus Manager" in
+  let error_page = error_page "Corpus Manager" in
   try
     let state =
       env
@@ -70,7 +73,7 @@ value main =
       |> List.map (fun (k, v) -> (k, Cgi.decode_url v))
     in
     do
-    { Web_corpus.save_sentence force Web.graph_cgi state
+    { Web_corpus.save_sentence force graph_cgi state
     ; Corpus_manager.mk_page corpdir corpmode
     }
   with

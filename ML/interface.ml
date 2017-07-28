@@ -507,27 +507,27 @@ value append_cache entry gender =
   }
 ;
 value save_button query =
-  Html.center_begin ^
-  Web.cgi_begin Web.save_corpus_cgi "" ^
-  Html.hidden_input Save_corpus_params.state (Html.escape query) ^
-  Html.submit_input "Save sentence" ^
-  Web.cgi_end ^
-  Html.center_end
+  center_begin ^
+  cgi_begin save_corpus_cgi "" ^
+  hidden_input Save_corpus_params.state (escape query) ^
+  submit_input "Save sentence" ^
+  cgi_end ^
+  center_end
 ;
 value quit_button corpmode corpdir sentno =
   let submit_button_label =
     match corpmode with
-    [ Web.Annotator -> "Abort"
-    | Web.Reader | Web.Manager -> "Continue reading"
+    [ Annotator -> "Abort"
+    | Reader | Manager -> "Continue reading"
     ]
   in
-  Html.center_begin ^
-  Web.cgi_begin (Cgi.url Web.corpus_manager_cgi ~fragment:sentno) "" ^
-  Html.hidden_input Params.corpus_dir corpdir ^
-  Html.hidden_input Params.corpus_mode (Web.string_of_corpus_mode corpmode) ^
-  Html.submit_input submit_button_label ^
-  Web.cgi_end ^
-  Html.center_end
+  center_begin ^
+  cgi_begin (Cgi.url corpus_manager_cgi ~fragment:sentno) "" ^
+  hidden_input Params.corpus_dir corpdir ^
+  hidden_input Params.corpus_mode (string_of_corpus_mode corpmode) ^
+  submit_input submit_button_label ^
+  cgi_end ^
+  center_end
 ;
 (* Main body of graph segmenter cgi *)
 value graph_engine () = do
@@ -560,7 +560,7 @@ value graph_engine () = do
     let corpus_mode =
       url_enc_corpus_mode
       |> Cgi.decode_url
-      |> Web.corpus_mode_of_string
+      |> corpus_mode_of_string
     in
     let corpus_dir = Cgi.get Params.corpus_dir env "" in
     let sentence_no = Cgi.get Params.sentence_no env "" in
@@ -579,7 +579,7 @@ value graph_engine () = do
                                     | g -> (guess_morph,g) 
                                     ] in do
                { append_cache entry gender
-               ; let cache_txt_file = Web.public_cache_txt_file in
+               ; let cache_txt_file = public_cache_txt_file in
                  let cache = Nouns.extract_current_cache cache_txt_file in
                   make_cache_transducer cache
                }
@@ -629,19 +629,19 @@ value graph_engine () = do
      else ()
 
      (* Save sentence button *)
-   ; if Web.corpus_manager_mode corpus_dir sentence_no &&
-        corpus_mode = Web.Annotator then
-       save_button query |> Web.pl
+   ; if corpus_manager_mode corpus_dir sentence_no &&
+        corpus_mode = Annotator then
+       save_button query |> pl
      else
        ()
 
-   ; Html.html_break |> Web.pl
+   ; html_break |> pl
 
      (* Quit button: continue reading (reader mode) or quit without
         saving (annotator mode).  *)
-   ; if Web.corpus_mode corpus_dir sentence_no then
+   ; if corpus_mode_on corpus_dir sentence_no then
        quit_button corpus_mode
-         (Cgi.decode_url corpus_dir) (Cgi.decode_url sentence_no) |> Web.pl
+         (Cgi.decode_url corpus_dir) (Cgi.decode_url sentence_no) |> pl
      else
        ()
 

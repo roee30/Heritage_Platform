@@ -644,15 +644,16 @@ value scl_toggle =
 value corpus_toggle = True (* Was Paths.skt_corpus_dir <> "" *)
 ;
 value corpus_read_only =
-  match Html.target with
-  [ Html.Station -> False
-  | Html.Computer | Html.Server | Html.Simputer -> True
+  match target with
+  [ Station -> False
+  | Computer | Server | Simputer -> True
   ]
 ;
-value corpus_mode corpus_dir sentence_no = corpus_dir <> "" && sentence_no <> ""
+value corpus_mode_on corpus_dir sentence_no =
+  corpus_dir <> "" && sentence_no <> ""
 ;
 value corpus_manager_mode corpus_dir sentence_no =
-  not corpus_read_only && corpus_mode corpus_dir sentence_no
+  not corpus_read_only && corpus_mode_on corpus_dir sentence_no
 ;
 value interaction_modes_default mode =  
   [ (" Summary ","g",mode="g") 
@@ -707,14 +708,14 @@ value abort lang s1 s2 = do
   }
 ;
 (* Build an HTML page to report error.  *)
-value error_page title msg submsg =
+value error_page title_str msg submsg =
   do
   { maybe_http_header ()
-  ; page_begin (Html.title title)
-  ; Html.body_begin Html.Chamois_back |> pl
+  ; page_begin (title title_str)
+  ; body_begin Chamois_back |> pl
   ; open_page_with_margin 15
-  ; Html.h1_title title |> print_title (Some Html.default_language)
-  ; abort Html.default_language msg submsg
+  ; h1_title title_str |> print_title (Some default_language)
+  ; abort default_language msg submsg
   }
 ;
 type corpus_mode = [ Reader | Annotator | Manager ]

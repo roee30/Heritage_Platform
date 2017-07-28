@@ -19,9 +19,12 @@ and encoding = string -> list int
 
 (* Recognize a Sanskrit sentence as either a pada or a sloka *)
 type pada = list skt
-and sloka = list pada
 ;
-
+type danda = 
+   [ Singledanda | Doubledanda ]
+and sanscrit = 
+   [ Pada of pada | Sloka of list (pada * danda) ]
+;
 (* Dangerous - keeps the accent and chars + - dollar *)
 value string_of_skt s = s (* coercion [skt -> string] *)
 ;
@@ -67,19 +70,24 @@ EXTEND Gramskt
   pada: (* non-empty list of chunks separated by blanks *)
     [ [ el = LIST1 skt -> el ] ] ; 
   sloka_line:
-    [ [ p = pada; "|"; "|" -> p 
-      | p = pada; "|" -> p 
-    ] ] ; 
+    [ [ p = pada; "|"; "|" -> (p, Doubledanda)
+      | p = pada; "|" -> (p, Singledanda)
+    ] ] ;
   sloka:
     [ [ s = sloka_line; sl = sloka -> [ s :: sl ]
       | `EOI -> []
     ] ] ;
   sanscrit:
-    [ [ p = pada; "|"; "|"; sl = sloka -> [ p :: sl ]
-      | p = pada; "|"; sl = sloka -> [ p :: sl ]
-      | p = pada; `EOI -> [ p ] 
-      | `EOI -> failwith "Empty sanskrit input" 
+    [ [ p = pada; "|"; "|"; sl = sloka -> Sloka [ (p, Doubledanda) :: sl ] 
+      | p = pada; "|"; sl = sloka -> Sloka [ (p, Singledanda) :: sl ] 
+      | p = pada; `EOI -> Pada p
+      | `EOI -> failwith "Empty sanskrit input"
     ] ] ;
+(*i Beware! due to limitation of camlp4 grammars, not possible to simplify above in
+  sanscrit:
+    [ [ p = pada; `EOI -> Pada p
+      | s = sloka -> Sloka s
+    ] ] ;                    i*)
   skt_list :
     [ [ el = LIST1 skt SEP ","; `EOI -> el ] ] ;
 END
@@ -137,20 +145,24 @@ value sanskrit_sentence strm =
   | Loc.Exc_located loc ex -> raise ex
   ]
 ;
-(* No padapatha processing, each chunk is assumed to be in terminal sandhi 
-   already. But normalizes away anusvara, contrarily to its name *)
 (* encode is [raw_sanskrit_word], [raw_sanskrit_word_KH], etc. *)
 value read_raw_skt_stream encode strm = 
   let process = List.map encode in
-  let sloka = sanskrit_sentence strm in 
-  List.fold_right concat sloka []
-      where concat line lines = process line @ lines
+  match sanskrit_sentence strm with
+  [ Pada l -> process l 
+   (* No padapatha processing, each chunk is assumed to be in terminal sandhi 
+      already. But normalizes away anusvara, contrarily to its name *)
+  | Sloka lines -> List.fold_right concat lines []
+      where concat (line,_) lines = process line @ lines
+  ]
 ;
 value read_processed_skt_stream encode strm = 
   let process = padapatha (sanskrit_chunk encode) in
-  let sloka = sanskrit_sentence strm in 
-  List.fold_right concat sloka []
-      where concat line lines = process line @ lines
+  match sanskrit_sentence strm with 
+  [ Pada l ->  process l
+  | Sloka lines -> List.fold_right concat lines []
+      where concat (line,_) lines = process line @ lines
+  ]
 ;
 (* assumes Velthuis encoding *)
 value read_corpus unsandhied chi = (* only used by Tagger1 *)

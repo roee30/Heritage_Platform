@@ -12,11 +12,7 @@
 type skt  (* abstract *)
 ;
 type pada = list skt
-;
-type danda = 
-   [ Singledanda | Doubledanda ]
-and sanscrit = 
-   [ Pada of pada | Sloka of list (pada * danda) ]
+and sloka = list pada
 ;
 value string_of_skt : skt -> string; (* input *)
 value skt_of_string : string -> skt; (* faking - debug and [Subst.record_tad] *)
@@ -28,8 +24,8 @@ value dagh_root : skt;
 value daghna_part : skt;
 value arcya_absolutive : skt;
 value trad_skt : string -> skt;
-value trad_sanscrit : string -> sanscrit;
-value trad_skt_list : string -> list skt;
+value trad_sanscrit : string -> sloka; 
+value trad_skt_list : string -> list skt; 
 value maha_epic : skt;
 value rama_epic : skt;
 value skt_to_tex : skt -> string;

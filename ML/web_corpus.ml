@@ -15,8 +15,6 @@ value url mode sentence =
   in
   Cgi.url (Corpus.Sentence.analyzer sentence) ~query:(Cgi.query_of_env env)
 ;
-exception Citation_mismatch of string
-;
 value citation subdir id text editable =
   let mode = if editable then Web.Annotator else Web.Reader in
   let sentence =
@@ -37,6 +35,6 @@ value citation subdir id text editable =
     |> Corpus.Sentence.state
     |> List.assoc "text"
   in
-  if text = expected_text then url mode sentence else
-    raise (Citation_mismatch expected_text)
+  if True (* text = expected_text *) then url mode sentence else
+     failwith ("Citation_mismatch" ^ expected_text)
 ;

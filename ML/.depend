@@ -286,38 +286,40 @@ mk_sandhi_page.cmo : web.cmo html.cmo
 mk_sandhi_page.cmx : web.cmx html.cmx
 mk_corpus_page.cmo : web.cmo params.cmi html.cmo
 mk_corpus_page.cmx : web.cmx params.cmx html.cmx
-corpus.cmi : ../ZEN/word.cmo
-corpus.cmo : ../ZEN/word.cmo sanskrit.cmi params.cmi ../ZEN/gen.cmo \
-    encode.cmo dir.cmi cgi.cmo corpus.cmi
-corpus.cmx : ../ZEN/word.cmx sanskrit.cmx params.cmx ../ZEN/gen.cmx \
-    encode.cmx dir.cmx cgi.cmx corpus.cmi
+corpus.cmi : ../ZEN/word.cmo phases.cmo html.cmo
+corpus.cmo : ../ZEN/word.cmo web.cmo phases.cmo html.cmo ../ZEN/gen.cmo \
+    dir.cmi canon.cmo corpus.cmi
+corpus.cmx : ../ZEN/word.cmx web.cmx phases.cmx html.cmx ../ZEN/gen.cmx \
+    dir.cmx canon.cmx corpus.cmi
 web_corpus.cmi : web.cmo corpus.cmi
-web_corpus.cmo : web.cmo paths.cmo params.cmi corpus.cmi cgi.cmo \
-    web_corpus.cmi
-web_corpus.cmx : web.cmx paths.cmx params.cmx corpus.cmx cgi.cmx \
-    web_corpus.cmi
+web_corpus.cmo : web.cmo sanskrit.cmi params.cmi html.cmo corpus.cmi \
+    checkpoints.cmo cgi.cmo web_corpus.cmi
+web_corpus.cmx : web.cmx sanskrit.cmx params.cmx html.cmx corpus.cmx \
+    checkpoints.cmx cgi.cmx web_corpus.cmi
 corpus_manager.cmi : web.cmo
 corpus_manager.cmo : web_corpus.cmi web.cmo paths.cmo params.cmi \
     multilingual.cmo mkdir_corpus_params.cmi ../ZEN/list2.cmo html.cmo \
-    dir.cmi corpus.cmi control.cmo cgi.cmo canon.cmo corpus_manager.cmi
+    dir.cmi corpus.cmi control.cmo cgi.cmo corpus_manager.cmi
 corpus_manager.cmx : web_corpus.cmx web.cmx paths.cmx params.cmx \
     multilingual.cmx mkdir_corpus_params.cmx ../ZEN/list2.cmx html.cmx \
-    dir.cmx corpus.cmx control.cmx cgi.cmx canon.cmx corpus_manager.cmi
+    dir.cmx corpus.cmx control.cmx cgi.cmx corpus_manager.cmi
 corpus_manager_cgi.cmo : web.cmo params.cmi corpus_manager.cmi cgi.cmo
 corpus_manager_cgi.cmx : web.cmx params.cmx corpus_manager.cmx cgi.cmx
 save_corpus_params.cmi :
 save_corpus_params.cmo : save_corpus_params.cmi
 save_corpus_params.cmx : save_corpus_params.cmi
 save_corpus_cgi.cmo : web_corpus.cmi web.cmo save_corpus_params.cmi \
-    params.cmi html.cmo corpus_manager.cmi control.cmo cgi.cmo
+    sanskrit.cmi paths.cmo params.cmi html.cmo corpus_manager.cmi corpus.cmi \
+    control.cmo checkpoints.cmo cgi.cmo
 save_corpus_cgi.cmx : web_corpus.cmx web.cmx save_corpus_params.cmx \
-    params.cmx html.cmx corpus_manager.cmx control.cmx cgi.cmx
+    sanskrit.cmx paths.cmx params.cmx html.cmx corpus_manager.cmx corpus.cmx \
+    control.cmx checkpoints.cmx cgi.cmx
 mkdir_corpus_params.cmi :
 mkdir_corpus_params.cmo : params.cmi mkdir_corpus_params.cmi
 mkdir_corpus_params.cmx : params.cmx mkdir_corpus_params.cmi
 mkdir_corpus_cgi.cmo : web_corpus.cmi web.cmo mkdir_corpus_params.cmi \
-    corpus_manager.cmi control.cmo cgi.cmo
+    html.cmo corpus_manager.cmi control.cmo cgi.cmo
 mkdir_corpus_cgi.cmx : web_corpus.cmx web.cmx mkdir_corpus_params.cmx \
-    corpus_manager.cmx control.cmx cgi.cmx
-mk_corpus.cmo : web.cmo paths.cmo params.cmi corpus.cmi
-mk_corpus.cmx : web.cmx paths.cmx params.cmx corpus.cmx
+    html.cmx corpus_manager.cmx control.cmx cgi.cmx
+mk_corpus.cmo : corpus.cmi
+mk_corpus.cmx : corpus.cmx

@@ -48,6 +48,26 @@ value confirmation_page query =
   }
 
 ;
+value analysis_of_env env =
+  let lang =
+    env
+    |> Cgi.decoded_get "lex" Paths.default_lexicon
+    |> Html.language_of
+  in
+  let cpts =
+    env
+    |> Cgi.decoded_get "cpts" ""
+    |> Checkpoints.parse_cpts
+  in
+  let nb_sols =
+    env
+    |> Cgi.decoded_get Save_corpus_params.nb_sols ""
+    |> Num.num_of_string
+  in
+  Corpus.Analysis.make Corpus.Analyzer.Graph lang cpts nb_sols
+;
+value error_page = error_page "Corpus Manager"
+;
 (***************)
 (* Entry point *)
 (***************)
@@ -62,23 +82,27 @@ value main =
   in
   let env = Cgi.create_env query in
   let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
+  let sentno =
+    env
+    |> Cgi.decoded_get Params.sentence_no ""
+    |> float_of_string
+    |> int_of_float
+  in
+  let text = Cgi.decoded_get "text" "" env in
+  let unsandhied = Cgi.decoded_get "us" "f" env = "t" in
   let corpmode =
     corpus_mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
   in
-  let error_page = error_page "Corpus Manager" in
   try
-    let state =
-      env
-      |> List.remove_assoc Params.corpus_mode
-      |> List.map (fun (k, v) -> (k, Cgi.decode_url v))
-    in
     do
-    { Web_corpus.save_sentence force graph_cgi state
+    { Web_corpus.save_sentence force corpdir sentno
+        (Sanskrit.read_VH unsandhied text) unsandhied (analysis_of_env env)
     ; Corpus_manager.mk_page corpdir corpmode
     }
   with
   [ Web_corpus.Sentence_already_exists -> confirmation_page query
   | Sys_error msg -> error_page Control.sys_err_mess msg
   | Failure msg -> error_page Control.fatal_err_mess msg
+  | _ -> abort default_language Control.fatal_err_mess "Unexpected anomaly"
   ]
 ;

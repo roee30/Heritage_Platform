@@ -48,17 +48,18 @@ value populate_corpus dirname file =
     in
     let rec aux i =
       try
-        let line = input_line ch in
-        let state =
-          [ (Params.corpus_dir, dirname)
-          ; (Params.sentence_no, string_of_int i)
-          ; ("t", Paths.default_transliteration)
-          ]
-        in
-        do
-        { extract_citation state (Corp.save_sentence True Web.graph_cgi) line i
-        ; aux (i + 1)
-        }
+        (* let line = input_line ch in *)
+        (* let state = *)
+        (*   [ (Params.corpus_dir, dirname) *)
+        (*   ; (Params.sentence_no, string_of_int i) *)
+        (*   ; ("t", Paths.default_transliteration) *)
+        (*   ] *)
+        (* in *)
+        failwith "TODO"
+        (* do *)
+        (* { extract_citation state (Corp.save_sentence True Web.graph_cgi) line i *)
+        (* ; aux (i + 1) *)
+        (* } *)
       with
       [ End_of_file -> () ]
     in

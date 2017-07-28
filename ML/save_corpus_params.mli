@@ -11,3 +11,5 @@ value state : string
 ;
 value force : string
 ;
+value nb_sols : string
+;

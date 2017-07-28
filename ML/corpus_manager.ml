@@ -105,27 +105,22 @@ value uplinks dir mode =
    file.  *)
 value sentence_links dir mode sentences =
   let to_anchor_ref sentence =
-    let metadata =
-      Web_corpus.gobble_metadata dir sentence
-    in
     let font = Multilingual.font_of_string Paths.default_display_font in
-    let words =
-      List.map (
+    let encoding =
         match font with
-        [ Multilingual.Deva -> Canon.unidevcode
-        | Multilingual.Roma -> Canon.uniromcode
+        [ Multilingual.Deva -> Corpus.Encoding.Devanagari
+        | Multilingual.Roma -> Corpus.Encoding.IAST
         ]
-      ) metadata.Corpus.Sentence.text
     in
+    let text = Corpus.Sentence.text encoding sentence in
     let display =
       match font with
       [ Multilingual.Deva -> deva16_blue
       | Multilingual.Roma -> span Trans16
       ]
     in
-    let sentence_str = String.concat " " words in
-    sentence_str
-    |> anchor_ref (sentence |> Web_corpus.url mode |> escape)
+    text
+    |> anchor_ref (sentence |> Web_corpus.url dir mode |> escape)
     |> display
   in
   List.map to_anchor_ref sentences
@@ -283,5 +278,6 @@ value mk_page dir mode =
     }
   with
   [ Sys_error msg -> abort default_language Control.sys_err_mess msg
+  | _ -> abort default_language Control.fatal_err_mess "Unexpected anomaly"
   ]
 ;

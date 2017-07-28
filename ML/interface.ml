@@ -506,10 +506,11 @@ value append_cache entry gender =
   ; close_out cho
   }
 ;
-value save_button query =
+value save_button query nb_sols =
   center_begin ^
   cgi_begin save_corpus_cgi "" ^
   hidden_input Save_corpus_params.state (escape query) ^
+  hidden_input Save_corpus_params.nb_sols (nb_sols |> Num.string_of_num |> escape) ^
   submit_input "Save sentence" ^
   cgi_end ^
   center_end
@@ -631,7 +632,8 @@ value graph_engine () = do
      (* Save sentence button *)
    ; if corpus_manager_mode corpus_dir sentence_no &&
         corpus_mode = Annotator then
-       save_button query |> pl
+     (* TODO: use segment_all to compute the nb of sols.  *)
+       save_button query (Num.num_of_int 0) |> pl
      else
        ()
 

@@ -11,3 +11,5 @@ value state = "state"
 ;
 value force = "force"
 ;
+value nb_sols = "nbsols"
+;

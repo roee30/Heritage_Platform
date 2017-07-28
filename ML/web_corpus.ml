@@ -9,36 +9,44 @@
 
 include Corpus.Make (struct value path = Web.corpus_dir; end)
 ;
-value url mode sentence =
+value url dir mode sentence =
+  let analysis = Corpus.Sentence.analysis sentence in
   let env =
-    [ (Params.corpus_mode, Web.string_of_corpus_mode mode) ::
-      (Corpus.Sentence.state sentence) ]
+    [ (Params.corpus_mode, Web.string_of_corpus_mode mode)
+    ; ("text", Corpus.Sentence.text Corpus.Encoding.Velthuis sentence)
+    ; ("cpts", Checkpoints.string_points (Corpus.Analysis.checkpoints analysis))
+    ; (Params.corpus_dir, dir)
+    ; (Params.sentence_no, sentence |> Corpus.Sentence.id |> string_of_int)
+    ]
   in
-  Cgi.url (Corpus.Sentence.analyzer sentence) ~query:(Cgi.query_of_env env)
+  let path =
+    analysis
+    |> Corpus.Analysis.analyzer
+    |> Corpus.Analyzer.path
+  in
+  Cgi.url path ~query:(Cgi.query_of_env env)
 ;
 (* exception Citation_mismatch of string
 ; *)
-value citation subdir id text editable =
+value citation subdir id text_str editable =
+  let text = Sanskrit.read_VH False text_str in
   let mode = if editable then Web.Annotator else Web.Reader in
   let sentence =
     try sentence subdir id with
     [ No_such_sentence ->
-      let init_state =
-        [ (Params.corpus_dir, subdir)
-        ; (Params.sentence_no, string_of_int id)
-        ; ("t", Paths.default_transliteration)
-        ; ("text", text)
-        ]
+      (* lang must be a param of citation? *)
+      let analysis = Corpus.Analysis.make Corpus.Analyzer.Graph
+          Html.default_language [] (Num.Int 0)
       in
-      Corpus.Sentence.make id Web.graph_cgi init_state
+      (* unsandhied or not ?  *)
+      Corpus.Sentence.make id text False analysis
     ]
   in
-  let expected_text =
-    sentence
-    |> Corpus.Sentence.state
-    |> List.assoc "text"
-  in
-  if (* text = expected_text *) True then url mode sentence else
+  let expected_text = Corpus.Sentence.text Corpus.Encoding.Velthuis sentence in
+  (* if text = expected_text then url subdir mode sentence else *)
+  (*   raise (Citation_mismatch expected_text) *)
+  (* in *)
+  if (* text = expected_text *) True then url subdir mode sentence else
      (* raise (Citation_mismatch expected_text) *)
      failwith ("Citation mismatch: " ^ expected_text)
 ;

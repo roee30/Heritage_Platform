@@ -16,19 +16,47 @@ module Heading : sig
   ;
 end
 ;
+module Analyzer : sig
+  type t = [ Graph ]
+  ;
+  value path : t -> string
+  ;
+end
+;
+module Analysis : sig
+  type t
+  ;
+  value make :
+    Analyzer.t -> Html.language ->
+    list (int * (Phases.Phases.phase * list int) * bool) -> Num.num -> t
+  ;
+  value analyzer : t -> Analyzer.t
+  ;
+  value lang : t -> Html.language
+  ;
+  value checkpoints : t -> list (int * (Phases.Phases.phase * list int) * bool)
+  ;
+  value nb_sols : t -> Num.num
+  ;
+end
+;
+module Encoding : sig
+  type t = [ Velthuis | WX | KH | SLP1 | Devanagari | IAST ]
+  ;
+  value to_string : t -> string
+  ;
+end
+;
 module Sentence : sig
   type t
   ;
-  value make : int -> string -> list (string * string) -> t
+  value make : int -> list Word.word -> bool -> Analysis.t -> t
   ;
   value id : t -> int
   ;
-  value analyzer : t -> string
+  value text : Encoding.t -> t -> string
   ;
-  value state : t -> list (string * string)
-  ;
-  (* TODO: Determine all the fields.  *)
-  type metadata = { text : list Word.word }
+  value analysis : t -> Analysis.t
   ;
 end
 ;
@@ -58,10 +86,10 @@ module type S = sig
   exception Sentence_already_exists
   ;
   (* Raise [Sentence_already_exists] if the sentence to be saved already
-     exists and [force] is [False], [Failure "save_sentence"] if the
-     given state is invalid and [Sys_error] when an operating system
-     error occurs.  *)
-  value save_sentence : bool -> string -> list (string * string) -> unit
+     exists and [force] is [False] and [Sys_error] when an operating
+     system error occurs.  *)
+  value save_sentence :
+    bool -> string -> int -> list Word.word -> bool -> Analysis.t -> unit
   ;
   exception Heading_abbrev_already_exists of string
   ;
@@ -76,10 +104,10 @@ module type S = sig
      exist.  *)
   value sentence : string -> int -> Sentence.t
   ;
-  value gobble_metadata : string -> Sentence.t -> Sentence.metadata
-  ;
-  value dump_metadata : string -> Sentence.t -> Sentence.metadata -> unit
-  ;
+  (* value gobble_metadata : string -> Sentence.t -> Sentence.metadata *)
+  (* ; *)
+  (* value dump_metadata : string -> Sentence.t -> Sentence.metadata -> unit *)
+  (* ; *)
 end
 ;
 module Make (Loc : Location) : S

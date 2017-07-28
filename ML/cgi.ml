@@ -100,7 +100,7 @@ value query_string () =
   ]
 ;
 value url_encode s =
-  let hexa_str c = Printf.sprintf "%X" (Char.code c) in
+  let hexa_str c = Printf.sprintf "%.2X" (Char.code c) in
 
   (* Reference: RFC 3986 appendix A *)
   let url_encode = fun

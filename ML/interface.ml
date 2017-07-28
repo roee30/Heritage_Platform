@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                        Gérard Huet & Pawan Goyal                       *)
 (*                                                                        *)
-(* ©2016 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Sanskrit Reader Summarizing interface. *)

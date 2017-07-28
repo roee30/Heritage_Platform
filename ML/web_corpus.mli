@@ -20,8 +20,8 @@ include Corpus.S
 (* ; *)
 value url : Web.corpus_mode -> Corpus.Sentence.t -> string
 ;
-exception Citation_mismatch of string
-;
+(* exception Citation_mismatch of string
+; *)
 (* [citation subdir id text editable] returns an URL to the analysis of
    the sentence [text] whose number is [id] in the corpus subdirectory
    [subdir].  [editable] is a flag to indicate if the sentence is editable

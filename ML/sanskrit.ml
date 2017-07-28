@@ -96,9 +96,8 @@ value trad_string entry t =
 value trad_skt = trad_string skt1
 and trad_sanscrit = trad_string sanscrit
 and trad_skt_list = trad_string skt_list
-  ;
+;
 
-  
 value maha_epic = "Mahaabhaarata" (* for [Print_html] *)
 and rama_epic = "Raamaaya.na"
 ;

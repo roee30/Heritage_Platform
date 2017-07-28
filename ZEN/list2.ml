@@ -83,14 +83,29 @@ value rec last = fun
   ]
 ;
 
+(* [split n l] returns a pair of lists [(prefix, suffix)] such that
+   [prefix @ suffix = l] and [List.length prefix = n].  Raise [Failure
+   "split"] if [n < 0] or [n > List.length l].  *)
+value split n l = aux n l []
+  where rec aux n l acc =
+  if n = 0 then (acc, l) else
+    match l with
+    [ [] -> failwith "split"
+    | [ h :: t ] -> aux (n - 1) t [ h :: acc ]
+    ]
+;
 (* [truncate n l] removes from [l] its initial sublist of length [n]. *)
 (*                                                                    *)
 (* [truncate : int -> list 'a -> list 'a]                             *)
-value rec truncate n l = 
-  if n=0 then l else match l with 
-   [ [] -> failwith "truncate" 
-   | [ _ :: r ] -> truncate (n-1) r
-   ]
+value truncate n l =
+  try snd (split n l) with [ Failure _ -> failwith "truncate" ]
+;
+(* [take_prefix n l] returns the first [n] elements of [l] (in the same
+   order of appearance in [l]).  If [n > List.length l], then it returns
+   the whole list [l].  Raise [Failure "take_prefix"] if [n < 0] or [n >
+   List.length l].  *)
+value take_prefix n l =
+  try fst (split n l) with [ Failure _ -> failwith "take_prefix" ]
 ;
 type ranked 'a = list (int * 'a)
 ;
@@ -149,18 +164,6 @@ value in_bucket key element buckets = in_rec [] buckets
        else if k=key then unstack accu [ (k,[ element :: l ]) :: buckets ]
        else in_rec [ bucket :: accu ] rest
      ]
-;
-
-(* [take_prefix n l] returns the first [n] elements of [l] (in the same
-   order of appearance in [l]).  If [n > List.length l], then it returns
-   the whole list [l].  Raise [Invalid_argument "take_prefix"] if [n <
-   0].  *)
-value take_prefix n l =
-  if n < 0 then invalid_arg "take_prefix" else aux n l
-    where rec aux n = fun
-      [ [] -> []
-      | [ h :: t ] -> if n = 0 then [] else [ h :: aux (n - 1) t ]
-      ]
 ;
 
 (*i end; i*)

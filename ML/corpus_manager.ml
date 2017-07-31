@@ -26,10 +26,10 @@ type gap = { start : int; stop : int }
 value max_gap = { start = 1; stop = max_int }
 ;
 value string_of_gap gap =
-  let right_bound =
-    if gap.stop = max_int then "..." else string_of_int gap.stop
-  in
-  Printf.sprintf "%d - %s" gap.start right_bound
+  if gap.stop = max_int then
+    Printf.sprintf "> %d" (gap.start - 1)
+  else
+    Printf.sprintf "%d - %d" gap.start gap.stop
 ;
 (* Return a triple [(g, gap, rest)] where [g] is the first group of the
    given list, [gap] the gap to the next group and [rest] the given
@@ -169,11 +169,8 @@ value htmlify_group dir mode (group, gap) =
   let add_sentence_form =
     button
       ~id:"add_sentence"
-      ~onclick:
-        { js_funid = "hideShowElement"
-        ; js_funargs = [ div_id ]
-        }
-    ("Hide/Show form to fill gap " ^ string_of_gap gap) ^
+      ~onclick:{ js_funid = "hideShowElement" ; js_funargs = [ div_id ] }
+      (string_of_gap gap) ^
     elt_begin_attrs [ ("id", div_id) ] "div" Hidden_ ^
     html_paragraph ^
     add_sentence_form dir mode gap ^

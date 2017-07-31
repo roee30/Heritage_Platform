@@ -19,22 +19,18 @@ value mode_selection =
   ) [ Reader; Annotator; Manager ]
 ;
 value make lang =
-  let title_str =
-    if corpus_toggle then "Sanskrit Corpus" else "No corpus available"
-  in
+  let title_str = "Sanskrit Corpus" in
   do
   { open_html_file (corpus_page lang) (title title_str)
   ; body_begin Chamois_back |> pl
   ; open_page_with_margin 15
   ; h1_title title_str |> print_title (Some lang)
   ; center_begin |> pl
-  ; if corpus_toggle then
-      cgi_begin corpus_manager_cgi "" ^
-      "Mode: " ^
-      option_select_default Params.corpus_mode mode_selection ^ " " ^
-      submit_input "OK" ^
-      cgi_end |> pl
-    else ()
+  ; cgi_begin corpus_manager_cgi "" ^
+    "Mode: " ^
+    option_select_default Params.corpus_mode mode_selection ^ " " ^
+    submit_input "OK" ^
+    cgi_end |> pl
   ; center_end |> pl
   ; close_page_with_margin ()
   ; close_html_file lang True

@@ -34,7 +34,7 @@ GOLD=$(SKTRESOURCES)GOLD# Heritage in Goldendict format databases
 XMLBANKS=$(SKTRESOURCES)XML# Heritage Sanskrit morphology in XML databases
 
 # Path to global Sanskrit corpus downloaded from Git.
-SKTCORPUS = #SKTCORPUS
+SKTCORPUS = $(SKTRESOURCES)CORPUS
 
 # Path to the corpus in the server area.
 SERVERCORPUS = $(SERVERPUBLICDIR)CORPUS
@@ -421,7 +421,6 @@ echo 'and default_lexicon = "$(LEXICON)"'; \
 echo 'and default_display_font = "$(DISPLAY)"'; \
 echo 'and skt_install_dir = "$(SKTINSTALLDIR)"'; \
 echo 'and skt_resources_dir = "$(SKTRESOURCES)"'; \
-echo 'and skt_corpus_dir = "$(SKTCORPUS)"'; \
 echo 'and public_skt_dir = "$(SERVERPUBLICDIR)"'; \
 echo 'and skt_dir_url = "$(SKTDIRURL)"'; \
 echo 'and server_host = "$(SERVERHOST)"'; \
@@ -526,12 +525,12 @@ releasedata: abrevs
 		cp $(SITEPAGE_EN) $(SERVERPUBLICDIR)index.html;	\
 	fi # default language from lexicon parameter
 	cp -R $(DICO) $(SERVERPUBLICDIR) # hypertext Heritage dictionary
-	if [ $(SKTCORPUS) ]; then			\
-		mkdir -p $(SERVERCORPUS);		\
-		cp -R $(SKTCORPUS)* $(SERVERCORPUS);	\
-		chown -R $(APACHE_USER):$(APACHE_GROUP)	\
-			$(SERVERCORPUS);		\
-	fi			# Sanskrit corpus
+
+# Copy the corpus in the server area.
+	cp -R $(SKTCORPUS) $(SERVERPUBLICDIR)
+# Make the corpus in the server area writable by CGIs.
+	chown -R $(APACHE_USER):$(APACHE_GROUP) $(SERVERCORPUS)
+
 # so that cgis invocations in DICO pages are relocated consistently with config:
 	cd $(SERVERPUBLICDIR) && for i in `ls DICO/*.html`; do (\
 sed '1,$$s|!CGIDECL|$(CGIBINURL)$(CGIDECL)|g' < $$i >temp; \

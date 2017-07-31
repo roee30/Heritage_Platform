@@ -23,7 +23,7 @@ meta_docintro_path="DOC/docintro"
 docintro_path="DOC/docintro.tex"
 makefile_keys=["TEMPLATE","PLATFORM","TRANSLIT","LEXICON","DISPLAY","WARN",
                "SERVERHOST","SERVERPUBLICDIR","SKTDIRURL","SKTRESOURCES",
-               "SKTCORPUS","CGIBINURL","CGIDIR","CGIEXT","MOUSEACTION"]
+               "CGIBINURL","CGIDIR","CGIEXT","MOUSEACTION"]
 #"SCLURL","SCLINSTALLDIR","TEMPAREA","OUTPUTFONT",
 counter_keys=["CAPTION"]
 version_keys=["VERSION","DATE"]

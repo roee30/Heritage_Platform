@@ -285,7 +285,6 @@ value skt_dir_url = Paths.skt_dir_url
 value web_dico_url = skt_dir_url ^ "DICO/"
 and mw_dico_url    = skt_dir_url ^ "MW/"
 and web_images_url = skt_dir_url ^ "IMAGES/" 
-and corpus_url     = skt_dir_url ^ "CORPUS/"
 and sanskrit_page_url l = skt_dir_url ^ (site_entry_page l)
 and faq_page_url l      = skt_dir_url ^ (faq_page l)
 and portal_page_url l   = skt_dir_url ^ (portal_page l)
@@ -710,30 +709,5 @@ value error_page title_str msg submsg =
   ; abort default_language msg submsg
   }
 ;
-type corpus_mode = [ Reader | Annotator | Manager ]
-;
-value default_corpus_mode = Reader
-;
-value string_of_corpus_mode = fun
-  [ Reader -> "reader"
-  | Annotator -> "annotator"
-  | Manager -> "manager"
-  ]
-;
-value corpus_mode_of_string = fun
-  [ "annotator" -> Annotator
-  | "manager" -> Manager
-  | _ -> Reader
-  ]
-;
-(* [invalid_corpus_mode_page expected_mode current_mode] generates an HTML on
-   [output_channel] to notify the user that the requested operation
-   on the corpus is available only in [expected_mode] and not in
-   [current_mode].  *)
-value invalid_corpus_mode_page expected current =
-  error_page "Corpus Manager"
-    "Invalid mode "
-    ("Expected mode: " ^ string_of_corpus_mode expected ^
-     " | Current mode: " ^ string_of_corpus_mode current)
-;
+
 (*i end; i*)

@@ -18,11 +18,11 @@ value main =
   let parent_dir = Cgi.decoded_get Mkdir_corpus_params.parent_dir "" env in
   let mode =
     Cgi.decoded_get Mkdir_corpus_params.mode "" env
-    |> corpus_mode_of_string
+    |> Web_corpus.mode_of_string
   in
   let error_page = error_page "Corpus Manager" in
   match mode with
-  [ Manager ->
+  [ Web_corpus.Manager ->
     try
       do
       { Web_corpus.mkdir (Filename.concat parent_dir dirname)
@@ -40,6 +40,7 @@ value main =
     | _ ->
       abort Html.default_language Control.fatal_err_mess "Unexpected anomaly"
     ]
-  | Reader | Annotator -> invalid_corpus_mode_page Manager mode
+  | Web_corpus.Reader | Web_corpus.Annotator ->
+    Web_corpus.(invalid_mode_page Manager mode)
   ]
 ;

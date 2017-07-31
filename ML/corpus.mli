@@ -27,14 +27,14 @@ module Analysis : sig
   type t
   ;
   value make :
-    Analyzer.t -> Html.language ->
-    list (int * (Phases.Phases.phase * list int) * bool) -> Num.num -> t
+    Analyzer.t -> Html.language -> string
+    (* list (int * (Phases.Phases.phase * list int) * bool) *) -> Num.num -> t
   ;
   value analyzer : t -> Analyzer.t
   ;
   value lang : t -> Html.language
   ;
-  value checkpoints : t -> list (int * (Phases.Phases.phase * list int) * bool)
+  value checkpoints : t -> string(* list (int * (Phases.Phases.phase * list int) * bool) *)
   ;
   value nb_sols : t -> Num.num
   ;
@@ -104,10 +104,23 @@ module type S = sig
      exist.  *)
   value sentence : string -> int -> Sentence.t
   ;
-  (* value gobble_metadata : string -> Sentence.t -> Sentence.metadata *)
-  (* ; *)
-  (* value dump_metadata : string -> Sentence.t -> Sentence.metadata -> unit *)
-  (* ; *)
+  type mode = [ Reader | Annotator | Manager ]
+  ;
+  value default_mode : mode
+  ;
+  value string_of_mode : mode -> string
+  ;
+  value mode_of_string : string -> mode
+  ;
+  value url : string -> mode -> Sentence.t -> string
+  ;
+  (* [citation subdir id text editable] returns an URL to the analysis
+     of the sentence [text] whose number is [id] in the corpus
+     subdirectory [subdir].  [editable] is a flag to indicate if the
+     sentence is editable or not.  Raise [Failure "citation"] if an
+     error occurs.  *)
+  value citation : string -> int -> string -> bool -> string
+  ;
 end
 ;
 module Make (Loc : Location) : S

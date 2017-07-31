@@ -516,16 +516,17 @@ value save_button query nb_sols =
   center_end
 ;
 value quit_button corpmode corpdir sentno =
-  let submit_button_label =
+  let submit_button_label = Web_corpus.(
     match corpmode with
     [ Annotator -> "Abort"
     | Reader | Manager -> "Continue reading"
     ]
+  )
   in
   center_begin ^
   cgi_begin (Cgi.url corpus_manager_cgi ~fragment:sentno) "" ^
   hidden_input Params.corpus_dir corpdir ^
-  hidden_input Params.corpus_mode (string_of_corpus_mode corpmode) ^
+  hidden_input Params.corpus_mode (Web_corpus.string_of_mode corpmode) ^
   submit_input submit_button_label ^
   cgi_end ^
   center_end
@@ -561,7 +562,7 @@ value graph_engine () = do
     let corpus_mode =
       url_enc_corpus_mode
       |> Cgi.decode_url
-      |> corpus_mode_of_string
+      |> Web_corpus.mode_of_string
     in
     let corpus_dir = Cgi.get Params.corpus_dir env "" in
     let sentence_no = Cgi.get Params.sentence_no env "" in
@@ -630,7 +631,7 @@ value graph_engine () = do
      else ()
 
      (* Save sentence button *)
-   ; if corpus_mode = Annotator then
+   ; if corpus_mode = Web_corpus.Annotator then
      (* TODO: use segment_all to compute the nb of sols instead of
         passing 0 as nb_sols.  *)
        save_button query (Num.num_of_int 0) |> pl

@@ -15,12 +15,12 @@ open Web;
 value mode_selection =
   let selection modes =
       List.map (fun mode ->
-        let mode_str = string_of_corpus_mode mode in
-        (String.capitalize mode_str, mode_str, mode = Reader)
+        let mode_str = Web_corpus.string_of_mode mode in
+        (String.capitalize mode_str, mode_str, mode = Web_corpus.Reader)
       ) modes
   in
-  let read_only_modes = [ Reader ] in
-  let other_modes = [ Annotator; Manager ] in
+  let read_only_modes = [ Web_corpus.Reader ] in
+  let other_modes = Web_corpus.[ Annotator; Manager ] in
   let all_modes = read_only_modes @ other_modes in
   selection (if corpus_read_only then read_only_modes else all_modes)
 ;

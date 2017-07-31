@@ -9,38 +9,13 @@
 
 include Corpus.Make (struct value path = Web.corpus_dir; end)
 ;
-value url dir mode sentence =
-  let analysis = Corpus.Sentence.analysis sentence in
-  let env =
-    [ (Params.corpus_mode, Web.string_of_corpus_mode mode)
-    ; ("text", Corpus.Sentence.text Corpus.Encoding.Velthuis sentence)
-    ; ("cpts", Checkpoints.string_points (Corpus.Analysis.checkpoints analysis))
-    ; (Params.corpus_dir, dir)
-    ; (Params.sentence_no, sentence |> Corpus.Sentence.id |> string_of_int)
-    ]
-  in
-  let path =
-    analysis
-    |> Corpus.Analysis.analyzer
-    |> Corpus.Analyzer.path
-  in
-  Cgi.url path ~query:(Cgi.query_of_env env)
-;
-value citation subdir id text_str editable =
-  let text = Sanskrit.read_VH False text_str in
-  let mode = if editable then Web.Annotator else Web.Reader in
-  let sentence =
-    try sentence subdir id with
-    [ No_such_sentence ->
-      (* lang must be a param of citation? *)
-      let analysis = Corpus.Analysis.make Corpus.Analyzer.Graph
-          Html.default_language [] (Num.Int 0)
-      in
-      (* unsandhied or not ?  *)
-      Corpus.Sentence.make id text False analysis
-    ]
-  in
-  let expected_text = Corpus.Sentence.text Corpus.Encoding.Velthuis sentence in
-  if True then url subdir mode sentence else
-     failwith ("Citation_mismatch: " ^ expected_text)
+(* [invalid_corpus_mode_page expected_mode current_mode] generates an HTML on
+   [output_channel] to notify the user that the requested operation
+   on the corpus is available only in [expected_mode] and not in
+   [current_mode].  *)
+value invalid_mode_page expected current =
+  Web.error_page "Corpus Manager"
+    "Invalid mode "
+    ("Expected mode: " ^ string_of_mode expected ^
+     " | Current mode: " ^ string_of_mode current)
 ;

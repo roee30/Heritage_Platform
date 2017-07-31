@@ -36,7 +36,7 @@ module Analyzer : sig
 end = struct
   type t = [ Graph ]
   ;
-  value path = fun [ Graph -> Web.graph_cgi ]
+  value path = fun [ Graph -> Paths.(cgi_dir_url ^ cgi_graph) ]
   ;
 end
 ;
@@ -44,14 +44,13 @@ module Analysis : sig
   type t
   ;
   value make :
-    Analyzer.t -> Html.language ->
-    list (int * (Phases.Phases.phase * list int) * bool) -> Num.num -> t
+    Analyzer.t -> Html.language -> string -> Num.num -> t
   ;
   value analyzer : t -> Analyzer.t
   ;
   value lang : t -> Html.language
   ;
-  value checkpoints : t -> list (int * (Phases.Phases.phase * list int) * bool)
+  value checkpoints : t -> string
   ;
   value nb_sols : t -> Num.num
   ;
@@ -59,7 +58,7 @@ end = struct
   type t =
     { analyzer : Analyzer.t
     ; lang : Html.language
-    ; checkpoints : list (int * (Phases.Phases.phase * list int) * bool)
+    ; checkpoints : string
     ; nb_sols : Num.num
     }
   ;
@@ -95,7 +94,7 @@ end = struct
   ;
 end
 ;
-(* metadata ? -> date, author, history... *)
+(* What about metadata (date, author, history...) ?  *)
 module Sentence : sig
   type t
   ;
@@ -178,10 +177,18 @@ module type S = sig
   ;
   value sentence : string -> int -> Sentence.t
   ;
-  (* value gobble_metadata : string -> Sentence.t -> Sentence.metadata *)
-  (* ; *)
-  (* value dump_metadata : string -> Sentence.t -> Sentence.metadata -> unit *)
-  (* ; *)
+  type mode = [ Reader | Annotator | Manager ]
+  ;
+  value default_mode : mode
+  ;
+  value string_of_mode : mode -> string
+  ;
+  value mode_of_string : string -> mode
+  ;
+  value url : string -> mode -> Sentence.t -> string
+  ;
+  value citation : string -> int -> string -> bool -> string
+  ;
 end
 ;
 module Make (Loc : Location) : S = struct
@@ -252,6 +259,64 @@ module Make (Loc : Location) : S = struct
     [ Unix.Unix_error (Unix.EEXIST, _, _) ->
       raise (Heading_abbrev_already_exists (Filename.basename dirname))
     ]
+  ;
+  type mode = [ Reader | Annotator | Manager ]
+  ;
+  value default_mode = Reader
+  ;
+  value string_of_mode = fun
+    [ Reader -> "reader"
+    | Annotator -> "annotator"
+    | Manager -> "manager"
+    ]
+  ;
+  value mode_of_string = fun
+    [ "annotator" -> Annotator
+    | "manager" -> Manager
+    | _ -> Reader
+    ]
+  ;
+  value url dir mode sentence =
+    let analysis = Sentence.analysis sentence in
+    let env =
+      [ (Params.corpus_mode, string_of_mode mode)
+      ; ("text", Sentence.text Encoding.Velthuis sentence)
+      ; ("cpts", Analysis.checkpoints analysis)
+      ; (Params.corpus_dir, dir)
+      ; (Params.sentence_no, sentence |> Sentence.id |> string_of_int)
+      ]
+    in
+    let path =
+      analysis
+      |> Analysis.analyzer
+      |> Analyzer.path
+    in
+    Cgi.url path ~query:(Cgi.query_of_env env)
+  ;
+  value citation subdir id text_str editable =
+    let text = Sanskrit.read_VH False text_str in
+    let mode = if editable then Annotator else Reader in
+    let sentence =
+      try sentence subdir id with
+      [ No_such_sentence ->
+        (* Citation always with language = French (i.e. lexicon = Sanskrit
+           Heritage) or language should be a parameter of this
+           function ?  *)
+        let analysis =
+          Analysis.make Analyzer.Graph Html.French "" (Num.Int 0)
+        in
+        (* Unsandhied or not ?  Apparently, all the citations are
+           sandhied...  *)
+        do
+        { try mkdir subdir with
+          [ Heading_abbrev_already_exists _ -> ()
+          | _ -> failwith "citation"
+          ]
+        ; Sentence.make id text False analysis
+        }
+      ]
+    in
+    url subdir mode sentence
   ;
 end
 ;

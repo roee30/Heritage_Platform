@@ -57,7 +57,7 @@ value analysis_of_env env =
   let cpts =
     env
     |> Cgi.decoded_get "cpts" ""
-    |> Checkpoints.parse_cpts
+    (* |> Checkpoints.parse_cpts *)
   in
   let nb_sols =
     env
@@ -92,7 +92,7 @@ value main =
     let text = Cgi.decoded_get "text" "" env in
     let unsandhied = Cgi.decoded_get "us" "f" env = "t" in
     let corpmode =
-      corpus_mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
+      Web_corpus.mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
     in
     do
     { Web_corpus.save_sentence force corpdir sentno

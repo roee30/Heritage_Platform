@@ -88,7 +88,7 @@ value rec last = fun
    "split"] if [n < 0] or [n > List.length l].  *)
 value split n l = aux n l []
   where rec aux n l acc =
-  if n = 0 then (acc, l) else
+  if n = 0 then (List.rev acc, l) else
     match l with
     [ [] -> failwith "split"
     | [ h :: t ] -> aux (n - 1) t [ h :: acc ]

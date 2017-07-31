@@ -239,7 +239,10 @@ value body dir mode =
     do
     { uplinks dir mode |> big |> pl
     ; open_page_with_margin 30
-    ; groups |> List.map (htmlify_group dir mode) |> List.iter pl
+    ; if mode = Manager then
+        "No action available." |> pl
+      else
+        groups |> List.map (htmlify_group dir mode) |> List.iter pl
     ; close_page_with_margin ()
     }
 
@@ -268,19 +271,14 @@ value mk_page dir mode =
     |> anchor_ref (Cgi.url corpus_manager_cgi ~query)
     |> h1_title
   in
-  try
-    do
-    { maybe_http_header ()
-    ; page_begin (title title_str)
-    ; body_begin Chamois_back |> pl
-    ; open_page_with_margin 15
-    ; clickable_title |> print_title (Some default_language)
-    ; body dir mode
-    ; close_page_with_margin ()
-    ; page_end default_language True
-    }
-  with
-  [ Sys_error msg -> abort default_language Control.sys_err_mess msg
-  | _ -> abort default_language Control.fatal_err_mess "Unexpected anomaly"
-  ]
+  do
+  { maybe_http_header ()
+  ; page_begin (title title_str)
+  ; body_begin Chamois_back |> pl
+  ; open_page_with_margin 15
+  ; clickable_title |> print_title (Some default_language)
+  ; body dir mode
+  ; close_page_with_margin ()
+  ; page_end default_language True
+  }
 ;

@@ -630,9 +630,9 @@ value graph_engine () = do
      else ()
 
      (* Save sentence button *)
-   ; if corpus_manager_mode corpus_dir sentence_no &&
-        corpus_mode = Annotator then
-     (* TODO: use segment_all to compute the nb of sols.  *)
+   ; if corpus_mode = Annotator then
+     (* TODO: use segment_all to compute the nb of sols instead of
+        passing 0 as nb_sols.  *)
        save_button query (Num.num_of_int 0) |> pl
      else
        ()
@@ -641,7 +641,7 @@ value graph_engine () = do
 
      (* Quit button: continue reading (reader mode) or quit without
         saving (annotator mode).  *)
-   ; if corpus_mode_on corpus_dir sentence_no then
+   ; if sentence_no <> "" then
        quit_button corpus_mode
          (Cgi.decode_url corpus_dir) (Cgi.decode_url sentence_no) |> pl
      else

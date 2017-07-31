@@ -75,25 +75,25 @@ value main =
   let query = Cgi.query_string () in
   let env = Cgi.create_env query in
   let query = Cgi.decoded_get Save_corpus_params.state "" env in
-  let force =
-    env
-    |> Cgi.decoded_get Save_corpus_params.force (string_of_bool False)
-    |> bool_of_string
-  in
-  let env = Cgi.create_env query in
-  let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
-  let sentno =
-    env
-    |> Cgi.decoded_get Params.sentence_no ""
-    |> float_of_string
-    |> int_of_float
-  in
-  let text = Cgi.decoded_get "text" "" env in
-  let unsandhied = Cgi.decoded_get "us" "f" env = "t" in
-  let corpmode =
-    corpus_mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
-  in
   try
+    let force =
+      env
+      |> Cgi.decoded_get Save_corpus_params.force (string_of_bool False)
+      |> bool_of_string
+    in
+    let env = Cgi.create_env query in
+    let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
+    let sentno =
+      env
+      |> Cgi.decoded_get Params.sentence_no ""
+      |> float_of_string
+      |> int_of_float
+    in
+    let text = Cgi.decoded_get "text" "" env in
+    let unsandhied = Cgi.decoded_get "us" "f" env = "t" in
+    let corpmode =
+      corpus_mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
+    in
     do
     { Web_corpus.save_sentence force corpdir sentno
         (Sanskrit.read_VH unsandhied text) unsandhied (analysis_of_env env)

@@ -13,10 +13,16 @@ open Html;
 open Web;
 
 value mode_selection =
-  List.map (fun mode ->
-    let mode_str = string_of_corpus_mode mode in
-    (String.capitalize mode_str, mode_str, mode = Reader)
-  ) [ Reader; Annotator; Manager ]
+  let selection modes =
+      List.map (fun mode ->
+        let mode_str = string_of_corpus_mode mode in
+        (String.capitalize mode_str, mode_str, mode = Reader)
+      ) modes
+  in
+  let read_only_modes = [ Reader ] in
+  let other_modes = [ Annotator; Manager ] in
+  let all_modes = read_only_modes @ other_modes in
+  selection (if corpus_read_only then read_only_modes else all_modes)
 ;
 value make lang =
   let title_str = "Sanskrit Corpus" in

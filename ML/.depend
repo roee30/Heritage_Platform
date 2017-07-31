@@ -299,12 +299,14 @@ web_corpus.cmx : web.cmx sanskrit.cmx params.cmx html.cmx corpus.cmx \
 corpus_manager.cmi : web.cmo
 corpus_manager.cmo : web_corpus.cmi web.cmo paths.cmo params.cmi \
     multilingual.cmo mkdir_corpus_params.cmi ../ZEN/list2.cmo html.cmo \
-    dir.cmi corpus.cmi control.cmo cgi.cmo corpus_manager.cmi
+    dir.cmi corpus.cmi cgi.cmo corpus_manager.cmi
 corpus_manager.cmx : web_corpus.cmx web.cmx paths.cmx params.cmx \
     multilingual.cmx mkdir_corpus_params.cmx ../ZEN/list2.cmx html.cmx \
-    dir.cmx corpus.cmx control.cmx cgi.cmx corpus_manager.cmi
-corpus_manager_cgi.cmo : web.cmo params.cmi corpus_manager.cmi cgi.cmo
-corpus_manager_cgi.cmx : web.cmx params.cmx corpus_manager.cmx cgi.cmx
+    dir.cmx corpus.cmx cgi.cmx corpus_manager.cmi
+corpus_manager_cgi.cmo : web.cmo params.cmi html.cmo corpus_manager.cmi \
+    control.cmo cgi.cmo
+corpus_manager_cgi.cmx : web.cmx params.cmx html.cmx corpus_manager.cmx \
+    control.cmx cgi.cmx
 save_corpus_params.cmi :
 save_corpus_params.cmo : save_corpus_params.cmi
 save_corpus_params.cmx : save_corpus_params.cmi

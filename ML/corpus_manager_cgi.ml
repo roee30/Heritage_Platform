@@ -16,5 +16,12 @@ value main =
   let mode =
     Web.corpus_mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
   in
-  Corpus_manager.mk_page corpdir mode
+  try
+    Corpus_manager.mk_page corpdir mode
+  with
+  [ Sys_error msg -> Web.abort Html.default_language Control.sys_err_mess msg
+  | _ ->
+    Web.abort Html.default_language Control.fatal_err_mess
+      "Unexpected anomaly"
+  ]
 ;

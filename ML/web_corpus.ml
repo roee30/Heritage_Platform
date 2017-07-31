@@ -26,8 +26,6 @@ value url dir mode sentence =
   in
   Cgi.url path ~query:(Cgi.query_of_env env)
 ;
-(* exception Citation_mismatch of string
-; *)
 value citation subdir id text_str editable =
   let text = Sanskrit.read_VH False text_str in
   let mode = if editable then Web.Annotator else Web.Reader in
@@ -43,10 +41,6 @@ value citation subdir id text_str editable =
     ]
   in
   let expected_text = Corpus.Sentence.text Corpus.Encoding.Velthuis sentence in
-  (* if text = expected_text then url subdir mode sentence else *)
-  (*   raise (Citation_mismatch expected_text) *)
-  (* in *)
-  if (* text = expected_text *) True then url subdir mode sentence else
-     (* raise (Citation_mismatch expected_text) *)
-     failwith ("Citation mismatch: " ^ expected_text)
+  if True then url subdir mode sentence else
+     failwith ("Citation_mismatch: " ^ expected_text)
 ;

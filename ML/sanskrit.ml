@@ -66,16 +66,17 @@ EXTEND Gramskt
   pada: (* non-empty list of chunks separated by blanks *)
     [ [ el = LIST1 skt -> el ] ] ; 
   sloka_line:
-    [ [ p = pada; "|"; "|" -> p
-      | p = pada; "|" -> p
+    [ [ p = pada; "|"; "|" -> [ p ]  
+      | p = pada; "|"; sl = sloka_line -> [ p :: sl ]
     ] ] ;
-  sloka:
-    [ [ s = sloka_line; sl = sloka -> [ s :: sl ]
-      | `EOI -> []
+  sloka: (* wrong *)
+    [ [ p = pada; "|"; sl = sloka_line -> [ p :: sl ]
+      | p = pada -> [ p ]
+      | `EOI -> failwith "Empty sanskrit input"
     ] ] ;
-  sanscrit:
-    [ [ p = pada; "|"; "|"; sl = sloka -> [ p :: sl ] 
-      | p = pada; "|"; sl = sloka -> [ p :: sl ] 
+  sanscrit: 
+    [ [ p = pada; "|"; "|"  -> [ p ]
+      | p = pada; "|"; sl = sanscrit -> [ p :: sl ] 
       | p = pada; `EOI -> [ p ]
       | `EOI -> failwith "Empty sanskrit input"
     ] ] ;

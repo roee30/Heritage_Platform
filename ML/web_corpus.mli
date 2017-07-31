@@ -9,5 +9,3 @@
 
 include Corpus.S
 ;
-value invalid_mode_page : mode -> mode -> unit
-;

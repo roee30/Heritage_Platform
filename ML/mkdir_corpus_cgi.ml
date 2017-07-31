@@ -41,6 +41,8 @@ value main =
       abort Html.default_language Control.fatal_err_mess "Unexpected anomaly"
     ]
   | Web_corpus.Reader | Web_corpus.Annotator ->
-    Web_corpus.(invalid_mode_page Manager mode)
+    let expected_mode = Web_corpus.(string_of_mode Manager) in
+    let current_mode = Web_corpus.string_of_mode mode in
+    invalid_corpus_mode_page expected_mode current_mode
   ]
 ;

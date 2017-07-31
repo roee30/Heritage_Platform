@@ -292,8 +292,8 @@ corpus.cmo : ../ZEN/word.cmo sanskrit.cmi paths.cmo params.cmi html.cmo \
 corpus.cmx : ../ZEN/word.cmx sanskrit.cmx paths.cmx params.cmx html.cmx \
     ../ZEN/gen.cmx dir.cmx cgi.cmx canon.cmx corpus.cmi
 web_corpus.cmi : corpus.cmi
-web_corpus.cmo : web.cmo corpus.cmi web_corpus.cmi
-web_corpus.cmx : web.cmx corpus.cmx web_corpus.cmi
+web_corpus.cmo : paths.cmo corpus.cmi web_corpus.cmi
+web_corpus.cmx : paths.cmx corpus.cmx web_corpus.cmi
 corpus_manager.cmi : web_corpus.cmi
 corpus_manager.cmo : web_corpus.cmi web.cmo paths.cmo params.cmi \
     multilingual.cmo mkdir_corpus_params.cmi ../ZEN/list2.cmo html.cmo \

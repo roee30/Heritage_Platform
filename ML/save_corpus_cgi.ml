@@ -94,11 +94,18 @@ value main =
     let corpmode =
       Web_corpus.mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
     in
-    do
-    { Web_corpus.save_sentence force corpdir sentno
-        (Sanskrit.read_VH unsandhied text) unsandhied (analysis_of_env env)
-    ; Corpus_manager.mk_page corpdir corpmode
-    }
+    match corpmode with
+    [ Web_corpus.Annotator ->
+      do
+      { Web_corpus.save_sentence force corpdir sentno
+          (Sanskrit.read_VH unsandhied text) unsandhied (analysis_of_env env)
+      ; Corpus_manager.mk_page corpdir corpmode
+      }
+    | Web_corpus.Reader | Web_corpus.Manager ->
+      let expected_mode = Web_corpus.(string_of_mode Annotator) in
+      let current_mode = Web_corpus.string_of_mode corpmode in
+      invalid_corpus_mode_page expected_mode current_mode
+    ]
   with
   [ Web_corpus.Sentence_already_exists -> confirmation_page query
   | Sys_error msg -> error_page Control.sys_err_mess msg

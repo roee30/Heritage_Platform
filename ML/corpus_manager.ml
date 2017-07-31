@@ -97,9 +97,14 @@ value uplinks dir mode =
    in
    List.map (link mode) updirs
   in
-  dir
-  |> aux
-  |> String.concat " / "
+  let uplinks_str =
+    dir
+    |> aux
+    |> String.concat " / "
+  in
+  let final_sep = if uplinks_str <> "" then " / " else "" in
+  uplinks_str ^ final_sep
+
 ;
 (* Display sentences with format "sentence || sentno" like in citations
    file.  *)
@@ -136,7 +141,7 @@ value heading_selection dir headings =
 ;
 value add_sentence_form dir mode gap =
   cgi_begin (cgi_bin "skt_heritage") "" ^
-  "Add sentence: " ^ uplinks dir mode ^ " / " ^
+  "Add sentence: " ^ uplinks dir mode ^
   hidden_input Params.corpus_dir dir ^
   hidden_input Params.corpus_mode (string_of_corpus_mode mode) ^
   int_input Params.sentence_no
@@ -184,9 +189,8 @@ value group_sentences dir sentences =
   List.map (fun (x, y) -> (List.map (fun x -> List.assoc x dict) x, y)) groups
 ;
 value new_heading_form dir mode =
-  let uplinks = uplinks dir mode in
   cgi_begin mkdir_corpus_cgi "" ^
-  "New heading: " ^ uplinks ^ (if uplinks <> "" then " / " else "") ^
+  "New heading: " ^ uplinks dir mode ^
   hidden_input Mkdir_corpus_params.parent_dir dir ^
   hidden_input Mkdir_corpus_params.mode (string_of_corpus_mode mode) ^
   text_input "new_heading" Mkdir_corpus_params.dirname ^ " " ^
@@ -196,7 +200,6 @@ value new_heading_form dir mode =
   ;
 value heading_selection_form dir mode headings =
   let selection_prompt =
-    let uplinks = uplinks dir mode in
     let submit_button_label =
       match mode with
       [ Reader -> "Read"
@@ -204,7 +207,7 @@ value heading_selection_form dir mode headings =
       | Manager -> "Manage"
       ]
     in
-    uplinks ^ (if uplinks <> "" then " / " else "") ^
+    uplinks dir mode ^
     heading_selection dir (List.map Corpus.Heading.label headings)  ^ " " ^
     submit_input submit_button_label
   in

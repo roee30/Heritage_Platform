@@ -9,7 +9,7 @@
 
 (* Operations on the corpus tree *)
 
-module Heading : sig
+module Section : sig
   type t
   ;
   value label : t -> string
@@ -26,15 +26,13 @@ end
 module Analysis : sig
   type t
   ;
-  value make :
-    Analyzer.t -> Html.language -> string
-    (* list (int * (Phases.Phases.phase * list int) * bool) *) -> Num.num -> t
+  value make : Analyzer.t -> Html.language -> string -> Num.num -> t
   ;
   value analyzer : t -> Analyzer.t
   ;
   value lang : t -> Html.language
   ;
-  value checkpoints : t -> string(* list (int * (Phases.Phases.phase * list int) * bool) *)
+  value checkpoints : t -> string
   ;
   value nb_sols : t -> Num.num
   ;
@@ -68,15 +66,15 @@ end
 module type S = sig
   (* Contents of a corpus subdirectory: either it is empty (constructor
      [Empty]), otherwise we are on leaves of the tree (constructor
-     [Sentences]) or on branches (constructor [Headings]).  *)
+     [Sentences]) or on branches (constructor [Sections]).  *)
   type contents =
     [ Empty
-    | Headings of list Heading.t
+    | Sections of list Section.t
     | Sentences of list Sentence.t
     ]
   ;
   (* List the contents of the given corpus subdirectory.  Note that the
-     returned elements are sorted according to [Heading.compare] or
+     returned elements are sorted according to [Section.compare] or
      [Sentence.compare] depending on the case.  Raise [Sys_error] when
      an operating system error occurs.  *)
   value contents : string -> contents
@@ -91,9 +89,9 @@ module type S = sig
   value save_sentence :
     bool -> string -> int -> list Word.word -> bool -> Analysis.t -> unit
   ;
-  exception Heading_abbrev_already_exists of string
+  exception Section_already_exists of string
   ;
-  (* Raise [Heading_abbrev_already_exists] if the given corpus directory
+  (* Raise [Section_already_exists] if the given corpus directory
      already exists and [Unix.Unix_error] when an operating system error
      occurs.  *)
   value mkdir : string -> unit

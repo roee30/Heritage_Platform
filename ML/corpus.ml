@@ -7,7 +7,7 @@
 (* ©2017 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-module Heading : sig
+module Section : sig
   type t
   ;
   value make : string -> t
@@ -152,15 +152,15 @@ end
 module type S = sig
   (* Contents of a corpus subdirectory: either we are on leaves of the
      tree (constructor [Sentences]) or on branches (constructor
-     [Headings]).  *)
+     [Sections]).  *)
   type contents =
     [ Empty
-    | Headings of list Heading.t
+    | Sections of list Section.t
     | Sentences of list Sentence.t
     ]
   ;
   (* List the contents of the given corpus subdirectory.  Note that the
-     returned elements are sorted according to [Heading.compare] or
+     returned elements are sorted according to [Section.compare] or
      [Sentence.compare] depending on the case.  *)
   value contents : string -> contents
   ;
@@ -169,7 +169,7 @@ module type S = sig
   value save_sentence :
     bool -> string -> int -> list Word.word -> bool -> Analysis.t -> unit
   ;
-  exception Heading_abbrev_already_exists of string
+  exception Section_already_exists of string
   ;
   value mkdir : string -> unit
   ;
@@ -194,7 +194,7 @@ end
 module Make (Loc : Location) : S = struct
   type contents =
     [ Empty
-    | Headings of list Heading.t
+    | Sections of list Section.t
     | Sentences of list Sentence.t
     ]
   ;
@@ -226,22 +226,16 @@ module Make (Loc : Location) : S = struct
       in
       match sentences with [ [] -> Empty | sentences -> Sentences sentences ]
     | subdirs ->
-      let headings =
+      let sections =
         subdirs
-        |> List.map Heading.make
-        |> List.sort Heading.compare
+        |> List.map Section.make
+        |> List.sort Section.compare
       in
-      Headings headings
+      Sections sections
     ]
   ;
   value metadata_file dir id = ~/dir /^ "." ^ string_of_int id
   ;
-  (* value gobble_metadata dir sentence = *)
-  (*   (Gen.gobble (metadata_file dir (Sentence.id sentence)) : Sentence.metadata) *)
-  (* ; *)
-  (* value dump_metadata dir sentence metadata = *)
-  (*   Gen.dump metadata (metadata_file dir (Sentence.id sentence)) *)
-  (* ; *)
   exception Sentence_already_exists
   ;
   value save_sentence force dir id text unsandhied analysis =
@@ -252,12 +246,12 @@ module Make (Loc : Location) : S = struct
     else
       Gen.dump sentence file
   ;
-  exception Heading_abbrev_already_exists of string
+  exception Section_already_exists of string
   ;
   value mkdir dirname =
     try Unix.mkdir ~/dirname 0o755 with
     [ Unix.Unix_error (Unix.EEXIST, _, _) ->
-      raise (Heading_abbrev_already_exists (Filename.basename dirname))
+      raise (Section_already_exists (Filename.basename dirname))
     ]
   ;
   type mode = [ Reader | Annotator | Manager ]
@@ -309,7 +303,7 @@ module Make (Loc : Location) : S = struct
            sandhied...  *)
         do
         { try mkdir subdir with
-          [ Heading_abbrev_already_exists _ -> ()
+          [ Section_already_exists _ -> ()
           | _ -> failwith "citation"
           ]
         ; Sentence.make id text False analysis

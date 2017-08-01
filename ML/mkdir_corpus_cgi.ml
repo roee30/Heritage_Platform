@@ -29,8 +29,8 @@ value main =
       ; Corpus_manager.mk_page parent_dir mode
       }
     with
-    [ Web_corpus.Heading_abbrev_already_exists abbrev ->
-      error_page "Already used heading abbreviation " abbrev
+    [ Web_corpus.Section_already_exists abbrev ->
+      error_page "Already existing section " abbrev
     | Unix.Unix_error (err, func, arg) ->
       let submsg =
         Printf.sprintf "'%s' failed on '%s': %s"

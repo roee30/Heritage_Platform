@@ -130,12 +130,12 @@ value sentence_links dir mode sentences =
   in
   List.map to_anchor_ref sentences
 ;
-value heading_selection dir headings =
+value section_selection dir sections =
   let options =
     let prefixes =
-      List.map (fun x -> Filename.concat dir x) headings
+      List.map (fun x -> Filename.concat dir x) sections
     in
-    List.combine prefixes headings
+    List.combine prefixes sections
   in
   option_select_label Params.corpus_dir options
 ;
@@ -185,17 +185,17 @@ value group_sentences dir sentences =
   let groups = ids |> groups_with_gaps |> add_init_gap in
   List.map (fun (x, y) -> (List.map (fun x -> List.assoc x dict) x, y)) groups
 ;
-value new_heading_form dir mode =
+value new_section_form dir mode =
   cgi_begin mkdir_corpus_cgi "" ^
-  "New heading: " ^ uplinks dir mode ^
+  "New section: " ^ uplinks dir mode ^
   hidden_input Mkdir_corpus_params.parent_dir dir ^
   hidden_input Mkdir_corpus_params.mode (Web_corpus.string_of_mode mode) ^
-  text_input "new_heading" Mkdir_corpus_params.dirname ^ " " ^
+  text_input "new_section" Mkdir_corpus_params.dirname ^ " " ^
   submit_input "Create"
   ^
   cgi_end
   ;
-value heading_selection_form dir mode headings =
+value section_selection_form dir mode sections =
   let selection_prompt =
     let submit_button_label = Web_corpus.(
       match mode with
@@ -206,7 +206,7 @@ value heading_selection_form dir mode headings =
     )
     in
     uplinks dir mode ^
-    heading_selection dir (List.map Corpus.Heading.label headings)  ^ " " ^
+    section_selection dir (List.map Corpus.Section.label sections)  ^ " " ^
     submit_input submit_button_label
   in
   cgi_begin corpus_manager_cgi "" ^
@@ -225,7 +225,7 @@ value body dir mode =
     ; match mode with
         [ Web_corpus.Reader -> "Empty corpus"
         | Web_corpus.Annotator -> add_sentence_form dir mode max_gap
-        | Web_corpus.Manager -> new_heading_form dir mode
+        | Web_corpus.Manager -> new_section_form dir mode
         ]
       |> pl
     ; close_page_with_margin ()
@@ -244,13 +244,13 @@ value body dir mode =
     ; close_page_with_margin ()
     }
 
-  | Web_corpus.Headings headings ->
+  | Web_corpus.Sections sections ->
     do
     { center_begin |> pl
-    ; heading_selection_form dir mode headings |> pl
+    ; section_selection_form dir mode sections |> pl
     ; html_break |> pl
     ; if mode = Web_corpus.Manager then
-        new_heading_form dir mode |> pl
+        new_section_form dir mode |> pl
       else ()
     ; center_end |> pl
     }

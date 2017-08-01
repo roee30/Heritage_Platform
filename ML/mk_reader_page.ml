@@ -73,7 +73,7 @@ value reader_page () = do
   ; print_title (Some lang) reader_title
   ; h3_begin C3 |> pl
   ; if Web_corpus.(mode_of_string corpus_mode = Annotator) then
-      "Corpus annotator mode" |> pl
+      "Corpus annotator mode - " ^ corpus_dir |> pl
     else
       ()
   ; h3_end |> pl

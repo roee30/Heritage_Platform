@@ -511,7 +511,7 @@ value save_button query nb_sols =
   cgi_begin save_corpus_cgi "" ^
   hidden_input Save_corpus_params.state (escape query) ^
   hidden_input Save_corpus_params.nb_sols (nb_sols |> Num.string_of_num |> escape) ^
-  submit_input "Save sentence" ^
+  submit_input "Save" ^
   cgi_end ^
   center_end
 ;

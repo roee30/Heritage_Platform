@@ -187,7 +187,7 @@ module type S = sig
   ;
   value url : string -> mode -> Sentence.t -> string
   ;
-  value citation : string -> int -> string -> bool -> string
+  value citation : string -> int -> string 
   ;
 end
 ;
@@ -212,7 +212,8 @@ module Make (Loc : Location) : S = struct
   value sentence subdir id =
     let file = sentence_file subdir id in
     if Sys.file_exists file then (Gen.gobble file : Sentence.t) else
-      raise No_such_sentence
+      failwith "No_such_sentence"
+      (* raise No_such_sentence *)
   ;
   value contents subdir =
     let subdir = ~/subdir in
@@ -242,7 +243,8 @@ module Make (Loc : Location) : S = struct
     let file = sentence_file dir id in
     let sentence = Sentence.make id text unsandhied analysis in
     if not force && Sys.file_exists file then
-      raise Sentence_already_exists
+      failwith "Sentence_already_exists"
+      (* raise Sentence_already_exists *)
     else
       Gen.dump sentence file
   ;
@@ -251,7 +253,8 @@ module Make (Loc : Location) : S = struct
   value mkdir dirname =
     try Unix.mkdir ~/dirname 0o755 with
     [ Unix.Unix_error (Unix.EEXIST, _, _) ->
-      raise (Section_already_exists (Filename.basename dirname))
+      failwith ("Section_already_exists" ^ (Filename.basename dirname))
+      (* raise (Section_already_exists (Filename.basename dirname)) *)
     ]
   ;
   type mode = [ Reader | Annotator | Manager ]
@@ -287,7 +290,8 @@ module Make (Loc : Location) : S = struct
     in
     Cgi.url path ~query:(Cgi.query_of_env env)
   ;
-  value citation subdir id text_str editable =
+(* Idir
+    value citation subdir id text_str editable =
     let text = Sanskrit.read_VH False text_str in
     let mode = if editable then Annotator else Reader in
     let sentence =
@@ -311,6 +315,9 @@ module Make (Loc : Location) : S = struct
       ]
     in
     url subdir mode sentence
-  ;
+  ; *)
+value citation subdir id =
+   url subdir Reader (sentence subdir id)
+;
 end
 ;

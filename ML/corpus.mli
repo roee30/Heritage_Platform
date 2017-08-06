@@ -112,12 +112,11 @@ module type S = sig
   ;
   value url : string -> mode -> Sentence.t -> string
   ;
-  (* [citation subdir id text editable] returns an URL to the analysis
-     of the sentence [text] whose number is [id] in the corpus
-     subdirectory [subdir].  [editable] is a flag to indicate if the
-     sentence is editable or not.  Raise [Failure "citation"] if an
+  (* [citation subdir id ]] returns an URL to the analysis
+     of the sentence whose number is [id] in the corpus
+     subdirectory [subdir]. Raise [Failure "citation"] if an
      error occurs.  *)
-  value citation : string -> int -> string -> bool -> string
+  value citation : string -> int -> string 
   ;
 end
 ;

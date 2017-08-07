@@ -27,7 +27,6 @@ end = struct
   ;
 end
 ;
-(* move analysis stuff to a sep module... *)
 module Analyzer : sig
   type t = [ Graph ]
   ;
@@ -180,17 +179,17 @@ module type S = sig
   ;
   value sentence : string -> int -> Sentence.t
   ;
-  type mode = [ Reader | Annotator | Manager ]
+  type permission = [ Reader | Annotator | Manager ]
   ;
-  value default_mode : mode
+  value default_permission : permission
   ;
-  value string_of_mode : mode -> string
+  value string_of_permission : permission -> string
   ;
-  value mode_of_string : string -> mode
+  value permission_of_string : string -> permission
   ;
-  value url : string -> mode -> Sentence.t -> string
+  value url : string -> permission -> Sentence.t -> string
   ;
-  value relocatable_url : string -> mode -> Sentence.t -> string
+  value relocatable_url : string -> permission -> Sentence.t -> string
   ;
   value citation : string -> int -> string 
   ;
@@ -262,26 +261,26 @@ module Make (Loc : Location) : S = struct
       (* raise (Section_already_exists (Filename.basename dirname)) *)
     ]
   ;
-  type mode = [ Reader | Annotator | Manager ]
+  type permission = [ Reader | Annotator | Manager ]
   ;
-  value default_mode = Reader
+  value default_permission = Reader
   ;
-  value string_of_mode = fun
+  value string_of_permission = fun
     [ Reader -> "reader"
     | Annotator -> "annotator"
     | Manager -> "manager"
     ]
   ;
-  value mode_of_string = fun
+  value permission_of_string = fun
     [ "annotator" -> Annotator
     | "manager" -> Manager
     | _ -> Reader
     ]
   ;
-  value url dir mode sentence =
+  value url dir permission sentence =
     let analysis = Sentence.analysis sentence in
     let env =
-      [ (Params.corpus_mode, string_of_mode mode)
+      [ (Params.corpus_permission, string_of_permission permission)
       ; ("text", Sentence.text Encoding.Velthuis sentence)
       ; ("cpts", Analysis.checkpoints analysis)
       ; (Params.corpus_dir, dir)
@@ -295,10 +294,10 @@ module Make (Loc : Location) : S = struct
     in
     Cgi.url path ~query:(Cgi.query_of_env env)
   ;
-  value relocatable_url dir mode sentence =
+  value relocatable_url dir permission sentence =
     let analysis = Sentence.analysis sentence in
     let env =
-      [ (Params.corpus_mode, string_of_mode mode)
+      [ (Params.corpus_permission, string_of_permission permission)
       ; ("text", Sentence.text Encoding.Velthuis sentence)
       ; ("cpts", Analysis.checkpoints analysis)
       ; (Params.corpus_dir, dir)
@@ -312,32 +311,6 @@ module Make (Loc : Location) : S = struct
     in
     Cgi.url path ~query:(Cgi.query_of_env env)
   ;
-(* Idir
-    value citation subdir id text_str editable =
-    let text = Sanskrit.read_VH False text_str in
-    let mode = if editable then Annotator else Reader in
-    let sentence =
-      try sentence subdir id with
-      [ No_such_sentence ->
-        (* Citation always with language = French (i.e. lexicon = Sanskrit
-           Heritage) or language should be a parameter of this
-           function ?  *)
-        let analysis =
-          Analysis.make Analyzer.Graph Html.French "" (Num.Int 0)
-        in
-        (* Unsandhied or not ?  Apparently, all the citations are
-           sandhied...  *)
-        do
-        { try mkdir subdir with
-          [ Section_already_exists _ -> ()
-          | _ -> failwith "citation"
-          ]
-        ; Sentence.make id text False analysis
-        }
-      ]
-    in
-    url subdir mode sentence
-  ; *)
 value citation subdir id =
    relocatable_url subdir Reader (sentence subdir id)
 ;

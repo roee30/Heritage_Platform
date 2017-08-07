@@ -16,17 +16,17 @@ value main =
   let env = Cgi.create_env query in
   let dirname = Cgi.decoded_get Mkdir_corpus_params.dirname "" env in
   let parent_dir = Cgi.decoded_get Mkdir_corpus_params.parent_dir "" env in
-  let mode =
-    Cgi.decoded_get Mkdir_corpus_params.mode "" env
-    |> Web_corpus.mode_of_string
+  let permission =
+    Cgi.decoded_get Mkdir_corpus_params.permission "" env
+    |> Web_corpus.permission_of_string
   in
   let error_page = error_page "Corpus Manager" in
-  match mode with
+  match permission with
   [ Web_corpus.Manager ->
     try
       do
       { Web_corpus.mkdir (Filename.concat parent_dir dirname)
-      ; Corpus_manager.mk_page parent_dir mode
+      ; Corpus_manager.mk_page parent_dir permission
       }
     with
     [ Web_corpus.Section_already_exists abbrev ->
@@ -41,8 +41,8 @@ value main =
       abort Html.default_language Control.fatal_err_mess "Unexpected anomaly"
     ]
   | Web_corpus.Reader | Web_corpus.Annotator ->
-    let expected_mode = Web_corpus.(string_of_mode Manager) in
-    let current_mode = Web_corpus.string_of_mode mode in
-    invalid_corpus_mode_page expected_mode current_mode
+    let expected_permission = Web_corpus.(string_of_permission Manager) in
+    let current_permission = Web_corpus.string_of_permission permission in
+    invalid_corpus_permission_page expected_permission current_permission
   ]
 ;

@@ -16,7 +16,7 @@ value confirmation_page query =
   let title_str = "Sanskrit Corpus" in
   let env = Cgi.create_env query in
   let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
-  let corpmode = Cgi.decoded_get Params.corpus_mode "" env in
+  let corppermission = Cgi.decoded_get Params.corpus_permission "" env in
   let sentno = Cgi.decoded_get Params.sentence_no "" env in
   let confirmation_msg =
     Printf.sprintf "Confirm changes for sentence no. %s of %s ?" sentno corpdir
@@ -39,7 +39,7 @@ value confirmation_page query =
   ; html_break |> pl
   ; cgi_begin (specific_url corpus_manager_cgi) "" |> pl
   ; hidden_input Params.corpus_dir corpdir |> pl
-  ; hidden_input Params.corpus_mode corpmode |> pl
+  ; hidden_input Params.corpus_permission corppermission |> pl
   ; submit_input "No" |> pl
   ; cgi_end |> pl
   ; center_end |> pl
@@ -91,20 +91,20 @@ value main =
     in
     let text = Cgi.decoded_get "text" "" env in
     let unsandhied = Cgi.decoded_get "us" "f" env = "t" in
-    let corpmode =
-      Web_corpus.mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
+    let permission =
+      Web_corpus.permission_of_string (Cgi.decoded_get Params.corpus_permission "" env)
     in
-    match corpmode with
+    match permission with
     [ Web_corpus.Annotator ->
       do
       { Web_corpus.save_sentence force corpdir sentno
           (Sanskrit.read_VH unsandhied text) unsandhied (analysis_of_env env)
-      ; Corpus_manager.mk_page corpdir corpmode
+      ; Corpus_manager.mk_page corpdir permission
       }
     | Web_corpus.Reader | Web_corpus.Manager ->
-      let expected_mode = Web_corpus.(string_of_mode Annotator) in
-      let current_mode = Web_corpus.string_of_mode corpmode in
-      invalid_corpus_mode_page expected_mode current_mode
+      let expected_permission = Web_corpus.(string_of_permission Annotator) in
+      let current_permission = Web_corpus.string_of_permission permission in
+      invalid_corpus_permission_page expected_permission current_permission
     ]
   with
   [ Web_corpus.Sentence_already_exists -> confirmation_page query

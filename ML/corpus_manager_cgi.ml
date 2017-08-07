@@ -13,11 +13,11 @@
 value main =
   let env = Cgi.create_env (Cgi.query_string ()) in
   let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
-  let mode =
-    Web_corpus.mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
+  let permission =
+    Web_corpus.permission_of_string (Cgi.decoded_get Params.corpus_permission "" env)
   in
   try
-    Corpus_manager.mk_page corpdir mode
+    Corpus_manager.mk_page corpdir permission
   with
   [ Sys_error msg -> Web.abort Html.default_language Control.sys_err_mess msg
   | _ ->

@@ -713,11 +713,10 @@ value error_page title_str msg submsg =
    [output_channel] to notify the user that the requested operation
    on the corpus is available only in [expected_mode] and not in
    [current_mode].  *)
-value invalid_corpus_mode_page expected current =
+value invalid_corpus_permission_page expected current =
   error_page "Corpus Manager"
-    "Invalid mode "
-    ("Expected mode: " ^ expected ^
-     " | Current mode: " ^ current)
+    "Invalid permission "
+    ("Expected permission: " ^ expected ^ " | Current permission: " ^ current)
 ;
 
 (*i end; i*)

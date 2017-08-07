@@ -14,5 +14,5 @@
    a static HTML file (according to the "magic switch"
    Web.output_channel).  NB: No error handling is done by this
    function.  *)
-value mk_page : string -> Web_corpus.mode -> unit
+value mk_page : string -> Web_corpus.permission -> unit
 ;

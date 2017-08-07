@@ -65,15 +65,15 @@ value reader_page () = do
     and text = decode_url url_encoded_input in
 
     (* Corpus parameters *)
-    let corpus_mode = Cgi.decoded_get Params.corpus_mode "" env in
+    let corpus_permission = Cgi.decoded_get Params.corpus_permission "" env in
     let corpus_dir = Cgi.decoded_get Params.corpus_dir "" env in
     let sentence_no = Cgi.decoded_get Params.sentence_no "" env in do
 
   { pl (body_begin back_ground) 
   ; print_title (Some lang) reader_title
   ; h3_begin C3 |> pl
-  ; if Web_corpus.(mode_of_string corpus_mode = Annotator) then
-      "Corpus annotator mode - " ^ corpus_dir |> pl
+  ; if Web_corpus.(permission_of_string corpus_permission = Annotator) then
+      "Corpus annotator permission - " ^ corpus_dir |> pl
     else
       ()
   ; h3_end |> pl
@@ -115,7 +115,7 @@ value reader_page () = do
         (interaction_modes_default url_encoded_mode))
 
   (* Corpus parameters *)
-  ; hidden_input Params.corpus_mode corpus_mode |> pl
+  ; hidden_input Params.corpus_permission corpus_permission |> pl
   ; hidden_input Params.corpus_dir corpus_dir |> pl
   ; hidden_input Params.sentence_no sentence_no |> pl
 

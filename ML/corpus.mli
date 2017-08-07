@@ -104,17 +104,17 @@ module type S = sig
      exist.  *)
   value sentence : string -> int -> Sentence.t
   ;
-  type mode = [ Reader | Annotator | Manager ]
+  type permission = [ Reader | Annotator | Manager ]
   ;
-  value default_mode : mode
+  value default_permission : permission
   ;
-  value string_of_mode : mode -> string
+  value string_of_permission : permission -> string
   ;
-  value mode_of_string : string -> mode
+  value permission_of_string : string -> permission
   ;
-  value url : string -> mode -> Sentence.t -> string
+  value url : string -> permission -> Sentence.t -> string
   ;
-  value relocatable_url : string -> mode -> Sentence.t -> string
+  value relocatable_url : string -> permission -> Sentence.t -> string
   ;
   (* [citation subdir id ]] returns an URL to the analysis
      of the sentence whose number is [id] in the corpus

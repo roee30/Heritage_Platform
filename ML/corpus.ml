@@ -33,10 +33,13 @@ module Analyzer : sig
   ;
   value path : t -> string
   ;
+  value relocatable_path : t -> string
+  ;
 end = struct
   type t = [ Graph ]
   ;
   value path = fun [ Graph -> Paths.(cgi_dir_url ^ cgi_graph) ]
+  and relocatable_path = fun [ Graph -> "!CGIGRAPH" ]
   ;
 end
 ;
@@ -187,6 +190,8 @@ module type S = sig
   ;
   value url : string -> mode -> Sentence.t -> string
   ;
+  value relocatable_url : string -> mode -> Sentence.t -> string
+  ;
   value citation : string -> int -> string 
   ;
 end
@@ -290,6 +295,23 @@ module Make (Loc : Location) : S = struct
     in
     Cgi.url path ~query:(Cgi.query_of_env env)
   ;
+  value relocatable_url dir mode sentence =
+    let analysis = Sentence.analysis sentence in
+    let env =
+      [ (Params.corpus_mode, string_of_mode mode)
+      ; ("text", Sentence.text Encoding.Velthuis sentence)
+      ; ("cpts", Analysis.checkpoints analysis)
+      ; (Params.corpus_dir, dir)
+      ; (Params.sentence_no, sentence |> Sentence.id |> string_of_int)
+      ]
+    in
+    let path =
+      analysis
+      |> Analysis.analyzer
+      |> Analyzer.relocatable_path
+    in
+    Cgi.url path ~query:(Cgi.query_of_env env)
+  ;
 (* Idir
     value citation subdir id text_str editable =
     let text = Sanskrit.read_VH False text_str in
@@ -317,7 +339,7 @@ module Make (Loc : Location) : S = struct
     url subdir mode sentence
   ; *)
 value citation subdir id =
-   url subdir Reader (sentence subdir id)
+   relocatable_url subdir Reader (sentence subdir id)
 ;
 end
 ;

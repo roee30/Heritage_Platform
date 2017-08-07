@@ -21,6 +21,8 @@ module Analyzer : sig
   ;
   value path : t -> string
   ;
+  value relocatable_path : t -> string
+  ;
 end
 ;
 module Analysis : sig
@@ -111,6 +113,8 @@ module type S = sig
   value mode_of_string : string -> mode
   ;
   value url : string -> mode -> Sentence.t -> string
+  ;
+  value relocatable_url : string -> mode -> Sentence.t -> string
   ;
   (* [citation subdir id ]] returns an URL to the analysis
      of the sentence whose number is [id] in the corpus

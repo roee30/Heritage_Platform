@@ -285,7 +285,6 @@ value skt_dir_url = Paths.skt_dir_url
 value web_dico_url = skt_dir_url ^ "DICO/"
 and mw_dico_url    = skt_dir_url ^ "MW/"
 and web_images_url = skt_dir_url ^ "IMAGES/" 
-and corpus_url     = skt_dir_url ^ "CORPUS/"
 and sanskrit_page_url l = skt_dir_url ^ (site_entry_page l)
 and faq_page_url l      = skt_dir_url ^ (faq_page l)
 and portal_page_url l   = skt_dir_url ^ (portal_page l)
@@ -641,18 +640,11 @@ value remote_server_host = "http://sanskrit.inria.fr/"
 value scl_toggle =
   not (SCLpaths.scl_url="") (* True if SCL tools are installed *)
 ;
-value corpus_toggle = Paths.skt_corpus_dir <> ""
-;
 value corpus_read_only =
-  match Html.target with
-  [ Html.Station -> False
-  | Html.Computer | Html.Server | Html.Simputer -> True
+  match target with
+  [ Station -> False
+  | Computer | Server | Simputer -> True
   ]
-;
-value corpus_mode corpus_dir sentence_no = corpus_dir <> "" && sentence_no <> ""
-;
-value corpus_manager_mode corpus_dir sentence_no =
-  not corpus_read_only && corpus_mode corpus_dir sentence_no
 ;
 value interaction_modes_default mode =  
   [ (" Summary ","g",mode="g") 
@@ -707,31 +699,15 @@ value abort lang s1 s2 = do
   }
 ;
 (* Build an HTML page to report error.  *)
-value error_page title msg submsg =
+value error_page title_str msg submsg =
   do
   { maybe_http_header ()
-  ; page_begin (Html.title title)
-  ; Html.body_begin Html.Chamois_back |> pl
+  ; page_begin (title title_str)
+  ; body_begin Chamois_back |> pl
   ; open_page_with_margin 15
-  ; Html.h1_title title |> print_title (Some Html.default_language)
-  ; abort Html.default_language msg submsg
+  ; h1_title title_str |> print_title (Some default_language)
+  ; abort default_language msg submsg
   }
-;
-type corpus_mode = [ Reader | Annotator | Manager ]
-;
-value default_corpus_mode = Reader
-;
-value string_of_corpus_mode = fun
-  [ Reader -> "reader"
-  | Annotator -> "annotator"
-  | Manager -> "manager"
-  ]
-;
-value corpus_mode_of_string = fun
-  [ "annotator" -> Annotator
-  | "manager" -> Manager
-  | _ -> Reader
-  ]
 ;
 (* [invalid_corpus_mode_page expected_mode current_mode] generates an HTML on
    [output_channel] to notify the user that the requested operation
@@ -740,7 +716,8 @@ value corpus_mode_of_string = fun
 value invalid_corpus_mode_page expected current =
   error_page "Corpus Manager"
     "Invalid mode "
-    ("Expected mode: " ^ string_of_corpus_mode expected ^
-     " | Current mode: " ^ string_of_corpus_mode current)
+    ("Expected mode: " ^ expected ^
+     " | Current mode: " ^ current)
 ;
+
 (*i end; i*)

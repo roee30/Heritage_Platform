@@ -11,11 +11,14 @@ TRANSLIT='VH'
 LEXICON='SH'
 DISPLAY='roma'
 SERVERHOST='127.0.0.1'
+
+# User-specific Apache config.
 SERVERPUBLICDIR='/var/www/html/heritage-platform/'
 SKTDIRURL='/heritage-platform/'
 CGIDIR='/usr/lib/cgi-bin/heritage-platform/'
 CGIBINURL='/cgi-bin/heritage-platform/'
-CGIEXT='.cgi'
+CGIEXT=''
+
 MOUSEACTION='CLICK'
 CAPTION='My mirror site'
 SKTRESOURCES='/home/idir/sanskrit/Heritage_Resources/'

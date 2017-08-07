@@ -1,4 +1,5 @@
 (**************************************************************************)
+(*                                                                        *)
 (*                     The Sanskrit Heritage Platform                     *)
 (*                                                                        *)
 (*                              Idir Lankri                               *)
@@ -9,4 +10,6 @@
 value state : string
 ;
 value force : string
+;
+value nb_sols : string
 ;

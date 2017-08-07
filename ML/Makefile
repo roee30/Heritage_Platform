@@ -212,7 +212,7 @@ load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
 chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx load_morphs.cmx \
 int_sandhi.cmx nouns.cmx share.cmx minimap.cmx mini.cmx nums.cmxa \
 graph_segmenter.cmx checkpoints.cmx automaton.cmx params.cmx \
-save_corpus_params.cmx interface.cmx -o interface
+save_corpus_params.cmx dir.cmx corpus.cmx web_corpus.cmx interface.cmx -o interface
 
 user_aid: user_aid.cmx
 	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
@@ -309,10 +309,7 @@ mk_grammar_page: mk_grammar_page.cmx
 SCLpaths.cmx web.cmx mk_grammar_page.cmx -o mk_grammar_page
 
 mk_reader_page: mk_reader_page.cmx
-	$(LINK) str.cmxa gen.cmx paths.cmx version.cmx date.cmx control.cmx	\
-		html.cmx SCLpaths.cmx web.cmx cgi.cmx params.cmx	\
-		mk_reader_page.cmx					\
-		-o mk_reader_page
+	$(LINK) $(CORENATIVES) str.cmxa unix.cmxa control.cmx cgi.cmx date.cmx SCLpaths.cmx html.cmx web.cmx params.cmx dir.cmx corpus.cmx web_corpus.cmx mk_reader_page.cmx -o mk_reader_page
 
 mk_nyaaya_page: mk_nyaaya_page.cmx
 	$(LINK) gen.cmx paths.cmx version.cmx date.cmx \
@@ -323,8 +320,8 @@ mk_sandhi_page: mk_sandhi_page.cmx
 SCLpaths.cmx web.cmx mk_sandhi_page.cmx -o mk_sandhi_page
 
 mk_corpus_page: mk_corpus_page.cmx
-	$(LINK) str.cmxa gen.cmx paths.cmx version.cmx date.cmx	\
-		html.cmx SCLpaths.cmx web.cmx params.cmx $< -o $@
+	$(LINK) $(CORENATIVES) str.cmxa unix.cmxa date.cmx	\
+		html.cmx SCLpaths.cmx web.cmx params.cmx dir.cmx cgi.cmx corpus.cmx web_corpus.cmx $< -o $@
 
 # site_pages must be recomputed after configuration and creation of DICO dir
 # the style sheet must be recomputed, since it contains absolute URLs as well

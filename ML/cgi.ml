@@ -95,12 +95,10 @@ value decoded_get key default alist = decode_url (get key alist default)
 value query_string_env_var = "QUERY_STRING"
 ;
 value query_string () =
-  try Sys.getenv query_string_env_var with [
-    Not_found -> assert False   (* By RFC 3875 section 4.1.7 *)
-  ]
+  try Sys.getenv query_string_env_var with [ Not_found -> "" ]
 ;
 value url_encode s =
-  let hexa_str c = Printf.sprintf "%X" (Char.code c) in
+  let hexa_str c = Printf.sprintf "%.2X" (Char.code c) in
 
   (* Reference: RFC 3986 appendix A *)
   let url_encode = fun

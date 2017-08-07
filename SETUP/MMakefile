@@ -34,18 +34,18 @@ GOLD=$(SKTRESOURCES)GOLD# Heritage in Goldendict format databases
 XMLBANKS=$(SKTRESOURCES)XML# Heritage Sanskrit morphology in XML databases
 
 # Path to global Sanskrit corpus downloaded from Git.
-SKTCORPUS = #SKTCORPUS
+SKTCORPUS=$(SKTRESOURCES)CORPUS
 
 # Path to the corpus in the server area.
-SERVERCORPUS = $(SERVERPUBLICDIR)CORPUS
+SERVERCORPUS=$(SERVERPUBLICDIR)CORPUS
 
 # Macro to extract information from the Apache configuration.
 apache_config_extract = $(shell apachectl -S | grep $(1) |		\
 				cut -d ' ' -f 2 | cut -d '=' -f 2)
 
 # User and group under which CGIs are executed.
-APACHE_USER = $(call apache_config_extract,"User")
-APACHE_GROUP = $(call apache_config_extract,"Group")
+APACHE_USER=$(call apache_config_extract,"User")
+APACHE_GROUP=$(call apache_config_extract,"Group")
 
 # Virtual path for make
 VPATH=ML
@@ -421,7 +421,6 @@ echo 'and default_lexicon = "$(LEXICON)"'; \
 echo 'and default_display_font = "$(DISPLAY)"'; \
 echo 'and skt_install_dir = "$(SKTINSTALLDIR)"'; \
 echo 'and skt_resources_dir = "$(SKTRESOURCES)"'; \
-echo 'and skt_corpus_dir = "$(SKTCORPUS)"'; \
 echo 'and public_skt_dir = "$(SERVERPUBLICDIR)"'; \
 echo 'and skt_dir_url = "$(SKTDIRURL)"'; \
 echo 'and server_host = "$(SERVERHOST)"'; \
@@ -492,7 +491,7 @@ web_services: # Will write localized site pages in DICO and export cgis
 	cp -p SITE/xml.html DICO
 
 release: $(DICO) web_services releasecgi releaseMW releasedata releasedoc \
-releasebook
+releasebook releasecorpus
 # releasexml - no XML release on server - lookup Heritage_Resources
 # releasepdf disabled at present as bulky and un-finished
 	echo "Version $(VERSION) of Sanskrit site released on $(SERVERHOST)"
@@ -526,12 +525,6 @@ releasedata: abrevs
 		cp $(SITEPAGE_EN) $(SERVERPUBLICDIR)index.html;	\
 	fi # default language from lexicon parameter
 	cp -R $(DICO) $(SERVERPUBLICDIR) # hypertext Heritage dictionary
-	if [ $(SKTCORPUS) ]; then			\
-		mkdir -p $(SERVERCORPUS);		\
-		cp -R $(SKTCORPUS)* $(SERVERCORPUS);	\
-		chown -R $(APACHE_USER):$(APACHE_GROUP)	\
-			$(SERVERCORPUS);		\
-	fi			# Sanskrit corpus
 # so that cgis invocations in DICO pages are relocated consistently with config:
 	cd $(SERVERPUBLICDIR) && for i in `ls DICO/*.html`; do (\
 sed '1,$$s|!CGIDECL|$(CGIBINURL)$(CGIDECL)|g' < $$i >temp; \
@@ -546,6 +539,12 @@ rm temp ); done
 	cp $(DATAMW) $(SERVERPUBLICDIR)DATA # MW links
 	cp $(SCRIPTS) $(SERVERPUBLICDIR)DICO # Javascript in DICO dir
 #	cp $(DOC_IMAGES) $(SERVERPUBLICDIR)IMAGES
+
+releasecorpus:
+# Copy the corpus in the server area.
+	cp -R $(SKTCORPUS) $(SERVERPUBLICDIR)
+# Make the corpus in the server area writable by CGIs.
+	chown -R $(APACHE_USER):$(APACHE_GROUP) $(SERVERCORPUS)
 
 BOOKPRINTS=$(BOOK)/Heritage.pdf $(BOOK)/abrevs.pdf
 
@@ -792,5 +791,11 @@ reinstall: uninstall
 
 export SERVERCORPUS
 .PHONY: export-corpus
-export-corpus:
+export-corpus: # ???
 	$(MAKE) -C $(SKTRESOURCES) commit-corpus
+
+# saving corpus acquisitions 
+commit-corpus: 
+	cp -R $(SERVERCORPUS) $(SKTRESOURCES)
+# TODO: git add des nouvelles citations, git commit, git push
+

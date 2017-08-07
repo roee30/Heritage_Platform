@@ -1,4 +1,5 @@
 (**************************************************************************)
+(*                                                                        *)
 (*                     The Sanskrit Heritage Platform                     *)
 (*                                                                        *)
 (*                              Idir Lankri                               *)
@@ -8,37 +9,42 @@
 
 (* This program produces the pages corpus.html (Corpus interface).  *)
 
+open Html;
+open Web;
+
 value mode_selection =
-  List.map (fun mode ->
-    let mode_str = Web.string_of_corpus_mode mode in
-    (String.capitalize mode_str, mode_str, mode = Web.Reader)
-  ) Web.[ Reader; Annotator; Manager ]
+  let selection modes =
+      List.map (fun mode ->
+        let mode_str = Web_corpus.string_of_mode mode in
+        (String.capitalize mode_str, mode_str, mode = Web_corpus.Reader)
+      ) modes
+  in
+  let read_only_modes = [ Web_corpus.Reader ] in
+  let other_modes = Web_corpus.[ Annotator; Manager ] in
+  let all_modes = read_only_modes @ other_modes in
+  selection (if corpus_read_only then read_only_modes else all_modes)
 ;
 value make lang =
-  let title =
-    if Web.corpus_toggle then "Sanskrit Corpus" else "No corpus available"
-  in
+  let title_str = "Sanskrit Corpus" in
   do
-  { Web.open_html_file (Web.corpus_page lang) (Html.title title)
-  ; Html.body_begin Html.Chamois_back |> Web.pl
-  ; Web.open_page_with_margin 15
-  ; Html.h1_title title |> Web.print_title (Some lang)
-  ; Html.center_begin |> Web.pl
-  ; if Web.corpus_toggle then
-      Web.cgi_begin Web.corpus_manager_cgi "" ^
-      "Mode: " ^
-      Html.option_select_default Params.corpus_mode mode_selection ^ " " ^
-      Html.submit_input "OK" ^
-      Web.cgi_end |> Web.pl
-    else ()
-  ; Html.center_end |> Web.pl
-  ; Web.close_page_with_margin ()
-  ; Web.close_html_file lang True
+  { open_html_file (corpus_page lang) (title title_str)
+  ; body_begin Chamois_back |> pl
+  ; open_page_with_margin 15
+  ; h1_title title_str |> print_title (Some lang)
+  ; center_begin |> pl
+  ; cgi_begin corpus_manager_cgi "" ^
+    "Mode: " ^
+    option_select_default Params.corpus_mode mode_selection ^ " " ^
+    submit_input "OK" ^
+    cgi_end |> pl
+  ; center_end |> pl
+  ; close_page_with_margin ()
+  ; close_html_file lang True
   }
 ;
 value main =
   do
-  { make Html.English
-  ; make Html.French
+  { make English
+  ; make French
   }
 ;

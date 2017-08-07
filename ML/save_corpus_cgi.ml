@@ -1,4 +1,5 @@
 (**************************************************************************)
+(*                                                                        *)
 (*                     The Sanskrit Heritage Platform                     *)
 (*                                                                        *)
 (*                              Idir Lankri                               *)
@@ -8,8 +9,11 @@
 
 (* CGI script [save_corpus] for saving a sentence into the corpus.  *)
 
+open Html;
+open Web;
+
 value confirmation_page query =
-  let title = "Sanskrit Corpus" in
+  let title_str = "Sanskrit Corpus" in
   let env = Cgi.create_env query in
   let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
   let corpmode = Cgi.decoded_get Params.corpus_mode "" env in
@@ -19,30 +23,50 @@ value confirmation_page query =
   in
   let specific_url path = Cgi.url path ~fragment:sentno in
   do
-  { Web.maybe_http_header ()
-  ; Web.page_begin (Html.title title)
-  ; Html.body_begin Html.Chamois_back |> Web.pl
-  ; Web.open_page_with_margin 15
-  ; Html.h1_title title |> Web.print_title (Some Html.default_language)
-  ; Html.center_begin |> Web.pl
-  ; Html.div Html.Latin16 confirmation_msg |> Web.pl
-  ; Html.html_break |> Web.pl
-  ; Web.cgi_begin (specific_url Web.save_corpus_cgi) "" |> Web.pl
-  ; Html.hidden_input Save_corpus_params.state (Html.escape query) |> Web.pl
-  ; Html.hidden_input Save_corpus_params.force (string_of_bool True) |> Web.pl
-  ; Html.submit_input "Yes" |> Web.pl
-  ; Web.cgi_end |> Web.pl
-  ; Html.html_break |> Web.pl
-  ; Web.cgi_begin (specific_url Web.corpus_manager_cgi) "" |> Web.pl
-  ; Html.hidden_input Params.corpus_dir corpdir |> Web.pl
-  ; Html.hidden_input Params.corpus_mode corpmode |> Web.pl
-  ; Html.submit_input "No" |> Web.pl
-  ; Web.cgi_end |> Web.pl
-  ; Html.center_end |> Web.pl
-  ; Web.close_page_with_margin ()
-  ; Web.page_end Html.default_language True
+  { maybe_http_header ()
+  ; page_begin (title title_str)
+  ; body_begin Chamois_back |> pl
+  ; open_page_with_margin 15
+  ; h1_title title_str |> print_title (Some default_language)
+  ; center_begin |> pl
+  ; div Latin16 confirmation_msg |> pl
+  ; html_break |> pl
+  ; cgi_begin (specific_url save_corpus_cgi) "" |> pl
+  ; hidden_input Save_corpus_params.state (escape query) |> pl
+  ; hidden_input Save_corpus_params.force (string_of_bool True) |> pl
+  ; submit_input "Yes" |> pl
+  ; cgi_end |> pl
+  ; html_break |> pl
+  ; cgi_begin (specific_url corpus_manager_cgi) "" |> pl
+  ; hidden_input Params.corpus_dir corpdir |> pl
+  ; hidden_input Params.corpus_mode corpmode |> pl
+  ; submit_input "No" |> pl
+  ; cgi_end |> pl
+  ; center_end |> pl
+  ; close_page_with_margin ()
+  ; page_end default_language True
   }
 
+;
+value analysis_of_env env =
+  let lang =
+    env
+    |> Cgi.decoded_get "lex" Paths.default_lexicon
+    |> Html.language_of
+  in
+  let cpts =
+    env
+    |> Cgi.decoded_get "cpts" ""
+    (* |> Checkpoints.parse_cpts *)
+  in
+  let nb_sols =
+    env
+    |> Cgi.decoded_get Save_corpus_params.nb_sols "0"
+    |> Num.num_of_string
+  in
+  Corpus.Analysis.make Corpus.Analyzer.Graph lang cpts nb_sols
+;
+value error_page = error_page "Corpus Manager"
 ;
 (***************)
 (* Entry point *)
@@ -51,30 +75,41 @@ value main =
   let query = Cgi.query_string () in
   let env = Cgi.create_env query in
   let query = Cgi.decoded_get Save_corpus_params.state "" env in
-  let force =
-    env
-    |> Cgi.decoded_get Save_corpus_params.force (string_of_bool False)
-    |> bool_of_string
-  in
-  let env = Cgi.create_env query in
-  let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
-  let corpmode =
-    Web.corpus_mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
-  in
-  let error_page = Web.error_page "Corpus Manager" in
   try
-    let state =
+    let force =
       env
-      |> List.remove_assoc Params.corpus_mode
-      |> List.map (fun (k, v) -> (k, Cgi.decode_url v))
+      |> Cgi.decoded_get Save_corpus_params.force (string_of_bool False)
+      |> bool_of_string
     in
-    do
-    { Web_corpus.save_sentence force Web.graph_cgi state
-    ; Corpus_manager.mk_page corpdir corpmode
-    }
+    let env = Cgi.create_env query in
+    let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
+    let sentno =
+      env
+      |> Cgi.decoded_get Params.sentence_no ""
+      |> float_of_string
+      |> int_of_float
+    in
+    let text = Cgi.decoded_get "text" "" env in
+    let unsandhied = Cgi.decoded_get "us" "f" env = "t" in
+    let corpmode =
+      Web_corpus.mode_of_string (Cgi.decoded_get Params.corpus_mode "" env)
+    in
+    match corpmode with
+    [ Web_corpus.Annotator ->
+      do
+      { Web_corpus.save_sentence force corpdir sentno
+          (Sanskrit.read_VH unsandhied text) unsandhied (analysis_of_env env)
+      ; Corpus_manager.mk_page corpdir corpmode
+      }
+    | Web_corpus.Reader | Web_corpus.Manager ->
+      let expected_mode = Web_corpus.(string_of_mode Annotator) in
+      let current_mode = Web_corpus.string_of_mode corpmode in
+      invalid_corpus_mode_page expected_mode current_mode
+    ]
   with
   [ Web_corpus.Sentence_already_exists -> confirmation_page query
   | Sys_error msg -> error_page Control.sys_err_mess msg
   | Failure msg -> error_page Control.fatal_err_mess msg
+  | _ -> abort default_language Control.fatal_err_mess "Unexpected anomaly"
   ]
 ;

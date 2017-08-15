@@ -369,10 +369,10 @@ value stems root =
       let lstem = lengthened rstem in
       (revstem substitute,rstem,lstem) in
   match root with (* This shows what ought to be the root name, its weak form *)
-     [ "grah"   -> sampra "g.rh"
-     | "vyadh"  -> sampra "vidh"
+     [ "grah"   -> sampra "g.rh" (* \Pan{6,1,15} *) 
+     | "vyadh"  -> sampra "vidh" (* \Pan{6,1,15} *) 
      | "spardh" -> sampra "sp.rdh"
-     | "svap"   -> sampra "sup"
+     | "svap"   -> sampra "sup" (* \Pan{6,1,15} *) 
      (*  note "vac", "yaj" etc not concerned although having samprasaara.na *)
      | _ -> let weak = weak_stem root rstem 
             and strong = strong_stem root rstem in
@@ -387,6 +387,7 @@ value drop_penultimate_nasal = fun
   ]
 ;
 value passive_stem entry rstem = (* Panini -yak (k means no guna) *)
+                                 (* k also means samprasaara.na *)
   let weak = match entry with 
   (* [weak] same as first component of [stems], except praz vac etc and bh.rjj *)
     [ "dah#1" | "dih" | "duh#1" | "druh#1" | "muh" | "snih#1" | "snuh#1"
@@ -394,12 +395,12 @@ value passive_stem entry rstem = (* Panini -yak (k means no guna) *)
     | "nah"   -> nahify rstem
     | "m.rj" | "vraj" | "raaj#1" | "bhraaj" | "s.rj#1" | "bh.rjj" 
               -> mrijify rstem
-    | "yaj#1" -> mrijify (revcode "ij") (* samprasaara.na ya-x \R i-x *)
+    | "yaj#1" -> mrijify (revcode "ij") (* samprasaara.na ya-x \R i-x \Pan{6,1,15} *)
     | "vyadh" -> revcode "vidh"  (* id *)
-    | "grah"  -> revcode "g.rh"  (* samprasaara.na ra-x \R .r-x *)
+    | "grah"  -> revcode "g.rh"  (* samprasaara.na ra-x \R .r-x  \Pan{6,1,16} *) 
     | "vrazc" -> revcode "v.rzc" (* id *)
-    | "praz"  -> revcode "p.rcch" (* similar *)
-    | "svap"  -> revcode "sup"   (* samprasaara.na va-x \R u-x *)
+    | "praz"  -> revcode "p.rcch" (* id *)
+    | "svap"  -> revcode "sup"   (* samprasaara.na va-x \R u-x \Pan{6,1,15} *) 
     | "vaz" | "vac" | "vap" | "vap#1" | "vap#2" | "vad" | "vas#1" | "vas#4" 
     | "vah#1" (* idem - specific code for va-x roots *)
               -> match rstem with 
@@ -407,7 +408,7 @@ value passive_stem entry rstem = (* Panini -yak (k means no guna) *)
                  | [ c :: _ ] -> [ c ; 5 (* u *) ] (* va-x \R u-x *)
                  | [] -> failwith "Anomalous passive_stem"
                  ]
-    | "vaa#3" -> revcode "uu" 
+    | "vaa#3" -> revcode "uu" (* \Pan{6,1,15} *) 
     | "zaas"  -> revcode "zi.s" (* ambiguous zi.s.ta, zi.syate *)
     | "zii#1" -> revcode "zay" (* \Pan{7,4,22} *) 
     | "pyaa"  -> revcode "pyaay" (* pyaa=pyai *)
@@ -2637,7 +2638,7 @@ value compute_ppp_stems entry rstem =
            | "muurch" -> revcode "muur" (* muurta *)
            | "av"     -> revcode "uu" (* uuta *)
            | "i" | ".r" | "k.r#1" | "kyaa" | "khyaa" | "gu~nj" | "gh.r" 
-           | "ghraa" | "ci" | "cyu" | "ji" | "du" | "dru#1" | "dh.r" 
+           | "ghraa" | "ci" | "cyu" | "ji" | "daa#3" | "du" | "dru#1" | "dh.r" 
            | "dhyaa" | "dhru" | "nu#1" | "praa#1" | "bh.r" | "mi" | "m.r" 
            | "yaa#1" | "yu#1" | "yu#2" | "raa#1" | "ru" | "va~nc" 
            | "vaa#2" | "v.r#1" | "v.r#2" | "zaas" | "zri" | "zru" | "su#2"
@@ -2808,8 +2809,8 @@ value compute_future_10 rstem entry =
 value admits_passive = fun 
   [ (* We filter out roots with no attested passive forms *)
     "an#2" | "av" | "as#1" | "iiz#1" | "uc" | "kan" | "kuu" | "k.lp"| "k.si" 
-  | "kha.n.d" | "dyut#1" | "dru#1" | "pat#2" | "paz" | "paa#2" | "pi#2" 
-  | "praa#1" | "ruc#1" | "vas#4" | "vidh#1" | "vip" | "vyac" | "zam#1"
+  | "kha.n.d" | "daa#2" | "dyut#1" | "dru#1" | "pat#2" | "paz" | "paa#2"
+  | "pi#2" | "praa#1" | "ruc#1" | "vas#4" | "vidh#1" | "vip" | "vyac" | "zam#1"
   | "zrambh" | "zvit" | "siiv" | "spaz#1" | "spardh" | "h.r#2" | "hrii#1"
   | "ma.mh" (* supplied by "mah" *)
       -> False 
@@ -3456,7 +3457,11 @@ value compute_perfect entry =
     | "ah" -> compute_perfect_ah ()
     | "vyaa" -> compute_perfect_vyaa "vyaa" (* does not fit standard aa scheme *)
     | "i" -> let (strong, weak,_,_,_) = redup_perf entry in
-             compute_perfect_v strong weak entry
+             compute_perfect_v strong weak entry (* semble inutile ? *)
+    | "zvaa" -> let (strong, weak,_,_,_) = redup_perf "zuu" in (* \Pan{6,1,30} *)
+             compute_perfect_v strong weak entry (* Whitney 794b zizvaaya *)
+(* Whitney 794b also jyaa pyaa vyaa hvaa; we treat vyaa above, and hvaa is huu.
+   Thus pyaa is covered by pii. jyaa#1 as jii gives jijyau same WR *)
     | "indh" -> compute_perfectm Primary (revcode "iidh") entry
     | "mah" -> let (strong, weak, _, _, _) = redup_perf entry in
                compute_perfectm Primary strong entry (* ZZ Atma for Para root *)
@@ -4963,7 +4968,7 @@ value compute_present_system entry rstem gana pada third =
                    | "lup"    -> revcode "lump"
                    | "vid#2"  -> revcode "vind"
                    | "praz"   -> revcode "p.rcch" (* ra/.r *)
-                   | "vrazc"  -> revcode "v.rzc"  (* id *)
+                   | "vrazc"  -> revcode "v.rzc"  (* id déploiement vocalique *)
                    | "s.rj"   -> mrijify rstem
                    | _ -> rstem (* root stem *)
                    ]
@@ -5768,7 +5773,7 @@ value fake_compute_conjugs (gana : int) (entry : string) = do
       | "zaa"    -> record_part_ppp (revcode "zaata") entry
       | "zaas"   -> compute_extra_zaas ()
       | "zru"    -> compute_extra_zru () 
-      | "sa~nj"  -> compute_extra_sanj ()
+      | "sa~nj"  -> compute_extra_sanj () 
       | "skand"  -> compute_extra_skand ()
       | "spaz#1" -> record_part_ppp (revcode "spa.s.ta") entry
       | "syand"  -> compute_extra_syand ()

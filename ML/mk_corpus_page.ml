@@ -14,19 +14,18 @@ open Web;
 
 value permission_selection =
   let selection permissions =
-      List.map (fun permission ->
+      List.map select permissions 
+      where select permission =
         let permission_str = Web_corpus.string_of_permission permission in
-        (String.capitalize permission_str, permission_str, permission = Web_corpus.Reader)
-      ) permissions
-  in
+        (String.capitalize permission_str, permission_str, 
+         permission = Web_corpus.Reader) in
   let read_only_permissions = [ Web_corpus.Reader ] in
   let other_permissions = Web_corpus.[ Annotator; Manager ] in
   let all_permissions = read_only_permissions @ other_permissions in
   selection (if corpus_read_only then read_only_permissions else all_permissions)
 ;
 value make lang =
-  let title_str = "Sanskrit Corpus" in
-  do
+  let title_str = "Sanskrit Corpus" in do
   { open_html_file (corpus_page lang) (title title_str)
   ; body_begin Chamois_back |> pl
   ; open_page_with_margin 15
@@ -42,8 +41,7 @@ value make lang =
   ; close_html_file lang True
   }
 ;
-value main =
-  do
+value main = do
   { make English
   ; make French
   }

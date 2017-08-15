@@ -91,8 +91,8 @@ value voices_of = fun
   | "pru" | "plu" | "ba.mh" | "baadh" | "bha.n.d" | "bhand" | "bhaa.s"
   | "bhuj#2" | "bhraaj" | "ma.mh" | "man" | "mand#1" | "yat#1" | "yudh#1"
   | "rabh" | "ruc#1" | "lajj" | "lamb" | "lii" | "loc" | "vand" | "vas#2"
-  | "vaaz" | "vip" | "v.rdh#1" | "ve.s.t" | "vrii.d" | "zafk"
-  | "zad" | "zii#1" | "zrambh" | "zlaagh" | "zvit" | "sac" | "sev"
+  | "vaaz" | "vip" | "v.rdh#1" | "ve.s.t" | "vrii.d" | "zafk" | "zad"
+  | "zi~nj" | "zii#1" | "zrambh" | "zlaagh" | "zvit" | "sac" | "sev"
   | "styaa" | "spand" | "spardh" | "spaz#1" | "sphaa" | "smi" | "sra.ms"
   | "sva~nj" | "haa#2" | "hu.n.d" | "h.r#2" | "hnu" | "hraad" | "hlaad" 
 (*| "m.r" Ubha needed for non present tenses - see \Pan{1,3,61} for exact rule *)

@@ -215,9 +215,8 @@ module Make (Loc : Location) : S = struct
   ;
   value sentence subdir id =
     let file = sentence_file subdir id in
-    if Sys.file_exists file then (Gen.gobble file : Sentence.t) else
-      failwith "No_such_sentence"
-      (* raise No_such_sentence *)
+    if Sys.file_exists file then (Gen.gobble file : Sentence.t) 
+                            else raise No_such_sentence 
   ;
   value contents subdir =
     let subdir = ~/subdir in
@@ -246,19 +245,15 @@ module Make (Loc : Location) : S = struct
   value save_sentence force dir id text unsandhied analysis =
     let file = sentence_file dir id in
     let sentence = Sentence.make id text unsandhied analysis in
-    if not force && Sys.file_exists file then
-      failwith "Sentence_already_exists"
-      (* raise Sentence_already_exists *)
-    else
-      Gen.dump sentence file
+    if not force && Sys.file_exists file then raise Sentence_already_exists 
+                                         else Gen.dump sentence file
   ;
   exception Section_already_exists of string
   ;
   value mkdir dirname =
     try Unix.mkdir ~/dirname 0o755 with
     [ Unix.Unix_error (Unix.EEXIST, _, _) ->
-      failwith ("Section_already_exists" ^ (Filename.basename dirname))
-      (* raise (Section_already_exists (Filename.basename dirname)) *)
+      raise (Section_already_exists (Filename.basename dirname)) 
     ]
   ;
   type permission = [ Reader | Annotator | Manager ]

@@ -59,7 +59,8 @@ value css_decls =
   ; "a:visited {color: Purple}"
   ; "a:active {color: Fuchsia}"
   ; "img {border: 0}"
-  ] @ List.map cascade sheets
+  ; "li " ^ "{" ^ (style B3) ^ "}" (* patch for line numbers in corpus *)
+  ] @ List.map cascade sheets 
 ;
 value pop_up_spec =
   "#popBox { position: absolute; z-index: 2; background: " ^ rgb Mauve ^ 

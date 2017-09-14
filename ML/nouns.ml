@@ -4756,12 +4756,12 @@ value build_num stem entry =
   let decline case suff = (case,fix stem suff) in 
   enter entry (
    [ Declined Noun (Deictic Numeral)
-   [ (* (Singular, (* delegated to iic. incomplete [PS] *)
+   [ (Singular, 
          [ decline Voc "a" 
          ; decline Nom "a"
          ; decline Acc "a"
-         ]) ; *)
-     (Dual, if entry = "a.s.tan" then 
+         ]) 
+   ; (Dual, if entry = "a.s.tan" then 
             (* remains of dual form 8 as a pair of 4 *)
             [ decline Voc "au"
             ; decline Nom "au"

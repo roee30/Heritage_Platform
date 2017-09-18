@@ -329,17 +329,17 @@ value rec react phase input output back occ = fun
        let out = accrue segment output in 
        match validate out with 
        [ [] -> deter cont
-       | contracted -> match input' with 
+       | contracted -> match input' with
               [ [] -> if accepting phase then 
                       if check_chunk contracted
                          then Some (contracted,cont) (* solution found *) 
                          else continue cont 
                       else continue cont 
-              | [ first :: _ ] -> 
-                  if check_id_sandhi occ first then (* legitimate Id sandhi? *)
-                         let cont' = schedule phase input' contracted [] cont in
-                         if cut then continue cont' else deter cont' 
-                  else if cut then continue cont else deter cont 
+              | [ first :: _ ] -> (* we first try the longest matching word *)
+                      let cont' = schedule phase input' contracted [] cont in
+                      if cut then continue cont' else
+                      if check_id_sandhi occ first then (* legitimate Id *)
+                         deter cont' else deter cont 
               ]
        ]
     else if cut then continue cont else deter cont 

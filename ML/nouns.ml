@@ -4756,19 +4756,15 @@ value build_num stem entry =
   let decline case suff = (case,fix stem suff) in 
   enter entry (
    [ Declined Noun (Deictic Numeral)
-   [ (Singular, 
-         [ decline Voc "a" 
-         ; decline Nom "a"
-         ; decline Acc "a"
-         ]) 
-   ; (Dual, if entry = "a.s.tan" then 
+   [ (Dual, if entry = "a.s.tan" then 
             (* remains of dual form 8 as a pair of 4 *)
-            [ decline Voc "au"
-            ; decline Nom "au"
+            [ decline Nom "au"
             ; decline Acc "au"
             ] else [])
    ; (Plural, let l =
-        [ decline Ins "abhis"
+        [ decline Nom "a" (* plural although no proper plural form Whitney§483 *)
+        ; decline Acc "a" 
+        ; decline Ins "abhis"
         ; decline Dat "abhyas"
         ; decline Abl "abhyas"
         ; decline Gen "aanaam"
@@ -4781,10 +4777,9 @@ value build_num stem entry =
         ]    else l)
    ]
    ; Bare Noun (wrap stem 1) 
+   ; Cvi (wrap stem 4) 
    ] @ (if entry = "a.s.tan" then
            [ Bare Noun (wrap stem 2) (* a.s.taa *) ] 
-        else if entry = "pa~ncan" then
-           [ Bare Noun (code "paa~nca"); Cvi (code "pa~ncii") ] 
         else []))
 ;
 value build_kati entry = 

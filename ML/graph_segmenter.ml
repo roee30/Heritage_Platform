@@ -407,12 +407,12 @@ value rec react phase input output back occ = fun
       ] in
     let cont = if choices=[] then back (* non deterministic continuation *)
                else [ Choose phase input output occ choices :: back ] in
-    (* now we look for - or + pragma *)
+    (* now we look for - or + segmentation pragma *)
     let (keep,cut,input') = match input with 
        [ [ 0 :: rest ] -> (* explicit "-" compound break hint *) 
               (ii_phase phase,True,rest) 
-       | [ -10 :: rest ] -> (* mandatory segmentation + *)
-              (True,True,rest)  
+       | [ -10 :: rest ] -> (* mandatory segmentation indicated by "+" *)
+              (True,True,rest)
        | _ -> (True,False,input) (* no hint in input *)
        ] in         
     if accept && keep then 
@@ -425,10 +425,10 @@ value rec react phase input output back occ = fun
                          do { log_chunk contracted; continue cont } 
                       else continue cont 
               | [ first :: _ ] -> (* we first try the longest matching word *)
+                      let cont' = schedule phase input' contracted [] cont in
+                      if cut then continue cont' else
                       if check_id_sandhi occ first then (* legitimate Id *)
-                         let cont' = schedule phase input' contracted [] cont in
-                         if cut then continue cont' else deter cont' 
-                      else if cut then continue cont else deter cont 
+                         deter cont' else deter cont 
               ]
        ]
     else if cut then continue cont else deter cont 

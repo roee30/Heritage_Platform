@@ -711,7 +711,8 @@ value indic_unicode_point = fun
          else "" (* homo index dropped *)
   ]
 and matra_indic_unicode_point = fun
-  [ 0  -> (* - *)  "70" (* necessary for iic form ending in consonant *)
+  [ -10   (* + *) (* necessary for word form ending in consonant *)
+  | 0  -> (* - *)  "70" (* id for iics *)
   | 1  -> (* a *)  "" (* default *)
   | 2  -> (* aa *) "3E"
   | 3  -> (* i *)  "3F"

@@ -3850,7 +3850,9 @@ value compute_thematic_injunctm stem entry =
   enter1 entry (Conju (injm 2) (thematic_preterit_m conjug))
 ;
 (* identical to [compute_thematic_impfta] *) 
-value compute_redup_aorista stem entry = 
+(* de Saussure (Memoire sur le systeme primitif des voyelles dans les langues IE)
+   says: reduplicated aorists represent imperfects of a verbal class. *) 
+value compute_redup_aorista stem entry =  
   let conjug person suff = (person,fix_augment stem suff) in
   enter1 entry (Conju (aora 3) (thematic_preterit_a conjug))
   (* NB Macdonnel dixit -- Gonda says "ur" for Third Plural *)

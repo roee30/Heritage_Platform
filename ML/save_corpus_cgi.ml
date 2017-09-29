@@ -102,7 +102,7 @@ value main =
       ; Corpus_manager.mk_page corpdir permission
       }
     | Web_corpus.Reader | Web_corpus.Manager ->
-      let expected_permission = Web_corpus.string_of_permission Annotator in
+      let expected_permission = Web_corpus.(string_of_permission Annotator) in
       let current_permission = Web_corpus.string_of_permission permission in
       invalid_corpus_permission_page expected_permission current_permission
     ]

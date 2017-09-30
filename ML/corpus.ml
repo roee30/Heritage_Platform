@@ -266,11 +266,18 @@ module Make (Loc : Location) : S = struct
     | Manager -> "manager"
     ]
   ;
-  value permission_of_string = fun
-    [ "annotator" -> Annotator
-    | "manager" -> Manager
-    | _ -> Reader
+  value restrict_permission perm =
+    match Html.target with
+    [ Html.Server -> Reader
+    | Html.Simputer | Html.Computer | Html.Station -> perm
     ]
+  ;
+  value permission_of_string s = s |> to_perm |> restrict_permission
+    where to_perm = fun
+      [ "annotator" -> Annotator
+      | "manager" -> Manager
+      | _ -> Reader
+      ]
   ;
   value url dir permission sentence =
     let analysis = Sentence.analysis sentence in

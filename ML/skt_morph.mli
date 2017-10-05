@@ -86,10 +86,9 @@ and participle = (* participles *)
   | Ppftm (* middle perfect participle *) (* no passive *)
   | Pfuta (* active future participle *)
   | Pfutm (* middle future participle *)
-  | Pfutp of kritya (* passive future/potential participle - 3 forms *)
-    (* Pfutp is called gerundive in old grammars *)
+  | Pfutp of kritya (* passive future/potential participle/gerundive 3 forms *)
   | Action_noun (* generative only for auxiliaries, for cvi compounds *)
-  (* Other krit stems are not generative, but are assumed lexicalized *)
+(*| Agent_noun, etc. -- non generative, must be lexicalized; see nominal *)
   ]
 ;
 (* Invariable verbal forms.
@@ -119,11 +118,12 @@ type nominal = (conjugation * krit)
 and krit = (* coarser than Paninian krit suffixes *) 
   [ Agent_aka (* .nvul \Pan{3,1,133} \Pan{3,3,108-109} -aka -ikaa v.rddhi 
                  .svun \Pan{3,1,145} trade gu.na f. -akii  
-                 vu~n \Pan{3,1,146-147} *)
+                 vu~n \Pan{3,1,146-147} 
+                 vun \Pan{3,1,149-150} repeated action, benediction *)
   | Agent_in  (* .nini \Pan{3,1,134} \Pan{3,2,78-86}   -in  -inii v.rddhi 
                  ghinu.n \Pan{3,2,141-145} 
                  ini \Pan{3,2,93} ifc. -vikrayin past *)
-  | Agent_tri (* t.rc \Pan{3,1,133} t.rn \Pan{3,2,135} -t.r gu.na  *)
+  | Agent_tri (* t.rc \Pan{3,1,133} t.rn \Pan{3,2,135} habit -t.r gu.na  *)
   | Agent_ana (* lyu \Pan{3,1,134} yuc \Pan{3,2,148}     -ana a.   
                  .nyu.t \Pan{3,1,147-148} profession f. -anii *)
   | Agent_root (* kvip \Pan{3,2,61} ifc + \Pan{3,2,76} adja  
@@ -136,28 +136,28 @@ and krit = (* coarser than Paninian krit suffixes *)
                .na \Pan{3,1,140-143} v.rddhi (f. -aa)
                ka \Pan{3,1,135-136;144} -gu.na 
                   \Pan{3,2,3-7} m. -a (f. -aa) metaphoric use
-               za \Pan{3,1,137-139} idem ka but (f. -aa) nb present stem *)
-  | Agent_nu (* i.s.nu \Pan{3,2,136}    
+               za \Pan{3,1,137-139} idem ka but (f. -aa) nb present stem 
+               a.n \Pan{3,2,1} vriddhi ifc (iic obj) (f. -ii) -kaara *)
+  | Agent_nu (* i.s.nu \Pan{3,2,136} 
                 i.s.nuc \Pan{3,2,136-138} -i.s.nu gu.na (habit)
                 khi.s.nuc \Pan{3,2,57} -i.s.n'u gu.na 
-                knu \Pan{3,2,140} ksnu \Pan{3,2,139}  -nu -gu.na     *)
-  | Action_ana (* lyu.t \Pan{3,3,115-117}            -ana n.        *)
-  | Action_na (* naf \Pan{3,3,90} nan \Pan{3,3,91}    -na m. -naa f. *)
-  | Action_a (* gha~n \Pan{3,3,18-}               -a m. v.rddhi *)
+                knu \Pan{3,2,140} ksnu \Pan{3,2,139} -nu -gu.na *)
+  | Action_ana (* lyu.t \Pan{3,3,115-117}            -ana n.    *)
+  | Action_na (* naf \Pan{3,3,90} nan \Pan{3,3,91} -na m. -naa f. *) 
+  | Action_a (* gha~n \Pan{3,3,18-}                -a m. v.rddhi *)
   | Action_ya (* kyap \Pan{3,1,107} -ya n. -yaa f.              *)
-  | Action_root (* ?                                      f.   *)
   | Action_ti (* ktin \Pan{3,3,94}                      -ti f.  *)
   | Action_i (* ki \Pan{3,3,92-93}                     -i f.    *)
-  | Object_root 
-  | Object_a (* ka                                    -a n.    *)
+  | Action_root (* unknown krit of non-agent noun  *) 
+  | Object_root (* we should probably lump action and object in Non_agent *)
+  | Object_a (* ka                                    -a n.    *) 
   | Instrument (* ka \Pan{3,1,136}                  0/amui n.   *)
   | Instra (* .s.tran -tra n.                -trii f. traa f.  *)
   | Agent_u   (* san+u                             -u on des stem *)
   | Action_aa (* san+a+.taap  \Pan{3,3,102}        -aa on des stem *)
   | Abstract (* abstract nouns n.           -as u.naadi suffix *)
-  (* More to come *)
   ]
-  ;
+;
 
 type ind_kind = 
   [ Adv       (* adverb *)

@@ -2954,7 +2954,6 @@ value redup_perf root =
       | "ci"     -> stems "ki"       (* idem *)
       | "cit#1"  -> stems "kit"      (* idem *)
       | "umbh"   -> stems "ubh"   (* remove penultimate nasal *)
-      | "nand"   -> stems "nad"      (* idem *)
       | "sva~nj" -> stems "svaj"     (* idem *)
       | "han#1"  -> stems "ghan"  (* velar h -> gh *)
       | "hi#2"   -> stems "ghi"      (* idem *)

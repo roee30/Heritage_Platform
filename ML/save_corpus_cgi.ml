@@ -57,7 +57,7 @@ value analysis_of_env env =
   let cpts =
     env
     |> Cgi.decoded_get "cpts" ""
-    (* |> Checkpoints.parse_cpts *)
+    (* [|> Checkpoints.parse_cpts] *)
   in
   let nb_sols =
     env

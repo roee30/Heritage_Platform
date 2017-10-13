@@ -13,7 +13,7 @@
 (* Terminology. record functions will build the forms needed by Conjugation
 and Stemming. After change of this file, and "make releasecgi", these tables
 are updated. But the Reader/Parser needs a full pass of generation, with 
-"make scratch", in order to rebuild the full automata. *)
+"make scratch" from Dictionary, in order to rebuild the full automata. *)
 
 (*i module Verbs = struct i*)
 
@@ -21,7 +21,7 @@ open List; (* map, length, rev *)
 open Phonetics; (* [vowel, homonasal, duhify, mrijify, nahify, light, nasal, 
                     gana, mult, aug, trunc_a, trunc_u, trunc_aa] *)
 open Skt_morph;
-open Inflected; (* [Conju, roots, enter1, morpho_gen, admits_aa] *)
+open Inflected; (* [Conju, Invar, Inftu, roots, enter1, morpho_gen, admits_aa] *)
 open Parts; (* [memo_part, record_part, cau_gana, fix, fix_augment, rfix,
                 compute_participles] *)
 (* This module also uses modules [List2 Word Control Canon Encode Int_sandhi] 
@@ -3460,7 +3460,7 @@ value compute_perfect entry =
     | "zvaa" -> let (strong, weak,_,_,_) = redup_perf "zuu" in (* \Pan{6,1,30} *)
              compute_perfect_v strong weak entry (* Whitney 794b zizvaaya *)
 (* Whitney 794b also jyaa pyaa vyaa hvaa; we treat vyaa above, and hvaa is huu.
-   Thus pyaa is covered by pii. jyaa#1 as jii gives jijyau same WR *)
+   Thus pyaa is covered by pii. jyaa1 as jii gives jijyau same WR *)
     | "indh" -> compute_perfectm Primary (revcode "iidh") entry
     | "mah" -> let (strong, weak, _, _, _) = redup_perf entry in
                compute_perfectm Primary strong entry (* ZZ Atma for Para root *)
@@ -4303,6 +4303,10 @@ value build_infinitive c inf_stem root = do
    bhaavitum have to be entered as supplements; see Witney§1051c. *)
   { enter1 root (Invar (c,Infi) (fix inf_stem "tum"))
   ; enter1 root (Inftu c (fix inf_stem "tu")) (* Xtu-kaama compounds *)
+(* NB. bahuv cpds in -kaama and -manas constructed with infinitives in -tu 
+   See Renou HLS p72 from Patanjali; also Assimil p194 eg tyaktukaama
+   anu.s.thaatukaama "desirious to proceed" vaktukaama "who wants to speak"
+   dra.s.tumanas "inclined to see" *)
   }
 ;
 value perif conj perstem entry = do 

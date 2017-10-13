@@ -423,14 +423,14 @@ value check_sentence translit us text_orig checkpoints sentence
              ] in do
   { make_visual cur_chunk.offset
   ; find_conflict 0
-  ; pl html_break 
-  ; pl (html_latin16 "Sentence: ")
-  ; ps (deva16_blue devainput) (* devanagari *)
-  ; pl html_break
-  ; ps (div_begin Latin16)
-  ; pl (table_begin Spacing20)
-  ; pl tr_begin
-  ; ps (td_wrap (call_undo text checkpoints ^ "Undo"))
+  ; html_break |> pl
+  ; html_latin16 "Sentence: " |> pl
+  ; deva16_blue devainput |> ps (* devanagari *)
+  ; html_break |> ps
+  ; div_begin Latin16 |> ps
+  ; table_begin Spacing20 |> pl
+  ; tr_begin |> pl
+  ; td_wrap (call_undo text checkpoints ^ "Undo") |> ps
   ; let call_scl_parser n = (* invocation of scl parser *)
         if scl_toggle then
            ps (td_wrap (call_reader text cpts "o" ^ "UoH Analysis Mode"))
@@ -438,34 +438,34 @@ value check_sentence translit us text_orig checkpoints sentence
     match count with 
     [ Num.Int n -> if n > max_count then 
                       (* too many solutions would choke the parsers *) 
-                      ps (td_wrap ("(" ^ string_of_int n ^ " Solutions)"))
+                      td_wrap ("(" ^ string_of_int n ^ " Solutions)") |> ps
                    else if n=1 (* Unique remaining solution *) then do
-                       { ps (td_wrap (call_parser text cpts ^ "Unique Solution"))
-                       ; call_scl_parser 1
-                       }
+                      { td_wrap (call_parser text cpts ^ "Unique Solution") |> ps
+                      ; call_scl_parser 1
+                      }
                    else do
-        { ps (td_wrap (call_reader text cpts "p" ^ "Filtered Solutions"))
-        ; let info = string_of_int n ^ if flag then "" else " Partial" in 
-          ps (td_wrap (call_reader text cpts "t" ^ "All " ^ info ^ " Solutions"))
-        ; call_scl_parser n
-        } 
-    | _ -> ps (td_wrap "(More than 2^32 Solutions!)")
+       { td_wrap (call_reader text cpts "p" ^ "Filtered Solutions") |> ps
+       ; let info = string_of_int n ^ if flag then "" else " Partial" in 
+         td_wrap (call_reader text cpts "t" ^ "All " ^ info ^ " Solutions") |> ps
+       ; call_scl_parser n
+       } 
+    | _ -> td_wrap "(More than 2^32 Solutions!)" |> ps
     ]
-  ; pl tr_end
-  ; pl table_end
-  ; ps div_end (* Latin16 *)
-  ; pl html_break 
-  ; ps (div_begin Latin12)
-  ; pl (table_begin Tcenter)
-  ; ps tr_begin 
+  ; tr_end |> pl
+  ; table_end |> pl
+  ; div_end |> ps (* Latin16 *)
+  ; html_break |> pl
+  ; div_begin Latin12 |> ps
+  ; table_begin Tcenter |> pl
+  ; tr_begin |> ps
   ; List.iter update_col_length chunks 
   ; if Paths.platform="Station" then print_all text checkpoints chunks 0
                                 else List.iter print_first_server chunks
-  ; pl tr_end
+  ; tr_end |> pl
   ; print_interf text checkpoints ()
-  ; pl table_end
-  ; ps div_end (* Latin12 *)
-  ; pl html_break  
+  ; table_end |> pl
+  ; div_end |> ps (* Latin12 *)
+  ; html_break |> pl
   ; reset_graph () 
   ; reset_visual ()
   ; set_cur_offset 0
@@ -632,8 +632,8 @@ value graph_engine () = do
 
      (* Save sentence button *)
    ; if corpus_permission = Web_corpus.Annotator then
-     (* TODO: use segment_all to compute the nb of sols instead of
-        passing 0 as nb_sols.  *)
+     (* TODO: use [segment_all] to compute the nb of sols instead of
+        passing 0 to [nb_sols].  *)
        save_button query (Num.num_of_int 0) |> pl
      else
        ()

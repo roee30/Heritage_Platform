@@ -76,9 +76,9 @@ value transducer = fun
   | Vocc -> transducers.vocc (* consonant-initial vocatives *)
   | Iiy  -> transducers.iiy  (* iic avyayiibhava *)
   | Avy  -> transducers.avya (* ifc avyayiibhava *)
-  | Inftu -> transducers.inftu (* infinitives in -tu *)
-  | Kama -> transducers.kama (* forms of kaama *)
-  | Sfx  -> transducers.sfx  (* ifc taddhita suffixes *)
+  | Inftu -> transducers.inftu (* infinitives in -tu iic. Renou HLS 72 *)
+  | Kama -> transducers.kama (* ifcs of kaama/manas: tyaktukaama dra.s.tumanas *)
+  | Sfx  -> transducers.sfx  (* ifc taddhita suffixes *) 
   | Isfx -> transducers.isfx (* iifc taddhita suffixes *)
   | Cache -> transducers.cache (* cached forms *)
   | Noun | Iic | Iik | Voca | Krid | Pvk | Vok

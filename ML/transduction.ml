@@ -892,7 +892,7 @@ EXTEND Gram (* skt to nat *)
       | LETTER "S" -> 148
       | LETTER "H" -> 149 
 (* duplication with lower necessary in order to get proper sharing of prefix *)
-      | "\""; LETTER "m" -> 41 
+      | "\""; LETTER "m" -> 15 
       | "\""; LETTER "n" -> 36
       | LETTER "f" -> 36
       | "\""; LETTER "s" -> 48

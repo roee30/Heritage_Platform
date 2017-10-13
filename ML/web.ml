@@ -349,8 +349,8 @@ value ps s = output_string output_channel.val s
 and pc c = output_char output_channel.val c 
 and pi i = output_string output_channel.val (string_of_int i) 
 ;
-value line () = pc '\n'
-and sp () = ps " "
+value line () = pc '\n' 
+and sp () = ps " " 
 and pl s = ps (s ^ "\n")
 ; 
 value meta_program l = List.iter pl (List.map meta_prefix l)
@@ -393,17 +393,17 @@ value favicon dyn =
   "<link rel=\"shortcut icon\" href=\"" ^ path ^ "\">" 
 ; 
 value page_begin_dyn dyn title = do
-  { pl doctype
-  ; ps (xml_begin_with_att "html" [])
-  ; pl (xml_begin "head")                           (* ( *)
-  ; meta_program contents_instructions              (* . *)
-  ; pl title                                        (* . *)
-  ; meta_program title_instructions                 (* . *)
-  ; pl (css_link dyn)                               (* . *)
-  ; pl (favicon dyn)                                (* . *)
-  ; pl (deva_read_script dyn) (* devanagari input *)(* . *)
-  ; pl (js_util_script dyn)
-  ; pl (xml_end "head")                             (* ) *)
+  { doctype |> pl
+  ; xml_begin_with_att "html" [] |> ps
+  ; xml_begin "head" |> pl                           (* ( *)
+  ; meta_program contents_instructions               (* . *)
+  ; title |> pl                                      (* . *)
+  ; meta_program title_instructions                  (* . *)
+  ; css_link dyn |> pl                               (* . *)
+  ; favicon dyn |> pl                                (* . *)
+  ; deva_read_script dyn |> pl (* devanagari input *)(* . *)
+  ; js_util_script dyn |> pl                         (* . *)
+  ; xml_end "head" |> pl                             (* ) *)
   }
 ;
 value open_html_file f title = do (* for building the Web services pages *)
@@ -421,31 +421,31 @@ value version lang =
   h3_begin B3 ^ Date.version ^ lang_str ^ h3_end 
 ;
 value print_title lang title = do
-  { pl (table_begin Centered)
-  ; ps tr_begin
-  ; ps th_begin 
-  ; pl title
-  ; pl (version lang)
-  ; ps th_end
-  ; ps tr_end
-  ; pl table_end
+  { table_begin Centered |> pl
+  ; tr_begin |> ps
+  ; th_begin |> ps 
+  ; title |> pl
+  ; version lang |> pl
+  ; th_end |> ps
+  ; tr_end |> ps
+  ; table_end |> pl
   }
 and print_title_solid color lang title = do
-  { pl (table_begin (centered color))
-  ; ps tr_begin
-  ; ps th_begin 
-  ; pl title
-  ; pl (version lang)
-  ; ps th_end
-  ; ps tr_end
-  ; pl table_end
+  { table_begin (centered color) |> pl
+  ; tr_begin |> ps
+  ; th_begin |> ps 
+  ; title |> pl
+  ; version lang |> pl
+  ; th_end |> ps
+  ; tr_end |> ps
+  ; table_end |> pl
   }
 ;
 value print_transliteration_help lang = 
   if narrow_screen then () 
   else do
-  { ps "Transliteration help "
-  ; pl (anchor_ref (rel_faq_page_url lang ^ "#transliteration") "here")
+  { "Transliteration help " |> ps
+  ; anchor_ref (rel_faq_page_url lang ^ "#transliteration") "here" |> pl
   }
 ;
 value transliteration_switch_default dft id =
@@ -459,59 +459,59 @@ value transliteration_switch_default dft id =
        ]
 ;
 value print_transliteration_switch id =
-  ps (transliteration_switch_default Paths.default_transliteration id)
+  transliteration_switch_default Paths.default_transliteration id |> pl
 ;
 value print_lexicon_select lexicon = do 
-  { ps "Lexicon Access " 
-  ; pl (option_select_default "lex" 
+  { "Lexicon Access " |> ps
+  ; option_select_default "lex" 
          [ ("    Heritage     ","SH","SH"=lexicon)  (* Sanskrit Heritage *)
          ; (" Monier-Williams ","MW","MW"=lexicon)  (* Monier-Williams *)
-         ])
+         ] |> pl
   }
 ;
 value print_index_help lang = 
   if narrow_screen then () else do
-  { pl (par_begin G2)
-  ; pl html_break 
-  ; ps "Search for an entry matching an initial pattern:"
-  ; pl html_break 
+  { par_begin G2 |> pl
+  ; html_break |> pl
+  ; "Search for an entry matching an initial pattern:" |> ps
+  ; html_break |> pl 
   ; print_transliteration_help lang
-  ; pl par_end (* G2 *)
+  ; par_end |> pl (* G2 *)
   }
 ;
 value print_dummy_help_en () = 
   if narrow_screen then () else do
-  { pl (par_begin G2)
-  ; ps "The simplified interface below allows search without diacritics"
-  ; pl html_break 
-  ; pl "Proper names may be entered with an initial capital"
-  ; pl par_end (* G2 *)
+  { par_begin G2 |> pl
+  ; "The simplified interface below allows search without diacritics" |> ps
+  ; html_break |> pl 
+  ; "Proper names may be entered with an initial capital" |> pl
+  ; par_end |> pl (* G2 *)
   }
 ;
 value print_stemmer_help_en () = 
   if narrow_screen then () else do
-  { ps (par_begin G2)
-  ; pl "Submit candidate form and category"
-  ; pl html_break 
-  ; pl "Forms ended in r should not be entered with final visarga"
-  ; pl html_break 
-  ; pl "Compound words may be recognized with the Reader interface"
-  ; pl html_break 
-  ; pl par_end (* G2 *)
+  { par_begin G2 |> ps
+  ; "Submit candidate form and category" |> pl
+  ; html_break |> pl 
+  ; "Forms ended in r should not be entered with final visarga" |> pl
+  ; html_break |> pl 
+  ; "Compound words may be recognized with the Reader interface" |> pl
+  ; html_break |> pl 
+  ; par_end |> pl (* G2 *)
   }
 ;
 value open_page_with_margin width = 
   let margin = string_of_int width ^ "pt" in 
   let attr = [ noborder; nopadding; ("cellspacing",margin); fullwidth ] in do 
-  { pl (table_begin_style (background Chamois) attr)
-  ; ps tr_begin (* closed by [close_page_with_margin] *)
-  ; pl td_begin
+  { table_begin_style (background Chamois) attr |> pl
+  ; tr_begin |> ps (* closed by [close_page_with_margin] *)
+  ; td_begin |> pl
   }
 and close_page_with_margin () = do 
-  { pl html_break 
-  ; ps td_end
-  ; ps tr_end
-  ; pl table_end
+  { html_break |> pl 
+  ; td_end |> ps
+  ; tr_end |> ps
+  ; table_end |> pl
   }
 ;
 value indexer_page l = dico_page (dico_index_page l) (* [mk_index_page]   *) 
@@ -523,85 +523,86 @@ and corpus_page l = dico_page (dico_corpus_page l)   (* [mk_corpus_page]  *)
 
 value print_site_map dyn lang = (* the various Web services of the site *)
   if dyn then do 
-  { ps (anchor_ref (sanskrit_page_url lang) (emph "Top")); pl " | " 
-  ; ps (anchor_ref (indexer_page_url lang) (emph "Index")); pl " | "
-  ; ps (anchor_ref (indexer_page_url lang ^ "#stemmer") (emph "Stemmer")); pl " | "
-  ; ps (anchor_ref (grammar_page_url lang) (emph "Grammar")); pl " | "
-  ; ps (anchor_ref (sandhi_page_url lang) (emph "Sandhi")); pl " | "
-  ; ps (anchor_ref (reader_page_url lang) (emph "Reader")); pl " | "
-  ; ps (anchor_ref (corpus_page_url lang) (emph "Corpus")); pl " | "
-  ; ps (anchor_ref (faq_page_url lang) (emph "Help")); pl " | "
-  ; pl (anchor_ref (portal_page_url lang) (emph "Portal"))
+  { anchor_ref (sanskrit_page_url lang) (emph "Top") |> ps; " | " |> pl  
+  ; anchor_ref (indexer_page_url lang) (emph "Index") |> ps; " | " |> pl 
+  ; anchor_ref (indexer_page_url lang ^ "#stemmer") (emph "Stemmer") |> ps; " | " |> pl
+  ; anchor_ref (grammar_page_url lang) (emph "Grammar") |> ps; " | " |> pl
+  ; anchor_ref (sandhi_page_url lang) (emph "Sandhi") |> ps; " | " |> pl
+  ; anchor_ref (reader_page_url lang) (emph "Reader") |> ps; " | " |> pl
+  ; anchor_ref (corpus_page_url lang) (emph "Corpus") |> ps; " | " |> pl
+  ; anchor_ref (faq_page_url lang) (emph "Help") |> ps; " | " |> pl
+  ; anchor_ref (portal_page_url lang) (emph "Portal") |> pl
   }
  else do
-  { ps (anchor_ref (rel_sanskrit_page_url lang) (emph "Top")); pl " | "
-  ; ps (anchor_ref (dico_index_page lang) (emph "Index")); pl " | "
-  ; ps (anchor_ref (dico_index_page lang ^ "#stemmer") (emph "Stemmer")); pl " | "
-  ; ps (anchor_ref (dico_grammar_page lang) (emph "Grammar")); pl " | "
-  ; ps (anchor_ref (dico_sandhi_page lang) (emph "Sandhi")); pl " | "
-  ; ps (anchor_ref (dico_reader_page lang) (emph "Reader")); pl " | "
-  ; ps (anchor_ref (dico_corpus_page lang) (emph "Corpus")); pl " | "
-  ; ps (anchor_ref (rel_faq_page_url lang) (emph "Help")); pl " | "
-  ; pl (anchor_ref (rel_portal_page_url lang) (emph "Portal"))
+  { anchor_ref (rel_sanskrit_page_url lang) (emph "Top") |> ps; " | " |> pl
+  ; anchor_ref (dico_index_page lang) (emph "Index") |> ps; " | " |> pl
+  ; anchor_ref (dico_index_page lang ^ "#stemmer") (emph "Stemmer") |> ps; " | " |> pl
+  ; anchor_ref (dico_grammar_page lang) (emph "Grammar") |> ps; " | " |> pl
+  ; anchor_ref (dico_sandhi_page lang) (emph "Sandhi") |> ps; " | " |> pl
+  ; anchor_ref (dico_reader_page lang) (emph "Reader") |> ps; " | " |> pl
+  ; anchor_ref (dico_corpus_page lang) (emph "Corpus") |> ps; " | " |> pl
+  ; anchor_ref (rel_faq_page_url lang) (emph "Help") |> ps; " | " |> pl
+  ; anchor_ref (rel_portal_page_url lang) (emph "Portal") |> pl
   }
 ;
 value pad () = do (* ad-hoc vertical padding to make room for the bandeau *)
-  { pl (table_begin Pad60)
-  ; ps tr_begin 
-  ; ps (xml_begin "td" ^ xml_end "td") 
-  ; ps tr_end
-  ; pl table_end
+  { table_begin Pad60 |> pl
+  ; tr_begin |> ps 
+  ; td_begin |> ps 
+  ; td_end |> ps 
+  ; tr_end |> ps 
+  ; table_end |> pl
   }
 ;
 value print_bandeau_enpied_dyn dyn lang color = do
   { pad () (* necessary padding to avoid hiding by bandeau *)
-  ; pl (elt_begin "div" Enpied)
-  ; ps (table_begin Bandeau)
-  ; ps tr_begin (* main row begin *)
-  ; pl td_begin
-  ; pl (caml_inside dyn)
-  ; ps td_end 
-  ; pl td_begin
-  ; pl (table_begin Tcenter)
-  ; ps tr_begin 
-  ; pl td_begin
+  ; elt_begin "div" Enpied |> pl
+  ; table_begin Bandeau |> ps
+  ; tr_begin |> ps (* main row begin *)
+  ; td_begin |> pl
+  ; caml_inside dyn |> pl
+  ; td_end |> ps 
+  ; td_begin |> pl
+  ; table_begin Tcenter |> pl
+  ; tr_begin |> ps
+  ; td_begin |> pl
   ; print_site_map dyn lang
-  ; ps td_end
-  ; ps tr_end
-  ; ps tr_begin 
-  ; pl td_begin
-  ; ps copyright
-  ; ps td_end
-  ; ps tr_end   (* copyright row end *)
-  ; ps table_end
-  ; ps td_end
-  ; pl td_begin
-  ; pl (inria_inside dyn)
-  ; ps html_break 
-  ; ps td_end
-  ; ps tr_end 
-  ; ps table_end (* Bandeau *)
-  ; pl (xml_end "div") (* end Enpied *)
+  ; td_end |> ps
+  ; tr_end |> ps
+  ; tr_begin |> ps 
+  ; td_begin |> pl
+  ; copyright |> ps
+  ; td_end |> ps
+  ; tr_end |> ps   (* copyright row end *)
+  ; table_end |> ps
+  ; td_end |> ps
+  ; td_begin |> pl
+  ; inria_inside dyn |> pl
+  ; html_break |> ps 
+  ; td_end |> ps
+  ; tr_end |> ps 
+  ; table_end |> ps (* Bandeau *)
+  ; xml_end "div" |> pl (* end Enpied *)
   }
 ;
 (* Simputer - legacy code - could be reused for smartphones *)
 value print_bandeau_entete color = 
   let margin_bottom height = "margin-bottom:" ^ points height in
   let interval height = do 
-    { ps tr_begin
-    ; pl (td [ ("width","100%"); ("style",margin_bottom height) ]) 
-    ; ps tr_end
+    { tr_begin |> ps
+    ; td [ ("width","100%"); ("style",margin_bottom height) ] |> pl 
+    ; tr_end |> ps
     } in do 
-  { pl (table_begin_style (background color) 
-            [ noborder; nopadding; ("cellspacing","5pt"); fullwidth ])
+  { table_begin_style (background color) 
+            [ noborder; nopadding; ("cellspacing","5pt"); fullwidth ] |> pl
   ; interval 10
-  ; ps tr_begin
-  ; pl (xml_begin_with_att "td" [ fullwidth; ("align","center") ])
+  ; tr_begin |> ps
+  ; xml_begin_with_att "td" [ fullwidth; ("align","center") ] |> pl
   ; print_site_map True Html.English
-  ; ps td_end
-  ; ps tr_end
+  ; td_end |> ps
+  ; tr_end |> ps
   ; interval 10
-  ; pl table_end
+  ; table_end |> pl
   }
 ;
 value page_end_dyn dyn lang bandeau = do 
@@ -610,8 +611,8 @@ value page_end_dyn dyn lang bandeau = do
     | Html.Computer | Html.Station  | Html.Server
       -> if bandeau then print_bandeau_enpied_dyn dyn lang Cyan else ()
     ] 
-  ; pl body_end
-  ; pl (xml_end "html")
+  ; body_end |> pl
+  ; xml_end "html" |> pl
   }
 ;
 value page_end = page_end_dyn True 
@@ -626,7 +627,7 @@ value http_header = "Content-Type: text/html\n"
 (* Print the HTTP header only when it is required, i.e. only if it is
    a CGI output.  *)
 value maybe_http_header () =
-  if output_channel.val = stdout then pl http_header else ()
+  if output_channel.val = stdout then http_header |> pl else ()
 ;
 value javascript_tooltip ="wz_tooltip.js"
 ;
@@ -660,13 +661,13 @@ value interaction_modes =
 (* NB Interface and Parser have their own prelude. *)
 (* [reader_prelude] is invoked by Parser through Rank and by [Mk_reader_page] *)
 value reader_prelude title = do 
-  { pl http_header  
+  { http_header |> pl
   ; page_begin reader_meta_title 
-  ; pl (body_begin Chamois_back)
+  ; body_begin Chamois_back |> pl
   ; if scl_toggle then (* external call SCL (experimental) *)
-       pl (javascript (SCLpaths.scl_url ^ javascript_tooltip))
+       javascript (SCLpaths.scl_url ^ javascript_tooltip) |> pl
     else ()
-  ; pl title 
+  ; title |> pl
   ; open_page_with_margin 15
   }
 ;
@@ -686,14 +687,14 @@ and cgi_end = xml_end "span" ^ xml_end "form"
 
 (* Failsafe aborting of cgi invocation *)
 value abort lang s1 s2 = do 
-  { pl (table_begin_style (centered Yellow) [ noborder; ("cellspacing","20pt") ])
-  ; ps tr_begin
-  ; ps th_begin
-  ; ps (html_red s1)  (* Report anomaly *)
-  ; pl (html_blue s2) (* Optional specific message *)
-  ; ps th_end
-  ; ps tr_end
-  ; pl table_end 
+  { table_begin_style (centered Yellow) [ noborder; ("cellspacing","20pt") ] |> pl
+  ; tr_begin |> ps
+  ; th_begin |> ps
+  ; html_red s1 |> ps  (* Report anomaly *)
+  ; html_blue s2 |> pl (* Optional specific message *)
+  ; th_end |> ps
+  ; tr_end |> ps
+  ; table_end |> pl 
   ; close_page_with_margin ()
   ; page_end lang True
   }

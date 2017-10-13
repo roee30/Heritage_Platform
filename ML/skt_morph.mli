@@ -88,7 +88,7 @@ and participle = (* participles *)
   | Pfutm (* middle future participle *)
   | Pfutp of kritya (* passive future/potential participle/gerundive 3 forms *)
   | Action_noun (* generative only for auxiliaries, for cvi compounds *)
-(*| Agent_noun, etc. -- non generative, must be lexicalized; see nominal *)
+(*| [Agent_noun], etc. -- non generative, must be lexicalized; see nominal *)
   ]
 ;
 (* Invariable verbal forms.
@@ -149,7 +149,7 @@ and krit = (* coarser than Paninian krit suffixes *)
   | Action_ti (* ktin \Pan{3,3,94}                      -ti f.  *)
   | Action_i (* ki \Pan{3,3,92-93}                     -i f.    *)
   | Action_root (* unknown krit of non-agent noun  *) 
-  | Object_root (* we should probably lump action and object in Non_agent *)
+  | Object_root (* we should probably lump action and object in [Non_agent] *)
   | Object_a (* ka                                    -a n.    *) 
   | Instrument (* ka \Pan{3,1,136}                  0/amui n.   *)
   | Instra (* .s.tran -tra n.                -trii f. traa f.  *)

@@ -18,9 +18,9 @@ open Web;
 type gap = { start : int; stop : int }
 ;
 (* The following functions assume that the given list is sorted in
-   increasing order and represents a subset of positive integers.  In
-   particular, the lowest bound of a gap is at least [1] and the
-   greatest at most [max_int]).  We call "group" a list of consecutive
+   increasing order and represents a subset of positive integers. 
+   In particular, the lowest bound of a gap is at least [1] and the
+   greatest at most [max_int]). We call "group" a list of consecutive
    integers.  *)
 
 value max_gap = { start = 1; stop = max_int }
@@ -230,8 +230,6 @@ value body dir permission =
       |> pl
     ; close_page_with_margin ()
     }
-
-
   | Web_corpus.Sentences sentences ->
     let groups = group_sentences dir sentences in
     do
@@ -243,7 +241,6 @@ value body dir permission =
         groups |> List.map (htmlify_group dir permission) |> List.iter pl
     ; close_page_with_margin ()
     }
-
   | Web_corpus.Sections sections ->
     do
     { center_begin |> pl

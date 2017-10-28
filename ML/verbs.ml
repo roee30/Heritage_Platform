@@ -4590,8 +4590,8 @@ value record_ppp_abs_stems entry rstem ppstems =
            else ((* taken care of as Tia *))
          ; (* abs -ya computed whether set or anit *) 
            match entry with 
-           [ "av" -> record_abs_ya entry rstem rstem (* -avya *)
-           | _ -> record_abs_ya entry rstem w 
+           [ "av" -> record_abs_ya entry rstem (revcode "aav") (* -aavya *)
+           | _ -> record_abs_ya entry rstem w
            ]
          }
      | Tia w -> let (ita,itvaa) = if entry="grah" then ("iita","iitvaa")  

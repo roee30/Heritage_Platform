@@ -55,8 +55,8 @@ module Machine = Dispatch Transducers Lemmas
 ;
 open Machine (* [cache_phase] *)
 ;
-(* At this point we have a Finite Eilenberg machine ready to instantiate the
-Eilenberg component of the Segment module. *)
+(* At this point we have a Finite Eilenberg machine ready to instantiate *)
+(* the Eilenberg component of the Segment module.                        *)
 
 (* Viccheda sandhi splitting *)
 
@@ -520,15 +520,14 @@ value quit_button corpmode corpdir sentno =
     match corpmode with
     [ Annotator -> "Abort"
     | Reader | Manager -> "Continue reading"
-    ]
-  )
-  in
+    ])
+  and permission = Web_corpus.string_of_permission corpmode in
   center_begin ^
-  cgi_begin (Cgi.url corpus_manager_cgi ~fragment:sentno) "" ^
-  hidden_input Params.corpus_dir corpdir ^
-  hidden_input Params.corpus_permission (Web_corpus.string_of_permission corpmode) ^
-  submit_input submit_button_label ^
-  cgi_end ^
+      cgi_begin (Cgi.url corpus_manager_cgi ~fragment:sentno) "" ^
+           hidden_input Params.corpus_dir corpdir ^
+           hidden_input Params.corpus_permission permission ^
+           submit_input submit_button_label ^
+      cgi_end ^
   center_end
 ;
 (* Main body of graph segmenter cgi *)
@@ -611,7 +610,7 @@ value graph_engine () = do
            ] in
        let word_len = find_word_len 1 chunks in
        let new_chunk_len = Word.length (Encode.switch_code translit revised) in
-       let diff = new_chunk_len - word_len in
+       let diff = new_chunk_len-word_len in
        let revised_check = 
          let revise (k,sec,sel) = 
              (if k<word_off then k else k+diff,sec,sel) in
@@ -629,25 +628,19 @@ value graph_engine () = do
             graph_cgi ^ "?" ^ text ^  
             ";cpts=" ^ (string_points checkpoints) ^ "\";}\n</script>")
      else ()
-
      (* Save sentence button *)
    ; if corpus_permission = Web_corpus.Annotator then
      (* TODO: use [segment_all] to compute the nb of sols instead of
         passing 0 to [nb_sols].  *)
        save_button query (Num.num_of_int 0) |> pl
-     else
-       ()
-
+     else ()
    ; html_break |> pl
-
      (* Quit button: continue reading (reader mode) or quit without
         saving (annotator mode).  *)
    ; if sentence_no <> "" then
        quit_button corpus_permission
          (Cgi.decode_url corpus_dir) (Cgi.decode_url sentence_no) |> pl
-     else
-       ()
-
+     else ()
    ; close_page_with_margin ()
    ; page_end lang True
    }

@@ -34,37 +34,38 @@ VPATH=$(ZEN)
 # CORE package - utilities, transducers, sanskrit and french lexers, dico spec
 CORE=$(DISTR_CORE) paths.ml 
 DISTR_CORE = control.ml version.ml date.ml canon.ml transduction.ml	\
-		encode.ml order.ml padapatha.ml sanskrit.mli		\
-		sanskrit.ml skt_lexer.ml test_stamp.ml dir.mli dir.ml
+	     encode.ml order.ml padapatha.ml sanskrit.mli		\
+             sanskrit.ml skt_lexer.ml test_stamp.ml dir.mli dir.ml
 
 # GRAM package - phonetics, morphology, segmentation and tagging engines
-GRAM=index.ml phonetics.ml int_sandhi.ml skt_morph.mli morphology.mli naming.ml \
-inflected.mli inflected.ml sandhi.ml sandhier.ml pada.ml nouns.mli nouns.ml \
-verbs.mli verbs.ml parts.ml conj_infos.mli morpho_string.ml morpho.ml \
-declension.ml conjugation.ml indexer.ml indexerd.ml phases.ml lemmatizer.ml \
-auto.mli load_transducers.ml dispatcher.mli dispatcher.ml segmenter.ml \
-load_morphs.ml lexer.mli lexer.ml rank.ml scl_parser.ml \
-reader.ml parser.ml constraints.mli constraints.ml multilingual.ml \
-paraphrase.mli paraphrase.ml bank_lexer.ml regression.ml \
-checkpoints.ml graph_segmenter.ml automaton.ml interface.mli interface.ml \
-user_aid.ml reset_caches.ml params.mli params.ml
+GRAM = index.ml phonetics.ml int_sandhi.ml skt_morph.mli morphology.mli \
+       naming.ml inflected.mli inflected.ml sandhi.ml sandhier.ml pada.ml \
+       nouns.mli nouns.ml verbs.mli verbs.ml parts.ml conj_infos.mli \
+       morpho_string.ml morpho.ml declension.ml conjugation.ml indexer.ml \
+       indexerd.ml phases.ml lemmatizer.ml auto.mli load_transducers.ml \
+       dispatcher.mli dispatcher.ml segmenter.ml load_morphs.ml lexer.mli \
+       lexer.ml rank.ml scl_parser.ml reader.ml parser.ml constraints.mli \
+       constraints.ml multilingual.ml paraphrase.mli paraphrase.ml \
+       bank_lexer.ml regression.ml checkpoints.ml graph_segmenter.ml \
+       automaton.ml interface.mli interface.ml user_aid.ml reset_caches.ml \
+       params.mli params.ml
 
 # WEB package - HTML, HTTP, CGI utilities for Web interface
-WEB=html.ml web.ml css.ml cgi.ml morpho_html.ml chapters.ml morpho_scl.ml \
-mk_index_page.ml mk_grammar_page.ml mk_reader_page.ml mk_sandhi_page.ml \
-mk_corpus_page.ml
+WEB = html.ml web.ml css.ml cgi.ml morpho_html.ml chapters.ml morpho_scl.ml \
+    mk_index_page.ml mk_grammar_page.ml mk_reader_page.ml mk_sandhi_page.ml \
+    mk_corpus_page.ml
 
 # CORPUS package - corpus manager
 CORPUS = corpus.mli corpus.ml web_corpus.mli web_corpus.ml		\
-	corpus_manager.mli corpus_manager.ml corpus_manager_cgi.ml	\
-	save_corpus_params.mli save_corpus_params.ml save_corpus_cgi.ml	\
-	mkdir_corpus_params.mli mkdir_corpus_params.ml			\
-	mkdir_corpus_cgi.ml mk_corpus.ml
+ 	 corpus_manager.mli corpus_manager.ml corpus_manager_cgi.ml	\
+	 save_corpus_params.mli save_corpus_params.ml save_corpus_cgi.ml	\
+	 mkdir_corpus_params.mli mkdir_corpus_params.ml			\
+	 mkdir_corpus_cgi.ml mk_corpus.ml
 
 # extra file SCLpaths.ml for SCL interfacing - not distributed.
 
 # TREE package - tree bank manager and syntax analyser - legacy
-TREE=parse_tree.ml parse_apte.ml stemmer.ml tag_tree.ml tag_apte.ml 
+TREE = parse_tree.ml parse_apte.ml stemmer.ml tag_tree.ml tag_apte.ml 
 
 DEBUG=debug.ml 
 

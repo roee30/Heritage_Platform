@@ -66,16 +66,16 @@ value decode_url s =
     strip_heading_and_trailing_spaces (copy_decode_in s1 0 0)
   else s;
 
-(* ça convertit une chaine venant de l'URL en une a-list; la chaine est
-   une suite de paires clé=valeur séparées par des ; ou des \& *)
+(* converts a string coming from the URL into an a-list; the string is 
+   a sequence of pairs key=vallue separated by ; or \& *)
 
 value create_env s =
   let rec get_assoc beg i =
     if i == Bytes.length s then
-      if i == beg then [] else [Bytes.sub s beg (i - beg)]
+      if i == beg then [] else [ Bytes.sub s beg (i - beg) ]
     else if s.[i] == ';' || s.[i] == '&' then
-      let next_i = succ i in
-      [Bytes.sub s beg (i - beg) :: get_assoc next_i next_i]
+      let next_i = succ i in 
+      [ Bytes.sub s beg (i - beg) :: get_assoc next_i next_i ]
     else get_assoc beg (succ i) in
   let rec separate i s =
     if i = Bytes.length s then (s, "")
@@ -105,18 +105,13 @@ value url_encode s =
     (* Unreserved characters *)
     [ 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '-' | '.' | '_' | '~' as c ->
       String.make 1 c
-
     (* Special case of the space character *)
     | ' ' -> "+"
-
     (* Reserved characters *)
     | c -> "%" ^ hexa_str c
-    ]
-  in
-
+    ] in
   let char_of_string s =
-    if String.length s = 1 then s.[0] else failwith "char_of_string"
-  in
+    if String.length s = 1 then s.[0] else failwith "char_of_string" in
   let subst s = s |> Str.matched_string |> char_of_string |> url_encode in
   let any_char = Str.regexp ".\\|\n" in
   Str.global_substitute any_char subst s
@@ -128,8 +123,7 @@ value url ?query ?fragment path =
   let opt_part prefix = fun
     [ None -> ""
     | Some part -> prefix ^ part
-    ]
-  in
+    ] in
   let query_part = opt_part "?" query in
   let fragment_part = opt_part "#" fragment in
   path ^ query_part ^ fragment_part

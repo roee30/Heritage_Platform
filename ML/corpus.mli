@@ -45,6 +45,12 @@ module Encoding : sig
   ;
   value to_string : t -> string
   ;
+  value of_string : string -> t
+  ;
+  value encode : t -> string -> Word.word
+  ;
+  value decode : t -> Word.word -> string
+  ;
 end
 ;
 module Sentence : sig

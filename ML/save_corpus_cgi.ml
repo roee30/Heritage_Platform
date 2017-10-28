@@ -96,9 +96,18 @@ value main =
     in
     match permission with
     [ Web_corpus.Annotator ->
+      let read_skt =
+        if unsandhied then Sanskrit.read_raw_sanskrit else
+          Sanskrit.read_sanskrit
+      in
+      let encode =
+        Cgi.decoded_get "t" Paths.default_transliteration env
+        |> Corpus.Encoding.of_string
+        |> Corpus.Encoding.encode
+      in
       do
       { Web_corpus.save_sentence force corpdir sentno
-          (Sanskrit.read_VH unsandhied text) unsandhied (analysis_of_env env)
+          (read_skt encode text) unsandhied (analysis_of_env env)
       ; Corpus_manager.mk_page corpdir permission
       }
     | Web_corpus.Reader | Web_corpus.Manager ->

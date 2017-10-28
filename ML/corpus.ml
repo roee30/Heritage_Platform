@@ -82,6 +82,12 @@ module Encoding : sig
   ;
   value to_string : t -> string
   ;
+  value of_string : string -> t
+  ;
+  value encode : t -> string -> Word.word
+  ;
+  value decode : t -> Word.word -> string
+  ;
 end = struct
   type t = [ Velthuis | WX | KH | SLP1 | Devanagari | IAST ]
   ;
@@ -93,6 +99,25 @@ end = struct
     | Devanagari -> "deva"
     | IAST -> "roma"
     ]
+  ;
+  value rec of_string = fun
+    [ "VH" -> Velthuis
+    | "WX" -> WX
+    | "KH" -> KH
+    | "SL" -> SLP1
+    | "deva" -> Devanagari
+    | "roma" -> IAST
+    | _ -> Velthuis
+    ]
+  ;
+  value encode encoding = encoding |> to_string |> Encode.switch_code
+  ;
+  value decode = fun
+  [ Velthuis | WX | KH | SLP1 as encoding ->
+    encoding |> to_string |> Canon.switch_decode
+  | Devanagari -> Canon.unidevcode
+  | IAST -> Canon.uniromcode
+  ]
   ;
 end
 ;
@@ -128,15 +153,7 @@ end = struct
   value id s = s.id
   ;
   value text encoding s =
-    let encode_word =
-      match encoding with
-      [ Encoding.Velthuis | Encoding.WX | Encoding.KH | Encoding.SLP1 ->
-        encoding |> Encoding.to_string |> Canon.switch_decode
-      | Encoding.Devanagari -> Canon.unidevcode
-      | Encoding.IAST -> Canon.uniromcode
-      ]
-    in
-    s.text |> List.map encode_word |> String.concat " "
+    s.text |> List.map (Encoding.decode encoding) |> String.concat " "
   ;
   value unsandhied s = s.unsandhied
   ;
@@ -281,9 +298,10 @@ module Make (Loc : Location) : S = struct
   ;
   value url dir permission sentence =
     let analysis = Sentence.analysis sentence in
+    let encoding = Encoding.of_string Paths.default_transliteration in
     let env =
       [ (Params.corpus_permission, string_of_permission permission)
-      ; ("text", Sentence.text Encoding.Velthuis sentence)
+      ; ("text", Sentence.text encoding sentence)
       ; ("cpts", Analysis.checkpoints analysis)
       ; (Params.corpus_dir, dir)
       ; (Params.sentence_no, sentence |> Sentence.id |> string_of_int)
@@ -301,6 +319,7 @@ module Make (Loc : Location) : S = struct
     let env =
       [ (Params.corpus_permission, string_of_permission permission)
       ; ("text", Sentence.text Encoding.Velthuis sentence)
+      ; ("t", Encoding.(to_string Velthuis))
       ; ("cpts", Analysis.checkpoints analysis)
       ; (Params.corpus_dir, dir)
       ; (Params.sentence_no, sentence |> Sentence.id |> string_of_int)

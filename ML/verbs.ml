@@ -356,6 +356,7 @@ value weak_stem entry rstem = (* rstem = revstem entry *)
     | "nij"    -> revcode "ni~nj" (* nasalisation *)
     | "vaz"    -> revcode "uz" (* but not vac ! *)
     | "zaas"   -> revcode "zi.s" 
+    | "myak.s" -> revcode "mik.s" 
     | _ -> rstem
     ]
 ;
@@ -3026,7 +3027,7 @@ value redup_perf root =
         else match root with
           [ "maa#3" -> 3 (* i *) (* analogy with present *)
           | "vyath" | "vyadh" | "vyaa" | "jyaa#1" | "pyaa" | "syand" | "dyut#1"
-                    -> 3
+          | "myak.s" -> 3
             (* Whitney§785 also "vyac" and ved. "tyaj#1"; "vyaa" treated other *)
           | "kan" | "mah" -> 2 (* ved lengthened redup vow Whitney§786a *)
           | _ -> short v (* reduplicated vowel is short *)
@@ -3079,7 +3080,7 @@ value redup_perf root =
                 ] in (glue short,False,iopt) 
           ] 
        and strong = glue (if p then revw else revs) 
-       and longifvr = if vriddhi then revl else revs in
+       and longifvr = if vriddhi then revl else revs in 
        let olong = if p then None else Some (glue longifvr) in
        (strong, weak, olong, eweak, iopt)
   ]
@@ -5714,6 +5715,7 @@ value compute_extra () = do
   ; compute_aorist "kan" 
   ; compute_perfect "kam" 
   ; compute_perfect "ghas" 
+  ; compute_perfect "ta.d" 
   ; compute_perfect "spaz#1" 
   ; compute_aorist "spaz#1" 
   ; compute_aorist "k.r#2" 

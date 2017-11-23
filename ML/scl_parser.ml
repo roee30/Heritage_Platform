@@ -40,7 +40,7 @@ value print_scl_output output =
   List.fold_left Lex.print_scl_segment 1 (List.rev output) 
 ;
 value print_scl_solutions s =
-   let _ = print_scl_output s in ()
+  let _ = print_scl_output s in ()
 ;
 (* Invocation of UoH's CSL parser for dependency graph display *)
 value print_scl1 (solutions : list (Phases.phase * Word.word)) =

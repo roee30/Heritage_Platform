@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Nouns = struct i*)
@@ -5547,7 +5547,7 @@ value extract_fem_stems = extract_rec []
   where rec extract_rec acc = fun
      [ [] -> acc
      | [ (s,Gender Fem) :: rest ] -> extract_rec [ s :: acc ] rest
-     | [ _ :: rest ] -> []
+     | [ _ :: rest ] -> [] (* Beware: ind subentry of fstem will kill its iic *)
      ]
 ;
 value enter_iic_stem entry (stem : string) = do
@@ -5606,7 +5606,8 @@ value iic_indecl = (* should be lexicalized *)
 value iicf_extra = 
   [ "abalaa" (* a-bala with fem abalaa *)  
   ; "kaantaa" (* kaanta pp *)
-  ]
+  ; "jihvaa" (* since jihva mas skips it *)
+  ] 
 ;
 value iic_avya = 
 (* indeclinable stems used as iic of avyayiibhaava cpd *)

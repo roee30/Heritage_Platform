@@ -4,17 +4,17 @@
 (*                                                                        *)
 (*                      Gérard Huet & Amba Kulkarni                       *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-(* Interface with UoH dependency parser *)
+(* Module [Scl_parser] used as interface with UoH dependency parser *)
 
 open Html; 
 open Web; (* ps pl etc. *)
 open Morphology; (* inflected lemma morphology *)
 open Phases; (* Phases *)
 open Dispatcher; (* Dispatch *)
-open SCLpaths; (* [scl_url scl_cgi] *) 
+open SCLpaths; (* [scl_url scl_cgi default_output_font] *) 
 
 
 module Prel = struct  

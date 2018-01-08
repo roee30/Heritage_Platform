@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Html = struct i*)
@@ -657,7 +657,7 @@ value anchor_pseudo url link =
 (***************************)
 
 value start_year = " 1994-"
-and current_year = "2017"
+and current_year = "2018"
 and author_name = "G&#233;rard Huet"
 ;
 value copyright = "&#169; " ^ author_name ^ start_year ^ current_year

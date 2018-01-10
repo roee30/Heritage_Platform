@@ -715,8 +715,7 @@ value error_page title_str msg submsg =
    on the corpus is available only in [expected_mode] and not in
    [current_mode].  *)
 value invalid_corpus_permission_page expected current =
-  error_page "Corpus Manager"
-    "Invalid permission "
+  error_page "Corpus Manager" "Invalid permission "
     ("Expected permission: " ^ expected ^ " | Current permission: " ^ current)
 ;
 

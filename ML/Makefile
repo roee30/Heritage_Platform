@@ -5,7 +5,7 @@
 #                        Gérard Huet & Pawan Goyal                         #
 #                                                                          #
 ############################################################################
-# Makefile of Sanskrit Heritage Software  02-06-2017  Copyright INRIA 2017 #
+# Makefile of Sanskrit Heritage Software  08-01-2018  Copyright INRIA 2018 #
 ############################################################################
 # Prerequisites: Ocaml and Camlp4 preprocessor
 

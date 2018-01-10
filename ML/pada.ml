@@ -37,7 +37,7 @@ value voices_of = fun
   | "k.rz" | "krand" | "krii.d" | "kru~nc#1" | "krudh#1" | "kruz" | "klam"
   | "klid" | "kliz" | "kvath" | "k.sar" | "k.sal" | "k.si" | "k.sii" | "k.su"
   | "k.sudh#1" | "k.subh" | "k.svi.d" | "khaad" | "khid" | "khel" | "khyaa"
-  | "gaj" | "gad" | "gam" | "garj" | "gard" | "gal" | "gaa#1" | "gaa#2" | "gu~nj"
+  | "gaj" | "gad" | "garj" | "gard" | "gal" | "gaa#1" | "gaa#2" | "gu~nj"
   | "gu.n.th" | "gup" | "gumph" | "g.rdh" | "g.rr#1" | "g.rr#2" | "granth"
   | "grah" | "glai" | "ghas" | "ghu.s" | "gh.r" | "gh.r.s" | "ghraa" | "cakaas"
   | "ca.t" | "cand" | "cam" | "car" | "cal" | "cit#1" | "cumb" | "chur"
@@ -75,6 +75,7 @@ value voices_of = fun
 (*| "ji"     Atma needed for eg vijayate paraajayate \Pan{1,3,19} *)
 (*| "jyaa#1" Atma needed for jiiyate *)
 (*| "kan"    Atma needed for kaayamaana *)
+(*| "gam"    Atma needed for sa.mgacchate *)
 (*| "van"    Atma needed for vanute *)
 (*| "mah" also Atma for pft. maamahe *)
 (*| "cit#1" also Atma for pft. cikite *)
@@ -103,7 +104,7 @@ value voices_of = fun
   [ "a~nc" | "arh" | "i" | "i.s#1" | "uurj#1" | "uuh" | ".r" | ".rj"
   | "ka.n.d" | "kal" | "ka.s" | "ku.t.t" | "ku.n.d" | "k.r#1" | "k.r#2"
   | "kram" | "krii" | "k.san" | "k.sap#1" | "k.sal" | "k.sip" | "k.sud" | "khan" 
-  | "garh" | "guh" | "gras" | "gha.t.t" | "cat" | "carc" | "ci"
+  | "gam" | "garh" | "guh" | "gras" | "gha.t.t" | "cat" | "carc" | "ci"
   | "cint" | "cud" | "ce.s.t" | "cyu" | "chad#1" | "chand" | "chid#1" | "jan" 
   | "juu" | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d" | "tan#1" | "tan#2" 
   | "tud#1" | "tul" | "t.rd" | "daaz#1" | "diz#1" | "dih" | "duh#1"
@@ -236,7 +237,7 @@ value voices_of_gana g root = match g with
 value voices_of_pv upasarga gana = fun (* gana only used for "tap" "i" *)
 (* Paninian requirements *)
 [ "zru" | ".r" | "gam" | "svar" | "vid#1" (* | "praz" *) -> 
-             if upasarga = "sam" then Ubha else Para (* \Pan{1,3,29} *)
+             if upasarga = "sam" then Atma else Para (* \Pan{1,3,29} *)
 (* "praz" used in Atma with aa- but also without pv in epics (MW) *)
 | "car" ->   if upasarga = "sam" then Ubha else Para (* \Pan{1,3,54} *)
 | "viz#1" -> if upasarga = "ni"  then Atma else Para (* \Pan{1,3,17} *)

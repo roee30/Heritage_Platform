@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* CGI-bin declension for computing declensions.                          *)
@@ -63,26 +63,26 @@ value prlist_font font =
        ]
 ;
 value display_title font = do
-  { pl html_paragraph
-  ; pl (table_begin (centered Mauve))
-  ; ps tr_begin
-  ; ps th_begin
-  ; ps (dtitle font)
-  ; ps th_end 
-  ; ps tr_end 
-  ; pl table_end (* Mauve *)
-  ; pl html_paragraph
+  { html_paragraph |> pl
+  ; table_begin (centered Mauve) |> pl
+  ; tr_begin |> ps
+  ; th_begin |> ps
+  ; dtitle font |> ps
+  ; th_end |> ps
+  ; tr_end |> ps 
+  ; table_end |> pl (* Mauve *)
+  ; html_paragraph |> pl
   }
 and display_subtitle title = do
-  { pl html_paragraph
-  ; pl (table_begin (centered Deep_sky))
-  ; ps tr_begin
-  ; ps th_begin
-  ; ps title
-  ; ps th_end 
-  ; ps tr_end 
-  ; pl table_end (* Centered *)
-  ; pl html_paragraph
+  { html_paragraph |> pl
+  ; table_begin (centered Deep_sky) |> pl
+  ; tr_begin |> ps
+  ; th_begin |> ps
+  ; title |> ps
+  ; th_end |> ps 
+  ; tr_end |> ps 
+  ; table_end |> pl (* Centered *)
+  ; html_paragraph |> pl
   }
 ;
 value cases_of decls =
@@ -100,32 +100,32 @@ value cases_of decls =
   in List.fold_left reorg init decls (* (v,n,a,i,d,ab,g,l) *)
 ;
 value print_ro1 caption s d p = do
-  { ps tr_begin
-  ; ps th_begin
-  ; ps caption
-  ; ps (xml_next "th") 
-  ; ps s
-  ; ps (xml_next "th") 
-  ; ps d
-  ; ps (xml_next "th") 
-  ; ps p
-  ; ps th_end
-  ; pl tr_end
+  { tr_begin |> ps
+  ; th_begin |> ps
+  ; caption |> ps
+  ; xml_next "th" |> ps
+  ; s |> ps
+  ; xml_next "th" |> ps
+  ; d |> ps
+  ; xml_next "th" |> ps
+  ; p |> ps
+  ; th_end |> ps
+  ; tr_end |> ps
   }
 ;
 value print_row_font font case s d p = 
   let prlist = prlist_font font in do
-  { ps (tr_mouse_begin (color Light_blue) (color Pale_yellow))
-  ; ps th_begin 
-  ; ps case
-  ; ps (xml_next "th") 
-  ; prlist s
-  ; ps (xml_next "th") 
-  ; prlist d
-  ; ps (xml_next "th") 
-  ; prlist p
-  ; ps th_end
-  ; pl tr_end
+  { tr_mouse_begin (color Light_blue) (color Pale_yellow) |> ps
+  ; th_begin |> ps
+  ; case |> ps
+  ; xml_next "th" |> ps
+  ; s |> prlist
+  ; xml_next "th" |> ps
+  ; d |> prlist
+  ; xml_next "th" |> ps
+  ; p |> prlist
+  ; th_end |> ps
+  ; tr_end |> pl
   }
 ;
 value display_gender font gender = fun
@@ -165,25 +165,25 @@ value display_gender font gender = fun
 value display_iic font = fun
   [ [] -> ()
   | l -> do 
-    { pl html_paragraph
-    ; ps (h3_begin C3)
-    ; ps (compound_name font); ps " "
+    { html_paragraph |> pl
+    ; h3_begin C3 |> ps
+    ; compound_name font |> ps; ps " "
     ; let print_iic w = pr_i font w in
       List.iter print_iic l
-    ; ps h3_end
+    ; h3_end |> ps
     }
   ]
 ;
 value display_avy font = fun
   [ [] -> ()
   | l -> do 
-    { pl html_paragraph
-    ; ps (h3_begin C3)
-    ; ps (avyaya_name font); ps " "
+    { html_paragraph |> pl
+    ; h3_begin C3 |> ps
+    ; avyaya_name font |> ps; ps " "
     ; let ifc_form w = [ 0 ] (* - *) @ w in
       let print_iic w = pr_f font (ifc_form w) in
       List.iter print_iic l
-    ; ps h3_end
+    ; h3_end |> ps
     }
   ]
 ;
@@ -214,15 +214,15 @@ value display_inflected font (gen_deco,pn_deco,voca_deco,iic_deco,avy_deco) =
   let (mas,fem,neu,any,_,_) = Deco.fold sort_out non_vocas voca_deco 
   and iic = List.map fst (Deco.contents iic_deco) 
   and avy = List.map fst (Deco.contents avy_deco) in do
-  { pl center_begin
+  { center_begin |> pl
   ; display_gender font Mas mas 
   ; display_gender font Fem fem 
   ; display_gender font Neu neu
   ; display_gender font (Deictic Numeral) any (* arbitrary *)
   ; display_iic font iic 
   ; display_avy font avy 
-  ; pl center_end 
-  ; pl html_paragraph
+  ; center_end |> pl 
+  ; html_paragraph |> pl
   }
 ;
 (* [entry:skt] [part:string] *)

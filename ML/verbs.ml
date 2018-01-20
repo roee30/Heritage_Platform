@@ -415,7 +415,7 @@ value passive_stem entry rstem = (* Panini -yak (k means no guna) *)
     | "pyaa"  -> revcode "pyaay" (* pyaa=pyai *)
     | "indh" | "und" | "umbh" | "gumph" | "granth" | "da.mz" | "dhva.ms"  
     | "bandh" | "bhra.mz" | "za.ms" | "zrambh" 
-      (* above roots have penultimate and do not have [i_it] marker *)
+      (* above roots have penultimate nasal and do not have [i_it] marker *)
     | "ba.mh" | "ma.mh" | "manth" | "stambh" 
       (* these four roots are listed in dhatupathas as bahi, mahi, mathi, stabhi
          and thus appear here even though they admit [i_it] marker *)
@@ -2812,8 +2812,8 @@ value admits_passive = fun
     "an#2" | "av" | "as#1" | "iiz#1" | "uc" | "kan" | "kuu" | "k.lp"| "k.si" 
   | "kha.n.d" | "daa#2" | "dyut#1" | "dru#1" | "pat#2" | "paz" | "paa#2"
   | "pi#2" | "praa#1" | "ruc#1" | "vas#4" | "vidh#1" | "vip" | "vyac" | "zam#1"
-  | "zrambh" | "zvit" | "siiv" | "spaz#1" | "spardh" | "h.r#2" | "hrii#1"
-  | "ma.mh" (* supplied by "mah" *)
+  | "zrambh" | "zvit" | "siiv" | "spaz#1" | "spardh" | "h.r#2" 
+  | "hrii#1" | "ma.mh" (* supplied by "mah" *)
       -> False 
 (* But "iiz#1" "uc" "kuu" "k.lp" "dru#1" "pi#2" "ruc#1" "vip" "zam#1" 
        "zrambh" "siiv" "spardh" "hrii#1" admit ppp. and "k.lp" admits pfp. *)
@@ -4436,7 +4436,8 @@ value pfp_ya rstem entry =
     | [ 49; 1; 48 ] (* sah *) -> rstem (* zakya sahya \Pan{3,1,99} -yat *) 
     | [ 24; 1 ] (* aj *) -> rstem (* ajya *)
     | [ c :: [ 1 :: _ ] ] when labial c -> rstem  (* \Pan{3,1,98} -yat *) 
-    | [ c :: [ 1 :: r ] ] -> [ c :: [ 2 :: r ] ] (* a lengthened if last non labial *)
+    | [ c :: [ 1 :: r ] ] -> [ c :: [ 2 :: r ] ] 
+                      (* a lengthened if last non labial *)
                       (* above often optional, see [record_extra_pfp_ya] below *)
     | [ c :: [ 7 :: _ ] ] -> rstem (* d.rz1 v.r.s but NOT m.rj *)
     | [ c :: [ v :: _ ] ] when short_vowel v (* gunify *) -> strong
@@ -4684,7 +4685,7 @@ value record_pppca cpstem cstem entry =
   ; record_part (Pppa_ Causative [ 45 :: ppstem ] entry) (* pp-vat *)
   ; let abs_stem_ya = match entry with (* Whitney§1051d *)
         [ "aap" | ".r" | ".rc#1" | ".rdh" | "kal" | "k.lp" | "kram" | "gam" 
-        | "jan" | "jval" | "dh.r" | "rac" | "zam" | "p.rr" | "bhak.s" | "v.rj" 
+        | "jan" | "jval" | "dh.r" | "rac" | "zam#1" | "p.rr" | "bhak.s" | "v.rj" 
             -> cstem  (* retains ay: -gamayya to distinguish from -gamya *)
         | _ -> cpstem (* eg -vaadya -vezya *)
         ] 
@@ -4942,7 +4943,7 @@ value compute_present_system entry rstem gana pada third =
             | "vaa#3"   -> revcode "va" (* bizarre - should be ve class 1 *)
             | "vyadh"   -> revcode "vidh"
             | "zam#1"   -> revcode "zaam" 
-            | "zam#2"   -> revcode "zama"
+     (* OBS | "zam#2"   -> revcode "zama" *)
             | "zaa"     -> revcode "z"
             | "zram"    -> revcode "zraam"
             | "saa#1"   -> revcode "s"
@@ -5158,10 +5159,10 @@ value record_pfp entry rstem = do
     | "grah"   -> record_extra_pfp_ya "g.rhya" (* \Pan{3,1,119} *)
     | "cuu.s"  -> record_extra_pfp_ya "co.sya" 
     | "ci"     -> do 
-       { record_extra_pfp_ya "caayya"
-         (* \Pan{3,1,131} fire only with pari- upa- sam- *)
-       ; record_extra_pfp_ya "citya" (* \Pan{3,1,131} in sense of fire *)
-       }
+      { record_extra_pfp_ya "caayya"
+        (* \Pan{3,1,131} fire only with pari- upa- sam- *)
+      ; record_extra_pfp_ya "citya" (* \Pan{3,1,131} in sense of fire *)
+      }
     | "vad"    -> do 
       { record_extra_pfp_ya "udya"  (* \Pan{3,1,106} for brahmodya *)
       ; record_extra_pfp_ya "vadya" (* id for brahmavadya sn *)
@@ -5676,6 +5677,11 @@ and compute_extra_hims () = do
 and compute_extra_nind () = (* WR: RV *)
   enter1 "nand" (Conju perfa [ (Plural,[ (Third, code "ninidus") ])
                              ; (Plural,[ (First, code "nindimas") ]) ])
+(* OBSS and compute_extra_zam2 () = 
+  let rstem = revcode "zam" in do
+      { compute_passive_primary "zam#2" rstem (* should be causative *)
+      ; record_pfp "zam#2" rstem 
+      } *)
 and compute_extra_sanj () = (* WR *)
   let root = "sa~nj" 
   and conj = Primary

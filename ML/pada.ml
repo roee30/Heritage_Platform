@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Pada defines the allowed padas (Para, Atma or Ubha) for
@@ -22,7 +22,7 @@ type voices = (* permitted padas in present system *)
      ("karma.ni prayoga"). Atma is called "middle" by Western grammarians. *)
   [ Para (* parasmaipadin usage only - generated as Dictionary.Active *) 
   | Atma (* aatmanepadin  usage only - generated as Dictionary.Middle *) 
-  | Ubha (* admits both schemes - default *)
+  | Ubha (* ubhayapada admits both schemes - default *)
   ]
 ;
 exception Unattested (* when a root/pada is attested only for some pvs *)
@@ -285,7 +285,8 @@ value voices_of_pv upasarga gana = fun (* gana only used for "tap" "i" *)
             | _ -> Para (* \Pan{1,3,18} *)
             ]
 (* Next three equivalent to marking "unused" in lexicon *)
-| "ta~nc" | "saa#1" | "zal" (* also "khyaa" ? *) -> match upasarga with 
+| "ta~nc" | "saa#1" | "zam#2" | "zal" (* also "khyaa" ? *) ->
+   match upasarga with 
    [ "" -> raise Unattested
    | _ -> Para
    ]  

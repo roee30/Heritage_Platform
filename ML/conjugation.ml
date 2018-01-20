@@ -761,6 +761,7 @@ value resolve_homonym entry =
     | "pu.s"
     | "budh"
     | "mad" 
+    | "zam" 
     | "saa"
     | "sidh" 
     | "snih" 
@@ -772,7 +773,6 @@ value resolve_homonym entry =
     | "draa" 
     | "dhaa"
     | "pat"
-    | "zam" 
     | "svid" -> second entry
     | "vaa" -> third entry
     | _ -> entry

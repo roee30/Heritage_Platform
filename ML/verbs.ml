@@ -2463,7 +2463,8 @@ value intercalate_pp root rstem =
            | "la.s" | "las" | "lu.th" | "lul" | "lok" | "loc" | "vad" | "val" 
            | "vas#2" | "vaaz"| "vaas#3" | "vid#1" | "vip"| "ven" | "vyath" 
            | "vraj" | "vra.n" | "vrii.d" | "zubh#1" | "zcut#1" | "zrath" 
-           | "zlath" | "zlaagh" | "zvas#1" | ".s.thiiv" | "suuc"| "suud" | "sev"            | "skhal" | "stan" | "stim" | "sthag" | "sphu.t" | "sphur" | "svad"
+           | "zlath" | "zlaagh" | "zvas#1" | ".s.thiiv" | "suuc"| "suud" | "sev"
+           | "skhal" | "stan" | "stim" | "sthag" | "sphu.t" | "sphur" | "svad"
            | "svan" | "svar#1" | "has" | "hras" | "hraad" | "hlaad" | "hval" 
                -> set
            | "palaay" -> set (* very special item *)
@@ -4417,7 +4418,7 @@ value pfp_ya rstem entry =
         [ "st.rr" -> strong (* starya *)
         | _ -> long
         ] 
-      (* now consonant rules *)
+      (* now consonant rules - order of patterns important *)
     | [ 22; 7 ] (* .rc *) 
     | [ 24; 7 ] (* .rj *) -> strong (* arc arj *)
     | [ 24; 7; 41 ] (* m.rj *) -> long (* maarj \Pan{7,2,114} *)
@@ -5456,7 +5457,8 @@ value compute_conjugs_stems entry (vmorph,aa) = do
         }
    ; (* Ppp computation and recording (together with absolutives) *)
      match entry with
-     [ "bruu" (* vac *)
+     [ "ad#1" (* jak.s jagdha \Pan{2,4,36} *)
+     | "bruu" (* vac *) 
      | "paz"  (* d.rz *) 
      | "zvit" -> ()
      | _ -> if gana=10 then 

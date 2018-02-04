@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* CGI-bin indexer for indexing in sanskrit dictionary.                   *)
@@ -71,20 +71,20 @@ value try_declensions word before =
   [ [] -> (* Not found; we try vocative forms *)
     let inflectedv = load_vocas () in
     match Deco.assoc word inflectedv with
-  [ [] -> (* Not found; we try root forms *)
-    let inflectedr = load_roots () in
-    match Deco.assoc word inflectedr with
-  [ [] -> (* Not found; we try adverbial forms *)
-    let inflecteda = load_indecls () in
-    match Deco.assoc word inflecteda with
-  [ [] -> report_failure before
-    (* NB - no look-up in parts forms since big and partly lexicalized *)
-  | l -> display word l
-  ] 
-  | l -> display word l
-  ] 
-  | l -> display word l
-  ]
+    [ [] -> (* Not found; we try root forms *)
+      let inflectedr = load_roots () in
+      match Deco.assoc word inflectedr with
+      [ [] -> (* Not found; we try adverbial forms *)
+        let inflecteda = load_indecls () in
+        match Deco.assoc word inflecteda with
+        [ [] -> report_failure before
+          (* NB - no look-up in parts forms since big and partly lexicalized *)
+        | l -> display word l
+        ] 
+      | l -> display word l
+      ] 
+    | l -> display word l
+    ]
   | l -> display word l
   ]
 ;

@@ -4,11 +4,11 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Sandhi Engine cgi *)
-(* It gives the most commun sandhi solution, but not the optional forms *)
+(* It gives the most common sandhi solution, but not the optional forms *)
 (* This stand-alone module is not used by the rest of the system *)
 
 (*i module Sandhier = struct i*)

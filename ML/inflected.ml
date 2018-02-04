@@ -378,9 +378,9 @@ type flexion =
   | Avyayaf of word (* Ifc of avyayiibhaava cpd *)
   | Cvi of word (* -cvi suffixed stem (iiv) for inchoative compound verbs *)
   | Preverb of word and list word
-  | Invar of modal and word       (* inf abs-ya perpft *) 
-  | Inftu of conjugation and Word.word          (* infinitive in -tu *)
-  | Absotvaa of conjugation and word (* abs-tvaa *)
+  | Invar of modal and word            (* infinitive abs-ya perpft *) 
+  | Inftu of conjugation and Word.word (* infinitive in -tu *)
+  | Absotvaa of conjugation and word   (* abs-tvaa *)
   ]
 ;
 value is_taddhita = fun (* unused at present - see [Subst.taddhitas] *)
@@ -450,8 +450,8 @@ value enter1 entry =
                   match vi with  
      [ Infi -> do (* 2 cases: with and without preverbs - saves one phase *)
          { add_morphabsya w delta f aapv
-         ; add_morphin w delta f 
-         ; if auxiliary entry then add_morphauxi w delta f else ()
+         ; add_morphabstvaa w delta f 
+         ; if auxiliary entry then add_morphauxi w delta f else () 
          }
        (*i was [add_morphc w delta f] but prevents being in same chunk as finite
           verb. PB : infinitives with preverbs are in diff category (Absoya);

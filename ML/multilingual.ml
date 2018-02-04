@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Multilingual = struct i*)
@@ -219,14 +219,14 @@ value voice_mark = fun
 value participle_name part = fun
   [ Deva -> let indian_part = match part with
       [ Ppp    -> [ "kta" ]
-      | Pppa   -> [ "ktavat" ]
+      | Pppa   -> [ "ktavatu" ]
       | Ppra _ -> [ "zat.r" ] 
       | Pprm _ -> [ "zaanac" ]
       | Pprp   -> [ "zaanac"; "karma.ni" ]
       | Ppfta  -> [ "li.daadeza"; voice_mark Active ]
       | Ppftm  -> [ "li.daadeza"; voice_mark Middle ]
-      | Pfuta  -> [ "lu.taadeza"; voice_mark Active ]
-      | Pfutm  -> [ "lu.taadeza"; voice_mark Middle ]
+      | Pfuta  -> [ "lu.daadeza"; voice_mark Active ]
+      | Pfutm  -> [ "lu.daadeza"; voice_mark Middle ]
       | Pfutp k -> match k with 
                    [ 1 -> [ "yat" ]
                    | 2 -> [ "aniiyar" ]

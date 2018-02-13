@@ -99,13 +99,12 @@ value trad_string entry t =
   ] 
 ;
 value trad_skt = trad_string skt1
-and trad_sanscrit = trad_string sanscrit
-and trad_skt_list = trad_string skt_list
-  ;
+  and trad_sanscrit = trad_string sanscrit
+  and trad_skt_list = trad_string skt_list
+;
 
-  
 value maha_epic = "Mahaabhaarata" (* for [Print_html] *)
-and rama_epic = "Raamaaya.na"
+  and rama_epic = "Raamaaya.na"
 ;
 value skt_to_tex = Transduction.skt_to_tex;   (* romanisation Tex diacritics *)
 value skt_to_dev = Transduction.skt_to_dev;   (* devanagari devnag *)
@@ -151,7 +150,7 @@ value read_raw_skt_stream encode strm =
   match sanskrit_sentence strm with
   [ [ l ] -> process l 
   | lines -> List.fold_right concat lines []
-      where concat line lines = process line @ lines
+             where concat line lines = process line @ lines
   ]
 ;
 value read_processed_skt_stream encode strm = 
@@ -159,7 +158,7 @@ value read_processed_skt_stream encode strm =
   match sanskrit_sentence strm with 
   [ [ l ] ->  process l
   | lines -> List.fold_right concat lines []
-      where concat line lines = process line @ lines
+             where concat line lines = process line @ lines
   ]
 ;
 (* assumes Velthuis encoding *)

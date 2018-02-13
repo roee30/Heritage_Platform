@@ -181,9 +181,9 @@ value  code = Encode.code_string (* normalized *)
 and revcode = Encode.rev_code_string (* reversed *)
 and revstem = Encode.rev_stem (* stripped of homo counter *)
 ;
-(* Checking consistency of computed form with witness from lexicon.   *)
-(* Discrepancies are noted on a warnings log, written on stderr.      *)
-(* NB currently log dumped in STAT/warnings.txt by "make roots.rem".  *)
+(* Checking consistency of computed form with witness from lexicon.      *)
+(* Discrepancies are noted on a warnings log, written on stderr.         *)
+(* NB currently log dumped in (D)STAT/warnings.txt by "make roots.rem".  *)
 value emit_warning s =
   if morpho_gen.val then output_string stderr (s ^ "\n") else ((* cgi *))
 ;
@@ -342,6 +342,7 @@ value strong_stem entry rstem = (* rstem = revstem entry *)
     | "bh.rjj" -> mrijify (strong (truncate rstem))
     | "nij"    -> revcode "ni~nj" (* nasalisation for gana 2 *)
     | "zrath"  -> revcode "zranth"
+    | "diiv#1" -> revcode "dev"
     | _ -> strong rstem
     ]
 ;
@@ -519,7 +520,7 @@ value redup3 entry rstem =
                    [ [ 2 :: rest ] -> rest (* drop final aa *)
                    | _ -> failwith "Anomaly Verbs"
                    ]
-                | _ -> rstem
+                | _ -> rstem 
                 ] in 
       (strong rstem,wstem)
       and glue = revaffix [rv; rc] in 
@@ -1260,24 +1261,27 @@ value compute_athematic_present3a strong weak iiflag entry third =
    ; (Dual, let l =
         [ conjugw First  "vas"
         ; conjugw Second "thas"
-        ; conjugw Third  "tas"
+        ; conjugw Third  "tas" 
         ] in if haa_flag then l @
                 [ conjughaa First  "vas"
                 ; conjughaa Second "thas"
                 ; conjughaa Third  "tas"
-                ]    
+                ]
              else l)
    ; (Plural, let l =
         [ conjugw First  "mas"
-        ; conjugw Second "tha"
-        ; conjugw Third  "ati"
-        ] in if haa_flag then l @
+        ; conjugw Second "tha" 
+        ; if entry="bhas" then (Third, code "bapsati") (* Whitney§678 MW§340 *) 
+          else conjugw Third  "ati" 
+        ] in if haa_flag then l @ 
                 [ conjughaa First  "mas"
                 ; conjughaa Second "tha"
                 ]    
              else l)
    ])
-  ; let wstem = if iiflag then strip_ii weak else weak in (* 3rd pl weak stem *)
+  ; let wstem = if iiflag then strip_ii weak else 
+                if entry="bhas" then revcode "baps" (* Whitney§678 *) 
+                else weak in (* 3rd pl weak stem *)
     record_part (Pprared_ Primary wstem entry) 
   }
 ;
@@ -1448,7 +1452,8 @@ value compute_athematic_imperative3a strong weak iiflag entry =
    ; (Dual, let l = 
         [ conjugs First  "aava"
         ; conjugw Second "tam"
-        ; conjugw Third  "taam"
+        ; if entry="bhas" then (Third, code "babdhaam") (* Whitney§678 MW§340 *) 
+          else conjugw Third  "taam"
         ] in if haa_flag then l @
                 [ conjughaa Second "tam"
                 ; conjughaa Third  "taam"
@@ -2739,7 +2744,7 @@ value perstems rstem entry =
        | 1 -> let w = match entry with 
                 [ "uc" | "mil" | "sphu.t" | "sphur" -> rstem
                 | "guh"   -> revcode "guuh" (* \Pan{6,4,89} *)
-                | "sad#1" -> revcode "siid"  
+                | "sad#1" -> revcode "siid" 
                 | "sp.rh" -> revcode "sp.rhay"
                 | "haa#1" -> revcode "jah" 
                 | _ -> sstem
@@ -2770,14 +2775,14 @@ value compute_future_gen rstem entry =
              | _ -> sstem (* for nij gana 3 *)
              ] in sandhi w (code "sya") (* eg dah -> dhak.sya *)
        | 1 -> let w = match entry with
-             [ "uc" | "mil" | "sphu.t" | "sphur" -> rstem 
-             | "guh"   -> revcode "guuh" (* \Pan{6,4,89} *) 
-             | "dabh"  -> revcode "dambh"  
-             | "nij"   -> revcode "ni~nj" (* consistent with gana 2 *)
-             | "sad#1" -> revcode "siid" 
-             | "vaa#3" -> revcode "ve"
-             | "haa#1" -> revcode "jah" 
-             | "huu"   -> revcode "hve" 
+             [ "uc" | " mil" | "sphu.t" | "sphur" -> rstem 
+             | "guh"    -> revcode "guuh" (* \Pan{6,4,89} *) 
+             | "dabh"   -> revcode "dambh"  
+             | "nij"    -> revcode "ni~nj" (* consistent with gana 2 *)
+             | "sad#1"  -> revcode "siid" 
+             | "vaa#3"  -> revcode "ve"
+             | "haa#1"  -> revcode "jah" 
+             | "huu"    -> revcode "hve" 
              | _ -> sstem
              ] in sandhi w (code "i.sya")
        | 2 -> sandhi sstem (code "ii.sya") (* grah *)
@@ -2813,10 +2818,10 @@ value admits_passive = fun
     "an#2" | "av" | "as#1" | "iiz#1" | "uc" | "kan" | "kuu" | "k.lp"| "k.si" 
   | "kha.n.d" | "daa#2" | "dyut#1" | "dru#1" | "pat#2" | "paz" | "paa#2"
   | "pi#2" | "praa#1" | "ruc#1" | "vas#4" | "vidh#1" | "vip" | "vyac" | "zam#1"
-  | "zrambh" | "zvit" | "siiv" | "spaz#1" | "spardh" | "h.r#2" 
+  | "zi~nj" | "zrambh" | "zvit" | "siiv" | "spaz#1" | "spardh" | "h.r#2" 
   | "hrii#1" | "ma.mh" (* supplied by "mah" *)
       -> False 
-(* But "iiz#1" "uc" "kuu" "k.lp" "dru#1" "pi#2" "ruc#1" "vip" "zam#1" 
+(* But "iiz#1" "uc" "kuu" "k.lp" "dru#1" "pi#2" "ruc#1" "vip" "zam#1" "zi~nj"
        "zrambh" "siiv" "spardh" "hrii#1" admit ppp. and "k.lp" admits pfp. *)
   | _ -> True 
   ]
@@ -2960,12 +2965,13 @@ value redup_perf root =
       | "han#1"  -> stems "ghan"  (* velar h -> gh *)
       | "hi#2"   -> stems "ghi"      (* idem *)
       | "guh"    -> stems "guuh"  (* \Pan{6,4,89} *)
+      | "diiv#1" -> stems "dev" 
       | "dham"   -> stems "dhmaa"
       | "praz" -> let w = revcode "pracch" in (w,w,w) (* Whitney§794c *)
       | "zaas" -> let w = revcode root in (w,w,w) (* redup voy a, not i *)
       | _ -> stems root (* NB: keep penultimate nasal "ta~nc" *)
       ] in
-  match rev revw with (* ugly double reversal gets the stem from its rev *)
+  match Word.mirror revw with (* ugly double reversal to get the stem *)
   [ [] -> error_empty 14
   | [ c1 :: r ] -> 
       if vowel c1 then let (s,w) = match c1 with
@@ -3021,7 +3027,7 @@ value redup_perf root =
               else c1 in
       let rv = (* rv is reduplicating vowel *)
         if v>6 (* .r .rr .l dipht *) then match root with
-          [ "ce.s.t" | "dev" |"sev" | "mlecch" | "vye" 
+          [ "ce.s.t" | "diiv#1" | "dev" |"sev" | "mlecch" | "vye" 
               -> 3 (* i *) (* vye for vyaa *)
           | _ -> 1 (* a *) (* also bhuu elsewhere *)
           ]
@@ -4333,8 +4339,9 @@ value perif conj perstem entry = do
   (* other pfps generated from [pfp_ya] et [pfp_aniiya] below *)
   }
 ;
-value compute_perif rstem entry=
-  let pstems = perstems rstem entry in
+(* Computes periphrastic future, infinitive and [pfp_tavya] Primary forms *)
+value compute_perif rstem entry =
+  let pstems = perstems rstem entry in 
   iter (fun st -> perif Primary (rev st) entry) pstems
 ;
 
@@ -4344,13 +4351,14 @@ value compute_perif rstem entry=
 
 value palatal_exception root = List.mem root
   [ "aj"; "vraj" (* \Pan{7,3,60} *)
+  ; "zuc#1" (* \Pan{7,3,59} zocya *) 
   ; "yaj#1"; "yaac"; "ruc#1"; ".rc#1" (* \Pan{7,3,66} *) 
   ; "tyaj#1" (* tyaajya Vaartika on \Pan{7,3,66} *)
   ; "s.rj#1"; "v.rj"; "p.rc" (* because of -kyap \Pan{3,1,110} *)
   ; "raaj#1" (* in order not to get raagya - unjustified by Panini ? *)
   ]
 ; 
-value rfix_pfp_ya rstem = (* \Pan{7,3,52} *) 
+value velarification rstem = (* \Pan{7,3,52} *) 
   match Word.mirror rstem with (* double rev *)
   [ [ c :: _ ] when velar c -> rfix rstem "ya" (* \Pan{7,3,59} *)
 (* Actually the following velarification should be registered as an optional
@@ -4374,7 +4382,7 @@ value record_pfp_ya conj ya_stem root =
          if palatal_exception root then rfix ya_stem "ya"
          else match root with 
               [ "hi.ms" -> revcode "hi.msya" (* no retroflex s Whitney§183a *)
-              | _ -> rfix_pfp_ya ya_stem (* .nyat *)
+              | _ -> velarification ya_stem (* .nyat *)
               ]
       else rfix ya_stem "ya" (* yat *) in
   record_part (Pfutp_ conj pfp_stem root) 
@@ -4944,7 +4952,6 @@ value compute_present_system entry rstem gana pada third =
             | "vaa#3"   -> revcode "va" (* bizarre - should be ve class 1 *)
             | "vyadh"   -> revcode "vidh"
             | "zam#1"   -> revcode "zaam" 
-     (* OBS | "zam#2"   -> revcode "zama" *)
             | "zaa"     -> revcode "z"
             | "zram"    -> revcode "zraam"
             | "saa#1"   -> revcode "s"
@@ -5381,9 +5388,9 @@ value compute_denominative entry pada third =
 (* Main conjugation engine *)
 (***************************)
 (* [compute_conjugs_stems : string -> Conj_infos.vmorph -> unit]           *)
-(* called by [compute_conjugs] and [fake_compute_conjugs] below 
-   and [Conjugation.secondary_conjugs]   *)
-value compute_conjugs_stems entry (vmorph,aa) = do
+(* Called by [compute_conjugs] and [fake_compute_conjugs] below            *)
+(*        and [Conjugation.secondary_conjugs]                              *)
+value compute_conjugs_stems entry (vmorph,aa) = do 
   { admits_aa.val := aa (* sets the flag for phantom forms for aa- preverb *)
   ; match vmorph with 
  [ Conj_infos.Prim 11 pada third -> 
@@ -5679,11 +5686,6 @@ and compute_extra_hims () = do
 and compute_extra_nind () = (* WR: RV *)
   enter1 "nand" (Conju perfa [ (Plural,[ (Third, code "ninidus") ])
                              ; (Plural,[ (First, code "nindimas") ]) ])
-(* OBSS and compute_extra_zam2 () = 
-  let rstem = revcode "zam" in do
-      { compute_passive_primary "zam#2" rstem (* should be causative *)
-      ; record_pfp "zam#2" rstem 
-      } *)
 and compute_extra_sanj () = (* WR *)
   let root = "sa~nj" 
   and conj = Primary

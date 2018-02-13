@@ -486,16 +486,16 @@ value enter_form stem =
      where enterg (n,ln) = List.iter entern ln
      where entern (c,w) = 
        let p = Part_form v g n c in (* We lose the root, and v is used only in
-        Constraints. Both can be recovered from stem using [unique_kridantas] *)
+         Constraints. Both can be recovered from stem using [unique_kridantas] *)
        if c=Voc then add_morphpav w stem p aapv 
        else do
         { match v with
-            [ (_,Action_noun) -> add_morphauxik w stem p (* cvi patch *)
-            | _ -> do 
-              { add_morphpa w stem p aapv 
-              ; if auxiliary root then add_morphauxik w stem p else ()
-              }
-            ]
+          [ (_,Action_noun) -> add_morphauxik w stem p (* cvi patch *)
+          | _ -> do 
+                 { add_morphpa w stem p aapv 
+                 ; if auxiliary root then add_morphauxik w stem p else ()
+                 }
+          ]
         ; if morpho_gen.val then 
              if root = "i" || root = "edh" then () (* \Pan{6,1,89} *)
              else add_morphlopak w stem p aapv

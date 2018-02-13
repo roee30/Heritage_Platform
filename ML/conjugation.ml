@@ -10,6 +10,7 @@
 (* CGI-bin conjugation for computing root conjugations.                   *)
 (* This CGI is triggered by page [grammar_page] in [dico_dir].            *)
 (* Reads its input in shell variable [QUERY_STRING] URI-encoded.          *)
+(* Reads its grammatical information from [public_roots_infos_file]       *)
 (* Prints an html document of root conjugations on [stdout].              *)
 (*i Test: (csh): setenv QUERY_STRING "q=i;c=2"; ./conjugation            i*)
 (*i Web: http://skt_server_url/cgi-bin/sktconjug?q=i;c=2                 i*)
@@ -589,10 +590,9 @@ value look_up_and_display font gana entry =
           ; pl table_end  (* Mauve *)
           ; pl center_end
           ; pl html_paragraph (* Now display indeclinable root forms if any *)
-          ; let (inf,_,_,_)     = Deco.fold sort_out_u init_u indecls.val 
+          ; let (inf,_,_,abstvaa) = Deco.fold sort_out_u init_u abstvaa.val 
             and (_,absya,_,_)   = Deco.fold sort_out_u init_u absya.val
-            and (_,_,per,_)     = Deco.fold sort_out_u init_u peri.val
-            and (_,_,_,abstvaa) = Deco.fold sort_out_u init_u abstvaa.val in
+            and (_,_,per,_)     = Deco.fold sort_out_u init_u peri.val in
             if absya=[] && per=[] && abstvaa=[] then () else do
             (* Display indeclinable forms *)
             { pl center_begin 
@@ -754,6 +754,7 @@ value resolve_homonym entry =
   | 4 -> match entry with 
     [ "k.sudh" 
     | "dam"
+    | "diiv"
     | "d.rz"
     | "druh"
     | "dhii" 

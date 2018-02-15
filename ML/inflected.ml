@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Inflected = struct i*)
@@ -383,7 +383,7 @@ type flexion =
   | Absotvaa of conjugation and word   (* abs-tvaa *)
   ]
 ;
-value is_taddhita = fun (* unused at present - see [Subst.taddhitas] *)
+value is_taddhita = fun (* OBSOLETE - see [Subst.taddhitas] *)
   [ "taa" | "tva" | "vat" | "mat" | "tas"
   | "kataa" | "katva" (* -ka-taa -ka-tva *)
   | "vattva" | "tvavat"-> True 
@@ -408,7 +408,8 @@ value enter1 entry =
                  ; match entry with (* generative ifcs of infinitive bahus *)
                    [ "kaama" (* volition : who wants to do *)
                    | "manas" (* consideration : who thinks about doing *)
-                (* | "zakya" (* consideration : who is able to do *)  kridanta *)
+                (* | "zakya" (* possibility : who is able to do *)  
+                             (* not amenable since kridanta, other phase *) *)
                              -> add_morphkama w delta f 
                    | _ -> () 
                    ]

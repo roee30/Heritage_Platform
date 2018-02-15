@@ -77,8 +77,8 @@ value voices_of = fun
 (*| "kan"    Atma needed for kaayamaana *)
 (*| "gam"    Atma needed for sa.mgacchate *)
 (*| "van"    Atma needed for vanute *)
-(*| "mah" also Atma for pft. maamahe *)
-(*| "cit#1" also Atma for pft. cikite *)
+(*| "mah"    Atma needed for pft. maamahe *)
+(*| "cit#1"  Atma needed for pft. cikite *)
 (*| "kaafk.s" | "han#1" occur also in Atma in BhG: kaafk.se hani.sye *)
 (*| "a~nj" also Atma afkte | "naath" "praz" "sp.rz#1" idem *)
       -> Para (* active only *)
@@ -98,8 +98,8 @@ value voices_of = fun
   | "sva~nj" | "haa#2" | "hu.n.d" | "h.r#2" | "hnu" | "hraad" | "hlaad" 
 (*| "m.r" Ubha needed for non present tenses - see \Pan{1,3,61} for exact rule *)
    (* DRP restriction: "dyut#1" *) 
-      -> Atma (* middle only *)
-  | _ -> Ubha (* default *)
+      -> Atma (* "deponent" verbs: middle only *)
+  | _ -> Ubha (* default *) 
   (* Attested Ubha (over all ga.nas) : 
   [ "a~nc" | "arh" | "i" | "i.s#1" | "uurj#1" | "uuh" | ".r" | ".rj"
   | "ka.n.d" | "kal" | "ka.s" | "ku.t.t" | "ku.n.d" | "k.r#1" | "k.r#2"

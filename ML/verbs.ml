@@ -5609,6 +5609,7 @@ value compute_extra_participles () = do
   { record_part_ppp (revstem "gupta") "gup" (* gup gana 10 *)
   ; record_part_ppp (revstem "zaata") "zaa" 
   ; record_part_ppp (revstem "kaanta") "kam" 
+  ; record_part_ppp (revstem "k.sita") "k.sii" 
   ; record_part_ppp (revstem "spa.s.ta") "spaz#1"
   ; record_part (Ppra_ 1 Intensive (revstem "jaajam") (revstem "jaajamat") "jam")
   ; record_pfp "d.r#1" (revcode "d.r")
@@ -5775,6 +5776,7 @@ value fake_compute_conjugs (gana : int) (entry : string) = do
     { compute_conjugs_stems entry (vmorph,False)
     ; match entry with (* extra forms - to be completed from [compute_extra] *)
       [ ".rc#1"  -> compute_extra_rc ()
+      | "k.sii"  -> record_part_ppp (revcode "k.sita") entry
       | "khan"   -> compute_extra_khan ()
       | "gup"    -> record_part_ppp (revcode "gupta") entry 
       | "car"    -> compute_extra_car ()

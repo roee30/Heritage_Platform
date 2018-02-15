@@ -124,8 +124,9 @@ value load_transducer cat =
               else do { Prel.prelude (); abort cat } ]
 ; 
 (* privative prefixes automata *)
-value a_trans = State(False,[(1,State(True,[],[]))],[])
-and an_trans  = let n_trans = State(False,[(36,State(True,[],[]))],[]) in
+value a_trans = State(False,[(1,State(True,[],[cch]))],[])
+  where cch = (([ 22; 23 ],[],[ 23 ]) : rule) (* a-ch \R acch *)
+and an_trans  = let n_trans = State(False,[(36,State(True,[],[]))],[]) in 
                 State(False,[(1,n_trans)],[])
 ;
 (* Splitting an automaton into vowel-initial and consonant-initial solutions *)

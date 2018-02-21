@@ -4,13 +4,13 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-(* Sanskrit sentence segmenter - analyses (external) sandhi *)
-(* Runs the segmenting transducer defined by parameter module [Eilenberg]. *)
+(* Sanskrit sentence segmenter - analyses (external) sandhi                   *)
+(* Runs the segmenting transducer defined by parameter module [Eilenberg].    *)
 (* Used by [Lexer], and thus by [Reader] for segmenting, tagging and parsing. *)
-(* Same logic as old [Segmenter1] but modular with multiple phases *)
+(* Same logic as old [Segmenter1] but modular with multiple phases            *)
 (* Eilenberg is a finite Eilenberg machine, Control gives command parameters. *)
 
 (* In the Sanskrit application, [Word.word] is (reverse of) inflected form. *)
@@ -89,7 +89,7 @@ value rec contains phase_w = fun
   | [ (phase,word,_) :: rest ] -> phase_w=(phase,word) || contains phase_w rest
   ] 
 ;
-(* This validation comes from the Summarize mode, which sets checkpoints that
+(* This validation comes from the Summary mode, which sets checkpoints that
    have to be verified for each solution. This is probably temporary, 
    [solution] ought to be checked progressively by [react], 
    with proper pruning of backtracking. *)
@@ -309,20 +309,19 @@ value rec react phase input output back occ = fun
     let deter cont = match input with
       [ [] -> continue cont
       | [ letter :: rest ] -> match List2.ass letter det with 
-           [ Some state ->
-             react phase rest output cont [ letter :: occ ] state  
+           [ Some state -> react phase rest output cont [ letter :: occ ] state  
            | None -> continue cont
            ] 
       ] in
-    let cont = if choices=[] then back
+    let cont = if choices=[] then back (* non deterministic continuation *)
                else [ Choose phase input output occ choices :: back ] in
-    (* now we look for - or + pragma *)
+    (* now we look for - or + segmentation hint *)
     let (keep,cut,input') = match input with 
        [ [ 0 :: rest ] -> (* explicit "-" compound break hint *) 
               (ii_phase phase,True,rest) 
        | [ -10 :: rest ] -> (* mandatory segmentation + *)
               (True,True,rest)  
-       | _ -> (True,False,input)
+       | _ -> (True,False,input) (* no hint in input *)
        ] in         
     if accept && keep then 
        let segment = (phase,occ,Id) in 

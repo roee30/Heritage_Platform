@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                        Pawan Goyal & Gérard Huet                       *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* This library is used by Reader and Regression. It constructs a lexer Lex, 
@@ -138,7 +138,7 @@ value dove_tail filter_mode init =
 ;
 (* From Interface: splitting checkpoints into current and future ones *)
 value split_check limit = split_rec []
-   where rec split_rec acc checkpts = match checkpts with
+  where rec split_rec acc checkpts = match checkpts with
       [ [] -> (List.rev acc,[])
       | [ ((index,_,_) as check) :: rest ] -> 
           if index > limit then (List.rev acc,checkpts)
@@ -146,23 +146,23 @@ value split_check limit = split_rec []
       ]
 ;
 value segment_chunks_filter filter_mode chunks cpts = 
-   let (_,constrained_segs) = List.fold_left init ((0,cpts),[]) chunks
-   where init ((offset,checkpoints),stack) chunk = do
-   { let ini_cont = Lex.Viccheda.init_segment chunk in 
-     let chunk_length = Word.length chunk in
-     let extremity = offset+chunk_length in 
-     let (local,future) = split_check extremity checkpoints in
-     let chunk_constraints = (offset,local) in
-     ((succ extremity,future), do 
-        { Lex.Viccheda.set_offset chunk_constraints (* Sets local constraints *)
-        ; let res = match Lex.Viccheda.continue ini_cont with
-              [ Some c -> c 
-              | None -> Lex.un_analyzable chunk
-              ] in 
-          [ (chunk_constraints,res) :: stack ]
-        }) 
-   } in
-   dove_tail filter_mode constrained_segs 
+  let (_,constrained_segs) = List.fold_left init ((0,cpts),[]) chunks
+  where init ((offset,checkpoints),stack) chunk = do
+  { let ini_cont = Lex.Viccheda.init_segment chunk in 
+    let chunk_length = Word.length chunk in
+    let extremity = offset+chunk_length in 
+    let (local,future) = split_check extremity checkpoints in
+    let chunk_constraints = (offset,local) in
+    ((succ extremity,future), do 
+       { Lex.Viccheda.set_offset chunk_constraints (* Sets local constraints *)
+       ; let res = match Lex.Viccheda.continue ini_cont with
+             [ Some c -> c 
+             | None -> Lex.un_analyzable chunk
+             ] in 
+         [ (chunk_constraints,res) :: stack ]
+       }) 
+  } in
+  dove_tail filter_mode constrained_segs 
 ;
 
 value segment_all filter_mode chunks cpts = 

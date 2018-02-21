@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Dispatcher: Sanskrit Engine in 55 phases automaton (plus 2 fake ones) *)
@@ -53,7 +53,10 @@ value trim_tags :
 ;
 value validate : output -> output (* consistency check and glueing *) 
 ;
-value color_of_phase : phase -> Html.color;  
+value terminal_sa : output -> bool
+;
+value color_of_phase : phase -> Html.color
+;  
 
 end;
 

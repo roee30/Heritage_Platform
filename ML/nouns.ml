@@ -48,7 +48,7 @@ and normal_stem = Encode.normal_stem
 (* declension generators *)
 type declension_class = 
   [ Gender of gender  (* declined substantive, adjective, number, pronoun *)
-  | Ind of ind_kind   (* Indeclinable form *)
+  | Und of und_kind   (* undeclinable form *)
   ]
 and nmorph = (string * declension_class)
 ;
@@ -201,7 +201,7 @@ value build_mas_a stem entry =
    ] 
    ; Bare Noun (wrap stem 1)
    ; Avyayaf (fix stem "am"); Avyayaf (fix stem "aat") (* avyayiibhaava *)
-   ; Indecl Tas (fix stem "atas") (* tasil productive *)
+   ; Undecl Tas (fix stem "atas") (* tasil productive *)
    ; Cvi (wrap stem 4) (* cvi now productive for masculine stems in -a *)
    ]) 
 ;
@@ -245,7 +245,7 @@ value build_mas_i stem trunc entry = (* declension of "ghi" class *)
    ]
    ; Bare Noun (mirror stem)
    ; Avyayaf (mirror stem)
-   ; Indecl Tas (fix stem "tas")
+   ; Undecl Tas (fix stem "tas")
    ; Cvi (wrap trunc 4) (* "aadhi1" "pratinidhi" *)
    ])
 ;
@@ -330,7 +330,7 @@ value build_mas_u stem trunc entry = (* similar to [build_mas_i] *)
    ; Bare Noun (mirror stem)
    ; Cvi (wrap trunc 6) (* .rju maru m.rdu laghu *)
    ; Avyayaf (mirror stem)
-   ; Indecl Tas (fix stem "tas")
+   ; Undecl Tas (fix stem "tas")
    ]
 ;
 value build_mas_ri_v stem entry = (* vriddhi in strong cases *)
@@ -531,7 +531,7 @@ value build_mas_red stem entry =
         ; decline Loc "tsu"
         ])
    ] 
-   ; Indecl Tas (fix stem "tas")
+   ; Undecl Tas (fix stem "tas")
    ]
 ;
 value build_mas_at stem entry = 
@@ -711,7 +711,7 @@ value build_man g stem entry =
         ])
    ]
    ; Avyayaf (fix stem "mam")
-   ; Indecl Tas (fix stem "matas")
+   ; Undecl Tas (fix stem "matas")
    ] @ (if entry = "dharman" then [] (* redundant with dharma *)
         else [ Bare Noun (mirror [ 1 :: [ 41 :: stem ]]) ])
      @ (if g=Neu && man_iiv entry then [ Cvi (mirror [ 4 :: [ 41 :: stem ]]) ] 
@@ -812,7 +812,7 @@ value build_van g stem entry =
    ]
    ; Bare Noun (mirror [ 1 :: [ 44 :: stem ]])
    ; Avyayaf (fix stem "vam")
-   ; Indecl Tas (fix stem "vatas")
+   ; Undecl Tas (fix stem "vatas")
    ]
    @ if g=Neu then [ Avyayaf (fix stem "va") ] else []) (* \Pan{5,4,109} *)
 
@@ -1914,7 +1914,7 @@ value build_neu_a stem entry =
    ]             
    ; Bare Noun (wrap stem 1) 
    ; Avyayaf (fix stem "am"); Avyayaf (fix stem "aat")
-   ; Indecl Tas (fix stem "atas")
+   ; Undecl Tas (fix stem "atas")
    ] @ (if a_n_iiv entry then [ Cvi (wrap stem 4) ] else []))
 ;
 value build_neu_i trunc entry = (* stems in -i and -ii *)
@@ -2928,7 +2928,7 @@ value build_fem_i stem trunc entry =
    ]             
    ; Bare Noun (mirror stem)
    ; Avyayaf (mirror stem) 
-   ; Indecl Tas (fix stem "tas")
+   ; Undecl Tas (fix stem "tas")
    ] @ (if entry = "vi.mzati" 
         then [ Bare Noun (mirror trunc) (* vi.mzat *) ]
         else []))
@@ -4067,7 +4067,7 @@ value build_sa_tad g stem entry =
         ; decline Gen "tasya"
         ; decline Loc "tasmin"
         ] in if g=Mas then 
-        [ decline Nom "sa" :: l ] (* usable before vowels, see Dispatcher *)
+        [ decline Nom "sa" :: l ] (* usable before consonants, see Dispatcher *)
              else l) 
    ; (Dual, 
         [ decline Nom (if g=Mas then "tau" else "te")
@@ -5521,8 +5521,8 @@ value compute_nouns_stem_form e stem d p =
       | _ -> report stem g
       ]
     ] 
-  | Ind k -> let form = mirror (terminal_form stem) in
-             enter e [ Indecl k form ] 
+  | Und k -> let form = mirror (terminal_form stem) in
+             enter e [ Undecl k form ] 
   ] with
   [ Failure s -> do
       { output_string stdout "\n\n"
@@ -5535,7 +5535,7 @@ value compute_nouns_stem_form e stem d p =
 ;
 (* Main procedure, invoked by [compute_decls] and [fake_compute_decls] 
    with entry [e:string], [d:declension_class] which gives the gender [g], 
-   [s:skt] is a stem of [e] [p:string] is a participle name or "" *)
+   [s:skt] is a stem of [e], [p:string] is a participle name or "" *)
 value compute_decls_stem e (s,d) p = 
   let rstem = revstem s in (* remove homonym index if any *)
   compute_nouns_stem_form e rstem d p
@@ -5709,20 +5709,20 @@ value enter_iiy entry =
 ;
 value tasil_preserve () = do (* Whitney§1098 *)
   (* needed since -tas etymology induces skipping the entry *)
-  { enter1 "tad"    (Indecl Tas (code "tatas"))   (* tasil on tad \Pan{5,3,7} *) 
-  ; enter1 "ya#1"   (Indecl Tas (code "yatas"))   (* tasil on ya \Pan{5,3,7} *) 
-  ; enter1 "ku#1"   (Indecl Tas (code "kutas"))   (* tasil on ku \Pan{5,3,7-8} *)
-  ; enter1 "abhi"   (Indecl Tas (code "abhitas")) (* tasil on abhi \Pan{5,3,9} *)
-  ; enter1 "pari"   (Indecl Tas (code "paritas")) (* tasil on pari \Pan{5,3,9} *)
-  ; enter1 "anti"   (Indecl Tas (code "antitas")) (* tasil on pn \Pan{5,3,7} *)
-  ; enter1 "adas"   (Indecl Tas (code "amutas"))    (* id *)
-  ; enter1 "anya"   (Indecl Tas (code "anyatas"))   (* id *)
-  ; enter1 "avara"  (Indecl Tas (code "avaratas"))  (* id *)  
-  ; enter1 "para"   (Indecl Tas (code "paratas"))   (* id *) 
-  ; enter1 "vizva"  (Indecl Tas (code "vizvatas"))  (* id *) 
-  ; enter1 "sva"    (Indecl Tas (code "svatas"))    (* id *) 
-  ; enter1 "puurva" (Indecl Tas (code "puurvatas")) (* id *) 
-  ; enter1 "aze.sa" (Indecl Tas (code "aze.satas")) (* tasil on privative cpd *)
+  { enter1 "tad"    (Undecl Tas (code "tatas"))   (* tasil on tad \Pan{5,3,7} *) 
+  ; enter1 "ya#1"   (Undecl Tas (code "yatas"))   (* tasil on ya \Pan{5,3,7} *) 
+  ; enter1 "ku#1"   (Undecl Tas (code "kutas"))   (* tasil on ku \Pan{5,3,7-8} *)
+  ; enter1 "abhi"   (Undecl Tas (code "abhitas")) (* tasil on abhi \Pan{5,3,9} *)
+  ; enter1 "pari"   (Undecl Tas (code "paritas")) (* tasil on pari \Pan{5,3,9} *)
+  ; enter1 "anti"   (Undecl Tas (code "antitas")) (* tasil on pn \Pan{5,3,7} *)
+  ; enter1 "adas"   (Undecl Tas (code "amutas"))    (* id *)
+  ; enter1 "anya"   (Undecl Tas (code "anyatas"))   (* id *)
+  ; enter1 "avara"  (Undecl Tas (code "avaratas"))  (* id *)  
+  ; enter1 "para"   (Undecl Tas (code "paratas"))   (* id *) 
+  ; enter1 "vizva"  (Undecl Tas (code "vizvatas"))  (* id *) 
+  ; enter1 "sva"    (Undecl Tas (code "svatas"))    (* id *) 
+  ; enter1 "puurva" (Undecl Tas (code "puurvatas")) (* id *) 
+  ; enter1 "aze.sa" (Undecl Tas (code "aze.satas")) (* tasil on privative cpd *)
   }
 ;
 (* Supplementary forms - called by [Make_nouns.genders_to_nouns]

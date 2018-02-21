@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 (* Chunking mechanism for guessing partial padapatha form from list of chunks *)
 
@@ -146,10 +146,10 @@ value adjust c w = match Word.mirror w with
               | _ -> w
               ]
         | 48 (* s *) -> match rest with
-               [ [ 14 (* .m *) :: b ] -> if c=32 || c=33 (* t th *) then
-                                         Word.mirror [ 36 (* n *) :: b ] else w 
-               | _ -> w
-               ]
+              [ [ 14 (* .m *) :: b ] -> if c=32 || c=33 (* t th *) then
+                                        Word.mirror [ 36 (* n *) :: b ] else w 
+              | _ -> w
+              ]
         | _ -> w
         ]
   ] 
@@ -176,7 +176,7 @@ value padapatha read_chunk l = (* l is list of chunks separated by blanks *)
           | [ p :: lp ] -> let conc = w @ p in
                            [ conc :: lp ] (* we lose the boundary indication *)
           ]
-         ])
+        ])
     ] in
   let (_,padas) = pad_rec l in padas
 ;

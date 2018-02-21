@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Morpho_scl = struct i*)
@@ -137,13 +137,13 @@ value print_scl_morph = fun
       ; print_scl_number n
       ; print_scl_person p
       }
-  | Ind_form k -> print_scl_kind k
+  | Und_form k -> print_scl_kind k
   | Avyayaf_form -> ps "<avya/>"
-  | Abs_root c -> do { print_scl_conjugation c; ps "<abs/>" }
-  | Auxi_form -> ps "<iiv/>"
-  | Ind_verb m -> print_scl_modal m
-  | PV _ -> ps "<pv/>"
-  | Unanalysed -> ps "<unknown/>" 
+  | Abs_root c   -> do { print_scl_conjugation c; ps "<abs/>" }
+  | Auxi_form    -> ps "<iiv/>"
+  | Und_verb m   -> print_scl_modal m
+  | PV _         -> ps "<pv/>"
+  | Unanalysed   -> ps "<unknown/>" 
   ]
 ;
 value print_scl_morphs = 

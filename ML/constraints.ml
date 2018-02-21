@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Syntactico/semantic analysis and penalty computations. *)
@@ -259,17 +259,17 @@ value get_roles entry = fun
                 else Actor (gram_role n entry c) g n (* beware n duplication *)
   | Verb_form f n p -> get_fin_roles entry f n p 
   | Abs_root _ -> get_abs_roles entry 
-  | Ind_form Conj -> match entry with
+  | Und_form Conj -> match entry with
                      [ "ca" -> Tool Coordination
                      | _ -> Ignored (* TODO vaa etc *)
                      ]
-  | Ind_form Prep -> if entry = "saha" || entry = "vinaa" || entry = "satraa" 
+  | Und_form Prep -> if entry = "saha" || entry = "vinaa" || entry = "satraa" 
                         then Tool Post_instrument
                      else Ignored
-  | Ind_form Adv -> if entry = "saha" then Tool Not_Post_instrument
+  | Und_form Adv -> if entry = "saha" then Tool Not_Post_instrument
                     else Ignored
-  | Ind_form Abs -> get_abs_roles entry 
-  | Ind_form Part -> match entry with
+  | Und_form Abs -> get_abs_roles entry 
+  | Und_form Part -> match entry with
                      [ "maa#2" -> Tool Prohibition
                      | _ -> Ignored
                      ] 

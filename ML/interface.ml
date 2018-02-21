@@ -53,7 +53,7 @@ module Transducers = Trans Prel
 ;
 module Machine = Dispatch Transducers Lemmas
 ;
-open Machine (* [cache_phase] *)
+open Machine 
 ;
 (* At this point we have a Finite Eilenberg machine ready to instantiate *)
 (* the Eilenberg component of the Segment module.                        *)
@@ -74,7 +74,7 @@ end (* [Segment_control] *)
 ;
 module Viccheda = Segment Phases Machine Segment_control
 ;
-open Viccheda (* [segment_all visual_width] etc. *)
+open Viccheda (* [segment_iter visual_width] etc. *)
 ;
 (* At this point we have the sandhi inverser segmenting engine *)
 
@@ -416,7 +416,7 @@ value check_sentence translit us text_orig checkpoints sentence
   let devainput = String.concat " " devachunks  
   and cpts = sort_check checkpoints in 
   let _ = chkpts.all_checks := cpts
-  and (flag,count) = segment_all chunks in 
+  and (full,count) = segment_iter chunks in (* full iff all chunks segment *)
   let text = match sol_num with
              [ "0" -> update_text_with_sol text_orig count
              | _ -> text_orig
@@ -429,7 +429,7 @@ value check_sentence translit us text_orig checkpoints sentence
   ; html_break |> ps
   ; div_begin Latin16 |> ps
   ; table_begin Spacing20 |> pl
-  ; tr_begin |> pl
+  ; tr_begin |> pl (* tr begin *)
   ; td_wrap (call_undo text checkpoints ^ "Undo") |> ps
   ; let call_scl_parser n = (* invocation of scl parser *)
         if scl_toggle then
@@ -445,13 +445,13 @@ value check_sentence translit us text_orig checkpoints sentence
                       }
                    else do
        { td_wrap (call_reader text cpts "p" ^ "Filtered Solutions") |> ps
-       ; let info = string_of_int n ^ if flag then "" else " Partial" in 
+       ; let info = string_of_int n ^ if full then "" else " Partial" in 
          td_wrap (call_reader text cpts "t" ^ "All " ^ info ^ " Solutions") |> ps
        ; call_scl_parser n
        } 
     | _ -> td_wrap "(More than 2^32 Solutions!)" |> ps
     ]
-  ; tr_end |> pl
+  ; tr_end |> pl   (* tr end *)
   ; table_end |> pl
   ; div_end |> ps (* Latin16 *)
   ; html_break |> pl
@@ -550,19 +550,17 @@ value graph_engine () = do
     and uns = us="t" (* unsandhied vs sandhied corpus *) 
     and () = if st="f" then iterate.val:=False else () (* word stemmer? *)
     and () = if cp="f" then complete.val:=False else () (* simplified reader? *) 
-    and () = toggle_lexicon lex 
-    and corpus = get "corpus" env ""
+    and () = toggle_lexicon lex (* sticky lexicon switch *)
+    and corpus = get "corpus" env "" 
     and sent_id = get "sentenceNumber" env "0" 
     and link_num = get "linkNumber" env "0" (* is there a better default? *)
     and sol_num = get "allSol" env "0" in (* Needed for Validate mode *)
     let url_enc_corpus_permission =
-      Cgi.get Params.corpus_permission env (string_of_bool True)
-    in
+        Cgi.get Params.corpus_permission env "true" in
     let corpus_permission =
       url_enc_corpus_permission
       |> Cgi.decode_url
-      |> Web_corpus.permission_of_string
-    in
+      |> Web_corpus.permission_of_string in
     let corpus_dir = Cgi.get Params.corpus_dir env "" in
     let sentence_no = Cgi.get Params.sentence_no env "" in
     let text = arguments translit lex cache st us cp url_encoded_input
@@ -582,12 +580,12 @@ value graph_engine () = do
                { append_cache entry gender
                ; let cache_txt_file = public_cache_txt_file in
                  let cache = Nouns.extract_current_cache cache_txt_file in
-                  make_cache_transducer cache
+                 make_cache_transducer cache
                }
             else () in
     let revised = decode_url (get "revised" env "")
     and rev_off = int_of_string (get "rev_off" env "-1")
-    and rev_ind = int_of_string (get "rev_ind" env "-1") in
+    and rev_ind = int_of_string (get "rev_ind" env "-1") in 
    try do
    { match (revised,rev_off,rev_ind) with
      [ ("",-1,-1) -> check_sentence translit uns text checkpoints 
@@ -612,15 +610,14 @@ value graph_engine () = do
        let new_chunk_len = Word.length (Encode.switch_code translit revised) in
        let diff = new_chunk_len-word_len in
        let revised_check = 
-         let revise (k,sec,sel) = 
-             (if k<word_off then k else k+diff,sec,sel) in
+         let revise (k,sec,sel) = (if k<word_off then k else k+diff,sec,sel) in
          List.map revise checkpoints
        and updated_text = arguments translit lex cache st us cp updated_input
                             url_encoded_topic abs sol_num corpus sent_id link_num
                             url_enc_corpus_permission corpus_dir sentence_no
        and new_input = decode_url updated_input in
        check_sentence translit uns updated_text revised_check 
-                                  new_input sol_num corpus sent_id link_num
+                      new_input sol_num corpus sent_id link_num
      ]
      (* automatically refreshing the page only if guess parameter *)
    ; if String.length guess_morph > 0 then 
@@ -630,13 +627,13 @@ value graph_engine () = do
      else ()
      (* Save sentence button *)
    ; if corpus_permission = Web_corpus.Annotator then
-     (* TODO: use [segment_all] to compute the nb of sols instead of
-        passing 0 to [nb_sols].  *)
-       save_button query (Num.num_of_int 0) |> pl
+     (* TODO: use [segment_iter] to compute the nb of sols instead of
+        passing 0 to [nb_sols]. *)
+        save_button query (Num.num_of_int 0) |> pl
      else ()
    ; html_break |> pl
-     (* Quit button: continue reading (reader mode) or quit without
-        saving (annotator mode).  *)
+     (* Quit button: continue reading (reader mode) 
+                  or quit without saving (annotator mode) *)
    ; if sentence_no <> "" then
        quit_button corpus_permission
          (Cgi.decode_url corpus_dir) (Cgi.decode_url sentence_no) |> pl
@@ -671,6 +668,6 @@ value safe_engine () =
 ;
 end (* Interface *)
 ;
-Interface.safe_engine () (* Should always produce a compliant xhtml page *)
+Interface.safe_engine () (* Should always produce a compliant HTML page *)
 ;
 

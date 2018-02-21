@@ -199,7 +199,7 @@ value sort_out accu form = fun
               ]
         | Bare_stem | Auxi_form -> (mas,fem,neu,any,[ f :: iic ],avy)
         | Avyayaf_form -> (mas,fem,neu,any,iic,[ f :: avy ])
-        | Ind_form _ | Verb_form _ _ _  | Ind_verb _ | Abs_root _ 
+        | Und_form _ | Verb_form _ _ _  | Und_verb _ | Abs_root _ 
         | Avyayai_form | Unanalysed | PV _ 
         | Part_form _ _ _ _ ->
           failwith "Unexpected form in declensions"

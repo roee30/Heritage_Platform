@@ -92,7 +92,7 @@ and participle = (* participles *)
   ]
 ;
 (* Invariable verbal forms.
-   Such forms are indeclinable and have their own inflected forms constructors.
+   Such forms are undeclinable and have their own inflected forms constructors.
    Infinitives are similar to dative substantival forms, periphrastic perfect
    forms are associated with an auxiliary verb in the perfect.
    Absolutives split into root absolutives in -tvaa and absolutives in -ya 
@@ -159,7 +159,7 @@ and krit = (* coarser than Paninian krit suffixes *)
   ]
 ;
 
-type ind_kind = 
+type und_kind = 
   [ Adv       (* adverb *)
   | Avya      (* turned into an adverb by avyayiibhaava compounding *)
   | Abs       (* root absolutive in -tvaa *)

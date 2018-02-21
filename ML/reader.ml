@@ -153,8 +153,8 @@ value process_input text us mode topic (input:string) encode cpts =
   let chunker = if us (* sandhi undone *) then Sanskrit.read_raw_sanskrit 
                 else (* blanks non-significant *) Sanskrit.read_sanskrit in
   let chunks = chunker encode input (* normalisation here *) in 
-  let devachunks = List.map Canon.unidevcode chunks in
-  let devainput = String.concat " " devachunks in do
+  let deva_chunks = List.map Canon.unidevcode chunks in
+  let deva_input = String.concat " " deva_chunks in do
   { pl (xml_begin_with_att "p" [ ("align","center") ])
   ; ps (div_begin Latin16)
   ; pl (call_graph text ^ " Show Summary of Solutions")
@@ -164,7 +164,7 @@ value process_input text us mode topic (input:string) encode cpts =
   ; pl hr
   ; pl html_break
   ; pl "Sentence: "
-  ; ps (deva16_blue devainput) (* devanagari *)
+  ; ps (deva16_blue deva_input) (* devanagari *)
   ; pl html_break
   ; if mode = Analyse then () else ps "may be analysed as:"
   ; ps div_end (* Latin16 *)

@@ -8,7 +8,7 @@
 (**************************************************************************)
 
 (* Sanskrit Phrase Lexer in 40 phases version. *)
-(* Used by Parser, Reader and Regression. 
+(* Used by Parser, and Rank for Reader/Regression. 
    Uses Phases from Dispatcher to define phase.
    Loads the transducers, calls Dispatch to create Disp. 
    Calls Segment to build Viccheda, the Sanskrit lexer that undoes sandhi 
@@ -65,7 +65,8 @@ value rec color_of_role = fun (* Semantic role of lexical category *)
   | Noun | Noun2 | Nouv | Nouc | Krid | Kriv | Kric | Pron | Ifc | Ifc2
   | Kama | Lopak | Auxik -> Cyan (* Actor or Predicate *)
   | Root | Lopa |  Auxi -> Pink (* abs-tvaa in Inde *) (* Process *) 
-  | Abso | Absv | Absc | Inde | Avy | Ai | Ani | Inftu -> Lavender (* Circumstance *)
+  | Abso | Absv | Absc | Inde | Avy | Ai | Ani | Inftu (* Circumstance *)
+    -> Lavender 
   | Unknown | Cache -> Grey 
   | Comp (_,ph) _ _ | Tad (_,ph)  _ _ -> color_of_role ph
   | Sfx -> Cyan

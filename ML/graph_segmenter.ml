@@ -13,8 +13,11 @@
 open List2; (* unstack ass subtract *)
 open Auto.Auto; (* auto rule choices State *)
 
-module Segment 
-  (Phases: sig 
+(* used by Interface : [Viccheda = Segment Phases Machine Segment_control] 
+      where Machine = Dispatch Transducers Lemmas 
+      where Lemmas = Load_morphs.Morphs Prel Phases *)
+module Segment
+  (Phases: sig  
          type phase
          and phases = list phase;
          value unknown : phase;
@@ -23,8 +26,8 @@ module Segment
          value ii_phase : phase -> bool;
          value un_lopa : phase -> phase;
          end)
-  (Eilenberg: sig 
-         value transducer : Phases.phase -> auto;
+  (Eilenberg: sig (* To be instanciated by Dispatcher *)
+         value transducer : Phases.phase -> auto; 
          value initial : bool -> Phases.phases;
          value dispatch : bool -> Word.word -> Phases.phase -> Phases.phases;
          value accepting : Phases.phase -> bool;
@@ -36,6 +39,8 @@ module Segment
          and segment = (Phases.phase * Word.word * transition)
          and output = list segment; 
          value validate : output -> output; (* consistency check / compress *) 
+         value terminal_sa : output -> bool;
+         (* unused value terminal_sas : output -> bool; *)
          end)
   (Control: sig value star : ref bool; (* chunk= if star then word+ else word *)
                 value full : ref bool; (* all kridantas and nan cpds if full *)
@@ -130,12 +135,21 @@ value register index (phase,pada,sandhi) =
   | [] -> update_graph [ (phase,[ pada_right ]) ] (* new bucket *)
   ]   
 ;
-type chunk_params = { offset : mutable int; segmentable : mutable bool }
+
+(* To avoid heavy functional transmission of chunk global parameters,
+we define a record of chunk parameters.
+NB. offset and last are inherited attributes, segmentable is synthesized. *)
+
+type chunk_params = { offset : mutable int
+                    ; segmentable : mutable bool
+                    ; last : mutable bool (* for sa elimination in last chunk *)
+                    }
 ;
-value cur_chunk = { offset = 0; segmentable = False }
+value cur_chunk = { offset = 0; segmentable = False; last = False }
 ;
 value set_cur_offset n = cur_chunk.offset := n
 and set_segmentable b = cur_chunk.segmentable := b
+and set_last b = cur_chunk.last := b
 ;
 value set_offset (offset,checkpoints) = do
   { set_cur_offset offset
@@ -154,9 +168,9 @@ value reset_visual () = for i = 0 to max_seg_rows-1 do
 (* The offset permits to align each segment with the input string *)
 value offset = fun
   [ Euphony (w,u,v) -> 
-    let off = if w=[] then 1 (* amui/lopa from Lopa/Lopak *)
-                      else Word.length w in
-    off - (Word.length u + Word.length v) 
+      let off = if w=[] then 1 (* amui/lopa from Lopa/Lopak *)
+                        else Word.length w in
+      off - (Word.length u + Word.length v) 
   | Id -> 0
   ]
 ;
@@ -361,6 +375,12 @@ type backtrack =
   ]
 and resumption = list backtrack (* coroutine resumptions *)
 ;
+value check_sa contracted =
+     not (cur_chunk.last && terminal_sa contracted)    (* forbid sa last *)
+(* [ && (not (terminal_sas contracted) || cur_chunk.last) (* sa.h last only *) ]
+   This is too strict, in view of padapatha and und-sandhied mode 
+   et on a donc un peu d'overgeneration, avec eg "sa.h yogii" *)
+;
 
 (* Service routines of the segmenter *)
 
@@ -400,29 +420,29 @@ value rec react phase input output back occ = fun
     let deter cont = match input with 
       [ [] -> continue cont
       | [ letter :: rest ] -> match ass letter det with  
-           [ Some state ->
-             react phase rest output cont [ letter :: occ ] state  
+           [ Some state -> react phase rest output cont [ letter :: occ ] state  
            | None -> continue cont
            ] 
       ] in
     let cont = if choices=[] then back (* non deterministic continuation *)
                else [ Choose phase input output occ choices :: back ] in
-    (* now we look for - or + segmentation pragma *)
+    (* now we look for - or + segmentation hint *)
     let (keep,cut,input') = match input with 
        [ [ 0 :: rest ] -> (* explicit "-" compound break hint *) 
               (ii_phase phase,True,rest) 
-       | [ -10 :: rest ] -> (* mandatory segmentation indicated by "+" *)
+       | [ -10 :: rest ] -> (* mandatory segmentation "+" *)
               (True,True,rest)
        | _ -> (True,False,input) (* no hint in input *)
        ] in         
     if accept && keep then 
        let segment = (phase,occ,Id) in
        let out = accrue segment output in (*i unknown Id sandhi - TODO i*) 
-       match validate out with 
-       [ [] -> if cut then continue cont else deter cont
+       match validate out (* validate and compact partial output *) with 
+       [ [] -> if cut then continue cont else deter cont 
        | contracted -> match input' with
-              [ [] -> if accepting phase then (* solution found *)
-                         do { log_chunk contracted; continue cont } 
+              [ [] -> if accepting phase (* solution found *)
+                         && check_sa contracted (* forbid sa last *)
+                         then do { log_chunk contracted; continue cont } 
                       else continue cont 
               | [ first :: _ ] -> (* we first try the longest matching word *)
                       let cont' = schedule phase input' contracted [] cont in
@@ -447,7 +467,8 @@ and choose phase input output back occ = fun
            | contracted ->
               if v=[] (* final sandhi *) then
                  if rest=[] && accepting phase (* solution found *)
-                    then do { log_chunk contracted; continue cont }
+                    && check_sa contracted (* forbid sa last *)
+                 then do { log_chunk contracted; continue cont }
                  else continue cont
               else continue (schedule phase rest contracted v cont)
            ]
@@ -486,7 +507,7 @@ value segment chunk = do
 ;
 (* Splitting checkpoints into current and future ones *)
 value split_check limit = split_rec []
-   where rec split_rec acc checkpts = match checkpts with 
+  where rec split_rec acc checkpts = match checkpts with 
       [ [] -> (Word.mirror acc,[])
       | [ ((index,_,_) as check) :: rest ] -> 
           if index > limit then (Word.mirror acc,checkpts)
@@ -496,18 +517,18 @@ value split_check limit = split_rec []
 (* We do not need to [dove_tail] like in Rank, since chunks are independent. *)
 (* Returns a pair (b,n) where b is True if all chunks are segmentable so far,
    and n is the number of potential solutions *)
-value segment_all = List.fold_left segment_chunk (True,Num.Int 1)
-  where segment_chunk (flag,count) chunk = 
+value segment_chunk (full,count) chunk last =
     let extremity = cur_chunk.offset+Word.length chunk in
     let (local,future) = split_check extremity chkpts.all_checks in do
     { chkpts.segment_checks := local
+    ; set_last last
     ; let segmentable = segment chunk 
       and local_count = get_counter () in do
       { set_segmentable False
       ; set_offset (succ extremity,future)
       ; if segmentable then do
            { reset_counter ()
-           ; (flag,Num.mult_num count (Num.Int local_count))
+           ; (full,Num.mult_num count (Num.Int local_count))
              (* we have [local_count] segmentations of the local [chunk], and,
               chunks being independent, the total number of solutions multiply *)
            }
@@ -515,6 +536,14 @@ value segment_all = List.fold_left segment_chunk (True,Num.Int 1)
       }
     }
 ;
+value segment_iter chunks = segment_chunks (True,Num.Int 1) chunks
+  where rec segment_chunks acc = fun (* terminal recursion *)
+    [ [ (* last *) chunk ] -> segment_chunk acc chunk True
+    | [ chunk :: rest ] -> segment_chunks (segment_chunk acc chunk False) rest
+    | [] -> acc
+    ]
+;
+
 
 end; (* Segment *)
 

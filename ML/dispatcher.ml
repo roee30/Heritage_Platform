@@ -290,7 +290,7 @@ value extract_gana_pada = fun
            | Conjug _ v | Perfut v -> (None,v)
            ] in
        (conj,(o_gana,pada_of_voice voice))
-  | Ind_verb _ _ -> raise Unvoiced (* could be refined *)
+  | Und_verb _ _ -> raise Unvoiced (* could be refined *)
   | _ -> failwith "Unexpected root form" 
   ]
 and extract_gana_pada_k krit =
@@ -597,7 +597,7 @@ value validate out = match out with
                 else []
       ]
   | [ (Abso,rev_abso_form,s) :: [ (Pv,prev,sv) :: r ] ] ->
-      (* Takes care of absolutives in -ya and of infinitives with preverbs *)
+      (* Takes care of absolutives in -ya and infinitives with preverbs *)
       let pv = Word.mirror prev in 
       let pv_str = Canon.decode pv 
       and abso_form = Word.mirror rev_abso_form in
@@ -614,10 +614,18 @@ value validate out = match out with
       ]
     (* We now prevent overgeneration of forms "sa" and "e.sa" \Pan{6,1,132} *)
     (*i TODO: similar test for dual forms i*)
-  | [ (ph,form,_) :: [ (Pron,[ 1; 48 ],_) :: _ ] ]  (* sa *)
-  | [ (ph,form,_) :: [ (Pron,[ 1; 47; 10 ],_) :: _ ] ] (* e.sa *) -> 
-      if Phonetics.consonant_initial (Word.mirror form) 
+  | [ (ph,form,_) :: [ (Pron,[ 1; 48 ],_) :: _ ] ] (* sa *) ->  
+      if Phonetics.consonant_initial (Word.mirror form)  
       then out else [] 
+  | [ (ph,form,_) :: [ (Pron,[ 1; 47; 10 ],_) :: _ ] ] (* e.sa *) -> 
+      if Phonetics.consonant_initial (Word.mirror form)  
+      then out else [] 
+  | [ (ph,form,_) :: [ (Pron,[ 48; 1; 48 ],_) :: _ ] ] (* sas *) ->  
+      if Phonetics.consonant_initial (Word.mirror form) then [] 
+      else out 
+  | [ (ph,form,_) :: [ (Pron,[ 48; 1; 47; 10 ],_) :: _ ] ] (* e.sas *) ->  
+      if Phonetics.consonant_initial (Word.mirror form) then [] 
+      else out 
 (* Alternative: put infinitives in Root rather than Indecl+Abso 
  [| [ (Absc,_,_) :: _ ] 
   | [ (Absv,_,_) :: _ ] -> check root is autonomous 
@@ -640,7 +648,19 @@ This pv is not terminal, and should be chopped off by the next item *)
   | _ -> out (* default identity *)
   ]
 ;
-
+value terminal_sa = fun 
+  [ [ (Pron,[ 1; 48 ],_) :: _ ] (* sa *) 
+  | [ (Pron,[ 1; 47; 10 ],_) :: _ ] (* e.sa *) -> True
+  | _ -> False 
+  ]
+;
+(*i unused 
+value terminal_sas = fun 
+  [ [ (Pron,[ 48; 1; 48 ],_) :: _ ] (* sas *)  
+  | [ (Pron,[ 48; 1; 47; 10 ],_) :: _ ] (* e.sas *) -> True 
+  | _ -> False 
+  ]
+; i*)
 open Html;
 value rec color_of_phase = fun
   [ Noun | Noun2 | Lopak | Nouc | Nouv | Kriv | Kric | Krid | Auxik | Kama

@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Nouns : sig i*)
@@ -14,7 +14,7 @@ open Morphology; (* [inflected_map] *)
 
 type declension_class = 
   [ Gender of gender  (* declined substantive, adjective, number, pronoun *)
-  | Ind of ind_kind   (* indeclinable form *)
+  | Und of und_kind   (* undeclinable form *)
   ]
 and nmorph = (string * declension_class)
 ;

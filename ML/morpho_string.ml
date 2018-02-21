@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Linearizes morphological information as a string.
@@ -83,7 +83,7 @@ and string_person = fun
   | Second -> "2" 
   | Third  -> "3" 
   ] 
-and string_ind_kind = fun
+and string_und_kind = fun
   [ Part -> "part."
   | Prep -> "prep."
   | Conj -> "conj."
@@ -116,10 +116,10 @@ value string_morph = fun
   | Bare_stem | Avyayai_form -> "iic."
   | Avyayaf_form -> "ind."
   | Verb_form f n p -> (string_finite f) ^ (string_number n) ^ (string_person p)
-  | Ind_form k -> string_ind_kind k
+  | Und_form k -> string_und_kind k
   | Abs_root c -> (string_conjugation c) ^ "abs."
   | Auxi_form ->  "iiv."
-  | Ind_verb m -> string_modal m
+  | Und_verb m -> string_modal m
   | Unanalysed -> "?"
   | PV pvs -> "pv." 
   ]

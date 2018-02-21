@@ -4,10 +4,10 @@
 (*                                                                        *)
 (*                        Pawan Goyal & Gérard Huet                       *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-(* Regression analysis *)
+(* Regression analysis - Legacy *)
 
 (*i module Regression = struct i*)
 
@@ -17,7 +17,7 @@
 
 open Encode; (* [code_string] *)
 open Constraints; (* [extract truncate_groups] *)
-open Rank; (* Lex [morpho parse_solution parse_metadata complete] *)
+open Rank; (* Lex [morpho parse_solution parse_metadata segment_all complete] *)
 
 module Prel = struct
  value prelude () = ()

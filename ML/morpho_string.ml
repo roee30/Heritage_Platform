@@ -83,7 +83,7 @@ and string_person = fun
   | Second -> "2" 
   | Third  -> "3" 
   ] 
-and string_und_kind = fun
+and string_ind_kind = fun
   [ Part -> "part."
   | Prep -> "prep."
   | Conj -> "conj."
@@ -116,10 +116,10 @@ value string_morph = fun
   | Bare_stem | Avyayai_form -> "iic."
   | Avyayaf_form -> "ind."
   | Verb_form f n p -> (string_finite f) ^ (string_number n) ^ (string_person p)
-  | Und_form k -> string_und_kind k
+  | Ind_form k -> string_ind_kind k
   | Abs_root c -> (string_conjugation c) ^ "abs."
   | Auxi_form ->  "iiv."
-  | Und_verb m -> string_modal m
+  | Ind_verb m -> string_modal m
   | Unanalysed -> "?"
   | PV pvs -> "pv." 
   ]

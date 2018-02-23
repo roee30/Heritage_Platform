@@ -14,8 +14,8 @@ open List2; (* unstack ass subtract *)
 open Auto.Auto; (* auto rule choices State *)
 
 (* used by Interface : [Viccheda = Segment Phases Machine Segment_control] 
-      where Machine = Dispatch Transducers Lemmas 
-      where Lemmas = Load_morphs.Morphs Prel Phases *)
+      where [Machine = Dispatch Transducers Lemmas] 
+      where [Lemmas = Load_morphs.Morphs Prel Phases] *)
 module Segment
   (Phases: sig  
          type phase
@@ -40,7 +40,7 @@ module Segment
          and output = list segment; 
          value validate : output -> output; (* consistency check / compress *) 
          value terminal_sa : output -> bool;
-         (* unused value terminal_sas : output -> bool; *)
+         (* unused [value terminal_sas : output -> bool;] *)
          end)
   (Control: sig value star : ref bool; (* chunk= if star then word+ else word *)
                 value full : ref bool; (* all kridantas and nan cpds if full *)

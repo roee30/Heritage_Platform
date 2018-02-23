@@ -31,7 +31,7 @@ value peri     : ref inflected_map;
 value auxi     : ref inflected_map;
 value auxik    : ref inflected_map;
 value auxiick  : ref inflected_map;
-value undecls  : ref inflected_map;
+value indecls  : ref inflected_map;
 value invs     : ref inflected_map;
 value absya    : ref inflected_map;
 value abstvaa  : ref inflected_map;
@@ -57,7 +57,7 @@ type nominal =
 type flexion =
   [ Declined of nominal and gender and list (number * list (case * Word.word))
   | Conju of finite and list (number * list (person * Word.word))
-  | Undecl of und_kind and Word.word
+  | Indecl of ind_kind and Word.word
   | Bare of nominal and Word.word
   | Avyayai of Word.word (* Iic of avyayiibhaava cpd *)
   | Avyayaf of Word.word (* Ifc of avyayiibhaava cpd *)

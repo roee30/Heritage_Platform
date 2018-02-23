@@ -290,7 +290,7 @@ value extract_gana_pada = fun
            | Conjug _ v | Perfut v -> (None,v)
            ] in
        (conj,(o_gana,pada_of_voice voice))
-  | Und_verb _ _ -> raise Unvoiced (* could be refined *)
+  | Ind_verb _ _ -> raise Unvoiced (* could be refined *)
   | _ -> failwith "Unexpected root form" 
   ]
 and extract_gana_pada_k krit =
@@ -613,11 +613,17 @@ value validate out = match out with
                 else []
       ]
     (* We now prevent overgeneration of forms "sa" and "e.sa" \Pan{6,1,132} *)
-    (*i TODO: similar test for dual forms i*)
-  | [ (ph,form,_) :: [ (Pron,[ 1; 48 ],_) :: _ ] ] (* sa *) ->  
+  | [ (ph,form,_) :: [ (Pron,[ 1; 48 ],_) :: _ ] ] (* sa *) -> 
       if Phonetics.consonant_initial (Word.mirror form)  
       then out else [] 
-  | [ (ph,form,_) :: [ (Pron,[ 1; 47; 10 ],_) :: _ ] ] (* e.sa *) -> 
+    (* Or, if one wants to replace sa with sa.h : [
+  | [ ((ph,form,_) as last) :: [ (Pron,[ 1; 48 ],_) :: rest ] ] (* sa *) -> 
+      let initial = List.hd (Word.mirror form) in 
+      if Phonetics.consonant initial then 
+         let sandhi = Euphony ([ 48; 1; initial], [ 48; 1; 48 ], [ initial ]) in
+         [ last :: [ (Pron,[ 48; 1; 48 ],sandhi) :: rest ] ] 
+      else [] ] *)
+  | [ (ph,form,_) :: [ (Pron,[ 1; 47; 10 ],_) :: _ ] ] (* e.sa *) ->
       if Phonetics.consonant_initial (Word.mirror form)  
       then out else [] 
   | [ (ph,form,_) :: [ (Pron,[ 48; 1; 48 ],_) :: _ ] ] (* sas *) ->  
@@ -626,9 +632,10 @@ value validate out = match out with
   | [ (ph,form,_) :: [ (Pron,[ 48; 1; 47; 10 ],_) :: _ ] ] (* e.sas *) ->  
       if Phonetics.consonant_initial (Word.mirror form) then [] 
       else out 
+    (*i TODO: similar test for dual forms i*)
 (* Alternative: put infinitives in Root rather than Indecl+Abso 
  [| [ (Absc,_,_) :: _ ] 
-  | [ (Absv,_,_) :: _ ] -> check root is autonomous 
+  | [ (Absv,_,_) :: _ ] -> check root is autonomous ]
   idem for infinitives, but they need their own phase/color *)
 (* Finally we glue taddita suffix "forms" to the previous (iic) segment *)
 (* NB This cumulates with the preverb glueing but not with itself *)
@@ -654,13 +661,13 @@ value terminal_sa = fun
   | _ -> False 
   ]
 ;
-(*i unused 
+(*i unused [
 value terminal_sas = fun 
   [ [ (Pron,[ 48; 1; 48 ],_) :: _ ] (* sas *)  
   | [ (Pron,[ 48; 1; 47; 10 ],_) :: _ ] (* e.sas *) -> True 
   | _ -> False 
   ]
-; i*)
+; ] i*)
 open Html;
 value rec color_of_phase = fun
   [ Noun | Noun2 | Lopak | Nouc | Nouv | Kriv | Kric | Krid | Auxik | Kama

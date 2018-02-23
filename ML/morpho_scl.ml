@@ -114,7 +114,7 @@ and print_scl_kind = fun
   | Conj -> ps "<conj/>"
   | Abs  -> ps "<abs/>"
   | Adv  -> ps "<adv/>"
-  | _    -> ps "<und/>"
+  | _    -> ps "<ind/>"
   ]
 ;
 value print_scl_finite (c,p) = 
@@ -137,11 +137,11 @@ value print_scl_morph = fun
       ; print_scl_number n
       ; print_scl_person p
       }
-  | Und_form k -> print_scl_kind k
+  | Ind_form k -> print_scl_kind k
   | Avyayaf_form -> ps "<avya/>"
   | Abs_root c   -> do { print_scl_conjugation c; ps "<abs/>" }
   | Auxi_form    -> ps "<iiv/>"
-  | Und_verb m   -> print_scl_modal m
+  | Ind_verb m   -> print_scl_modal m
   | PV _         -> ps "<pv/>"
   | Unanalysed   -> ps "<unknown/>" 
   ]

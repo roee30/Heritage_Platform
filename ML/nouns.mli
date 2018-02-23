@@ -14,7 +14,7 @@ open Morphology; (* [inflected_map] *)
 
 type declension_class = 
   [ Gender of gender  (* declined substantive, adjective, number, pronoun *)
-  | Und of und_kind   (* undeclinable form *)
+  | Ind of ind_kind   (* indeclinable form *)
   ]
 and nmorph = (string * declension_class)
 ;

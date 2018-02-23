@@ -338,7 +338,7 @@ DOC_ML=DOC/Heritage_Platform.pdf
 
 AUTOMATA=$(DATA)/nouns.rem $(DATA)/roots.rem $(DATA)/preverbs.rem \
 $(DATA)/lopas.rem $(DATA)/pronouns.rem $(DATA)/transpn.rem $(DATA)/parts.rem \
-$(DATA)/lopaks.rem $(DATA)/undecls.rem $(DATA)/abstvaa.rem $(DATA)/absya.rem \
+$(DATA)/lopaks.rem $(DATA)/indecls.rem $(DATA)/abstvaa.rem $(DATA)/absya.rem \
 $(DATA)/iics.rem $(DATA)/piics.rem $(DATA)/ifcs.rem $(DATA)/iivs.rem \
 $(DATA)/iifcs.rem $(DATA)/auxi.rem $(DATA)/voca.rem $(DATA)/invs.rem \
 $(DATA)/inftu.rem $(DATA)/kama.rem $(DATA)/nouns2.rem $(DATA)/iics2.rem \
@@ -349,7 +349,7 @@ $(DATA)/transiiy.rem $(DATA)/transavy.rem $(DATA)/transp.rem \
 $(DATA)/transpa.rem $(DATA)/transic.rem $(DATA)/sfxs.rem $(DATA)/isfxs.rem \
 $(DATA)/transsfx.rem $(DATA)/transisfx.rem $(DATA)/transif.rem \
 $(DATA)/transpic.rem $(DATA)/transiif.rem $(DATA)/transabsya.rem \
-$(DATA)/transabstvaa.rem $(DATA)/transiv.rem $(DATA)/transunde.rem \
+$(DATA)/transabstvaa.rem $(DATA)/transiv.rem $(DATA)/transinde.rem \
 $(DATA)/partvocs.rem $(DATA)/transpav.rem $(DATA)/translopak.rem \
 $(DATA)/transauxi.rem $(DATA)/transvoca.rem $(DATA)/translopa.rem \
 $(DATA)/transn2.rem $(DATA)/transif2.rem $(DATA)/transic2.rem \
@@ -376,7 +376,7 @@ CACHES=cache.txt cache.rem minica.rem transca.rem
 # Linguistic resources: Sanskrit morphology documents
 
 PDF_MORPHOLOGY=$(DATA)/nouns.pdf $(DATA)/roots.pdf $(DATA)/parts.pdf \
-$(DATA)/undecls.pdf $(DATA)/final.pdf # enormous, useless
+$(DATA)/indecls.pdf $(DATA)/final.pdf # enormous, useless
 
 SL_XML_MORPHOLOGY=$(XMLDATA)/SL_morph.tar.gz
 WX_XML_MORPHOLOGY=$(XMLDATA)/WX_morph.tar.gz

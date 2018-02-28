@@ -18,6 +18,7 @@ philological applications:
 It may also be used for interactive consulting of a Sanskrit Dictionary
 with grammatical knowledge, on the Web, on a computer workstation,
 or on a personal communicator device. 
+Finally, it may be used as support for teaching the language.
 
 This project is the follow-up of two previous stages. 
 
@@ -51,9 +52,9 @@ This constituted the thesis research of Benoît Razet.
 
 From 2006 onwards, an international cooperation on Sanskrit Computational
 Linguistics was started between INRIA and the Sanskrit Studies Department
-at the University of Hyderabad. The goal of this joint team is to develop
-inter-operable packages for the manipulation of Sanskrit corpus, as 
-interlinked Web services.
+at the University of Hyderabad, headed by Pr. Amba kulkarni. The goal of this 
+joint team is to develop inter-operable packages for the processing of 
+Sanskrit corpus, as communicating Web services.
 
 In 2011-2012, Pawan Goyal spent a post-doctoral year working with
 Gérard Huet on the Sanskrit Platform. He contributed many new modules:

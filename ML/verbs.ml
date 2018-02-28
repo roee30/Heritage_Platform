@@ -780,6 +780,9 @@ value record_part_m_th verbal stem entry =
   match entry with
   [ "cint" -> let pprm = Pprm_ 10 Primary (revcode "cintayaan") entry in
               record_part pprm (* irregular *)
+  | "muc#1" | "sp.rz#1" -> 
+         let mid_stem = rfix stem "aana" in (* Whitney§752 *)
+         record_part_m verbal mid_stem entry 
   | _ -> let mid_stem = trunc_a (rfix stem "amaana") (* -maana *) in
          (* [trunc_a] needed because possible retroflexion in amaa.na *)
          record_part_m verbal mid_stem entry 
@@ -1196,8 +1199,11 @@ value compute_active_present2 sstem wstem set entry third = do
   ; compute_athematic_imperative2a sstem wstem set entry 
   ; match wstem with 
     [ [ 2 :: _ ] -> (* Ppr of roots in -aa is complex and overgenerates *)
-           let m_pstem = wstem and f_pstem = rev (fix2w wstem "at" set) in
-           record_part (Ppra_ 2 Primary m_pstem f_pstem entry) 
+      match entry with 
+      [ "maa#1" -> () (* no ppra *)
+      | _ -> let m_pstem = wstem and f_pstem = rev (fix2w wstem "at" set) in
+             record_part (Ppra_ 2 Primary m_pstem f_pstem entry) 
+      ]
     | _ -> let m_pstem = if entry = "han#1" then revstem "ghn" 
                          else correct2 wstem in
            let f_pstem = if entry = "han#1" then revstem "ghnat" 

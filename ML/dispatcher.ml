@@ -40,7 +40,7 @@ value transducer = fun
   | Nouc -> transducers.nouc (* consonant-initial noun *)
   | Noun2 -> transducers.noun2 (* idem in mode non gen *) 
   | Pron -> transducers.pron (* declined pronouns *) 
-  | Root -> transducers.root (* conjugated root forms and infinitives *) 
+  | Root -> transducers.root (* conjugated root forms *) 
   | Vokv -> transducers.vokv (* vowel-initial vocative k.rdaantas *)  
   | Vokc -> transducers.vokc (* consonant-initial vocative k.rdaantas *)  
   | Inde -> transducers.inde (* indeclinables, particles  *) 
@@ -105,7 +105,7 @@ and amuitic= fun
        $Noun = Nounv + Nounc$ and
        $Iic = Iicv + Iicc$\\
 NB. $Abso$ = absolutives in -ya, 
-    $Inde$ contains absolutives in -tvaa and infinitives,
+    $Inde$ contains absolutives in -tvaa 
     $Voca = Vocv + Vocc$ (vocatives),
     $Auxi$ = finite forms of bhuu and k.r.\\
 The following is obtained from the above recursion equation by Brzozowski's 
@@ -597,7 +597,7 @@ value validate out = match out with
                 else []
       ]
   | [ (Abso,rev_abso_form,s) :: [ (Pv,prev,sv) :: r ] ] ->
-      (* Takes care of absolutives in -ya and infinitives with preverbs *)
+      (* Takes care of absolutives in -ya *)
       let pv = Word.mirror prev in 
       let pv_str = Canon.decode pv 
       and abso_form = Word.mirror rev_abso_form in
@@ -622,7 +622,7 @@ value validate out = match out with
       if Phonetics.consonant initial then 
          let sandhi = Euphony ([ 48; 1; initial], [ 48; 1; 48 ], [ initial ]) in
          [ last :: [ (Pron,[ 48; 1; 48 ],sandhi) :: rest ] ] 
-      else [] ] *)
+      else [] ] - But we should do it between chunks as well *)
   | [ (ph,form,_) :: [ (Pron,[ 1; 47; 10 ],_) :: _ ] ] (* e.sa *) ->
       if Phonetics.consonant_initial (Word.mirror form)  
       then out else [] 
@@ -633,10 +633,6 @@ value validate out = match out with
       if Phonetics.consonant_initial (Word.mirror form) then [] 
       else out 
     (*i TODO: similar test for dual forms i*)
-(* Alternative: put infinitives in Root rather than Indecl+Abso 
- [| [ (Absc,_,_) :: _ ] 
-  | [ (Absv,_,_) :: _ ] -> check root is autonomous ]
-  idem for infinitives, but they need their own phase/color *)
 (* Finally we glue taddita suffix "forms" to the previous (iic) segment *)
 (* NB This cumulates with the preverb glueing but not with itself *)
   | [ (sfxph,sfx,s) :: [ (ph,rstem,sv) :: r ] ] when sfx_phase sfxph 

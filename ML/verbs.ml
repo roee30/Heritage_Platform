@@ -1200,8 +1200,8 @@ value compute_active_present2 sstem wstem set entry third = do
   ; match wstem with 
     [ [ 2 :: _ ] -> (* Ppr of roots in -aa is complex and overgenerates *)
       match entry with 
-      [ "maa#1" -> () (* no ppra *)
-      | _ -> let m_pstem = wstem and f_pstem = rev (fix2w wstem "at" set) in
+      [ "maa#1" | "yaa#1" -> () (* no ppra *)
+      | _ -> let m_pstem = wstem and f_pstem = rev (fix2w wstem "at" set) in 
              record_part (Ppra_ 2 Primary m_pstem f_pstem entry) 
       ]
     | _ -> let m_pstem = if entry = "han#1" then revstem "ghn" 
@@ -4608,7 +4608,7 @@ value record_ppp_abs_stems entry rstem ppstems =
          ; (* abs -ya computed whether set or anit *) 
            match entry with 
            [ "av" -> record_abs_ya entry rstem (revcode "aav") (* -aavya *)
-           | _ -> record_abs_ya entry rstem w
+           | _    -> record_abs_ya entry rstem w
            ]
          }
      | Tia w -> let (ita,itvaa) = if entry="grah" then ("iita","iitvaa")  
@@ -4648,8 +4648,11 @@ value record_ppp_abs_stems entry rstem ppstems =
 value record_ppp_abs_den ystem entry = 
  let ppstem = trunc (revstem entry) in do  
   { record_part_ppp (rfix ppstem "ita") entry 
-  ; record_abso_tvaa (fix ystem "itvaa") entry  
-  (* no [record_abso_ya] since usually no preverb to denominatives *)
+  ; match entry with
+    [ "aakar.na" -> record_abso_tvaa (fix ppstem "ya") entry (* fake abso-ya! *)
+    | _ -> record_abso_tvaa (fix ystem "itvaa") entry 
+    ]
+  (* no general [record_abso_ya] since usually no preverb to denominatives *)
   }
 ;
 (* Absolutive in -am - Macdonell§166 Stenzler§288 \Pan{3,4,22} .namul          *)
@@ -5243,7 +5246,8 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
    | "i.sudhi" | "gadgada" (* \Pan{3,1,27} *)
    | "agada" (* Kale§660 *) | "iras" 
        -> trunc rstem (* -()yati *) (* lopa *) 
-   (* "maarg" "mok.s" "lak.s" "suuc" presently roots class 10 *)
+   (* | "maarg" | "mok.s" | "lak.s" | "suuc" 
+    -> [ 1:: rstem ] (* -ayati *) presently roots class 10 *)
    | "kutsaa" | "maalaa" | "mudraa" | "medhaa" 
        -> [ 1 :: trunc_aa rstem ] (* -()ayati - shortening final aa *)
    | "udazru" 
@@ -5298,12 +5302,12 @@ value den_stem_m entry = (* in general intransitive or reflexive Whitney§1059c 
    match entry with 
    [ "artha" | "i.sa" | "kuha" | "carca" | "mantra" | "muutra" | "m.rga"
    | "viira" | "safgraama" | "suutra" (* also zithila below *)
-       -> rstem (* -ayate *) 
+       -> rstem (* (a)-yate *) 
    | "asuuya" (* "asu" lengthened *)
        -> trunc (trunc rstem) 
    | "tavi.sa" | "citra" (* do \Pan{3,1,19} *) | "sajja"
        -> [ 4 :: trunc_a rstem ] (* -()iiyate *)
-   | "apsaras" | "sumanas" (* act as , become \Pan{3,1,11-12} *) 
+   | "apsaras" | "sumanas" (* act as, become \Pan{3,1,11-12} *) 
    | "unmanas" 
    | "uu.sman" (* emit \Pan{3,1,16} *)
        -> lengthen (trunc rstem) (* final consonant dropped *)

@@ -77,10 +77,11 @@ EXTEND Gramskt
   sanscrit: 
     [ [ p = pada; "|"; "|"  -> [ p ]
       | p = pada; "|"; sl = sanscrit -> [ p :: sl ] 
-      | p = pada; `EOI -> [ p ]
+      | p = pada; "!"; sl = sanscrit -> [ p :: sl ] (* for voc and interj *)
+      | p = pada; `EOI -> [ p ] 
       | `EOI -> failwith "Empty sanskrit input"
     ] ] ;
-(*i Beware! due to limitation of camlp4 grammars, not possible to simplify above in
+(*i NB! due to limitation of camlp4 grammars, not possible to simplify above in
   sanscrit:
     [ [ p = pada; `EOI -> Pada p
       | s = sloka -> Sloka s

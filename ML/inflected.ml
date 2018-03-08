@@ -28,7 +28,7 @@ value admits_aa = ref False
 and admits_lopa = ref False 
 ;
 value morpho_gen = ref True (* morphology generation time *)
-(* Turn to [False] for cgi execution (fake conjugation and nophantoms) *)
+(* Turn to [False] for cgi execution (fake conjugation and no phantoms) *)
 ;
 (* The [inflected_map] lexicons of inflected forms: nouns, iics, etc are computed
    by [Make_nouns] and are dumped as persistent global databases nouns.rem etc.

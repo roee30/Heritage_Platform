@@ -7,7 +7,7 @@
 (* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-(* Sanskrit Reader Summarizing interface. *)
+(* Sanskrit Reader Summarizing interface. Yields sktgraph.cgi *)
 
 (* We construct a CGI Interface displaying the segmentation graph in which the 
    user may indicate segments as mandatory checkpoints. At any point he may
@@ -20,9 +20,9 @@ open Graph_segmenter; (* [Segment cur_chunk set_cur_offset graph visual] *)
 open Phases; (* [Phases] *) 
 open Phases; (* [phase is_cache generative] *) 
 open Dispatcher; (* [transducer_vect phase Dispatch transition trim_tags] *) 
-open Html; 
-open Web; (* [ps pl abort reader_cgi scl_toggle] etc. *)
-open Cgi; 
+open Html; (* html constructors *)
+open Web; (* [ps pl abort reader_cgi scl_toggle] etc. *) 
+open Cgi; (* [url get decode_url] *)
 
 module Prel = struct (* Interface's lexer prelude *)
 
@@ -179,8 +179,8 @@ value sort_check cpts =
   List.sort compare_index cpts
 ;
 value seg_length = fun
- [ [ -2 :: rest ] -> Word.length rest 
- | w -> Word.length w
+ [ [ -2 :: rest ] -> Word.length rest (* lopa does not count *)
+ | w -> Word.length w 
  ]
 ;
 value rec merge_rec lpw = fun 
@@ -433,7 +433,7 @@ value check_sentence translit us text_orig checkpoints sentence
   ; td_wrap (call_undo text checkpoints ^ "Undo") |> ps
   ; let call_scl_parser n = (* invocation of scl parser *)
         if scl_toggle then
-           ps (td_wrap (call_reader text cpts "o" ^ "UoH Analysis Mode"))
+           td_wrap (call_reader text cpts "o" ^ "UoH Analysis Mode") |> ps
         else () (* [scl_parser] is not visible unless toggle is set *) in
     match count with 
     [ Num.Int n -> if n > max_count then 
@@ -498,7 +498,7 @@ value make_cache_transducer (cache : Morphology.inflected_map) =
   ; Gen.dump auto_cache public_transca_file (* for [Load_transducers] *)
   }
 ;
-(* We fill gendered entries incrementally in a [public_cache_txt_file] *)
+(* We fill gendered entries incrementally in [public_cache_txt_file] *)
 value append_cache entry gender =    
   let cho = open_out_gen [ Open_wronly; Open_append; Open_text ] 0o777 
                          public_cache_txt_file in do
@@ -523,7 +523,7 @@ value quit_button corpmode corpdir sentno =
     ])
   and permission = Web_corpus.string_of_permission corpmode in
   center_begin ^
-      cgi_begin (Cgi.url corpus_manager_cgi ~fragment:sentno) "" ^
+      cgi_begin (url corpus_manager_cgi ~fragment:sentno) "" ^
            hidden_input Params.corpus_dir corpdir ^
            hidden_input Params.corpus_permission permission ^
            submit_input submit_button_label ^
@@ -535,7 +535,13 @@ value graph_engine () = do
   { Prel.prelude () 
   ; let query = Sys.getenv "QUERY_STRING" in
     let env = create_env query in
-    let url_encoded_input = get "text" env ""
+    (* Multiple environment variables according to modes of use are: 
+       text topic st cp us t lex cache abs cpts (standard mode) 
+       allSol (deprecated Validate mode)
+       corpus sentenceNumber linkNumber (Corpus mode)
+       corpdir sentno corpmode (defined in Params) 
+       guess gender revised rev_off rev_ind (User-aid)     *)
+    let url_encoded_input = get "text" env "" 
     and url_encoded_topic = get "topic" env "" (* topic carry-over *)
     and st = get "st" env "t" (* sentence parse default *)
     and cp = get "cp" env "t" (* complete mode default *)
@@ -555,14 +561,14 @@ value graph_engine () = do
     and sent_id = get "sentenceNumber" env "0" 
     and link_num = get "linkNumber" env "0" (* is there a better default? *)
     and sol_num = get "allSol" env "0" in (* Needed for Validate mode *)
-    let url_enc_corpus_permission =
-        Cgi.get Params.corpus_permission env "true" in
-    let corpus_permission =
+    let url_enc_corpus_permission = (* Corpus mode *)
+        get Params.corpus_permission env "true" in
+    let corpus_permission = 
       url_enc_corpus_permission
-      |> Cgi.decode_url
+      |> decode_url
       |> Web_corpus.permission_of_string in
-    let corpus_dir = Cgi.get Params.corpus_dir env "" in
-    let sentence_no = Cgi.get Params.sentence_no env "" in
+    let corpus_dir = get Params.corpus_dir env "" in
+    let sentence_no = get Params.sentence_no env "" in
     let text = arguments translit lex cache st us cp url_encoded_input
                          url_encoded_topic abs sol_num corpus sent_id link_num
                          url_enc_corpus_permission corpus_dir sentence_no
@@ -570,9 +576,10 @@ value graph_engine () = do
       try let url_encoded_cpts = List.assoc "cpts" env in (* do not use get *)
           parse_cpts (decode_url url_encoded_cpts)
       with [ Not_found -> [] ]
-    and guess_morph = decode_url (get "guess" env "") 
+    and guess_morph = decode_url (get "guess" env "") (* User-aid guessing *)
     and pseudo_gender = decode_url (get "gender" env "") in 
     let _ = if String.length guess_morph > 0 && Paths.platform="Station" then
+               (* User-aid cache acquisition *)
                let (entry,gender) = match pseudo_gender with 
                                     [ "" -> parse_guess guess_morph 
                                     | g -> (guess_morph,g) 
@@ -583,14 +590,15 @@ value graph_engine () = do
                  make_cache_transducer cache
                }
             else () in
-    let revised = decode_url (get "revised" env "")
-    and rev_off = int_of_string (get "rev_off" env "-1")
+    let revised = decode_url (get "revised" env "") (* User-aid revision *)
+    and rev_off = int_of_string (get "rev_off" env "-1") 
     and rev_ind = int_of_string (get "rev_ind" env "-1") in 
    try do
    { match (revised,rev_off,rev_ind) with
-     [ ("",-1,-1) -> check_sentence translit uns text checkpoints 
-                                    input sol_num corpus sent_id link_num
-     | (new_word,word_off,chunk_ind) -> 
+     [ ("",-1,-1) -> (* Standard input processing *** main call *** *)
+       check_sentence translit uns text checkpoints input sol_num
+                      corpus sent_id link_num
+     | (new_word,word_off,chunk_ind) (* User-aid revision *) -> 
        let chunks = Sanskrit.read_sanskrit (Encode.switch_code translit) input in
        let rec decoded init ind = fun
            [ [] -> String.sub init 0 ((String.length init)-1)
@@ -606,8 +614,8 @@ value graph_engine () = do
            | [ a :: rest ] -> if cur_ind = chunk_ind then Word.length a
                               else find_word_len (cur_ind+1) rest
            ] in
-       let word_len = find_word_len 1 chunks in
-       let new_chunk_len = Word.length (Encode.switch_code translit revised) in
+       let word_len = find_word_len 1 chunks 
+       and new_chunk_len = Word.length (Encode.switch_code translit revised) in
        let diff = new_chunk_len-word_len in
        let revised_check = 
          let revise (k,sec,sel) = (if k<word_off then k else k+diff,sec,sel) in
@@ -635,8 +643,8 @@ value graph_engine () = do
      (* Quit button: continue reading (reader mode) 
                   or quit without saving (annotator mode) *)
    ; if sentence_no <> "" then
-       quit_button corpus_permission
-         (Cgi.decode_url corpus_dir) (Cgi.decode_url sentence_no) |> pl
+        quit_button corpus_permission
+                    (decode_url corpus_dir) (decode_url sentence_no) |> pl
      else ()
    ; close_page_with_margin ()
    ; page_end lang True

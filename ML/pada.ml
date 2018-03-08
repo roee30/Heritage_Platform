@@ -68,7 +68,7 @@ value voices_of = fun
   | "sad#1" | "sap#1" | "saa#1" | "sidh#1" | "sidh#2" | "siiv" | "sur" | "s.r"
   | "s.rj#1" | "s.rp" | "skand" | "skhal" | "stan" | "stubh" | "sthag" | "snaa" 
   | "snih#1" | "snu" | "snuh#1" | "sp.r" | "sphal" | "sphu.t" | "sphur" 
-  | "sm.r" | "sru" | "svan" | "svap"  | "svar#1" | "svar#2" | "ha.th" | "has" 
+  | "sm.r" | "sru" | "svan" | "svap"  | "svar#1" | "svar#2" | "ha.th" 
   | "haa#1" | "hi#2" | "hi.ms" | "h.r.s" | "hras" | "hrii#1" | "hval"
   | "maarg" (* root rather than nominal verb *)
 (*| "viz#1"  Atma needed for eg nivizate \Pan{1,3,17} *)
@@ -80,6 +80,7 @@ value voices_of = fun
 (*| "mah"    Atma needed for pft. maamahe *)
 (*| "cit#1"  Atma needed for pft. cikite *)
 (*| "kaafk.s" | "han#1" occur also in Atma in BhG: kaafk.se hani.sye *)
+(*| "has"    Atma needed for hasate *)
 (*| "a~nj" also Atma afkte | "naath" "praz" "sp.rz#1" idem *)
       -> Para (* active only *)
   | "az#1" | "aas#2" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" | "ii.s" 

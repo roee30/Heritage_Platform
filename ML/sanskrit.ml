@@ -65,6 +65,7 @@ EXTEND Gramskt
     [ [ s = skt; `EOI -> s ] ] ;
   pada: (* non-empty list of chunks separated by blanks *)
     [ [ el = LIST1 skt -> el ] ] ; 
+(*i deprecated
   sloka_line:
     [ [ p = pada; "|"; "|" -> [ p ]  
       | p = pada; "|"; sl = sloka_line -> [ p :: sl ]
@@ -73,7 +74,7 @@ EXTEND Gramskt
     [ [ p = pada; "|"; sl = sloka_line -> [ p :: sl ]
       | p = pada -> [ p ]
       | `EOI -> failwith "Empty sanskrit input"
-    ] ] ;
+    ] ] ; *)
   sanscrit: 
     [ [ p = pada; "|"; "|"  -> [ p ]
       | p = pada; "|"; sl = sanscrit -> [ p :: sl ] 
@@ -161,21 +162,6 @@ value read_processed_skt_stream encode strm =
   | lines -> List.fold_right concat lines []
              where concat line lines = process line @ lines
   ]
-;
-(* assumes Velthuis encoding *)
-value read_corpus unsandhied chi = (* only used by Tagger1 *)
-  let encode = Transduction.code_raw (* unnormalized input from stream *)
-  and channel = Stream.of_channel chi
-  and reader = if unsandhied then read_raw_skt_stream 
-                             else read_processed_skt_stream in
-  reader encode channel
-;
-value read_VH unsandhied str = 
-  let encode = Encode.code_string (* normalized input from string *)
-  and channel = Stream.of_string str 
-  and reader = if unsandhied then read_raw_skt_stream 
-                             else read_processed_skt_stream in
-  reader encode channel
 ;
 
 (* Now general readers with encoding parameter of type [string -> word] *)

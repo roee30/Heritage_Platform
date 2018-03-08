@@ -4,10 +4,13 @@
 (*                                                                        *)
 (*                              Idir Lankri                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-value abort report_error status =
+(* This is an unfinished attempt to fiter out citations from Heritage
+   and make a corpus document from it - unused at present *)
+
+value abort report_error status = 
   do
   { report_error ()
   ; exit status

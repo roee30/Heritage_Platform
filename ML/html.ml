@@ -38,7 +38,7 @@ value xml_next op = xml_end op ^ xml_begin op
 value html_break = xml_empty "br"
 and html_paragraph = xml_begin "p" ^ xml_end "p"
 ;
-(* array operations *)
+(* Array operations *)
 value tr_begin = xml_begin "tr"
 and   tr_end   = xml_end "tr"
 and   th_begin = xml_begin "th"
@@ -124,13 +124,11 @@ value int_input ?id ?val ?(step = 1) ?(min = min_int) ?(max = max_int) name =
     ; ("step", string_of_int step)
     ; ("min", string_of_int min)
     ; ("max", string_of_int max)
-    ]
-  in
+    ] in
   let opt_attrs =
     [ ("id", id)
     ; ("value", Gen.opt_app string_of_int val)
-    ]
-  in
+    ] in
   let attrs = add_opt_attrs opt_attrs attrs in
   xml_empty_with_att "input" attrs
 ;
@@ -172,24 +170,16 @@ value li ?id item =
 (* Ordered list *)
 value ol ?id ?li_id_prefix ?(start = 1) items =
   let ol = "ol" in
-  let items =
-    List.mapi (fun i item ->
-        let id =
-          let genid prefix = prefix ^ string_of_int (start + i) in
-          Gen.opt_app genid li_id_prefix
-        in
-        li ?id item
-      ) items
-  in
-  let list = String.concat "\n" items in
+  let process i item = 
+    let id = let genid prefix = prefix ^ string_of_int (start + i) in
+             Gen.opt_app genid li_id_prefix in
+    li ?id item in
+  let lines = List.mapi process items in 
+  let list = String.concat "\n" lines in
   let attrs =
-    add_opt_attrs [ ("id", id) ] [ ("start", string_of_int start) ]
-  in
-  xml_begin_with_att ol attrs ^ "\n" ^
-  list ^ "\n" ^
-  xml_end ol
+    add_opt_attrs [ ("id", id) ] [ ("start", string_of_int start) ] in
+  xml_begin_with_att ol attrs ^ "\n" ^ list ^ "\n" ^ xml_end ol
 ;
-
 value fieldn name content = [ ("name",name); ("content",content) ]
 and fieldp name content = [ ("property",name); ("content",content) ]
 ;
@@ -203,22 +193,6 @@ type color =
   | Gold | Magenta | Mauve | Pink | Salmon | Lime | Light_blue | Lavender 
   | Lawngreen | Deep_pink | Pale_yellow | Pale_rose | Beige ]
 ;
-(* TO be relocated [
-type pict = string (* misc background pictures *)
-   [ Om | Om2 | Om3 | Om4 | Gan | Hare | Geo ] 
-; 
-(* Deprecated, for use as background pictures like in the ancient Web... *)
-(* Problematic, since pollutes with installation-dependent URLs *)
-value pict = fun 
-  [ "Om"   -> Install.om_jpg 
-  | "Om2"  -> Install.om2_jpg
-  | "Om3"  -> Install.om3_jpg 
-  | "Om4"  -> Install.om4_jpg
-  | "Gan"  -> Install.ganesh_gif 
-  | "Geo"  -> Install.geo_gif
-  | "Hare" -> Install.hare_jpg 
-  ] 
-;] *)
 type basic_style = 
   [ Font_family of font_family  
   | Font_style of font_style 
@@ -357,7 +331,6 @@ type style_class =
     | Deep_sky_back | Carmin_back | Orange_back | Red_back | Mauve_back 
     | Lavender_back | Lavender_cent | Green_back | Lawngreen_back | Magenta_back
     | Aquamarine_back | Hidden_
-(*[ | Pict_om | Pict_om2 | Pict_om3 | Pict_om4 | Pict_gan | Pict_hare | Pict_geo ]*)
     ]
 ;
 value background = fun
@@ -470,7 +443,7 @@ value styles = fun
     ]
 ;
 (* Compiles a class into its style for non-css compliant browsers *)
-(* Mostly used by Css to compile the css style sheet *)
+(* Nowadays mostly used by Css to compile the css style sheet     *)
 value style cla = String.concat "; " (List.map style_sheet (styles cla)) 
 ; 
 value class_of = fun
@@ -549,7 +522,7 @@ value class_of = fun
 (* This support was necessary for Simputer platform *)
 value elt_begin_attrs attrs elt cl = 
   let style_attr = (* if Install.css then *) ("class",class_of cl)  
-                                 (*  else ("style",style cl) *) in
+                                 (*  else    ("style",style cl) *) in
   xml_begin_with_att elt [ style_attr :: attrs ] 
 ;
 value elt_begin = elt_begin_attrs []
@@ -564,7 +537,7 @@ and div_begin   = elt_begin "div"
 and body_begin  = elt_begin "body"  
 and body_begin_style = elt_begin_attrs margins "body" (* Body margins are null *)
   where margins = [ ("style","margin-left: 0; margin-right: 0; margin-top: 0;") ]
-(* [table_begin_style] not compliant with HTML5 (dynamic style)      *)
+(* Caution: [table_begin_style] is not compliant with HTML5 (dynamic style)    *)
 and table_begin_style style attrs = elt_begin_attrs attrs "table" style
 and table_begin    = elt_begin "table" 
 and td_begin_class = elt_begin "td"
@@ -594,15 +567,13 @@ value span style text = span_begin style ^ text ^ span_end
 and span_skt style text = span_skt_begin style ^ text ^ span_end
 and div style text = div_begin style ^ text ^ div_end
 ;
-value center = div Center_
-and center_begin = div_begin Center_ 
+(* Centering old style - deprecated *)
+value center = div Center_ 
+and center_begin = div_begin Center_  
 and center_end = div_end
-;
-value center_image name caption = 
-  center (xml_empty_with_att "img" [ ("src",name); ("alt",caption) ])
-;
-value html_red         = span Red_
-and html_devared       = span_skt Devared_
+; 
+value html_red         = span Red_ 
+and html_devared       = span_skt Devared_ 
 and html_magenta       = span Magenta_
 and html_blue          = span Blue_
 and html_green         = span Green_
@@ -666,11 +637,10 @@ value author = fieldn "author" author_name
 and date_copyrighted = fieldp "dc:datecopyrighted" current_year
 and rights_holder = fieldp "dc:rightsholder" author_name
 and keywords = fieldn "keywords" 
-    "dictionary,sanskrit,heritage,dictionnaire,sanscrit,india,inde,indology,linguistics,panini,digital humanities,cultural heritage,computational linguistics,hypertext lexicon"
+    "sanskrit,dictionary,heritage,dictionnaire,sanscrit,india,inde,indology,linguistics,panini,digital humanities,digital libraries,cultural heritage,computational linguistics,hypertext lexicon"
 ;
 value heritage_dictionary_title = title "Sanskrit Heritage Dictionary"
 ;
-(* was in Install *)
 (* Supported publishing media *)
 type medium = [ Html | Tex ]
 ;
@@ -680,7 +650,7 @@ type platform = [ Simputer | Computer | Station | Server ]
 (* Current target platform to customize - needs recompiling if changed *)
 value target = match Paths.platform with
   [ "Simputer" -> Simputer (* Historical - small screen *)
-  | "Smartphone" -> Simputer (* Smartphone version not implemented yet *)
+  | "Smartphone" | "Tablet" -> Simputer (* TODO *)
   | "Computer" -> Computer (* Standard client installation *)
   | "Station"  -> Station  (* Permits external Analysis mode *) 
   | "Server"   -> Server   (* Http server for Internet web services *)
@@ -702,7 +672,7 @@ type language = [ French | English ]
 (* Two indexing lexicons are supported, French SH and English MW.*)
 value lexicon_of = fun 
   [ French  -> "SH" (* Sanskrit Heritage *) 
-  | English -> "MW" (* Monier-Williams *) 
+  | English -> "MW" (* Monier-Williams   *) 
   ] 
 and language_of = fun 
   [ "SH" -> French  

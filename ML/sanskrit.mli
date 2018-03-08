@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Sanskrit : sig i*)
@@ -43,8 +43,6 @@ value normal_stem_skt : skt -> string;
 value code_skt_ref : skt -> Word.word;
 value code_skt_ref_d : skt -> Word.word;
 value decode_skt : Word.word -> skt;
-value read_corpus : bool -> in_channel -> list Word.word;
-value read_VH : bool -> string -> list Word.word; 
 value read_sanskrit : (string -> Word.word) -> string -> list Word.word;
 value read_raw_sanskrit : (string -> Word.word) -> string -> list Word.word;
 

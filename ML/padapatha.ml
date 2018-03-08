@@ -100,7 +100,7 @@ value adjust c w = match Word.mirror w with
              | _ -> if c=36 (* n *) || c=41 (* m *)
                        then raise Glue (* since d|m->nn and n|m -> nm *)
                          (* Word.mirror [ 32 :: rest ] (* n -> t *) *)
-                         (* incomplétude: raajan naasiin vocatif raajan *)
+                         (* incompleteness: raajan naasiin vocatif raajan *)
                     else w
              ]
         | 22 (* c *) -> if c=22 then Word.mirror [ 32 :: rest ] (* c -> t *)
@@ -154,6 +154,8 @@ value adjust c w = match Word.mirror w with
         ]
   ] 
 ;
+(* Called from [Sanskrit.read_processed_skt_stream] for use in [read_sanskrit]
+   with argument [read_chunk=sanskrit_chunk encode] *)
 value padapatha read_chunk l = (* l is list of chunks separated by blanks *)
                      (* returns padapatha as list of forms in terminal sandhi *)
   let rec pad_rec = fun (* returns (c,l) with c first char of first pada in l *)

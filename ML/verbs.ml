@@ -1200,7 +1200,7 @@ value compute_active_present2 sstem wstem set entry third = do
   ; match wstem with 
     [ [ 2 :: _ ] -> (* Ppr of roots in -aa is complex and overgenerates *)
       match entry with 
-      [ "maa#1" | "yaa#1" -> () (* no ppra *)
+      [ "bhaa#1" | "maa#1" | "yaa#1" -> () (* no known ppra *)
       | _ -> let m_pstem = wstem and f_pstem = rev (fix2w wstem "at" set) in 
              record_part (Ppra_ 2 Primary m_pstem f_pstem entry) 
       ]

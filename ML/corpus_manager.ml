@@ -115,28 +115,23 @@ value sentence_links dir permission sentences =
         match font with
         [ Multilingual.Deva -> Corpus.Encoding.Devanagari
         | Multilingual.Roma -> Corpus.Encoding.IAST
-        ]
-    in
+        ] in
     let text = Corpus.Sentence.text encoding sentence in
     let display =
       match font with
       [ Multilingual.Deva -> deva16_blue
       | Multilingual.Roma -> span Trans16
-      ]
-    in
+      ] in 
     text
     |> anchor_ref (sentence |> Web_corpus.url dir permission |> escape)
-    |> display
-  in
+    |> display in
   List.map to_anchor_ref sentences
 ;
 value section_selection dir sections =
   let options =
     let prefixes =
-      List.map (fun x -> Filename.concat dir x) sections
-    in
-    List.combine prefixes sections
-  in
+      List.map (fun x -> Filename.concat dir x) sections in
+    List.combine prefixes sections in
   option_select_label Params.corpus_dir options
 ;
 value add_sentence_form dir permission gap =

@@ -42,7 +42,7 @@ open Format;
       ;
       value rec filter is_kwd = parser
         [ [: `((KEYWORD s, loc) as p); strm :] ->
-             if is_kwd s then [: `p; filter is_kwd strm :]
+             if is_kwd s || s = "!" then [: `p; filter is_kwd strm :]
              else raise (Encode.In_error ("Undefined token : " ^ s))
         | [: `x; s :] -> [: `x; filter is_kwd s :]
         | [: :] -> [: :] 

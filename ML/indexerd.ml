@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* CGI-bin indexerd for indexing in sanskrit dico without diacritics.     *)
@@ -52,14 +52,12 @@ value print_word c = pl (Morpho_html.skt_anchor_R False (Canon.decode_ref c))
 (* Each dummy is mapped to a list of words - all the words which
    give back the dummy by normalisation such as removing diacritics *)
 value read_dummies () =
- (Gen.gobble public_dummies_file : Deco.deco Word.word)
+  (Gen.gobble public_dummies_file : Deco.deco Word.word)
 ;
 value index_engine () = 
   let abor = abort Html.French (* may not preserve the current lang *) in
   try let dummies_deco = read_dummies () in do
      { prelude () 
-     ; answer_begin ()
-     ; ps (div_begin Latin12)
      ; let query = Sys.getenv "QUERY_STRING" in
        let alist = create_env query in
        (* We do not assume transliteration, just ordinary roman letters *)
@@ -67,7 +65,9 @@ value index_engine () =
        let url_encoded_entry = List.assoc "q" alist in
        let str = decode_url url_encoded_entry in 
        try let word = Encode.code_skt_ref_d str (* normalization *) in do
-           { let words = Deco.assoc word dummies_deco in
+           { answer_begin ()
+           ; ps (div_begin Latin12)
+           ; let words = Deco.assoc word dummies_deco in
              match words with
                [ [] -> do { ps (Morpho_html.skt_red str)
                           ; ps " not found in Heritage dictionary"

@@ -15,8 +15,8 @@
 
 (*i module Indexer = struct i*)
 
-open Html; (* abort *)
-open Web; (* ps pl etc. *)
+open Html; (* [table_begin] etc. *) 
+open Web; (* ps pl abort etc. *) 
 open Cgi;
 
 value answer_begin () = do
@@ -24,21 +24,21 @@ value answer_begin () = do
   ; ps tr_begin
   ; ps th_begin
   }
-  ;
+;
 value answer_end () = do
   { ps th_end
   ; ps tr_end
   ; pl table_end 
   ; pl html_paragraph
   }
-  ;
+;
 value ok (mess,s) = do { ps mess; pl (Morpho_html.skt_anchor_R False s) }
  and ok2 (mess,s1,s2) = do { ps mess; pl (Morpho_html.skt_anchor_R2 s1 s2) }
      (* ok2 prints the entry under the spelling given by the user, i.e. without 
         normalisation, thus e.g. sandhi is not written sa.mdhi, and possibly 
         suffixed by homonymy index 1, e.g. b.rh. *)
-   ;
-   (* Should share [Lemmatizer.load_inflected] *)
+;
+(* Should share [Lemmatizer.load_inflected] *)
 value load_inflected file = (Gen.gobble file : Morphology.inflected_map)
 ;
 value load_nouns   () = load_inflected public_nouns_file
@@ -46,7 +46,7 @@ and   load_roots   () = load_inflected public_roots_file
 and   load_vocas   () = load_inflected public_vocas_file
 and   load_indecls () = load_inflected public_inde_file
 and   load_parts   () = load_inflected public_parts_file
-  ;
+;
 value back_ground = background Chamois
 ;
 value display word l = do 
@@ -62,7 +62,7 @@ and report_failure s = do
   ; ps (Morpho_html.skt_anchor_R False s)
   ; pl html_break
   }
-   ;
+;
 value try_declensions word before = 
   (* before is last lexical item before word in lexical order *)
   (* This is costly because of the size of inverted inflected databases *)
@@ -112,14 +112,14 @@ value index_engine () = do
   and url_encoded_entry = get "q" env "" in
   let lang = language_of lex in do
   { print_title_solid Mauve (Some lang) (dico_title lang)
-  ; answer_begin ()
-  ; ps (div_begin Latin12)
-  ; let str = decode_url url_encoded_entry (* in translit *)
-    and encode = Encode.switch_code translit 
+  ; let str = decode_url url_encoded_entry (* in translit *) 
+    and encode = Encode.switch_code translit  
     and () = toggle_lexicon lex in
-    try let word = encode str (* normalization *) in
-        let str_VH = Canon.decode word in do
-        { match lex with 
+    try let word = encode str (* normalization *) in 
+        let str_VH = Canon.decode word in do 
+        { answer_begin ()
+        ; ps (div_begin Latin12)
+        ; match lex with 
           [ "MW" -> 
             let mw_index = read_mw_index () in 
             let words = Deco.assoc word mw_index in
@@ -152,13 +152,12 @@ value index_engine () = do
           ]
         ; ps div_end (* Latin12 *)
         ; answer_end ()
-        ; () 
         ; page_end lang True
-        } 
+        } (* do *)
     with [ Stream.Error _ -> abort lang "Illegal transliteration " str ]
   } (* do *)
   } (* do *)
-  ;
+;
 value safe_index_engine () = 
   let abor = abort Html.French (* may not preserve the current language *) in 
   try index_engine () with 

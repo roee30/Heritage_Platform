@@ -2384,7 +2384,7 @@ value intercalates root =
             | "grah" -> setl
             | "s.rj#1" -> [ 3 ] (* sra.s.taa *)
             | "k.r.s" -> [ 3 :: vet ] (* ar -> ra optionally *)
-            | "bh.rjj" -> [ 3 :: anit ] (* idem *)
+            | "bh.rjj" | "sp.rz#1" -> [ 3 :: anit ] (* idem *)
             | "ad#1" | "aap" | "krudh#1" | "kruz" | "k.sip" | "k.sud" 
             | "k.sudh#1" | "khid" | "chid#1" | "tud#1" | "tu.s" | "t.rp#1"
             | "tvi.s#1" | "diz#1" | "dih" | "du.s" | "duh#1" | "d.rz#1" 
@@ -2396,7 +2396,7 @@ value intercalates root =
             | "lup" | "vac" | "vap#1" | "vic" | "vid#2" | "viz#1" | "vi.s#1" 
             | "vyadh" | "zak" | "zad" | "zap" | "zi.s" | "zudh" | "zu.s" 
             | "zli.s" | "sa~nj" | "sic" | "sidh#1" | "s.rp" | "skand" 
-            | "sp.rz#1" | "sva~nj" | "svid#2" | "had" 
+            | "sva~nj" | "svid#2" | "had" 
                 -> anit
             | _ -> set (* default all multisyllabic, gana 10, nominal verbs plus:
 [ "afg" | "a~nc" | "an#2" | "arh" | "av" | "az#1" | "az#2" | "as#2" | "aas#2"
@@ -2715,7 +2715,7 @@ value perstems rstem entry =
                -> [ 0 ]
              | "v.rj" -> [ 1 ]
              | "zuc#1" -> [ 0; 1 ] (* zoktum *)
-             | "d.rz#1" -> [ 3 ] (* ar -> ra dra.s.tum *)
+             | "d.rz#1" | "sp.rz#1" -> [ 3 ] (* ar -> ra dra.s.tum *)
              | "k.r.s" | "bh.rjj" -> [ 0; 3 ] (* berk *)
              | "naz#1" -> [ 0; 1; 4 ] (* berk - (1 not in WR) *)
              | "radh" | "trap#1" | "d.rp" | "druh#1" | "muh" | "rudh#2"

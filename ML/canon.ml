@@ -26,7 +26,7 @@ value canon = fun
   | 12 -> "o"
   | 13 -> "au"
   | 14 -> ".m" (* anusvaara *)
-  | 15 -> "~~" (* anunaasika candrabindu *)
+  | 15 -> "~~" (* anun\=asika candrabindu *)
   | 16 -> ".h"
   | 17 -> "k"
   | 18 -> "kh"
@@ -381,7 +381,7 @@ value canon2 = fun
   | 49 -> "h"
   | 50 -> "_" (* hiatus *)
   | -1 -> "'"
-  | -2 -> "[-]" (* Inconsistent with previous versions *)
+  | -2 -> "[-]" 
   | -3 -> "A|a" (* sandhi of A and (a,A) - phantom phoneme *)
   | -4 -> "A|i" (* sandhi of A and (i,I) - phantom phoneme *) 
   | -5 -> "A|u" (* sandhi of A and (u,U) - phantom phoneme *)
@@ -396,9 +396,9 @@ value catenate2 c (s,b) =
   let protected = if b && b' then "_" ^ s else s in
   (canon2 c ^ protected , b')
 ;
-(* [decode2 : word -> string] *)
+(* decode2 : word -> string (debug for [Morpho_xml] *)
 value decode2 word = 
-  try let (s,_) = List.fold_right catenate2 word ("",False) in s
+  try let (s,_) = List.fold_right catenate2 word ("",False) in s  
   with [ Failure _ -> failwith ("decode2: " ^ robust_decode (Word.mirror word)) ]
 ;
 value canon_upper = fun

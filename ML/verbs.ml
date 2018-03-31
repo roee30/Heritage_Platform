@@ -376,7 +376,7 @@ value stems root =
      | "spardh" -> sampra "sp.rdh"
      | "svap"   -> sampra "sup" (* \Pan{6,1,15} *) 
      (*  note "vac", "yaj" etc not concerned although having samprasaara.na *)
-     | _ -> let weak = weak_stem root rstem 
+     | _ -> let weak   = weak_stem root rstem 
             and strong = strong_stem root rstem in
             let long = lengthened weak in
             (weak,strong,long)
@@ -523,9 +523,9 @@ value redup3 entry rstem =
                 | _ -> rstem 
                 ] in 
       (strong rstem,wstem)
-      and glue = revaffix [rv; rc] in 
-        if entry="s.r" then (* ad-hoc nonsense *)
-             (revcode "sisar",revcode "sis.r",iiflag) (* to avoid si.sarti ?!? *)
+      and glue = revaffix [ rv; rc ] in 
+        if entry="s.r" then (*i ad-hoc nonsense to avoid si.sarti ? i*)
+             (revcode "sisar",revcode "sis.r",iiflag) 
         else (glue strong,glue weak,iiflag)
     ]
 ;
@@ -2397,7 +2397,7 @@ value intercalates root =
             | "vyadh" | "zak" | "zad" | "zap" | "zi.s" | "zudh" | "zu.s" 
             | "zli.s" | "sa~nj" | "sic" | "sidh#1" | "s.rp" | "skand" 
             | "sva~nj" | "svid#2" | "had" 
-                -> anit
+                -> anit 
             | _ -> set (* default all multisyllabic, gana 10, nominal verbs plus:
 [ "afg" | "a~nc" | "an#2" | "arh" | "av" | "az#1" | "az#2" | "as#2" | "aas#2"
 | "indh" | "inv" | "i.s#1" | "i.s#2" | "iik.s" | "iifkh" | "ii.d" | "iiz#1" 
@@ -2545,8 +2545,8 @@ value compute_ppp_stems entry rstem =
     | "tud#1" | "t.rd" | "t.rr" | "dagh" | "d.rr" | "dev" | "draa#1" | "draa#2"
     | "nud" | "pad#1" | "pi#2" | "p.rr" | "pyaa" | "bha~nj" | "bhid#1" | "bhuj#1"
     | "majj" | "man" | "mid" | "mlaa" | "ri" | "lii" | "luu#1" | "vij" | "vid#2"
-    | "zad" | "zuu" | "z.rr" | "sad#1" | "skand" | "syand" | "st.rr" | "styaa" 
-    | "had" | "svid#2" | "haa#2" (* but not "k.svi.d" "zrath" *)
+    | "vlii" | "zad" | "zuu" | "z.rr" | "sad#1" | "skand" | "syand" | "st.rr" 
+    | "styaa" | "had" | "svid#2" | "haa#2" (* but not "k.svi.d" "zrath" *)
       -> 
       (* except lag which is "nipaatana" \Pan{7,2,18} *)
       let ppna w = [ Na w ] in
@@ -3977,18 +3977,19 @@ value compute_aorist entry =
     | "dhaa#1" | "dhaa#2" | "paa#1" | "bhuu#1" | "muc#1" | "zaa" 
     | "saa#1" | "sthaa#1" | "has" | "haa#1" -> do
       { compute_root_aorista weak strong entry 
-      ; if entry = "k.r#1" || entry = "gam" || entry = "jan" 
-           then compute_root_aoristm weak entry (* rare *) 
-        else if entry = "sthaa#1" (* Whitney §834a. *)
-                then compute_root_aoristm (revstem "sthi") entry (* asthita *) 
-   (*i [else if entry = "dhaa#1" then compute_root_aoristm (revstem "dhii") entry] ? i*)
-        else ()
+      ; match entry with
+        [ "k.r#1" | "gam" | "jan" -> compute_root_aoristm weak entry (* rare *) 
+        | "sthaa#1" (* Whitney §834a. *) ->
+                    compute_root_aoristm (revstem "sthi") entry (* asthita *) 
+   (*i [| "dhaa#1" -> compute_root_aoristm (revstem "dhii") entry] ? i*)
+        | _ -> ()
+        ]
       ; let stem = if entry = "muc#1" then strong else match long with 
             [ [ 2 (* aa *) :: _ ] -> [ 42 (* y *) :: long ]
             | _ -> long
             ] in 
         compute_root_aoristp stem entry (* passive *)
-      (* for root aorist participles, see Whitney§840 and Burrow p178 *)
+      (* For root aorist participles, see Whitney§840 and Burrow p178 *)
       }
     | "prii" -> let st = revcode "priiyaa" in compute_root_aorista st st entry 
     | "svid#2" -> let st = revcode "svidyaa" in compute_root_aorista st st entry
@@ -4003,8 +4004,8 @@ value compute_aorist entry =
     | "rabh" -> compute_root_aoristp (revcode "rambh") entry 
     | "jaag.r" | "t.rr" | "pac" | "zru" | "stu" | "hu"
         -> compute_root_aoristp long entry 
-    (* "zru" -> azraayi Whitney§844a typo ? (azraayi WR) *) 
-    | _ -> () (* "i" -> iiyaat difficile *)
+           (* NB "zru" -> azraavi WR while Whitney§844a azraayi typo *) 
+    | _ -> () (* "i" -> iiyaat hard *)
     ]
   ; match entry with (* 2. thematic aorist af *)
     [ "aap" | "krudh" | "gam" | "g.rdh" | "ghas" | "das" | "dyut#1" | "muc#1" 
@@ -4012,7 +4013,7 @@ value compute_aorist entry =
     | "zuc#1" | "zudh" | "sic" | "stan" | "huu" 
      -> do
       { compute_thematic_aorista weak entry
-      ; compute_thematic_aoristm weak entry (* middle is very rare *)
+      ; compute_thematic_aoristm weak entry (* middle very rare *)
       }
     | "vyaa" -> let stem = revcode "vi" in do
       { compute_thematic_aorista stem entry
@@ -4038,8 +4039,8 @@ value compute_aorist entry =
       { compute_redup_aorista stem entry (* but atu.s.tavam RV (WR) *)  
       ; compute_redup_aoristm stem entry 
       }
-    | "iik.s" | "klid" | "gup" | "cur" | "m.r" | "d.rz#1" | "dyut#1" | "vrazc" 
-      -> (* active only *)
+    | "iik.s" | "kamp" | "klid" | "gup" | "cur" | "m.r" | "d.rz#1" | "dyut#1" 
+    | "vrazc" -> (* active only *)
       let stem = redup_aor weak entry in 
       compute_redup_aorista stem entry
     | "grah" -> do 
@@ -4047,8 +4048,7 @@ value compute_aorist entry =
         { compute_redup_aorista stem entry
         ; compute_redup_aoristm stem entry 
         }
-      ; let stem = redup_aor (revcode "grabh") entry in do
-        (* ved -- Whitney§223g *)
+      ; let stem = redup_aor (revcode "grabh") entry in do (* ved Whitney§223g *)
         { compute_redup_aorista stem entry
         ; compute_redup_aoristm stem entry 
         }
@@ -4058,7 +4058,7 @@ value compute_aorist entry =
         ; compute_redup_aoristm stem entry 
         }
       (* then exceptions to treatment of aa with intercalaring ii *)
-    | "raadh" -> let stem = redup_aor (revcode "radh") entry in (* riiradh *) 
+    | "raadh" -> let stem = redup_aor (revcode "radh") (* riiradh *) entry in  
                  compute_redup_aorista stem entry (* Macdonnel p 126 *)
     | "haa#1" -> let stem = revcode "jiijah" in 
                  compute_redup_aorista stem entry
@@ -4074,12 +4074,12 @@ value compute_aorist entry =
     | "nii#1" | "pac" | "praz" | "prii" | "budh#1" | "bhaa#1" | "bhii#1" 
     | "muc#1" | "yaj#1" | "yuj#1" | "ram" | "labh" | "v.r#2" | "vyadh" | "zru" 
     | "s.rj#1" | "stu" | "sp.rz#1" | "hu" -> do
-      { let stema = match entry with
+      { let stem = match entry with
             [ "d.rz#1" | "s.rj#1" | "sp.rz#1" -> long_metathesis weak
             | "ram" -> weak 
             | _ -> long
             ] in
-        compute_ath_s_aorista stema entry 
+        compute_ath_s_aorista stem entry 
       ; if entry = "yuj#1" || entry = "chid#1" 
            then compute_ath_s_aorista strong entry else ()
         (* ayok.siit and acchetsiit besides ayauk.siit and acchaitsiit *)
@@ -4132,7 +4132,7 @@ value compute_aorist entry =
       compute_ath_is_aorista (revcode "zve") entry 
     | "kan" | "k.r#2"| "p.rr" -> (* active only *)
       compute_ath_is_aorista long entry 
-    | "jan" | "zii#1" | "spand" -> (* middle only *)
+    | "kamp" | "jan" | "zii#1" | "spand" -> (* middle only *)
       compute_ath_is_aoristm strong entry 
     | "grah" -> do 
       { let stem = revcode "grah" in do (* same as group above *)
@@ -4336,6 +4336,7 @@ value perif conj perstem entry = do
              | "p.rr"   -> revcode "puuri" (* puuritum *)
              | "sva~nj" -> revcode "svaj" (* svaktum *)
              | "sa~nj"  -> revcode "saj" (* saktum *)
+             | ".dii"   -> revcode ".dii" (* .diitum *)
              | _ -> perstem
              ] 
         | _ -> perstem 
@@ -5276,13 +5277,14 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
    | "kar.na" | "kalafka" | "kalu.sa" | "kavala" | "ku.t.ta" | "kusuma" 
    | "kha.da" | "garva" | "gopaa" | "carca" | "cuur.na" | "chala" | "chidra"
    | "tantra" | "tarafga" | "taru.na" | "tuhina" | "da.n.da" | "deva" | "dola"
-   | "dhiira#1" | "nuutana" | "pa.tapa.taa" | "pallava" | "pavitra" | "paaza" 
-   | "pi.n.da" | "pulaka" | "puula" | "pratikuula" | "prati.sedha" 
-   | "pradak.si.na" | "prasaada" | "bhi.saj" | "mantra" | "malina" | "mizra"
-   | "mukula" | "mukhara" | "mu.n.da" | "muutra" | "m.rga" | "yantra" | "rasa" 
-   | "ruuk.sa" | "lagha" (* u -> a *) | "var.na" | "vaasa#3" | "vizada"
-   | "vra.na" | "zaanta" | "zithila" | "zyena" | ".sa.n.dha" | "sapi.n.da" 
-   | "saphala" | "sabhaaja" | "saantva" | "saavadhaana" | "suutra" | "stena" 
+   | "dravat" | "dhiira#1" | "nuutana" | "pa.tapa.taa" | "pallava"
+   | "pavitra" | "paaza" | "pi.n.da" | "pulaka" | "puula" | "pratikuula" 
+   | "prati.sedha" | "pradak.si.na" | "prasaada" | "bhi.saj" | "mantra" 
+   | "malina" | "mizra" | "mukula" | "mukhara" | "mu.n.da" | "muutra" 
+   | "m.rga" | "yantra" | "rasa" | "ruuk.sa" | "lagha" (* u -> a *) 
+   | "var.na" | "vaasa#3" | "vizada" | "vra.na" | "zaanta" | "zithila"
+   | "zyena" | ".sa.n.dha" | "sapi.n.da" | "saphala" | "sabhaaja" | "saantva" 
+   | "saavadhaana" | "suutra" | "stena" 
    | "sthaga" | "tapas" (* practice \Pan{3,1,15} *)
    | "u.sas" | "namas" | "varivas" (* do \Pan{3,1,19} *)
    | "udan" (* Kale§645 *)

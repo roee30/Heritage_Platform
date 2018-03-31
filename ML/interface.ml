@@ -540,7 +540,7 @@ value graph_engine () = do
        allSol (deprecated Validate mode)
        corpus sentenceNumber linkNumber (Corpus mode)
        corpdir sentno corpmode (defined in Params) 
-       guess gender revised rev_off rev_ind (User-aid)     *)
+       guess gender revised [rev_off] [rev_ind] (User-aid) *)
     let url_encoded_input = get "text" env "" 
     and url_encoded_topic = get "topic" env "" (* topic carry-over *)
     and st = get "st" env "t" (* sentence parse default *)

@@ -33,11 +33,11 @@ value voices_of = fun
   | "ard" | "av" | "az#2" | "as#1" | "as#2" | "aap" | "ifg" | "in" | "ind" 
   | "inv" | "il" | "i.s#2" | "iifkh" | "iir.s" | "uk.s" | "uc" | "ujjh" | "u~nch"
   | "und" | "umbh" | "u.s" | ".rc#1" | ".rdh" | ".r.s" | "ej" | "kas" | "kiil"
-  | "ku.t" | "ku.n.th" | "kunth" | "kup" | "kul" | "kuuj" | "k.rt#1"
-  | "k.rz" | "krand" | "krii.d" | "kru~nc#1" | "krudh#1" | "kruz" | "klam"
-  | "klid" | "kliz" | "kvath" | "k.sar" | "k.sal" | "k.si" | "k.sii" | "k.su"
-  | "k.sudh#1" | "k.subh" | "k.svi.d" | "khaad" | "khid" | "khel" | "khyaa"
-  | "gaj" | "gad" | "garj" | "gard" | "gal" | "gaa#1" | "gaa#2" | "gu~nj"
+  | "ku.t" | "ku.n.th" | "kunth" | "kup" | "kul" | "kuuj" | "k.rt#1" | "k.rz"
+  | "krand" | "krii.d" | "kru~nc#1" | "krudh#1" | "kruz" | "klam" | "klid" 
+  | "kliz" | "kvath" | "k.sar" | "k.sal" | "k.si" | "k.sii" | "k.su" | "k.sudh#1"
+  | "k.subh" | "k.svi.d" | "kha~nj#1" | "khaad" | "khid" | "khel" | "khyaa" 
+  | "gaj" | "gad" | "garj" | "gard" | "gal" | "gaa#1" | "gaa#2" | "gu~nj" 
   | "gu.n.th" | "gup" | "gumph" | "g.rdh" | "g.rr#1" | "g.rr#2" | "granth"
   | "grah" | "glai" | "ghas" | "ghu.s" | "gh.r" | "gh.r.s" | "ghraa" | "cakaas"
   | "ca.t" | "cand" | "cam" | "car" | "cal" | "cit#1" | "cumb" | "chur"
@@ -81,6 +81,7 @@ value voices_of = fun
 (*| "cit#1"  Atma needed for pft. cikite *)
 (*| "kaafk.s" | "han#1" occur also in Atma in BhG: kaafk.se hani.sye *)
 (*| "has"    Atma needed for hasate *)
+(*| "zu.s" Atma for zu.syate WR epic *)
 (*| "a~nj" also Atma afkte | "naath" "praz" "sp.rz#1" idem *)
       -> Para (* active only *)
   | "az#1" | "aas#2" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" | "ii.s" 
@@ -117,12 +118,12 @@ value voices_of = fun
   | "mi" | "mith" | "mil" | "mii" | "muc#1" | "mud#1" | "m.r" | "m.rj" 
   | "m.rdh" | "m.r.s" | "yaj#1" | "yaac" | "yu#1" | "yuj#1" | "rac" 
   | "ra~nj" | "ram" | "rah" | "raaj#1" | "ri" | "ric" | "rud#1" | "rudh#2"
-  | "lafgh" | "labh" | "la.s" | "lip" | "lih#1" | "lup" | "luu#1" | "vad" 
-  | "vap#1" | "vap#2" | "val" | "vah#1" | "vaa#3" | "vic" | "vij" | "viij" 
-  | "v.r#2" | "v.rt#1" | "vyath" | "vyaa" | "zap" | "zaa" | "zubh#1" 
-  | "zyaa" | "zri" | "san#1" | "sah#1" | "sic" | "su#2" | "suud" | "stambh" 
-  | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" | "sp.rh" | "syand" | "svad" | "had" 
-  | "hikk" | "hu" | "huu" | "h.r#1" ] *)
+  | "lafgh" | "lak.s" | "labh" | "la.s" | "lip" | "lih#1" | "lup" | "luu#1"
+  | "vad" | "vap#1" | "vap#2" | "val" | "vah#1" | "vaa#3" | "vic" | "vij" 
+  | "viij" | "v.r#2" | "v.rt#1" | "vyath" | "vyaa" | "zap" | "zaa" | "zu.s" 
+  | "zubh#1" | "zyaa" | "zri" | "san#1" | "sah#1" | "sic" | "su#2" | "suud" 
+  | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" | "sp.rh" | "syand"
+  | "svad" | "had" | "hikk" | "hu" | "huu" | "h.r#1" ] *)
   (* + corr. "pa.th" | "sthaa#1" | "praz" | "k.rr" | "p.rc" | "bandh" *)
   (* NB. "ah" "rip" "vadh" have no pr, "mand2" is fictitious *) 
   (* "iiz1" and "lii" allowed Para in future *)

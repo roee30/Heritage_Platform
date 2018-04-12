@@ -459,7 +459,9 @@ value validate out = match out with
       let pv_str = Canon.decode pv 
       and lopa_form = Word.mirror rev_lopa_form in
       let root_form = match lopa_form with 
-                      [ [ -2 :: rf ] -> rf | _ -> failwith "Wrong lopa form" ] in
+                      [ [ -2 :: rf ] -> rf 
+                      | _ -> failwith "Wrong lopa form" 
+                      ] in
       if validate_pv pv_str root_form then
         let form = apply_sandhi prev lopa_form sv in
         let verb_form = Word.mirror form in
@@ -467,9 +469,8 @@ value validate out = match out with
       else []
   | [ (Lopa,rev_lopa_form,_) :: next ] ->
       let lopa_form = Word.mirror rev_lopa_form in 
-      if autonomous_form lopa_form
-      && sa_before_check lopa_form next
-      then out else []
+      if autonomous_form lopa_form && sa_before_check lopa_form next
+         then out else []
   | (* infinitives in -tu with preverbs *)
     [ (Inftu,rev_root_form,s) :: [ (Pv,prev,sv) :: r ] ] ->
       let pv = Word.mirror prev in 

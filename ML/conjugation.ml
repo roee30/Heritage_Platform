@@ -657,6 +657,7 @@ value resolve_homonym entry =
   [ 1 -> match entry with 
     [ ".rc"
     | "krudh"
+    | "kha~nj" 
     | "cit" 
     | "chad" 
     | "tyaj" 
@@ -762,6 +763,7 @@ value resolve_homonym entry =
     | "pu.s"
     | "budh"
     | "mad" 
+    | "yudh"
     | "zam" 
     | "saa"
     | "sidh" 

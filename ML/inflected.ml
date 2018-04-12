@@ -402,8 +402,8 @@ value enter1 entry =
      where entern (c,w) = 
          let f = Noun_form g n c in 
          if c=Voc then 
-             if morpho_gen.val && is_kridanta entry then ((* f is in Kridv *)) 
-             else add_voca w delta f (* non-generative Voca *)
+            if morpho_gen.val && is_kridanta entry then ((* f is in Kridv *)) 
+            else add_voca w delta f (* non-generative Voca *)
          else do { add_morph w delta f 
                  ; match entry with (* generative ifcs of infinitive bahus *)
                    [ "kaama" (* volition : who wants to do *)
@@ -424,7 +424,7 @@ value enter1 entry =
      where entern (p,w) = let v = Verb_form f n p in do 
        { add_morphc w delta v aapv 
        (* Now we take care of \Pan{6,1,94} when not blocked by \Pan{6,1,89} *)
-       (* ex: prejate, + (Kazikaa) upelayati prelayati upo.sati pro.sati *)
+       (* ex: prejate + (Kazikaa) upelayati prelayati upo.sati pro.sati *)
        ; if morpho_gen.val then 
             if entry = "i" || entry = "edh" then () (* \Pan{6,1,89} *) 
             else add_morphlopa w delta v 

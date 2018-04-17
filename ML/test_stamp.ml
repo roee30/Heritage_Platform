@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Tests consistency of data version of [Heritage_Resources]
@@ -30,7 +30,7 @@ value check_data_version () =
    if data_version = Version.version then () else do
      { print_string "Warning: this platform release "
      ; print_string ("assumes version " ^ Version.version)
-     ; print_string "of Heritage_Resources\n"
+     ; print_string " of Heritage_Resources\n"
      ; print_string "while the currently installed Heritage_Resources at "
      ; print_string resources_version_file
      ; print_string (" has version " ^ data_version)

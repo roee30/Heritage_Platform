@@ -50,7 +50,7 @@ published recently as
 <a href="http://jlm.ipipan.waw.pl/index.php/JLM/article/view/108/140">Design and
 analysis of a lean interface for Sanskrit corpus annotation</a>.
 <p>
-Written on January 8th 2018, for Sanskrit Engine Version 3.04.
+Written on April 17th 2018, for Sanskrit Engine Version 3.06.
 
 <h2 class="b2" id="tour">First approach to using the Sanskrit Heritage engine</h2>
 
@@ -97,7 +97,7 @@ pronouns are sky blue, vocative forms are green.
 When you click on a rectangle, its morphology is displayed.
 For instance, clicking on the red <i>labhate</i> reveals that it is a 3rd person
 singular form of the present of root <i>labh</i> in the middle voice
-(<i>ātmanepadin</i>) of class (<i>gaṇa</i>) 1.
+(<i>ātmanepadī</i>) of present class (<i>gaṇa</i>) 1.
 Furthermore, underlined <i>labh</i> is a link to the lexicon,
 which you may visit to check its meaning.
 <p>
@@ -108,7 +108,8 @@ Heritage dictionary. If it had been set to Monier-Williams, you would be
 directed to the Sanskrit-English Monier-Williams dictionary.
 By default, you will get Monier-Williams access if you enter the site through its
 <a href="http://sanskrit.inria.fr/index.en.html" target="_blank">English</a>
-entry URL.
+entry URL. Furthermore, this choice is sticky, which means it is persistent
+throughout a session, until an explicit choice of lexicon is set. 
 <p>
 In both cases
 you obtain the definition of root <i>labh</i>, decorated with its present
@@ -147,20 +148,20 @@ In two clicks on the green upper signs you get the intended segmentation.
 
 Now let us return to the reader window, and remove all the blanks in your input:
 "praaptavyamartha.mlabhatemanu.syodevo'pita.mlafghayitu.mnazakta.h".
-The segmenter now returns more solutions, 96 instead of 6, and you see
+The segmenter now returns more solutions, 48 instead of 6, and you see
 unexpected new forms appear, such as <i>prāptavyamartham</i>,
 whose stem happens to be lexicalized as the name <i>Prāptavyamartha</i> of
 the young boy from Pañcatantra, blamed by his father for having bought
 a book containing just one poem, starting precisely with our sentence.
 Other forms such as <i>ude</i> or <i>evaḥ</i>
 are just noise due to sandhi ambiguity. But the
-correct segments appear here too in prominent places, and in 4 clicks the
+correct segments appear here too in prominent places, and in 3 clicks the
 correct solution is easily attained. Note how clicking on blue segment
 <i>manuṣyaḥ</i> determines unambiguously the next one <i>devaḥ</i>.
 <p>
 If you click on a selection by mistake, it is easy to backtrack by clicking
 on the Undo button of the page. Other command links on the same
-line (Filtered Solutions, All 96 Solutions) should be ignored at this stage,
+line (Filtered Solutions, All 48 Solutions) should be ignored at this stage,
 and will be explained in section <a href=#parser2>Shallow parsing</a> below.
 <p>
 Please note that the default Velthuis transliteration is just an option.
@@ -254,7 +255,7 @@ linked to the lexicon by stems (here <i>gata</i>) as well as by roots
 
 These linguistic resources are freely provided
 in XML form under various transliteration schemes.
-Please visit the <a href="DATA/XML/">Sanskrit linguistic resources site</a>.
+Please visit the <a href="xml.html">Sanskrit linguistic resources page</a>.
 
 <h2 class="b2" id="dictionary">The Sanskrit Heritage Dictionary</h2>
 <p>
@@ -262,7 +263,7 @@ The Sanskrit Heritage Dictionary is the latest edition of a Sanskrit
 to French Dictionary
 "Dictionnaire Français de l'H&eacute;ritage Sanskrit" compiled by
 G&eacute;rard Huet since 1994. This dictionary is freely available
-as a 907 pages <a href="Heritage.pdf">book</a> under the pdf format,
+as a 936 pages <a href="Heritage.pdf">book</a> under the pdf format,
 easily readable with Acrobat Reader, a free Adobe product.  
 This dictionary is still under development, and is
 automatically updated along with the site,
@@ -300,8 +301,9 @@ derivatives by suffixes from primary ones, and compounds.
 The first two categories are individual entries
 at toplevel, the others are sub-entries of a parent vocable, or sub-sub-entries.
 Adjectives are just semantic roles of nominals. Pronouns and numbers are
-subclasses of nouns. Indeclinable forms (adverbs) and tool particles complete the
-lexical categories. Some idiomatic expressions and a few selected
+subclasses of nouns. Indeclinable forms (adverbs) and tool particles such as
+conjunctions complete the lexical categories.
+Some idiomatic expressions and a few selected
 citations are listed at the end of entries at any level.
 <p>
 The list of abbreviations, of the Heritage dictionary as well as the grammatical
@@ -387,7 +389,7 @@ The parameter "Text" is set by default to Sentence, and may be set to Word
 if you want to recognize a single pada.
 For instance, if you parse the following compound (taken from Pañcatantra):
 "pravaran.rpamuku.tama.nimariicima~njariicayacarcitacara.nayugala.h"
-in Sentence mode, you will be offered 96 solutions, but only 6 solutions
+in Sentence mode, you will be offered 32 solutions, but only 6 solutions
 in Word mode. 
 <p>
 
@@ -439,14 +441,11 @@ The summary interface returns a page
 showing you your input sentence in blue devanāgarī, then a line with a number
 of green check marks, the first one being labeled Undo, then the graphical
 display where segments may be selected or discarded, as explained above.
-The third button is labeled "All 28 Solutions". It indicates that there is a
-total of 28 segmentation solutions at this initial stage. Indeed, when you
+The third button is labeled "All 14 Solutions". It indicates that there is a
+total of 14 segmentation solutions at this initial stage. Indeed, when you
 select segments by clicking on their green check signs (resp. discard
 them by clicking on their red check signs) you see the count of solutions
-decrease. Thus selecting segment <i>dhyānam</i> brings this count to only 4.
-One choice is to select verbal segment <i>karoti</i>. Either by clicking
-on its green check sign, or by clicking on the red cross sign on either
-one of the parasitic segments <i>kara</i> and <i>ūti</i>.
+decrease. Thus selecting segment <i>dhyānam</i> brings this count to only 2.
 
 The only remaining choice is to select or reject the yellow <i>a</i>
 segment indicating a possible privative compound. We remark <i>en passant</i>
@@ -456,7 +455,7 @@ with the final <i>-ā</i> of segment <i>gatvā</i>, and thus cannot be rejected
 from other segment selections. This shows the necessity of the red cross signs.
 <p>
 
-From the state after selection of <i>karoti</i>, click on the green check
+From the state after selection of <i>dhyānam</i>, click on the green check
 labeled "All 2 Solutions". You see the two potential solutions listed one
 after the other, with no sharing of common parts. Each segment is lemmatized
 with hyperlinks to the lexicon. Segments are separated by sandhi annotations.
@@ -509,8 +508,8 @@ entering <i>vana.mgatvaadhyaana.mkaroti</i>. We notice in the first menu line
 a button labeled "Filtered Solutions". If you click on it, you see a listing
 of solutions similar to what we saw in the last section, but now
 solutions are listed according to some constraint satisfaction ranking.
-The first one (labeled 4) is the intended one, followed by another one,
-proposing <i>ādhyānam</i> in place of <i>dhyānam</i>.
+The first one (labeled 2) is the intended one, followed by another one
+(labeled 5), proposing <i>ādhyānam</i> in place of <i>dhyānam</i>.
 You may select the one you prefer, and go directly to the Parser
 Assistant page as seen above. You may also go back to the graphical summary
 interface, allowing mutual interaction between the two modes of operation.
@@ -520,9 +519,9 @@ Let us illustrate this shallow parsing facility on a much-discussed
 ambiguous sentence going back to Patañjali. 
 Go back to the Reader interface, and enter
 <i>zvetodhaavati</i>, using Summary Mode. You see a display of the
-36 segmentation solutions. You are also offered a green check sign labeled
+26 segmentation solutions. You are also offered a green check sign labeled
 Filtered Solutions. Click on it.
-You see one particular solution, labeled 24, formed with blue <i>śvetaḥ</i>
+You see one particular solution, labeled 14, formed with blue <i>śvetaḥ</i>
 in the nominative, followed by red <i>dhāvati</i>, a verbal form in the present.
 Actually form <i>dhāvati</i> is marked as ambiguous, since it may result from
 root <i>dhāv_1</i> (running) or from root <i>dhāv_2</i> (cleaning).
@@ -541,9 +540,9 @@ marking the absence of the object to a transitive verb.
 In this example, the machine has succeeded in focusing on a correct solution
 automatically, among many interpretations.
 If we come back to the initial selection, it indeed tells
-"1 solution kept among 36",
-but actually lists also 7 other plausible additional solutions. Indeed, among
-them, Solution 33 gives another correct decomposition <i>śvetaḥ+itaḥ+dhāvati</i>
+"1 solution kept among 26",
+but actually lists also 5 other plausible additional solutions. Indeed, among
+them, Solution 23 gives another correct decomposition <i>śvā+itaḥ+dhāvati</i>
 "The dog is running towards here". Here too, the tool analyses <i>dhāv_1</i>
 as fitting the grammatical constraints. It has penalty 0 as well, but
 was just disfavored over the first interpretation because it has 3 segments
@@ -557,7 +556,7 @@ segmentation candidates is below a threshold set by default to 100.
 This is in contrast with the situation with the graphical interface, which
 is fast and robust. Thus entering the following verse from Kālidāsa, we obtain
 very quicky a display factorizing an astronomical number
-(37680373292728320) of solutions:
+(24873394117017600) of solutions:
 <i>yaa tapovize.saparizafkitasya sukumaaramprahara.nam mahendrasyapratyaadeza.h ruupagarvitaayaa.h zriya.h ala.mkaara.h svargasyasaana.h priyasakhyurvazii kuberabhavanaat pratinivartamaanaasamaapattid.r.s.tena kezinaadaanavenacitralekhaadvitiiyaa bandigraaha.mg.rhiitaa</i>.
 
 <h3 class="b3" id="parser3">Lexical categories</h3>
@@ -575,7 +574,7 @@ yellow segments denoting stems, followed by a blue nominal inflected form.
 For instance, enter in the Reader the following input (Velthuis)
 <i>pravaran.rpamuku.tama.nimariicima~njariicayacarcitacara.nayugala.h</i>
 or प्रवरनृपमुकुटमणिमरीचिमञ्जरीचयचर्चितचरणयुगलः (Devanagari). The returned display
-exhibits 96 solutions in Sentence mode. But if you select Word rather than
+exhibits 32 solutions in Sentence mode. But if you select Word rather than
 Sentence as Text mode parameter, you get only 6 solutions, which denote various
 nominal compounds with many components. Actually, there are remaining
 ambiguities concerning the bracketing of their constituents. Let us examine
@@ -626,7 +625,7 @@ There exists yet another variety of compound, the so-called <i>avyayībhāva</i>
 of segments, first the preposition <i>nis</i>, colored lavender, and then the
 stem <i>makṣikā</i>, turned into an invariable form <i>makṣikam</i>,
 colored magenta. We remark that the segment <i>makṣikam</i> is not accepted
-as stand-alone input. Please also note on this example
+as stand-alone input. Please also note with this last example
 that an unrecognized chunk of input yields a grey rectangle. 
 
 <p>
@@ -643,7 +642,7 @@ the other.
 Another periphrastic construction is the inchoative "cvi" verbal compound.
 Its left part is a special substantival stem in <i>ī</i> or <i>ū</i>,
 and its right part a finite verb form of one of the auxiliaries,
-like <i>kadarthīkaroti</i> or <i>mṛdūbhavate</i>.
+like <i>kadarthīkaroti</i> or <i>mṛdūbhavati</i>.
 It in turns gives rise to primary derivatives (<i>kṛdanta</i>) like
 <i>khilībhūtaḥ</i>. Here too the left part is orange, and the right part is
 either red for verbal forms or blue for participial forms. 

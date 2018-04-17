@@ -83,6 +83,7 @@ value voices_of = fun
 (*| "has"    Atma needed for hasate *)
 (*| "zu.s" Atma for zu.syate WR epic *)
 (*| "a~nj" also Atma afkte | "naath" "praz" "sp.rz#1" idem *)
+(*| Doubt: "bhuu#1" could also be Atma bhavate *)
       -> Para (* active only *)
   | "az#1" | "aas#2" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" | "ii.s" 
   | "iih"  | "edh" | "katth" | "kam" | "kamp" | "kaaz" | "kaas#1" | "kuu" 

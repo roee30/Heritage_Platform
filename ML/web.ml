@@ -442,8 +442,7 @@ and print_title_solid color lang title = do
   }
 ;
 value print_transliteration_help lang = 
-  if narrow_screen then () 
-  else do
+  if narrow_screen then () else do
   { "Transliteration help " |> ps
   ; anchor_ref (rel_faq_page_url lang ^ "#transliteration") "here" |> pl
   }

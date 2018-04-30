@@ -7,8 +7,8 @@
 (* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-(* Tests consistency of data version of [Heritage_Resources]
-   with program version of [Heritage_Platform] *)
+(* Tests consistency of data version of [Heritage_Resources]  *)
+(* with program version of [Heritage_Platform]                *)
 
 value check_data_version () = 
   let resources_version_file = Paths.skt_resources_dir ^ "DATA/version.rem" in

@@ -3834,6 +3834,7 @@ value compute_root_injunctm stem entry = (* rare *)
   enter1 entry (Conju (injm 1) (conjugs_past_m conjug))
 ;
 value compute_root_aoristp stem entry = (* passive aorist Whitney§843 *)
+  (* \Pan{3,1,60-66} suffix ci.n usage réflexif-passif agent/objet karmakart.r *)
   (* TODO use Kümmel 1996 for Vedic plural 3rd forms *)
   let conjug person suff = (person,fix_augment stem suff) in
   let conju3 = Conju aorp1 [ (Singular,[ conjug Third "i" ]) ] in
@@ -3999,12 +4000,13 @@ value compute_aorist entry =
       { compute_root_aoristp long entry 
       ; compute_root_aoristp (revcode "voc") entry 
       }
-    | "d.rz#1" | "dvi.s#1" | "budh#1" | "vid#1"| "s.rj#1" 
-        -> compute_root_aoristp strong entry 
+    | "p.rr" -> compute_root_aoristp (revcode "puur") entry 
+    | "diip" | "duh#1" | "d.rz#1" | "dvi.s#1" | "budh#1" | "vid#1"| "s.rj#1" 
+        -> compute_root_aoristp strong entry
     | "rabh" -> compute_root_aoristp (revcode "rambh") entry 
-    | "jaag.r" | "t.rr" | "pac" | "zru" | "stu" | "hu"
-        -> compute_root_aoristp long entry 
-           (* NB "zru" -> azraavi WR while Whitney§844a azraayi typo *) 
+    | "ci" | "jaag.r" | "t.rr" | "pac" | "pad#1" | "zru" | "stu" | "hu"
+        -> compute_root_aoristp long entry
+           (* NB "zru" -> azraavi WR while Whitney§844a *azraayi typo *) 
     | _ -> () (* "i" -> iiyaat hard *)
     ]
   ; match entry with (* 2. thematic aorist af *)
@@ -4104,7 +4106,7 @@ value compute_aorist entry =
   ; match entry with (* 5. i.s aorist se.t-sic *)
     [ "ak.s" | "aj" | "aas#2" | "i.s#1" | "iik.s" | "uk.s" | "uc" | "u.s" 
     | "uuh" | ".rc#1" | "k.rt#1" | "krand" | "kram" | "khan"  | "car" 
-    | "ce.s.t" | "jalp" | "jaag.r" | "t.rr" | "pa.th" | "puu#1" | "p.rc" 
+    | "ce.s.t" | "jalp" | "jaag.r" | "t.rr" | "diip" | "pa.th" | "puu#1" | "p.rc"
     | "baadh" | "budh#1" | "mad#1" | "mud#1" | "muurch" | "mlecch" | "yaac" 
     | "ruc#1" | "lu~nc" | "luu#1" | "vad" | "vadh" | "vid#1" | "v.r#1" | "vraj"
     | "z.rr" | "sidh#2" | "skhal" | "stan" | "stu" | "hi.ms" -> do

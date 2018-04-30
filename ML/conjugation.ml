@@ -760,6 +760,7 @@ value resolve_homonym entry =
     | "druh"
     | "dhii" 
     | "naz" 
+    | "pad"
     | "pu.s"
     | "budh"
     | "mad" 

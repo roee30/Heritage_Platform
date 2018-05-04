@@ -4132,7 +4132,7 @@ value build_sya_tyad g entry = (* Vedic Whitney §499a *)
 ;
 (* pronominal stems (mirror+lopa) of pronouns usable as nominals *)
 value pseudo_nominal_basis = fun 
-  [ [ 17; 10; 36; 1 ] (* aneka *) (* perhaps also eka, anya ? *)
+  [ [ 17; 10; 36; 1 ] (* aneka *) (* possibly also eka, anya ? *)
   | [ 31; 3; 47; 17; 1; 34 ] (* dak.si.na *) 
   | [ 41; 3; 22; 46; 1; 37 ] (* pazcima *) 
   | [ 41; 10; 36 ] (* nema Whitney§525c *)
@@ -4159,7 +4159,8 @@ value build_pron_a g stem entry = (* g=Mas ou g=Neu *)
       | [ 41; 1; 32; 1; 17 ] (* katama *)
       | [ 43; 1; 32; 3 ] (* itara *)
       | [ 42; 36; 1 ] (* anya *) 
-      | [ 43; 1; 32; 1; 42; 36; 1 ] (* anyatara *) -> "at" (* Whitney§523 *)
+      | [ 43; 1; 32; 1; 42; 36; 1 ] (* anyatara *)
+      | [ 45; 32 ] (* tva *)-> "at" (* Whitney§523 *)
       | _ -> (* eka, ekatara, vizva, sva, sarva, ... *) "am"
       ] in
   let decline case suff = (case,fix stem suff) 
@@ -4853,6 +4854,7 @@ value compute_nouns_stem_form e stem d p =
             | [ 45; 43; 1; 48 ] (* sarva *)
             | [ 45; 43; 6; 37 ] (* puurva *)
             | [ 45; 46; 3; 45 ] (* vizva *) 
+            | [ 45; 32 ] (* tva *) 
             | [ 45; 48 ] (* sva *) -> build_pron_a Mas r1 e
             | [ 36; 10 ] (* ena *) -> build_ena Mas e
             | [ 47; 10 ] (* e.sa *) when (e="etad" || e="e.sa#1" || e="e.sa")
@@ -5113,6 +5115,7 @@ value compute_nouns_stem_form e stem d p =
             | [ 45; 46; 3; 45 ]        (* vizva *)
             | [ 45; 43; 1; 48 ]        (* sarva *)
             | [ 45; 48 ]               (* sva *) 
+            | [ 45; 32 ]               (* tva *) 
                 -> build_pron_a Neu r1 e
             | _ -> build_neu_a r1 e
             ]
@@ -5175,6 +5178,7 @@ value compute_nouns_stem_form e stem d p =
             | [ 37 ] (* pad *) -> build_root_weak Neu stem "paada"
             | [ 37 :: s ]  (* -pad *) -> build_pad Neu s e
             | [ 42 ] (* yad *) 
+            | [ 45; 32 ] (* tvad *) 
             | [ 42; 36; 1 ] (* anyad *) 
             | [ 43; 1; 32; 1; 42; 36; 1 ] (* anyatarad *) (* Whitney§523 *)
                 -> build_pron_a Neu r2 e
@@ -5311,7 +5315,9 @@ value compute_nouns_stem_form e stem d p =
             | [ 45; 43; 1; 48 ]        (* sarvaa *) 
             | [ 45; 43; 6; 37 ]        (* puurvaa *)
             | [ 45; 46; 3; 45 ]        (* vizvaa *)
-            | [ 45; 48 ]               (* svaa *) -> build_pron_aa r1 e
+            | [ 45; 48 ]               (* svaa *) 
+            | [ 45; 32 ]               (* tvaa *) 
+                  -> build_pron_aa r1 e
             | [ 36; 10 ] (* enaa *)  -> build_ena Fem e 
             | [ 47; 10 ] (* e.saa *) when e="etad" || e="e.saa"
                   -> build_saa [ 10 ] e  
@@ -5582,6 +5588,7 @@ value iic_indecl = (* should be lexicalized *)
   ; "iti"       (* ityukta *)  
   ; "upari"     (* uparicara *)  
   ; "ubhayatas" (* ubhayata.hsasya *)
+  ; "evam"      (* eva.mvid *)
   ; "tatra"     (* tatrabhavat *)
   ; "na~n"      (* na~nvaada *)
   ; "naanaa"    (* naanaaruupa *)

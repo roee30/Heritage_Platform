@@ -770,6 +770,7 @@ value resolve_homonym entry =
     | "sidh" 
     | "snih" 
     | "snuh" -> first entry
+    | "div" -> first "diiv" (* since MW spells div *)
     | "as" 
     | "i.s"
     | "tan"

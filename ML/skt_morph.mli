@@ -59,6 +59,7 @@ and tense =
   | Injunctive of aor_class (* (le.t) - also Prohibitive with maa *) 
   | Benedictive (* Precative: optative aorist (aazirlif) *) 
   | Conditional (* Preterit of future (l.rf) *)
+(*| Subjunctive (* le.t *) TODO *)
   ]
 ;
 (* NB from Indo-European: the present stem has the imperfective aspect,
@@ -96,7 +97,7 @@ and participle = (* participles *)
    Infinitives are similar to dative substantival forms, periphrastic perfect
    forms are associated with an auxiliary verb in the perfect.
    Absolutives split into root absolutives in -tvaa and absolutives in -ya 
-   that must be prefixed with a preverb. *)
+   that must be prefixed with a preverb. Absolutives in -aam (.namul) are in both. *)
 type modal = (conjugation * invar) 
 and invar =
   [ Infi    (* infinitive (tumun) *)
@@ -113,8 +114,8 @@ type sadhana = (* karaka, action or absolutive - coarser than krit *)
   | Absolu
   ]
 ;
-(* Primary nominal formations *)
-type nominal = (conjugation * krit)  
+(* Primary nominal formations (k.rdantas) *)
+type nominal = (conjugation * krit) 
 and krit = (* coarser than Paninian krit suffixes *) 
   [ Agent_aka (* .nvul \Pan{3,1,133} \Pan{3,3,108-109} -aka -ikaa v.rddhi 
                  .svun \Pan{3,1,145} trade gu.na f. -akii  
@@ -131,7 +132,7 @@ and krit = (* coarser than Paninian krit suffixes *)
                         \Pan{3,2,76} root autonomous mnf. 
                  + .tak \Pan{3,2,8} root ifc (f. -ii) 
                  + .ta \Pan{3,2,20} -kara ifc (f. -ii) habitual, enjoy
-                 + ka \Pan{3,2,3} root -aa, amuie, ifcno (no Preverb) f. ii *)
+                 + ka \Pan{3,2,3} root -aa, amuie, ifcno (no preverb) f. ii *)
   | Agent_a (* ac \Pan{3,1,134} gu.na m. -a f. -aa   
                .na \Pan{3,1,140-143} v.rddhi (f. -aa)
                ka \Pan{3,1,135-136;144} -gu.na 
@@ -150,10 +151,10 @@ and krit = (* coarser than Paninian krit suffixes *)
   | Action_i (* ki \Pan{3,3,92-93}                     -i f.    *)
   | Action_root (* unknown krit of non-agent noun  *) 
   | Object_root (* we should probably lump action and object in [Non_agent] *)
-  | Object_a (* ka                                    -a n.    *) 
+  | Object_a (* ka                                     -a n.    *) 
   | Instrument (* ka \Pan{3,1,136}                  0/amui n.   *)
-  | Instra (* .s.tran -tra n.                -trii f. traa f.  *)
-  | Agent_u   (* san+u                             -u on des stem *)
+  | Instra (* .s.tran -tra n.                -trii f. traa f.   *)
+  | Agent_u   (* san+u                             -u on des stem  *)
   | Action_aa (* san+a+.taap  \Pan{3,3,102}        -aa on des stem *)
   | Abstract (* abstract nouns n.           -as u.naadi suffix *)
   ]

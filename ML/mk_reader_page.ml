@@ -24,7 +24,7 @@ value out_mode = ref None
 value set_cho () = Arg.parse 
   [ ("-fr", Arg.Unit (fun () -> out_mode.val:=Some French), "French")
   ; ("-en", Arg.Unit (fun () -> out_mode.val:=Some English), "English")
-  ; ("",    Arg.Unit (fun () -> out_mode.val:=None), "cgi output on stdout")
+  ; ("",    Arg.Unit (fun () -> out_mode.val:=None), "default language for cgi")
   ]
   (fun s -> raise (Arg.Bad s)) 
   "Usage: mk_reader_page -en or mk_reader_page -fr or mk_reader_page"

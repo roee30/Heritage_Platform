@@ -124,28 +124,28 @@ value analyse query output =
   ; match threshold with      
     [ None -> ()
     | Some p -> do
-       { ps html_break 
-       ; ps (html_red ("Truncated penalty " ^ string_of_int p ^ " or more")) 
-       ; ps html_break 
+       { html_break |> ps
+       ; html_red ("Truncated penalty " ^ string_of_int p ^ " or more") |> ps
+       ; html_break |> ps
        }
     ]
   }
 ;
 value print_sems word morphs = do  
-  { ps (span_begin Latin12)
-  ; ps "{ "
-  ; let bar () = ps " | " 
+  { span_begin Latin12 |> ps
+  ; "{ " |> ps
+  ; let bar () = " | " |> ps
     and sem = Canon.decode word in 
     List2.process_list_sep (print_sem sem) bar morphs
-  ; ps " }" 
-  ; ps span_end 
+  ; " }" |> ps
+  ; span_end |> ps
   }
 ;
 value print_out seg_num segment = do 
   (* Contrarily to Reader, we discard phonetic information. *)
-  { ps tr_begin
+  { tr_begin |> ps
   ; Lex.print_segment_roles print_sems seg_num segment 
-  ; ps tr_end 
+  ; tr_end |> ps
   ; seg_num+1
   }
 ;
@@ -335,7 +335,7 @@ value parser_engine () = do
                 | None -> ()
                 ]
              else () in] *) 
-    let proj = (* checks for parsing mode *)
+    let proj = (* checks for parsing mode or final unique tags listing *)
         try let url_encoded_proj = List.assoc "p" alist in (* do not use get *) 
             Some (parse_proj (decode_url url_encoded_proj))
         with [ Not_found -> do 

@@ -590,7 +590,9 @@ analyser: ML/reader ML/parser ML/interface ML/user_aid
 	cp ML/parser $(CGIDIR)$(CGIPARSER)
 	cp ML/interface $(CGIDIR)$(CGIGRAPH)
 	cp ML/user_aid $(CGIDIR)$(CGIUSER)
+# following is special interface for Sanskrit Library invocation
 	cp ML/mk_reader_page $(CGIDIR)skt_heritage # $(CGIINTERFACE)
+# following is deprecated 
 #	cp ML/tagger $(CGIDIR)$(CGITAGGER)
 
 indexers: ML/indexer ML/indexerd

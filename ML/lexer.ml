@@ -310,8 +310,8 @@ value print_segment_roles print_sems seg_num (phase,rword,_) =
        [ Atomic tags -> 
           process_kridanta [] seg_num phase word tags
        | Preverbed (_,phase) pvs form tags -> 
-          process_kridanta pvs seg_num phase form tags
-       | Taddhita (ph,form) sfx sfx_phase sfx_tags -> 
+          process_kridanta pvs seg_num phase form tags 
+       | Taddhita (ph,form) sfx sfx_phase sfx_tags ->  
             match tags_of ph form with 
             [ Atomic _ -> (* stem, tagged as iic *)
               process_taddhita [] seg_num ph form sfx_phase sfx sfx_tags 
@@ -358,7 +358,7 @@ value print_projection phase rword ((_,m) as index) = do
   ; let word = mirror rword in 
     match tags_of phase word with
     [ Atomic tags -> print_unitag [] phase word tags index 
-    | Preverbed (_,phase) pvs form tags -> print_unitag pvs phase word tags index
+    | Preverbed (_,phase) pvs form tags -> print_unitag pvs phase form tags index
     | Taddhita (ph,form) sfx sfx_phase sfx_tags -> 
         match tags_of ph form with
         [ Atomic _ -> print_uni_taddhita [] m phase form sfx sfx_phase sfx_tags

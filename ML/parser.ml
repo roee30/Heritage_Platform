@@ -20,6 +20,7 @@ open Html;
 open Web; (* ps pl abort truncation etc. [remote_server_host] *)
 open Cgi; (* get *)
 open Checkpoints;
+open Phases.Phases; (* generative *)
 open Scl_parser; (* Interface with UoH dependency parser *)
 
 module Prel = struct (* Parser's lexer prelude *)
@@ -52,6 +53,135 @@ end (* [Lexer_control] *)
 module Lex = Lexer.Lexer Prel Lexer_control 
 (* [print_proj print_segment_roles print_ext_segment extract_lemma] *)
 ;
+(* Printing functions *)
+
+value table_labels = table_begin (background Pink)
+;
+value print_labels tags seg_num = do
+    { ps th_begin  (* begin labels *) 
+    ; pl table_labels
+    ; let print_label n _ = do
+        { ps (cell (html_red (string_of_int seg_num ^ "." ^ string_of_int n)))
+        ; n+1
+        } in 
+      let _ = List.fold_left print_label 1 tags in () 
+    ; ps table_end 
+    ; ps th_end    (* end labels *)
+    }
+;
+value rec color_of_role = fun (* Semantic role of lexical category *)
+  [ Pv | Pvk | Pvkc | Pvkv | Iic | Iic2 | Iik | Voca | Inv | Iicv | Iicc 
+  | Iikv | Iikc | Iiif | A | An | Vok | Vokv | Vokc | Vocv | Vocc | Iiy 
+  | Iiv | Iivv | Iivc | Peri | Auxiick -> Grey 
+  | Noun | Noun2 | Nouv | Nouc | Krid | Kriv | Kric | Pron | Ifc | Ifc2
+  | Kama | Lopak | Auxik -> Cyan (* Actor or Predicate *)
+  | Root | Lopa |  Auxi -> Pink (* abs-tvaa in Inde *) (* Process *) 
+  | Abso | Absv | Absc | Inde | Avy | Ai | Ani | Inftu (* Circumstance *)
+    -> Lavender 
+  | Unknown | Cache -> Grey 
+  | Comp (_,ph) _ _ | Tad (_,ph)  _ _ -> color_of_role ph
+  | Sfx -> Cyan
+  | Isfx -> Grey
+  ]
+and table_role_of phase = table_begin (background (color_of_role phase)) 
+; 
+(* syntactico/semantical roles analysis, function of declension *)
+value print_roles pr_sem phase tags form = do
+    { ps th_begin 
+    ; pl (table_role_of phase)
+    ; let pr_roles (delta,sems) = do 
+       { ps tr_begin 
+       ; ps th_begin 
+       ; let word = Word.patch delta form in 
+         pr_sem word sems 
+       ; ps th_end
+       ; ps tr_end 
+       } in
+      List.iter pr_roles tags  
+    ; ps table_end 
+    ; ps th_end  
+    }
+;
+(* Segment printing without phonetics with semantics for Parser *)
+value print_segment_roles print_sems seg_num (phase,rword,_) =  
+  let word = Word.mirror rword in do
+  { Morpho_html.print_signifiant_yellow rword
+  ; let (decl_phase,form,decl_tags) = match Lex.tags_of phase word with
+       [ Atomic tags -> 
+          Lex.process_kridanta [] seg_num phase word tags
+       | Preverbed (_,phase) pvs form tags -> 
+          Lex.process_kridanta pvs seg_num phase form tags 
+       | Taddhita (ph,form) sfx sfx_phase sfx_tags ->  
+            match Lex.tags_of ph form with 
+            [ Atomic _ -> (* stem, tagged as iic *)
+              Lex.process_taddhita [] seg_num ph form sfx_phase sfx sfx_tags 
+            | Preverbed _ pvs _ _ -> (* stem, tagged as iic *)
+              Lex.process_taddhita pvs seg_num ph form sfx_phase sfx sfx_tags 
+            | _ -> failwith "taddhita recursion unavailable"
+            ]
+       ] in do
+    { print_labels decl_tags seg_num
+    ; print_roles print_sems decl_phase decl_tags form
+    }
+  } 
+;
+value project n list = List.nth list (n-1) (* Ocaml's nth starts at 0 *)
+; 
+value print_uni_kridanta pvs phase word multitags (n,m) = 
+  let (delta,polytag) = project n multitags in
+  let unitag = [ project m polytag ] in do
+     { ps th_begin
+     ; pl (Lex.table_morph_of phase) (* table of color of phase begins *)
+     ; let _ = (* print unique tagging *)
+       Lex.print_morph pvs False 0 (generative phase) word 0 (delta,unitag) in ()
+     ; ps table_end              (* table of color of phase ends *)
+     ; ps th_end
+     }
+;
+value print_uni_taddhita pvs m phase stem sfx sfx_phase = fun
+  [ [ (delta,polytag) ] -> (* we assume n=1 taddhita form unambiguous *)
+    let unitag = [ project m polytag ] 
+    and gen = generative phase 
+    and cached = False in do
+    { ps th_begin 
+    ; pl (Lex.table_morph_of sfx_phase)      (* table begin *)
+    ; let _ = Lex.print_morph_tad pvs cached 0 gen stem sfx 0 (delta,unitag) in ()
+    ; ps table_end                       (* table end *) 
+    ; ps th_end
+    }
+  | _ -> failwith "Multiple sfx tag"
+  ]
+;
+value print_projection phase rword ((_,m) as index) = do
+  { ps tr_begin             (* tr begins *)
+  ; Morpho_html.print_signifiant_yellow rword
+  ; let word = Word.mirror rword in 
+    match Lex.tags_of phase word with
+    [ Atomic tags -> print_uni_kridanta [] phase word tags index 
+    | Preverbed (_,phase) pvs form tags -> 
+        print_uni_kridanta pvs phase form tags index
+    | Taddhita (ph,form) sfx sfx_phase sfx_tags -> 
+        match Lex.tags_of ph form with
+        [ Atomic _ -> print_uni_taddhita [] m phase form sfx sfx_phase sfx_tags
+        | Preverbed _ pvs _ _ -> 
+                      print_uni_taddhita pvs m phase form sfx sfx_phase sfx_tags
+        | _ -> failwith "taddhita recursion unavailable" 
+        ]
+    ] 
+  ; ps tr_end               (* tr ends *)
+  }
+;
+value print_proj phase rword = fun 
+   [ [] -> failwith "Projection missing"
+   | [ n_m :: rest ] -> do
+       { print_projection phase rword n_m 
+       ; rest (* returns the rest of projections stream *)
+       }
+   ]
+;
+(* End Printing functions *)
+
+
 value rpc = remote_server_host 
 and remote = ref False (* local invocation of cgi by default *) 
 ;
@@ -144,7 +274,7 @@ value print_sems word morphs = do
 value print_out seg_num segment = do 
   (* Contrarily to Reader, we discard phonetic information. *)
   { tr_begin |> ps
-  ; Lex.print_segment_roles print_sems seg_num segment 
+  ; print_segment_roles print_sems seg_num segment 
   ; tr_end |> ps
   ; seg_num+1
   }
@@ -155,7 +285,7 @@ value rec print_project proj = fun
             | _ -> failwith "Too many projections"
             ]
     | [ (phase,rword,_) :: rest ] -> (* sandhi ignored *)
-      let new_proj = Lex.print_proj phase rword proj in
+      let new_proj = print_proj phase rword proj in
       print_project new_proj rest 
     ]
 ;

@@ -120,6 +120,77 @@ value check_tags current_sol_string tagging =
   let oc = parse_phase (String.sub current_sol_string 0 pos) in
   oc = tagging
 ;
+(* OBS Used to be in Lexer - to be adapted 
+value return_tagging output projs = 
+  let get_tags phase rword projs = (* adapted from [print_proj] *)
+     let form = mirror rword in  
+     match tags_of phase form with
+     [ Atomic polytag -> match projs with 
+           [ [] -> failwith "Projection missing"
+           | [ (n,m) :: rest ] -> 
+              let gen = generative phase in
+              let (delta,tags) = project n polytag in
+              let tagging = [ project m tags ] in 
+              let entry = get_morph gen phase form (delta,tagging) in
+              (rest, lex_cat phase, entry)
+           ]
+     | _ -> failwith "Not implemented yet" (*i TODO for Regression 
+         [ (projs, lex_cat Pv, (form, lex_cat Pv, Preverbs_list prevs, []))] i*)
+     ] in 
+  let rec taggings accu projs = fun
+     [ [] -> match projs with 
+             [ [] -> accu
+             | _ -> failwith "Too many projections"
+             ]
+     | [ (phase,rword,_) :: rest ] -> (* sandhi ignored *)
+          let (new_projs,phase,tags) = get_tags phase rword projs in
+          taggings [ tags :: accu ] new_projs rest 
+     ] in 
+  return_morph (List.rev (taggings [] projs output))
+;
+value record_tagging unsandhied mode_sent mode_trans all sentence output proj = 
+  let report = output_string Control.out_chan.val in
+  let print_proj1 phase rword proj prevs = do 
+  (* adapted from [print_proj] *)
+  { report "${"
+  ; let form = mirror rword in do 
+    { report (decode form)
+    ; let res = match proj with 
+           [ [] -> failwith "Projection missing"
+           | [ (n,m) :: rest ] -> 
+              let gen = generative phase in
+              let polytag = extract_lemma phase form in
+              let (delta,tags) = project n polytag in 
+              let tagging = [ project m tags ] in do 
+                { report ":"
+                ; report (string_of_phase phase ^ "")
+                ; Morpho_out.report_morph gen form (delta,tagging) 
+                ; (rest,[]) (* returns the rest of projections stream *)
+                }
+           ] in 
+      do { report "}$&"; res }
+    }
+  } in do
+  { report (if Control.full.val then "[{C}] " else "[{S}] ")
+  ; report (if unsandhied then "<{F}> " else "<{T}> ")
+  ; report (if mode_sent then "|{Sent}| " else "|{Word}| ")
+  ; report ("#{" ^ mode_trans ^ "}# ")
+  ; report ("({" ^ sentence ^ "})")
+  ; report (" [" ^ (string_of_int all) ^ "] ")
+  ; let rec pp (proj,prevs) = fun
+    [ [] -> match proj with 
+            [ [] -> () (* finished, projections exhausted *)
+            | _ -> failwith "Too many projections"
+            ]
+    | [ (phase,rword,_) :: rest ] -> (* sandhi ignored *)
+        let proj_prevs = print_proj1 phase rword proj prevs in
+        pp proj_prevs rest 
+    ] in pp (proj,[]) output
+  ; report "\n"
+  ; close_out Report_chan.chan.val
+  }
+;
+OBS *)
 value look_up_tags solution output tagging sol = 
   let proj = List.fold_left extract "" sol in
   let p = parse_proj proj in 

@@ -38,7 +38,8 @@ type inflected_map = Lexmap.lexmap inflexions
 and lemma = Lexmap.inverse inflexions
 and lemmas = list lemma
 ;
-type multitag = list (Word.delta * inflexions)
+type unitag = (Word.delta * inflexions)
+and multitag = list unitag
 ;
 type morphology = 
   { nouns    : inflected_map 

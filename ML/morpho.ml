@@ -73,8 +73,10 @@ value print_inv_morpho pe pne pu form (seg_num,sub) generative (delta,morphs) =
         let krit_infos = Deco.assoc bare_stem unique_kridantas in 
         try let (verbal,root) = look_up_homo homo krit_infos in do
         { match Deco.assoc bare_stem lexical_kridantas with
-          [ [] (* not in lexicon *) -> pne bare_stem
-          | entries (* bare stem is lexicalized *) -> 
+          [ [] (* not in lexicon *) -> 
+              if stem = [ 3; 32; 1 ] (* ita ifc *) then pe stem
+                                                   else pne bare_stem
+          | entries (* bare stem is lexicalized *) ->
               if List.exists (fun (_,h) -> h=homo) entries
                  then pe stem (* stem with exact homo is lexical entry *)
               else pne bare_stem
@@ -88,13 +90,21 @@ value print_inv_morpho pe pne pu form (seg_num,sub) generative (delta,morphs) =
     ; ps "]"
     }
 ;
+(* Decomposes a preverb sequence into the list of its components *)
+value decomp_pvs pvs = 
+  Deco.assoc pvs Web.preverbs_structure
+;
 (* Used in [Morpho_html] *)
 value print_inv_morpho_link pvs pe pne pu form =
   let pv = if Phonetics.phantomatic form then [ 2 ] (* aa- *)
            else pvs in
   let encaps print e = (* encapsulates prefixing with possible preverbs *)
-     if pv = [] then print e else do { pe pvs; ps "-"; print e } in
-  print_inv_morpho (encaps pe) (encaps pne) pu form
+     if pv = [] then print e else 
+        let pr_pv pv = do { pe pv; ps "-" } in do 
+            { List.iter pr_pv (decomp_pvs pvs)
+            ; print e 
+            } in
+        print_inv_morpho (encaps pe) (encaps pne) pu form
 (* Possible overgeneration when derivative of a root non attested with pv 
    since only existential test in [Dispatcher.validate_pv]. Thus
    [anusandhiiyate] should show [dhaa#1], not [dhaa#2], [dhii#1] or [dhyaa] *)

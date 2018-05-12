@@ -46,7 +46,7 @@ GRAM = index.ml phonetics.ml int_sandhi.ml skt_morph.mli morphology.mli \
        dispatcher.mli dispatcher.ml segmenter.ml load_morphs.ml lexer.mli \
        lexer.ml rank.ml scl_parser.ml reader.ml parser.ml constraints.mli \
        constraints.ml multilingual.ml paraphrase.mli paraphrase.ml \
-       bank_lexer.ml regression.ml checkpoints.ml graph_segmenter.ml \
+       bank_lexer.ml checkpoints.ml graph_segmenter.ml \
        automaton.ml interface.mli interface.ml user_aid.ml reset_caches.ml \
        params.mli params.ml
 
@@ -70,7 +70,7 @@ TREE = parse_tree.ml parse_apte.ml stemmer.ml tag_tree.ml tag_apte.ml
 DEBUG=debug.ml 
 
 ENGINE=$(CORE) $(GRAM) $(WEB) $(CORPUS)
-INACTIVE=$(TREE) nyaaya.ml mk_nyaaya_page.ml 
+INACTIVE=$(TREE) nyaaya.ml mk_nyaaya_page.ml regression.ml 
 
 SOURCES=$(ENGINE) $(DEBUG) $(INACTIVE) 
 
@@ -90,8 +90,8 @@ LINK=ocamlopt -I $(ZEN) -I +camlp4  dynlink.cmxa camlp4lib.cmxa
 
 # standard installation of Sanskrit Heritage platform - assumes ZEN library
 
-engine: test_version cgis reset_caches static_pages regression mk_corpus
-# reader_plugin  parse_apte
+engine: test_version cgis reset_caches static_pages mk_corpus
+# reader_plugin  parse_apte regression 
 
 # testing consistency of Heritage_resources and Heritage_platform
 test_version: paths.cmx gen.cmx version.cmx control.cmx test_stamp.cmx

@@ -57,6 +57,5 @@ value terminal_sa : output -> bool
 ;
 value color_of_phase : phase -> Html.color
 ;  
-
 end;
 

@@ -229,14 +229,7 @@ and attested prev root = (* prev is attested preverb sequence for root *)
   let pvs = assoc_word root roots_usage in
   List.mem prev pvs (* NB attested here means lexicalized entry *)
 ;
-(* Now we retrieve finer discrimination for verbs forms preceded by preverbs.
-   This is experimental, and incurs too many conversions betweeen strings
-   and words, suggesting a restructuring of preverbs representation. *)
-value preverbs_structure =
-  try (Gen.gobble Web.public_preverbs_file : Deco.deco Word.word) 
-                  (*i should probably be rather : [Deco.deco string] i*)
-  with [ _ -> failwith "preverbs_structure" ]
-;
+
 value gana_o = fun 
   [ None -> 0 (* arbitrary *)
   | Some g -> g (* only used for "tap" *)
@@ -251,7 +244,7 @@ and voice_o v = fun
 value main_preverb pvs = List2.last pvs 
 ;
 value main_preverb_string pv = 
-  Canon.decode (main_preverb (assoc_word pv preverbs_structure))
+  Canon.decode (main_preverb (assoc_word pv Web.preverbs_structure))
 ;
 value attested_verb (o_gana,o_voice) pv root = attested pv root && 
   let gana = gana_o o_gana in

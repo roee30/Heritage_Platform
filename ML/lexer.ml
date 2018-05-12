@@ -39,7 +39,7 @@ open Phases; (* phase *)
 
 module Lemmas = Load_morphs.Morphs Prel Phases
 ;
-open Lemmas (* [morpho tags_of] *)
+open Lemmas (* [morpho tag_sort tags_of] *)
 ;
 open Load_transducers; (* [transducer_vect Trans] *)
 
@@ -58,47 +58,33 @@ and   set_offset = Viccheda.set_offset
 value un_analyzable (chunk : word) = 
   ([ (Unknown,mirror chunk,Disp.Id) ],Viccheda.finished)
 ;
-value rec color_of_role = fun (* Semantic role of lexical category *)
-  [ Pv | Pvk | Pvkc | Pvkv | Iic | Iic2 | Iik | Voca | Inv | Iicv | Iicc 
-  | Iikv | Iikc | Iiif | A | An | Vok | Vokv | Vokc | Vocv | Vocc | Iiy 
-  | Iiv | Iivv | Iivc | Peri | Auxiick -> Grey 
-  | Noun | Noun2 | Nouv | Nouc | Krid | Kriv | Kric | Pron | Ifc | Ifc2
-  | Kama | Lopak | Auxik -> Cyan (* Actor or Predicate *)
-  | Root | Lopa |  Auxi -> Pink (* abs-tvaa in Inde *) (* Process *) 
-  | Abso | Absv | Absc | Inde | Avy | Ai | Ani | Inftu (* Circumstance *)
-    -> Lavender 
-  | Unknown | Cache -> Grey 
-  | Comp (_,ph) _ _ | Tad (_,ph)  _ _ -> color_of_role ph
-  | Sfx -> Cyan
-  | Isfx -> Grey
-  ]
-;
+
+(* Printing *)
+
 value table_morph_of phase = table_begin (background (color_of_phase phase)) 
-and table_role_of phase = table_begin (background (color_of_role phase)) 
-and table_labels = table_begin (background Pink)
 ;
 value print_morph pvs cached seg_num gen form n tag = do
 (* n is the index in the list of tags of an ambiguous form *)
-  { ps tr_begin
-  ; ps th_begin 
-  ; ps (span_begin Latin12)  
+  { tr_begin |> ps
+  ; th_begin |> ps
+  ; span_begin Latin12 |> ps
   ; Morpho_html.print_inflected_link pvs cached form (seg_num,n) gen tag 
-  ; ps span_end 
-  ; ps th_end   
-  ; ps tr_end   
+  ; span_end |> ps
+  ; th_end |> ps
+  ; tr_end |> ps  
   ; n+1
   }
 ;
 (* generalisation of [print_morph] to taddhitas *)
 value print_morph_tad pvs cached seg_num gen stem sfx n tag = do
 (* n is the index in the list of tags of an ambiguous form *)
-  { ps tr_begin
-  ; ps th_begin 
-  ; ps (span_begin Latin12)  
+  { tr_begin |> ps
+  ; th_begin |> ps
+  ; span_begin Latin12 |> ps
   ; Morpho_html.print_inflected_link_tad pvs cached stem sfx (seg_num,n) gen tag 
-  ; ps span_end 
-  ; ps th_end  
-  ; ps tr_end   
+  ; span_end |> ps
+  ; th_end |> ps 
+  ; tr_end |> ps  
   ; n+1
   }
 ;
@@ -138,21 +124,21 @@ value print_scl_morph pvs gen form tag = do
 value print_scl_tags pvs phase form tags = 
   let table phase = 
       xml_begin_with_att "tags" [ ("phase",scl_phase phase) ] in do
-  { ps (table phase) 
+  { table phase |> ps
   ; List.iter (print_scl_morph pvs (generative phase) form) tags 
-  ; ps (xml_end "tags")
+  ; xml_end "tags" |> ps
   }
 ;
-
-(* Used in Parser *)
+value tags_of = Lemmas.tags_of (* For export to Parser *)
+;
 value extract_lemma phase word = 
- match tags_of phase word with  
- [ Atomic tags -> tags 
- | Preverbed (_,phase) pvs form tags -> (* tags to be trimmed to [ok_tags] *)
+  match tags_of phase word with  
+  [ Atomic tags -> tags 
+  | Preverbed (_,phase) pvs form tags -> (* tags to be trimmed to [ok_tags] *)
      if pvs = [] then tags 
      else trim_tags (generative phase) form (Canon.decode pvs) tags 
- | Taddhita  _ _ _ tags -> tags
- ]
+  | Taddhita  _ _ _ tags -> tags
+  ]
 ; 
 (* Returns the offset correction (used by SL interface) *)
 value process_transition = fun  
@@ -174,36 +160,36 @@ value print_sfx_tags sfx = fun
   ]
 ;
 value process_kridanta pvs seg_num phase form tags = do
-  { ps th_begin 
-  ; pl (table_morph_of phase)          (* table begin *)
+  { th_begin |> ps
+  ; table_morph_of phase |> pl          (* table begin *)
   ; let ok_tags = 
         if pvs = [] then tags 
         else trim_tags (generative phase) form (Canon.decode pvs) tags in do
         (* NB Existence of the segment guarantees that [ok_tags] is not empty *)
   { print_tags pvs seg_num phase form ok_tags 
-  ; ps table_end                       (* table end *) 
-  ; ps th_end  
-  ; (phase,form,ok_tags)
+  ; table_end |> ps                     (* table end *) 
+  ; th_end |> ps
+  ; (phase, form, ok_tags)
   }}
 ;
 value process_taddhita pvs seg_num phase stem sfx_phase sfx sfx_tags = 
   let gen = generative phase 
   and cached = False in
   let ptag = print_morph_tad pvs cached seg_num gen stem sfx in do
-  { ps th_begin 
-  ; pl (table_morph_of sfx_phase)      (* table begin *)
+  { th_begin |> ps
+  ; table_morph_of sfx_phase |> pl     (* table begin *)
   ; let _ = List.fold_left ptag 1 sfx_tags in ()
-  ; ps table_end                       (* table end *) 
-  ; ps th_end  
-  ; (sfx_phase,sfx,sfx_tags)
+  ; table_end |> ps                    (* table end *) 
+  ; th_end |> ps
+  ; (sfx_phase, sfx, sfx_tags)
   }
 ;
 (* Same structure as [Interface.print_morpho] *)
 value print_morpho phase word = do  
-  { pl (table_morph_of phase)          (* table begin *)  
-  ; ps tr_begin 
-  ; ps th_begin 
-  ; ps (span_begin Latin12)  
+  { table_morph_of phase |> pl          (* table begin *)  
+  ; tr_begin |> ps
+  ; th_begin |> ps
+  ; span_begin Latin12 |> ps 
   ; let _ =
        match tags_of phase word with 
        [ Atomic tags ->  
@@ -219,23 +205,23 @@ value print_morpho phase word = do
             | _ -> failwith "Anomaly: taddhita recursion"
             ]
        ] in ()
-  ; ps span_end  
-  ; ps th_end  
-  ; ps tr_end 
-  ; ps table_end                       (* table end *)
+  ; span_end |> ps
+  ; th_end |> ps 
+  ; tr_end |> ps
+  ; table_end |> ps                      (* table end *)
   }
 ;
 (* Segment printing with phonetics without semantics for Reader *)
 value print_segment offset (phase,rword,transition) = do
-  { ps "[ "
+  { "[ " |> ps
   ; Morpho_html.print_signifiant_off rword offset
   ; print_morpho phase (mirror rword)
   (* Now we print the sandhi transition *)
-  ; ps "&lang;" (* < *) 
+  ; "&lang;" |> ps (* < *) 
   ; let correction = process_transition transition in do  
       { print_transition transition
-      ; pl "&rang;]" (* >] *)
-      ; pl html_break
+      ; "&rang;]" |> pl (* >] *)
+      ; html_break |> pl
       ; offset+correction+length rword
       }
   }
@@ -245,10 +231,10 @@ value print_segment offset (phase,rword,transition) = do
 value print_scl_segment counter (phase,rword) =  
   let word = Morpho_html.visargify rword in do
   { let solid = background (Disp.color_of_phase phase) in
-    pl (td_begin_class solid)
+    td_begin_class solid |> pl
   ; let ic = string_of_int counter in
-    ps ("<input type=\"hidden\" name=\"field" ^ ic ^ "\" value='<form wx=\""
-        ^ Canon.decode_WX word ^ "\"/>")
+    "<input type=\"hidden\" name=\"field" ^ ic ^ "\" value='<form wx=\""
+        ^ Canon.decode_WX word ^ "\"/>" |> ps
   ; match tags_of phase (mirror rword) with 
     [ Atomic tags ->
           print_scl_tags [] phase word tags
@@ -266,118 +252,13 @@ value print_scl_segment counter (phase,rword) =
             and taddhitanta_stem = form @ sfx (* very experimental *) in
             print_scl_tags [] taddhitanta_phase taddhitanta_stem sfx_tags 
     ]
-  ; ps "'>" (* closes <input *) 
-  ; ps (Canon.unidevcode word)
-  ; ps td_end
-  ; ps "\n"
+  ; "'>" |> ps (* closes <input *) 
+  ; Canon.unidevcode word |> ps
+  ; td_end |> ps
+  ; "\n" |> ps
   ; counter+1
   } 
 ; 
-value print_labels tags seg_num = do
-    { ps th_begin  (* begin labels *) 
-    ; pl table_labels
-    ; let print_label n _ = do
-        { ps (cell (html_red (string_of_int seg_num ^ "." ^ string_of_int n)))
-        ; n+1
-        } in 
-      let _ = List.fold_left print_label 1 tags in () 
-    ; ps table_end 
-    ; ps th_end    (* end labels *)
-    }
-;
-(* syntactico/semantical roles analysis, function of declension *)
-value print_roles pr_sem phase tags form = do
-    { ps th_begin 
-    ; pl (table_role_of phase)
-    ; let pr_roles (delta,sems) = do 
-       { ps tr_begin 
-       ; ps th_begin 
-       ; let word = patch delta form in 
-         pr_sem word sems 
-       ; ps th_end
-       ; ps tr_end 
-       } in
-      List.iter pr_roles tags  
-    ; ps table_end 
-    ; ps th_end  
-    }
-;
-(* Segment printing without phonetics with semantics for Parser *)
-value print_segment_roles print_sems seg_num (phase,rword,_) =  
-  let word = mirror rword in do
-  { Morpho_html.print_signifiant_yellow rword
-  ; let (decl_phase,form,decl_tags) = match tags_of phase word with
-       [ Atomic tags -> 
-          process_kridanta [] seg_num phase word tags
-       | Preverbed (_,phase) pvs form tags -> 
-          process_kridanta pvs seg_num phase form tags 
-       | Taddhita (ph,form) sfx sfx_phase sfx_tags ->  
-            match tags_of ph form with 
-            [ Atomic _ -> (* stem, tagged as iic *)
-              process_taddhita [] seg_num ph form sfx_phase sfx sfx_tags 
-            | Preverbed _ pvs _ _ -> (* stem, tagged as iic *)
-              process_taddhita pvs seg_num ph form sfx_phase sfx sfx_tags 
-            | _ -> failwith "taddhita recursion unavailable"
-            ]
-       ] in do
-    { print_labels decl_tags seg_num
-    ; print_roles print_sems decl_phase decl_tags form
-    }
-  } 
-;
-value project n list = List.nth list (n-1) (* Ocaml's nth starts at 0 *)
-; 
-value print_unitag pvs phase word multitags (n,m) = 
-  let (delta,polytag) = project n multitags in
-  let unitag = [ project m polytag ] in do
-     { ps th_begin
-     ; pl (table_morph_of phase) (* table of color of phase begins *)
-     ; let _ = (* print unique tagging *)
-       print_morph pvs False 0 (generative phase) word 0 (delta,unitag) in ()
-     ; ps table_end              (* table of color of phase ends *)
-     ; ps th_end
-     }
-;
-value print_uni_taddhita pvs m phase stem sfx sfx_phase = fun
-  [ [ (delta,polytag) ] -> (* we assume n=1 taddhita form unambiguous *)
-    let unitag = [ project m polytag ] 
-    and gen = generative phase 
-    and cached = False in do
-    { ps th_begin 
-    ; pl (table_morph_of sfx_phase)      (* table begin *)
-    ; let _ = print_morph_tad pvs cached 0 gen stem sfx 0 (delta,unitag) in ()
-    ; ps table_end                       (* table end *) 
-    ; ps th_end
-    }
-  | _ -> failwith "Multiple sfx tag"
-  ]
-;
-value print_projection phase rword ((_,m) as index) = do
-  { ps tr_begin             (* tr begins *)
-  ; Morpho_html.print_signifiant_yellow rword
-  ; let word = mirror rword in 
-    match tags_of phase word with
-    [ Atomic tags -> print_unitag [] phase word tags index 
-    | Preverbed (_,phase) pvs form tags -> print_unitag pvs phase form tags index
-    | Taddhita (ph,form) sfx sfx_phase sfx_tags -> 
-        match tags_of ph form with
-        [ Atomic _ -> print_uni_taddhita [] m phase form sfx sfx_phase sfx_tags
-        | Preverbed _ pvs _ _ -> 
-                      print_uni_taddhita pvs m phase form sfx sfx_phase sfx_tags
-        | _ -> failwith "taddhita recursion unavailable" 
-        ]
-    ] 
-  ; ps tr_end               (* tr ends *)
-  }
-;
-value print_proj phase rword = fun 
-   [ [] -> failwith "Projection missing"
-   | [ n_m :: rest ] -> do
-       { print_projection phase rword n_m 
-       ; rest (* returns the rest of projections stream *)
-       }
-   ]
-;
 
 module Report_chan = struct 
 value chan = Control.out_chan; (* where to report *)
@@ -385,49 +266,6 @@ end;
 
 module Morpho_out = Morpho.Morpho_out Report_chan;
 
-(* Recording of selected solution - used only in Regression *)
-value record_tagging unsandhied mode_sent mode_trans all sentence output proj = 
-  let report = output_string Control.out_chan.val in
-  let print_proj1 phase rword proj prevs = do 
-  (* adapted from [print_proj] *)
-  { report "${"
-  ; let form = mirror rword in do 
-    { report (decode form)
-    ; let res = match proj with 
-           [ [] -> failwith "Projection missing"
-           | [ (n,m) :: rest ] -> 
-              let gen = generative phase in
-              let polytag = extract_lemma phase form in
-              let (delta,tags) = project n polytag in 
-              let tagging = [ project m tags ] in do 
-                { report ":"
-                ; report (string_of_phase phase ^ "")
-                ; Morpho_out.report_morph gen form (delta,tagging) 
-                ; (rest,[]) (* returns the rest of projections stream *)
-                }
-           ] in 
-      do { report "}$&"; res }
-    }
-  } in do
-  { report (if Control.full.val then "[{C}] " else "[{S}] ")
-  ; report (if unsandhied then "<{F}> " else "<{T}> ")
-  ; report (if mode_sent then "|{Sent}| " else "|{Word}| ")
-  ; report ("#{" ^ mode_trans ^ "}# ")
-  ; report ("({" ^ sentence ^ "})")
-  ; report (" [" ^ (string_of_int all) ^ "] ")
-  ; let rec pp (proj,prevs) = fun
-    [ [] -> match proj with 
-            [ [] -> () (* finished, projections exhausted *)
-            | _ -> failwith "Too many projections"
-            ]
-    | [ (phase,rword,_) :: rest ] -> (* sandhi ignored *)
-        let proj_prevs = print_proj1 phase rword proj prevs in
-        pp proj_prevs rest 
-    ] in pp (proj,[]) output
-  ; report "\n"
-  ; close_out Report_chan.chan.val
-  }
-;
 (* Structured entries with generative morphology *)
 type gen_morph =
    [ Gen_krid of ((string * word) * (verbal * word))
@@ -482,33 +320,6 @@ value lex_cat phase = phase (*i TEMPORARY - TODO i*)
 value get_morph gen phase form (delta,morphs) =
   let stem = patch delta form in (* stem may have homo index *)
   (form, lex_cat phase, generative_stem gen stem, morphs)
-;
-value return_tagging output projs = (* Used only in Regression *)
-  let get_tags phase rword projs = (* adapted from [print_proj] *)
-     let form = mirror rword in  
-     match tags_of phase form with
-     [ Atomic polytag -> match projs with 
-           [ [] -> failwith "Projection missing"
-           | [ (n,m) :: rest ] -> 
-              let gen = generative phase in
-              let (delta,tags) = project n polytag in
-              let tagging = [ project m tags ] in 
-              let entry = get_morph gen phase form (delta,tagging) in
-              (rest, lex_cat phase, entry)
-           ]
-     | _ -> failwith "Not implemented yet" (*i TODO for Regression 
-         [ (projs, lex_cat Pv, (form, lex_cat Pv, Preverbs_list prevs, []))] i*)
-     ] in 
-  let rec taggings accu projs = fun
-     [ [] -> match projs with 
-             [ [] -> accu
-             | _ -> failwith "Too many projections"
-             ]
-     | [ (phase,rword,_) :: rest ] -> (* sandhi ignored *)
-          let (new_projs,phase,tags) = get_tags phase rword projs in
-          taggings [ tags :: accu ] new_projs rest 
-     ] in 
-  return_morph (List.rev (taggings [] projs output))
 ;
 
 end;

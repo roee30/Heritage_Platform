@@ -12,7 +12,8 @@
 
 open Morphology; (* lemmas *)
 
-module Morphs (* takes its prelude and control arguments as parameters *) 
+(* Morph functor takes its prelude and control arguments as parameters *) 
+module Morphs 
   (Prel: sig value prelude : unit -> unit; end) 
   (Phases: sig type phase = (* Phases.phase *)
   [ Noun | Noun2
@@ -48,33 +49,31 @@ module Morphs (* takes its prelude and control arguments as parameters *)
 
 open Phases (* phase *)
 ;
-
-(* Somewhat weird classification of segments accoding to their construction
+(* Somewhat weird classification of segments according to their construction
 by Dispatcher. Preverbed segments may be finite verb forms or kridantas. *)
 type tag_sort =
   [ Atomic of lemmas 
   | Preverbed of (phase * phase) and (* pv *) Word.word and Word.word and lemmas 
   | Taddhita of (phase * Word.word) and (* sfx *) Word.word and phase and lemmas 
   ]
-;
+; 
 (* Fake tags of nan prefixes *)
 value nan_prefix = Bare_stem 
 ;
 value a_tag = [ ((0,[]),[ nan_prefix ]) ]
 and an_tag = [ ((0,[ 51 ]),[ nan_prefix ]) ] (* since lexicalized as an\#1 *)
 (* [an_tag] has delta = (0,[51]) since an\#1 is the relevant entry. Such values
-will have to be parameters of the specific lexicon used. *)(*i TODO i*)
+ought to be parameters of the specific lexicon used. *)(*i TODO i*)
 ;
 value ai_tag = a_tag (* special for privative abs-tvaa eg akritvaa *)
 and ani_tag = an_tag
 ;
 value unknown_tag = [ ((0,[]),[ Unanalysed ]) ] 
-;
+; 
 value give_up cat = 
   let mess = "Missing " ^ cat ^ " morphology bank" in do
   { Web.abort Html.default_language
                       "System error - please report - " mess
-(*  ; exit 0 (* installation problem -- executing process fails *) *)
   ; Deco.empty 
   }
 ;
@@ -158,7 +157,7 @@ value morpho_tags = fun
     | _ -> raise (Control.Anomaly "morpho_tags") 
     ]
 ;
-(* Used in Lexer, Reader, Parser, Interface *) 
+(* Used in Lexer/Reader/Parser and Interface *) 
 value tags_of phase word = 
   match phase with
   [ Pv | Pvk | Pvkc | Pvkv -> failwith "Preverb in tags_of" 
@@ -179,6 +178,6 @@ value tags_of phase word =
     (* NB Atomic comprises tin verbal forms of roots as well as sup atomic forms
        and all the pure stems collections Iic Iiv etc. *)
   ]
-;
+; 
 
 end;

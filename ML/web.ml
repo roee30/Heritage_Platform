@@ -75,9 +75,10 @@ and public_data_dir   = top_site_dir "DATA" (* linguistic data for cgis *)
 and var_dir           = top_site_dir "VAR" (* Parser dynamic regression suites *)
 and corpus_dir        = top_site_dir "CORPUS" (* Corpus tree *)
 ;
-(* This file is accessible only from Station clients in [var_dir] *)
+(* Regression deprecated 
+[(* This file is accessible only from Station clients in [var_dir] *)
 value regression_file_name = "regression" (* regression analysis stuff *)
-;
+; ]*)
 
 value data name = data_dir ^ name
 and dico_page name = dico_dir ^ name
@@ -278,6 +279,15 @@ and public_transstems_file = public_data "transstems.rem"
 and public_sandhis_id_file = public_data "sandhis_id.rem" 
 and public_cache_file      = public_data "cache.rem"
 and public_cache_txt_file  = public_data "cache.txt"
+;
+(* Here we retrieve finer discrimination for verbs forms preceded by preverbs.
+   This is experimental, and incurs too many conversions betweeen strings
+   and words, suggesting a restructuring of preverbs representation. *)
+(* This structure is in Web which acts as a common gloabal namespace for the 
+   various runtimes Lexer/Reader/Parser and Interface *)
+value preverbs_structure = (* Used in Morpho for display of pvs *) 
+  try (Gen.gobble public_preverbs_file : Deco.deco Word.word) 
+  with [ _ -> failwith "preverbs_structure" ]
 ;
 value skt_dir_url = Paths.skt_dir_url
 ;

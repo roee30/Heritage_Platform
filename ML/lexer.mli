@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Sanskrit Phrase Lexer *)
@@ -44,18 +44,23 @@ module Lexer : functor (* takes its prelude and iterator control as parameters *
 
   value extract_lemma : Phases.phase -> Word.word -> list lemma;
   value print_segment : int -> Disp.segment -> int;
-  value print_segment_roles : (Word.word -> inflexions -> unit)  
-     -> int -> Disp.segment -> unit;
-  value print_proj : Phases.phase -> Word.word -> 
-                     list (int * int) -> list (int * int);
-
+(* Exported for Parser *)
+  value process_kridanta: Word.word -> int -> Phases.phase -> Word.word ->
+        Morphology.multitag -> (Phases.phase * Word.word * Morphology.multitag);
+  value process_taddhita: Word.word -> int -> Phases.phase -> Word.word ->
+        Phases.phase -> Word.word -> Morphology.multitag ->
+        (Phases.phase * Word.word * Morphology.multitag);
+  value table_morph_of : Phases.phase -> string;
+  value print_morph : Word.word -> bool -> int -> bool -> Word.word -> int -> 
+        Morphology.unitag -> int;
+  value print_morph_tad : Word.word -> bool -> int -> bool -> Word.word -> 
+        Word.word -> int -> Morphology.unitag -> int;
+(* END Exported for Parser *)
   value all_checks : ref (list Viccheda.check); 
   value un_analyzable : Word.word -> (list Disp.segment * Viccheda.resumption); 
   value set_offset : (int * list Viccheda.check) -> unit;
   value print_scl_segment : int -> (Phases.phase * Word.word) -> int;
-  value record_tagging : bool -> bool -> string -> int -> string -> 
-    list (Phases.phase * Word.word * 'a) -> list (int * int) -> unit;
-  value return_tagging : 
-    list (Phases.phase * Word.word * 'a) -> list (int * int) -> string;
+  value tags_of : Phases.phase -> Word.word -> 
+                  (Load_morphs.Morphs Prel Phases).tag_sort; (* ugly *)
 end;
 

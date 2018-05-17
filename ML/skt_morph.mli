@@ -42,12 +42,12 @@ and paradigm =
   [ Presenta of gana and pr_mode (* parasmaipade *)
   | Presentm of gana and pr_mode (* aatmanepade *)
   | Presentp of pr_mode (* passive of present system *)
-  | Conjug of tense and voice (* other tenses/aspects *)
+  | Conjug of tense and voice (* other tenses/modes/aspects *)
   | Perfut of voice (* periphrastic futur (lu.t) *)
   ]
 and voice = [ Active | Middle | Passive ] (* diathesis (pada: Para Atma Ubha) *)
 and pr_mode = 
-  [ Present (* (la.t) *)
+  [ Present (* Indicative (la.t) *)
   | Imperfect (* Preterit (laf) *)
   | Imperative (* (lo.t) *)
   | Optative (* Potential (lif) *) 
@@ -55,11 +55,11 @@ and pr_mode =
 and tense = 
   [ Future (* (l.r.t) *)
   | Perfect (* Remote past - resultative aspect (li.t) *)
-  | Aorist of aor_class (* Immediate past or future - perfective aspect (luf) *)
-  | Injunctive of aor_class (* (le.t) - also Prohibitive with maa *) 
+  | Aorist of aor_class (* Immediate past or future with perfective aspect (luf) *)
+  | Injunctive of aor_class (* (le.t) - injunctions also Prohibitive with maa *) 
   | Benedictive (* Precative: optative aorist (aazirlif) *) 
   | Conditional (* Preterit of future (l.rf) *)
-(*| Subjunctive (* le.t *) TODO *)
+  | Subjunctive (* le.t *) (* Rare subjunctive, intermediate between Optative and Imperative *)
   ]
 ;
 (* NB from Indo-European: the present stem has the imperfective aspect,

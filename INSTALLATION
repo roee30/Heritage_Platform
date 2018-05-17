@@ -5,7 +5,7 @@
 #                               Gérard Huet                                #
 #                                                                          #
 ############################################################################
-# Installation instructions                     Copyright Gérard Huet 2017 #
+# Installation instructions                     Copyright Gérard Huet 2018 #
 ############################################################################
 
 This is just a reminder for quick installation.
@@ -20,7 +20,11 @@ If OCaml has been installed through the OPAM package manager, then:
    opam install camlp4
 
 should do the job. Alternatively, see https://github.com/ocaml/camlp4
-for download and installation instructions.
+for download and installation instructions. 
+
+Beware: camlp4 is not updated at every Ocaml distribution, so you may have 
+to settle for a somewhat ancient version of Ocaml, such as 4.02.2, which is
+the one I use myself. 
 
 1) Install the Heritage_resources package:
 

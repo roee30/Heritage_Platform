@@ -644,6 +644,7 @@ value look_up_and_display font gana entry =
 ;
 value in_lexicon entry = (* entry as a string in VH transliteration *)
   Index.is_in_lexicon (Encode.code_string entry)
+(* Problem: may give link to a non-root entry if called from Grammar service *)
 and doubt s = "?" ^ s
 ; 
 (* Compute homonym index for a given present class. *)

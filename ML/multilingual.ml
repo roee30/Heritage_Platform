@@ -105,6 +105,7 @@ value western_tense = fun
   | Injunctive _ -> "Injunctive"
   | Conditional  -> "Conditional"
   | Benedictive  -> "Benedictive"
+  | Subjunctive  -> "Subjunctive" 
   ]
 and indian_tense = fun
   [ Future       -> "l.r.t" 
@@ -113,7 +114,7 @@ and indian_tense = fun
   | Injunctive _ -> "aagamaabhaavayuktaluf" 
   | Conditional  -> "l.rf"
   | Benedictive  -> "aaziirlif" 
-(*| Subjunctive  -> "le.t" *)
+  | Subjunctive  -> "le.t" 
   ] 
 ;
 type gentense =

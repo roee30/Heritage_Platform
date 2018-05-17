@@ -50,6 +50,7 @@ and string_tense = fun
   | Injunctive k -> "inj." ^ (gana_str k)
   | Conditional  -> "cond."
   | Benedictive  -> "ben."
+  | Subjunctive  -> "subj."
   ]
 and string_case = fun 
   [ Nom -> "nom."

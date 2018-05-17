@@ -369,9 +369,12 @@ type nominal =
   | Krid of verbal and string (* kridantas of roots *)
   ]
 ;
+type sup = (number * list (case * word   (* stem *))) (* nominal generators *)
+ and tin = (number * list (person * word (* root *))) (* verbal generators *)
+;
 type flexion =
-  [ Declined of nominal and gender and list (number * list (case * word))
-  | Conju of finite and list (number * list (person * word))
+  [ Declined of nominal and gender and list sup
+  | Conju of finite and list tin
   | Indecl of ind_kind and word (* avyaya, particle, interjection, nota *)
   | Bare of nominal and word (* Iic *)
   | Avyayai of word (* Iic of avyayiibhaava cpd *)
@@ -383,19 +386,21 @@ type flexion =
   | Absotvaa of conjugation and word   (* abs-tvaa *)
   ]
 ;
-value is_taddhita = fun (* OBSOLETE - see [Subst.taddhitas] *)
+(*i OBSOLETE for NN - see [Subst.taddhitas] 
+[value is_taddhita = fun 
   [ "taa" | "tva" | "vat" | "mat" | "tas"
   | "kataa" | "katva" (* -ka-taa -ka-tva *)
   | "vattva" | "tvavat"-> True 
   | _ -> False
   ]
 ;
-value sort_taddhita s = s (*i OBS: [if is_taddhita s then "-" ^ s else s] i*)
-;
+value sort_taddhita s = if is_taddhita s then "-" ^ s else s
+;] OBS i*)
+
+(* Now functions that populate the inflected treebanks from the lexemes *)
 (* enter1: string -> flexion -> unit *)
 value enter1 entry =
-  let lexeme = sort_taddhita entry in 
-  let delta = Encode.diff_str lexeme (* partial application *)
+  let delta = Encode.diff_str entry (* partial application for patching *)
   and aapv = admits_aa.val (* for phantom forms generation *) in fun
    [ Declined Noun g lg -> List.iter enterg lg (* nouns *)
      where enterg (n,ln) = List.iter entern ln

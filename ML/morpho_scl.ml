@@ -69,8 +69,9 @@ and print_scl_tense = fun
   | Perfect      -> ps "<pft/>"
   | Aorist k     -> do { ps "<aor gana="; pr_scl_gana k; ps "/>" }
   | Injunctive k -> do { ps "<inj gana="; pr_scl_gana k; ps "/>" }
-  | Conditional  -> ps "<cond/>"
   | Benedictive  -> ps "<ben/>"
+  | Conditional  -> ps "<cond/>"
+  | Subjunctive  -> ps "<subj/>"
   ]
 ;
 value print_scl_paradigm = fun

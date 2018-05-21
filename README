@@ -52,7 +52,7 @@ This constituted the thesis research of Benoît Razet.
 
 From 2006 onwards, an international cooperation on Sanskrit Computational
 Linguistics was started between INRIA and the Sanskrit Studies Department
-at the University of Hyderabad, headed by Pr. Amba kulkarni. The goal of this 
+at the University of Hyderabad, headed by Pr. Amba Kulkarni. The goal of this 
 joint team is to develop inter-operable packages for the processing of 
 Sanskrit corpus, as communicating Web services.
 
@@ -75,4 +75,10 @@ and the platform Web services operations proper. The two packages
 are available at git repositories, namely
 git@gitlab.inria.fr/huet/Heritage_Resources.git
 git@gitlab.inria.fr/huet/Heritage_Platform.git
+
+In summer 2017 Idir Lankri spent his Master internship implementing
+a Corpus Manager prototype, which is used by Gérard Huet to link
+citations of the Heritage Dictionary to selected readings stored in the corpus.
+
+May 21st 2018
 

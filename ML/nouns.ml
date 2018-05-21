@@ -4500,7 +4500,7 @@ value build_ena g entry =
 ;
 value build_aham () = 
   let decline case form = (case,code form) in 
-  enter "asmad" (* entry *)
+  enter "asmad" (* Paninian entry *)
    [ Declined Pron (Deictic Speaker)
    [ (Singular, 
         [ decline Nom "aham"
@@ -4548,7 +4548,7 @@ value build_aham () =
 ;
 value build_tvad () = 
   let decline case form = (case,code form) in 
-  enter "yu.smad" (* entry *)
+  enter "yu.smad" (* Paninian entry *)
    [ Declined Pron (Deictic Listener)
    [ (Singular, 
         [ decline Nom "tvam"
@@ -5115,8 +5115,8 @@ value compute_nouns_stem_form e stem d p =
             | [ 45; 46; 3; 45 ]        (* vizva *)
             | [ 45; 43; 1; 48 ]        (* sarva *)
             | [ 45; 48 ]               (* sva *) 
-            | [ 45; 32 ]               (* tva *) 
-                -> build_pron_a Neu r1 e
+            (* | [ 45; 32 ] cf tvad clash with tva taddhita ending *) 
+                -> build_pron_a Neu r1 e 
             | _ -> build_neu_a r1 e
             ]
       | [ 2 :: _ ] -> report stem Neu (* (missing) ahigopaa raa vibhaa sthaa *)

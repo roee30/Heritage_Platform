@@ -71,6 +71,7 @@ value reg_stem = fun (* regular english verbs paraphrase *)
   | "paa#2"   -> "protect"
   | "pi#2"    -> "increase"
   | "praz"    -> "ask"
+  | "bhaa.s"  -> "talk"
   | "tarj" 
   | "bharts"  -> "threaten"
   | "bruu"    -> "say"
@@ -80,6 +81,7 @@ value reg_stem = fun (* regular english verbs paraphrase *)
   | "lal"     -> "fondle"
   | "v.rt#1"  -> "exist"
   | "v.r.s"   -> "rain"
+  | "zubh#1"  -> "shine"
   | "sp.rz#1" -> "touch"
   | "svid#2"  -> "sweat"
   | _ -> raise Unknown

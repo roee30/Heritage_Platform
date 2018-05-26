@@ -4679,6 +4679,7 @@ value record_abso_am root =
   | "kram"    -> record "kraamam"
   | "k.r#1"   -> record "kaaram" (* \Pan{3,4,26-28} *)
   | "khan"    -> record "khaanam"
+  | "j~naa#1" -> record "j~naayam"
   | "t.r.s#1" -> record "tar.sam"
   | "daa#1"   -> record "daayam"
   | "paa#1"   -> record "paayam"
@@ -5565,11 +5566,6 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
        record_pfp_aniiya Causative cpstem entry
        (* Passive past participle and absolutives *)
      ; record_pppca cpstem cstem entry
-     ; match entry with (* additional forms *)
-       [ "j~naa#1" -> let st = revcode "j~nap" in (* optional j~napita *)
-                      record_pppca st st entry (* vet \Pan{7,2,27} *)
-       | _ -> ()
-       ] 
        (* Periphrastic future, Infinitive, Gerundive/pfp in -tavya *)
      ; perif Causative icstem entry 
        (* Periphrastic perfect Whitney§1045 *)
@@ -5706,6 +5702,14 @@ value compute_extra_car () = do
   ; enter1 "car" (Absotvaa Primary (code "ciirtvaa"))
   ; enter1 "car" (Invar (Primary,Infi) (code "cartum")) (* epic *)
   }
+ and compute_extra_jnaa () =
+  let entry = "j~naa#1" in (* j~napta vet \Pan{7,2,27} *)
+  let cstem = revcode "j~nap" in 
+  let ppstem = [ 1 :: [ 32 :: cstem ] ] (* j~napta *) in do 
+  { record_part (Ppp_ Causative ppstem entry)
+  ; record_part (Pppa_ Causative [ 45 :: ppstem ] entry) (* pp-vat *)
+  ; perif Causative cstem entry 
+  }
  and compute_extra_zru () = 
   enter1 "zru" (* ved écoute *) 
          (Conju (impera 5) [ (Singular,[ (Second, code "zrudhi") ]) ])
@@ -5794,6 +5798,7 @@ value compute_extra () = do
   ; compute_extra_khan ()
   ; compute_extra_car () 
   ; compute_extra_cud () 
+  ; compute_extra_jnaa () 
   ; compute_extra_dhaa () 
   ; compute_extra_nind () 
   ; compute_extra_prr () 
@@ -5841,7 +5846,8 @@ value fake_compute_conjugs (gana : int) (entry : string) = do
       | "gup"    -> record_part_ppp (revcode "gupta") entry 
       | "car"    -> compute_extra_car ()
       | "cud"    -> compute_extra_cud () 
-      | "dhaa#1" -> compute_extra_dhaa ()
+      | "j~naa#1"-> compute_extra_jnaa () 
+      | "dhaa#1" -> compute_extra_dhaa () 
       | "nind"   -> compute_extra_nind ()
       | "p.rr"   -> compute_extra_prr ()
       | "bhaa.s" -> compute_extra_bhaas ()

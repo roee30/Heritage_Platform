@@ -5043,7 +5043,7 @@ value compute_nouns_stem_form e stem d p =
                 ]
             | [ 5 :: r2 ] -> match r2 with
                 [ [ 24 :: [ 1 :: [ 48 ] ] ] (* saju.s *)
-                    -> build_us Mas r2 e (* Kale §114 *)
+                    -> build_us Mas r2 e (* Kale§114 *)
                 | _ -> build_root Mas stem e
                 ]
             | _ -> build_root Mas stem e
@@ -5200,7 +5200,7 @@ value compute_nouns_stem_form e stem d p =
                | [ 47; 6; 42 ] (* yuu.san *)
                | [ 47; 12; 34 ] (* do.san *)
                | [ 48; 1 ] (* asan *)
-               | [ 48; 2 ] (* aasan *) -> build_sp_an r2 e (* Whitney §432 *)
+               | [ 48; 2 ] (* aasan *) -> build_sp_an r2 e (* Whitney§432 *)
                | [ 35; 6 ] (* uudhan *) -> build_uudhan r2 e
                | [ 41 :: r3 ] (* -man *) -> match e with
                   [ "brahman" -> build_neu_brahman e
@@ -5341,12 +5341,12 @@ value compute_nouns_stem_form e stem d p =
           else do
                { if r1=[ 22; 1 ] (* -acii *)  then () (* seulement avec px *)
                  else build_fem_ii r1 e
-               ; match r1 with (* vedic forms Whitney §355-356 *) 
+               ; match r1 with (* vedic forms Whitney§355-356 *) 
                  [ [ 45; 1 ]             (* avii *)
                  | [ 34; 1; 36 ]         (* nadii *) 
                  | [ 41; 43; 6; 48 ]     (* suurmii *) 
                  | [ 41; 47; 17; 1; 44 ] (* lak.smii *) 
-                 | [ 43; 1; 32 ] (* tarii *) (* Whitney §363a *)
+                 | [ 43; 1; 32 ] (* tarii *) (* Whitney§363a *)
                  | [ 43; 32; 36; 1; 32 ] (* tantrii *)
                  | [ 43; 1; 32; 48 ] (* starii *) (* Deshpande u.naadisuutra *)
                    -> build_poly_ii Fem r1 e
@@ -5358,7 +5358,7 @@ value compute_nouns_stem_form e stem d p =
           if monosyl r1 || compound_monosyl_uu r1 then build_mono_uu Fem r1 e
           else do
                { build_fem_uu r1 e
-               ; match r1 with (* vedic forms Whitney §355-356 *)
+               ; match r1 with (* vedic forms Whitney§355-356 *)
                  [ [ 35; 1; 45 ] (* vadhuu *) 
                  | [ 36; 1; 32 ] (* tanuu *) 
                  | [ 41; 1; 22 ] (* camuu *) 
@@ -5600,7 +5600,7 @@ value iic_indecl = (* should be lexicalized *)
   ; "yathaa"    (* yathaanirdi.s.ta *)
   ; "vinaa"     (* vinaabhava *)
   ; "satraa"    (* satraajit *)
-  ; "saha"      (* problematic -- overgenerates  *)
+  ; "saha#2"    (* problematic -- overgenerates  *)
   ; "saak.saat"
   ; "saaci"
   ]

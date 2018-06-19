@@ -53,4 +53,13 @@ and lexical_kridantas =
 and by [Morpho.print_inv_morpho] and [Morpho_ext.print_inv_morpho_ext]
 at segmenting time. *)
 
+(* Here we retrieve finer discrimination for verbs forms preceded by preverbs.
+   This is experimental, and incurs too many conversions betweeen strings
+   and words, suggesting a restructuring of preverbs representation. *)
+value preverbs_structure = (* Used in Morpho for display of pvs *) 
+  try (Gen.gobble Web.public_preverbs_file : Deco.deco Word.word) 
+  with [ _ -> failwith "preverbs_structure" ]
+;
+
+
 (*i end; i*)

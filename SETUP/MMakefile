@@ -35,9 +35,10 @@ XMLBANKS=$(SKTRESOURCES)XML# Heritage Sanskrit morphology in XML databases
 
 # Path to global Sanskrit corpus downloaded from Git.
 SKTCORPUS=$(SKTRESOURCES)CORPUS
-
 # Path to the corpus in the server area.
 SERVERCORPUS=$(SERVERPUBLICDIR)CORPUS
+# Corpus is loaded in SERVERCORPUS at install time, by make releasecorpus
+# Conversely, Corpus is exported in Resources at demand by make commit-corpus
 
 # Macro to extract information from the Apache configuration.
 apache_config_extract = $(shell apachectl -S | grep $(1) |		\

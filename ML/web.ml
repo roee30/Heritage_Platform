@@ -280,15 +280,6 @@ and public_sandhis_id_file = public_data "sandhis_id.rem"
 and public_cache_file      = public_data "cache.rem"
 and public_cache_txt_file  = public_data "cache.txt"
 ;
-(* Here we retrieve finer discrimination for verbs forms preceded by preverbs.
-   This is experimental, and incurs too many conversions betweeen strings
-   and words, suggesting a restructuring of preverbs representation. *)
-(* This structure is in Web which acts as a common gloabal namespace for the 
-   various runtimes Lexer/Reader/Parser and Interface *)
-value preverbs_structure = (* Used in Morpho for display of pvs *) 
-  try (Gen.gobble public_preverbs_file : Deco.deco Word.word) 
-  with [ _ -> failwith "preverbs_structure" ]
-;
 value skt_dir_url = Paths.skt_dir_url
 ;
 (* Relative paths of top directory of site and sub directories *)

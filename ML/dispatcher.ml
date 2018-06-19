@@ -244,7 +244,7 @@ and voice_o v = fun
 value main_preverb pvs = List2.last pvs 
 ;
 value main_preverb_string pv = 
-  Canon.decode (main_preverb (assoc_word pv Web.preverbs_structure))
+  Canon.decode (main_preverb (assoc_word pv Naming.preverbs_structure))
 ;
 value attested_verb (o_gana,o_voice) pv root = attested pv root && 
   let gana = gana_o o_gana in

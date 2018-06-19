@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Prints morphological information, including derivative morphology.
@@ -92,7 +92,7 @@ value print_inv_morpho pe pne pu form (seg_num,sub) generative (delta,morphs) =
 ;
 (* Decomposes a preverb sequence into the list of its components *)
 value decomp_pvs pvs = 
-  Deco.assoc pvs Web.preverbs_structure
+  Deco.assoc pvs Naming.preverbs_structure
 ;
 (* Used in [Morpho_html] *)
 value print_inv_morpho_link pvs pe pne pu form =

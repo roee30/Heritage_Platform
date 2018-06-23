@@ -5729,6 +5729,7 @@ value tasil_preserve () = do (* Whitney§1098 *)
   ; enter1 "vizva"  (Indecl Tas (code "vizvatas"))  (* id *) 
   ; enter1 "sva"    (Indecl Tas (code "svatas"))    (* id *) 
   ; enter1 "puurva" (Indecl Tas (code "puurvatas")) (* id *) 
+  ; enter1 "sarva" (Indecl Tas (code "sarvatas"))   (* id *) 
   ; enter1 "aze.sa" (Indecl Tas (code "aze.satas")) (* tasil on privative cpd *)
   }
 ;

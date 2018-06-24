@@ -798,8 +798,8 @@ export SERVERCORPUS
 export-corpus: # ???
 	$(MAKE) -C $(SKTRESOURCES) commit-corpus
 
-# saving corpus acquisitions 
+# saving corpus acquisitions - to be refined for incrementality
 commit-corpus: 
-	cp -R $(SERVERCORPUS) $(SKTRESOURCES)
+	cp -Rp $(SERVERCORPUS) $(SKTRESOURCES)
 # TODO: git add des nouvelles citations, git commit, git push
 

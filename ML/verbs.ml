@@ -5287,7 +5287,7 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
    | "kar.na" | "kalafka" | "kalu.sa" | "kavala" | "ku.t.ta" | "kusuma" 
    | "kha.da" | "garva" | "gopaa" | "carca" | "cuur.na" | "chala" | "chidra"
    | "tantra" | "tarafga" | "taru.na" | "tuhina" | "da.n.da" | "deva" | "dola"
-   | "dravat" | "dhiira#1" | "nuutana" | "pa.tapa.taa" | "pallava"
+   | "dravat" | "dhiira#1" | "nirmuula" | "nuutana" | "pa.tapa.taa" | "pallava"
    | "pavitra" | "paaza" | "pi.n.da" | "pulaka" | "puula" | "pratikuula" 
    | "prati.sedha" | "pradak.si.na" | "prasaada" | "bhi.saj" | "mantra" 
    | "malina" | "mizra" | "mukula" | "mukhara" | "mu.n.da" | "muutra" 

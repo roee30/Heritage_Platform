@@ -1247,7 +1247,7 @@ value build_mas_in stem entry =
 ;
 value build_as gen stem entry = 
   let decline case suff = (case,fix stem suff) 
-  and bare = mirror [ 48 :: [ 1 :: stem ] ] in 
+  and rstem = [ 48 :: [ 1 :: stem ] ] in 
   enter entry (
    [ Declined Noun gen
    [ (Singular, let l =
@@ -1305,7 +1305,8 @@ value build_as gen stem entry =
         ; decline Loc "a.hsu" (* decline Loc "assu" *)
         ])
    ]            
-   ; Bare Noun bare (* as *)
+   ; Bare Noun (mirror rstem) (* as *)
+   ; Indecl Tas (fix rstem "tas") (* eg manastas *)
    ]
      @ (match entry with 
          ["uras" | "manas" -> [ Bare Noun (wrap stem 1) ] (* ura- mana- *)
@@ -1372,7 +1373,8 @@ value build_nas entry =
 ;
 value build_is gen stem entry =
   let decline case suff = (case,fix stem suff) 
-  and bare = mirror [ 48 :: [ 3 :: stem ] ] in 
+  and rstem = [ 48 :: [ 3 :: stem ] ] in 
+  let bare = mirror rstem in
   enter entry 
    [ Declined Noun gen
    [ (Singular, 
@@ -1421,12 +1423,14 @@ value build_is gen stem entry =
         ])
    ]             
    ; Bare Noun bare (* is *)
+   ; Indecl Tas (fix rstem "tas") 
    ; Avyayaf bare
    ]
 ;
 value build_us gen stem entry = 
   let decline case suff = (case,fix stem suff) 
-  and bare = mirror [ 48 :: [ 5 :: stem ] ] in 
+  and rstem = [ 48 :: [ 5 :: stem ] ] in 
+  let bare = mirror rstem in 
   enter entry 
    [ Declined Noun gen
    [ (Singular,
@@ -1476,6 +1480,7 @@ value build_us gen stem entry =
    ]             
    ; Bare Noun bare (* us *)
    ; Cvi (wrap stem 6) (* arus cak.sus *)
+   ; Indecl Tas (fix rstem "tas") 
    ; Avyayaf bare 
    ]
 ;
@@ -3321,7 +3326,7 @@ value build_fem_ri_v stem entry = (* vriddhi in strong cases *)
    ; Avyayaf bare 
    ]
 ;
-value build_fem_ri_g stem entry = (* parenté avec gu.na *)
+value build_fem_ri_g stem entry = (* lien de parenté avec gu.na *)
   let decline case suff = (case,fix stem suff) 
   and bare = wrap stem 7 in 
   enter entry 
@@ -4908,7 +4913,7 @@ value compute_nouns_stem_form e stem d p =
                | [ 2; 41; 2; 24 ] (* jaamaat.r *)
                | [ 36; 1; 42; 1; 37; 3 ] (* upayant.r *) 
                | [ 2; 43; 40 ] (* bhraat.r *) -> build_mas_ri_g r1 e
-               (* napt.r bhart.r pari.net.r - parenthood exceptions, follow: *)
+               (* napt.r bhart.r pari.net.r dev.r: parenthood relation follow: *)
                | _ -> (* dhaat.r general agent paradigm *) build_mas_ri_v r1 e
              ]
           | [ 36 ] (* n.r *) -> build_nri r1 e

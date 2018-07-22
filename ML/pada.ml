@@ -109,7 +109,7 @@ value voices_of = fun
   | "kram" | "krii" | "k.san" | "k.sap#1" | "k.sal" | "k.sip" | "k.sud" | "khan" 
   | "gam" | "garh" | "guh" | "gras" | "gha.t.t" | "cat" | "carc" | "ci"
   | "cint" | "cud" | "ce.s.t" | "cyu" | "chad#1" | "chand" | "chid#1" | "jan" 
-  | "juu" | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d" | "tan#1" | "tan#2" 
+  | "juu" | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d" | "tan#1" | "tan#2" | "tap"
   | "tud#1" | "tul" | "t.rd" | "daaz#1" | "diz#1" | "dih" | "duh#1"
   | "dev#1" | "draa#2" | "dvi.s#1" | "dhaa#1" | "dhaav#1" | "dhaav#2" 
   | "dhuu#1" | "dh.r" | "dhva.ms" | "nah" | "naath" | "nij" | "nii#1"
@@ -141,7 +141,7 @@ jan 4A 1U
 j.rr 1U 4P
 jyaa1 4A 9P
 .damb 1A 10P (vi-)
-tap 1P 4A
+tap 1U 4A
 daa1 2P 1U 3U
 draa2 2P 4U
 dh.r.s 1U 5P
@@ -173,11 +173,12 @@ value voices_of_gana g root = match g with
  [ 1 -> match root with
         [ ".r" | "k.r.s" | "cur" | "tap" | "budh#1" | "van" | "v.r#1" | "su#2"
         | "suu#1" 
-            -> Para (* but ".r" Atma for pv sam \Pan{1,3,29} *)  
+            -> Para 
         | "i" | "gha.t.t" | "ghuur.n" | ".damb" | "bhra.mz" | "mid" | "mok.s"
         | "lok" | "svid#2" 
             -> Atma
-        | "i.s#1" | "j.rr" | "daa#1" | "dh.r.s" | "as#2" | "kuc" 
+        | "i.s#1" | ".r" (* ".r" Atma for pv sam \Pan{1,3,29} also "tap" *)  
+        | "j.rr" | "tap" | "daa#1" | "dh.r.s" | "as#2" | "kuc" 
         | "m.rj" | "m.rd#1" | "rud#1" | "stambh" 
             -> Ubha
         | "kliiba" -> Atma (* denominative verb *)
@@ -237,12 +238,12 @@ value voices_of_gana g root = match g with
 ;
 
 (* Refining with potential preverb *)
-value voices_of_pv upasarga gana = fun (* gana only used for "tap" "i" *)
+value voices_of_pv upasarga gana = fun (* gana only used for "tap" "i" ".r" *)
 (* Paninian requirements *)
-[ "zru" | ".r" | "gam" | "svar" | "vid#1" (* | "praz" *) -> 
+[ "zru" | "gam" | "svar" | "vid#1" (* | "praz" *) -> 
              if upasarga = "sam" then Atma else Para (* \Pan{1,3,29} *)
 (* "praz" used in Atma with aa- but also without pv in epics (MW) *)
-| "car" ->   if upasarga = "sam" then Ubha else Para (* \Pan{1,3,54} *)
+| ".r" | "car" ->   if upasarga = "sam" then Ubha else Para (* \Pan{1,3,54} *)
 | "viz#1" -> if upasarga = "ni"  then Atma else Para (* \Pan{1,3,17} *)
 | "huu" -> match upasarga with
            [ "ni" | "sam" | "upa" | "vi" -> Atma (* \Pan{1,3,30} *)

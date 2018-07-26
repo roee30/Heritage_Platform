@@ -470,7 +470,10 @@ value build_mas_ppfa verbal stem inter stem_vas root =
         ; decline  Gen "u.saam"
         ; declinev Loc "vatsu"
         ])
-   ] ]
+   ]
+   ; Bare krid (fix stem "vat") (* eg vidvat- *)
+(* ; Avyayaf (fix stem "vas") - Not dealt with by [Inflected.enter_form] *)
+   ]
 ;
 (* Similar to [Nouns.build_neu_vas] *)
 value build_neu_ppfa verbal stem inter stem_vas root = 
@@ -511,10 +514,13 @@ value build_neu_ppfa verbal stem inter stem_vas root =
         ; decline  Gen "u.saam"
         ; declinev Loc "vatsu"
         ])
-   ] ]
+   ]
+   ; Bare krid (fix stem "vat") (* eg vidvat- *)
+(* ; Avyayaf (fix stem "vas") - Not dealt with by [Inflected.enter_form] *)
+   ]
 ;
-(* Supplementary forms with intercalation of i *)
-value build_more_ppfa verbal stem stem_vas root = 
+(* Supplementary forms with intercalation of i in later language Whitney§805b *)
+value build_late_ppfa verbal stem stem_vas root = 
   let gen_entry = gen_stem (verbal,root) stem_vas in
   let krid = Krid verbal root in
   let declinev case suff = (case,fix stem ("i" ^ suff)) in do
@@ -562,7 +568,9 @@ value build_more_ppfa verbal stem stem_vas root =
         ; declinev Abl "vadbhyas"
         ; declinev Loc "vatsu"
         ])
-   ] ]
+   ]    
+   ; Bare krid (fix stem "vat") 
+   ]
    }
 ;
 value build_part_a part_kind stem root = 
@@ -595,7 +603,7 @@ and build_part_vas c stem inter stemf root =
   { build_mas_ppfa verbal stem inter prati root (* (i)vas *)
   ; build_neu_ppfa verbal stem inter prati root (* (i)vas *)
   ; if (root="d.rz#1" || root="vid#2" || root="viz#1") && c=Primary
-    then build_more_ppfa verbal stem prati root (* Whitney §805b *)
+    then build_late_ppfa verbal stem prati root (* i supplement Whitney§805b *)
     else ()
   ; build_part_ii verbal stemf prati root (* u.sii *)
   }

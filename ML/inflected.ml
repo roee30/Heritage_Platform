@@ -386,18 +386,8 @@ type flexion =
   | Absotvaa of conjugation and word   (* abs-tvaa *)
   ]
 ;
-(*i OBSOLETE for NN - see [Subst.taddhitas] 
-[value is_taddhita = fun 
-  [ "taa" | "tva" | "vat" | "mat" | "tas"
-  | "kataa" | "katva" (* -ka-taa -ka-tva *)
-  | "vattva" | "tvavat"-> True 
-  | _ -> False
-  ]
-;
-value sort_taddhita s = if is_taddhita s then "-" ^ s else s
-;] OBS i*)
 
-(* Now functions that populate the inflected treebanks from the lexemes *)
+(* Now functions that populate the inflected forms treebanks from the lexemes *)
 (* enter1: string -> flexion -> unit *)
 value enter1 entry =
   let delta = Encode.diff_str entry (* partial application for patching *)
@@ -508,7 +498,7 @@ value enter_form stem =
           else ()
         }
    | Bare (Krid (_,Action_noun) root) w -> 
-       add_morphauxiick w stem Bare_stem (* cvi *)
+       add_morphauxiick w stem Bare_stem (* cvi patch *)
    | Bare (Krid _ root) w -> let f = Bare_stem in do (* losing verbal and root *)
        { add_morphpi w stem f aapv 
        ; if auxiliary root then add_morphauxiick w stem f else ()

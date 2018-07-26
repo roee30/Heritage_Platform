@@ -10,7 +10,8 @@
 (*i module Canon = struct i*)
 
 (* Inverse of [Transduction.code_raw] - word to VH transliteration *)
-value canon = fun
+(* Except that .ll has no canonical code *)
+value canon = fun 
   [ 0  -> "-" (* notation for suffixes and segmentation hint in compounds *)
   | 1  -> "a"
   | 2  -> "aa"

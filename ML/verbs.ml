@@ -4865,9 +4865,6 @@ value compute_present_system entry rstem gana pada third =
          match voices_of_gana gana entry with
          [ Para -> (* active only *) if pada then
              compute_thematic_active gana Primary stem entry third
-             (*                      else if entry = ".r" 
-                                          || entry = "tap" then (* for sam- *)
-             compute_thematic_middle gana Primary stem entry third  *)
              else emit_warning ("Unexpected middle form: " ^ entry)
          | Atma -> (* middle only *)  
              if padam then emit_warning ("Unexpected active form: " ^ entry) 

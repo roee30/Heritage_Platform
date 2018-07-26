@@ -1559,7 +1559,7 @@ value build_mas_vas stem entry =
         ; decline Loc "vatsu"
         ])
    ]
-(* ; Bare Noun (fix stem "vas") *) (* ou vat ? *)
+   ; Bare Noun (fix stem "vat") (* eg vidvat- *)
    ; Avyayaf (fix stem "vas")
    ]
 ;
@@ -2419,10 +2419,10 @@ value build_aksan stem entry =
         ; decline Loc "nos"
         ])
    ; (Plural, 
-        [ decline Voc "iinii"
-        ; decline Nom "iinii"
-        ; decline Acc "iinii"
-        ; decline Acc "aanii" (* MW véd. sakthaanii RV{10,86,16} AV{6,9,1} *)
+        [ decline Voc "iini"
+        ; decline Nom "iini"
+        ; decline Acc "iini"
+        ; decline Acc "aani" (* MW véd. sakthaani RV{10,86,16} AV{6,9,1} *)
         ; decline Ins "ibhis"
         ; decline Dat "ibhyas"
         ; decline Abl "ibhyas"

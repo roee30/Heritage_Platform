@@ -343,9 +343,9 @@ value validate_pv_k pv krit_form (delta,_) = (* see [Morpho.print_inv_morpho] *)
   let krit_stem = Word.patch delta krit_form in 
   let (homo,bare_stem) = homo_undo krit_stem in 
   let krit_infos = assoc_word bare_stem unique_kridantas in 
-  let ((conj,krit),root) = look_up_homo homo krit_infos in try
-  let gana_pada = extract_gana_pada_k krit in  
-  if conj=Primary then attested_verb gana_pada pv root else attested pv root
+  let ((conj,krit),root) = look_up_homo homo krit_infos in
+  try let gana_pada = extract_gana_pada_k krit in  
+      if conj=Primary then attested_verb gana_pada pv root else attested pv root
   with [ Unvoiced -> attested pv root ]
 ;
 (* We should verify aa- validation for phantomatic forms *)
@@ -369,10 +369,11 @@ value autonomous_form_k krid_form (delta,_) =
   let stem = Word.patch delta krid_form in
   let (homo,bare_stem) = homo_undo stem in
   let krid_infos = assoc_word bare_stem unique_kridantas in 
-  let ((conj,krit),root) = look_up_homo homo krid_infos in try
-  let gana_pada = extract_gana_pada_k krit in  
-  if conj=Primary then if filter_out_krit krit root then False
-                       else autonomous_root gana_pada root else True
+  let ((conj,krit),root) = look_up_homo homo krid_infos in 
+  try let gana_pada = extract_gana_pada_k krit in  
+      if conj=Primary then if filter_out_krit krit root then False
+                           else autonomous_root gana_pada root 
+      else True
   with [ Unvoiced -> autonomous root ]
 ;
 (* Checks whether a verbal or participial form is attested/validated *)
@@ -425,11 +426,11 @@ value apply_sandhi rleft right = fun
 (* [validate : output -> output] - dynamic consistency check in Segmenter.
    It refines the regular language of dispatch by contextual conditions
    expressing that preverbs are consistent with the following verbal form. 
-   The forms are then compounded, otherwise rejected. *)
-(* Things would be much simpler if we generated forms of verbs and kridantas
+   The forms are then compounded, otherwise rejected. 
+ Things would be much simpler if we generated forms of verbs and kridantas
  with (only valid) preverbs attached, since this check would be unnecessary.
  On the other hand, we would have to solve the ihehi problem. *)
-(* A similar kind of aggregation is effected for a few generative taddhitas,
+(* NB. A similar kind of aggregation is effected for a few generative taddhitas,
    but this is still experimental. *)
 value validate out = match out with
   [ [] -> []
@@ -610,7 +611,7 @@ value validate out = match out with
   | [ (ph,form,_) :: [ (Pron,[ 1; 48 ],_) :: _ ] ] (* sa *) -> 
       if Phonetics.consonant_initial (Word.mirror form)  
       then out else [] 
-    (* Or, if one wants to replace sa with sa.h : [
+    (* Alternatively, if one wants to replace "sa" with "sa.h" : [
   | [ ((ph,form,_) as last) :: [ (Pron,[ 1; 48 ],_) :: rest ] ] (* sa *) -> 
       let initial = List.hd (Word.mirror form) in 
       if Phonetics.consonant initial then 

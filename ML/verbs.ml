@@ -5266,7 +5266,7 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
      (* to become \Pan{3,1,13} kya.s *)
    | "asu" (* lexicalized under "asuuya" *)
        -> lengthen rstem (* lengthening -aayati *) 
-   | "asuuya" (* "asu" lengthened *) | "gomaya" (* euphony *)
+   | "asuuya" (* "asu" lengthened *) | "gomaya" | "vyaya" (* euphony *)
        -> trunc (trunc rstem) 
    | "artha" | "veda" | "satya" (* \Pan{3,1,25} vt. *)
        -> [ 1 :: [ 37 :: [ 2 :: trunc rstem ] ] ] (* -aapayati - interc p *) 
@@ -5313,7 +5313,7 @@ value den_stem_m entry = (* in general intransitive or reflexive Whitney§1059c 
    [ "artha" | "i.sa" | "kuha" | "carca" | "mantra" | "muutra" | "m.rga"
    | "viira" | "safgraama" | "suutra" (* also zithila below *)
        -> rstem (* (a)-yate *) 
-   | "asuuya" (* "asu" lengthened *)
+   | "asuuya" (* "asu" lengthened *) | "vyaya" (* euphony *)
        -> trunc (trunc rstem) 
    | "tavi.sa" | "citra" (* do \Pan{3,1,19} *) | "sajja"
        -> [ 4 :: trunc_a rstem ] (* -()iiyate *)

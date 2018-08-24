@@ -4755,19 +4755,12 @@ value build_sat entry =
    ; Bare Noun (code ".sa.t")
    ]
 ;
-(* To verify: internal sandhi ought to allow formation of stem .sa.t *)
-
 (* Numerals 5, 7, 8, 9, 10, 11-19 *)
 value build_num stem entry = 
   let decline case suff = (case,fix stem suff) in 
   enter entry (
    [ Declined Noun (Deictic Numeral)
-   [ (Dual, if entry = "a.s.tan" then 
-            (* remains of dual form 8 as a pair of 4 *)
-            [ decline Nom "au"
-            ; decline Acc "au"
-            ] else [])
-   ; (Plural, let l =
+   [ (Plural, let l =
         [ decline Nom "a" (* plural although no proper plural form Whitney§483 *)
         ; decline Acc "a" 
         ; decline Ins "abhis"
@@ -4776,7 +4769,9 @@ value build_num stem entry =
         ; decline Gen "aanaam"
         ; decline Loc "asu"
         ] in if entry = "a.s.tan" then l @
-        [ decline Ins "aabhis"
+        [ decline Nom "au" (* remains of dual form 8 as a pair of 4 *)
+        ; decline Acc "au"
+        ; decline Ins "aabhis"
         ; decline Dat "aabhyas"
         ; decline Abl "aabhyas"
         ; decline Loc "aasu"

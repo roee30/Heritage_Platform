@@ -233,6 +233,7 @@ chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx segmenter.cmx \
 morpho_scl.cmx load_morphs.cmx lexer.cmx constraints.cmx checkpoints.cmx \
 paraphrase.cmx scl_parser.cmx parser.cmx -o parser
 
+# corpus manager by Idir Lankri:
 corpus_manager: corpus_manager_cgi.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
 		version.cmx date.cmx control.cmx word.cmx canon.cmx	\

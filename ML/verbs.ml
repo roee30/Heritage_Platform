@@ -4327,7 +4327,8 @@ value build_infinitive c inf_stem root = do
   { enter1 root (Invar (c,Infi) (fix inf_stem "tum"))
   ; enter1 root (Inftu c (fix inf_stem "tu")) (* Xtu-kaama compounds *)
 (* NB. bahuv cpds in -kaama and -manas constructed with infinitives in -tu 
-   See Renou HLS p72 from Patanjali; also Assimil p194 eg tyaktukaama
+   See Renou HLS p72 from Patanjali; Renou grammaire §107 dagdhukaama
+   also Assimil p194 eg tyaktukaama
    anu.s.thaatukaama "desirious to proceed" vaktukaama "who wants to speak"
    dra.s.tumanas "inclined to see" *)
   }
@@ -5661,20 +5662,6 @@ value compute_subjunctives () =
   }
 ;
 
-(* Extra participial forms - intensive, desiderative, no present, etc *)
-value compute_extra_participles () = do
-  { record_part_ppp (revstem "gupta") "gup" (* gup gana 10 *)
-  ; record_part_ppp (revstem "zaata") "zaa" 
-  ; record_part_ppp (revstem "kaanta") "kam" 
-  ; record_part_ppp (revstem "k.sita") "k.sii" 
-  ; record_part_ppp (revstem "spa.s.ta") "spaz#1"
-  ; record_part (Ppra_ 1 Intensive (revstem "jaajam") (revstem "jaajamat") "jam")
-  ; record_pfp "d.r#1" (revcode "d.r")
-  ; record_pfp "vadh" (revcode "vadh")
-  ; record_part (Pprm_ 1 Primary (revcode "gacchamaana") "gam")
-  ; record_part (Pprm_ 4 Primary (revcode "kaayamaana") "kan")
-  }
-;
 value compute_auxi_kridantas () = 
   let stems str = let st = revstem str in match st with
       [ [ 1 :: rst ] -> (rst,Word.mirror st) 
@@ -5776,6 +5763,21 @@ and compute_extra_huu () = do (* WR *)
    ; enter1 "huu" (Invar (Primary,Infi) (code "hvayitum")) 
    }
 ;
+(* Extra participial forms - intensive, desiderative, no present, etc *)
+value record_extra_participles () = do
+  { record_part_ppp (revstem "gupta") "gup" (* gup gana 10 *)
+  ; record_part_ppp (revstem "zaata") "zaa" 
+  ; record_part_ppp (revstem "kaanta") "kam" 
+  ; record_part_ppp (revstem "k.sita") "k.sii" 
+  ; record_part_ppp (revstem "spa.s.ta") "spaz#1"
+  ; record_part (Ppra_ 1 Intensive (revstem "jaajam") (revstem "jaajamat") "jam")
+  ; record_pfp "d.r#1" (revcode "d.r")
+  ; record_pfp "vadh" (revcode "vadh")
+  ; record_part (Pprm_ 1 Primary (revcode "gacchamaana") "gam")
+  ; record_part (Pprm_ 4 Primary (revcode "kaayamaana") "kan")
+  ; record_part (Ppra_ 1 Primary (revstem ".dam") (revstem ".damat") ".dam")
+  }
+;
 (* For verbs without present forms and variants, *)
 (* called by [Make_roots.roots_to_conjugs] at generation time *)
 value compute_extra () = do
@@ -5822,8 +5824,8 @@ value compute_extra () = do
   ; enter1 "t.rd" (Invar (Primary,Infi) (code "t.rdas")) (* aat.rdas *)
   ; let st = revcode "si.saadhayi.s" in (* des of ca of sidh1 *)
     compute_desiderativea st "saadh" []
+  ; record_extra_participles () 
   ; compute_participles ()
-  ; compute_extra_participles () 
   ; compute_auxi_kridantas () 
   ; compute_subjunctives ()
   }

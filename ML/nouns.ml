@@ -4768,14 +4768,14 @@ value build_num stem entry =
         ; decline Abl "abhyas"
         ; decline Gen "aanaam"
         ; decline Loc "asu"
-        ] in if entry = "a.s.tan" then l @
-        [ decline Nom "au" (* remains of dual form 8 as a pair of 4 *)
-        ; decline Acc "au"
+        ] in if entry = "a.s.tan" then 
+        [ decline Nom "au" (* remains of dual form 8 as a pair of 4 (Vedic) *)
+        ; decline Acc "au" 
         ; decline Ins "aabhis"
         ; decline Dat "aabhyas"
         ; decline Abl "aabhyas"
         ; decline Loc "aasu"
-        ]    else l)
+        ] @ l   else l)
    ]
    ; Bare Noun (wrap stem 1) 
    ; Cvi (wrap stem 4) 

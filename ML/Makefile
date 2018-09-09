@@ -80,10 +80,10 @@ padapatha.cmx sanskrit.cmx order.cmx
 
 ANNOTFLAGS = -annot -bin-annot
 
-COMPILE=ocamlopt -pp "camlp4r pa_extend.cmo" -I $(ZEN) -I +camlp4 -c	\
+COMPILE=ocamlopt -pp "camlp4rf" -I $(ZEN) -I +camlp4 -c	\
 		$(ANNOTFLAGS)
 
-COMPILEI=ocamlc -pp "camlp4r pa_extend.cmo" -I $(ZEN) -I +camlp4 -c	\
+COMPILEI=ocamlc -pp "camlp4rf" -I $(ZEN) -I +camlp4 -c	\
 		$(ANNOTFLAGS)
 
 LINK=ocamlopt -I $(ZEN) -I +camlp4 dynlink.cmxa camlp4lib.cmxa

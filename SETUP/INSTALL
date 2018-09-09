@@ -27,13 +27,13 @@ Then install package Ocamlbuild from https://github.com/ocaml/ocamlbuild/release
 for instance OCamlbuild 0.12.0:
 make configure
 make
-make install
+sudo make install
 
 Then install Camlp4 from GitHub, in the 4.07 branch, available from
 https://github.com/ocaml/camlp4/releases; take for instance 4.07+1. 
 This should be installed by:
 ./configure
-make all
+make all # beware: not just make
 sudo make install
 
 The following instructions assume installation under some version of the 

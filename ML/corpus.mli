@@ -28,7 +28,7 @@ end
 module Analysis : sig
   type t
   ;
-  value make : Analyzer.t -> Html.language -> string -> Num.num -> t
+  value make : Analyzer.t -> Html.language -> string -> int (* Num.num *) -> t
   ;
   value analyzer : t -> Analyzer.t
   ;
@@ -36,7 +36,7 @@ module Analysis : sig
   ;
   value checkpoints : t -> string
   ;
-  value nb_sols : t -> Num.num
+  value nb_sols : t -> int (* Num.num *)
   ;
 end
 ;

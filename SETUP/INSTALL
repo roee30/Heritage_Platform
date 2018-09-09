@@ -16,16 +16,21 @@ install the site.
 
 Installation assumes prior installation of Objective Caml available
 from site http://ocaml.org. The distribution version
-4.02 ought to be used, available at"http://ocaml.org/releases/4.02.html".
-More recent distributions may work too, but this has not been tested. 
+4.07 ought to be used, available at "http://ocaml.org/releases/".
 
 The proper sequence of commands is:
 ./configure
 make world.opt
 sudo make install
 
-Then install Camlp4 from GitHub, in the 4.02 branch, available from
-https://github.com/ocaml/camlp4/releases; take for instance 4.02+6. 
+Then install package Ocamlbuild from https://github.com/ocaml/ocamlbuild/releases
+for instance OCamlbuild 0.12.0:
+make configure
+make
+make install
+
+Then install Camlp4 from GitHub, in the 4.07 branch, available from
+https://github.com/ocaml/camlp4/releases; take for instance 4.07+1. 
 This should be installed by:
 ./configure
 make all

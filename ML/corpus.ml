@@ -46,7 +46,7 @@ module Analysis : sig
   type t
   ;
   value make :
-    Analyzer.t -> Html.language -> string -> Num.num -> t
+    Analyzer.t -> Html.language -> string -> int (* Num.num *) -> t
   ;
   value analyzer : t -> Analyzer.t
   ;
@@ -54,14 +54,14 @@ module Analysis : sig
   ;
   value checkpoints : t -> string
   ;
-  value nb_sols : t -> Num.num
+  value nb_sols : t -> int (* Num.num *)
   ;
 end = struct
   type t =
     { analyzer : Analyzer.t
     ; lang : Html.language
     ; checkpoints : string
-    ; nb_sols : Num.num
+    ; nb_sols : int (* Num.num *)
     }
   ;
   value make analyzer lang checkpoints nb_sols =

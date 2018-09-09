@@ -5,9 +5,9 @@
 #                        Gérard Huet & Pawan Goyal                         #
 #                                                                          #
 ############################################################################
-# Makefile of Sanskrit Heritage Software  21-01-2018  Copyright INRIA 2018 #
+# Makefile of Sanskrit Heritage Software  09-09-2018  Copyright INRIA 2018 #
 ############################################################################
-# Prerequisites: Ocaml and Camlp4 preprocessor
+# Prerequisites: Ocaml 4.07 and Camlp4 preprocessor
 
 # For change of make in all recursive Makefiles
 MAKE=make
@@ -33,9 +33,9 @@ VPATH=$(ZEN)
 
 # CORE package - utilities, transducers, sanskrit and french lexers, dico spec
 CORE=$(DISTR_CORE) paths.ml 
-DISTR_CORE = control.ml version.ml date.ml canon.ml transduction.ml	\
-	     encode.ml order.ml padapatha.ml sanskrit.mli		\
-             sanskrit.ml skt_lexer.ml test_stamp.ml dir.mli dir.ml
+DISTR_CORE = control.ml version.ml date.ml canon.ml transduction.ml encode.ml \
+             order.ml padapatha.ml skt_lexer.ml sanskrit.mli sanskrit.ml \
+             test_stamp.ml dir.mli dir.ml
 
 # GRAM package - phonetics, morphology, segmentation and tagging engines
 GRAM = index.ml phonetics.ml int_sandhi.ml skt_morph.mli morphology.mli \
@@ -86,7 +86,7 @@ COMPILE=ocamlopt -pp "camlp4r pa_extend.cmo" -I $(ZEN) -I +camlp4 -c	\
 COMPILEI=ocamlc -pp "camlp4r pa_extend.cmo" -I $(ZEN) -I +camlp4 -c	\
 		$(ANNOTFLAGS)
 
-LINK=ocamlopt -I $(ZEN) -I +camlp4  dynlink.cmxa camlp4lib.cmxa
+LINK=ocamlopt -I $(ZEN) -I +camlp4 dynlink.cmxa camlp4lib.cmxa
 
 # standard installation of Sanskrit Heritage platform - assumes ZEN library
 
@@ -172,7 +172,7 @@ word.cmx deco.cmx zen_lexer.cmx canon.cmx phonetics.cmx transduction.cmx \
 encode.cmx html.cmx SCLpaths.cmx web.cmx cgi.cmx naming.cmx morpho_string.cmx \
 morpho.cmx order.cmx chapters.cmx morpho_html.cmx lemmatizer.cmx -o lemmatizer
 
-declension: declension.cmx
+declension: declension.cmx share.cmx
 	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx control.cmx \
 word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx \
 deco.cmx int_sandhi.cmx lexmap.cmx inflected.cmx bank_lexer.cmx html.cmx \
@@ -204,14 +204,17 @@ chapters.cmx morpho_html.cmx cgi.cmx segmenter.cmx morpho_scl.cmx \
 load_morphs.cmx lexer.cmx constraints.cmx rank.cmx bank_lexer.cmx \
 scl_parser.cmx checkpoints.cmx reader.cmx -o reader 
 
-interface: interface.cmx
+LEGACY=
+# LEGACY= nums.cmxa 
+
+interface: interface.cmx minimap.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
 control.cmx word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx \
 encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx \
 inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
 load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
 chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx load_morphs.cmx \
-int_sandhi.cmx nouns.cmx share.cmx minimap.cmx mini.cmx nums.cmxa \
+int_sandhi.cmx nouns.cmx share.cmx minimap.cmx mini.cmx $(LEGACY) \
 graph_segmenter.cmx checkpoints.cmx automaton.cmx params.cmx \
 save_corpus_params.cmx dir.cmx corpus.cmx web_corpus.cmx interface.cmx -o interface
 
@@ -244,7 +247,7 @@ corpus_manager: corpus_manager_cgi.cmx
 		load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx	\
 		order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx	\
 		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
-		share.cmx minimap.cmx mini.cmx nums.cmxa		\
+		share.cmx minimap.cmx mini.cmx $(LEGACY) \
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx save_corpus_params.cmx dir.cmx corpus.cmx	\
 		web_corpus.cmx multilingual.cmx				\
@@ -260,7 +263,7 @@ save_corpus: save_corpus_cgi.cmx
 		load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx	\
 		order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx	\
 		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
-		share.cmx minimap.cmx mini.cmx nums.cmxa		\
+		share.cmx minimap.cmx mini.cmx $(LEGACY) \
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx save_corpus_params.cmx dir.cmx corpus.cmx	\
 		web_corpus.cmx multilingual.cmx				\
@@ -276,7 +279,7 @@ mkdir_corpus: mkdir_corpus_cgi.cmx
 		load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx	\
 		order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx	\
 		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
-		share.cmx minimap.cmx mini.cmx nums.cmxa		\
+		share.cmx minimap.cmx mini.cmx $(LEGACY) \
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx save_corpus_params.cmx dir.cmx corpus.cmx	\
 		web_corpus.cmx multilingual.cmx				\
@@ -292,7 +295,7 @@ mk_corpus: mk_corpus.cmx
 		load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx	\
 		order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx	\
 		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
-		share.cmx minimap.cmx mini.cmx nums.cmxa		\
+		share.cmx minimap.cmx mini.cmx $(LEGACY) \
 		graph_segmenter.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx save_corpus_params.cmx dir.cmx corpus.cmx	\
 		web_corpus.cmx  multilingual.cmx			\

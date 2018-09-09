@@ -62,7 +62,7 @@ value analysis_of_env env =
   let nb_sols =
     env
     |> Cgi.decoded_get Save_corpus_params.nb_sols "0"
-    |> Num.num_of_string
+    |> int_of_string
   in
   Corpus.Analysis.make Corpus.Analyzer.Graph lang cpts nb_sols
 ;

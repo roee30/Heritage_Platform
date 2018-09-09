@@ -103,8 +103,8 @@ value insert ((pen,min),sol) ((min_pen,sols,saved) as current) =
          let rescue = List.fold_right save sols [] in
          if rescue=[] then saved else [ (min_pen,rescue) :: saved ]
 ;
-(* Forget absolute penalties of solutions with minimal length penalty *)
-(* also used to erase constraints - thus do not eta-reduce !!! *)
+(* Forget absolute penalties of solutions with minimal length penalty. *)
+(* Also used to erase constraints - thus do not eta-reduce !!! *)
 value trim x = List.map snd x 
 ;
 (* overflow is None or (Some n) when n solutions with n<Web.truncation *)

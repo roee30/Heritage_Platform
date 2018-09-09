@@ -40,13 +40,13 @@ order.cmo :
 order.cmx :
 padapatha.cmo : ../ZEN/word.cmo phonetics.cmo encode.cmo
 padapatha.cmx : ../ZEN/word.cmx phonetics.cmx encode.cmx
+skt_lexer.cmo : encode.cmo
+skt_lexer.cmx : encode.cmx
 sanskrit.cmi : ../ZEN/word.cmo
 sanskrit.cmo : transduction.cmo skt_lexer.cmo padapatha.cmo encode.cmo \
     canon.cmo sanskrit.cmi
 sanskrit.cmx : transduction.cmx skt_lexer.cmx padapatha.cmx encode.cmx \
     canon.cmx sanskrit.cmi
-skt_lexer.cmo : encode.cmo
-skt_lexer.cmx : encode.cmx
 test_stamp.cmo : version.cmo paths.cmo ../ZEN/gen.cmo control.cmo
 test_stamp.cmx : version.cmx paths.cmx ../ZEN/gen.cmx control.cmx
 dir.cmi :
@@ -152,12 +152,12 @@ dispatcher.cmi : ../ZEN/word.cmo phases.cmo morphology.cmi \
     load_transducers.cmo html.cmo ../ZEN/deco.cmo auto.cmi
 dispatcher.cmo : ../ZEN/word.cmo web.cmo skt_morph.cmi phonetics.cmo \
     phases.cmo pada.cmo naming.cmo morphology.cmi load_transducers.cmo \
-    ../ZEN/list2.cmo html.cmo ../ZEN/gen.cmo encode.cmo ../ZEN/deco.cmo \
-    control.cmo canon.cmo auto.cmi dispatcher.cmi
+    ../ZEN/list2.cmo html.cmo encode.cmo ../ZEN/deco.cmo control.cmo \
+    canon.cmo auto.cmi dispatcher.cmi
 dispatcher.cmx : ../ZEN/word.cmx web.cmx skt_morph.cmi phonetics.cmx \
     phases.cmx pada.cmx naming.cmx morphology.cmi load_transducers.cmx \
-    ../ZEN/list2.cmx html.cmx ../ZEN/gen.cmx encode.cmx ../ZEN/deco.cmx \
-    control.cmx canon.cmx auto.cmi dispatcher.cmi
+    ../ZEN/list2.cmx html.cmx encode.cmx ../ZEN/deco.cmx control.cmx \
+    canon.cmx auto.cmi dispatcher.cmi
 segmenter.cmo : ../ZEN/word.cmo web.cmo phonetics.cmo ../ZEN/list2.cmo \
     ../ZEN/gen.cmo encode.cmo ../ZEN/deco.cmo auto.cmi
 segmenter.cmx : ../ZEN/word.cmx web.cmx phonetics.cmx ../ZEN/list2.cmx \
@@ -167,7 +167,7 @@ load_morphs.cmo : ../ZEN/word.cmo web.cmo morphology.cmi html.cmo \
 load_morphs.cmx : ../ZEN/word.cmx web.cmx morphology.cmi html.cmx \
     ../ZEN/gen.cmx ../ZEN/deco.cmx control.cmx
 lexer.cmi : ../ZEN/word.cmo phases.cmo morphology.cmi load_transducers.cmo \
-    html.cmo dispatcher.cmi
+    load_morphs.cmo html.cmo dispatcher.cmi
 lexer.cmo : ../ZEN/word.cmo web.cmo transduction.cmo skt_morph.cmi \
     segmenter.cmo phases.cmo naming.cmo morphology.cmi morpho_string.cmo \
     morpho_scl.cmo morpho_html.cmo morpho.cmo load_transducers.cmo \
@@ -193,13 +193,15 @@ reader.cmx : web.cmx scl_parser.cmx sanskrit.cmx rank.cmx phases.cmx \
     paths.cmx html.cmx encode.cmx control.cmx checkpoints.cmx cgi.cmx \
     canon.cmx
 parser.cmo : ../ZEN/word.cmo web.cmo skt_morph.cmi scl_parser.cmo \
-    sanskrit.cmi SCLpaths.cmo paths.cmo paraphrase.cmi ../ZEN/list2.cmo \
-    lexer.cmi inflected.cmi html.cmo ../ZEN/gen.cmo encode.cmo date.cmo \
-    control.cmo constraints.cmi checkpoints.cmo cgi.cmo canon.cmo
+    sanskrit.cmi SCLpaths.cmo phases.cmo paths.cmo paraphrase.cmi \
+    morpho_html.cmo ../ZEN/list2.cmo lexer.cmi inflected.cmi html.cmo \
+    ../ZEN/gen.cmo encode.cmo date.cmo control.cmo constraints.cmi \
+    checkpoints.cmo cgi.cmo canon.cmo
 parser.cmx : ../ZEN/word.cmx web.cmx skt_morph.cmi scl_parser.cmx \
-    sanskrit.cmx SCLpaths.cmx paths.cmx paraphrase.cmx ../ZEN/list2.cmx \
-    lexer.cmx inflected.cmx html.cmx ../ZEN/gen.cmx encode.cmx date.cmx \
-    control.cmx constraints.cmx checkpoints.cmx cgi.cmx canon.cmx
+    sanskrit.cmx SCLpaths.cmx phases.cmx paths.cmx paraphrase.cmx \
+    morpho_html.cmx ../ZEN/list2.cmx lexer.cmx inflected.cmx html.cmx \
+    ../ZEN/gen.cmx encode.cmx date.cmx control.cmx constraints.cmx \
+    checkpoints.cmx cgi.cmx canon.cmx
 constraints.cmi : skt_morph.cmi morphology.cmi
 constraints.cmo : ../ZEN/word.cmo skt_morph.cmi morphology.cmi \
     ../ZEN/list2.cmo html.cmo canon.cmo constraints.cmi
@@ -214,10 +216,6 @@ paraphrase.cmx : web.cmx skt_morph.cmi morphology.cmi html.cmx \
     constraints.cmx paraphrase.cmi
 bank_lexer.cmo :
 bank_lexer.cmx :
-regression.cmo : web.cmo version.cmo sanskrit.cmi rank.cmo encode.cmo \
-    date.cmo constraints.cmi bank_lexer.cmo
-regression.cmx : web.cmx version.cmx sanskrit.cmx rank.cmx encode.cmx \
-    date.cmx constraints.cmx bank_lexer.cmx
 checkpoints.cmo : phases.cmo encode.cmo control.cmo canon.cmo bank_lexer.cmo
 checkpoints.cmx : phases.cmx encode.cmx control.cmx canon.cmx bank_lexer.cmx
 graph_segmenter.cmo : ../ZEN/word.cmo web.cmo phonetics.cmo ../ZEN/list2.cmo \

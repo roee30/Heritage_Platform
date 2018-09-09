@@ -392,10 +392,7 @@ value invoke_SL text cpts corpus_id count sent_id link_num =
   ps (td_wrap (call_SL text cpts "t" corpus_id count sent_id link_num 
                ^ "Sanskrit Library Interface"))
 ;
-value update_text_with_sol text count = text ^ ";allSol=" ^ match count with
-  [ Num.Int n -> string_of_int n
-  | _ -> "2147483648" (* [2^31] *)
-  ]
+value update_text_with_sol text count = text ^ ";allSol=" ^ string_of_int count
 ;
 value call_undo text cpts  = 
   let string_pts = match cpts with 
@@ -435,22 +432,19 @@ value check_sentence translit us text_orig checkpoints sentence
         if scl_toggle then
            td_wrap (call_reader text cpts "o" ^ "UoH Analysis Mode") |> ps
         else () (* [scl_parser] is not visible unless toggle is set *) in
-    match count with 
-    [ Num.Int n -> if n > max_count then 
-                      (* too many solutions would choke the parsers *) 
-                      td_wrap ("(" ^ string_of_int n ^ " Solutions)") |> ps
-                   else if n=1 (* Unique remaining solution *) then do
-                      { td_wrap (call_parser text cpts ^ "Unique Solution") |> ps
-                      ; call_scl_parser 1
-                      }
-                   else do
+    if count > max_count then 
+       (* too many solutions would choke the parsers *) 
+       td_wrap ("(" ^ string_of_int count ^ " Solutions)") |> ps
+    else if count=1 (* Unique remaining solution *) then do
+            { td_wrap (call_parser text cpts ^ "Unique Solution") |> ps
+            ; call_scl_parser 1
+            }
+         else do
        { td_wrap (call_reader text cpts "p" ^ "Filtered Solutions") |> ps
-       ; let info = string_of_int n ^ if full then "" else " Partial" in 
+       ; let info = string_of_int count ^ if full then "" else " Partial" in 
          td_wrap (call_reader text cpts "t" ^ "All " ^ info ^ " Solutions") |> ps
-       ; call_scl_parser n
+       ; call_scl_parser count
        } 
-    | _ -> td_wrap "(More than 2^32 Solutions!)" |> ps
-    ]
   ; tr_end |> pl   (* tr end *)
   ; table_end |> pl
   ; div_end |> ps (* Latin16 *)
@@ -510,8 +504,8 @@ value save_button query nb_sols =
   center_begin ^
   cgi_begin save_corpus_cgi "" ^
   hidden_input Save_corpus_params.state (escape query) ^
-  hidden_input Save_corpus_params.nb_sols (nb_sols |> Num.string_of_num |> escape) ^
-  submit_input "Save" ^
+  hidden_input Save_corpus_params.nb_sols (nb_sols |> string_of_int |> escape) ^
+  submit_input "Save" ^ 
   cgi_end ^
   center_end
 ;
@@ -637,8 +631,8 @@ value graph_engine () = do
    ; if corpus_permission = Web_corpus.Annotator then
      (* TODO: use [segment_iter] to compute the nb of sols instead of
         passing 0 to [nb_sols]. *)
-        save_button query (Num.num_of_int 0) |> pl
-     else ()
+        save_button query 0 |> pl
+     else () 
    ; html_break |> pl
      (* Quit button: continue reading (reader mode) 
                   or quit without saving (annotator mode) *)

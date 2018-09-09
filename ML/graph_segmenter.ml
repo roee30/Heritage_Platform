@@ -528,7 +528,7 @@ value segment_chunk (full,count) chunk last =
       ; set_offset (succ extremity,future)
       ; if segmentable then do
            { reset_counter ()
-           ; (full,Num.mult_num count (Num.Int local_count))
+           ; (full,count*local_count) (* overflow may compute modulo *)
              (* we have [local_count] segmentations of the local [chunk], and,
               chunks being independent, the total number of solutions multiply *)
            }
@@ -536,8 +536,8 @@ value segment_chunk (full,count) chunk last =
       }
     }
 ;
-value segment_iter chunks = segment_chunks (True,Num.Int 1) chunks
-  where rec segment_chunks acc = fun (* terminal recursion *)
+value segment_iter chunks = segment_chunks (True,1) chunks
+  where rec segment_chunks acc = fun (* terminal recursion *) 
     [ [ (* last *) chunk ] -> segment_chunk acc chunk True
     | [ chunk :: rest ] -> segment_chunks (segment_chunk acc chunk False) rest
     | [] -> acc

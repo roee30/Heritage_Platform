@@ -24,63 +24,63 @@ value hexa_val conf =
 ;
 value decode_url s =
   let rec need_decode i =
-    if i < Bytes.length s then
+    if i < String.length s then
       match s.[i] with
       [ '%' | '+' -> True
       | _ -> need_decode (succ i)
       ]
     else False in
   let rec compute_len i i1 =
-    if i < Bytes.length s then
+    if i < String.length s then
       let i =
         match s.[i] with
-        [ '%' when i + 2 < Bytes.length s -> i + 3
+        [ '%' when i + 2 < String.length s -> i + 3
         | _ -> succ i
         ]
       in
       compute_len i (succ i1)
     else i1 in
   let rec copy_decode_in s1 i i1 =
-    if i < Bytes.length s then
+    if i < String.length s then
       let i =
         match s.[i] with
-        [ '%' when i + 2 < Bytes.length s ->
-            let v = hexa_val s.[i + 1] * 16 + hexa_val s.[i + 2] 
-            in do {Bytes.set s1 i1 (Char.chr v); i + 3}
+        [ '%' when i + 2 < String.length s ->
+            let v = hexa_val s.[i+1] * 16 + hexa_val s.[i+2] in
+            do {Bytes.set s1 i1 (Char.chr v); i + 3}
         | '+' -> do {Bytes.set s1 i1 ' '; succ i}
         | x -> do {Bytes.set s1 i1 x; succ i} 
         ] in
       copy_decode_in s1 i (succ i1)
     else s1 in
   let rec strip_heading_and_trailing_spaces s =
-    if Bytes.length s > 0 then
+    if String.length s > 0 then
       if s.[0] == ' ' then
-        strip_heading_and_trailing_spaces (Bytes.sub s 1 (Bytes.length s - 1))
-      else if s.[Bytes.length s - 1] == ' ' then
-        strip_heading_and_trailing_spaces (Bytes.sub s 0 (Bytes.length s - 1))
+        strip_heading_and_trailing_spaces (String.sub s 1 (String.length s - 1))
+      else if s.[String.length s - 1] == ' ' then
+        strip_heading_and_trailing_spaces (String.sub s 0 (String.length s - 1))
       else s
     else s in
   if need_decode 0 then
     let len = compute_len 0 0 in
     let s1 = Bytes.create len in
-    strip_heading_and_trailing_spaces (copy_decode_in s1 0 0)
-  else s;
-
+    strip_heading_and_trailing_spaces (Bytes.to_string (copy_decode_in s1 0 0))
+  else s
+;
 (* converts a string coming from the URL into an a-list; the string is 
-   a sequence of pairs key=vallue separated by ; or \& *)
+   a sequence of pairs key=value separated by ; or \& *)
 
 value create_env s =
   let rec get_assoc beg i =
-    if i == Bytes.length s then
-      if i == beg then [] else [ Bytes.sub s beg (i - beg) ]
+    if i == String.length s then
+      if i == beg then [] else [String.sub s beg (i - beg)]
     else if s.[i] == ';' || s.[i] == '&' then
-      let next_i = succ i in 
-      [ Bytes.sub s beg (i - beg) :: get_assoc next_i next_i ]
+      let next_i = succ i in
+      [String.sub s beg (i - beg) :: get_assoc next_i next_i]
     else get_assoc beg (succ i) in
   let rec separate i s =
-    if i = Bytes.length s then (s, "")
+    if i = String.length s then (s, "")
     else if s.[i] == '=' then
-      (Bytes.sub s 0 i, Bytes.sub s (succ i) (Bytes.length s - succ i))
+      (String.sub s 0 i, String.sub s (succ i) (String.length s - succ i))
     else separate (succ i) s in
   List.map (separate 0) (get_assoc 0 0)
 ;

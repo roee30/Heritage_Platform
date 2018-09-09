@@ -11,7 +11,7 @@
 This is just a reminder for quick installation.
 A more complete installation procedure is described in file SETUP/INSTALL.
 
-0) Install OCaml (>= 4.02). See http://ocaml.org for installation
+0) Install OCaml (>= 4.07). See http://ocaml.org for installation
 instructions.
 
 Then install the Camplp4 processor in the corresponding distribution.
@@ -20,7 +20,8 @@ If OCaml has been installed through the OPAM package manager, then:
    opam install camlp4
 
 should do the job. Alternatively, see https://github.com/ocaml/camlp4
-for download and installation instructions. 
+for download and installation instructions. You may have to install
+the auxiliary package ocamlbuild. 
 
 Beware: camlp4 is not updated at every Ocaml distribution, so you may have 
 to settle for a somewhat ancient version of Ocaml, such as 4.02.2, which is

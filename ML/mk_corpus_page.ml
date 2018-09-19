@@ -17,7 +17,7 @@ value permission_selection =
       List.map select permissions 
       where select permission =
         let permission_str = Web_corpus.string_of_permission permission in
-        (String.capitalize permission_str, permission_str, 
+        (String.capitalize_ascii permission_str, permission_str, 
          permission = Web_corpus.Reader) in
   let read_only_permissions = [ Web_corpus.Reader ] in
   let other_permissions = Web_corpus.[ Annotator; Manager ] in

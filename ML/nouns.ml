@@ -15,8 +15,8 @@
 
 open List; (* exists, iter *)
 open Word; (* mirror *)
-open Skt_morph;
-open Phonetics; (* [finalize, finalize_r] *)
+open Skt_morph (* morphology datatypes *);
+open Phonetics; (* [finalize, finalize_r] *) 
 open Inflected; (* [Declined, Bare, Cvi, enter, enter1, morpho_gen,
 reset_nominal_databases, nominal_databases] *)
 
@@ -25,9 +25,9 @@ exception Report of string
 ;
 value report revstem gen =
   let stem = Canon.rdecode revstem
-  and gender = match gen with 
+  and gender_str = match gen with 
       [ Mas -> "M" | Neu -> "N" | Fem -> "F" | Deictic _ -> "*" ] in 
-  let message = stem ^ " missing gender " ^ gender in
+  let message = stem ^ " missing gender " ^ gender_str in
   raise (Report message)
 ;
 value warn revstem str =
@@ -108,7 +108,8 @@ value compound_monosyl_ii = fun
 value compound_monosyl_uu = fun
   [ [ 40 :: _ ] (* -bhuu *) -> True (* abhiibhuu (may be too wide) *) 
   | [ 48 :: _ ] (* -suu *) -> True (* prasuu  (may be too wide) *)
-  | _ -> False (* to be completed for other roots *)
+  | [ 43 :: [ 40 ::  _ ] ] (* -bhruu *) -> True (* subhruu (may be too wide) *)
+  | _ -> False (* to be completed for other stems *)
   ]
 ;
 
@@ -461,6 +462,7 @@ value build_mas_ri_g stem entry = (* parenté avec gu.na *)
    ; Bare Noun bare
    ; Bare Noun (wrap stem 2) (* for dvandva eg ved hotaapotarau \Pan{6,3,47} *)
    ; Avyayaf bare
+   ; Indecl Tas (fix stem ".rtas") (* pit.rtas *)
    ]
 ;
 value build_nri stem entry = (* currently disabled by skip in Dico *)
@@ -1048,7 +1050,7 @@ value build_mas_zvan stem entry =  (* \Pan{6,4,133} *)
 ;
 value build_athin stem entry = (* pathin, supathin, mathin *)
   let decline case suff = (case,fix stem suff) 
-  and bare = wrap stem 3 in 
+  and bare = fix stem "thi" in 
   enter entry 
    [ Declined Noun Mas
    [ (Singular,
@@ -3206,8 +3208,9 @@ value build_mono_uu g stem entry =
    [ Declined Noun g
    [ (Singular,
         [ decline Voc "uus"
-        ; decline Nom "uus"
-        ; decline Acc "uvam"
+        ; decline Voc "u" (* alternative Renou §234 MW gram §126h Vopadeva *)
+        ; decline Nom "uus"  
+        ; decline Acc "uvam" 
         ; decline Ins "uvaa"
         ; decline Dat "uve"
         ; decline Dat "uvai"
@@ -3365,6 +3368,7 @@ value build_fem_ri_g stem entry = (* lien de parenté avec gu.na *)
    ]             
    ; Bare Noun bare
    ; Avyayaf bare 
+   ; Indecl Tas (fix stem ".rtas") (* maat.rtas *)
    ]
 ;
 value build_fem_ir stem entry = (* gir *)
@@ -5007,7 +5011,7 @@ value compute_nouns_stem_form e stem d p =
                | _  -> build_an Mas r2 e
                ]
             | [ 3 :: r2 ] (* -in *) -> match r2 with
-               [ [ 33 :: r3 ] -> match r3 with
+               [ [ 33 :: r3 ] (* -thin *)-> match r3 with
                   [ [ 1 :: [ 37 :: _ ] ]   (* -pathin *) (* \Pan{7,1,85} *)
                   | [ 1 :: [ 41 :: _ ] ]   (* -mathin *) 
                      -> build_athin r3 e

@@ -94,7 +94,7 @@ LINK_BYTEG=ocamlc -I +camlp4 dynlink.cma camlp4lib.cma
 all: timeshare unshare make_english_lexicon dagify \
 terdagify test  minimap.cmx lexmap.cmx bintree.cmx \
 deco.cmx zen_lexer.cmx transducer.cmx sharemod.cmx react0.cmx reactt.cmx \
-reacte.cmx regular.cmo #specific_cmx
+reacte.cmx mini.cmx regular.cmo #specific_cmx
 
 problematic: make_french_lexicon list_iso unglue_test.cmx
 

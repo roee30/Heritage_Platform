@@ -45,7 +45,7 @@ and revcode = Encode.rev_code_string (* reversed (mirror o code) *)
 and revstem = Encode.rev_stem (* stripped of homo counter *)
 and normal_stem = Encode.normal_stem 
 ;
-(* declension generators *)
+(* Declension generators *)
 type declension_class = 
   [ Gender of gender  (* declined substantive, adjective, number, pronoun *)
   | Ind of ind_kind   (* indeclinable form *)

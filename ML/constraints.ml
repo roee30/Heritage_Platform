@@ -111,6 +111,7 @@ type regime =
   | Quotative    (* aahur - it is said *) 
 (*| Bitransitive - use of transitive with 2 accusatives *)
 (*| Regime of (list case * list case) - specific regime - unused so far *)
+(* Actually a root should have a valency list like [ 0; 1; 2 ] for "bhaa.s" *)
   ]
 ;
 
@@ -148,6 +149,8 @@ value root_regime = fun
   | "v.r.s" -> Factitive
   | "ah" -> Quotative
   | _ -> (* sakarmaka in all usages *) Transitive
+(* But "bhaa.s" is Transitive, even though he may be used with 0 or 2 objects *)
+(* Thus a penalty should not occur if he has no object or 2 objects *)
   ]
 ;
 (* But valency may depend on gana for the present system *)

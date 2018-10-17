@@ -5257,7 +5257,7 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
    | "agada" (* Kale§660 *) | "iras" 
        -> trunc rstem (* -()yati *) (* lopa *) 
    (* | "maarg" | "mok.s" | "lak.s" | "suuc" 
-    -> [ 1:: rstem ] (* -ayati *) presently roots class 10 *)
+    -> [ 1 :: rstem ] (* -ayati *) presently roots class 10 *)
    | "kutsaa" | "maalaa" | "mudraa" | "medhaa" 
        -> [ 1 :: trunc_aa rstem ] (* -()ayati - shortening final aa *)
    | "udazru" 
@@ -5285,7 +5285,7 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
    | "amitra" | "aakar.na" | "aakula" | "aavila" | "i.sa" | "upahasta" 
    | "ka.thora" | "kadartha" | "kar.na" | "kalafka" | "kalu.sa" | "kavala"
    | "ku.t.ta" | "kusuma" | "kha.da" | "garva" | "gopaa" | "carca"
-   | "cuur.na" | "chala" | "chidra" | "tantra" | "tarafga" | "taru.na"
+   | "cuur.na" | "chala" | "chidra" | "tantra" | "tapas" | "tarafga" | "taru.na"
    | "tuhina" | "da.n.da" | "deva" | "dola" | "dravat" | "dhiira#1"
    | "nirmuula" | "nuutana" | "pa.tapa.taa" | "pallava"
    | "pavitra" | "paaza" | "pi.n.da" | "pulaka" | "puula" | "pratikuula" 
@@ -5294,14 +5294,13 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
    | "m.rga" | "yantra" | "rasa" | "ruuk.sa" | "lagha" (* u -> a *) 
    | "var.na" | "vaasa#3" | "vizada" | "vra.na" | "zaanta" | "zithila"
    | "zyena" | ".sa.n.dha" | "sapi.n.da" | "saphala" | "sabhaaja" | "saantva" 
-   | "saavadhaana" | "suutra" | "stena" 
-   | "sthaga" | "tapas" (* practice \Pan{3,1,15} *)
+   | "saavadhaana" | "suutra" | "stena" | "sthaga" (* practice \Pan{3,1,15} *)
    | "u.sas" | "namas" | "varivas" (* do \Pan{3,1,19} *)
    | "udan" (* Kale§645 *)
    | "kelaa" | "rekhaa" | "tiras" | "uras" | "payas" (* Kale§660 *)
    | "vaac" (* consonant Kale§642 *)
    | "dantura" (* possess *)
-   | "viira" | "zabda" | "tira" (* MW *) | "ma~njara" 
+   | "viira" | "zabda" | "tira" (* MW *) | "ma~njara" | "sraja" 
        -> rstem (* -yati *) (* standard causative meaning *)  
    | "madhu" | "v.r.sa" (* also madhvasyati v.r.siiyati *) 
    | "k.siira" | "lava.na" (* also putra *)

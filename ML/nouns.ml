@@ -203,7 +203,7 @@ value build_mas_a stem entry =
    ; Bare Noun (wrap stem 1)
    ; Avyayaf (fix stem "am"); Avyayaf (fix stem "aat") (* avyayiibhaava *)
    ; Indecl Tas (fix stem "atas") (* tasil productive *)
-   ; Cvi (wrap stem 4) (* cvi now productive for masculine stems in -a *)
+   ; Cvi (wrap stem 4) (* cvi productive *)
    ]) 
 ;
 value build_mas_i stem trunc entry = (* declension of "ghi" class *) 
@@ -471,11 +471,13 @@ value build_nri stem entry = (* currently disabled by skip in Dico *)
   enter entry 
    [ Declined Noun Mas
    [ (Singular,
-        [ decline Nom "aa" ]) (* other cases from nara *)
+        [ decline Nom "aa"  (* other cases from nara like naram *)
+        ; decline Loc "ari" (* MacDonell §101b *)
+        ])
    ; (Dual, 
-        [ decline Voc "aarau"
-        ; decline Nom "aarau"
-        ; decline Acc "aarau"
+        [ decline Voc "arau"
+        ; decline Nom "arau"
+        ; decline Acc "arau"
         ; decline Ins ".rbhyaam"
         ; decline Dat ".rbhyaam"
         ; decline Abl ".rbhyaam"
@@ -483,8 +485,8 @@ value build_nri stem entry = (* currently disabled by skip in Dico *)
         ; decline Loc "ros"
         ])
    ; (Plural,
-        [ decline Voc "aaras"
-        ; decline Nom "aaras"
+        [ decline Voc "aras"
+        ; decline Nom "aras"
         ; decline Acc ".rrn"
         ; decline Ins ".rbhis"
         ; decline Dat ".rbhyas"
@@ -493,10 +495,8 @@ value build_nri stem entry = (* currently disabled by skip in Dico *)
         ; decline Gen ".r.naam" (* Veda, but .r metrically long *)
         ; decline Loc ".r.su"
         ])
-   ]
+   ] 
    ; Bare Noun bare
-   ; Bare Noun (wrap stem 2)
-   ; Avyayaf bare 
    ]
 ;
 value build_mas_red stem entry = 
@@ -2936,7 +2936,7 @@ value build_fem_i stem trunc entry =
    ; Bare Noun (mirror stem)
    ; Avyayaf (mirror stem) 
    ; Indecl Tas (fix stem "tas")
-   ] @ (if entry = "vi.mzati" 
+   ] @ (if entry = "vi.mzati"
         then [ Bare Noun (mirror trunc) (* vi.mzat *) ]
         else []))
 

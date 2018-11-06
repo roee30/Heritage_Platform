@@ -442,7 +442,7 @@ value passive_stem entry rstem = (* Panini -yak (k means no guna) *)
             ]
         | 3 (* i *) -> [ 4 (* ii *) :: rst ]
         | 5 (* u *) -> match entry with
-            [ "k.su" | "plu" | "sru" -> weak
+            [ "k.su" | "k.s.nu" | "plu" | "sru" -> weak
             | _ -> [ 6 (* uu *) :: rst ]
             ]
         | 7 (* .r *) -> match rst with
@@ -582,6 +582,12 @@ and uu_it = fun (* perstems \Pan{7,2,44} *)
   ]
 and o_it = fun (* these roots have ppp in -na - unused here *)
   [ "zuu" | "haa#1" | "haa#2" | "vij" | "vrazc" | "bhuj#1" | "bha~nj" | "lag" 
+ (* | "iir" | "und" | "k.rr" | "klid" | "k.sii" | "k.sud" | "k.svid" | "khid"
+    | "g.rr#1" | "glai" | "chad#1" | "chid#1" | "ch.rd" | "j.rr" | ".dii"
+    | "tud#1" | "t.rd" | "t.rr" | "dagh" | "d.rr" | "dev" | "draa#1" | "draa#2"
+    | "nud" | "pad#1" | "pi#2" | "p.rr" | "pyaa" | "bhid#1" | "majj" | "man"
+    | "mid" | "mlaa" | "ri" | "lii" | "luu#1" | "vid#2" | "vlii" | "zad" | "z.rr"
+    | "sad#1" | "skand" | "st.rr" | "styaa" | "syand" | "svid#2" | "had" *)
       -> True
   | _ -> False
   ]
@@ -643,7 +649,7 @@ value compute_thematic_presentm cl conj stem entry third =
         ])
    ])
 ;
-value thematic_preterit_a conjug =
+value thematic_preterit_a conjug = 
    [ (Singular, 
         [ conjug First  "am"
         ; conjug Second "as"
@@ -661,11 +667,11 @@ value thematic_preterit_a conjug =
         ])
    ]
 ;
-value compute_thematic_impfta cl conj stem entry = 
+value compute_thematic_impfta cl conj stem entry =  
   let conjug person suff = (person,fix_augment stem suff) in
   enter1 entry (Conju (fimpfta cl conj) (thematic_preterit_a conjug))
 ;
-value thematic_preterit_m conjug =
+value thematic_preterit_m conjug = 
    [ (Singular, 
         [ conjug First  "e"
         ; conjug Second "athaas"
@@ -683,11 +689,11 @@ value thematic_preterit_m conjug =
         ])
    ]
 ;
-value compute_thematic_impftm cl conj stem entry = 
+value compute_thematic_impftm cl conj stem entry =  
   let conjug person suff = (person,fix_augment stem suff) in
   enter1 entry (Conju (fimpftm cl conj) (thematic_preterit_m conjug))
 ;
-value compute_thematic_optativea cl conj stem entry =
+value compute_thematic_optativea cl conj stem entry = 
   let conjug person suff = (person,fix stem suff) in
   enter1 entry (Conju (fopta cl conj)
    [ (Singular, 
@@ -747,7 +753,7 @@ value compute_thematic_imperativea cl conj stem entry =
         ])
    ])
 ;
-value compute_thematic_imperativem cl conj stem entry =
+value compute_thematic_imperativem cl conj stem entry = 
   let conjug person suff = (person,fix stem suff) in
   enter1 entry (Conju (fimperm cl conj)
    [ (Singular, 
@@ -767,7 +773,7 @@ value compute_thematic_imperativem cl conj stem entry =
         ])
    ])
 ; 
-value record_part_m (conj,part_kind) stem entry = match part_kind with
+value record_part_m (conj,part_kind) stem entry = match part_kind with 
   [ Pprm k -> record_part (Pprm_ k conj stem entry)
   | Pprp   -> record_part (Pprp_ conj stem entry)
   | Ppfta  -> record_part (Ppfta_ conj stem entry)
@@ -776,7 +782,7 @@ value record_part_m (conj,part_kind) stem entry = match part_kind with
   | _ -> failwith "Unexpected participle"
   ]
 ;
-value record_part_m_th verbal stem entry = 
+value record_part_m_th verbal stem entry =  
   match entry with
   [ "cint" -> let pprm = Pprm_ 10 Primary (revcode "cintayaan") entry in
               record_part pprm (* irregular *)
@@ -787,7 +793,7 @@ value record_part_m_th verbal stem entry =
          (* [trunc_a] needed because possible retroflexion in amaa.na *)
          record_part_m verbal mid_stem entry 
   ]
-and record_part_m_ath verbal stem entry = 
+and record_part_m_ath verbal stem entry =  
   let suff = if entry = "aas#2" then "iina" (* McDonell§158a *)
              else "aana" (* -aana *) in
   let mid_stem = match rfix stem suff  with
@@ -1723,13 +1729,13 @@ value compute_athematic_imperative5m gana strong weak vow entry = (* gana=5 or 8
   compute_imp_ath_m gana conjugs conjugw entry 
 ;
 (* Used by classes 5 and 8 *)
-value compute_active_present5 gana sstem wstem vow entry third = do
+value compute_active_present5 gana sstem wstem vow entry third = do 
   { compute_athematic_present5a gana sstem wstem vow entry third
   ; compute_athematic_impft5a gana sstem wstem vow entry 
   ; compute_athematic_optative5a gana wstem vow entry 
   ; compute_athematic_imperative5a gana sstem wstem vow entry 
   } 
-and compute_middle_present5 gana sstem wstem vow entry third = do
+and compute_middle_present5 gana sstem wstem vow entry third = do 
   { compute_athematic_present5m gana wstem vow entry third
   ; compute_athematic_impft5m gana wstem vow entry 
   ; compute_athematic_optative5m gana wstem vow entry 
@@ -1738,7 +1744,7 @@ and compute_middle_present5 gana sstem wstem vow entry third = do
   }
 ;
 (* Also used by gana 8 *)
-value compute_present5 gana sstem wstem vow entry third pada padam = 
+value compute_present5 gana sstem wstem vow entry third pada padam =
   match voices_of_gana gana entry with
        [ Para -> if pada then
            compute_active_present5 gana sstem wstem vow entry third
@@ -1756,7 +1762,7 @@ value compute_present5 gana sstem wstem vow entry third pada padam =
 
 (*** Gana 7  ***)
 
-value compute_athematic_present7a strong weak entry third = 
+value compute_athematic_present7a strong weak entry third =
   let conjugs person suff = (person,fix strong suff)
   and conjugw person suff = (person,fix weak suff) in do
   { enter1 entry (Conju (presa 7)
@@ -2309,8 +2315,8 @@ value compute_condm conj stem entry =
 value compute_future stem entry = 
   match entry with
     [ "as#1" -> () (* uses bhuu *) 
-    | "iiz#1" | "lii" -> do (* Para allowed in future *)
-         { compute_futurea Primary stem entry 
+    | "iiz#1" | "lii" | "knuu" -> do (* Para allowed in future *)
+         { compute_futurea Primary stem entry  
          ; compute_futurem Primary stem entry  
          }
     | _ -> match voices_of entry with
@@ -2508,7 +2514,7 @@ value intercalate_tvaa root rstem =
   and anit = [ 0 ] (* no intercalation *)
   and vet  = [ 0; 1 ] (* intercalate i optionally *) in
   match root with
-  [ "zam#2" -> [] (* unused without preverb *)
+  [ "zam#2"    (* unused without preverb *)
   | "av" -> [] (* WR no absol *)
   | "ka.s" | "dh.r.s" | "am" | "tvar" | ".r.s" -> set 
   | "nud" -> anit
@@ -2830,8 +2836,8 @@ value compute_future_10 rstem entry =
 
 value admits_passive = fun 
   [ (* We filter out roots with no attested passive forms *)
-    "an#2" | "av" | "as#1" | "iiz#1" | "uc" | "kan" | "kuu" | "k.lp"| "k.si" 
-  | "kha.n.d" | "daa#2" | "dyut#1" | "dru#1" | "pat#2" | "paz" | "paa#2"
+    "an#2" | "av" | "as#1" | "iiz#1" | "uc" | "kan" | "kuu" | "k.lp" | "knuu" 
+  | "k.si" | "kha.n.d" | "daa#2" | "dyut#1" | "dru#1" | "pat#2" | "paz" | "paa#2"
   | "pi#2" | "praa#1" | "ruc#1" | "vas#4" | "vidh#1" | "vip" | "vyac" | "zam#1"
   | "zi~nj" | "zrambh" | "zvit" | "siiv" | "spaz#1" | "spardh" | "h.r#2" 
   | "hrii#1" | "ma.mh" (* supplied by "mah" *)
@@ -2988,7 +2994,11 @@ value redup_perf root =
       ] in
   match Word.mirror revw with (* ugly double reversal to get the stem *)
   [ [] -> error_empty 14
-  | [ c1 :: r ] -> 
+  | [ 3 ] (* i *) -> let wk = [ 3; 42 ] (* iy *) 
+                     and st = [ 3; 42; 10 ] (* iye *) (* iyaya *)
+                     and lg = [ 3; 42; 11 ] (* iyai *) (* iyaaya *) in
+                     (rev st, rev wk, Some (rev lg), False, True)
+  | [ c1 :: r ] ->  
       if vowel c1 then let (s,w) = match c1 with
          [ 1 (* a *) -> let w = match r with
            [ [ c2 ] -> if root = "az#1" then (revw @ [ 36; 2 ]) (* aan- az1 *)
@@ -3049,14 +3059,14 @@ value redup_perf root =
           | "vyath" | "vyadh" | "vyaa" | "jyaa#1" | "pyaa" | "syand" | "dyut#1"
           | "myak.s" -> 3
             (* Whitney§785 also "vyac" and ved. "tyaj#1"; "vyaa" treated other *)
-          | "kan" | "mah" -> 2 (* ved lengthened redup vow Whitney§786a *)
+          | "kan" | "mah" -> 2 (* ved lengthened redup vowel Whitney§786a *)
           | _ -> short v (* reduplicated vowel is short *)
           ]
       and rc = (* reduplicating consonant *) match c with
         [ 17 | 18 (* k kh *) -> 22 (* c *)
         | 19 | 20 | 49 (* g gh h *) -> 24 (* j *)
         | 23 | 25 | 28 | 30 | 33 | 35 | 38 | 40 -> c-1 (* xh -> x *)
-        | _ -> c (* by default c *)
+        | _ -> c (* c by default *)
         ] in 
       let (affix,sampra) = match root with (* ya -> ii va -> uu *)
           [ "yaj#1" -> ([ 3 (* i *)],Some (mrijify (revcode "iij")))
@@ -3089,14 +3099,14 @@ value redup_perf root =
                 | _ -> (glue revw,False,False)
                 ]
               ] 
-            | _ -> (glue revw,False,False)
+            | _ -> (glue revw,False,False) 
             ]       else 
               let (short,iopt) = match root with
                 [ "gam"   -> (revcode "gm",True) (* actually i forbidden *)
                 | "ghas"  -> (revcode "k.s",False)
                 | "han#1" -> (revcode "ghn",True)
                 | "khan"  -> (revcode "khn",False)
-                | _       -> (revw,False)
+                | _       -> (revw,False) 
                 ] in (glue short,False,iopt) 
           ] 
        and strong = glue (if p then revw else revs) 
@@ -3278,12 +3288,11 @@ value multi_consonant root = match revcode root with
   ]
 ;
 value compute_perfecta_v strong weak entry = 
-  let lengthened = if entry = "i" then revcode "iyai"
-             else lengthened weak 
+  let lengthened = lengthened weak 
   and iforb = List.mem entry (* option intercalating i forbidden Whitney§797c *)
                [ "k.r#1"; "bh.r"; "v.r#2"; "s.r"; "dru#1"; "zru"; "stu"; "sru" ]
   and mc = multi_consonant entry in
-  let conjugw person suff = (person,fix_dup weak suff mc)
+  let conjugw person suff = (person,fix_dup weak suff mc) 
   and conjugs person suff = (person,fix strong suff)
   and conjugl person suff = (person,fix lengthened suff) in do
   { enter1 entry (Conju perfa
@@ -3364,9 +3373,9 @@ value compute_perfectm_v weak mc entry =
     (* middle part rare - eg cakraa.na pecaana anuucaana zepaana *)
   }
 ;
-value compute_perfect_bhuu () =
+value compute_perfect_bhuu root =
   let conjug person suff = (person,fix (revcode "babhuu") suff) in
-  enter1 "bhuu#1" (Conju perfa
+  enter1 root (Conju perfa
    [ (Singular, 
         [ conjug First  "va"
         ; conjug Second "tha"
@@ -3385,10 +3394,10 @@ value compute_perfect_bhuu () =
         ])
    ])
 ;
-value compute_perfect_vid () = (* perfect in the sense of present *)
+value compute_perfect_vid root = (* perfect in the sense of present *)
   let conjugw person suff = (person,fix (revcode "vid") suff)
   and conjugs person suff = (person,fix (revcode "ved") suff) in 
-  enter1 "vid#1" (Conju perfa
+  enter1 root (Conju perfa
    [ (Singular, 
         [ conjugs First  "a"
         ; conjugs Second "tha"
@@ -3406,8 +3415,8 @@ value compute_perfect_vid () = (* perfect in the sense of present *)
         ])
    ])
 ;
-value compute_perfect_ah () =
-  enter1 "ah" (Conju perfa
+value compute_perfect_ah root =
+  enter1 root (Conju perfa
    [ (Singular, 
         [ (Second, code "aattha")
         ; (Third,  code "aaha") 
@@ -3421,7 +3430,7 @@ value compute_perfect_ah () =
         ])
    ])
 ;
-value compute_perfect_vyaa entry = 
+value compute_perfect_vyaa root = 
   (* This code is consistent with Dhaaturuupaprapa~nca, except for
      middle 1st sg where it lists "vivyaye" rather than "vivye" *)
   let weak = revcode "vivii" (* redup de vii Whitney§801c *)
@@ -3430,7 +3439,7 @@ value compute_perfect_vyaa entry =
   let conjugw person suff = (person,fix_dup weak suff False)
   and conjugs person suff = (person,fix strong suff)
   and conjugl person suff = (person,fix long suff) in do
-  { enter1 entry (Conju perfa
+  { enter1 root (Conju perfa
    [ (Singular, 
         [ conjugl First  "a"
         ; conjugs First  "a"
@@ -3448,8 +3457,8 @@ value compute_perfect_vyaa entry =
         ; conjugw Third  "ur"
         ])
    ])
-  ; record_part (Ppfta_ Primary weak entry)
-  ; compute_perfectm_v weak False entry (* mc=False! *)
+  ; record_part (Ppfta_ Primary weak root)
+  ; compute_perfectm_v weak False root (* mc=False! *)
   }
 ;
 value compute_perfect_v strong weak entry = 
@@ -3464,22 +3473,21 @@ value compute_perfect_v strong weak entry =
   ]
 ;
 value compute_perfect entry =
+(*i Bizarre pada dependency should be factored *)
   match entry with
     [ "bhuu#1" -> do
-        { compute_perfect_bhuu () (* No middle forms Whitney§800d *)
+        { compute_perfect_bhuu entry (* No middle forms Whitney§800d *)
         ; record_part (Ppfta_ Primary (revcode "babhuu") entry)
         ; record_part_m_ath ppftm (revcode "babhuuv") entry 
         }
     | "vid#1" -> do
-        { compute_perfect_vid () (* middle forms ? *)
+        { compute_perfect_vid entry (* middle forms ? *)
         ; record_part (Ppfta_ Primary (revcode "vid") entry)
         }
-    | "ah" -> compute_perfect_ah ()
-    | "vyaa" -> compute_perfect_vyaa "vyaa" (* does not fit standard aa scheme *)
-    | "i" -> let (strong, weak,_,_,_) = redup_perf entry in
-             compute_perfect_v strong weak entry (* semble inutile ? *)
+    | "ah" -> compute_perfect_ah entry
+    | "vyaa" -> compute_perfect_vyaa entry (* does not fit standard aa scheme *)
     | "zvaa" -> let (strong, weak,_,_,_) = redup_perf "zuu" in (* \Pan{6,1,30} *)
-             compute_perfect_v strong weak entry (* Whitney§794b zizvaaya *)
+                compute_perfect_v strong weak entry (* Whitney§794b zizvaaya *)
 (* Whitney§794b also jyaa pyaa vyaa hvaa; we treat vyaa above, and hvaa is huu.
    Thus pyaa is covered by pii. jyaa1 as jii gives jijyau same WR *)
     | "indh" -> compute_perfectm Primary (revcode "iidh") entry
@@ -3509,13 +3517,13 @@ and compute_perfect_desidm st entry =
   let (_, weak, _, _, _) = redup_perf (Canon.rdecode st) in
   compute_perfectm Desiderative weak entry
 ;
-(************************)
-(* Periphrastic perfect *)
-(************************)
+(*********************************)
+(* Periphrastic perfect : .namul *)
+(*********************************)
 (* Construction of the periphrastic perfect, used for perfect of secondary 
 conjugations, denominative verbs and a few roots. It builds a form in -aam
 suffixed by a perfect form of the auxiliairies k.r bhuu et as \Pan{3,1,35-40} *)
-value peri_perf entry = 
+value peri_perf_stem entry = 
   let stem = match entry with 
   [ "iik.s" | "ii.d" | "iir" | "iih" | "uk.s" | "uc" | "ujjh" | "edh" 
     (* Macdonell§140a1 *)
@@ -4622,7 +4630,7 @@ value record_ppp_abs_stems entry rstem ppstems =
            | _    -> record_abs_ya entry rstem w
            ]
          }
-     | Tia w -> let (ita,itvaa) = if entry="grah" then ("iita","iitvaa")  
+     | Tia w -> let (ita,itvaa) = if entry = "grah" then ("iita","iitvaa")  
                                   else ("ita","itvaa") in do
          { if is_set_pp entry rstem then 
               match entry with
@@ -4670,9 +4678,9 @@ value record_ppp_abs_den ystem entry =
 (* Registered both in Invar and in Absotvaa, since may be used with preverbs.  *)
 (* Used specially for verbs that may be iterated - having done again and again *)
 value record_abso_am root = 
-  let record form = do 
-      { record_abso_tvaa (code form) root (* no preverb *)
-      ; record_abso_ya   (code form) root (* some preverb *)
+  let record form = let word = code form in do 
+      { record_abso_tvaa word root (* no preverb *)
+      ; record_abso_ya   word root (* some preverb *)
       } in 
   match root with 
   [ "as#2"    -> record "aasam" (* may overgenerate *)
@@ -4680,9 +4688,12 @@ value record_abso_am root =
   | "kram"    -> record "kraamam"
   | "k.r#1"   -> record "kaaram" (* \Pan{3,4,26-28} *)
   | "khan"    -> record "khaanam"
+  | "grah"    -> record "graaham"
+  | "jiiv"    -> record "jiivam" (* \Pan{3,4,30} *)
   | "j~naa#1" -> record "j~naayam"
   | "t.r.s#1" -> record "tar.sam"
   | "daa#1"   -> record "daayam"
+  | "naz#1"   -> record "naazam"
   | "paa#1"   -> record "paayam"
   | "pi.s"    -> record "pe.sam" (* \Pan{3,4,35+38} *)
   | "pu.s#1"  -> record "po.sam" (* \Pan{3,4,40} *)
@@ -4697,8 +4708,12 @@ value record_abso_am root =
   | "sa~nj"   -> record "sa~ngam"
   | "s.r"     -> record "saaram"
   | "han"     -> record "ghaatam" (* \Pan{3,4,36+37} *)
+  | "knuu"    -> record "knopam" (* from causative *)
   | _ -> ()
   ]
+(* NB Bandharkar: colloquial expressions iic+V.namul suivi de forme finie de V *)
+(* eg "hastagraaha.m g.r.naati" il tient par la main *)
+(* Should be also definable for causative, eg knopam \ca{knuu} \Pan{3,4,33} *)
 ;
 (* absolutive of secondary conjugations *)
 value record_absolutive c abs_stem_tvaa abs_stem_ya intercal entry = 
@@ -4935,6 +4950,7 @@ value compute_present_system entry rstem gana pada third =
               | "maa#4" -> revcode "may" (* shorten add y *)
               | "vyaa"  -> revcode "vyay"
               | "zuu"   -> revcode "zve" (* zvayati - similar to huu/hve *)
+              | "knuu"  -> revcode "knuuy" 
               | "guh"   -> revcode "guuh" (* lengthen \Pan{6,4,89} *)
               | "grah"  -> revcode "g.rh.n" (* WR *)
               | "das"   -> revcode "daas" 
@@ -5337,7 +5353,7 @@ value den_stem_m entry = (* in general intransitive or reflexive Whitney§1059c 
    | "romantha" (* practice \Pan{3,1,15} *)
    | "dhuuma" | "baa.spa" | "phena" (* emit \Pan{3,1,16} *)
    | "kurafga" | "pu.skara" | "yuga" | "vi.sa" | "zizu"  | "samudra#1" 
-     (* resemble *)
+   | "sa.mdhyaa"  (* resemble *)
    | "puru.sa" (* imitate *)
    | "manda" | "bhuusvarga" (* to become *)
        -> lengthen rstem (* reflexive causative middle to become \Pan{3,1,13} *)
@@ -5439,6 +5455,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
                      }
      | "vyadh" -> compute_future_gen (revcode "vidh") entry 
      | "zuu" -> compute_future_gen (revcode "zve") entry 
+     | "knuu" -> compute_future_gen (revcode "knuuy") entry 
      | _ -> if gana=10 then compute_future_10 rstem entry 
             else compute_future_gen rstem entry 
      ]
@@ -5453,6 +5470,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
                           }
           | "vyadh" -> compute_perif (revcode "vidh") entry 
           | "zuu" -> compute_perif (revcode "zve") entry 
+          | "knuu" -> compute_perif (revcode "knuuy") entry 
           | _ -> compute_perif rstem entry 
           ]
    ; (* Precative - active rare, middle unknown in classical language except
@@ -5511,8 +5529,8 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
             (* no perfect *)
           | _ -> compute_perfect entry 
           ]
-   ; (* Periphrastic Perfect *) (* on demand - except gana 10 above *)
-     try let stem = peri_perf entry in
+   ; (* Periphrastic Perfect *) (* .namul on demand - except gana 10 above *)
+     try let stem = peri_perf_stem entry in
          build_perpft Primary stem entry
      with [ Not_attested -> () ]
    ; (* Aorist *) compute_aorist entry

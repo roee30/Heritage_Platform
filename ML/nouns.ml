@@ -2735,8 +2735,8 @@ value build_fem_aa stem entry =
   enter entry (
    [ Declined Noun Fem
    [ (Singular, if entry = "ubha" then [] else let l = 
-        [ if entry = "allaa" || entry = "akkaa" 
-          then decline Voc "a" 
+        [ if entry = "allaa" || entry = "akkaa" (* Pan{7,3,107} *)
+          then decline Voc "a"
           else decline Voc "e"
         ; decline Nom "aa"
         ; decline Acc "aam"
@@ -2746,9 +2746,9 @@ value build_fem_aa stem entry =
         ; decline Gen "aayaas"
         ; decline Loc "aayaam"
         ] in if entry = "ambaa" then 
-        [ decline Voc "a" :: l ] (* also ambe vedic *)
+        [ decline Voc "a" :: l ] (* Pan{7,3,107} but also ambe vedic *)
              else if entry = "guha" then (* guhaa fde guha *)
-        [ decline Loc "aa" :: l ] (* vedic *)
+        [ decline Loc "aa" :: l ] (* Vedic *)
              else l)
    ; (Dual, 
         [ decline Voc "e"
@@ -4952,7 +4952,8 @@ value compute_nouns_stem_form e stem d p =
              | _ -> build_root Mas stem e
             ] 
       | [ 24 :: r1 ] (* -j *) -> match r1 with (* m.rjify *)
-            [ [ 2 :: [ 43 :: _ ] ] (* -raaj2 viraaj2 *) 
+            [ [ 1 :: [ 43 :: _ ] ] (* -yaj2 upaya.t *) 
+            | [ 2 :: [ 43 :: _ ] ] (* -raaj2 viraaj2 *) 
             | [ 2 :: [ 42 :: _ ] ] (* -yaaj2 *) 
             | [ 7; 48 ] (* s.rj2 *) -> build_root Mas [ 124 (* j' *) :: r1 ] e
             | [ 5; 42 ] (* yuj2 *) -> do 

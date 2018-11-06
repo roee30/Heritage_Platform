@@ -234,7 +234,7 @@ value light_10 = fun (* light roots end in short vowel Pan{1,4,11} *)
    [ [] -> failwith "light_10"
    | [ c :: r ] -> if vowel c then False (* ? *) else match r with
        [ [] -> failwith "light_10_1"
-       | [ v :: _ ] -> if short_vowel v then True else False
+       | [ v :: _ ] -> short_vowel v 
        ]
    ]
 ;

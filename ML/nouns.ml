@@ -812,7 +812,7 @@ value build_van g stem entry =
         ; decline Loc "vasu"
         ])
    ]
-   ; Bare Noun (mirror [ 1 :: [ 44 :: stem ]])
+   ; Bare Noun (mirror [ 1 :: [ 45 :: stem ]])
    ; Avyayaf (fix stem "vam")
    ; Indecl Tas (fix stem "vatas")
    ]
@@ -5338,14 +5338,14 @@ value compute_nouns_stem_form e stem d p =
           if monosyl r1 || compound_monosyl_ii r1 then match r1 with
              [ [ 43; 32; 48 ] (* strii *) -> build_strii r1 e
              | [ 43; 46 ] (* zrii *) -> do
-               { build_mono_ii Fem r1 e
-               ; build_fem_ii r1 e (* MW *)
+               { build_mono_ii Fem r1 e     (* nom. ii.h *)
+               ; build_fem_ii r1 e (* MW *) (* nom. ii Pan{6,1,68} sulopa *)
                }
-             | _ -> build_mono_ii Fem r1 e
+            | _ -> build_mono_ii Fem r1 e (* dhii hrii bhii2 *)
              ]
           else do
                { if r1=[ 22; 1 ] (* -acii *)  then () (* seulement avec px *)
-                 else build_fem_ii r1 e
+                 else build_fem_ii r1 e (* nom. ii Pan{6,1,68} sulopa *)
                ; match r1 with (* vedic forms Whitney§355-356 *) 
                  [ [ 45; 1 ]             (* avii *)
                  | [ 34; 1; 36 ]         (* nadii *) 
@@ -5354,8 +5354,11 @@ value compute_nouns_stem_form e stem d p =
                  | [ 43; 1; 32 ] (* tarii *) (* Whitney§363a *)
                  | [ 43; 32; 36; 1; 32 ] (* tantrii *)
                  | [ 43; 1; 32; 48 ] (* starii *) (* Deshpande u.naadisuutra *)
-                   -> build_poly_ii Fem r1 e
-                 | _ -> ()
+(* HN Bhat: avii tantrii tarii lak.smii hrii dhii zrii in u.naadi *)
+(* autre liste: tantrii starii lak.smii tarii dhii hrii zrii *)
+(* ci-dessus: + nadii suurmii - dhii hrii traités par [build_mono_ii] *) 
+                   -> build_poly_ii Fem r1 e (* nom. ii.h *)
+                 | _ -> () 
                  ]
                }
       | [ 5 :: r1 ] (* u *) -> build_fem_u stem r1 e

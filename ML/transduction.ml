@@ -479,7 +479,8 @@ EXTEND Gram (* skt to nat *)
       | LETTER "r" -> 43
       | LETTER "l" -> 44
       | LETTER "v" -> 45
-      | LETTER "s" -> 48
+      | LETTER "w" -> 45 (* alternate v rather than raising Stream error *)
+      | LETTER "s" -> 48 
       | LETTER "h" -> 49
       | "#"; i = INT -> 50+int_of_string i (* 0 *) 
       | "["; "-"; "]" -> -2 (* amuissement *)

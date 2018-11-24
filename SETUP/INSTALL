@@ -2,7 +2,7 @@
 * Installation of the Sanskrit Heritage Platform *
 **************************************************
 
-0. Generalities
+A. Generalities
 
 This library is developed on Unix/Linux, whereas the end product (Sanskrit 
 Platform) may run on any Web server. 
@@ -172,9 +172,13 @@ Try the web site by browsing http://SERVERHOST/SKTDIRURL
 N.B. You may run into security problems preventing you from running the CGI
 services. This may be due to security concerns, with an overly cautious
 configuration of Apache. This may be corrected by editing Apache's configuration,
-a complex and risky operation. Another route is to install the software
-with XAMPP, an open-source lightweight Apache distribution that makes 
-it easier for developers to install a local web server. 
+a complex and risky operation. For instance, check that your httpd.conf
+configuration file has an uncommented line:
+LoadModule cgi_module ...
+
+Another route is to install the software with XAMPP, an open-source 
+lightweight Apache distribution that makes it easier for developers 
+to install a local web server. 
 
 ______________
 

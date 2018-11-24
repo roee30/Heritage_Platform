@@ -21,11 +21,10 @@ If OCaml has been installed through the OPAM package manager, then:
 
 should do the job. Alternatively, see https://github.com/ocaml/camlp4
 for download and installation instructions. You may have to install
-the auxiliary package ocamlbuild. 
+the auxiliary package Ocamlbuild. 
 
 Beware: camlp4 is not updated at every Ocaml distribution, so you may have 
-to settle for a somewhat ancient version of Ocaml, such as 4.02.2, which is
-the one I use myself. 
+to settle for not the most recent version of Ocaml.
 
 1) Install the Heritage_resources package:
 

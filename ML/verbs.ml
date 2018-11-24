@@ -5353,7 +5353,7 @@ value den_stem_m entry = (* in general intransitive or reflexive Whitney§1059c 
    | "romantha" (* practice \Pan{3,1,15} *)
    | "dhuuma" | "baa.spa" | "phena" (* emit \Pan{3,1,16} *)
    | "kurafga" | "pu.skara" | "yuga" | "vi.sa" | "zizu"  | "samudra#1" 
-   | "sa.mdhyaa"  (* resemble *)
+   | "gomaya" | "sa.mdhyaa"  (* resemble *)
    | "puru.sa" (* imitate *)
    | "manda" | "bhuusvarga" (* to become *)
        -> lengthen rstem (* reflexive causative middle to become \Pan{3,1,13} *)

@@ -74,7 +74,8 @@ int_sandhi.cmi ../ZEN/deco.cmx ../ZEN/zen_lexer.cmx
 inflected.cmo : ../ZEN/word.cmo skt_morph.cmi phonetics.cmo naming.cmo \
     morphology.cmi ../ZEN/lexmap.cmo encode.cmo ../ZEN/deco.cmo inflected.cmi
 inflected.cmx : ../ZEN/word.cmx skt_morph.cmi phonetics.cmx naming.cmx \
-    morphology.cmi ../ZEN/lexmap.cmx encode.cmx ../ZEN/deco.cmx inflected.cmi
+    morphology.cmi ../ZEN/lexmap.cmx encode.cmx ../ZEN/deco.cmx inflected.cmi \
+../ZEN/zen_lexer.cmx
 sandhi.cmo : ../ZEN/word.cmo phonetics.cmo ../ZEN/list2.cmo encode.cmo \
     canon.cmo
 sandhi.cmx : ../ZEN/word.cmx phonetics.cmx ../ZEN/list2.cmx encode.cmx \

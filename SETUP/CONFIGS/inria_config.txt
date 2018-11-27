@@ -1,3 +1,4 @@
+ZENDIR='/home/huet/ML/Zen/ML/'
 PLATFORM='Server'
 TRANSLIT='VH'
 LEXICON='SH'

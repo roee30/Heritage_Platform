@@ -1,3 +1,4 @@
+ZENDIR='/Users/huet/ML/ZEN/Zen/ML/'
 PLATFORM='Station'
 TRANSLIT='VH'
 LEXICON='SH'

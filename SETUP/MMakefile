@@ -681,7 +681,7 @@ distr_automata: # distribution of data derived from Heritage Dictionary
 
 distrib: # distribution of Heritage under HTML & PDF formats
 	$(MAKE) distr_automata
-	cp -p SETUP/zen.tar DISTR/SETUP # Zen toolkit distribution included
+#	cp -p SETUP/zen.tar DISTR/SETUP # Zen toolkit distribution not included
 # DICO is assumed to be customized for the distribution site
 	cp -Rp $(DICO) DISTR     # Hypertext Heritage Dictionary for browsing
 	mkdir DISTR/BOOK

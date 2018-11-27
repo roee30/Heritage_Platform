@@ -61,7 +61,8 @@ index.cmx : web.cmx ../ZEN/trie.cmx ../ZEN/list2.cmx ../ZEN/gen.cmx \
 phonetics.cmo : ../ZEN/list2.cmo canon.cmo
 phonetics.cmx : ../ZEN/list2.cmx canon.cmx
 int_sandhi.cmo : ../ZEN/word.cmo phonetics.cmo encode.cmo canon.cmo
-int_sandhi.cmx : ../ZEN/word.cmx phonetics.cmx encode.cmx canon.cmx
+int_sandhi.cmx : ../ZEN/word.cmx ../ZEN/zen_lexer.cmx phonetics.cmx encode.cmx \
+canon.cmx
 skt_morph.cmi :
 morphology.cmi : ../ZEN/word.cmo skt_morph.cmi ../ZEN/lexmap.cmo
 naming.cmo : ../ZEN/word.cmo web.cmo skt_morph.cmi ../ZEN/gen.cmo encode.cmo \
@@ -69,7 +70,7 @@ naming.cmo : ../ZEN/word.cmo web.cmo skt_morph.cmi ../ZEN/gen.cmo encode.cmo \
 naming.cmx : ../ZEN/word.cmx web.cmx skt_morph.cmi ../ZEN/gen.cmx encode.cmx \
     ../ZEN/deco.cmx
 inflected.cmi : ../ZEN/word.cmo skt_morph.cmi naming.cmo morphology.cmi \
-    ../ZEN/deco.cmo
+int_sandhi.cmi ../ZEN/deco.cmx ../ZEN/zen_lexer.cmx
 inflected.cmo : ../ZEN/word.cmo skt_morph.cmi phonetics.cmo naming.cmo \
     morphology.cmi ../ZEN/lexmap.cmo encode.cmo ../ZEN/deco.cmo inflected.cmi
 inflected.cmx : ../ZEN/word.cmx skt_morph.cmi phonetics.cmx naming.cmx \

@@ -1,4 +1,4 @@
-ZENDIR='/home/huet/ML/Zen/ML/'
+ZENDIR='/home/huet/ML/Zen/Zen/ML/'
 PLATFORM='Server'
 TRANSLIT='VH'
 LEXICON='SH'

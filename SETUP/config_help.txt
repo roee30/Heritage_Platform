@@ -1,7 +1,13 @@
+# Format of the config configuration file of the Sanskrit Heritage Platform
+
+# Absolute path of the ML directory of your Zen installation
+ZENDIR='Zen_installation_dir/ML/'
+
 # Type of platform for the server
 # should be 'Station', 'Computer' or 'Server'
 # Station allows external analysis mode if UoH tools installed
 # Computer is standard client installation 
+# Server means opening the platform Web services as a Heritage mirror 
 PLATFORM='Computer'
 
 # Default transliteration : 'VH', 'WX', 'KH' or 'SL'

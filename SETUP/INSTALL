@@ -41,14 +41,18 @@ Unix operating system, such as FreeBSD, Linux or MacOSX.
 They may also apply under to versions of Windows under the Cigwin emulator, 
 but this has not been tested.
 
+
 The Sanskrit Heritage Platform, implemented as a set of Web services,
 uses a separate package Heritage_resources that defines the Sanskrit
-linguistic data necessary for its operation.
-Both packages may be pulled as Git packages. In the installation directory,
-run successively:
+linguistic data necessary for its operation. It also uses the Zen
+computational linguistics Ocaml library.
+these packages may be pulled as Git packages. 
+
+Create a clean installation directory HERITAGE, where you run successively:
+git clone git@gitlab.inria.fr:huet/Zen.git
 git clone git@gitlab.inria.fr:huet/Heritage_Resources.git
 git clone git@gitlab.inria.fr:huet/Heritage_Platform.git
-This will create two sub_directories, namely Heritage_Resources
+This will create three sub_directories, namely Zen, Heritage_Resources
 and Heritage_Platform. 
 
 B. Sanskrit Platform installation.
@@ -68,6 +72,9 @@ access rights. Let "Main" be the installation directory
 this README file). Let "host" be your hostname or any label of your choosing.
 Go to subdirectory SETUP, and edit file config.txt
 for customization, as follows. 
+
+ZENDIR is the UNIX path to the subdirectory ML of the Zen library.
+So it should be of the form '.../Zen/ML/'.
 
 PLATFORM is a customization parameter of the HTTP server platform
 and of the HTML client browser target. Currently it can take values:
@@ -145,13 +152,13 @@ in CGIDIR under names declared as respectively
 CGIINDEX, CGIINDEXD, CGIDECL, CGICONJ, CGILEMMA, CGIREADER, CGIPARSER, CGITAGGER,
 CGISANDHI, CGIGRAPH and CGIUSER. 
 
-2. Elaboration of the tools executables
+2. Elaboration of the services
 
 This is simply achieved by command:
 make
 
-This compiles the Zen linguistic platform, included in the distribution.
-Then it compiles the various Web services of the platform.
+This compiles the Zen linguistic platform, together with the various 
+Web services of the platform.
 
 3. Installation
 

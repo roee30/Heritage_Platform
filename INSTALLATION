@@ -26,11 +26,15 @@ the auxiliary package Ocamlbuild.
 Beware: camlp4 is not updated at every Ocaml distribution, so you may have 
 to settle for not the most recent version of Ocaml.
 
-1) Install the Heritage_resources package:
+1) Install the Zen computational linguistics library:
+
+   git clone https://gitlab.inria.fr/huet/Zen.git
+
+2) Install the Heritage_resources package:
 
    git clone https://gitlab.inria.fr/huet/Heritage_Resources.git
 
-2) Create your configuration file "config" in directory SETUP.
+3) Create your configuration file "config" in directory SETUP.
 
 Look at the SETUP/CONFIGS directory to find examples. All fields are
 explained in SETUP/config_help.txt.

@@ -396,10 +396,9 @@ XML_MORPHOLOGY=$(SL_XML_MORPHOLOGY) $(WX_XML_MORPHOLOGY) $(XML_DTD)
 all: 
 	test -e $(ZEN) && echo "Zen toolkit detected" && exit 0 \
 || echo "You should first install the Zen library at $(ZEN)" && exit 1
-	cd $(ZEN); make
+	cd $(ZEN) && $(MAKE) 
 	test -e $(DATA) && echo "Heritage_Resources detected" && exit 0 \
 || echo "You should first install Heritage_Resources at $(DATA)" && exit 1
-	cd $(ZEN) && $(MAKE) all
 	ln -sf $(ZEN) ZEN
 	cp -Rp $(HERITAGE) . # local copy of DICO from Resources/DICO
 	cp -Rp $(MW) . # local copy of MW

@@ -22,8 +22,6 @@
     ../ZEN/minimap.cmi
 ../ZEN/minimap.cmx : ../ZEN/share.cmx ../ZEN/lexmap.cmx ../ZEN/deco.cmx \
     ../ZEN/minimap.cmi
-../ZEN/zen_lexer.cmo :
-../ZEN/zen_lexer.cmx :
 control.cmo :
 control.cmx :
 version.cmo :
@@ -32,8 +30,10 @@ date.cmo : version.cmo
 date.cmx : version.cmx
 canon.cmo : ../ZEN/word.cmo
 canon.cmx : ../ZEN/word.cmx
-transduction.cmo : ../ZEN/zen_lexer.cmo
-transduction.cmx : ../ZEN/zen_lexer.cmx
+min_lexer.cmo :
+min_lexer.cmx :
+transduction.cmo : ../ZEN/zen_lexer.cmo min_lexer.cmo
+transduction.cmx : ../ZEN/zen_lexer.cmx min_lexer.cmx
 encode.cmo : ../ZEN/word.cmo transduction.cmo phonetics.cmo canon.cmo
 encode.cmx : ../ZEN/word.cmx transduction.cmx phonetics.cmx canon.cmx
 order.cmo :
@@ -61,8 +61,7 @@ index.cmx : web.cmx ../ZEN/trie.cmx ../ZEN/list2.cmx ../ZEN/gen.cmx \
 phonetics.cmo : ../ZEN/list2.cmo canon.cmo
 phonetics.cmx : ../ZEN/list2.cmx canon.cmx
 int_sandhi.cmo : ../ZEN/word.cmo phonetics.cmo encode.cmo canon.cmo
-int_sandhi.cmx : ../ZEN/word.cmx ../ZEN/zen_lexer.cmx phonetics.cmx encode.cmx \
-canon.cmx
+int_sandhi.cmx : ../ZEN/word.cmx phonetics.cmx encode.cmx canon.cmx
 skt_morph.cmi :
 morphology.cmi : ../ZEN/word.cmo skt_morph.cmi ../ZEN/lexmap.cmo
 naming.cmo : ../ZEN/word.cmo web.cmo skt_morph.cmi ../ZEN/gen.cmo encode.cmo \
@@ -70,12 +69,11 @@ naming.cmo : ../ZEN/word.cmo web.cmo skt_morph.cmi ../ZEN/gen.cmo encode.cmo \
 naming.cmx : ../ZEN/word.cmx web.cmx skt_morph.cmi ../ZEN/gen.cmx encode.cmx \
     ../ZEN/deco.cmx
 inflected.cmi : ../ZEN/word.cmo skt_morph.cmi naming.cmo morphology.cmi \
-int_sandhi.cmi ../ZEN/deco.cmx ../ZEN/zen_lexer.cmx
+    ../ZEN/deco.cmo
 inflected.cmo : ../ZEN/word.cmo skt_morph.cmi phonetics.cmo naming.cmo \
     morphology.cmi ../ZEN/lexmap.cmo encode.cmo ../ZEN/deco.cmo inflected.cmi
 inflected.cmx : ../ZEN/word.cmx skt_morph.cmi phonetics.cmx naming.cmx \
-    morphology.cmi ../ZEN/lexmap.cmx encode.cmx ../ZEN/deco.cmx inflected.cmi \
-../ZEN/zen_lexer.cmx
+    morphology.cmi ../ZEN/lexmap.cmx encode.cmx ../ZEN/deco.cmx inflected.cmi
 sandhi.cmo : ../ZEN/word.cmo phonetics.cmo ../ZEN/list2.cmo encode.cmo \
     canon.cmo
 sandhi.cmx : ../ZEN/word.cmx phonetics.cmx ../ZEN/list2.cmx encode.cmx \

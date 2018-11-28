@@ -5,7 +5,7 @@
 #                        Gérard Huet & Pawan Goyal                         #
 #                                                                          #
 ############################################################################
-# Makefile of Sanskrit Heritage Software  09-09-2018  Copyright INRIA 2018 #
+# Makefile of Sanskrit Heritage Software  28-11-2018  Copyright INRIA 2018 #
 ############################################################################
 # Prerequisites: Ocaml 4.07 and Camlp4 preprocessor
 
@@ -22,7 +22,7 @@ DATA=../DATA
 NOWEB=ocamlweb 
 
 ZENSOURCES=gen.ml list2.ml word.ml share.mli share.ml unshare.ml trie.ml \
-mini.ml deco.ml lexmap.ml minimap.mli minimap.ml zen_lexer.ml
+mini.ml deco.ml lexmap.ml minimap.mli minimap.ml # zen_lexer.ml
 
 VPATH=$(ZEN) 
 
@@ -33,9 +33,9 @@ VPATH=$(ZEN)
 
 # CORE package - utilities, transducers, sanskrit and french lexers, dico spec
 CORE=$(DISTR_CORE) paths.ml 
-DISTR_CORE = control.ml version.ml date.ml canon.ml transduction.ml encode.ml \
-             order.ml padapatha.ml skt_lexer.ml sanskrit.mli sanskrit.ml \
-             test_stamp.ml dir.mli dir.ml
+DISTR_CORE = control.ml version.ml date.ml canon.ml min_lexer.ml \
+             transduction.ml encode.ml order.ml padapatha.ml skt_lexer.ml \
+             sanskrit.mli sanskrit.ml test_stamp.ml dir.mli dir.ml
 
 # GRAM package - phonetics, morphology, segmentation and tagging engines
 GRAM = index.ml phonetics.ml int_sandhi.ml skt_morph.mli morphology.mli \
@@ -75,7 +75,7 @@ INACTIVE=$(TREE) nyaaya.ml mk_nyaaya_page.ml regression.ml
 SOURCES=$(ENGINE) $(DEBUG) $(INACTIVE) 
 
 CORENATIVES=list2.cmx gen.cmx paths.cmx version.cmx word.cmx canon.cmx \
-zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx skt_lexer.cmx \
+min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx skt_lexer.cmx \
 padapatha.cmx sanskrit.cmx order.cmx
 
 ANNOTFLAGS = -annot -bin-annot
@@ -155,26 +155,26 @@ corpus_manager save_corpus mkdir_corpus
 
 indexer: indexer.cmx
 	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
-control.cmx word.cmx canon.cmx trie.cmx deco.cmx zen_lexer.cmx phonetics.cmx \
+control.cmx word.cmx canon.cmx trie.cmx deco.cmx min_lexer.cmx phonetics.cmx \
 transduction.cmx encode.cmx html.cmx SCLpaths.cmx web.cmx cgi.cmx index.cmx \
 naming.cmx morpho_string.cmx morpho.cmx order.cmx chapters.cmx morpho_html.cmx \
 indexer.cmx -o indexer
 
 indexerd: indexerd.cmx 
 	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx control.cmx \
-word.cmx zen_lexer.cmx canon.cmx phonetics.cmx transduction.cmx encode.cmx \
+word.cmx min_lexer.cmx canon.cmx phonetics.cmx transduction.cmx encode.cmx \
 deco.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx cgi.cmx morpho_string.cmx \
 morpho.cmx order.cmx chapters.cmx morpho_html.cmx indexerd.cmx -o indexerd
 
 lemmatizer: lemmatizer.cmx 
 	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx control.cmx \
-word.cmx deco.cmx zen_lexer.cmx canon.cmx phonetics.cmx transduction.cmx \
+word.cmx deco.cmx min_lexer.cmx canon.cmx phonetics.cmx transduction.cmx \
 encode.cmx html.cmx SCLpaths.cmx web.cmx cgi.cmx naming.cmx morpho_string.cmx \
 morpho.cmx order.cmx chapters.cmx morpho_html.cmx lemmatizer.cmx -o lemmatizer
 
 declension: declension.cmx share.cmx
 	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx control.cmx \
-word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx \
+word.cmx canon.cmx min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx \
 deco.cmx int_sandhi.cmx lexmap.cmx inflected.cmx bank_lexer.cmx html.cmx \
 SCLpaths.cmx web.cmx nouns.cmx naming.cmx morpho_string.cmx morpho.cmx order.cmx \
 chapters.cmx morpho_html.cmx cgi.cmx share.cmx trie.cmx index.cmx \
@@ -182,7 +182,7 @@ multilingual.cmx declension.cmx -o declension
 
 conjugation: conjugation.cmx
 	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx control.cmx \
-word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx \
+word.cmx canon.cmx min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx \
 deco.cmx int_sandhi.cmx lexmap.cmx inflected.cmx parts.cmx pada.cmx verbs.cmx \
 html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx order.cmx \
 chapters.cmx morpho_html.cmx cgi.cmx share.cmx trie.cmx index.cmx \
@@ -190,13 +190,13 @@ multilingual.cmx conjugation.cmx -o conjugation
 
 sandhier: sandhier.cmx
 	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx control.cmx word.cmx \
-zen_lexer.cmx canon.cmx phonetics.cmx transduction.cmx encode.cmx sandhi.cmx \
+min_lexer.cmx canon.cmx phonetics.cmx transduction.cmx encode.cmx sandhi.cmx \
 int_sandhi.cmx date.cmx html.cmx SCLpaths.cmx web.cmx cgi.cmx sandhier.cmx \
 -o sandhier
 
 reader: reader.cmx 
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
-control.cmx word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx \
+control.cmx word.cmx canon.cmx min_lexer.cmx phonetics.cmx transduction.cmx \
 encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx \
 inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
 load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
@@ -209,7 +209,7 @@ LEGACY=
 
 interface: interface.cmx minimap.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
-control.cmx word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx \
+control.cmx word.cmx canon.cmx min_lexer.cmx phonetics.cmx transduction.cmx \
 encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx \
 inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
 load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
@@ -220,7 +220,7 @@ save_corpus_params.cmx dir.cmx corpus.cmx web_corpus.cmx interface.cmx -o interf
 
 user_aid: user_aid.cmx
 	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
-control.cmx word.cmx canon.cmx deco.cmx zen_lexer.cmx phonetics.cmx \
+control.cmx word.cmx canon.cmx deco.cmx min_lexer.cmx phonetics.cmx \
 transduction.cmx encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx html.cmx \
 SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx order.cmx chapters.cmx \
 morpho_html.cmx bank_lexer.cmx cgi.cmx phases.cmx checkpoints.cmx user_aid.cmx \
@@ -228,7 +228,7 @@ morpho_html.cmx bank_lexer.cmx cgi.cmx phases.cmx checkpoints.cmx user_aid.cmx \
 
 parser: parser.cmx 
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
-control.cmx word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx \
+control.cmx word.cmx canon.cmx min_lexer.cmx phonetics.cmx transduction.cmx \
 encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx \
 inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
 load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
@@ -240,7 +240,7 @@ paraphrase.cmx scl_parser.cmx parser.cmx -o parser
 corpus_manager: corpus_manager_cgi.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
 		version.cmx date.cmx control.cmx word.cmx canon.cmx	\
-		zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
+		min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
 		skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx	\
 		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx web.cmx	\
 		naming.cmx morpho_string.cmx morpho.cmx			\
@@ -256,7 +256,7 @@ corpus_manager: corpus_manager_cgi.cmx
 save_corpus: save_corpus_cgi.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
 		version.cmx date.cmx control.cmx word.cmx canon.cmx	\
-		zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
+		min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
 		skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx	\
 		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx web.cmx	\
 		naming.cmx morpho_string.cmx morpho.cmx			\
@@ -272,7 +272,7 @@ save_corpus: save_corpus_cgi.cmx
 mkdir_corpus: mkdir_corpus_cgi.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
 		version.cmx date.cmx control.cmx word.cmx canon.cmx	\
-		zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
+		min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
 		skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx	\
 		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx web.cmx	\
 		naming.cmx morpho_string.cmx morpho.cmx			\
@@ -288,7 +288,7 @@ mkdir_corpus: mkdir_corpus_cgi.cmx
 mk_corpus: mk_corpus.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
 		version.cmx date.cmx control.cmx word.cmx canon.cmx	\
-		zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
+		min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
 		skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx	\
 		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx web.cmx	\
 		naming.cmx morpho_string.cmx morpho.cmx			\
@@ -352,7 +352,7 @@ site_pages: mk_index_page mk_grammar_page mk_reader_page mk_sandhi_page	\
 # sandhi non-regression tests
 sandhi_test: sandhi_test.cmx
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx \
-word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx encode.cmx \
+word.cmx canon.cmx min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx \
 sandhi.cmx int_sandhi.cmx sandhi_test.cmx -o sandhi_test
 	./sandhi_test
 
@@ -360,14 +360,14 @@ sandhi.cmx int_sandhi.cmx sandhi_test.cmx -o sandhi_test
 tagger1: tagger1.cmx 
 #	cd $(DATA) && $(MAKE) transn.rem
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx \
-word.cmx canon.cmx zen_lexer.cmx phonetics.cmx transduction.cmx \
+word.cmx canon.cmx min_lexer.cmx phonetics.cmx transduction.cmx \
 skt_lexer.cmx deco.cmx sandhi.cmx padapatha.cmx sanskrit.cmx naming.cmx \
 morpho.cmx segmenter1.cmx tagger1.cmx -o tagger1
 
 # enter in ocaml toplevel '#use "debug.ml";' in order to debug 
 # adapt to your need in modules 
 # NB best used by first hiding all .mli, make clean, make depend 
-debug: gen.cmo version.cmo date.cmo word.cmo zen_lexer.cmo order.cmo \
+debug: gen.cmo version.cmo date.cmo word.cmo min_lexer.cmo order.cmo \
 canon.cmo phonetics.cmo transduction.cmo padapatha.cmo sanskrit.cmo \
 sandhi.cmo int_sandhi.cmo share.cmo trie.cmo deco.cmo skt_lexer.cmo \
 encode.cmo order.cmo lexmap.cmo inflected.cmo parts.cmo verbs.cmo \
@@ -375,7 +375,7 @@ morpho_html.cmo cgi.cmo html.cmo web.cmo indexer.cmo declension.cmo
 	(cat debug.ml ; cat -) | ocaml -I +camlp4 -I . -I $(ZEN)
 
 morpho_debug: list2.cmo word.cmo deco.cmo morpho_string.cmo paths.cmo \
-install.cmo canon.cmo zen_lexer.cmo gen.cmo transduction.cmo phonetics.cmo \
+install.cmo canon.cmo min_lexer.cmo gen.cmo transduction.cmo phonetics.cmo \
 encode.cmo naming.cmo version.cmo date.cmo html.cmo morpho.cmo 
 	(cat morpho_debug.ml ; cat -) | ocaml -I +camlp4 -I . -I $(ZEN)
 

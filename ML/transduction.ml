@@ -11,9 +11,9 @@
 
 open Camlp4.PreCast; (* MakeGram Loc *)
 
-module Gram = MakeGram Zen_lexer 
+module Gram = MakeGram Min_lexer 
 ;
-open Zen_lexer.Token
+open Min_lexer.Token
 ;
 value transducer trad t =
   try Gram.parse_string trad Loc.ghost t with

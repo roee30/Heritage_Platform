@@ -2826,8 +2826,8 @@ value build_mas_aa_no_root stem entry =
         ; decline Acc "aam"
         ; decline Ins "aa"
         ; decline Dat "ai"
-        ; decline Abl "as"
-        ; decline Gen "as"
+        ; decline Abl "aas"
+        ; decline Gen "aas"
         ; decline Loc "e"
         ])
    ; (Dual,

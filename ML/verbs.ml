@@ -3095,6 +3095,7 @@ value redup_perf root =
                 [ [ c' ] when consonant c' -> 
                      (revaffix [ 10 (* e *); c ] w,True,True)
                      (* roots of form c.a.c' with c,c' consonant or .m Scharf *)
+                     (* cf. Pan{6,4,119-126 *)
                      (* ZZ may lead to hiatus *)
                 | _ -> (glue revw,False,False)
                 ]

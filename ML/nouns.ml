@@ -4154,6 +4154,8 @@ value pseudo_nominal_basis = fun
   | [ 43; 1; 45; 1 ] (* avara *)
   | [ 45; 43; 1; 48 ] (* sarva *)
   | [ 45; 43; 6; 37 ] (* puurva Whitney§524 *)
+(* NB ga.na {puurva, paraavara, dak.si.na, uttara, apara, adhara} -: paraavara 
+      +: aneka, pazcima, nema, ubhaya, antara, para, avara, sarva, vizva, sva *)
   | [ 45; 46; 3; 45 ] (* vizva *) 
   | [ 45; 48 ] (* sva *) -> True
   | _ -> False

@@ -22,8 +22,9 @@ goldendict_path="SITE/goldendict.html"
 meta_docintro_path="DOC/docintro"
 docintro_path="DOC/docintro.tex"
 makefile_keys=["TEMPLATE","PLATFORM","TRANSLIT","LEXICON","DISPLAY","WARN",
-               "SERVERHOST","SERVERPUBLICDIR","SKTDIRURL","SKTRESOURCES",
-               "CGIBINURL","CGIDIR","CGIEXT","MOUSEACTION","ZENDIR"]
+               "SERVERHOST","SERVERPROTOCOL","SERVERPUBLICDIR","SKTDIRURL",
+               "SKTRESOURCES","CGIBINURL","CGIDIR","CGIEXT","MOUSEACTION",
+               "ZENDIR"]
 # deprecated "SCLURL","SCLINSTALLDIR","TEMPAREA","OUTPUTFONT",
 counter_keys=["CAPTION"]
 version_keys=["VERSION","DATE"]

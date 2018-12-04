@@ -148,8 +148,11 @@ SERVERHOST=#SERVERHOST
 # SERVERHOST=pauillac.inria.fr# pauillac
 # SERVERHOST=213.41.153.152# dhruva gerardh.net1.nerim.net [legacy]
 
+# Protocol used by the server (http or https)
+SERVERPROTOCOL=#SERVERPROTOCOL
+
 # For remote invocation of cgi services (eg Sanskrit Library)
-REMOTESERVERHOST=http://sanskrit.inria.fr/# remote host Inria
+REMOTESERVERHOST=https://sanskrit.inria.fr/# remote host Inria
 
 # The SKT public http directory on the server
 SERVERPUBLICDIR=#SERVERPUBLICDIR
@@ -430,6 +433,7 @@ echo 'and skt_resources_dir = "$(SKTRESOURCES)"'; \
 echo 'and public_skt_dir = "$(SERVERPUBLICDIR)"'; \
 echo 'and skt_dir_url = "$(SKTDIRURL)"'; \
 echo 'and server_host = "$(SERVERHOST)"'; \
+echo 'and server_protocol = "$(SERVERPROTOCOL)"'; \
 echo 'and remote_server_host = "$(REMOTESERVERHOST)"'; \
 echo 'and cgi_dir_url = "$(CGIBINURL)"'; \
 echo 'and cgi_index = "$(CGIINDEX)"'; \

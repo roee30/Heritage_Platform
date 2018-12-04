@@ -740,8 +740,8 @@ value title_instructions =
 ;
 value doctype = "<!DOCTYPE html>" (* Assuming HTML5 *)
 ;
-value url dns = "http://" ^ dns;
-
+value url dns = Paths.server_protocol ^ "://" ^ dns
+;
 value ocaml_site = url "ocaml.org"
 and inria_site = url "www.inria.fr/"
 and tomcat = url "localhost:8080/" (* Sanskrit Library runs Tomcat *)

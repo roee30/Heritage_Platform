@@ -660,8 +660,14 @@ value avocalic = fun
   | [] -> failwith "Nouns.avocalic: empty stem"
   ]
 ;
+(* NB impossible to factorise with [build_van] because "mne" and not "nne" *) 
 value build_man g stem entry = 
-  let avoc = avocalic stem in
+  let vedic_drop = match entry with (* Whitney§425e *)
+      [ "mahiman" | "prathiman" | "variman" | "daaman" | "preman" | "bhuuman"
+          -> True 
+      | _ -> False
+      ] 
+  and avoc = avocalic stem in 
   let decline case suff = (case,fix stem suff) in
   enter entry (
    [ Declined Noun g
@@ -675,6 +681,7 @@ value build_man g stem entry =
         ; decline Gen (if avoc then "manas" else "mnas")
         ; decline Loc "mani"
         ] @ (if g=Neu then [ decline Voc "ma" ] else [])
+          @ (if vedic_drop then [ decline Ins "naa" ] else [])
           @ (if avoc then [] else [ decline Loc "mni" ]))
    ; (Dual, (if g=Neu then 
         [ decline Voc "manii"

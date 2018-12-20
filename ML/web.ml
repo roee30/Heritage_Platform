@@ -25,7 +25,7 @@ value truncation = 10000
 ;
  
 (* threshold for printing the list of explicit segmentation solutions *)
-value max_count = 100 (* do not exceed - use rather the graphical interface *)
+value max_count = 100 (* do not exceed - rather use the graphical interface *)
 ;
 value cache_allowed = target=Station (* cache allowed only on Station *)
 ;
@@ -50,10 +50,10 @@ and reader_cgi     = cgi_bin Paths.cgi_reader     (* reader *)
 and parser_cgi     = cgi_bin Paths.cgi_parser     (* parser *) 
 and graph_cgi      = cgi_bin Paths.cgi_graph      (* summarizer graphical interface *) 
 and user_aid_cgi   = cgi_bin Paths.cgi_user_aid   (* unknown chunks processing *) 
-and sandhier_cgi   = cgi_bin Paths.cgi_sandhier   (* sandhier *) 
+and sandhier_cgi       = cgi_bin Paths.cgi_sandhier   (* sandhier *) 
 and corpus_manager_cgi = cgi_bin Paths.cgi_corpus_manager (* Corpus manager *)
-and save_corpus_cgi = cgi_bin Paths.cgi_save_corpus
-and mkdir_corpus_cgi = cgi_bin Paths.cgi_mkdir_corpus
+and save_corpus_cgi    = cgi_bin Paths.cgi_save_corpus
+and mkdir_corpus_cgi   = cgi_bin Paths.cgi_mkdir_corpus
 ;
 (* Absolute paths on development site *)
 value resources name = Paths.skt_resources_dir ^ name ^ "/"
@@ -341,9 +341,7 @@ value dico_title = fun
   ]
 ;
 (* We set and reset [output_channel] to designate either a static html file
-   under creation or [stdout] to produce a cgi output dynamic page.
-   This is awful and should be fixed one day.
-*)
+   under creation or [stdout] to produce a cgi output dynamic page. Ugly. *)
 value output_channel = ref stdout
 ;
 value ps s = output_string output_channel.val s 

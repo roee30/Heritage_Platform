@@ -314,7 +314,7 @@ MANUAL=SITE/manual.html
 XMLPAGE=SITE/xml.html
 FAQ=SITE/faq.html
 PORTAL=SITE/portal.html
-GOLD=SITE/gold.html
+# deprecated GOLD=SITE/gold.html
 GOLDEN=SITE/goldendict.html
 ABREVS=SITE/abrevs.pdf
 ROBOTS=SITE/robots.txt # currently disabled to allow Google access
@@ -322,7 +322,7 @@ ROBOTS=SITE/robots.txt # currently disabled to allow Google access
 # Goldendict data banks are now distributed from sanskrit.inria.fr
 #GOLDENDICT=SITE/Heritage_du_sanskrit_san-fra.tar.gz SITE/Declension-heritage_du_sanskrit_san-eng.tar.gz SITE/Grammar-heritage_du_sanskrit_san-eng.tar.gz SITE/mw-heritage_du_sanskrit_san-eng.tar.gz
 
-WEBSOURCES=$(PORTAL) $(FAQ) $(ABREVS) $(GOLD) $(GOLDEN) $(MANUAL) $(XMLPAGE)
+WEBSOURCES=$(PORTAL) $(FAQ) $(ABREVS) $(GOLDEN) $(MANUAL) $(XMLPAGE)
 ALLWEBSOURCES=$(SITESOURCE) $(WEBSOURCES)
 # Sources of morphology documents
 XMLDATA=$(DATA)/XML
@@ -580,7 +580,7 @@ releasedoc:
 	cp $(FAQPAGE_FR) $(SERVERPUBLICDIR)faq.html # compatibility default fr
 	cp $(MANUAL) $(SERVERPUBLICDIR) # user's manual
 #	cp $(ROBOTS) $(SERVERPUBLICDIR) # robots permissions
-	cp $(GOLD) $(SERVERPUBLICDIR) # Heritage's Hall of Fame
+#	cp $(GOLD) $(SERVERPUBLICDIR) # Heritage's Hall of Fame
 	cp $(DOC_ML) $(SERVERPUBLICDIR)DOC
 	cp -p DOC/transliterations.pdf $(SERVERPUBLICDIR)DOC
 

@@ -4469,6 +4469,9 @@ value pfp_ya rstem entry =
     | [ 49; 43; 1 ] (* arh *) -> revcode "argh" (* arghya (h=h') *)
     | [ 17; 1; 46 ] (* zak *) 
     | [ 49; 1; 48 ] (* sah *) -> rstem (* zakya sahya \Pan{3,1,99} -yat *) 
+    | [ 43; 1; 22 ] (* car *) -> rstem (* carya \Pan{3,1,100} -yat *) 
+                                       (* but caarya obtainable as ca -.nyat *) 
+    (* NB car gad mad yam also take -yat \Pan{3,1,100}: [record_extra_pfp_ya] *) 
     | [ 24; 1 ] (* aj *) -> rstem (* ajya *)
     | [ c :: [ 1 :: _ ] ] when labial c -> rstem  (* \Pan{3,1,98} -yat *) 
     | [ c :: [ 1 :: r ] ] -> [ c :: [ 2 :: r ] ] 
@@ -5186,7 +5189,7 @@ value record_pfp entry rstem = do
         record_part (Pfutp_ Primary (revcode form) entry) in
     match entry with
     [ "k.r#1" (* \Pan{3,1,120} .duk.r~n + kyap *)
-    | "stu" | "bh.r" | "i" | "m.r" -> (* \Pan{3,1,109} Renou§155e *)
+    | "stu" | "bh.r" | "i" | "m.r" -> (* \Pan{3,1,109} Renopfp_yau§155e *)
       (* intercalate t after roots ending in short vowel Renou§146 *)
       let pfp_tya = rfix rstem "tya" in (* k.rtya stutya bh.rtya itya m.rtya *)
       record_part (Pfutp_ Primary pfp_tya entry)
@@ -5228,7 +5231,6 @@ value record_pfp entry rstem = do
     | ".r"     -> record_extra_pfp_ya "arya"  (* (aarya) \Pan{3,1,103} (owner) *) 
     | "kup"    -> record_extra_pfp_ya "kupya" (* (kopya) \Pan{3,1,114} *) 
     | "gad"    -> record_extra_pfp_ya "gadya" (* gaadya for pv- \Pan{3,1,100} *) 
-    | "car"    -> record_extra_pfp_ya "carya" (* caarya for pv- \Pan{3,1,100} *) 
     | "mad"    -> record_extra_pfp_ya "madya" (* maadya for pv- \Pan{3,1,100} *)
     | "tyaj#1" -> record_extra_pfp_ya "tyajya" (* for sa.mtyajya (tyaajya) *) 
     | "bhid#1" -> record_extra_pfp_ya "bhidya" (* \Pan{3,1,115} for river *) 
@@ -5576,8 +5578,9 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
      ; compute_aor_ca cpstem entry (* Whitney§861b Henry§339 *)
      ; (* Passive future participle in -ya *)
        match entry with
-       [ "yam" | "has" -> () (* to avoid redundancy with Primary pfp *)
+       [ "gad" | "yam" | "has" -> () (* to avoid redundancy with Primary pfp *)
        (* zi.s : justified redundancy with Primary pfp *)
+       (* car :  redundancy with Primary pfp to be justified *)
        | _ -> record_pfp_ya Causative cpstem entry 
        ]
      ; (* Passive future participle in -aniiya *)

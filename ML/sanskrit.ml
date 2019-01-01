@@ -65,28 +65,14 @@ EXTEND Gramskt
     [ [ s = skt; `EOI -> s ] ] ;
   pada: (* non-empty list of chunks separated by blanks *)
     [ [ el = LIST1 skt -> el ] ] ; 
-(*i deprecated
-  sloka_line:
-    [ [ p = pada; "|"; "|" -> [ p ]  
-      | p = pada; "|"; sl = sloka_line -> [ p :: sl ]
-    ] ] ;
-  sloka: (* wrong *)
-    [ [ p = pada; "|"; sl = sloka_line -> [ p :: sl ]
-      | p = pada -> [ p ]
-      | `EOI -> failwith "Empty sanskrit input"
-    ] ] ; *)
   sanscrit: 
     [ [ p = pada; "|"; "|"  -> [ p ]
+      | p = pada; "|"; `EOI -> [ p ] 
       | p = pada; "|"; sl = sanscrit -> [ p :: sl ] 
       | p = pada; "!"; sl = sanscrit -> [ p :: sl ] (* for voc and interj *)
       | p = pada; `EOI -> [ p ] 
       | `EOI -> failwith "Empty sanskrit input"
     ] ] ;
-(*i NB! due to limitation of camlp4 grammars, not possible to simplify above in
-  sanscrit:
-    [ [ p = pada; `EOI -> Pada p
-      | s = sloka -> Sloka s
-    ] ] ;                    i*)
   skt_list :
     [ [ el = LIST1 skt SEP ","; `EOI -> el ] ] ;
 END

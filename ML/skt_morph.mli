@@ -110,7 +110,8 @@ type sadhana = (* karaka, action or absolutive - coarser than krit *)
   | Action
   | Object
   | Instr
-  | Loca
+  | Orig (* unused *)
+  | Loca 
   | Absolu
   ]
 ;
@@ -154,6 +155,7 @@ and krit = (* coarser than Paninian krit suffixes *)
   | Object_a (* ka                                     -a n.    *) 
   | Instrument (* ka \Pan{3,1,136}                  0/amui n.   *)
   | Instra (* .s.tran -tra n.                -trii f. traa f.   *)
+  | Orig_root (* sruc srut sruva *)
   | Agent_u   (* san+u                             -u on des stem  *)
   | Action_aa (* san+a+.taap  \Pan{3,3,102}        -aa on des stem *)
   | Abstract (* abstract nouns n.           -as u.naadi suffix *)

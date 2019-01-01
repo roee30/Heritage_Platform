@@ -5640,6 +5640,7 @@ value iic_avya =
   ; "adhi" (* adhipaa.ni adhistri adhihari adhihasti adhyaatmam *)
   ; "abhi" (* abhyagni abhipuurvam *)
   ; "anu" (* anujye.s.tham anuk.sa.nam anugu anu.svadham (.) *)
+  ; "antaraa" (* antaraaz.fgam *)
   ; "apa"
 (*; "aa" -- overgenerates *)
   ; "upa" (* upakumbham upak.r.s.naat upagafgam upanadam upaagni *)

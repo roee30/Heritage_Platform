@@ -5,7 +5,7 @@
 #                        Gérard Huet & Pawan Goyal                         #
 #                                                                          #
 ############################################################################
-# Makefile of Sanskrit Heritage Software  28-11-2018  Copyright INRIA 2018 #
+# Makefile of Sanskrit Heritage Software  31-12-2018  Copyright INRIA 2018 #
 ############################################################################
 # Prerequisites: Ocaml 4.07 and Camlp4 preprocessor
 
@@ -58,7 +58,7 @@ WEB = html.ml web.ml css.ml cgi.ml morpho_html.ml chapters.ml morpho_scl.ml \
 # CORPUS package - corpus manager
 CORPUS = corpus.mli corpus.ml web_corpus.mli web_corpus.ml		\
  	 corpus_manager.mli corpus_manager.ml corpus_manager_cgi.ml	\
-	 save_corpus_params.mli save_corpus_params.ml save_corpus_cgi.ml	\
+	 save_corpus_params.mli save_corpus_params.ml save_corpus_cgi.ml \
 	 mkdir_corpus_params.mli mkdir_corpus_params.ml			\
 	 mkdir_corpus_cgi.ml mk_corpus.ml
 

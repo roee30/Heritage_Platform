@@ -580,7 +580,7 @@ and uu_it = fun (* perstems \Pan{7,2,44} *)
   | "kli.s" | "ta~nc" -> True 
   | _ -> False
   ]
-and o_it = fun (* these roots have ppp in -na - unused here *)
+and o_it = fun (* these roots have ppp in -na \Pan{8,2,45} - unused here *)
   [ "zuu" | "haa#1" | "haa#2" | "vij" | "vrazc" | "bhuj#1" | "bha~nj" | "lag" 
  (* | "iir" | "und" | "k.rr" | "klid" | "k.sii" | "k.sud" | "k.svid" | "khid"
     | "g.rr#1" | "glai" | "chad#1" | "chid#1" | "ch.rd" | "j.rr" | ".dii"
@@ -588,7 +588,8 @@ and o_it = fun (* these roots have ppp in -na - unused here *)
     | "nud" | "pad#1" | "pi#2" | "p.rr" | "pyaa" | "bhid#1" | "majj" | "man"
     | "mid" | "mlaa" | "ri" | "lii" | "luu#1" | "vid#2" | "vlii" | "zad" | "z.rr"
     | "sad#1" | "skand" | "st.rr" | "styaa" | "syand" | "svid#2" | "had" *)
-      -> True
+ (* aussi "suu#2" suuna *)
+      -> True 
   | _ -> False
   ]
 ;
@@ -2050,7 +2051,7 @@ value compute_presentk sstem wstem short entry third = do
 (*** Gana 9  ***)
 
 value compute_athematic_present9a strong weak short entry third = 
-  let conjugs person suff = (person,fix strong suff)
+  let conjugs person suff = (person,fix strong suff) 
   and conjugw_v person suff = (person,fix short suff) (* vowel suffix *)
   and conjugw_c person suff = (person,fix weak suff) (* consonant suffix *) in do
   { enter1 entry (Conju (presa 9)
@@ -2701,7 +2702,7 @@ value compute_ppp_stems entry rstem =
            | "mlecch" -> [ sTa "mlich" ] (* "mli.s.ta" *)
            | "vaa#3"  -> [ sTa "u" ]
            | "sah#1"  -> [ sTa "soh" ] 
-           | "suu#1"  -> [ sTa "su" ]
+           | "suu#1"  -> [ sTa "su" :: [ sNa "suu" ] ] (* suta suuna *)
            | "snih#1" -> [ sTa "snih" ] (* opt. duhify "snii.dha" *)
            | "snuh#1" -> [ sTa "snuh" ] (* opt. duhify "snuu.dha" *)
            | "haa#1"  -> [ sNa "hii" :: [ sNa "haa" ] ] (* irreg. na ppp *)
@@ -5144,15 +5145,16 @@ value compute_present_system entry rstem gana pada third =
         | _ -> match rstem with 
             [ [ c :: w ] -> (st,vowel c) 
               where st = if c=6 (* uu *) then [ 5 :: w ] (* Whitney§728a *)
-                         else if c=8 (* .rr *) then [ 7 :: w ] 
-                         else rstem
+                    else if c=8 (* .rr *) then [ 7 :: w ] else rstem
             | [] -> error_empty 30
             ] 
         ] in (* Macdonell§127.6 *)
-     (* NB Retroflexion prevented in k.subh: k.subhnaati \Pan{8,4,39} - TODO *)
-     let retn = if Int_sandhi.retron stem then 31 (* .n *) else 36 (* n *) in
-     let sstem = rev (sandhi stem [ 36; 2 ]) (* stem-naa *) (* naa accented *)
-     and wstem = rev (sandhi stem [ 36; 4 ]) (* stem-nii *) (* nii unaccented *)
+     (* NB Retroflexion prevented in k.subh: k.subhnaati \Pan{8,4,39} *)
+     let retn = if Int_sandhi.retron stem then 
+        if entry = "k.subh" then 36 (* n *) else 31 (* .n *)  else 36 (* n *) 
+     and glue = if entry = "k.subh" then List2.unstack else sandhi in
+     let sstem = rev (glue stem [ 36; 2 ]) (* stem-naa *) (* naa accented *) 
+     and wstem = rev (glue stem [ 36; 4 ]) (* stem-nii *) (* nii unaccented *)
      and short = [ retn :: stem ] (* stem-n *) in do
      { compute_present9 sstem wstem short vow stem entry third pada padam
      ; if entry = "grah" then (* ved alternative form "g.rbh" Vt1 \Pan{8,2,35} *)

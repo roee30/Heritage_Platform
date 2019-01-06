@@ -3420,11 +3420,11 @@ value build_fem_ir stem entry = (* gir *)
    ; Avyayaf short
    ]
 ;
-(* Similar to preceding paradigm - for aazis *)
-value build_fem_is stem entry = 
+(* Similar to preceding paradigm - for aazis fem et niraazis adj *)
+value build_aazis g stem entry = 
   let decline case suff = (case,fix stem suff) in 
   enter entry 
-   [ Declined Noun Fem
+   [ Declined Noun g
    [ (Singular,
         [ decline Voc "iis"
         ; decline Nom "iis"
@@ -5082,7 +5082,10 @@ value compute_nouns_stem_form e stem d p =
                ] 
             | [ 2; 41 ] (* maas *) -> build_maas ()
             | [ 2 :: _ ] (* -aas *) -> () (* avoids reporting bahu aas bhaas *) 
-            | [ 3 :: r2 ] (* -is *) -> build_is Mas r2 e
+            | [ 3 :: r2 ] (* -is *) -> match r2 with
+                [ [ 46; 2 :: _ ] (* niraazis *) -> build_aazis Mas r2 e
+                | _ -> build_is Mas r2 e
+                ]
             | [ 5 :: r2 ] (* -us *) -> build_us Mas r2 e
             | [ 12; 34 ] (* dos *) -> () (* avoids reporting bahu *) 
             | [ 14; 5; 37 ] (* pu.ms *) -> build_pums [ 41; 5; 37 ] stem e
@@ -5476,7 +5479,7 @@ value compute_nouns_stem_form e stem d p =
                 ]
             | [ 2 :: r2 ] (* -aas *) -> build_root Fem stem e (* bhaas *)
             | [ 3 :: r2 ] (* -is *) -> match r2 with
-                [ [ 46; 2 ] (* aazis *) -> build_fem_is r2 e
+                [ [ 46; 2 :: _ ] (* -aazis *) -> build_aazis Fem r2 e
                 | _ -> build_is Fem r2 e
                 ]
             | [ 5 :: r2 ] (* -us *) -> build_us Fem r2 e

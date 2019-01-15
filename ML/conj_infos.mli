@@ -14,9 +14,10 @@
 type vmorph =
   [ Prim of int and bool and Word.word  (* primary conjugation *)
          (* gana    pada     form of present 3rd sg for checking   *)
-  | Causa of Word.word          (* causative 3rd sg conjugation    *)
-  | Inten of Word.word          (* intensive 3rd sg conjugation    *)
-  | Desid of Word.word          (* desiderative 3rd sg conjugation *)
+         (* pada=True Paradmaipada pada=False AAtmanepada   *)
+  | Causa of Word.word          (* causative 3rd sg form    *) 
+  | Inten of Word.word          (* intensive 3rd sg form    *)
+  | Desid of Word.word          (* desiderative 3rd sg form *)
   ]
 ;
 type root_infos = (vmorph * bool) (* [True] means root admits preverb aa- *)

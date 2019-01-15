@@ -2469,11 +2469,11 @@ value intercalate_pp root rstem =
            | "ghu.s" (* \Pan{7,2,23} *) | "ka.s" (* \Pan{7,2,22} *) 
            | "dh.r.s" (* \Pan{7,2,19} *) 
            | "am" | "tvar" (* \Pan{7,2,28} *) -> vet (* but only set for -tvaa *)
-           | "gup" | "dyut#1" | "dham" | "nud" | "m.rj" -> vet 
+           | "kas" | "gup" | "dyut#1" | "dham" | "nud" | "m.rj" -> vet 
              (* NB zaas vet for stem zaas but admits also zi.s only anit *)
            | "aj" | "a.t" | "at" | "an#2" | "az#2" | "aas#2" | "i.s#2"
            | "ii.d" | "iir" | "iiz#1" | "ii.s" | "iih" | "uc" | ".rc#1" | ".rj" 
-           | "ej" | "edh" | "kath" | "kal" | "kas" | "kaaz" | "kiil" | "kuc"
+           | "ej" | "edh" | "kath" | "kal" | "kaaz" | "kiil" | "kuc"
            | "kup" | "kuuj" | "k.rz" | "krii.d" | "klav" | "kvath" | "k.sam" 
            | "k.sar" | "k.sudh#1" | "k.svi.d" | "khaad" | "ga.n" | "gad" | "gal" 
            | "granth" | "gha.t" | "ghaat" | "cak" | "ca.t" | "car" | "cal"

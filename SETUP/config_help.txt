@@ -24,9 +24,6 @@ DISPLAY='roma'
 # URL of host server -- '127.0.0.1' for localhost
 SERVERHOST='127.0.0.1'
 
-# Protocol used by the host server: 'http' or 'https'
-SERVERPROTOCOL='http'
-
 # IMPORTANT: in SERVERPUBLICDIR as well as CGIDIR below, you must plan on
 # creating the directories in the Apache area /var/www, in supervisor mode
 

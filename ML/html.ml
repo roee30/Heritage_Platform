@@ -739,7 +739,7 @@ value title_instructions =
 ;
 value doctype = "<!DOCTYPE html>" (* Assuming HTML5 *)
 ;
-value url dns = (* Paths.server_protocol *) "http://" ^ dns
+value url dns = "http://" ^ dns
 ;
 value ocaml_site = url "ocaml.org"
 and inria_site = url "www.inria.fr/"

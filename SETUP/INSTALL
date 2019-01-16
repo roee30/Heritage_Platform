@@ -103,9 +103,6 @@ SERVERHOST should be the domain name (or IP address) of the target HTTP server.
 For instance, use SERVERHOST='127.0.0.1' for localhost service
 (SERVERHOST='localhost' should work too). 
 
-SERVERPROTOCOL should be set to 'http' for a localhost or non secured server,
-and to 'https' for a server with a security certificate.
-
 SERVERPUBLICDIR should be the absolute path on the server file system of the data
 to be used by its cgi-bin executables - it should be allowed as readable from 
 all. The fields of the configuration file relevant to the Apache server

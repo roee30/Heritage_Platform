@@ -15,10 +15,11 @@
 (* Generic HTML scripting *)
 (**************************)
 
-(* All values are pure, not side-effect, no printing. *)
+(* All values are pure, with no side-effect, no printing. *)
 (* Attributes given as association lists [(label,value): (string * string)] *)
 value assoc_quote (label,valu) = 
-  let sp_label = " " ^ label in sp_label ^ "=\"" ^ valu ^ "\""
+  let sp_label = " " ^ label in 
+  sp_label ^ "=\"" ^ valu ^ "\""
 ;
 value rec quote_alist = fun
   [ [] -> ""
@@ -90,7 +91,7 @@ value rec print_options = fun
 value rec print_options_default = fun
    [ [] -> ""
    | [ (control,id,b) :: rest ] -> 
-       option_print_default id control b ^ print_options_default rest
+       (option_print_default id control b) ^ (print_options_default rest)
    ]
 ;
 value option_select list_options = 
@@ -110,12 +111,12 @@ value text_input id control =
   xml_empty_with_att "input" [ ("id",id); ("type","text"); ("name",control) ]
 ;
 value add_opt_attrs opt_attrs attrs =
-  List.fold_left (fun acc (label, v) ->
+  let add_attr acc (label, v) = 
     match v with
     [ None -> acc
     | Some v -> [ (label, v) :: acc ]
-    ]
-  ) attrs opt_attrs
+    ] in
+  List.fold_left add_attr attrs opt_attrs
 ;
 value int_input ?id ?val ?(step = 1) ?(min = min_int) ?(max = max_int) name =
   let attrs =
@@ -201,7 +202,6 @@ type basic_style =
   | Tablecenter
   | Color of color 
   | Bgcolor of color 
-(*| Bgpict of pict *)
   | Position of string 
   | Full_width 
   | Height of int
@@ -298,7 +298,6 @@ value style_sheet = fun
   | Textalign p ->  "text-align:" ^ justify p 
   | Color cl -> "color:" ^ rgb cl 
   | Bgcolor cl -> "background-color:" ^ rgb cl 
-(*[| Bgpict p -> "background-image:url(" ^ pict p ^ ")" ]*) 
   | Position pos -> pos  
   | Tablecenter -> "margin:0 auto"  
   | No_border -> "border: 0" 
@@ -320,7 +319,7 @@ value enpied = "position: fixed; bottom: 0pt; width: 100%"
 (* All the styles of the various sections - terminology to be streamlined *)
 (* NB: When [style_class] is changed, module Css ought to be adapted *)
 type style_class = 
-    [ Blue_ | Green_ | Navy_ | Red_ | Magenta_ 
+    [ Blue_ | Green_ | Navy_ | Red_ | Magenta_ | Hidden_
     | Header_deva | Header_tran | Bandeau | Body | Spacing20 | Pad60 | Border2
     | Latin12 | Trans12 | Deva | Devac | Deva16 | Deva16c | Deva20c 
     | Roma16o | Roma12o | Inflexion
@@ -331,7 +330,7 @@ type style_class =
     | Pink_back | Chamois_back | Cyan_back | Brown_back | Lime_back | Grey_back 
     | Deep_sky_back | Carmin_back | Orange_back | Red_back | Mauve_back 
     | Lavender_back | Lavender_cent | Green_back | Lawngreen_back | Magenta_back
-    | Aquamarine_back | Hidden_
+    | Aquamarine_back 
     ]
 ;
 value background = fun
@@ -520,7 +519,7 @@ value class_of = fun
     ]
 ; 
 (* Allows css style compiling even when browser does not support css *)
-(* This support was necessary for Simputer platform *)
+(* This support was necessary for Simputer platform - now deprecated *)
 value elt_begin_attrs attrs elt cl = 
   let style_attr = (* if Install.css then *) ("class",class_of cl)  
                                  (*  else    ("style",style cl) *) in
@@ -786,13 +785,10 @@ value escape s =
     ]
   in
   let escape s =
-    try "&" ^ List.assoc s conversion_tbl ^ ";" with [ Not_found -> s ]
-  in
+    try "&" ^ List.assoc s conversion_tbl ^ ";" with [ Not_found -> s ] in
   let special_chars =
     Str.regexp (
-      "[" ^ String.concat "" (conversion_tbl |> List.split |> fst) ^ " " ^ "]"
-    )
-  in
+      "[" ^ String.concat "" (conversion_tbl |> List.split |> fst) ^ " ]") in
   let subst s = s |> Str.matched_string |> escape in
   Str.global_substitute special_chars subst s
 ;

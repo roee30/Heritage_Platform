@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Sanskrit Phrase Lexer in 40 phases version. *)
@@ -75,20 +75,7 @@ value print_morph pvs cached seg_num gen form n tag = do
   ; n+1
   }
 ;
-(* generalisation of [print_morph] to taddhitas *)
-value print_morph_tad pvs cached seg_num gen stem sfx n tag = do
-(* n is the index in the list of tags of an ambiguous form *)
-  { tr_begin |> ps
-  ; th_begin |> ps
-  ; span_begin Latin12 |> ps
-  ; Morpho_html.print_inflected_link_tad pvs cached stem sfx (seg_num,n) gen tag 
-  ; span_end |> ps
-  ; th_end |> ps 
-  ; tr_end |> ps  
-  ; n+1
-  }
-;
-value print_tags pvs seg_num phase form tags =  
+value print_tags pvs seg_num phase form tags =   
   let ptag = print_morph pvs (is_cache phase) seg_num (generative phase) form in 
   let _ = List.fold_left ptag 1 tags in ()
 ;
@@ -100,9 +87,7 @@ value rec scl_phase = fun
   | Inde | Abso | Absv | Absc | Avy -> "inde"
   | Iic | Iic2 | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif | Auxiick
   | Ai | Ani -> "iic"
-  | Sfx -> "suffix"
-  | Isfx -> "iicsuffix"
-  | Iiv | Iivv | Iivc -> "iiv"
+  | Iiv | Iivv | Iivc -> "iiv" 
   | Iiy -> "iiy" 
   | Peri -> "peri" 
   | Inftu -> "inftu" 
@@ -112,13 +97,12 @@ value rec scl_phase = fun
   | Unknown -> "unknown"
   | Cache -> "Cache" 
   | Comp (_,ph) _ _ -> "preverbed " ^ scl_phase ph
-  | Tad (ph,_)  _ _ -> "taddhita " ^ scl_phase ph
   ]
 ;
 value print_scl_morph pvs gen form tag = do
   { ps (xml_begin "tag")
-  ; Morpho_scl.print_scl_inflected pvs form gen tag 
-  ; ps (xml_end "tag")
+  ; Morpho_scl.print_scl_inflected pvs form gen tag  
+  ; ps (xml_end "tag") 
   }
 ;
 value print_scl_tags pvs phase form tags = 
@@ -137,7 +121,6 @@ value extract_lemma phase word =
   | Preverbed (_,phase) pvs form tags -> (* tags to be trimmed to [ok_tags] *)
      if pvs = [] then tags 
      else trim_tags (generative phase) form (Canon.decode pvs) tags 
-  | Taddhita  _ _ _ tags -> tags
   ]
 ; 
 (* Returns the offset correction (used by SL interface) *)
@@ -171,19 +154,7 @@ value process_kridanta pvs seg_num phase form tags = do
   ; th_end |> ps
   ; (phase, form, ok_tags)
   }}
-;
-value process_taddhita pvs seg_num phase stem sfx_phase sfx sfx_tags = 
-  let gen = generative phase 
-  and cached = False in
-  let ptag = print_morph_tad pvs cached seg_num gen stem sfx in do
-  { th_begin |> ps
-  ; table_morph_of sfx_phase |> pl     (* table begin *)
-  ; let _ = List.fold_left ptag 1 sfx_tags in ()
-  ; table_end |> ps                    (* table end *) 
-  ; th_end |> ps
-  ; (sfx_phase, sfx, sfx_tags)
-  }
-;
+; 
 (* Same structure as [Interface.print_morpho] *)
 value print_morpho phase word = do  
   { table_morph_of phase |> pl          (* table begin *)  
@@ -196,15 +167,7 @@ value print_morpho phase word = do
           process_kridanta [] 0 phase word tags
        | Preverbed (_,phase) pvs form tags -> 
           process_kridanta pvs 0 phase form tags
-       | Taddhita (ph,form) sfx sfx_phase sfx_tags -> 
-            match tags_of ph form with 
-            [ Atomic _ -> (* stem, tagged as iic *)
-              process_taddhita [] 0 ph form sfx_phase sfx sfx_tags 
-            | Preverbed _ pvs _ _ -> (* stem, tagged as iic *)
-              process_taddhita pvs 0 ph form sfx_phase sfx sfx_tags 
-            | _ -> failwith "Anomaly: taddhita recursion"
-            ]
-       ] in ()
+       ] in () 
   ; span_end |> ps
   ; th_end |> ps 
   ; tr_end |> ps
@@ -212,7 +175,7 @@ value print_morpho phase word = do
   }
 ;
 (* Segment printing with phonetics without semantics for Reader *)
-value print_segment offset (phase,rword,transition) = do
+value print_segment offset (phase,rword,transition) = do 
   { "[ " |> ps
   ; Morpho_html.print_signifiant_off rword offset
   ; print_morpho phase (mirror rword)
@@ -243,15 +206,7 @@ value print_scl_segment counter (phase,rword) =
            if pvs = [] then tags 
            else trim_tags (generative phase) form (Canon.decode pvs) tags in
           print_scl_tags pvs phase form ok_tags
-    | Taddhita (_,form) sfx sfx_phase sfx_tags ->
-            let taddhitanta_phase = match sfx_phase with 
-                [ Sfx -> Noun
-                | Isfx -> Iic
-                | _ -> failwith "Wrong taddhita structure"
-                ] 
-            and taddhitanta_stem = form @ sfx (* very experimental *) in
-            print_scl_tags [] taddhitanta_phase taddhitanta_stem sfx_tags 
-    ]
+    ] 
   ; "'>" |> ps (* closes <input *) 
   ; Canon.unidevcode word |> ps
   ; td_end |> ps

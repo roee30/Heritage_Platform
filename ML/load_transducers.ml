@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* [Load_transducers] *)
@@ -63,8 +63,6 @@ type transducer_vect =
   ; iikc : auto (* consonant-initial iik *)
   ; kriv : auto (* vowel-initial krids *)
   ; kric : auto (* consonant-initial krids *)
-  ; sfx  : auto (* taddhita suffixes *)
-  ; isfx : auto (* taddhita suffixes for iic stems *)
   ; cache : auto (* user-defined supplement to noun *)
   }
 ;
@@ -113,8 +111,6 @@ value load_transducer cat =
       | "Voca"    -> Web.public_transvoca_file
       | "Inv"     -> Web.public_transinv_file 
       | "Prev"    -> Web.public_transp_file
-      | "Sfx"     -> Web.public_transsfx_file
-      | "Isfx"    -> Web.public_transisfx_file
       | "Cache"   -> Web.public_transca_file 
       | _ -> failwith ("Unexpected category: " ^ cat) 
       ] in 
@@ -216,8 +212,6 @@ value transducers =
   ; iikc = iikc
   ; absv = absv
   ; absc = absc
-  ; sfx  = load_transducer "Sfx" 
-  ; isfx = load_transducer "Isfx" 
   ; cache = load_transducer "Cache"
   }
 ;

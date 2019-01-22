@@ -106,22 +106,12 @@ value print_tags_tad pvs seg_num phase stem sfx sfx_tags =
   let ptag = print_morph_tad pvs seg_num False (generative phase) stem sfx in 
   fold_vert ptag sfx_tags 
 ;
-(* This is called "printing morphology interface style". Taddhitaanta forms
-   are printed as fake compounds of iic the stem and ifc the taddhita form. *)
+(* This is called "printing morphology interface style". *)
 value print_morpho phase word = 
      match tags_of phase word with 
         [ Atomic tags -> print_tags [] 0 phase word tags 
         | Preverbed (_,phase) pvs form tags -> print_tags pvs 0 phase form tags
-        | Taddhita (ph,form) sfx _ sfx_tags -> 
-            match tags_of ph form with 
-            [ Atomic _ -> (* stem, tagged as iic *)
-              print_tags_tad [] 0 ph form sfx sfx_tags 
-            | Preverbed _ pvs _ _ -> (* stem, tagged as iic *)
-              print_tags_tad pvs 0 ph form sfx sfx_tags 
-            | _ -> raise (Control.Anomaly "taddhita recursion")
-            ]
         ]
-    (* PB: if form has homonymy, we get t1 t2 t for [t1 | t2].t - confusion *)
 ;
 
 (* Parsing mandatory checkpoints *)

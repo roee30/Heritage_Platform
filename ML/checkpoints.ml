@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Checkpoints management *)
@@ -16,11 +16,7 @@ value rec phase_encode = fun
         "<{" ^ string_of_phase ph ^ "}{" ^
                string_of_phase ph' ^ "}{" ^
                Canon.decode prev ^ "}{" ^ Canon.decode form ^ "}>"
-  | Tad (ph,ph') form sfx -> 
-        "(" ^ phase_encode ph ^ "{" ^
-               string_of_phase ph' ^ "}{" ^
-               Canon.decode form ^ "}{" ^ Canon.decode sfx ^ "})"
-  | phase -> "{" ^ string_of_phase phase ^ "}"
+  | phase -> "{" ^ string_of_phase phase ^ "}" 
   ]
 and bool_encode b = if b then "t" else "f"
 ;
@@ -60,11 +56,7 @@ EXTEND Gram
            ; pre = TEXT; form = TEXT ; ">" ->
        Comp (phase_of_string p, phase_of_string p') 
                    (Encode.code_string pre) (Encode.code_string form)
-      | "("; p = phase; p' = TEXT  (* Taddhita *)
-           ; form = TEXT; sfx = TEXT; ")" ->
-       Tad (p, phase_of_string p') 
-                  (Encode.code_string form) (Encode.code_string sfx) 
-      | p = TEXT -> phase_of_string p
+      | p = TEXT -> phase_of_string p 
     ] ] ;
   phase_rword:
     [ [ s = phase; ","; o = TEXT -> (s, Encode.rev_code_string o) ] ] ;

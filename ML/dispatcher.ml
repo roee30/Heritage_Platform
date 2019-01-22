@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Dispatcher: Sanskrit Engine in 53 phases automaton (plus 2 fake ones) *)
@@ -78,8 +78,6 @@ value transducer = fun
   | Avy  -> transducers.avya (* ifc avyayiibhava *)
   | Inftu -> transducers.inftu (* infinitives in -tu iic. Renou HLS 72 *)
   | Kama -> transducers.kama (* ifcs of kaama/manas: tyaktukaama dra.s.tumanas *)
-  | Sfx  -> transducers.sfx  (* ifc taddhita suffixes *) 
-  | Isfx -> transducers.isfx (* iifc taddhita suffixes *)
   | Cache -> transducers.cache (* cached forms *)
   | Noun | Iic | Iik | Voca | Krid | Pvk | Vok
     -> raise (Control.Anomaly "composite phase")
@@ -116,7 +114,7 @@ value cached = (* potentially cached lexicon acquisitions *)
 ;
 (* initial1, initial2: phases *)
 value initial1 =
-   (* All phases but Ifc, Abso, Auxi, Auxik, Auxiick, Lopa, Lopak, Sfx, Isfx. *)
+   (* All phases but Ifc, Abso, Auxi, Auxik, Auxiick, Lopa, Lopak. *)
    [ Inde; Iicv; Iicc; Nouv; Nouc; Pron; A; An; Root; Kriv; Kric; Iikv; Iikc
    ; Peri; Pv; Pvkv; Pvkc; Iiv; Iivv; Iivc; Iiy; Inv; Ai; Ani; Absv; Absc; Inftu
    ; Vocv; Vocc; Vokv; Vokc ] @ cached
@@ -128,7 +126,7 @@ value initial full = if full then initial1 else initial2
 (* dispatch1: Word.word -> phase -> phases *)
 value dispatch1 w = fun (* w is the current input word *)
   [ Nouv | Nouc | Pron | Inde | Abso | Auxi | Auxik | Kama | Ifc 
-  | Kriv | Kric | Absv | Absc | Avy | Lopak | Sfx | Root | Lopa ->
+  | Kriv | Kric | Absv | Absc | Avy | Lopak | Root | Lopa ->
        if phantomatic w then [ Root; Kriv; Kric; Iikv; Iikc; Abso ] (* aa- pv *) 
        else initial1
   | A -> if phantomatic w then []
@@ -142,19 +140,15 @@ value dispatch1 w = fun (* w is the current input word *)
        justified by \Pan{2,2,6} a-x only if x is a subanta. *)
   | Iicv | Iicc | Iikv | Iikc | Iiif | Auxiick -> (* Compounding *)
        [ Iicv; Iicc; Nouv; Nouc; A; An; Ifc; Iikv; Iikc; Kriv; Kric
-       ; Pvkv; Pvkc; Iiif; Iivv; Iivc; Vocv; Vocc; Vokv; Vokc ] @ 
-       [ Sfx; Isfx ] @ cached
-  | Pv -> if phantomatic w then [] else 
+       ; Pvkv; Pvkc; Iiif; Iivv; Iivc; Vocv; Vocc; Vokv; Vokc ] @ cached
+  | Pv -> if phantomatic w then [] else  
           if amuitic w then [ Lopa ] else [ Root; Abso; Peri; Inftu ]
   | Pvkc | Pvkv -> if phantomatic w then [] else 
           if amuitic w then [ Lopak ] else [ Iikv; Iikc; Kriv; Kric; Vokv; Vokc ]
   | Iiv -> [ Auxi ] (* as bhuu and k.r finite forms *)
   | Iivv | Iivc -> [ Auxik; Auxiick ] (* bhuu and k.r kridanta forms *)
   | Iiy -> [ Avy ]
-  | Isfx -> (* Compounding with taddhita *)
-       [ Iicv; Iicc; Nouv; Nouc; A; An; Ifc; Iikv; Iikc; Kriv; Kric
-       ; Pvkv; Pvkc; Iiif; Iivv; Iivc; Vocv; Vocc; Vokv; Vokc ] @ cached
-  | Peri -> [ Auxi ] (* overgenerates, should be only perfect forms *)
+  | Peri -> [ Auxi ] (* overgenerates, should be only perfect forms *) 
   | Inftu -> [ Kama ] 
   | Vocc | Vocv | Vokv | Vokc | Cache -> [] 
       (* only chunk-final vocatives so no Iic overlap *) 
@@ -194,8 +188,7 @@ value terminal = (* Accepting phases *)
    ; Vocc; Vocv; Vokv; Vokc; Inv 
    ; Lopa; Lopak
    ; Avy; Kama
-   ; Sfx
-   ; Cache
+   ; Cache 
    ]
 ;
 
@@ -410,9 +403,8 @@ value rec chop word = fun
      ]
   ]
 ; 
-value sfx_phase = fun [ Sfx | Isfx -> True | _ -> False ]
-and iic_phase = fun 
-  [ Iicv | Iicc | Iikv | Iikc 
+value iic_phase = fun 
+  [ Iicv | Iicc | Iikv | Iikc
   | Comp (_,Iikv) _ _ | Comp (_,Iikc) _ _ -> True
   | _ -> False ]
 ;
@@ -628,15 +620,7 @@ value validate out = match out with
       if Phonetics.consonant_initial (Word.mirror form) then [] 
       else out 
     (*i TODO: similar test for dual forms i*)
-(* Finally we glue taddita suffix "forms" to the previous (iic) segment *)
-(* NB This cumulates with the preverb glueing but not with itself *)
-  | [ (sfxph,sfx,s) :: [ (ph,rstem,sv) :: r ] ] when sfx_phase sfxph 
-                                                  && iic_phase ph ->
-      let sfx_form = Word.mirror sfx in 
-      let stem = Word.mirror rstem in
-      let tad_form = Word.mirror (apply_sandhi rstem sfx_form sv) in
-      [ (Tad (ph,sfxph) stem sfx_form,tad_form,s) :: r ]
-  | [ (phase,_,_) :: [ (pv,_,_) :: _ ] ] when preverb_phase pv -> 
+  | [ (phase,_,_) :: [ (pv,_,_) :: _ ] ] when preverb_phase pv ->  
       let m = "validate: " ^ string_of_phase pv ^ " " ^ string_of_phase phase in 
       raise (Control.Anomaly m) (* all preverbs ought to have been processed *)
 (* [ | [ (pv,_,_) :: _ ] when preverb_phase pv -> out ] noop
@@ -676,10 +660,7 @@ value rec color_of_phase = fun
   | Ifc | Ifc2 -> Cyan
   | Unknown -> Grey
   | Comp (_,ph) _ _ -> color_of_phase ph 
-  | Tad (_,ph)  _ _ -> if ph=Sfx then Deep_sky else Yellow
-  | Pv | Pvk | Pvkc | Pvkv -> failwith "Illegal preverb segment"
-  | Sfx -> Deep_sky (* necessary for [Lexer.print_segment2] *)
-  | Isfx -> Yellow  (* idem *)
+  | Pv | Pvk | Pvkc | Pvkv -> failwith "Illegal preverb segment" 
 (*i NB: unused background colors: Pink Green Aquamarine Chamois i*)
   ]
 ; 

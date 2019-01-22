@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* CGI-bin callback for shallow syntax analysis *)
@@ -79,10 +79,8 @@ value rec color_of_role = fun (* Semantic role of lexical category *)
   | Abso | Absv | Absc | Inde | Avy | Ai | Ani | Inftu (* Circumstance *)
     -> Lavender 
   | Unknown | Cache -> Grey 
-  | Comp (_,ph) _ _ | Tad (_,ph)  _ _ -> color_of_role ph
-  | Sfx -> Cyan
-  | Isfx -> Grey
-  ]
+  | Comp (_,ph) _ _ -> color_of_role ph
+  ] 
 and table_role_of phase = table_begin (background (color_of_role phase)) 
 ; 
 (* syntactico/semantical roles analysis, function of declension *)
@@ -111,15 +109,7 @@ value print_segment_roles print_sems seg_num (phase,rword,_) =
           Lex.process_kridanta [] seg_num phase word tags
        | Preverbed (_,phase) pvs form tags -> 
           Lex.process_kridanta pvs seg_num phase form tags 
-       | Taddhita (ph,form) sfx sfx_phase sfx_tags ->  
-            match Lex.tags_of ph form with 
-            [ Atomic _ -> (* stem, tagged as iic *)
-              Lex.process_taddhita [] seg_num ph form sfx_phase sfx sfx_tags 
-            | Preverbed _ pvs _ _ -> (* stem, tagged as iic *)
-              Lex.process_taddhita pvs seg_num ph form sfx_phase sfx sfx_tags 
-            | _ -> failwith "taddhita recursion unavailable"
-            ]
-       ] in do
+       ] in do 
     { print_labels decl_tags seg_num
     ; print_roles print_sems decl_phase decl_tags form
     }
@@ -138,6 +128,7 @@ value print_uni_kridanta pvs phase word multitags (n,m) =
      ; ps th_end
      }
 ;
+(* deprecated
 value print_uni_taddhita pvs m phase stem sfx sfx_phase = fun
   [ [ (delta,polytag) ] -> (* we assume n=1 taddhita form unambiguous *)
     let unitag = [ project m polytag ] 
@@ -151,8 +142,8 @@ value print_uni_taddhita pvs m phase stem sfx sfx_phase = fun
     }
   | _ -> failwith "Multiple sfx tag"
   ]
-;
-value print_projection phase rword ((_,m) as index) = do
+; *)
+value print_projection phase rword ((_,m) as index) = do 
   { ps tr_begin             (* tr begins *)
   ; Morpho_html.print_signifiant_yellow rword
   ; let word = Word.mirror rword in 
@@ -160,13 +151,14 @@ value print_projection phase rword ((_,m) as index) = do
     [ Atomic tags -> print_uni_kridanta [] phase word tags index 
     | Preverbed (_,phase) pvs form tags -> 
         print_uni_kridanta pvs phase form tags index
+(* deprecated 
     | Taddhita (ph,form) sfx sfx_phase sfx_tags -> 
         match Lex.tags_of ph form with
         [ Atomic _ -> print_uni_taddhita [] m phase form sfx sfx_phase sfx_tags
         | Preverbed _ pvs _ _ -> 
                       print_uni_taddhita pvs m phase form sfx sfx_phase sfx_tags
         | _ -> failwith "taddhita recursion unavailable" 
-        ]
+        ] *)
     ] 
   ; ps tr_end               (* tr ends *)
   }

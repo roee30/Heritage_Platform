@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©20189 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Morphology interface *)
@@ -70,8 +70,6 @@ type morphology =
   ; kama     : inflected_map
   ; iiys     : inflected_map
   ; avys     : inflected_map 
-  ; sfxs     : inflected_map 
-  ; isfxs    : inflected_map 
   ; caches   : inflected_map
   }
 ;

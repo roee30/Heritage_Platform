@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Nouns = struct i*)
@@ -880,6 +880,7 @@ value build_an g stem entry =
    ]
    ; Bare Noun (wrap stem 1)
    ; Avyayaf (fix stem "am") 
+   ; Indecl Tas (fix stem "atas")
    ] @ if g=Neu then [ Avyayaf (fix stem "a") ] else []) (* \Pan{5,4,109} *)
 ;
 value build_an_god stem entry = (* Whitney §426a *)
@@ -2014,6 +2015,7 @@ value build_neu_u trunc entry = (* stems in -u and -uu *)
    ]            
    ; Bare Noun (mirror stems)
    ; Avyayaf (mirror stems)
+   ; Indecl Tas (fix stems "tas") (* eg vastutas *)
    ]
 ;
 value build_neu_ri trunc entry = 
@@ -4229,7 +4231,9 @@ value build_pron_a g stem entry = (* g=Mas ou g=Neu *)
           else if g=Mas && stem = [ 42; 36; 1 ] (* anya *) 
                then [ Bare phase (code "anya") ] (* optional anya- *)
           else if pseudo_nominal && g=Mas then 
-                  [ Avyayaf (fix stem "am"); Avyayaf (fix stem "aat") ]
+                  [ Avyayaf (fix stem "am"); Avyayaf (fix stem "aat") 
+                  ; Indecl Tas (fix stem "atas") 
+                  ]
           else [])
        @ (if g=Mas then match entry with
                        [ "eka" -> [ Cvi (code "ekii") ] 
@@ -5018,7 +5022,7 @@ value compute_nouns_stem_form e stem d p =
                   | _ -> build_van Mas r3 e
                   ]
                | [ 49 :: r3 ] (* -han *) -> build_han r3 e
-               | _  -> build_an Mas r2 e
+               | _  -> build_an Mas r2 e (* raajan *)
                ]
             | [ 3 :: r2 ] (* -in *) -> match r2 with
                [ [ 33 :: r3 ] (* -thin *)-> match r3 with
@@ -5402,6 +5406,7 @@ value compute_nouns_stem_form e stem d p =
       | [ 10 :: _ ] -> report stem Fem
       | [ 11 :: r1 ](* -ai *) -> match r1 with
             [ [ 43 ] (* rai *) -> build_rai Fem [ 2; 43 ] e
+(*          | [ 39; 41; 5; 41 ] (* mumbai *) -> (* TO DO *) *)
             | _ -> report stem Fem
             ]
       | [ 12 :: r1 ] (* -o *) ->  build_o Fem r1 e
@@ -5419,6 +5424,7 @@ value compute_nouns_stem_form e stem d p =
                 }
             | _ -> build_root Fem stem e
             ] 
+      | [ 32; 7; 37 ] (* p.rt *) -> build_root_weak Fem stem "p.rtanaa"
       | [ 34 :: r1 ] (* -d *) -> match r1 with
             [ [ 1; 37 ] (* pad *) -> build_root_weak Fem stem "paada"
             | [ 1; 37; 2 ] (* aapad *) 
@@ -5456,6 +5462,7 @@ value compute_nouns_stem_form e stem d p =
             | [ 4; 34 ] (* diiv\#2 *) -> build_diiv e
             | _ -> report stem g
             ]
+      | [ 46; 3; 36 ] (* niz *) -> build_root_weak Fem stem "nizaa"
       | [ 47 :: r1 ] (* -.s *) -> match r1 with
             [ [ 3 :: r2 ] -> match r2 with
                 [ [ 28 :: [ 1 :: [ 37 :: [ 3 :: [ 37 ] ] ] ] ] (* pipa.thi.s *)
@@ -5502,8 +5509,6 @@ value compute_nouns_stem_form e stem d p =
             | [ 1; 36; 2; 37; 5 ] -> build_upaanah r1 stem e (* Kale§101 *)
             | _ -> build_root Fem stem e
             ]
-      | [ 46; 3; 36 ] (* niz *) -> build_root_weak Fem stem "nizaa"
-      | [ 32; 7; 37 ] (* p.rt *) -> build_root_weak Fem stem "p.rtanaa"
       | _ -> build_root Fem stem e
       ]
     | Deictic _ -> match stem with 
@@ -5735,29 +5740,45 @@ value compute_extra_iiv = iter enter_iiv
 value enter_iiy entry = 
   enter1 entry (Avyayai (normal_stem entry)) (* stripped entry *)
 ;
-value tasil_preserve () = do (* Whitney§1098 *)
-  (* needed since -tas etymology induces skipping the entry *)
-  { enter1 "tad"    (Indecl Tas (code "tatas"))   (* tasil on tad \Pan{5,3,7} *) 
+(* Tasils are treated as vibhakti. Here are the lexicalized ones: Whitney§1098 
+   First tasils of pronouns, not needed if lexicalised 
+  ; enter1 "tad"    (Indecl Tas (code "tatas"))   (* tasil on tad \Pan{5,3,7} *) 
   ; enter1 "ya#1"   (Indecl Tas (code "yatas"))   (* tasil on ya \Pan{5,3,7} *) 
   ; enter1 "ku#1"   (Indecl Tas (code "kutas"))   (* tasil on ku \Pan{5,3,7-8} *)
   ; enter1 "abhi"   (Indecl Tas (code "abhitas")) (* tasil on abhi \Pan{5,3,9} *)
   ; enter1 "pari"   (Indecl Tas (code "paritas")) (* tasil on pari \Pan{5,3,9} *)
   ; enter1 "anti"   (Indecl Tas (code "antitas")) (* tasil on pn \Pan{5,3,7} *)
+  ; enter1 "ayam"   (Indecl Tas (code "atas"))    (* tasil on ayam \Pan{5,3,5} *)
+  ; enter1 "idam"   (Indecl Tas (code "itas"))    (* tasil on idam id *)
   ; enter1 "adas"   (Indecl Tas (code "amutas"))    (* id *)
   ; enter1 "anya"   (Indecl Tas (code "anyatas"))   (* id *)
-  ; enter1 "avara"  (Indecl Tas (code "avaratas"))  (* id *)  
   ; enter1 "para"   (Indecl Tas (code "paratas"))   (* id *) 
   ; enter1 "vizva"  (Indecl Tas (code "vizvatas"))  (* id *) 
-  ; enter1 "sva"    (Indecl Tas (code "svatas"))    (* id *) 
   ; enter1 "puurva" (Indecl Tas (code "puurvatas")) (* id *) 
-  ; enter1 "sarva" (Indecl Tas (code "sarvatas"))   (* id *) 
-  ; enter1 "aze.sa" (Indecl Tas (code "aze.satas")) (* tasil on privative cpd *)
-  }
-;
+  ; enter1 "sarva"  (Indecl Tas (code "sarvatas"))  (* id *) 
+  ; enter1 "eka"    (Indecl Tas (code "ekatas"))    (* id *) 
+  ; enter1 "sva"    (Indecl Tas (code "svatas"))    (* id *) 
+  ; enter1 "anyatara" (Indecl Tas (code "anyataratas")) (* id *)
+  ; enter1 "dak.si.na" (Indecl Tas (code "dak.si.natas"))  (* id *) 
+  ; enter1 "avara"  (Indecl Tas (code "avaratas"))  (* \Pan{5,3,29} *)  
+  ; enter1 "uttara#1" (Indecl Tas (code "uttaratas")) (* check *)  
+  ; enter1 "ubhaya" (Indecl Tas (code "ubhayatas")) (* check *)  
+*)
+value tasil_extra () = do (* add non-generative tasils *) 
+  { enter1 "aze.sa" (Indecl Tas (code "aze.satas")) (* tasil on privative cpd *)
+  ; enter1 "ekaruupa" (Indecl Tas (code "ekaruupatas")) (* tasil on cpd *)  
+  ; enter1 "d.r.s.taanta" (Indecl Tas (code "d.r.s.taantatas"))(* tasil on cpd *)
+  ; enter1 "paramaartha" (Indecl Tas (code "paramaarthatas")) (* tasil on cpd *) 
+  ; enter1 "praagbhaava" (Indecl Tas (code "praagbhaavatas")) (* tasil on cpd *) 
+  ; enter1 "bhasad" (Indecl Tas (code "bhasattas")) (* tasil on consonant stem *)
+(*; enter1 "nas#2" (Indecl Tas (code "nastas")) - idem but lexicalized *)
+  ; enter1 "yad.rcchaa" (Indecl Tas (code "yad.rcchaatas")) (* tasil on fstem *) 
+  } 
+; 
 (* Supplementary forms - called by [Make_nouns.genders_to_nouns]
    with argument [iic_stems] contents of [iic_stems_file] dumped from
    [Subst.iic_stems] built by calling [Subst.record_iic] for iic only entries. *)
-value compute_extra iic_only_stems = do
+value compute_extra iic_only_stems = do 
   { enter1 "maas" (* Siddhaanta kaumudii *) decl (*i Jha - CHECK i*)
     where decl = Declined Noun Mas [ (Dual,[ (Ins,code "maabhyaam") ]) ] 
   ; enter1 "yuu.sa" (* Siddhaanta kaumudii *) decl
@@ -5784,7 +5805,7 @@ value compute_extra iic_only_stems = do
   ; enter1 "viz#2" (* Vedic Whitney§218a *) decl
     where decl = Declined Noun Fem [ (Plural,[ (Loc,code "vik.su") ]) ]
   ; iter enter_iiy iic_avya
-  ; tasil_preserve ()
+  ; tasil_extra ()
   ; compute_extra_iic iic_indecl (* antar *) 
   ; compute_extra_iic iic_only_stems (* aajaanu etc. *)
   ; compute_extra_iic iicf_extra (* abalaa etc. *)

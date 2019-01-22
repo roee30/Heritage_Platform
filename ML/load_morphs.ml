@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* [Load_morphs] *)
@@ -39,11 +39,9 @@ module Morphs
   | Iik (* K.ridaantaas as left component - used to be called Piic *) 
   | Iikv | Iikc | Kriv | Kric | Vocv | Vocc | Vokv | Vokc
   | Iiy | Avy | Inftu | Kama
-  | Sfx | Isfx
-  | Cache (* Cached lexicon acquisitions *)
-  | Unknown (* Unrecognized chunk *)
+  | Cache (* Cached lexicon acquisitions *) 
+  | Unknown (* Unrecognized chunk *) 
   | Comp of (phase * phase) and (* pv *) Word.word and (* root form *) Word.word
-  | Tad  of (phase * phase) and (* nominal *) Word.word and (* sfx *) Word.word 
   ]; end)
  = struct 
 
@@ -54,7 +52,6 @@ by Dispatcher. Preverbed segments may be finite verb forms or kridantas. *)
 type tag_sort =
   [ Atomic of lemmas 
   | Preverbed of (phase * phase) and (* pv *) Word.word and Word.word and lemmas 
-  | Taddhita of (phase * Word.word) and (* sfx *) Word.word and phase and lemmas 
   ]
 ; 
 (* Fake tags of nan prefixes *)
@@ -115,8 +112,6 @@ value load_morphs () =
   ; ifcs2 = load_morpho Web.public_ifcs2_file
   ; inftu = load_morpho Web.public_inftu_file
   ; kama = load_morpho Web.public_kama_file
-  ; sfxs  = load_morpho Web.public_sfxs_file
-  ; isfxs = load_morpho Web.public_isfxs_file
   ; caches = load_morpho_cache Web.public_cache_file
   } 
 ;
@@ -151,9 +146,7 @@ value morpho_tags = fun
     | Ifc2               -> morpho.ifcs2
     | Inftu              -> morpho.inftu
     | Kama               -> morpho.kama
-    | Sfx                -> morpho.sfxs
-    | Isfx               -> morpho.isfxs 
-    | Cache              -> morpho.caches
+    | Cache              -> morpho.caches 
     | _ -> raise (Control.Anomaly "morpho_tags") 
     ]
 ;
@@ -171,11 +164,7 @@ value tags_of phase word =
       Preverbed sort pv form tag
 (* NB [Preverbed] comprises tin verbal forms of verbs with preverbs as well 
    as sup kridanta forms with preverbs. The preverbs are packed in pv. *)
-  | Tad (ph,sfx_ph) form sfx -> (* tag inherited from fake suffix entry *)
-      let sfx_tag = Deco.assoc sfx (morpho_tags sfx_ph) in
-(*   [let stem_tag = Deco.assoc sfx (morpho_tags ph) in] - possible extension *)
-      Taddhita (ph,form) [ 0 :: sfx ] sfx_ph sfx_tag (* 0 = "-" *)
-  | _ -> Atomic (Deco.assoc word (morpho_tags phase)) 
+  | _ -> Atomic (Deco.assoc word (morpho_tags phase))  
     (* NB Atomic comprises tin verbal forms of roots as well as sup atomic forms
        and all the pure stems collections Iic Iiv etc. *)
   ]

@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Sanskrit Phrase Lexer *)
@@ -47,14 +47,9 @@ module Lexer : functor (* takes its prelude and iterator control as parameters *
 (* Exported for Parser *)
   value process_kridanta: Word.word -> int -> Phases.phase -> Word.word ->
         Morphology.multitag -> (Phases.phase * Word.word * Morphology.multitag);
-  value process_taddhita: Word.word -> int -> Phases.phase -> Word.word ->
-        Phases.phase -> Word.word -> Morphology.multitag ->
-        (Phases.phase * Word.word * Morphology.multitag);
-  value table_morph_of : Phases.phase -> string;
+  value table_morph_of : Phases.phase -> string; 
   value print_morph : Word.word -> bool -> int -> bool -> Word.word -> int -> 
         Morphology.unitag -> int;
-  value print_morph_tad : Word.word -> bool -> int -> bool -> Word.word -> 
-        Word.word -> int -> Morphology.unitag -> int;
 (* END Exported for Parser *)
   value all_checks : ref (list Viccheda.check); 
   value un_analyzable : Word.word -> (list Disp.segment * Viccheda.resumption); 

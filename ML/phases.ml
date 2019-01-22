@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 module Phases = struct 
@@ -38,14 +38,11 @@ type phase =
   | Iik (* Kridanta iics *)
   | Iikv | Iikc | Kriv | Kric | Vocv | Vocc | Vokv | Vokc
   | Iiy | Avy (* Avyayiibhaavas *)
-  | Inftu | Kama (* vaktukaama cpds *)
-  | Sfx | Isfx (* Taddhita suffixes for padas and iics *)
-  | Cache   (* Lexicon acquisition *)  
+  | Inftu | Kama (* vaktukaama cpds *) 
+  | Cache   (* Lexicon acquisition *) 
   | Unknown (* Unrecognized chunk *)
   (* now pseudo phase tagging root/kridanta forms with preverbs *)
   | Comp of tag and (* pv *) Word.word and (* root/krid in tag *) Word.word 
-  (* finally pseudo-phase tagging nominal forms/stems with taddhita suffixes *)
-  | Tad of tag and Word.word (* nominal form in tag *) and Word.word (* sfx *)
   ] 
 and tag = (phase * phase) (* preverb phase and root/taddhita phase *)
 (* NB. It is essential to keep both phases to identify transition checkpoints *)
@@ -105,10 +102,8 @@ value rec string_of_phase = fun
   | Vocc  -> "Vocc"
   | Peri  -> "Peri"
   | Inftu -> "Inftu"
-  | Kama  -> "Kama"
-  | Sfx   -> "Sfx"
-  | Isfx  -> "Isfx"
-  | Cache -> "Cache"
+  | Kama  -> "Kama" 
+  | Cache -> "Cache" 
   | Unknown -> "Unknown"
   | _ -> failwith "string_of_phase"
   ] 
@@ -160,9 +155,7 @@ and phase_of_string = fun (* unsafe *)
   | "Kric"  -> Kric
   | "Vocv"  -> Vocv
   | "Vocc"  -> Vocc
-  | "Sfx"   -> Sfx
-  | "Isfx"  -> Isfx
-  | "Peri"  -> Peri
+  | "Peri"  -> Peri 
   | "Inftu" -> Inftu
   | "Kama"  -> Kama
   | "Unknown" -> Unknown
@@ -180,7 +173,7 @@ and preverb_phase = fun
 and krid_phase = fun [ Krid | Kric | Kriv -> True | _ -> False ]
 and ikrid_phase = fun [ Iik | Iikc | Iikv -> True | _ -> False ]
 and vkrid_phase = fun [ Vokc | Vokv -> True | _ -> False ]
-and ii_phase = fun [ Iicv | Iicc | Iikv | Iikc | A | An | Isfx -> True | _ -> False ]
+and ii_phase = fun [ Iicv | Iicc | Iikv | Iikc | A | An -> True | _ -> False ]
 and is_cache phase = (phase = Cache)
 ;
 (* Needed as argument of [Morpho.print_inv_morpho] *)

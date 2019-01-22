@@ -5,14 +5,14 @@
 #                         Gérard Huet & Pawan Goyal                        #
 #                                                                          #
 ############################################################################
-#TEMPLATE Makefile of SKT Platform      #DATE      Copyright Gérard Huet 2018 #
+#TEMPLATE Makefile of SKT Platform      #DATE      Copyright Gérard Huet 2019 #
 ############################################################################
 #WARN
 
 # This software presupposes a Unix-like OS environment, with c, make and sed
 # Also python is assumed for package management, and javascript for scripts.
 # Stand-alone distribution ought to include Zen and Ocaml/Camlp4 distributions.
-# Also Apache2 for managing the Web site.
+# Also Apache for managing the Web site.
 
 ############################ VERSIONING ####################################
 
@@ -348,8 +348,7 @@ $(DATA)/avyayais.rem $(DATA)/avyayafs.rem $(DATA)/ifcs2.rem $(DATA)/sandhis.rem 
 $(DATA)/sandhis_pv.rem $(DATA)/sandhis_ph.rem $(DATA)/peris.rem \
 $(DATA)/transperi.rem $(DATA)/transn.rem $(DATA)/transr.rem \
 $(DATA)/transiiy.rem $(DATA)/transavy.rem $(DATA)/transp.rem \
-$(DATA)/transpa.rem $(DATA)/transic.rem $(DATA)/sfxs.rem $(DATA)/isfxs.rem \
-$(DATA)/transsfx.rem $(DATA)/transisfx.rem $(DATA)/transif.rem \
+$(DATA)/transpa.rem $(DATA)/transic.rem $(DATA)/transif.rem \
 $(DATA)/transpic.rem $(DATA)/transiif.rem $(DATA)/transabsya.rem \
 $(DATA)/transabstvaa.rem $(DATA)/transiv.rem $(DATA)/transinde.rem \
 $(DATA)/partvocs.rem $(DATA)/transpav.rem $(DATA)/translopak.rem \

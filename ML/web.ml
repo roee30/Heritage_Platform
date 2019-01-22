@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* module Web html = struct *)
@@ -134,8 +134,6 @@ and ifcs_file     = data "ifcs.rem"  (* created by [make_nouns] etc. *)
 and ifcs2_file    = data "ifcs2.rem" (* same in mode non gen *)
 and avyayais_file = data "avyayais.rem" (* iic stems of avyayiibhava cpds *)
 and avyayafs_file = data "avyayafs.rem" (* ifc stems of avyayiibhava cpds *)
-and sfxs_file     = data "sfxs.rem"  (* created by [make_nouns] etc. *)
-and isfxs_file    = data "isfxs.rem"  (* created by [make_nouns] etc. *)
 and iivs_file     = data "iivs.rem"  (* created by [make_roots] etc. *)
 and auxis_file    = data "auxi.rem"  (* created by [make_roots] etc. *)
 and auxiks_file   = data "auxik.rem"  (* created by [make_roots] etc. *)
@@ -183,8 +181,6 @@ and transabsya_file   = data "transabsya.rem"   (* [absolya_automaton] *)
 and transabstvaa_file = data "transabstvaa.rem" (* [absoltvaa_automaton] *) 
 and transinftu_file   = data "transinftu.rem"   (* [inftu_automaton] *) 
 and transkama_file    = data "transkama.rem"    (* [kama_automaton] *) 
-and transsfx_file     = data "transsfx.rem"     (* [sfx_automaton] *) 
-and transisfx_file    = data "transisfx.rem"    (* [isfx_automaton] *) 
 and transca_file      = data "transca.rem"      (* [cache_automaton] *)
 and transstems_file   = data "transstems.rem"   (* [stems_automaton] *)
 and declstxt_file     = data "nouns.txt"   (* created by [decline -ascii] *)
@@ -217,8 +213,6 @@ and public_iics2_file       = public_data "iics2.rem"
 and public_piics_file       = public_data "piics.rem" 
 and public_ifcs_file        = public_data "ifcs.rem" 
 and public_ifcs2_file       = public_data "ifcs2.rem" 
-and public_sfxs_file        = public_data "sfxs.rem"  (* taddhita suffix forms *)
-and public_isfxs_file       = public_data "isfxs.rem" (* taddhita suffix stems *)
 and public_iivs_file        = public_data "iivs.rem" 
 and public_avyayais_file    = public_data "avyayais.rem" (* iic stems of avyayiibhava cpds *)
 and public_avyayafs_file    = public_data "avyayafs.rem" (* ifc stems of avyayiibhava cpds *)
@@ -272,8 +266,6 @@ and public_transabsya_file = public_data "transabsya.rem"
 and public_transabstvaa_file = public_data "transabstvaa.rem" 
 and public_transinftu_file   = public_data "transinftu.rem" 
 and public_transkama_file    = public_data "transkama.rem" 
-and public_transsfx_file   = public_data "transsfx.rem" 
-and public_transisfx_file  = public_data "transisfx.rem" 
 and public_transca_file    = public_data "transca.rem"
 and public_transstems_file = public_data "transstems.rem"
 and public_sandhis_id_file = public_data "sandhis_id.rem" 

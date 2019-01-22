@@ -77,7 +77,9 @@ value strip w = match w with
   | [] -> failwith "Empty stem to strip"
   ]
 ;
-value rev_strip w = Word.mirror (strip (Word.mirror w)) (* ugly - temp *)
+value rstem w = strip (Word.mirror w)
+;
+value rev_strip w = Word.mirror (rstem w) (* ugly - temp *)
 ;
 (* Builds revword normalised stem from entry string of root *)
 (* Used by [Verbs.revstem], [Nouns.enter_iic], [Print_dict] *)

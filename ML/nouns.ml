@@ -2967,8 +2967,8 @@ value build_fem_ii trunc entry =
         ; declines Gen "aas"
         ; declines Loc "aam"
         ])
-   ; (Dual, 
-        [ declines Voc "au"
+   ; (Dual, if entry = "ubhayii" then [] else 
+        [ declines Voc "au" 
         ; declines Nom "au"
         ; declines Acc "au"
         ; declinel Ins "bhyaam"
@@ -3052,7 +3052,7 @@ value poly_ii_decls decline =
         ; decline Gen "yas"
         ; decline Loc "yi"
         ])
-   ; (Dual,
+   ; (Dual, 
         [ decline Voc "yaa"
         ; decline Nom "yaa"
         ; decline Acc "yaa"
@@ -4198,7 +4198,8 @@ value build_pron_a g stem entry = (* g=Mas ou g=Neu *)
         ] in if pseudo_nominal then 
         [ decline Abl "aat" :: [ decline Loc "e" :: 
         [ decline Voc "a" :: l ] ] ] else l)
-   ; (Dual, let l = 
+   ; (Dual, if entry = "ubhaya"  (* no dual *) then [] 
+            else let l = 
         [ decline Nom (if g=Mas then "au" else "e")
         ; decline Acc (if g=Mas then "au" else "e")
         ; decline Ins "aabhyaam"

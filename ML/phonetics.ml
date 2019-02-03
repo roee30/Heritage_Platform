@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Phonetics = struct i*)
@@ -318,7 +318,7 @@ value phantom_elim = fun
   ]
 ;
 (* For m.rj-like verbs (Whitney§219-a) Panini{8,2,36} 
-   "bhraaj" "m.rj" "yaj1" "raaj1" "vraj" "s.rj1"
+   "bhraaj" "m.rj" "yaj1" "raaj1" "vraj" "s.rj1" "bh.rjj"
    replace phoneme j=24 by j'=124 with sandhi j'+t = .s.t (j' is j going to z) *)
 value mrijify stem = match stem with
   [ [ 24 :: r ] -> [ 124 :: r ]
@@ -394,8 +394,10 @@ value finalize rstem = match rstem with
        | 24 (* j *) (* e.g. bhi{\d s}aj; bhuj; as{\d r}j -yuj *)
        | 25 (* jh *) -> match rest with 
            [ [ 26 (* \~n *) :: ante ] -> [ 21 (* \.n *) :: ante ] 
-           | [ 21 (* \.n *) :: _ ] -> rest 
-           | _ -> [ 17 (* k *) :: rest ] (* but sometimes {\d t} - beware *)
+           | [ 24 (* j *) :: ante ] | [ 22 (* c *) :: ante ] 
+               -> [ 27 (* {\d t} *) :: ante ] (* majj bh.rjj pracch *)
+           | [ 21 (* \.n *) :: _ ] -> rest
+           | _ -> [ 17 (* k *) :: rest ] (* but sometimes {\d t} - eg devej *)
            ]
        | 20 (* gh *) -> [ 17 (* k *) :: asp rest ] 
        | 26 (* \~n *) -> [ 21 (* \.n *) :: rest ] 
@@ -415,7 +417,13 @@ value finalize rstem = match rstem with
           | _ -> [ 27 (* {\d t} *) :: rest ] (* default *)
           (* NB optionally nak Whitney§218a *) 
           ]
-       | 47 (* {\d s} *) -> [ 27 (* {\d t} *) :: rest ] (* e.g. dvi{\d s} {\R} dvi{\d t} *) 
+       | 47 (* {\d s} *) -> match rest with  
+          [ [ 7 :: [ 35 :: _ ] ] (* -dh{\d r}{\d s} {\R} -dh{\d r}k *) 
+              -> [ 17 (* k *) :: rest ] (* Kane §97 *)
+          | [ 17 :: ante ] (* -k{\d s} {\R} -k *) 
+              -> [ 17 (* k *) :: ante ] (* vivik.s Kane §97 but MW: vivi.t *)
+          | _ -> [ 27 (* {\d t} *) :: rest ] (* e.g. dvi{\d s} {\R} dvi{\d t} *)
+          ]
        | 49 (* h *) -> [ 27 (* {\d t} *) :: asp rest ] (* e.g. lih {\R} li{\d t} *) 
        | 149 (* h' *) -> [ 17 (* k *) :: asp rest ] (* -duh {\R} -dhuk , impft doh adhok, etc. *)
        | 249 (* h'' *) -> [ 32 (* t *) :: asp rest ] 
@@ -443,7 +451,11 @@ value finalize_r stem = match stem with
                           else stem 
           | [] -> failwith "Illegal arg r to finalize"
           ]
-       | 48 (* s *) -> [ 34 (* t *) :: rest ] (* for roots sras dhvas *)
+       | 48 (* s *) -> match rest with
+          [ [ 1 :: [ 45 :: [ 35 :: _ ] ] ] -> [ 34 (* t *) :: rest ] (* dhvas *)
+          | [ 1 :: [ 45 :: _ ] ] -> stem (* suvas *)
+          | _ -> [ 34 (* t *) :: rest ] (* sras *) 
+          ]
        | _ -> finalize stem 
        ]
   ] 

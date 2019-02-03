@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Encode = struct i*)
@@ -21,12 +21,12 @@ value is_vowel c = vowel c || c>100 && c<114 (* accounts for upper case *)
 value rec normalize = normal_rec False
   where rec normal_rec after_vow = fun
   [ [] -> []
-  | [ 14 (* .m *) :: [] ] -> [ 14 ] (* and NOT m *)
+  | [ 14 (* .m *) ] -> [ 14 ] (* and NOT m *)
   | [ 14 (* .m *) :: [ c :: l ] ] -> 
     if after_vow then
        let c' = homonasal c in [ c' :: [ c :: normal_rec (is_vowel c) l ] ]
     else raise (In_error "Anusvaara should follow vowel")
-  | [ 16 (* .h *) :: [] ] -> 
+  | [ 16 (* .h *) ] -> 
     if after_vow then [ 16 ]
     else raise (In_error "Visarga should follow vowel")
 (* No change to visarga since eg praata.hsvasu.h comes from praatar|svasu.h
@@ -79,7 +79,7 @@ value strip w = match w with
 ;
 value rstem w = strip (Word.mirror w)
 ;
-value rev_strip w = Word.mirror (rstem w) (* ugly - temp *)
+value rev_strip w = Word.mirror (rstem w) (* [compute_mw_links] *)
 ;
 (* Builds revword normalised stem from entry string of root *)
 (* Used by [Verbs.revstem], [Nouns.enter_iic], [Print_dict] *)

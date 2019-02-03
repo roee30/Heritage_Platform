@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Canon = struct i*)
@@ -732,7 +732,7 @@ and matra_indic_unicode_point = fun
   ]
 ;
 (* om 50 udatta 51 anudatta 52 grave 53 acute 54 avagraha 3D .ll 61 
-   danda 64 ddanda 65 0 66 1 67 2 68 3 69 4 6A 5 6B 6 6C 7 6D 8 6E 9 6F ° 70 *)
+   danda 64 ddanda 65 0 66 1 67 2 68 3 69 4 6A 5 6B 6 6C 7 6D 8 6E 9 6F deg 70 *)
 value inject_point s = "&#x09" ^ s ^ ";"
 ;
 value deva_unicode c = 

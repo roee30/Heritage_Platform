@@ -4,9 +4,10 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 (* Chunking mechanism for guessing partial padapatha form from list of chunks *)
+(* Essential for maximum parallelism in segmentation *)
 
 value sanskrit_chunk encode s = 
   match encode s with (* avagraha reverts to a *)

@@ -128,21 +128,6 @@ value print_uni_kridanta pvs phase word multitags (n,m) =
      ; ps th_end
      }
 ;
-(* deprecated
-value print_uni_taddhita pvs m phase stem sfx sfx_phase = fun
-  [ [ (delta,polytag) ] -> (* we assume n=1 taddhita form unambiguous *)
-    let unitag = [ project m polytag ] 
-    and gen = generative phase 
-    and cached = False in do
-    { ps th_begin 
-    ; pl (Lex.table_morph_of sfx_phase)      (* table begin *)
-    ; let _ = Lex.print_morph_tad pvs cached 0 gen stem sfx 0 (delta,unitag) in ()
-    ; ps table_end                       (* table end *) 
-    ; ps th_end
-    }
-  | _ -> failwith "Multiple sfx tag"
-  ]
-; *)
 value print_projection phase rword ((_,m) as index) = do 
   { ps tr_begin             (* tr begins *)
   ; Morpho_html.print_signifiant_yellow rword
@@ -151,14 +136,6 @@ value print_projection phase rword ((_,m) as index) = do
     [ Atomic tags -> print_uni_kridanta [] phase word tags index 
     | Preverbed (_,phase) pvs form tags -> 
         print_uni_kridanta pvs phase form tags index
-(* deprecated 
-    | Taddhita (ph,form) sfx sfx_phase sfx_tags -> 
-        match Lex.tags_of ph form with
-        [ Atomic _ -> print_uni_taddhita [] m phase form sfx sfx_phase sfx_tags
-        | Preverbed _ pvs _ _ -> 
-                      print_uni_taddhita pvs m phase form sfx sfx_phase sfx_tags
-        | _ -> failwith "taddhita recursion unavailable" 
-        ] *)
     ] 
   ; ps tr_end               (* tr ends *)
   }

@@ -339,8 +339,8 @@ value strong_stem entry rstem = (* rstem = revstem entry *)
     | "m.rj"   -> mrijify (revcode "maarj") (* maar.s.ti [long_metathesis] *)
     | "yaj#1" | "vraj" | "raaj#1" | "bhraaj" | "s.rj#1" 
                -> mrijify (strong rstem)
-    | "bh.rjj" -> mrijify (strong (truncate rstem))
-    | "nij"    -> revcode "ni~nj" (* nasalisation for gana 2 *)
+    | "bh.rjj" -> mrijify (strong (truncate rstem)) (* bh.rsj Pan{8,2,29} *)
+    | "nij"    -> revcode "ni~nj" (* nasalisation for gana 2 *) 
     | "zrath"  -> revcode "zranth"
     | "diiv#1" -> revcode "dev"
     | _ -> strong rstem
@@ -974,11 +974,11 @@ value compute_athematic_present2m strong weak set entry third =
    ; (Plural, let l =
         [ conjugw First  "mahe" 
         ; if entry = "as#1" then (Second, code "dhve") else
-          conjugw Second "dhve"
+          if entry = "aas#2" then (Second, code "aaddhve") else (* Whitney§612 *)
+          conjugw Second "dhve" 
         ; if entry = "zii#1" then conjugw Third "rate" (* \Pan{7,1,6} *)
           else conjugw Third "ate" 
         ] in if entry = "m.rj" then [ conjugs Third "ate" :: l ]
-             else if entry = "aas#2" then [ conjugw Second "ddhve" :: l ]
              else l (* Whitney§627 *)) 
    ])
 ;
@@ -1002,7 +1002,7 @@ value compute_athematic_impft2a strong weak set entry =
                     else conjugs Third "t"
         ] in if set then 
         [ conjugs Second "iis"
-        ; conjugs Third  "iit"
+        ; conjugs Third  "iit" 
         ] @ l else if entry = "bruu" 
                    then [ (First, code "abruvam") (* Whitney§632 *) :: l ]
                    else l)
@@ -1015,7 +1015,12 @@ value compute_athematic_impft2a strong weak set entry =
         [ conjugw First  "ma"
         ; conjugw Second "ta"
         ; if entry = "i" then conjugs Third "an" (* aayan *)
-          else conjugw Third "an"
+          else match entry with (* Kane§429 *)
+               [ "cakaas" | "jak.s" | "jaag.r" 
+            (* | "daridraa" - should concern "draa#1" TODO *)
+               | "zaas" -> conjugw Third "us" 
+               | _ -> conjugw Third "an" 
+               ]
         ] in if entry = "m.rj" 
                   then [ conjugs Third "an" :: l ] (* Whitney§627 *)
              else if entry = "bruu" 
@@ -1051,14 +1056,14 @@ value compute_athematic_impft2m strong weak set entry =
                 ] @ l else l (* Whitney§627 *))
     ; (Plural, let l =
         [ conjugw First  "mahi"
-        ; conjugw Second "dhvam"
-        ; if entry = "zii#1" then conjugw Third "rata" (* \Pan{7,1,6} *)
-          else if entry = "i" then conjugw Third "yata" (* adhyaiyata Bucknell 128 *)
-          else conjugw Third "ata"
-        ] in if entry = "m.rj" then [ conjugs Third "ata" :: l ]
-             else if entry = "aas#2" then [ conjugw Second "ddhvam" :: l ]
-             else if entry ="duh#1" then [ conjugw Third "ra" :: l ]
-              (* aduhata -> aduha-a = \Pan{7,1,41} = aduha -> aduhra \Pan{7,1,8} *)
+        ; if entry = "aas#2" then (Second, code "aaddhvam") (* Whitney§620 *) 
+          else conjugw Second "dhvam"
+        ; if entry = "zii#1" then conjugw Third "rata" (* \Pan{7,1,6} *) else
+          if entry = "i" then conjugw Third "yata" (* Bucknell 128 *) else
+          conjugw Third "ata"
+        ] in if entry = "m.rj" then [ conjugs Third "ata" :: l ] else
+             if entry ="duh#1" then [ conjugw Third "ra" :: l ]
+             (* aduhata -> aduha-a = \Pan{7,1,41} aduha -> aduhra \Pan{7,1,8} *)
              else l (* Whitney§627 *))
    ]) 
 ;
@@ -1115,7 +1120,7 @@ value compute_athematic_optative2m weak set entry =
    ; (Plural, let l =
         [ conjugw First  "iimahi"
         ; conjugw Second "iidhvam"
-        ; conjugw Third  "iiran"
+        ; conjugw Third  "iiran" (* TODO: Kane§429 like impft2 above *)
         ] in if entry = "m.rj" then 
                 [ conjugwmrij First  "iimahi"
                 ; conjugwmrij Second "iidhvam"
@@ -1139,6 +1144,7 @@ value compute_athematic_imperative2a strong weak set entry =
           | "zaas" -> code "zaadhi" 
  (* above leads to conflict between \Pan{6.4.35} (zaa+hi) and \Pan{6.4.101} 
     (zaas+dhi) [asiddhavat] => we operate in parallel zaa+dhi= zaadhi *)
+          | "cakaas" -> code "cakaadhi" (* Kane§429 *)  
           | _ -> let w = if entry = "han#1" then revcode "ja" else weak in
                  match w with 
             [ [ c :: _  ] -> fix2 w suff set
@@ -1151,6 +1157,8 @@ value compute_athematic_imperative2a strong weak set entry =
                 [ (Second, code "voci"); (Third, code "vocatu") ] @ l
              else if entry ="bruu" then [ conjugs Second "hi" :: l ]
                   (* braviihi Whitney§632 *)
+             else if entry ="cakaas" then [ (Second, code "cakaadvi") :: l ]
+                  (* Kane§429 *)  
              else l)
    ; (Dual,
         [ conjugs First  "aava"
@@ -1190,11 +1198,11 @@ value compute_athematic_imperative2m strong weak set entry =
              else l (* Whitney§627 *))
    ; (Plural, let l =
         [ conjugs First  "aamahai"
-        ; conjugw Second "dhvam"
+        ; if entry = "aas#2" then (Second, code "aaddhvam") (* Whitney§617 *) 
+          else conjugw Second "dhvam"
         ; if entry = "zii#1" then conjugw Third "rataam" (* \Pan{7,1,6} *)
           else conjugw Third "ataam"
         ] in if entry = "m.rj" then [ conjugs Third "ataam" :: l ]
-             else if entry = "aas#2" then [ conjugw Second "ddhvam" :: l ]
              else l (* Whitney§627 *))
    ])
 ;
@@ -3475,7 +3483,7 @@ value compute_perfect_v strong weak entry =
   ]
 ;
 value compute_perfect entry =
-(*i Bizarre pada dependency should be factored *)
+(*i Bizarre pada dependency should be factored i*)
   match entry with
     [ "bhuu#1" -> do
         { compute_perfect_bhuu entry (* No middle forms Whitney§800d *)
@@ -3528,7 +3536,7 @@ suffixed by a perfect form of the auxiliairies k.r bhuu et as \Pan{3,1,35-40} *)
 value peri_perf_stem entry = 
   let stem = match entry with 
   [ "iik.s" | "ii.d" | "iir" | "iih" | "uk.s" | "uc" | "ujjh" | "edh" 
-    (* Macdonell§140a1 *)
+    (* Macdonell§140a1 Whitney§1071c *)
   | "ind" | "indh" | "inv" | "umbh" | "cakaas" -> entry
   | "aas#2"  -> "aas" (* trim *)
   | "u.s"    -> "o.s" (* guna WR *) 
@@ -3603,7 +3611,15 @@ value compute_ath_s_aoristm stem entry =
           | _ -> error_empty 19
           ] in 
       (person,fix_augment stem suff) in 
-  let conjugc = if entry = "k.r#1" then conjugroot else conjug in
+  let conjugc = if entry = "k.r#1" (* Whitney§882a *)
+                || entry = "daa#1" (* Whitney§884 *) then conjugroot 
+                else match stem with  
+                     [ [ 43 :: _ ] | [ 36 :: _ ] | [ 41 :: _ ] -> conjug
+                       (* r             n             m  Whitney§881*)
+                     | [ c :: _ ] when consonant c -> conjugroot 
+                 (*[ | [ c :: _ ] when short_vowel c -> conjugroot] ? *)
+                     | _ -> conjug
+                     ] in 
   enter1 entry (Conju (aorm 4)
    [ (Singular, 
         [ conjug  First  "i"
@@ -4477,7 +4493,7 @@ value pfp_ya rstem entry =
     | [ c :: [ 1 :: _ ] ] when labial c -> rstem  (* \Pan{3,1,98} -yat *) 
     | [ c :: [ 1 :: r ] ] -> [ c :: [ 2 :: r ] ] 
                       (* a lengthened if last non labial *)
-                      (* above often optional, see [record_extra_pfp_ya] below *)
+                      (* above often optional, see [record_extra_pfp_ya] below *)
     | [ c :: [ 7 :: _ ] ] -> rstem (* d.rz1 v.r.s but NOT m.rj *)
     | [ c :: [ v :: _ ] ] when short_vowel v (* gunify *) -> strong
     | _ -> rstem
@@ -4718,7 +4734,7 @@ value record_abso_am root =
   ]
 (* NB Bandharkar: colloquial expressions iic+V.namul suivi de forme finie de V *)
 (* eg "hastagraaha.m g.r.naati" il tient par la main *)
-(* Should be also definable for causative, eg knopam \ca{knuu} \Pan{3,4,33} *)
+(* Should be also definable for causative, eg knopam ca{knuu} \Pan{3,4,33} *)
 ;
 (* absolutive of secondary conjugations *)
 value record_absolutive c abs_stem_tvaa abs_stem_ya intercal entry = 
@@ -4790,6 +4806,9 @@ value compute_intensive_presenta strong weak iiflag entry =
          ]         
                 else weak in (* 3rd pl weak stem *)
     record_part (Pprared_ Intensive wstem entry) 
+  ; if entry = "draa#1" then let ppstem = revcode "daridrita" in
+                             record_part (Ppp_ Intensive ppstem entry) 
+    else ((* TODO *))
   }
 ;
 value compute_intensive_impfta strong weak iiflag entry =
@@ -5114,9 +5133,13 @@ value compute_present_system entry rstem gana pada third =
            | [] -> error_empty 29
            ] 
        and nasal = homonasal c in
-       let wstem = [ c :: rev (sandhi stem [ nasal ]) ] (* stem-n *)
-       and sstem = [ c :: rev (sandhi stem [ 36; 1 ]) ] (* stem-na *) in 
-       compute_present7 sstem wstem entry third pada padam
+       let wstem = 
+         if entry = "t.rh" then revcode "t.rfh"
+         else [ c :: rev (sandhi stem [ nasal ]) ] (* stem-n *) 
+       and sstem = 
+         if entry = "t.rh" then [ c :: rev (sandhi stem [ 36; 10 (* -ne *)]) ] 
+         else [ c :: rev (sandhi stem [ 36; 1 ]) ] (* stem-na *) in 
+       compute_present7 sstem wstem entry third pada padam 
      | _ -> warning (entry ^ " atypic 7\n")
      ]
    | 8 -> (* k.r1 k.san tan1 man san1 *)
@@ -5191,7 +5214,7 @@ value record_pfp entry rstem = do
         record_part (Pfutp_ Primary (revcode form) entry) in
     match entry with
     [ "k.r#1" (* \Pan{3,1,120} .duk.r~n + kyap *)
-    | "stu" | "bh.r" | "i" | "m.r" -> (* \Pan{3,1,109} Renopfp_yau§155e *)
+    | "stu" | "bh.r" | "i" | "m.r" -> (* \Pan{3,1,109} Renou§155e *)
       (* intercalate t after roots ending in short vowel Renou§146 *)
       let pfp_tya = rfix rstem "tya" in (* k.rtya stutya bh.rtya itya m.rtya *)
       record_part (Pfutp_ Primary pfp_tya entry)
@@ -5651,7 +5674,8 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
 
 (* Various Vedic subjunctives needed for citations Whitney§562 *)
 (* No attempt for full paradigms, only specific attested forms *)
-value compute_subjunctives () =
+(* TODO add paradigms for i a. and aas#2 m. Whitney§614 *)
+value compute_subjunctives () = 
   let enter_subjunctivea conj root tin =
       enter1 root (Conju (conj,Conjug Subjunctive Active) [ tin ])
   and enter_subjunctivem conj root tin =
@@ -5839,6 +5863,7 @@ value compute_extra () = do
   ; compute_extra_hims ()
   ; compute_extra_huu ()
   ; build_infinitive Primary (revcode "rami") "ram"
+  ; build_infinitive Primary (revcode "aas") "aas#2" (* Whitney§968d *)
   ; build_infinitive Causative (revcode "bhaavi") "bhuu#1" (* Whitney§1051c *)
   ; build_infinitive Causative (revcode "dhaari") "dh.r"   (* Whitney§1051c *)
   ; build_infinitive Causative (revcode "ze.si") "zi.s"    (* Whitney§1051c *)

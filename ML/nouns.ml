@@ -1265,10 +1265,10 @@ value build_as gen stem entry =
         ; decline Nom (match gen with
            [ Mas -> match entry with (* gram Muller p 72,  Whitney §416 *)
                     [ "anehas" | "uzanas" | "da.mzas" (* Puruda.mzas *) -> "aa" 
-                    | _ -> "aas"
-                    ] 
+                    | _ -> "aas" (* Kane§108 candramas vedhas su/dur/unmanas *)
+                    ]  
            | Fem -> "aas"
-           | Neu -> "as"
+           | Neu -> "as" (* manas payas vyas? avas1 zreyas saras vacas *)
            | _ -> raise (Control.Anomaly "Nouns")
            ])
         ; decline Acc (match gen with
@@ -1312,7 +1312,7 @@ value build_as gen stem entry =
         ; decline Dat "obhyas"
         ; decline Abl "obhyas"
         ; decline Gen "asaam"
-        ; decline Loc "a.hsu" (* decline Loc "assu" *)
+        ; decline Loc "a.hsu" (* decline Loc "assu" *) (* Kane§108 opt "astu" *)
         ])
    ]            
    ; Bare Noun (mirror rstem) (* as *)
@@ -1377,6 +1377,51 @@ value build_nas entry =
         [ decline Nom "naasaa" (* RV narines Whitney§397 *)
         ; decline Gen "nasos"
         ; decline Loc "nasos"
+        ])
+   ]            
+   ]
+;
+value build_dos gen entry = (* Kale§108a *)
+  let decline case form = (case,code form) in 
+  enter entry 
+   [ Declined Noun gen
+   [ (Singular, 
+        [ decline Voc "dos"
+        ; decline Nom "dos"
+        ; decline Acc "dos"
+        ; decline Ins "do.saa"
+        ; decline Dat "do.se"
+        ; decline Abl "do.sas"
+        ; decline Gen "do.sas"
+        ; decline Loc "do.si"
+        ])
+   ; (Dual, let form = match gen with 
+                       [ Mas | Fem -> "do.sau"
+                       | Neu  -> "do.sii"
+                       | _ -> raise (Control.Anomaly "Nouns")
+                       ] in
+        [ decline Voc form
+        ; decline Nom form
+        ; decline Acc form
+        ; decline Ins "dorbhyaam"
+        ; decline Dat "dorbhyaam"
+        ; decline Abl "dorbhyaam"
+        ; decline Gen "dor.sos"
+        ; decline Loc "dor.sos"
+        ])
+   ; (Plural, let form = match gen with
+          [ Mas | Fem -> "do.sas"
+          | Neu  -> "do.m.si"
+          | _ -> raise (Control.Anomaly "Nouns")
+          ] in
+        [ decline Voc form
+        ; decline Nom form
+        ; decline Acc form
+        ; decline Ins "dorbhis"
+        ; decline Dat "dorbhyas"
+        ; decline Abl "dorbhyas"
+        ; decline Gen "do.saam"
+        ; decline Loc "do.h.su"
         ])
    ]            
    ]
@@ -1887,7 +1932,6 @@ value build_anadvah stem entry = (* ana.dvah *)
         ; decline Loc "utsu"
         ])
    ] 
-   ; Avyayaf (code "uham") 
    ]
 ;
 value build_neu_a stem entry = 
@@ -2401,7 +2445,7 @@ value build_neu_brahman entry =
    ]
 ;
 value build_aksan stem entry = 
-  (* stem = ak.san, asthan, dadhan, sakthan Whitney §431 *)
+  (* stem = ak.san, asthan, dadhan, sakthan Whitney §431 Kale§126 *)
   let decline case suff = (case,fix stem suff) in 
   enter entry 
    [ Declined Noun Neu
@@ -2416,19 +2460,21 @@ value build_aksan stem entry =
         ; decline Loc "ni"
         ; decline Loc "ani" (* \Pan{7,1,75} *)
         ])
-   ; (Dual, 
+   ; (Dual, let l = 
         [ decline Voc "inii"
-        ; decline Voc "ii"
         ; decline Nom "inii"
-        ; decline Nom "ii" (* Sun and moon *)
         ; decline Acc "inii"
-        ; decline Acc "ii"
         ; decline Ins "ibhyaam"
         ; decline Dat "ibhyaam"
         ; decline Abl "ibhyaam"
         ; decline Gen "nos"
         ; decline Loc "nos"
-        ])
+        ] in if entry="ak.san" then 
+        [ decline Voc "ii"
+        ; decline Nom "ii" 
+        ; decline Acc "ii"
+        ] @ l (* Vedic: Sun and moon *)
+      else l)
    ; (Plural, 
         [ decline Voc "iini"
         ; decline Nom "iini"
@@ -5073,11 +5119,11 @@ value compute_nouns_stem_form e stem d p =
                | [ 45 :: r3 ] (* -vas *) -> 
                  if p = "Ppfta" then build_mas_vas r3 e
                  else match r3 with 
-                   [ [ 1 :: [ 43 :: _ ] ] (* -ravas *)  
-                   | [ 5 :: [ 48 :: _ ] ] (* - suvas *) -> build_as Mas r2 e 
+                   [ [ 1 :: [ 43 :: _ ] ] (* -ravas *) -> build_as Mas r2 e   
                      (* uccaisravas, puruuravas, ugrazravas, vizravas non ppf *)
                    | [ 3 :: r4 ] (* -ivas *) -> build_mas_ivas r4 e
-                   | [ 35 :: _ ] (* -dhvas *) -> build_root Mas stem e
+                   | [ 35 :: _ ] (* -dhvas *)  
+                   | [ 5 :: [ 48 :: _ ] ] (* -suvas *) -> build_root Mas stem e 
                    | _       (* other ppf *) -> build_mas_vas r3 e
                    ]
                | [ 43 :: [ 48 :: _ ]] (* -sras *) -> build_root Mas stem e
@@ -5089,10 +5135,10 @@ value compute_nouns_stem_form e stem d p =
             | [ 2 :: _ ] (* -aas *) -> () (* avoids reporting bahu aas bhaas *) 
             | [ 3 :: r2 ] (* -is *) -> match r2 with
                 [ [ 46; 2 :: _ ] (* niraazis *) -> build_aazis Mas r2 e
-                | _ -> build_is Mas r2 e
+                | _ -> build_is Mas r2 e  (* udarcis *)
                 ]
-            | [ 5 :: r2 ] (* -us *) -> build_us Mas r2 e
-            | [ 12; 34 ] (* dos *) -> () (* avoids reporting bahu *) 
+            | [ 5 :: r2 ] (* -us *) -> build_us Mas r2 e (* acak.sus *)
+            | [ 12; 34 ] (* dos *) -> build_dos Mas e
             | [ 14; 5; 37 ] (* pu.ms *) -> build_pums [ 41; 5; 37 ] stem e
             | [ 14; 5; 37; 1; 36 ] (* napu.ms *) 
               -> build_pums [ 41; 5; 37; 1; 36 ] stem e 
@@ -5277,7 +5323,7 @@ value compute_nouns_stem_form e stem d p =
                  else match r3 with 
                  [ [ 1 ] (* avas1 - non ppf *)
                  | [ 1 :: [ 43 :: _ ] ] (* -ravas eg zravas, sravas - non ppf *)
-                 | [ 5 :: [ 48 :: _ ] ] (* - suvas *) 
+                 | [ 5 :: [ 48 :: _ ] ] (* -suvas *) 
                  | [ 3; 43; 1; 45 ] (* varivas *) -> build_as Neu r2 e
                  | [ 3 :: r4 ] (* ivas *) -> build_neu_ivas r4 e 
                  | [ 35 :: _ ] (* -dhvas *) -> build_root Neu stem e
@@ -5293,9 +5339,10 @@ value compute_nouns_stem_form e stem d p =
                | [ 40 :: _ ] (* bhaas aabhaas *) -> () (* missing paradigm *) 
                | _ -> report stem Neu
                ]
-            | [ 3 :: r2 ] (* -is *) -> build_is Neu r2 e
-            | [ 5 :: r2 ] (* -us *) -> build_us Neu r2 e
-            | _ -> build_root Neu stem e (* dos *)
+            | [ 3 :: r2 ] (* -is *) -> build_is Neu r2 e (* jyotis havis *)
+            | [ 5 :: r2 ] (* -us *) -> build_us Neu r2 e (* cak.sus dhanus *)
+            | [ 12; 34 ] (* dos *) -> build_dos Neu e 
+            | _ -> build_root Neu stem e 
             ]
       | [ 49 :: r1 ] (* -h *) -> match r1 with
             [ [ 1; 34 ] (* dah2 *) (* duhify *)
@@ -5491,7 +5538,7 @@ value compute_nouns_stem_form e stem d p =
                 | _ -> build_is Fem r2 e
                 ]
             | [ 5 :: r2 ] (* -us *) -> build_us Fem r2 e
-            | [ 12; 34 ] (* dos *) 
+            | [ 12; 34 ] (* dos *) -> build_dos Fem e 
             | [ 14; 2; 41 ] (* maa.ms *) -> () (* avoids reporting bahu *) 
             | [ 14 :: [ 5 :: _ ] ] -> () (* -pu.ms *)
             | _ -> report stem g

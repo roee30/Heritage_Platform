@@ -974,7 +974,7 @@ value compute_athematic_present2m strong weak set entry third =
    ; (Plural, let l =
         [ conjugw First  "mahe" 
         ; if entry = "as#1" then (Second, code "dhve") else
-          if entry = "aas#2" then (Second, code "aaddhve") else (* Whitney§612 *)
+          if entry = "aas#2" then (Second, code "aadhve") else (* #Whitney§612 *)
           conjugw Second "dhve" 
         ; if entry = "zii#1" then conjugw Third "rate" (* \Pan{7,1,6} *)
           else conjugw Third "ate" 
@@ -1056,7 +1056,7 @@ value compute_athematic_impft2m strong weak set entry =
                 ] @ l else l (* Whitney§627 *))
     ; (Plural, let l =
         [ conjugw First  "mahi"
-        ; if entry = "aas#2" then (Second, code "aaddhvam") (* Whitney§620 *) 
+        ; if entry = "aas#2" then (Second, code "aadhvam") (* #Whitney§620 *) 
           else conjugw Second "dhvam"
         ; if entry = "zii#1" then conjugw Third "rata" (* \Pan{7,1,6} *) else
           if entry = "i" then conjugw Third "yata" (* Bucknell 128 *) else
@@ -1198,7 +1198,7 @@ value compute_athematic_imperative2m strong weak set entry =
              else l (* Whitney§627 *))
    ; (Plural, let l =
         [ conjugs First  "aamahai"
-        ; if entry = "aas#2" then (Second, code "aaddhvam") (* Whitney§617 *) 
+        ; if entry = "aas#2" then (Second, code "aadhvam") (* #Whitney§617 *) 
           else conjugw Second "dhvam"
         ; if entry = "zii#1" then conjugw Third "rataam" (* \Pan{7,1,6} *)
           else conjugw Third "ataam"

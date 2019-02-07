@@ -4015,7 +4015,7 @@ value compute_aorist entry =
         [ "k.r#1" | "gam" | "jan" -> compute_root_aoristm weak entry (* rare *) 
         | "sthaa#1" (* Whitney§834a. *) ->
                     compute_root_aoristm (revstem "sthi") entry (* asthita *) 
-   (*i [| "dhaa#1" -> compute_root_aoristm (revstem "dhii") entry] ? i*)
+        | "dhaa#1" -> compute_root_aoristm (revstem "dhi") entry
         | _ -> ()
         ]
       ; let stem = if entry = "muc#1" then strong else match long with 
@@ -4105,10 +4105,10 @@ value compute_aorist entry =
     ]
   ; match entry with (* 4. sigma aorist sic *)
     [ "aap" | "k.r#1"  | "gup" | "chid#1" | "ji" | "tud" | "t.rr" | "dah#1"
-    | "daa#1" | "d.rz#1" | "draa#2" | "dhyaa" | "dhyai" | "dhv.r" | "nak.s" 
-    | "nii#1" | "pac" | "praz" | "prii" | "budh#1" | "bhaa#1" | "bhii#1" 
-    | "muc#1" | "yaj#1" | "yuj#1" | "ram" | "labh" | "v.r#2" | "vyadh" | "zru" 
-    | "s.rj#1" | "stu" | "sp.rz#1" | "hu" -> do
+    | "daa#1" | "d.rz#1" | "draa#2" | "dhaa#1" | "dhyaa" | "dhyai" | "dhv.r" 
+    | "nak.s" | "nii#1" | "pac" | "praz" | "prii" | "budh#1" | "bhaa#1"
+    | "bhii#1" | "muc#1" | "yaj#1" | "yuj#1" | "ram" | "labh" | "v.r#2" 
+    | "vyadh" | "zru" | "s.rj#1" | "stu" | "sp.rz#1" | "hu" -> do
       { let stem = match entry with
             [ "d.rz#1" | "s.rj#1" | "sp.rz#1" -> long_metathesis weak
             | "ram" -> weak 

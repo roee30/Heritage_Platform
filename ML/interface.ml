@@ -155,6 +155,7 @@ value call_parser text cpts =
             ";cpts=" ^ string_points cpts ^ ";n=1" in
   anchor Green_ (invoke cgi) check_sign
 ;
+(* Legacy interface with Sanskrit Library [
 value call_SL text cpts mode corpus solutions sent_id link_num = 
   let cgi = tomcat ^ corpus ^ "/SaveTagging?slp1Sentence=" 
             ^ text ^ "&numSolutions=" ^ (string_of_int solutions) 
@@ -164,6 +165,10 @@ value call_SL text cpts mode corpus solutions sent_id link_num =
             ^ string_points cpts in
   anchor Green_ (invoke cgi) check_sign
 ;
+value invoke_SL text cpts corpus_id count sent_id link_num =
+  ps (td_wrap (call_SL text cpts "t" corpus_id count sent_id link_num 
+               ^ "Sanskrit Library Interface"))
+;] *)
 value sort_check cpts = 
   let compare_index (a,_,_) (b,_,_) = compare a b in
   List.sort compare_index cpts
@@ -206,53 +211,50 @@ value build_visual k segments =
       ]
 ;
 (* We check whether the current segment [(w,tr,phase,k)] is conflicting with 
-   others at previous offset [l]; if not it is mandatory and marked blue. *)
+   others at previous offset [n]; if not it is mandatory and marked blue. *)
+(* Returns True for blue mandatory segments, False for green/red optional ones *)
 (* Warning: hairy code, do not change without understanding the theory.  *)
-value is_conflicting (w,tr,phase,k) = 
- let l_w = seg_length w in is_conflicting_rec 0
- where rec is_conflicting_rec l = match visual.(l) with 
- [ [] -> False
- | segs -> does_conflict segs
-     where rec does_conflict = fun
-       [ [] -> is_conflicting_rec (l+1) 
-       | [ (w1,tr1,phase1,k1) :: rest ] ->
-           if (w1,tr1,phase1,k1)=(w,tr,phase,k) 
-           then (* skip itself *) does_conflict rest
-           else let l_w1 = seg_length w1 in
-                if (k1<=k && k1+l_w1-1>k) 
-                || (k1<=k && k1+l_w1-1>=k && l_w=1)
+value is_conflicting ((w,tr,ph,k) as segment) =
+ let l = seg_length w in is_conflicting_rec 0
+ where rec is_conflicting_rec n = (* n is position in input string *)
+ match visual.(n) with 
+ [ [] -> False (* will exit here when n is length of input *) 
+ | segs -> does_conflict segs (* we search for conflicting segments *) 
+     where rec does_conflict = fun 
+       [ [] -> is_conflicting_rec (n+1) (* go to next input position *)
+       | [ ((w',tr',ph',k') as segment') :: rest ] -> 
+           if segment'=segment then (* skip itself *) does_conflict rest
+           else let l' = seg_length w' in
+                if (k'<=k && k'+l'-1>k) (* w inside w' *)
+                || (k'<=k && k'+l'-1>=k && l=1) (* w is a or aa *)
       (* This condition is necessary for the overlapping case *)
-                || (k<=k1 && k+l_w-1>k1 && l_w1>1) then 
-      (* This condition refines [(k<=k1 && k+l_w-1>k1)] but is modified
-         here to take care of cases such as elayati. We do not say that elayati 
-         (at k) conflicts with a segment aa (at the same offset). If it were 
-         conflicting, there would have existed another segment, which would be 
-         sufficient to prove the conflict. It also points to the fact that 
-         conflicting is not a symmetric relation. We might have to include 
-         a test as we did below *) 
-                   if k+l_w-1=k1 then match_tr tr
-      (* This is to check for the overlapping case, occurs when [k=k1, l_w=1]. 
+                || (k<=k' && k+l-1>k') then 
+                   if k+l-1=k' then let r' = Word.mirror w' in match_tr tr
+      (* This is to check for the overlapping case, occurs when [k=k', l=1]. 
          We need to check the sandhi conditions to decide whether this is a case 
          of overlap or conflict. *)
                        where rec match_tr = fun
                          [ [] -> True
                          | [ v :: rst ] -> match v with
                              [ [] -> match_tr rst
-                             | _  -> if Word.prefix v (Word.mirror w1) 
+                             | _  -> if Word.prefix v r' 
                                         then does_conflict rest
                                      else match_tr rst
                              ]
                          ]
-                   else if (k1<=k && k1+l_w1-1>=k && l_w=1) then match_tr1 tr1
-      (* For the case with [l_w=1], this is to check whether w is the only 
-         possible v for w1, then it is an overlap returning a blue sign. 
-         If w1 has any other possible v's, there is a conflict. *)
-                           where rec match_tr1 = fun
+                   else if (k'<=k && k'+l'-1>=k && l=1) then match_tr' tr'
+      (* For the case with [l=1], this is to check whether w is the only 
+         possible v for w', in which case it is an overlap returning a blue sign.
+         If w' has any other possible v's, there is a conflict. *)
+                           where rec match_tr' = fun
                              [ [] -> does_conflict rest
-                             | [ v :: rst ] -> Word.prefix v w || match_tr1 rst
+                             | [ v :: rst ] -> match v with 
+                                   [ [] -> does_conflict rest
+                                   | _ -> if v = w then match_tr' rst else True
+                                   ] 
                              ]
-                        else True
-                   else does_conflict rest
+                        else True 
+                else does_conflict rest
        ]
  ]
 ;
@@ -377,10 +379,6 @@ value print_interf text cpts () = vgrec 0
 ;
 value update_col_length chunk = 
   max_col.val := succ (max_col.val + Word.length chunk)
-;
-value invoke_SL text cpts corpus_id count sent_id link_num =
-  ps (td_wrap (call_SL text cpts "t" corpus_id count sent_id link_num 
-               ^ "Sanskrit Library Interface"))
 ;
 value update_text_with_sol text count = text ^ ";allSol=" ^ string_of_int count
 ;
@@ -639,7 +637,7 @@ value graph_engine () = do
  | Encode.In_error s   -> abort lang "Wrong input " s
  | Exit (* Sanskrit *) -> abort lang "Wrong character in input" "" 
  | Overflow            -> abort lang "Maximum input size exceeded" ""
- | Invalid_argument s  -> abort lang Control.fatal_err_mess s (* sub *)
+ | Invalid_argument s  -> abort lang Control.fatal_err_mess s (* sub array *)
  | Failure s           -> abort lang Control.fatal_err_mess s (* anomaly *)
  | End_of_file         -> abort lang Control.fatal_err_mess "EOF" (* EOF *)
  | Not_found           -> let s = "You must choose a parsing option" in

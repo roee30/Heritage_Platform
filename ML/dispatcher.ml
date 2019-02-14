@@ -453,10 +453,12 @@ value validate out = match out with
         let verb_form = Word.mirror form in
         [ (Comp (Pv,Lopa) pv lopa_form,verb_form,s) :: r ] 
       else []
-  | [ (Lopa,rev_lopa_form,_) :: next ] ->
+  | [ (Lopa,rev_lopa_form,_) :: next ] -> 
       let lopa_form = Word.mirror rev_lopa_form in 
-      if autonomous_form lopa_form && sa_before_check lopa_form next
-         then out else []
+      let verb_form =  match lopa_form with 
+                      [ [ -2 :: rf ] -> rf | _ -> failwith "Wrong lopa form" ] in
+      if autonomous_form verb_form && sa_before_check lopa_form next
+         then  out else []
   | (* infinitives in -tu with preverbs *)
     [ (Inftu,rev_root_form,s) :: [ (Pv,prev,sv) :: r ] ] ->
       let pv = Word.mirror prev in 
@@ -506,8 +508,8 @@ value validate out = match out with
       match Deco.assoc ikrid_form morpho.iiks with
       [ [] -> failwith ("Unknown ikrid_form: " ^ Canon.decode ikrid_form)
       | tags -> if List.exists (validate_pv_k pv_str ikrid_form) tags then
-                   let form = apply_sandhi prev ikrid_form sv in
-                   let cpd_form = Word.mirror form in
+                   let form = apply_sandhi prev ikrid_form sv in (* Z *)
+                   let cpd_form = Word.mirror form in 
                    [ (Comp (ph,phk) pv ikrid_form,cpd_form,s) :: r ] 
                 else []
       ]

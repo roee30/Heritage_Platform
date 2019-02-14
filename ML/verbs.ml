@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Verbs defines the conjugation paradigms, and computes conjugated forms *)
@@ -285,12 +285,14 @@ value sandhi revstem wsuff =
 *)
 
 (* Returns the reverse of [int_sandhi] of reversed prefix and reversed stem *)
-(* PB: [int_sandhi] may provoke too much retroflexion, such as *si.sarti 
-   instead of sisarti for root s.r, cf. the ugly ad-hoc patch in redup3 below. *)
-value revaffix revpref revstem = 
-  rev (Int_sandhi.int_sandhi revpref (rev revstem)) (*i too many revs - ugly i*)
+(* But [int_sandhi] may provoke too much retroflexion, such as *si.sarti 
+   instead of sisarti for root s.r in redup3 below. 
+   Same pb to avoid *pu.sphora as perfect of sphur, instead of pusphora. 
+   Thus need of the boolean argument retr: *)
+value revaffix retr revpref rstem = 
+  let glue = if retr then Int_sandhi.int_sandhi else List2.unstack in
+  rev (glue revpref (rev rstem)) (*i too many revs - ugly i*)
 ;
-
 (* Computation of verbal stems from root *)
 
 value  final_guna v w = List2.unstack (guna v) w
@@ -523,10 +525,13 @@ value redup3 entry rstem =
                 | _ -> rstem 
                 ] in 
       (strong rstem,wstem)
-      and glue = revaffix [ rv; rc ] in 
-        if entry="s.r" then (*i ad-hoc nonsense to avoid si.sarti ? i*)
+      and glue = match entry with
+          [ "s.r" -> revaffix False [ rv; rc ] (* no retroflexion: sisarti *)
+          | _ -> revaffix True [ rv; rc ] 
+          ] in (glue strong,glue weak,iiflag) 
+ (*        if entry="s.r" then (*i ad-hoc nonsense to avoid si.sarti ? i*)
              (revcode "sisar",revcode "sis.r",iiflag) 
-        else (glue strong,glue weak,iiflag)
+        else (glue strong,glue weak,iiflag) *)
     ]
 ;
 
@@ -2386,7 +2391,7 @@ value intercalates root =
           if all_consonants r then 
              match root with
              [ "k.sii" | "ji" | "nii#1" | "vaa#3" | "zii#1" | "su#2" 
-             | "stu" | "haa#1" -> vet
+             | "stu" | "sru" | "haa#1" -> vet
              | ".dii" | "nu#1" | "yu#1" | "yu#2" | "ru" | "zri" 
              | "k.su" | "k.s.nu" | "snu" (* Kale *) | "zuu"
                  -> set
@@ -2488,11 +2493,11 @@ value intercalate_pp root rstem =
            | "cud" | "cur" | "chal" | "jiiv" | "jval" | "ta.d" | "tam" | "tul" 
            | "t.r.s#1" | "tru.t" | "tvi.s#1" | "day" | "dal" | "dol" | "dhaav#1" 
            | "dhiir" | "dhvan" | "na.t" | "nad" | "pa.th" | "pa.n" | "pat#1"
-           | "piz" | "pii.d" | "pulak" | "puuj" | "prath" | "phal" | "baadh" 
-           | "bha.n" | "bhas" | "bhaa.s" | "bhaas#1" | "bhuu.s" | "bhraaj"
-           | "ma.mh" | "manth" | "mah" | "likh" | "mil" | "mi.s" | "miil" 
-           | "mud#1" | "mu.s#1" | "yaac" | "rac" | "ra.n" | "ras" | "rah" 
-           | "raaj#1" | "ruc#1" | "rud#1" | "lag" | "lap" | "lal" 
+           | "piz" | "pii.d" | "pulak" | "puuj" | "prath" | "pru.s#1" | "phal"
+           | "baadh" | "bha.n" | "bhas" | "bhaa.s" | "bhaas#1" | "bhuu.s" 
+           | "bhraaj" | "ma.mh" | "manth" | "mah" | "likh" | "mil" | "mi.s" 
+           | "miil" | "mud#1" | "mu.s#1" | "yaac" | "rac" | "ra.n" | "ras" 
+           | "rah" | "raaj#1" | "ruc#1" | "rud#1" | "lag" | "lap" | "lal" 
            | "la.s" | "las" | "lu.th" | "lul" | "lok" | "loc" | "vad" | "val" 
            | "vas#2" | "vaaz"| "vaas#3" | "vid#1" | "vip"| "ven" | "vyath" 
            | "vraj" | "vra.n" | "vrii.d" | "zubh#1" | "zcut#1" | "zrath" 
@@ -2772,8 +2777,8 @@ value perstems rstem entry =
                      ])
               ] 
        | 1 -> let w = match entry with 
-                [ "uc" | "mil" | "sphu.t" | "sphur" -> rstem
-                | "guh"   -> revcode "guuh" (* \Pan{6,4,89} *)
+                [ "uc" | "mil" | "sphu.t" | "sphur" -> rstem (* PB for Inf ? *)
+                | "guh"   -> revcode "guuh" (* \Pan{6,4,89} *) 
                 | "sad#1" -> revcode "siid" 
                 | "sp.rh" -> revcode "sp.rhay"
                 | "haa#1" -> revcode "jah" 
@@ -3093,7 +3098,10 @@ value redup_perf root =
             (* since special weak stem returned by stems *)
           | _ -> a
           ] in
-      let glue = revaffix affix in
+      let glue = match root with
+          [ "sphur" | "sphu.t" -> revaffix False affix (* no retroflexion *)
+          | _ -> revaffix True affix
+          ] in
       let (weak,eweak,iopt) = match sampra with (* iopt = optional i *) 
           [ Some weak -> (weak,False,True)
           | None -> if rc=c || root="bhaj" then match r with
@@ -3102,10 +3110,9 @@ value redup_perf root =
               | "val" | "mah" -> (glue revw,False,False) 
               | _ -> match w with
                 [ [ c' ] when consonant c' -> 
-                     (revaffix [ 10 (* e *); c ] w,True,True)
+                     (revaffix True [ 10 (* e *); c ] w,True,True)
                      (* roots of form c.a.c' with c,c' consonant or .m Scharf *)
-                     (* cf. Pan{6,4,119-126 *)
-                     (* ZZ may lead to hiatus *)
+                     (* cf. Pan{6,4,119-126 *) (* ZZ may lead to hiatus *)
                 | _ -> (glue revw,False,False)
                 ]
               ] 
@@ -3966,7 +3973,7 @@ value redup_aor weak root =
            ] else c1 in
       let rv = (* rv is reduplicating vowel *)
         if v = 5 then match root with
-           [ "dru#1" | "zru" | "stu" -> 5 
+           [ "dru#1" | "zru" | "stu" | "sru" -> 5 
            | "dyut#1" -> 3 (* also "zru" azizravat (WR) *)
            | _ -> 6 (* u -> uu *)
            ]
@@ -4001,7 +4008,7 @@ value redup_aor weak root =
                | _ -> error_empty 22
                ]
         ] in
-      revaffix [ rv; rc ] strengthened
+      revaffix True [ rv; rc ] strengthened
     ]
 ;
 value compute_aorist entry =
@@ -4056,7 +4063,7 @@ value compute_aorist entry =
       }
     | "zuu" | "zcut#1" -> compute_thematic_aorista weak entry
     | "zru"   -> compute_thematic_aorista (revcode "zrav") entry
-    | "khyaa" -> compute_thematic_aorista (revcode "khya") entry
+    | "khyaa" -> compute_thematic_aorista (revcode "khy") entry
     | "as#2"  -> compute_thematic_aorista (revcode "asth") entry
     | "pat#1" -> compute_thematic_aorista (revcode "papt") entry
     | "vac"   -> compute_thematic_aorista (revcode "voc") entry 
@@ -4075,7 +4082,7 @@ value compute_aorist entry =
       ; compute_redup_aoristm stem entry 
       }
     | "iik.s" | "kamp" | "klid" | "gup" | "cur" | "m.r" | "d.rz#1" | "dyut#1" 
-    | "vrazc" -> (* active only *)
+    | "vrazc" | "sru" -> (* active only *)
       let stem = redup_aor weak entry in 
       compute_redup_aorista stem entry
     | "grah" -> do 
@@ -4106,11 +4113,13 @@ value compute_aorist entry =
   ; match entry with (* 4. sigma aorist sic *)
     [ "aap" | "k.r#1"  | "gup" | "chid#1" | "ji" | "tud" | "t.rr" | "dah#1"
     | "daa#1" | "d.rz#1" | "draa#2" | "dhaa#1" | "dhyaa" | "dhyai" | "dhv.r" 
-    | "nak.s" | "nii#1" | "pac" | "praz" | "prii" | "budh#1" | "bhaa#1"
-    | "bhii#1" | "muc#1" | "yaj#1" | "yuj#1" | "ram" | "labh" | "v.r#2" 
-    | "vyadh" | "zru" | "s.rj#1" | "stu" | "sp.rz#1" | "hu" -> do
+    | "nak.s" | "nii#1" | "pac" | "praz" | "prii" | "pru.s#1" | "budh#1" 
+    | "bhaa#1" | "bhii#1" | "muc#1" | "yaj#1" | "yuj#1" | "ram" | "labh" 
+    | "v.r#2" | "vyadh" | "zru" | "sidh#1" | "s.rj#1" | "stu" | "sp.rz#1" 
+    | "hu" -> do
       { let stem = match entry with
             [ "d.rz#1" | "s.rj#1" | "sp.rz#1" -> long_metathesis weak
+            | "pru.s#1" -> strong
             | "ram" -> weak 
             | _ -> long
             ] in
@@ -4238,7 +4247,7 @@ value compute_injunctive entry =
     | _ -> () 
     ]
   ; match entry with (* 4. sigma injunct *)
-    [ "k.r#1" | "chid#1" | "pac" | "bhii#1" -> do
+    [ "k.r#1" | "chid#1" | "pac" | "bhii#1" | "sidh#1" -> do
       { let stema = long in
         compute_ath_s_injuncta stema entry 
       ; if entry = "chid#1" then compute_ath_s_injuncta strong entry else ()
@@ -4372,6 +4381,7 @@ value perif conj perstem entry = do
              | "p.rr"   -> revcode "puuri" (* puuritum *)
              | "sva~nj" -> revcode "svaj" (* svaktum *)
              | "sa~nj"  -> revcode "saj" (* saktum *)
+             | "s.rp"   -> revcode "sarpi" (* sarpitum *)
              | ".dii"   -> revcode ".dii" (* .diitum *)
              | _ -> perstem
              ] 
@@ -4728,6 +4738,8 @@ value record_abso_am root =
   | "zru"     -> record "zraavam"
   | "sa~nj"   -> record "sa~ngam"
   | "s.r"     -> record "saaram"
+  | "s.rp"    -> record "sarpam"
+  | "skand"   -> record "skandam"
   | "han"     -> record "ghaatam" (* \Pan{3,4,36+37} *)
   | "knuu"    -> record "knopam" (* from causative *)
   | _ -> ()
@@ -4894,7 +4906,6 @@ and compute_intensivem2 st =
 (******************)
 (* Present system *)
 (******************)
-
 value compute_present_system entry rstem gana pada third = 
   try
    (* pada=True for active (parasmaipade), False for middle (aatmanepade) *)
@@ -5063,7 +5074,7 @@ value compute_present_system entry rstem gana pada third =
         | _ -> let base_stem = strengthen_10 rstem entry in 
                let ystem = rev (sandhi base_stem [ 1; 42 ] (* ay *)) in 
                process10 ystem
-        ]
+        ] 
      | _ -> failwith "Anomaly Verbs"
      ] (* end of thematic conjugation *) 
    | 2 -> (* athematic conjugation: 2nd class (root class) *)

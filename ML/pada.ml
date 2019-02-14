@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Pada defines the allowed padas (Para, Atma or Ubha) for
@@ -115,8 +115,8 @@ value voices_of = fun
   | "dih" | "duh#1" | "dev#1" | "draa#2" | "dvi.s#1" | "dhaa#1" | "dhaav#1"
   | "dhaav#2" | "dhuu#1" | "dh.r" | "dhva.ms" | "nah" | "naath" | "nij" | "nii#1"
   | "nud" | "pac" | "paz" | "pa.th" | "pii.d" | "pu.s#1" | "puu#1" | "puuj"
-  | "puuy" | "p.rth" | "prii" | "budh#1" | "bruu" | "bhak.s" | "bhaj" | "bharts"
-  | "bhaas#1" | "bhid#1" | "bh.r" | "bh.rjj" | "maa#4"
+  | "puuy" | "p.rth" | "prii" | "pru.s#1" | "budh#1" | "bruu" | "bhak.s" 
+  | "bhaj" | "bharts" | "bhaas#1" | "bhid#1" | "bh.r" | "bh.rjj" | "maa#4"
   | "mi" | "mith" | "mil" | "mii" | "muc#1" | "mud#1" | "m.r" | "m.rj" 
   | "m.rdh" | "m.r.s" | "yaj#1" | "yaac" | "yu#1" | "yuj#1" | "rac" 
   | "ra~nj" | "ram" | "rah" | "raaj#1" | "ri" | "ric" | "rud#1" | "rudh#2"
@@ -173,14 +173,14 @@ svid2 1A 4P
 (* NB This will drive generation of verbal forms by Verbs. It may generate forms
    not listed in the lexicon root entry, but needed for use with some preverbs, 
    indicated in [voices_of_pv] below. 
-   Incorrect associations will be captured by Dispatcher. *)
+   Incorrect associations will be captured at Reader time by Dispatcher. *)
 value voices_of_gana g root = match g with 
  [ 1 -> match root with
         [ "k.r.s" | "cur" | "budh#1" | "van" | "v.r#1" | "su#2"
         | "suu#1" 
             -> Para 
-        | "i" | "gha.t.t" | "ghuur.n" | ".damb" | "bhra.mz" | "mid" | "mok.s"
-        | "lok" | "svid#2" 
+        | "i" | "gave.s" | "gha.t.t" | "ghuur.n" | ".damb" | "bhra.mz" | "mid"
+        | "mok.s" | "lok" | "svid#2" 
             -> Atma
         | "i.s#1" | ".r" (* ".r" Atma for pv sam \Pan{1,3,29} also "tap" *)  
         | "j.rr" | "tap" | "daa#1" | "dh.r.s" | "as#2" | "kuc" 

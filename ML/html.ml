@@ -782,8 +782,7 @@ value escape s =
     ; ("'", "apos")
     ; ("<", "lt")
     ; (">", "gt")
-    ]
-  in
+    ] in
   let escape s =
     try "&" ^ List.assoc s conversion_tbl ^ ";" with [ Not_found -> s ] in
   let special_chars =

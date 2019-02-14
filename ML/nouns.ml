@@ -4244,7 +4244,7 @@ value build_pron_a g stem entry = (* g=Mas ou g=Neu *)
         ] in if pseudo_nominal then 
         [ decline Abl "aat" :: [ decline Loc "e" :: 
         [ decline Voc "a" :: l ] ] ] else l)
-   ; (Dual, if entry = "ubhaya"  (* no dual *) then [] 
+   ; (Dual, if entry = "ubhaya"  (* no dual - dubious *) then [] 
             else let l = 
         [ decline Nom (if g=Mas then "au" else "e")
         ; decline Acc (if g=Mas then "au" else "e")
@@ -5809,8 +5809,8 @@ value enter_iiy entry =
   ; enter1 "anyatara" (Indecl Tas (code "anyataratas")) (* id *)
   ; enter1 "dak.si.na" (Indecl Tas (code "dak.si.natas"))  (* id *) 
   ; enter1 "avara"  (Indecl Tas (code "avaratas"))  (* \Pan{5,3,29} *)  
-  ; enter1 "uttara#1" (Indecl Tas (code "uttaratas")) (* check *)  
-  ; enter1 "ubhaya" (Indecl Tas (code "ubhayatas")) (* check *)  
+  ; enter1 "uttara#1" (Indecl Tas (code "uttaratas")) (* on pn \Pan{5,3,7} ? *)
+  ; enter1 "ubhaya" (Indecl Tas (code "ubhayatas")) (* on pn \Pan{5,3,7} ? *)
 *)
 value tasil_extra () = do (* add non-generative tasils *) 
   { enter1 "aze.sa" (Indecl Tas (code "aze.satas")) (* tasil on privative cpd *)

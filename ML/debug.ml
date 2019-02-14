@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (****************************************************************)
@@ -28,7 +28,7 @@ open Gen;
 #load "version.cmo";
 open Version;
 #load "date.cmo"; 
-#load "html.cmo"; 
+(* #load "html.cmo"; *)
 (* #load "web.cmo";
 open Web;
 #load "cgi.cmo"; *)
@@ -38,6 +38,7 @@ open Canon;
 open Phonetics;   
 
 open List;
+#load "min_lexer.cmo"; 
 #load "transduction.cmo"; 
 open Transduction;
 #load "encode.cmo"; 

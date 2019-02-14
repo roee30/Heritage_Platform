@@ -32,8 +32,8 @@ canon.cmo : ../ZEN/word.cmo
 canon.cmx : ../ZEN/word.cmx
 min_lexer.cmo :
 min_lexer.cmx :
-transduction.cmo : ../ZEN/zen_lexer.cmo min_lexer.cmo
-transduction.cmx : ../ZEN/zen_lexer.cmx min_lexer.cmx
+transduction.cmo : min_lexer.cmo
+transduction.cmx : min_lexer.cmx
 encode.cmo : ../ZEN/word.cmo transduction.cmo phonetics.cmo canon.cmo
 encode.cmx : ../ZEN/word.cmx transduction.cmx phonetics.cmx canon.cmx
 order.cmo :

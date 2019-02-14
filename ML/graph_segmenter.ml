@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                        Gérard Huet & Pawan Goyal                       *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* This segmenter is inspired from old module Segmenter, but uses a graph 
@@ -40,7 +40,6 @@ module Segment
          and output = list segment; 
          value validate : output -> output; (* consistency check / compress *) 
          value terminal_sa : output -> bool;
-         (* unused [value terminal_sas : output -> bool;] *)
          end)
   (Control: sig value star : ref bool; (* chunk= if star then word+ else word *)
                 value full : ref bool; (* all kridantas and nan cpds if full *)

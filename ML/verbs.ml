@@ -2444,10 +2444,11 @@ value intercalates root =
             ]
   ] 
 ;
-(* Whitney§631 \& §640 intercalating i in present system 2nd class *)
-value intercalate_2 = fun
-  [ "an#2" | "praa.n#1" | "rud#1" | "zvas#1" | "svap" | "jak.s" -> True
-  | _ -> False
+(* Whitney§631-§640 Bandharkar II p44 augment ii in present system 2nd class *)
+value augment_ii = fun (*  *)
+  [ "an#2" | "rud#1" | "zvas#1" | "svap" | "jak.s" -> True 
+    (* and thus  "praa.n#1" too gives praa.niit *) 
+  | _ -> False 
   ]
 ;
 
@@ -5078,7 +5079,7 @@ value compute_present_system entry rstem gana pada third =
      | _ -> failwith "Anomaly Verbs"
      ] (* end of thematic conjugation *) 
    | 2 -> (* athematic conjugation: 2nd class (root class) *)
-     let set = intercalate_2 entry 
+     let set = augment_ii entry 
      and sstem = strong_stem entry rstem 
      and wstem = if entry="as#1" then [ 48 ] else weak_stem entry rstem in do 
      { match voices_of_gana 2 entry with

@@ -3543,7 +3543,7 @@ conjugations, denominative verbs and a few roots. It builds a form in -aam
 suffixed by a perfect form of the auxiliairies k.r bhuu et as \Pan{3,1,35-40} *)
 value peri_perf_stem entry = 
   let stem = match entry with 
-  [ "iik.s" | "ii.d" | "iir" | "iih" | "uk.s" | "uc" | "ujjh" | "edh" 
+  [ "iik.s" | "ii.d" | "iir" | "iih" | "uk.s" | "uc" | "ujjh" | "uuh" | "edh" 
     (* Macdonell§140a1 Whitney§1071c *)
   | "ind" | "indh" | "inv" | "umbh" | "cakaas" -> entry
   | "aas#2"  -> "aas" (* trim *)
@@ -5356,7 +5356,7 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
    | "kelaa" | "rekhaa" | "tiras" | "uras" | "payas" (* Kale§660 *)
    | "vaac" (* consonant Kale§642 *)
    | "dantura" (* possess *)
-   | "viira" | "zabda" | "tira" (* MW *) | "ma~njara" | "sraja" 
+   | "viira" | "zabda" | "tira" (* MW *) | "ma~njara" | "sraja" | "manas" 
        -> rstem (* -yati *) (* standard causative meaning *)  
    | "madhu" | "v.r.sa" (* also madhvasyati v.r.siiyati *) 
    | "k.siira" | "lava.na" (* also putra *)
@@ -5367,8 +5367,8 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
 value den_stem_m entry = (* in general intransitive or reflexive Whitney§1059c *)
    let rstem = revstem entry in 
    match entry with 
-   [ "artha" | "i.sa" | "kuha" | "carca" | "mantra" | "muutra" | "m.rga"
-   | "viira" | "safgraama" | "suutra" (* also zithila below *)
+   [ "artha" | "i.sa" | "kuha" | "carca" | "manas" | "mantra" | "muutra" 
+   | "m.rga" | "viira" | "safgraama" | "suutra" (* also zithila below *)
        -> rstem (* (a)-yate *) 
    | "asuuya" (* "asu" lengthened *) | "vyaya" (* euphony *)
        -> trunc (trunc rstem) 
@@ -5567,7 +5567,8 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
           [ "paz"  (* d.rz *) | "bruu" (* vac *) | "ma.mh" (* mah *)
           | "ind" | "indh" | "inv" | "cakaas" | "dhii#1" | "vidh#1" -> ()
             (* no perfect *)
-          | _ -> compute_perfect entry 
+          | "uuh" -> () (* periphrastic *)
+          | _ -> compute_perfect entry
           ]
    ; (* Periphrastic Perfect *) (* .namul on demand - except gana 10 above *)
      try let stem = peri_perf_stem entry in

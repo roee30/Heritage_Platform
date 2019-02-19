@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* CGI-bin indexerd for indexing in sanskrit dico without diacritics.     *)
@@ -64,10 +64,10 @@ value index_engine () =
        (* TODO: adapt to MW search along Indexer *)
        let url_encoded_entry = List.assoc "q" alist in
        let str = decode_url url_encoded_entry in 
-       try let word = Encode.code_skt_ref_d str (* normalization *) in do
+       try let dummy = Encode.code_skt_ref_d str (* normalization *) in do
            { answer_begin ()
            ; ps (div_begin Latin12)
-           ; let words = Deco.assoc word dummies_deco in
+           ; let words = Deco.assoc dummy dummies_deco in
              match words with
                [ [] -> do { ps (Morpho_html.skt_red str)
                           ; ps " not found in Heritage dictionary"

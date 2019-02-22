@@ -242,7 +242,7 @@ value is_conflicting ((w,tr,ph,k) as segment) =
                                      else match_tr rst
                              ]
                          ]
-                   else if (k'<=k && k'+l'-1>=k && l=1) then match_tr' tr'
+                   else if (k'<=k && k'+l'-1=k && l=1) then match_tr' tr'
       (* For the case with [l=1], this is to check whether w is the only 
          possible v for w', in which case it is an overlap returning a blue sign.
          If w' has any other possible v's, there is a conflict. *)
@@ -250,7 +250,7 @@ value is_conflicting ((w,tr,ph,k) as segment) =
                              [ [] -> does_conflict rest
                              | [ v :: rst ] -> match v with 
                                    [ [] -> does_conflict rest
-                                   | _ -> if v = w then match_tr' rst else True
+                                   | _ -> v = w || match_tr' rst 
                                    ] 
                              ]
                         else True 

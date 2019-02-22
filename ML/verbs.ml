@@ -2497,8 +2497,8 @@ value intercalate_pp root rstem =
            | "piz" | "pii.d" | "pulak" | "puuj" | "prath" | "pru.s#1" | "phal"
            | "baadh" | "bha.n" | "bhas" | "bhaa.s" | "bhaas#1" | "bhuu.s" 
            | "bhraaj" | "ma.mh" | "manth" | "mah" | "likh" | "mil" | "mi.s" 
-           | "miil" | "mud#1" | "mu.s#1" | "yaac" | "rac" | "ra.n" | "ras" 
-           | "rah" | "raaj#1" | "ruc#1" | "rud#1" | "lag" | "lap" | "lal" 
+           | "miil" | "mud#1" | "mu.s#1" | "m.rg" | "yaac" | "rac" | "ra.n"
+           | "ras" | "rah" | "raaj#1" | "ruc#1" | "rud#1" | "lag" | "lap" | "lal"
            | "la.s" | "las" | "lu.th" | "lul" | "lok" | "loc" | "vad" | "val" 
            | "vas#2" | "vaaz"| "vaas#3" | "vid#1" | "vip"| "ven" | "vyath" 
            | "vraj" | "vra.n" | "vrii.d" | "zubh#1" | "zcut#1" | "zrath" 
@@ -2638,6 +2638,7 @@ value compute_ppp_stems entry rstem =
            | ".rj"    -> revcode "arj" (* strong *)
            | "k.svi.d" -> revcode "k.sve.d"
            | "vip"    -> revcode "vep"
+           | "m.rg"    -> revcode "marg" (* strong *)
            | "jak.s"  -> revcode "jagh" (* jagdha *)
            | "trai"   -> revcode "traa" (* glai given in -na section *)
            | "k.san"  -> revcode "k.sa" (* removal of final nasal *) 
@@ -2691,8 +2692,8 @@ value compute_ppp_stems entry rstem =
            | _ -> passive_stem entry rstem (* possibly duhified and mirjified *)
            ] in [ Ta ppstem :: match entry with  
                     [ ".rc#1" | ".rj" | "k.svi.d" | "ba.mh" | "ma.mh" | "manth" 
-                    | "yaj#1" | "vyadh" | "grah" | "vrazc" | "praz" | "zrath" 
-                    | "svap" ->
+                    | "m.rg" | "yaj#1" | "vyadh" | "grah" | "vrazc" | "praz" 
+                    | "zrath" | "svap" ->
                            [ Tia ppstem ] (* avoids *ma.mhita *)  
                     | "vaz" | "vac" | "vap" | "vap#1" | "vap#2" | "vad" 
                     | "vas#1" | "vas#4" ->
@@ -3981,8 +3982,9 @@ value redup_aor weak root =
         else if v = 6 then 5 (* uu \R u *)
         else match root with
              [ "klid" | "tvar" | "tvi.s#1" | "zri" | "grah" | "vrazc" -> 3 
-             | "j~naa#1" | "sthaa#1" (* hidden heavy since stem in i *) -> 3 
-             | "gaah" (* heavy exception *) -> 4 
+             | "j~naa#1" | "sthaa#1" | "hlaad" (* hidden heavy since stem in i *)
+                 -> 3 
+             | "gaah" (* heavy exception *) -> 4  
              | _ -> if heavy || amui root then 
                        if v=1 || v=2 || v=7 then 1 (* Whitney§860 *) 
                        else 3 (* short \R ii, long \R i *) (* \Pan{7,4,93} *)
@@ -4148,7 +4150,7 @@ value compute_aorist entry =
     ]
   ; match entry with (* 5. i.s aorist se.t-sic *)
     [ "ak.s" | "aj" | "aas#2" | "i.s#1" | "iik.s" | "uk.s" | "uc" | "u.s" 
-    | "uuh" | ".rc#1" | "k.rt#1" | "krand" | "kram" | "khan"  | "car" 
+    | "uuh" | ".rc#1" | "k.rt#1" | "krand" | "kram" | "k.san"  | "khan"  | "car" 
     | "ce.s.t" | "jalp" | "jaag.r" | "t.rr" | "diip" | "pa.th" | "puu#1" | "p.rc"
     | "baadh" | "budh#1" | "mad#1" | "mud#1" | "muurch" | "mlecch" | "yaac" 
     | "ruc#1" | "lu~nc" | "luu#1" | "vad" | "vadh" | "vid#1" | "v.r#1" | "vraj"
@@ -4199,7 +4201,7 @@ value compute_aorist entry =
       }
     | _ -> ()
     ]
-  ; match entry with (* 7. sa aorist ksa *)
+; match entry with (* 7. sa aorist ksa *)
       [ "guh" | "diz#1" | "dih" | "duh#1" | "lih#1" | "viz#1" | "v.rj" -> do
       (* \Pan{7,3,72-73} *)
       { compute_ath_sa_aorista weak entry   
@@ -4265,8 +4267,53 @@ value compute_injunctive entry =
       }
     | _ -> ()
     ]
-  }
-;
+  ; match entry with (* 5. i.s injunct *)
+    [ "ak.s" | "aj" | "aas#2" | "i.s#1" | "iik.s" | "uk.s" | "uc" | "u.s" 
+    | "uuh" | ".rc#1" | "k.rt#1" | "krand" | "kram" | "k.san"  | "khan"  | "car" 
+    | "ce.s.t" | "jalp" | "jaag.r" | "t.rr" | "diip" | "pa.th" | "puu#1" | "p.rc"
+    | "baadh" | "budh#1" | "mad#1" | "mud#1" | "muurch" | "mlecch" | "yaac" 
+    | "ruc#1" | "lu~nc" | "luu#1" | "vad" | "vadh" | "vid#1" | "v.r#1" | "vraj"
+    | "z.rr" | "sidh#2" | "skhal" | "stan" | "stu" | "hi.ms" -> do
+      { let stem = match weak with
+            [ [ 7 (* .r *) :: _ ] -> 
+              if entry = "jaag.r" then strong (* jaagari.sam RF IC 2 p 88 *)
+              else long (* avaariit *)
+            | [ 8 (* .rr *) :: _ ] -> 
+              if entry = "z.rr" then strong (* azariit *)
+              else long 
+            | [ c :: _ ] -> 
+              if vowel c then long 
+              else match entry with 
+                   [ "kan" | "khan" |"car" | "mad#1" | "vad" | "skhal" -> long 
+                   | _ -> strong
+                   ]
+            | [] -> error_empty 24
+            ] in
+        compute_ath_is_injuncta stem entry 
+      ; compute_ath_is_injunctm strong entry 
+      } 
+    | "gup" | "vrazc" | "zcut#1" | "sphu.t" -> (* active only *)
+      compute_ath_is_injuncta strong entry 
+    | "zuu" -> 
+      compute_ath_is_injuncta (revcode "zve") entry 
+    | "kan" | "k.r#2"| "p.rr" -> (* active only *)
+      compute_ath_is_injuncta long entry 
+    | "kamp" | "jan" | "zii#1" | "spand" -> (* middle only *)
+      compute_ath_is_injunctm strong entry 
+    | "grah" -> do 
+      { let stem = revcode "grah" in do (* same as group above *)
+        { compute_ath_is_injuncta stem entry 
+        ; compute_ath_is_injunctm stem entry 
+        } 
+      ; let stem = revcode "grabh" in do (* supplement (ved) -- Whitney§900b *)
+        { compute_ath_is_injuncta stem entry 
+        ; compute_ath_is_injunctm stem entry 
+        } 
+      }
+    | _ -> ()
+    ]
+  } (* injunctives of kinds 6. and 7. missing *)
+ ;
 (* Aorist of causative *)
 value compute_redup_aorista_ca stem entry = 
   let conjug person suff = (person,fix_augment stem suff) in
@@ -4287,6 +4334,7 @@ value compute_aor_ca cpstem entry =
   | "p.r#1" (* apiiparat *)
   | "t.rr" (* atiitarat *)
   | "vah#1" (* aviivahat *) 
+  | "hlaad" (* ajihladat *) 
 (*  | "jan"  (* wrong *ajijiinat for ajiijanat *)
     | "sp.rz#1" (* wrong *apii.spazat for apisp.rzat *) TODO *) ->
       match cpstem with (* cpstem-ayati is the ca stem *)
@@ -5410,6 +5458,7 @@ value compute_denom stem ystem entry = do (* other than present system - rare *)
     [ [ 1 :: rest ] -> 
         match entry with
         [ "asuuya" -> () (* wrong asya *)
+        | "m.rga" -> () (* from m.rg *)
         | _ -> do (* experimental - rare acc. to Whitney *)
                { compute_passive_11 entry rest
                ; record_pfp_10 entry rest

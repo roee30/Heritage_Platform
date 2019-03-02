@@ -5422,6 +5422,7 @@ value den_stem_m entry = (* in general intransitive or reflexive Whitney§1059c 
        -> trunc (trunc rstem) 
    | "tavi.sa" | "citra" (* do \Pan{3,1,19} *) | "sajja"
        -> [ 4 :: trunc_a rstem ] (* -()iiyate *)
+   | "arth" -> [ 1 :: trunc_a rstem ] (* arthayate for lexicon access *)
    | "apsaras" | "sumanas" (* act as, become \Pan{3,1,11-12} *) 
    | "unmanas" 
    | "uu.sman" (* emit \Pan{3,1,16} *)

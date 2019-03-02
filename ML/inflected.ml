@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Inflected = struct i*)
@@ -113,7 +113,7 @@ value iivs = ref (Deco.empty : inflected_map)
 value add_morphvi w d i = 
   iivs.val := Lexmap.addl iivs.val w (d w,i)
 ;
-(* finite forms of auxiliary roots k.r bhuu as *)
+(* finite forms of auxiliary roots k.r bhuu as plus infinitives and gerunds *)
 value auxi = ref (Deco.empty : inflected_map)
 ;
 value add_morphauxi w d i = 

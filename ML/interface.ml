@@ -227,7 +227,7 @@ value is_conflicting ((w,tr,ph,k) as segment) =
            else let l' = seg_length w' in
                 if (k'<=k && k'+l'-1>k) (* w inside w' *)
                 || (k'<=k && k'+l'-1>=k && l=1) (* w is a or aa *)
-      (* This condition is necessary for the overlapping case *)
+                   (* This condition is necessary for the overlapping case *)
                 || (k<=k' && k+l-1>k') then 
                    if k+l-1=k' then let r' = Word.mirror w' in match_tr tr
       (* This is to check for the overlapping case, occurs when [k=k', l=1]. 
@@ -246,19 +246,19 @@ value is_conflicting ((w,tr,ph,k) as segment) =
       (* For the case with [l=1], this is to check whether w is the only 
          possible v for w', in which case it is an overlap returning a blue sign.
          If w' has any other possible v's, there is a conflict. *)
-                           where rec match_tr' = fun
-                             [ [] -> does_conflict rest
-                             | [ v :: rst ] -> match v with 
-                                   [ [] -> does_conflict rest
-                                   | _ -> v = w || match_tr' rst 
-                                   ] 
+      (* This may only occur if w=[1] (a) and w' ends in a or aa *)       
+      (* NB. In naabhaava.h caakiirti.h a should be marked blue 
+         but in mahaajana.h after checking mahaa a should not be marked blue *)
+                           where  match_tr' = fun
+                             [ [ v ] -> not (v = w) || does_conflict rest
+                             | _ -> True
                              ]
-                        else True 
-                else does_conflict rest
+                        else True
+                   else does_conflict rest
        ]
- ]
-;
-value rec find_conflict_seg acc l = fun
+  ]
+; 
+value rec find_conflict_seg acc l = fun 
   [ [] -> List.rev acc
   | [ (w1,tr,phase,k) :: rest ] ->
       let conflict = is_conflicting (w1,tr,phase,k) in

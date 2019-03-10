@@ -922,7 +922,6 @@ value build_an_god stem entry = (* Whitney §426a *)
    ; Bare Noun (wrap stem 1)
    ] 
 ;
-
 value build_sp_an stem entry = 
 (* Whitney§432 these stems substitute the following for Voc Nom Acc :
    "yakan" \R "yak.rt"
@@ -930,8 +929,9 @@ value build_sp_an stem entry =
    "udan" \R "udaka"
    "yuu.san" \R "yuu.sa"
    "do.san" \R "dos"
-   "asan" \R "as.rk"
-   "aasan" \R "aasya" *)
+   "asan" \R "as.rj"
+   "aasan" \R "aasya" 
+   Kale§129 Renou§241d *)
   let decline case suff = (case,fix stem suff) in
   enter entry 
    [ Declined Noun Neu
@@ -950,7 +950,8 @@ value build_sp_an stem entry =
         ; decline Loc "nos"
         ])
    ; (Plural,
-        [ decline Ins "abhis"
+        [ decline Acc "aani" (* Kale§129 zakan but not yakan, Renou: trouble *)
+        ; decline Ins "abhis" 
         ; decline Dat "abhyas"
         ; decline Abl "abhyas"
         ; decline Gen "naam"
@@ -3785,6 +3786,13 @@ value build_ap entry =
 Phonetics.asp, in order to transform eg duk in dhuk (Whitney §155) *)
 value build_root g stem entry =
   let decline case suff = (case,fix stem suff)
+  and decline_nasalise case suff = 
+      let nstem = match stem with
+        [ [ c :: r ] -> if nasal c then stem else 
+                           try [ c :: [ (homonasal c) :: r ]]
+                           with [ Failure _ -> stem ]
+        | _ -> failwith "build_root"
+        ] in (case,fix nstem suff)
   and declfin case suff = 
       (* [finalize_r] for doubling of vowel in r roots Whitney §245b *)
       (case,fix (finalize_r stem) suff) 
@@ -3812,10 +3820,10 @@ value build_root g stem entry =
         ; decline Loc "os"
         ])
    ; (Plural, 
-        [ decline Voc (if g=Neu then "i" else "as")
-        ; decline Nom (if g=Neu then "i" else "as")
-        ; decline Acc (if g=Neu then "i" else "as")
-   (* Voc Nom Acc Neu ought to have nasal : vr.nti Whitney§389c p. 145 *)
+        [ if g=Neu then decline_nasalise Voc "i" else decline Voc "as"
+        ; if g=Neu then decline_nasalise Nom "i" else decline Nom "as"
+        ; if g=Neu then decline_nasalise Acc "i" else decline Acc "as"
+   (* Voc Nom Acc Neu ought to have nasal : v.rnti Whitney§389c p. 145 *)
    (* Acc. vaacas with accent on aa or on a        Whitney§391  p. 147 *)
         ; declfin Ins "bhis"
         ; declfin Dat "bhyas"
@@ -3829,7 +3837,7 @@ value build_root g stem entry =
    ; Avyayaf bare
    ]
 ;
-value build_root_m g trunc stem entry = (* Kale§107 *)
+value build_root_m g trunc stem entry = (* Kale§107 prazaam *)
   let decline case suff = (case,fix stem suff)
   and declcon case suff = (case,fix [ 36 (* n *) :: trunc ] suff) in
   enter entry 
@@ -5220,8 +5228,9 @@ value compute_nouns_stem_form e stem d p =
       | [ 24 :: r1 ] (* -j *) -> match r1 with (* m.rjify *)
             [ [ 2 :: [ 43 :: _ ] ] (* -raaj2 viraaj2 *) 
             | [ 2 :: [ 42 :: _ ] ] (* -yaaj2 *) 
-            | [ 7; 48 ] (* s.rj2 *) -> build_root Neu [ 124 (* j' *) :: r1 ] e
-            | [ 5; 42 ] (* yuj2 *) -> do 
+            | [ 7 :: [ 48 :: _ ] ] (* -s.rj2 as.rj *)
+                  -> build_root Neu [ 124 (* j' *) :: r1 ] e
+            | [ 5; 42 ] (* yuj2 *) -> do  
                 { build_root Neu stem e
                 ; build_archaic_yuj [ 24; 26; 5; 42 ] (* yu~nj *) Neu e
                 }
@@ -5235,7 +5244,7 @@ value compute_nouns_stem_form e stem d p =
                | _ -> build_neu_at r1 e (* e.g. jagat *)
                ]
             | [ 2 :: r2 ] (* -aat *) -> build_neu_at r1 e (* ppr in aat/aant ? *)
-            | _ -> build_root Neu stem e
+            | _ -> build_root Neu stem e 
             ] 
       | [ 34 :: r1 ] (* -d *) -> match r1 with
           [ [ 1 :: r2 ] (* -ad *) -> match r2 with

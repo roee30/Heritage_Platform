@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Sandhi = struct i*)
@@ -220,6 +220,7 @@ value ext_sandhi_pair wl wr =
              | 36      -> [ 14; 46; first ] (* n+c {\R} {\d m}\'sc *)
              | c       -> [ if visargor c then 46 else c; first ]
              ]
+  (* | 31 (* {\d n} *) missing c+.n = f.n TODO *)
      | c -> failwith ("illegal start of right arg of sandhi in " ^ decode wr)
      ] (* match first *) in (* let glue *)
        let (w1,w2) = match glue with

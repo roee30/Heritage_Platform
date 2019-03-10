@@ -229,11 +229,11 @@ value voices_of_gana g root = match g with
         | _ -> voices_of root (* van Ubha *)
         ]
  | 9 -> match root with
-        [ "jyaa#1" | "pu.s#1" | "mii" | "m.rd#1" | "ri" -> Para
+        [ "jyaa#1" | "pu.s#1" | "mii" | "m.rd#1" | "ri" | "stambh" -> Para
         | _ -> voices_of root
         ]
  | 10 -> match root with
-        [ "gha.t.t" | ".damb" | "mid" | "mok.s" | "lak.s" | "lok" | "stambh"
+        [ "gha.t.t" | ".damb" | "mid" | "mok.s" | "lak.s" | "lok" 
             -> Para
         | "arth" -> Atma
         | _ -> voices_of root (* other denominatives will take Ubha as default *)

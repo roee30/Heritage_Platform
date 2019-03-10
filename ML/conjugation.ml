@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* CGI-bin conjugation for computing root conjugations.                   *)
@@ -342,6 +342,7 @@ value display_inflected_u font inf absya per abstva = do
  ; display_ind (absolutive_caption True font) font abstva
  ; display_ind (absolutive_caption False font) font (List.map prefix_dash absya)
    where prefix_dash (c,w) = (c,[ 0 :: w ]) 
+   (* NB will display twice absol in -am *)
  ; display_ind (peripft_caption font) font per
  ; pl center_end
  }

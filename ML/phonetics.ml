@@ -57,6 +57,7 @@ and rivarna c = c=7 || c=8  (* .r .rr *)
 ;
 value not_a_vowel c = vowel c && not (avarna c) (* c>2 and c<14 *)
 and is_aa c = c=2
+and is_i_or_u c = c=3 || c=5
 and not_short_vowel c =  vowel c && not (short_vowel c)
 ;
 (* segments a word as a list of syllables - Unused *)

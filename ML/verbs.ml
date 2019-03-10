@@ -417,7 +417,7 @@ value passive_stem entry rstem = (* Panini -yak (k means no guna) *)
     | "zii#1" -> revcode "zay" (* \Pan{7,4,22} *) 
     | "pyaa"  -> revcode "pyaay" (* pyaa=pyai *)
     | "indh" | "und" | "umbh" | "gumph" | "granth" | "da.mz" | "dhva.ms"  
-    | "bandh" | "bhra.mz" | "za.ms" | "zrambh" 
+    | "bandh" | "bhra.mz" | "za.ms" | "zrambh" | "skambh" | "skand" 
       (* above roots have penultimate nasal and do not have [i_it] marker *)
     | "ba.mh" | "ma.mh" | "manth" | "stambh" 
       (* these four roots are listed in dhatupathas as bahi, mahi, mathi, stabhi
@@ -2677,6 +2677,7 @@ value compute_ppp_stems entry rstem =
            | "puuy"    -> revcode "puu"
            | "bhi.saj#2" -> revcode "bhi.sajy" 
            | "skambh" -> revcode "skabh" (* skambh -> skabh *)
+           | "stambh" -> revcode "stabh" (* stambh -> stabh *)
            | "zrath"  -> revcode "zranth"
            | "muurch" -> revcode "muur" (* muurta *)
            | "av"     -> revcode "uu" (* uuta *)
@@ -2693,8 +2694,8 @@ value compute_ppp_stems entry rstem =
            ] in [ Ta ppstem :: match entry with  
                     [ ".rc#1" | ".rj" | "k.svi.d" | "ba.mh" | "ma.mh" | "manth" 
                     | "m.rg" | "yaj#1" | "vyadh" | "grah" | "vrazc" | "praz" 
-                    | "zrath" | "svap" ->
-                           [ Tia ppstem ] (* avoids *ma.mhita *)  
+                    | "zrath" | "svap" | "stambh" ->
+                           [ Tia ppstem ] (* avoids *ma.mhita *) 
                     | "vaz" | "vac" | "vap" | "vap#1" | "vap#2" | "vad" 
                     | "vas#1" | "vas#4" ->
                            [ Tia rstem; Tia ppstem ]
@@ -4731,7 +4732,8 @@ value record_ppp_abs_stems entry rstem ppstems =
                     | "vaz" | "vac" | "vap" | "vap#1" | "vap#2" | "vad" 
                     | "vas#1" | "vas#4" -> w
                     | "siiv" -> revcode "sev" (* gu.na *)
-                    | _ -> strong w
+                    | "stambh" -> rstem (* stabhita but stambhitvaa! *)
+                    | _ -> strong w 
                     ] in
                 record_abso_tvaa (fix tstem itvaa) entry
               ; if alternate_tvaa entry rstem then 
@@ -4789,6 +4791,7 @@ value record_abso_am root =
   | "s.r"     -> record "saaram"
   | "s.rp"    -> record "sarpam"
   | "skand"   -> record "skandam"
+  | "stambh"  -> record "stambham"
   | "han"     -> record "ghaatam" (* \Pan{3,4,36+37} *)
   | "knuu"    -> record "knopam" (* from causative *)
   | _ -> ()
@@ -5171,7 +5174,7 @@ value compute_present_system entry rstem gana pada third =
      let (stem,vow) = match rstem with 
          [ [ 36; 3 ]     (* in *)  -> ([ 3 ] (* i *),True) (* Whitney§716a *)
          | [ 5; 43; 46 ] (* zru *) -> ([ 7; 46 ] (* z.r *),True) 
-         | [ 40 :: [ 41 :: r ] ] -> ([ 40 :: r ],False) (* skambh -> skabh *)
+         | [ 40 :: [ 41 :: r ] ] -> ([ 40 :: r ],False) (* skambh stambh *)
            (* possibly other penultimate nasal lopa ? *)
          | [ c :: rest ] -> if vowel c then ([ short c :: rest ],True)
                             else (rstem,False)  
@@ -5561,6 +5564,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
           | "vyadh" -> compute_perif (revcode "vidh") entry 
           | "zuu" -> compute_perif (revcode "zve") entry 
           | "knuu" -> compute_perif (revcode "knuuy") entry 
+          | "stambh" -> compute_perif (revcode "stabh") entry 
           | _ -> compute_perif rstem entry 
           ]
    ; (* Precative - active rare, middle unknown in classical language except

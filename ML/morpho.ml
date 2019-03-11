@@ -109,35 +109,6 @@ value print_inv_morpho_link pvs pe pne pu form =
    since only existential test in [Dispatcher.validate_pv]. Thus
    [anusandhiiyate] should show [dhaa#1], not [dhaa#2], [dhii#1] or [dhyaa] *)
 ;
-value print_inv_morpho_tad pv pe pne pu stem sfx_form (seg_num,sub)  
-                           generative (delta,morphs) = 
-  let sfx = Word.patch delta sfx_form in do
-    { ps "{ "
-    ; print_morphs (seg_num,sub) morphs (* taddhitaanta declension *)
-    ; ps " }["
-    ; if generative then (* interpret stem as unique name *)
-        let (homo,bare_stem) = homo_undo stem in
-        let krit_infos = Deco.assoc bare_stem unique_kridantas in 
-        try let (verbal,root) = look_up_homo homo krit_infos in do
-        { match Deco.assoc bare_stem lexical_kridantas with
-          [ [] (* not in lexicon *) -> pne bare_stem 
-          | entries (* bare stem is lexicalized *) -> 
-              if List.exists (fun (_,h) -> h=homo) entries
-                 then pe stem (* stem with exact homo is lexical entry *)
-              else pne bare_stem
-          ] 
-        ; ps " { "; print_verbal verbal; ps " }["; pe root; ps "]"
-        } with [ _ -> pu bare_stem ]
-      else pe stem 
-    ; pne sfx; ps "]" 
-    }
-;
-(* variant with link for printing of taddhitaantas *)
-value print_inv_morpho_link_tad pvs pe pne pu stem sfx_form  =
-  let pv = if Phonetics.phantomatic stem then [ 2 ] (* aa- *) 
-           else pvs in
-  print_inv_morpho_tad pv pe pne pu stem sfx_form
-;
 
 (* Used in [Lexer.record_tagging] for regression analysis *)
 value report_morph gen form (delta,morphs) =

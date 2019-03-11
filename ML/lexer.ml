@@ -21,7 +21,7 @@ open Skt_morph;
 open Morphology; (* [inflected inflected_map] *)
 open Auto.Auto; (* auto State *)
 open Segmenter; (* Segment *)
-open Dispatcher; (* [generative Dispatch transition phase_of_sort trim_tags] *) 
+open Dispatcher; (* [Dispatch transition phase_of_sort trim_tags] *) 
 open Word; (* word length mirror patch *)
 
 module Lexer (* takes its prelude and control arguments as module parameters *)
@@ -35,7 +35,7 @@ open Html;
 open Web; (* ps pl abort etc. *)
 open Cgi;
 open Phases; (* Phases *) 
-open Phases; (* phase *) 
+open Phases; (* phase generative *) 
 
 module Lemmas = Load_morphs.Morphs Prel Phases
 ;
@@ -47,7 +47,7 @@ module Transducers = Trans Prel;
 
 module Disp = Dispatch Transducers Lemmas;
 open Disp (* [transducer initial accepting dispatch input color_of_phase 
-              transition] *) 
+              transition trim_tags] *) 
 ;
 module Viccheda = Segment Phases Disp Control 
                   (* [init_segment continue set_offset] *)
@@ -114,6 +114,7 @@ value print_scl_tags pvs phase form tags =
   }
 ;
 value tags_of = Lemmas.tags_of (* For export to Parser *)
+and trim_tags = Disp.trim_tags
 ;
 value extract_lemma phase word = 
   match tags_of phase word with  
@@ -135,11 +136,6 @@ value process_transition = fun
 value print_transition = fun
   [ Euphony (w,u,v) -> Morpho_html.print_sandhi u v w 
   | Id -> ()
-  ]
-;
-value print_sfx_tags sfx = fun
-  [ [ tag ] -> let _ = print_morph [] False 0 False sfx 1 tag in ()
-  | _ -> failwith "Multiple sfx tag" 
   ]
 ;
 value process_kridanta pvs seg_num phase form tags = do

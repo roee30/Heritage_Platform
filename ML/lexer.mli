@@ -50,6 +50,8 @@ module Lexer : functor (* takes its prelude and iterator control as parameters *
   value table_morph_of : Phases.phase -> string; 
   value print_morph : Word.word -> bool -> int -> bool -> Word.word -> int -> 
         Morphology.unitag -> int;
+  value trim_tags : bool ->
+        Word.word -> string -> Morphology.multitag -> Morphology.multitag;
 (* END Exported for Parser *)
   value all_checks : ref (list Viccheda.check); 
   value un_analyzable : Word.word -> (list Disp.segment * Viccheda.resumption); 

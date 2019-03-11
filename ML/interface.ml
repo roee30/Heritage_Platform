@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                        Gérard Huet & Pawan Goyal                       *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Sanskrit Reader Summarizing interface. Yields sktgraph.cgi *)
@@ -97,14 +97,6 @@ value print_tags pvs seg_num phase form tags =
   (* NB Existence of the segment warrants that [ok_tags] is not empty *)
   and ptag = print_morph pvs seg_num cached gen form in 
   fold_vert ptag ok_tags  
-;
-(*i EXPERIMENTAL: taddhitaantas (ad-hoc) i*)
-value print_morph_tad pvs seg_num cache gen stem sfx n tag = 
-  Morpho_html.print_graph_link_tad pvs cache stem sfx (seg_num,n) gen tag  
-; 
-value print_tags_tad pvs seg_num phase stem sfx sfx_tags =  
-  let ptag = print_morph_tad pvs seg_num False (generative phase) stem sfx in 
-  fold_vert ptag sfx_tags 
 ;
 (* This is called "printing morphology interface style". *)
 value print_morpho phase word = 

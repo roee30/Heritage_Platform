@@ -102,20 +102,10 @@ value print_inflected_link pvs cached =
   let print_fun = if cached then print_cache else print_entry in 
   Morpho.print_inv_morpho_link pvs print_fun print_stem print_chunk 
 ;
-(* Variant for compound tags used in [Lexer.print_morph_tad] *)
-value print_inflected_link_tad pvs cached = 
-  let print_fun = if cached then print_cache else print_entry in 
-  Morpho.print_inv_morpho_link_tad pvs print_fun print_stem print_chunk 
-;
 (* Used in [Interface] to print the lemmas *)
 value print_graph_link pvs cached = 
   let print_fun = if cached then print_graph_cache else print_graph_entry in
   Morpho.print_inv_morpho_link pvs print_fun print_stem print_chunk
-;
-(* Used in [Interface] to print the lemmas for taddhitaantas *)
-value print_graph_link_tad pvs cached = 
-  let print_fun = if cached then print_graph_cache else print_graph_entry in
-  Morpho.print_inv_morpho_link_tad pvs print_fun print_stem print_chunk
 ;
 (* Final visarga form for display: final s and r are replaced by visarga.
    There is some information loss here, since -ar and -a.h do not have the 

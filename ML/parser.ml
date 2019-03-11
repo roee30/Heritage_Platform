@@ -109,7 +109,7 @@ value print_segment_roles print_sems seg_num (phase,rword,_) =
           Lex.process_kridanta [] seg_num phase word tags
        | Preverbed (_,phase) pvs form tags -> 
           Lex.process_kridanta pvs seg_num phase form tags 
-       ] in do 
+       ] in do  
     { print_labels decl_tags seg_num
     ; print_roles print_sems decl_phase decl_tags form
     }
@@ -120,24 +120,25 @@ value project n list = List.nth list (n-1) (* Ocaml's nth starts at 0 *)
 value print_uni_kridanta pvs phase word multitags (n,m) = 
   let (delta,polytag) = project n multitags in
   let unitag = [ project m polytag ] in do
-     { ps th_begin
-     ; pl (Lex.table_morph_of phase) (* table of color of phase begins *)
+     { th_begin |> ps
+     ; Lex.table_morph_of phase |> pl (* table of color of phase begins *)
      ; let _ = (* print unique tagging *)
        Lex.print_morph pvs False 0 (generative phase) word 0 (delta,unitag) in ()
-     ; ps table_end              (* table of color of phase ends *)
-     ; ps th_end
+     ; table_end |> ps             (* table of color of phase ends *)
+     ; th_end |> ps
      }
 ;
-value print_projection phase rword ((_,m) as index) = do 
-  { ps tr_begin             (* tr begins *)
+value print_projection phase rword index = do 
+  { tr_begin |> ps             (* tr begins *)
   ; Morpho_html.print_signifiant_yellow rword
   ; let word = Word.mirror rword in 
-    match Lex.tags_of phase word with
+    match Lex.tags_of phase word with 
     [ Atomic tags -> print_uni_kridanta [] phase word tags index 
     | Preverbed (_,phase) pvs form tags -> 
-        print_uni_kridanta pvs phase form tags index
+        let trim = Lex.trim_tags (generative phase) form (Canon.decode pvs) in
+        print_uni_kridanta pvs phase form (trim tags) index 
     ] 
-  ; ps tr_end               (* tr ends *)
+  ; tr_end |> ps               (* tr ends *)
   }
 ;
 value print_proj phase rword = fun 
@@ -208,7 +209,7 @@ value analyse query output =
       [ [ (_,[ a :: _ ]) :: _ ] -> List.length a
       | _ -> 0
       ] in
-    pl (xml_empty_with_att "input" 
+    pl (xml_empty_with_att "input" (* Final call to Parser for display *)
            [ ("type","submit"); ("value","Submit"); 
              ("onclick","unique('" ^ parser_cgi ^ "?" ^ query 
              ^ ";p=','" ^ string_of_int (find_len top_groups) ^ "')" )

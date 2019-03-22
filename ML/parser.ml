@@ -135,7 +135,8 @@ value print_projection phase rword index = do
     match Lex.tags_of phase word with 
     [ Atomic tags -> print_uni_kridanta [] phase word tags index 
     | Preverbed (_,phase) pvs form tags -> 
-        let trim = Lex.trim_tags (generative phase) form (Canon.decode pvs) in
+        (* we trim out lemmas inconsistent with preverb assignment to form *)
+        let trim = Lex.trim_tags (generative phase) form (Canon.decode pvs) in 
         print_uni_kridanta pvs phase form (trim tags) index 
     ] 
   ; tr_end |> ps               (* tr ends *)

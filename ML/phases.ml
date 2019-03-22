@@ -17,19 +17,19 @@ type phase =
   | Absv (* vowel-initial abs-tvaa *) 
   | Absc (* consonant-initial abs-tvaa *) 
   | Abso (* abs in -ya *)
-  | Voca 
-  | Inv 
-  | Iic | Iic2 
-  | Iiif (* iic of ifc, atteinable from previous iic eg -vartin iic -varti- *)
+  | Voca (* vocatives *)
+  | Inv (* invocations *)
+  | Iic | Iic2 (* first part of compounds *)
+  | Iiif (* iic of ifc, atteinable from previous iic eg -vartin iic -varti- *) 
   | Iiv | Iivv | Iivc (* inchoatives - cvi verbal compounds *)
-  | Auxi | Auxik | Auxiick 
-  | Ifc | Ifc2 
+  | Auxi | Auxik | Auxiick (* forms of auxiliary verbs as bhuu k.r *)
+  | Ifc | Ifc2 (* second part of compounds *)
   | Peri (* periphrastic perfect *)
   | Lopa (* e/o conjugated root forms with lopa *) 
   | Lopak (* e/o kridantas forms with lopa *) 
   | Pv (* Preverb optional before Root or Lopa or mandatory before Abso *)
   | Pvk | Pvkc | Pvkv (* Preverb optional before Krid or Iik or Lopak *) 
-  | A | An (* privative nan-compounds *)
+  | A | An (* privative nan-compounds formations in a- or -an *)
   | Ai | Ani (* initial privative nan-compounds *)
   | Iicv | Iicc (* split of Iic by first letter resp. vowel or consonant *)
   | Nouv | Nouc (* idem for Noun *)

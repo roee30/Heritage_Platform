@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                        Pawan Goyal & Gérard Huet                       *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* This library is used by Reader and Regression. It constructs a lexer Lex, 

@@ -404,11 +404,12 @@ participial forms of all roots and will recognize the so called <i>nan</i>
 compounds (nouns or adjectives using the privative prefix <i>a/an</i>).
 The Simplified version recognizes such forms only when they are explicitly
 lexicalized in the Sanskrit Heritage dictionary. Furthermore, only the
-Complete version allows vocatives. The default version is Simplified. It should
-be used first, since it is much more precise when it works than the Complete
-one, which may badly overgenerate. Thus the user should always attempt to read
-using the Simplified version, and switch to the Complete one only when the
-former does not find the intended analysis.
+Complete version allows vocatives. The default version is Complete.
+The Simplified version may be used for teaching beginners on simple
+sentences without vocatives, since it is much more precise when it works
+than the Complete one, which may badly overgenerate. Once the basic
+competence on using the interactive interface is acquired, the user should
+switch to the Complete mode.
 <!--
 For instance, the participial form
 <i>paryupasitaaya</i> is only recognized by the Complete version. Pressing
@@ -419,13 +420,8 @@ segmentations, out of which 3 are kept by the parser. -->
 The precise grammar used to recognize sentences in the Simplified version
 may be visualized as a local automaton graph:
 <a href="IMAGES/lexer10.jpg">Simple</a>.
-Compare with the <a href="IMAGES/lexer28.jpg">Complete</a> one.
+Compare with the <a href="IMAGES/lexer40.jpg">Complete</a> one.
 <p>
-<!--
-Finally, an "Experiment" parser strength is under test. It allows the recognition
-of certain <i>taddhita suffixes</i>. Since this option risks overgeneration,
-it is advised to use it only in Word text mode, in order to recognize
-complex compounds. -->
 
 <h2 class="b2" id="participles">Why does the system not recognize certain participial forms known to the stemmer?</h2>
 
@@ -433,7 +429,7 @@ complex compounds. -->
 Our Simplified reader/parser does not use all the participles generated
 by the grammatical engine, and recognized as such by the stemmer,
 but only the ones that are explicitly listed in the lexicon. If you want
-the full generative power, press the Complete strength button.
+the full generative power, use the Complete mode.
 
 <h2 class="b2">What is the use of the contextual topic argument?</h2>
 

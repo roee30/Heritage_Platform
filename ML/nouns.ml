@@ -5748,13 +5748,13 @@ value iic_avya =
 ;
 (*i Derivational morphology - unplugged at present 
 [value gen_prefixes = (* productive prefixes *)
-  [ "ku"
+  [ "ku" (* rare *)
   ; "dus"
   ; "nis"
   ; "prati"
-  ; "vi"
-  ; "sa#1"
-  ; "su#1"
+  ; "vi" (* maybe privative or intensive *)
+  ; "sa#1" (* substitute for saha - lookup Paa.nini *)
+  ; "su#1" 
 (* NB "mahaa" is taken into account by [build_mas_mahat]; *)
 (* fems in aa are included if nominal use of entry *)
 (* privative "a/an1" not included because generated in Complete mode,

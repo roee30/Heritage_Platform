@@ -2223,7 +2223,8 @@ value compute_present9 sstem wstem short vow stem entry third pada padam =
 ;
 
 (* Benedictive/precative. Formed from [conjug_optativea] *)
-value conjug_benedictivea conj weak entry =
+(* NB. Whitney§837 makes it an optative mode of the root aorist *)
+value conjug_benedictivea conj weak entry = 
   let conjugw person suff = (person,fix weak suff) in
   enter1 entry 
   (Conju (fbenea conj)
@@ -2562,8 +2563,8 @@ value compute_ppp_stems entry rstem =
     [ (* we first filter out roots with no attested ppp *)
       "ak.s" (* vedic a.s.ta overgenerates with a.s.tan *) | "as#1" | "kan" 
     | "k.si" | "gaa#1" | "paz" | "paa#2" | "praa#1" (* vedic praata omitted *)
-    | "bal" | "ma.mh" | "vaz" | "vyac" | "zaz" | "zam#2" | "sac" (* | "spaz#1" *)
-    | "h.r#2" 
+    | "bal" | "ma.mh" | "vaz" | "vyac" | "zaz" | "zam#2" | "sac" | "sap" 
+    | "h.r#2" (* | "spaz#1" *)
       -> []
       (* now participles in -na *) 
     | "vrazc" -> [ sNa "v.rk" ] (* exception - v.rk root stem of vrazc *)
@@ -2684,8 +2685,8 @@ value compute_ppp_stems entry rstem =
            | "i" | ".r" | "k.r#1" | "kyaa" | "khyaa" | "gu~nj" | "gh.r" 
            | "ghraa" | "ci" | "cyu" | "ji" | "daa#3" | "du" | "dru#1" | "dh.r" 
            | "dhyaa" | "dhru" | "nu#1" | "praa#1" | "bh.r" | "mi" | "m.r" 
-           | "yaa#1" | "yu#1" | "yu#2" | "raa#1" | "ru" | "va~nc" 
-           | "vaa#2" | "v.r#1" | "v.r#2" | "zaas" | "zri" | "zru" | "su#2"
+           | "yaa#1" | "yu#1" | "yu#2" | "raa#1" | "ru" | "va~nc" | "vaa#2" 
+           | "v.r#1" | "v.r#2" | "zaas" | "zri" | "zru" | "si" | "su#2"
            | "s.r" | "stu" | "snaa" | "snu" | "smi" | "sm.r" | "haa#1" | "hi#2" 
            | "hu" | "h.r#1" -> rstem 
             (* roots ending in a vowel do not take [passive_stem] in general ? *)
@@ -2856,7 +2857,7 @@ value admits_passive = fun
     "an#2" | "av" | "as#1" | "iiz#1" | "uc" | "kan" | "kuu" | "k.lp" | "knuu" 
   | "k.si" | "kha.n.d" | "daa#2" | "dyut#1" | "dru#1" | "pat#2" | "paz" | "paa#2"
   | "pi#2" | "praa#1" | "ruc#1" | "vas#4" | "vidh#1" | "vip" | "vyac" | "zam#1"
-  | "zi~nj" | "zrambh" | "zvit" | "siiv" | "spaz#1" | "spardh" | "h.r#2" 
+  | "zi~nj" | "zrambh" | "zvit" | "sap" | "siiv" | "spaz#1" | "spardh" | "h.r#2" 
   | "hrii#1" | "ma.mh" (* supplied by "mah" *)
       -> False 
 (* But "iiz#1" "uc" "kuu" "k.lp" "dru#1" "pi#2" "ruc#1" "vip" "zam#1" "zi~nj"
@@ -4018,9 +4019,9 @@ value redup_aor weak root =
 value compute_aorist entry =
   let (weak,strong,long) = stems entry in do (* 7 formations *)
   { match entry with (* 1. root aorist - Panini sic-luk *)
-    [ "k.r#1" | "kram" | "gam" | "gaa#1" | "jan" | "j~naa#1" | "daa#1" | "daa#2" 
-    | "dhaa#1" | "dhaa#2" | "paa#1" | "bhuu#1" | "muc#1" | "zaa" 
-    | "saa#1" | "sthaa#1" | "has" | "haa#1" -> do
+    [ "k.r#1" | "kram" | "gam" | "gaa#1" | "jan" | "j~naa#1" 
+    | "daa#1" | "daa#2" | "dhaa#1" | "dhaa#2" | "paa#1" | "bhuu#1" | "muc#1" 
+    | "zaa" | "saa#1" | "sthaa#1" | "has" | "haa#1" -> do
       { compute_root_aorista weak strong entry 
       ; match entry with
         [ "k.r#1" | "gam" | "jan" -> compute_root_aoristm weak entry (* rare *) 
@@ -4035,6 +4036,7 @@ value compute_aorist entry =
             ] in 
         compute_root_aoristp stem entry (* passive *)
       (* For root aorist participles, see Whitney§840 and Burrow p178 *)
+      (* For optative mode Whitney§837 see benedictive/precative. *)
       }
     | "prii" -> let st = revcode "priiyaa" in compute_root_aorista st st entry 
     | "svid#2" -> let st = revcode "svidyaa" in compute_root_aorista st st entry
@@ -4045,7 +4047,8 @@ value compute_aorist entry =
       ; compute_root_aoristp (revcode "voc") entry 
       }
     | "p.rr" -> compute_root_aoristp (revcode "puur") entry 
-    | "diip" | "duh#1" | "d.rz#1" | "dvi.s#1" | "budh#1" | "vid#1"| "s.rj#1" 
+    | "kaaz" |  "k.sip" | "diip" | "duh#1" | "d.rz#1" | "dvi.s#1" | "budh#1"
+    | "vid#1" | "s.rj#1" 
         -> compute_root_aoristp strong entry
     | "rabh" -> compute_root_aoristp (revcode "rambh") entry 
     | "ci" | "jaag.r" | "t.rr" | "pac" | "pad#1" | "zru" | "stu" | "hu"
@@ -5570,13 +5573,14 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
    ; (* Precative - active rare, middle unknown in classical language except
         2 occs in Abhisamayaalafkaara (David Reigle) *)
      match entry with
-     [ "budh#1" | "bhuu#1" -> (* Macdonell§150 *)
-        conjug_benedictivea Primary rstem entry (* Whitney§922b *)
-     | "k.r#1" | "grah"  | "bandh" | "yaj#1" | "zaas" | "stu" -> 
-        conjug_benedictivea Primary (passive_stem entry rstem) entry 
-     | "puu#1" -> let wstem = revcode "punii" (* weak stem of gana 9 *) in
+     [ "jiiv" | "budh#1" | "bhuu#1" -> (* Macdonell§150 Kane§960 *)
+        conjug_benedictivea Primary rstem entry (* Whitney§922b *) 
+     | "k.r#1" | "k.sip" | "grah"  | "bandh" | "yaj#1" | "zaas" | "stu" -> 
+        conjug_benedictivea Primary (passive_stem entry rstem) entry  
+(*   | "puu#1" -> let wstem = revcode "punii" (* weak stem of gana 9 *) in
         conjug_benedictivea Primary wstem entry (* puniiyaat Vi.s.nu sahasran *)
-     | "daa#1" -> let wstem = revcode "de" (* Henry§298 aa {\R} e *) in
+no - may be obtained as opt[9] *) 
+     | "daa#1" -> let wstem = revcode "de" (* Henry§298 aa {\R} e *) in 
         conjug_benedictivea Primary wstem entry (* puissé-je donner! *)
      | "m.r" -> let sibstem = revcode "m.r.s" in
         conjug_benedictivem Primary sibstem entry (* m.r.sii.s.ta \Pan{1,3,61} *)
@@ -5756,11 +5760,11 @@ value compute_subjunctives () =
   and subjm_sg3 root form = 
     let tin = (Singular,[ (Third, code form) ]) in 
     enter_subjunctivem Primary root tin
-  and subj_cau_sg2 root form = 
-    let tin = (Singular,[ (Second, code form) ]) in 
+  and subj_cau_sg root person form = 
+    let tin = (Singular,[ (person, code form) ]) in 
     enter_subjunctivea Causative root tin
-  and subj_int_sg2 root form = 
-    let tin = (Singular,[ (Second, code form) ]) in 
+  and subj_int_sg root person form = 
+    let tin = (Singular,[ (person, code form) ]) in 
     enter_subjunctivea Intensive root tin in do
   { subj_sg "zru" Third "zro.sat"
 (*i [; subj_sg "tandr" Third "tandrat" not generated - PB i*)
@@ -5770,8 +5774,9 @@ value compute_subjunctives () =
   ; subj_sg "vac" Second "vocas" (* both forms also available as inj *) 
   ; subj_sg "pat#1" Third "pataati"
   ; subj_pl "gam" Third "gman" (* for apigman *) 
-  ; subj_cau_sg2 "jan" "janayaas"  
-  ; subj_int_sg2 "vi.s#1" "vevi.sati" 
+  ; subj_cau_sg "jan" Second "janayaas"  
+  ; subj_cau_sg "cud" Third "codayaat" (* Gaayatrii pracodayaat *)
+  ; subj_int_sg "vi.s#1" Third "vevi.sati"
 (*; [subj_sg] "k.r#1" First "karavaa.ni" (* became imp Whitney§578 *) *)
   ; subjm_sg3 "k.r#1" "k.r.nvate" (* aussi pr[5] md *)
   }
@@ -5814,7 +5819,7 @@ value compute_extra_car () = do
   enter1 "zru" (* ved écoute *) 
          (Conju (impera 5) [ (Singular,[ (Second, code "zrudhi") ]) ])
  and compute_extra_muc () =  do 
-  { (* vedPprecative `fasse que je sois libéré' *)
+  { (* ved precative `fasse que je sois libéré' *)
     enter1 "muc#1" (Conju benem [ (Singular,[ (First, code "muk.siiya") ]) ])
   ; build_infinitive Causative (revcode "moci") "muc#1"    (* Whitney§1051c *)
   }
@@ -5830,9 +5835,7 @@ value compute_extra_car () = do
  and compute_extra_dhaa () = (* Gaayatrii dhiimahi precative m. Whitney§837b *)
   enter1 "dhaa#1" (Conju benem [ (Plural,[ (First, code "dhiimahi") ]) ])
 (* also "vidmahi" on yantra ? *)
- and compute_extra_cud () = (* Gaayatrii pracodayaat *)
-  enter1 "cud" (Conju benea [ (Singular,[ (Third, code "codayaat") ]) ])
- and compute_extra_bhr () = (* Epics sa.mbhriyantu Oberlies 8.7 *)
+ and compute_extra_bhr () = (* Epics sa.mbhriyantu Oberlies 8.7 *) 
   enter1 "bh.r" (Conju (Primary,vmp) [ (Plural,[ (Third, code "bhriyantu") ]) ])
  and compute_extra_bhram () = (* MW: Mah *)
   enter1 "bhram" (Conju perfa [ (Plural,[ (Third, code "bhremur") ]) ])
@@ -5912,7 +5915,6 @@ value compute_extra () = do
   ; compute_extra_rc () 
   ; compute_extra_khan ()
   ; compute_extra_car () 
-  ; compute_extra_cud () 
   ; compute_extra_jnaa () 
   ; compute_extra_dhaa () 
   ; compute_extra_nind () 
@@ -5961,7 +5963,6 @@ value fake_compute_conjugs (gana : int) (entry : string) = do
       | "khan"   -> compute_extra_khan ()
       | "gup"    -> record_part_ppp (revcode "gupta") entry 
       | "car"    -> compute_extra_car ()
-      | "cud"    -> compute_extra_cud () 
       | "j~naa#1"-> compute_extra_jnaa () 
       | "dhaa#1" -> compute_extra_dhaa () 
       | "nind"   -> compute_extra_nind ()

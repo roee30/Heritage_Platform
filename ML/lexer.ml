@@ -113,9 +113,13 @@ value print_scl_tags pvs phase form tags =
   ; xml_end "tags" |> ps
   }
 ;
-value tags_of = Lemmas.tags_of (* For export to Parser *)
+(* These definitions are for export to Parser.
+   They betray a difficuly in the modular organisation, since Parser sees
+   Lexer, but not Load_morphs or Dispatcher. Modules ought to be revised. *)
+value tags_of = Lemmas.tags_of 
 and trim_tags = Disp.trim_tags
 ;
+(* Keeps only relevant tags with [trim_tags] *)
 value extract_lemma phase word = 
   match tags_of phase word with  
   [ Atomic tags -> tags 

@@ -61,7 +61,7 @@ value canon = fun
   | 46 -> "z" (* used to be "\"s" -- fragile *)
   | 47 -> ".s"
   | 48 -> "s"
-  | 49 -> "h"
+  | 49 -> "h" (* h/.dh *)
   | 50 -> "_" (* hiatus *)
   | -1 -> "'" (* avagraha *)
   | -2 -> "[-]" (* amuissement - lopa of a or aa in preceding preverb *)

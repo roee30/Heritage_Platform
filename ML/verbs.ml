@@ -1147,7 +1147,7 @@ value compute_athematic_imperative2a strong weak set entry =
         ; (Second, match entry with
           [ "as#1" -> code "edhi"
           | "zaas" -> code "zaadhi" 
- (* above leads to conflict between \Pan{6.4.35} (zaa+hi) and \Pan{6.4.101} 
+ (* above leads to conflict between \Pan{6,4,35} (zaa+hi) and \Pan{6,4,101} 
     (zaas+dhi) [asiddhavat] => we operate in parallel zaa+dhi= zaadhi *)
           | "cakaas" -> code "cakaadhi" (* Kane§429 *)  
           | _ -> let w = if entry = "han#1" then revcode "ja" else weak in
@@ -4089,7 +4089,7 @@ value compute_aorist entry =
       ; compute_redup_aoristm stem entry 
       }
     | "iik.s" | "kamp" | "klid" | "gup" | "cur" | "m.r" | "d.rz#1" | "dyut#1" 
-    | "vrazc" | "sru" -> (* active only *)
+    | "vrazc" | "siiv" | "sru" -> (* active only *)
       let stem = redup_aor weak entry in 
       compute_redup_aorista stem entry
     | "grah" -> do 
@@ -4118,15 +4118,14 @@ value compute_aorist entry =
     | _ -> () 
     ]
   ; match entry with (* 4. sigma aorist sic *)
-    [ "aap" | "k.r#1"  | "gup" | "chid#1" | "ji" | "tud" | "t.rr" | "dah#1"
-    | "daa#1" | "d.rz#1" | "draa#2" | "dhaa#1" | "dhyaa" | "dhyai" | "dhv.r" 
-    | "nak.s" | "nii#1" | "pac" | "praz" | "prii" | "pru.s#1" | "budh#1" 
-    | "bhaa#1" | "bhii#1" | "muc#1" | "yaj#1" | "yuj#1" | "ram" | "labh" 
-    | "v.r#2" | "vyadh" | "zru" | "sidh#1" | "s.rj#1" | "stu" | "sp.rz#1" 
-    | "hu" -> do
+    [ "aap" | "k.r#1"  | "gup" | "chid#1" | "ji" | "tud" | "t.rr"
+    | "dah#1" | "daa#1" | "d.rz#1" | "draa#2" | "dhaa#1" | "dhyaa" | "dhyai" 
+    | "dhv.r" | "nak.s" | "nii#1" | "pac" | "praz" | "prii" 
+    | "budh#1" | "bhaa#1" | "bhii#1" | "muc#1" | "yaj#1" | "yuj#1" | "ram" 
+    | "labh" | "v.r#2" | "vyadh" | "zru" | "sidh#1" | "s.rj#1" | "stu" 
+    | "sp.rz#1" | "hu" -> do
       { let stem = match entry with
             [ "d.rz#1" | "s.rj#1" | "sp.rz#1" -> long_metathesis weak
-            | "pru.s#1" -> strong
             | "ram" -> weak 
             | _ -> long
             ] in
@@ -4154,11 +4153,12 @@ value compute_aorist entry =
     ]
   ; match entry with (* 5. i.s aorist se.t-sic *)
     [ "ak.s" | "aj" | "aas#2" | "i.s#1" | "iik.s" | "uk.s" | "uc" | "u.s" 
-    | "uuh" | ".rc#1" | "k.rt#1" | "krand" | "kram" | "k.san"  | "khan"  | "car" 
-    | "ce.s.t" | "jalp" | "jaag.r" | "t.rr" | "diip" | "pa.th" | "puu#1" | "p.rc"
-    | "baadh" | "budh#1" | "mad#1" | "mud#1" | "muurch" | "mlecch" | "yaac" 
-    | "ruc#1" | "lu~nc" | "luu#1" | "vad" | "vadh" | "vid#1" | "v.r#1" | "vraj"
-    | "z.rr" | "sidh#2" | "skhal" | "stan" | "stu" | "hi.ms" -> do
+    | "uuh" | ".rc#1" | "k.rt#1" | "krand" | "kram" | "k.san"  | "khan"
+    | "car" | "ce.s.t" | "jalp" | "jaag.r" | "t.rr" | "diip" | "pa.th" | "puu#1"
+    | "p.rc"| "pru.s#1" | "baadh" | "budh#1" | "mad#1" | "mud#1" | "muurch" 
+    | "mlecch" | "yaac" | "ruc#1" | "lu~nc" | "luu#1" | "vad" | "vadh" | "vid#1" 
+    | "v.r#1" | "vraj" | "z.rr" | "sidh#2" | "skhal" | "stan" | "stu"
+    | "hi.ms" -> do
       { let stem = match weak with
             [ [ 7 (* .r *) :: _ ] -> 
               if entry = "jaag.r" then strong (* jaagari.sam RF IC 2 p 88 *)
@@ -4177,7 +4177,7 @@ value compute_aorist entry =
         compute_ath_is_aorista stem entry 
       ; compute_ath_is_aoristm strong entry 
       } 
-    | "gup" | "vrazc" | "zcut#1" | "sphu.t" -> (* active only *)
+    | "ku.s" | "gup" | "vrazc" | "zcut#1" | "sphu.t" -> (* active only *)
       compute_ath_is_aorista strong entry 
     | "zuu" -> 
       compute_ath_is_aorista (revcode "zve") entry 

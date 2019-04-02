@@ -31,7 +31,7 @@ value rec previous b left z = match left with
                | Zip (b',l',_,_,z') -> previous b' l' z'
                ]
   | [ (n,t) :: _ ] -> let w1 = extract_zip z 
-                      and w2 = last_trie t in
+                      and w2 = last_trie t in 
                       w1 @ [ n :: w2 ]
   ]
 ;

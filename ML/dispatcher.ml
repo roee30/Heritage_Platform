@@ -17,7 +17,9 @@
 (*  - a consistency check of the output of the segmenting transducer *)
 
 (* Dispatch, instantiated by Transducers, is used as parameter of the 
-   Segment functor from Segmenter or Interface.   *)
+   Segment functor from Segmenter or Interface. 
+   It defines the phase automaton transitions. 
+   There are two versions: 1 for Complete, 2 for Simple.  *)
 
 open Auto.Auto; 
 open Load_transducers; (* [transducer_vect Trans roots_morpho krids_morpho] *)
@@ -92,11 +94,12 @@ value phantomatic = fun
   | _ -> False
   ]
 (* Amuitic forms start wiih -2 = [-] which elides preceding -a or -aa from Pv *)
-and amuitic= fun
+and amuitic = fun
   [ [ -2 :: _ ] -> True 
   | _ -> False
   ]
 ;
+(* Simplified description, not with all phases *)
 (* We recognize $S = (Subst + Pron + Verb + Inde + Voca)^+$\\
    with $Verb = (1 + Pv).Root + Pv.Abso + Iiv.Auxi$,\\
        $Subst = Noun + Iic.Ifc + Iic.Subst + Iiv.Auxik$,\\
@@ -109,7 +112,7 @@ NB. $Abso$ = absolutives in -ya,
 The following is obtained from the above recursion equation by Brzozowski's 
 derivatives like in Berry-Sethi's translator. *)
 
-value cached = (* potentially cached lexicon acquisitions *)
+value cached = (* potentially cached lexicon acquisitions *) 
   if Web.cache_active.val="t" then [ Cache ] else []
 ;
 (* initial1, initial2: phases *)

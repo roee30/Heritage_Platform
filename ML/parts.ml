@@ -70,9 +70,9 @@ value gensym stem n =
 (* We look up in the kridantas database if the given stem has been registered
    (possibly with some homo index) for the same (verbal,root). If not, we 
    generate the name affixing to stem the next available homo *)
-value gen_stem (k,root) stem = (* stem is a bare stem with no homo index *)
+value gen_stem (v,root) stem = (* stem is a bare stem with no homo index *)
   if morpho_gen.val then
-     let etym = (k,code_string root) in
+     let etym = (v,code_string root) in
      let alist = access_krid stem in 
      try gensym stem (List.assoc etym alist) with
        [ Not_found -> match alist with 
@@ -172,7 +172,7 @@ value build_part_at_m_red verbal stem stem_at root =
         ; decline Loc "atsu"
         ])
    ] 
-   ; Bare krid stem_at (* at - e.g. b.rhadazva *)
+   ; Bare krid stem_at 
    ]
 ;
 (* Similar to [Nouns.build_neu_at] *)
@@ -629,9 +629,9 @@ value record_part memo = (* called from Verbs *)
 value build_part = fun
   [ Ppp_ c stem root -> match stem with 
     [ [ 1 :: r ] -> build_part_a (c,Ppp) r root 
-    | _ -> failwith  ("Weird Ppp: " ^ Canon.rdecode stem)
+    | _ -> failwith ("Weird Ppp: " ^ Canon.rdecode stem)
     ]
-  | Pfutp_ c stem root -> (* k ought to be carried by [Pfutp_] *)
+  | Pfutp_ c stem root -> (* k below ought to be carried by [Pfutp_] *)
     match stem with 
     [ [ 1 :: r ] -> 
       let k = match r with
@@ -643,9 +643,10 @@ value build_part = fun
       build_part_a (c,Pfutp k) r root           
     | _ -> failwith ("Weird Pfp: " ^ Canon.rdecode stem)
     ]    
-  | Pppa_ c m_stem root -> 
-      let f_stem =  rfix m_stem "at" (* atii *) in
-      build_part_vat (c,Pppa) m_stem f_stem root
+  | Pppa_ c ppstem root -> 
+      let m_stem = [ 45 :: ppstem ] (* pp-v *) in
+      let f_stem =  rfix m_stem "at" (* vatii *) in  
+      build_part_vat (c,Pppa) m_stem f_stem root 
   | Ppra_ k c m_stem f_stem root -> 
       if redundant_gana k root then ()
       else build_part_at (c,Ppra k) m_stem f_stem root 

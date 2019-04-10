@@ -5797,6 +5797,36 @@ value enter_iiv entry =
 ;
 value compute_extra_iiv = iter enter_iiv 
 ;
+(* Gati forms used with auxiliary verbs, like Iiv -- form Absya *)
+value gatis =
+  [ "saak.saat" (* Pan{1,4,74} in the sense of cvi - becoming *)
+  ; "mithyaa"
+  ; "cintaa"
+  ; "rocanaa"
+  ; "aasthaa"
+  ; "amaa"
+  ; "amaa"
+  ; "arthe"
+  ; "lava.nam"
+  ; "u.s.nam"
+  ; "ziitam"
+  ; "udakam"
+  ; "aardram" 
+  ; "agnau"
+  ; "vaze"
+  ; "urasi" (* Pan{1,4,75} in the sense of anatyaadhaana cf Sharma *)
+  ; "manasi"
+  ; "anye" (* Pan{1,4,76} id *)
+  ; "pade"
+  ; "nicacane"
+  ; "haste" (* Pan{1,4,77} upayamana (mariage) *)
+  ; "paa.nau"
+  ]
+;
+value enter_gati gati = (* assumes gati has lexical entry *)
+  let stem = normal_stem gati in 
+  enter1 gati (Cvi stem)
+;
 value enter_iiy entry = 
   enter1 entry (Avyayai (normal_stem entry)) (* stripped entry *)
 ;
@@ -5843,8 +5873,7 @@ value compute_extra iic_only_stems = do
     where decl = Declined Noun Mas [ (Dual,[ (Ins,code "maabhyaam") ]) ] 
   ; enter1 "yuu.sa" (* Siddhaanta kaumudii *) decl
     where decl = Declined Noun Mas [ (Plural,[ (Loc,code "yuu.h.su") ]) ]
-  ; enter1 "avanam" (Cvi (revcode "avanamii"))
-  ; enter1 "saak.saat" (Cvi (revcode "saak.saat")) (* gati *)
+  ; enter1 "avanam" (Cvi (code "avanamii")) (* exception *)
  (* For the moment, computed as form of n.r but skipped
  [; enter1 "nara" decl (* overgenerates badly ! *)
     where decl = Declined Noun Mas [ (Singular,[ (Nom,code "naa") ]) ] ] *)
@@ -5865,6 +5894,7 @@ value compute_extra iic_only_stems = do
   ; enter1 "viz#2" (* Vedic Whitney§218a *) decl
     where decl = Declined Noun Fem [ (Plural,[ (Loc,code "vik.su") ]) ]
   ; iter enter_iiy iic_avya
+  ; iter enter_gati gatis
   ; tasil_extra ()
   ; compute_extra_iic iic_indecl (* antar *) 
   ; compute_extra_iic iic_only_stems (* aajaanu etc. *)

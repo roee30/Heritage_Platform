@@ -390,8 +390,7 @@ value drop_penultimate_nasal = fun
   | _ -> failwith "No penultimate nasal"
   ]
 ;
-value passive_stem entry rstem = (* Panini -yak (k means no guna) *)
-                                 (* k also means samprasaara.na *)
+value passive_stem entry rstem = (* Panini yak (k : no guna, samprasaara.na) *)
   let weak = match entry with 
   (* [weak] same as first component of [stems], except praz vac etc and bh.rjj *)
     [ "dah#1" | "dih" | "duh#1" | "druh#1" | "muh" | "snih#1" | "snuh#1"
@@ -4206,7 +4205,8 @@ value compute_aorist entry =
     | _ -> ()
     ]
 ; match entry with (* 7. sa aorist ksa *)
-      [ "guh" | "diz#1" | "dih" | "duh#1" | "lih#1" | "viz#1" | "v.rj" -> do
+      [ "guh" | "diz#1" | "dih" | "duh#1" | "lih#1" | "viz#1" | "v.rj" 
+      | "sp.rz#1" -> do
       (* \Pan{7,3,72-73} *)
       { compute_ath_sa_aorista weak entry   
       ; compute_ath_sa_aoristm weak entry 
@@ -4418,7 +4418,8 @@ value build_infinitive c inf_stem root = do
    See Renou HLS p72 from Patanjali; Renou grammaire §107 dagdhukaama
    also Assimil p194 eg tyaktukaama
    anu.s.thaatukaama "desirious to proceed" vaktukaama "who wants to speak"
-   dra.s.tumanas "inclined to see" *)
+   dra.s.tumanas "inclined to see" 
+   dra.s.tuzakya "able to see" *)
   }
 ;
 value perif conj perstem entry = do 
@@ -4470,16 +4471,17 @@ value velarification rstem = (* \Pan{7,3,52} *)
 (* Actually the following velarification should be registered as an optional
 form, since \Pan{7,3,65} says that it does not apply in the sense of necessity *)
   | _ -> let st = match rstem with (* [Int_sandhi.restore_stem] not needed *)
-    [ [ 22 (* c *) :: [ 26 (* ~n *) :: r ] ] ->  
-      [ 17 (* k *) :: [ 21 (* f *) :: r ] ] (* vafkya *)
-    | [ 22 (* c *) :: r ] -> [ 17 (* k *) :: r ] (* paakya vaakya *)
-    | [ 24 (* j *) :: [ 24 (* j *) :: r ] ] ->
-      [ 19 (* g *) :: [ 19 (* g *) :: r ] ] (* bh.rggya *)
-    | [ 24 (* j *) :: [ 26 (* ~n *) :: r ] ] ->
-      [ 19 (* g *) :: [ 21 (* f *) :: r ] ] (* safgya *)
-    | [ 24 (* j *) :: r ] -> [ 19 (* g *) :: r ] (* maargya *)
-    | _ -> rstem
-    ] in rfix st "ya"
+               [ [ 22 (* c *) :: [ 26 (* ~n *) :: r ] ] ->  
+               [ 17 (* k *) :: [ 21 (* f *) :: r ] ]      (* vafkya *)
+             | [ 22 (* c *) :: r ] -> [ 17 (* k *) :: r ] (* paakya vaakya *)
+             | [ 24 (* j *) :: [ 24 (* j *) :: r ] ] ->
+               [ 19 (* g *) :: [ 19 (* g *) :: r ] ]      (* bh.rggya *)
+             | [ 24 (* j *) :: [ 26 (* ~n *) :: r ] ] ->
+               [ 19 (* g *) :: [ 21 (* f *) :: r ] ]      (* safgya *)
+             | [ 24 (* j *) :: r ] -> [ 19 (* g *) :: r ] (* maargya *)
+             | _ -> rstem
+             ] in 
+         rfix st "ya"
   ]
 ; 
 value record_pfp_ya conj ya_stem root =
@@ -4595,7 +4597,7 @@ value record_pfp_10 entry rstem = do
 
 value record_part_ppp ppstem entry = do 
   { record_part (Ppp_ Primary ppstem entry)
-  ; record_part (Pppa_ Primary [ 45 :: ppstem ] entry) (* pp-vat (krid tavat) *)
+  ; record_part (Pppa_ Primary ppstem entry) (* pp-vat (krit tavat) *)
   }
 ;
 value record_abso_ya form entry   = enter1 entry (Invar (Primary,Absoya) form) 
@@ -4815,7 +4817,7 @@ value record_absolutive c abs_stem_tvaa abs_stem_ya intercal entry =
 value record_pppca cpstem cstem entry =
   let ppstem = [ 1 :: [ 32 :: [ 3 :: cpstem ] ] ] (* cp-ita *) in do 
   { record_part (Ppp_ Causative ppstem entry)
-  ; record_part (Pppa_ Causative [ 45 :: ppstem ] entry) (* pp-vat *)
+  ; record_part (Pppa_ Causative ppstem entry) (* pp-vat *)
   ; let abs_stem_ya = match entry with (* Whitney§1051d *)
         [ "aap" | ".r" | ".rc#1" | ".rdh" | "kal" | "k.lp" | "kram" | "gam" 
         | "jan" | "jval" | "dh.r" | "rac" | "zam#1" | "p.rr" | "bhak.s" | "v.rj" 
@@ -4830,7 +4832,7 @@ value record_pppca cpstem cstem entry =
 value record_pppdes stem entry =
   let ppstem = [ 1 :: [ 32 :: [ 3 :: stem ] ] ] in (* s-ita *) do
   { record_part (Ppp_ Desiderative ppstem entry)
-  ; record_part (Pppa_ Desiderative [ 45 :: ppstem ] entry) (* pp-vat *)
+  ; record_part (Pppa_ Desiderative ppstem entry) (* pp-vat *)
   ; let abs_stem_tvaa = [ 3 :: stem ] (* s-i *) 
     and abs_stem_ya = stem in
     record_absolutive Desiderative abs_stem_tvaa abs_stem_ya False entry 
@@ -5812,7 +5814,7 @@ value compute_extra_car () = do
   let cstem = revcode "j~nap" in 
   let ppstem = [ 1 :: [ 32 :: cstem ] ] (* j~napta *) in do 
   { record_part (Ppp_ Causative ppstem entry)
-  ; record_part (Pppa_ Causative [ 45 :: ppstem ] entry) (* pp-vat *)
+  ; record_part (Pppa_ Causative ppstem entry) (* pp-vat *)
   ; perif Causative cstem entry 
   }
  and compute_extra_zru () = 

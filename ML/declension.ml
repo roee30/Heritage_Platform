@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* CGI-bin declension for computing declensions.                          *)
@@ -197,7 +197,7 @@ value sort_out accu form = fun
               | Neu -> (mas,fem,[ t :: neu ],any,iic,avy)
               | Deictic _ -> (mas,fem,neu,[ t :: any ],iic,avy)
               ]
-        | Bare_stem | Auxi_form -> (mas,fem,neu,any,[ f :: iic ],avy)
+        | Bare_stem | Gati -> (mas,fem,neu,any,[ f :: iic ],avy)
         | Avyayaf_form -> (mas,fem,neu,any,iic,[ f :: avy ])
         | Ind_form _ | Verb_form _ _ _  | Ind_verb _ | Abs_root _ 
         | Avyayai_form | Unanalysed | PV _ 

@@ -362,7 +362,7 @@ value filter_out_krit krit root = match Canon.decode root with
 ;
 (* We should verify aa- validation for phantomatic forms *)
 value autonomous_form_k krid_form (delta,_) =
-  let stem = Word.patch delta krid_form in
+  let stem = Word.patch delta krid_form in 
   let (homo,bare_stem) = homo_undo stem in
   let krid_infos = assoc_word bare_stem unique_kridantas in 
   let ((conj,krit),root) = look_up_homo homo krid_infos in 
@@ -496,11 +496,11 @@ value validate out = match out with
                 then out else []
       ]
   | [ (Kric,rev_krid_form,_) :: _ ] ->
-      let krid_form = Word.mirror rev_krid_form in
+      let krid_form = Word.mirror rev_krid_form in 
       match Deco.assoc krid_form morpho.krids with
       [ [] -> failwith ("Unknown krid_form: " ^ (Canon.decode krid_form))
       | tags -> if List.exists (autonomous_form_k krid_form) tags
-                then out else []
+                then out else [] 
       ]
    | (* iic kridanta forms with preverbs *)
      [ (phk,rev_ikrid_form,s) :: [ (ph,prev,sv) :: r ] ] 
@@ -528,7 +528,7 @@ value validate out = match out with
       match Deco.assoc krid_form morpho.iiks with
       [ [] -> failwith ("Unknown krid_form: " ^ Canon.decode krid_form)
       | tags -> if List.exists (autonomous_form_k krid_form) tags
-                then out else []
+        then out else []
       ]
   | (* vocative kridanta forms with preverbs *)
     [ (phk,rev_krid_form,s) :: [ (ph,prev,sv) :: r ] ] 

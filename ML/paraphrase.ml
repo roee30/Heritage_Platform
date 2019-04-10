@@ -258,7 +258,7 @@ value print_sem w = fun
   | Ind_form Adv -> ps "Adverb"
   | Ind_form _ -> ps (translate_tool w)
   | Bare_stem -> ps "Compound"
-  | Auxi_form -> ps "Composed"
+  | Gati -> ps "Composed"
   | _ -> ()
   ]
 ;

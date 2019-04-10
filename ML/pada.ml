@@ -98,9 +98,10 @@ value voices_of = fun
   | "yudh#1" | "rabh" | "ruc#1" | "lajj" | "lamb" | "lii" | "loc" | "vand" 
   | "vas#2" | "vaaz" | "vip" | "v.rdh#1" | "ve.s.t" | "vrii.d" | "zafk" | "zad"
   | "zi~nj" | "zii#1" | "zrambh" | "zlaagh" | "zvit" | "sac" | "sev"
-  | "styaa" | "spand" | "spardh" | "spaz#1" | "sphaa" | "smi" | "sra.ms"
+  | "styaa" | "spand" | "spardh" | "spaz#1" | "sphaa" | "sra.ms"
   | "sva~nj" | "haa#2" | "hu.n.d" | "h.r#2" | "hnu" | "hraad" | "hlaad" 
 (*| "m.r" Ubha needed for non present tenses - see \Pan{1,3,61} for exact rule *)
+(*| "smi" Ubha needed for smitavat *)
    (* DRP restriction: "dyut#1" *) 
       -> Atma (* "deponent" verbs: middle only *)
   | _ -> Ubha (* default *) 
@@ -124,8 +125,8 @@ value voices_of = fun
   | "vad" | "vap#1" | "vap#2" | "val" | "vah#1" | "vaa#3" | "vic" | "vij" 
   | "viij" | "v.r#2" | "v.rt#1" | "vyath" | "vyaa" | "zap" | "zaa" | "zu.s" 
   | "zubh#1" | "zyaa" | "zri" | "san#1" | "sah#1" | "sic" | "su#2" | "suud" 
-  | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" | "sp.rh" | "syand"
-  | "svad" | "had" | "hikk" | "hu" | "huu" | "h.r#1" ] *)
+  | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" | "sp.rh" | "smi" 
+  | "syand" | "svad" | "had" | "hikk" | "hu" | "huu" | "h.r#1" ] *)
   (* + corr. "pa.th" | "sthaa#1" | "praz" | "k.rr" | "p.rc" | "bandh" *)
   (* NB. "ah" "rip" "vadh" have no pr, "mand2" is fictitious *) 
   (* "iiz1", "lii" and "knuu" allowed Para in future *)

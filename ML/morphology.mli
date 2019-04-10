@@ -26,11 +26,12 @@ type inflexion_tag = (* vibhakti *)
   | Ind_form of ind_kind                 (* indeclinable forms: prep, adv, etc *)
   | Ind_verb of modal                    (* indeclinable inf abs-ya and perpft *)
   | Abs_root of conjugation              (* abs-tvaa *)
-  | Auxi_form                            (* verbal auxiliaries forms *)
+  | Gati       (* iiv verbal auxiliaries forms *)
   | Unanalysed (* un-analysable segments *)
   | PV of list string (* Preverb sequences *)
-  (* NB preverb sequences are collated separately by [Roots] module, and they do not 
-     appear in solutions, removed by compression of [Dispatcher.validate]. *)
+  (* NB preverb sequences are collated separately by [Roots] module, 
+     and they do not appear in solutions, they are removed by compression 
+     of [Dispatcher.validate]. *)
   ]
 and inflexions = list inflexion_tag
 ;

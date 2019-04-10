@@ -407,7 +407,7 @@ value enter1 entry =
                    [ "kaama" (* volition : who wants to do *)
                    | "manas" (* consideration : who thinks about doing *)
                 (* | "zakya" (* possibility : who is able to do *)  
-                             (* not amenable since kridanta, other phase *) *)
+                             (* not here since kridanta, cf [enter_form] *) *)
                              -> add_morphkama w delta f 
                    | _ -> () 
                    ]
@@ -443,7 +443,7 @@ value enter1 entry =
    | Bare Pron w -> add_morphi w delta Bare_stem 
    | Avyayai w -> add_morphyai w delta Avyayai_form
    | Avyayaf w -> add_morphyaf w delta Avyayaf_form
-   | Cvi w -> add_morphvi w delta Auxi_form  
+   | Cvi w -> add_morphvi w delta Gati  
    | Invar m w -> let (_,vi) = m 
                   and f = Ind_verb m in 
                   match vi with  
@@ -499,7 +499,8 @@ value enter_form stem =
              if root = "i" || root = "edh" then () (* \Pan{6,1,89} *)
              else add_morphlopak w stem p aapv
           else ()
-        }
+(* TODO [; if v=Pfutp && root="zak" then imitate enter1] inftu-zakya *)
+        } 
    | Bare (Krid (_,Action_noun) root) w -> 
        add_morphauxiick w stem Bare_stem (* cvi patch *)
    | Bare (Krid _ root) w -> let f = Bare_stem in do (* losing verbal and root *)

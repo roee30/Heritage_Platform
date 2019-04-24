@@ -62,8 +62,8 @@ value transducer = fun
   | Ifc  -> transducers.ifc  (* in fine composi forms *)
   | Ifc2 -> transducers.ifc2 (* idem in mode non gen *)
   | Pv   -> transducers.prev (* preverbs *) 
-  | Pvkc -> transducers.pvc  (* preverbs starting with consonant *) 
-  | Pvkv -> transducers.pvv  (* preverbs starting with vowel *) 
+  | Pvkc | Pvc -> transducers.pvc  (* preverbs starting with consonant *) 
+  | Pvkv | Pvv -> transducers.pvv  (* preverbs starting with vowel *) 
   | A | Ai   -> transducers.a    (* privative a *)
   | An | Ani -> transducers.an   (* privative an *)
   | Iicv -> transducers.iicv (* vowel-initial iic *)
@@ -119,8 +119,8 @@ value cached = (* potentially cached lexicon acquisitions *)
 value initial1 =
    (* All phases but Ifc, Abso, Auxi, Auxik, Auxiick, Lopa, Lopak. *)
    [ Inde; Iicv; Iicc; Nouv; Nouc; Pron; A; An; Root; Kriv; Kric; Iikv; Iikc
-   ; Peri; Pv; Pvkv; Pvkc; Iiv; Iivv; Iivc; Iiy; Inv; Ai; Ani; Absv; Absc; Inftu
-   ; Vocv; Vocc; Vokv; Vokc ] @ cached
+   ; Peri; Pv; Pvc; Pvv; Pvkv; Pvkc; Iiv; Iivv; Iivc; Iiy; Inv; Ai; Ani
+   ; Absv; Absc; Inftu; Vocv; Vocc; Vokv; Vokc ] @ cached
 and initial2 =  (* simplified segmenter with less phases, no generation *)
    [ Inde; Iic2; Noun2; Pron; Root; Pv; Iiv; Absv; Absc ] 
 ;
@@ -137,8 +137,8 @@ value dispatch1 w = fun (* w is the current input word *)
   | An -> if phantomatic w then [] 
           else [ Iicv; Nouv; Iikv; Kriv; Pvkv; Iivv; Vocv; Vokv
           ; A (* eg anak.sara *) ; An (* attested ? *) ]
-  | Ai -> [ Absc ]
-  | Ani -> [ Absv ]
+  | Ai -> [ Absc; Pvc ]
+  | Ani -> [ Absv; Pvv ]
     (* This assumes that privative prefixes cannot prefix Ifc forms 
        justified by \Pan{2,2,6} a-x only if x is a subanta. *)
   | Iicv | Iicc | Iikv | Iikc | Iiif | Auxiick -> (* Compounding *)
@@ -146,6 +146,7 @@ value dispatch1 w = fun (* w is the current input word *)
        ; Pvkv; Pvkc; Iiif; Iivv; Iivc; Vocv; Vocc; Vokv; Vokc ] @ cached
   | Pv -> if phantomatic w then [] else  
           if amuitic w then [ Lopa ] else [ Root; Abso; Peri; Inftu ]
+  | Pvc | Pvv -> if phantomatic w then [] else  [ Abso ]
   | Pvkc | Pvkv -> if phantomatic w then [] else 
           if amuitic w then [ Lopak ] else [ Iikv; Iikc; Kriv; Kric; Vokv; Vokc ]
   | Iiv -> [ Auxi ] (* as bhuu and k.r finite forms *)
@@ -159,7 +160,7 @@ value dispatch1 w = fun (* w is the current input word *)
 (* Privative prefixes A and An are not allowed to prefix Ifc like a-dhii *)
   | Noun | Iic | Iik | Voca | Krid | Noun2 | Iic2 | Ifc2 | Pvk | Vok
   | Unknown -> failwith "Dispatcher anomaly"
-  | _ -> failwith "Dispatcher fake phase" 
+  | ph -> failwith ("Dispatcher fake phase: " ^ string_of_phase ph)
   ]
 and dispatch2 w = fun (* simplified segmenter *)
   [ Noun2 | Pron | Inde | Abso | Absv | Absc | Auxi | Ifc2 ->
@@ -588,7 +589,9 @@ value validate out = match out with
                    [ (Comp (Pv,Peri) pv peri_form,cpd_form,s) :: r ]
                 else []
       ]
-  | [ (Abso,rev_abso_form,s) :: [ (Pv,prev,sv) :: r ] ] ->
+  | [ (Abso,rev_abso_form,s) :: [ (Pv,prev,sv) :: r ] ] 
+  | [ (Abso,rev_abso_form,s) :: [ (Pvv,prev,sv) :: r ] ] 
+  | [ (Abso,rev_abso_form,s) :: [ (Pvc,prev,sv) :: r ] ] ->
       (* Takes care of absolutives in -ya *)
       let pv = Word.mirror prev in 
       let pv_str = Canon.decode pv 
@@ -665,7 +668,7 @@ value rec color_of_phase = fun
   | Ifc | Ifc2 -> Cyan
   | Unknown -> Grey
   | Comp (_,ph) _ _ -> color_of_phase ph 
-  | Pv | Pvk | Pvkc | Pvkv -> failwith "Illegal preverb segment" 
+  | Pv | Pvv | Pvc | Pvk | Pvkc | Pvkv -> failwith "Illegal preverb segment" 
 (*i NB: unused background colors: Pink Green Aquamarine Chamois i*)
   ]
 ; 

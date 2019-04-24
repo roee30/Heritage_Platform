@@ -32,6 +32,7 @@ module Morphs
   | Lopa (* e/o conjugated root forms with lopa *) 
   | Lopak (* e/o kridantas forms with lopa *)
   | Pv (* Preverb optional before Root or Lopa or mandatory before Abso *)
+  | Pvc | Pvv (* privative Abso *)
   | Pvk | Pvkc | Pvkv (* Preverb optional before Krid or Iik or Lopak *) 
   | A | An | Ai | Ani | Iicv | Iicc | Nouv | Nouc (* privative nan-compounds *)
   | Krid (* K.ridaantaas - used to be called Parts *) 

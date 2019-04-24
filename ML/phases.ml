@@ -28,7 +28,8 @@ type phase =
   | Lopa (* e/o conjugated root forms with lopa *) 
   | Lopak (* e/o kridantas forms with lopa *) 
   | Pv (* Preverb optional before Root or Lopa or mandatory before Abso *)
-  | Pvk | Pvkc | Pvkv (* Preverb optional before Krid or Iik or Lopak *) 
+  | Pvc | Pvv (* privative Abso *)
+  | Pvk | Pvkc | Pvkv (* Preverb optional before Krid or Iik or Lopak *)
   | A | An (* privative nan-compounds formations in a- or -an *)
   | Ai | Ani (* initial privative nan-compounds *)
   | Iicv | Iicc (* split of Iic by first letter resp. vowel or consonant *)
@@ -76,6 +77,8 @@ value rec string_of_phase = fun
   | Lopa  -> "Lopa"
   | Lopak -> "Lopak"
   | Pv    -> "Pv" 
+  | Pvc   -> "Pvc" 
+  | Pvv   -> "Pvv" 
   | Pvk   -> "Pvk"
   | Pvkc  -> "Pvkc" 
   | Pvkv  -> "Pvkv"
@@ -132,6 +135,8 @@ and phase_of_string = fun (* unsafe *)
   | "Lopa"  -> Lopa
   | "Lopak" -> Lopak
   | "Pv"    -> Pv
+  | "Pvv"   -> Pvv
+  | "Pvc"   -> Pvc
   | "Pvk"   -> Pvk
   | "Pvkc"  -> Pvkc
   | "Pvkv"  -> Pvkv
@@ -169,7 +174,7 @@ and aa_phase = fun (* phase of preverb "aa" according to following phase *)
 and un_lopa = fun (* phase of origin of lopa *)
     [ Lopa -> Root | Lopak -> Kriv | _ -> failwith "un_lopa" ] 
 and preverb_phase = fun 
-    [ Pv | Pvk | Pvkc | Pvkv -> True | _ -> False ]
+    [ Pv | Pvv | Pvc | Pvk | Pvkc | Pvkv -> True | _ -> False ]
 and krid_phase = fun [ Krid | Kric | Kriv -> True | _ -> False ]
 and ikrid_phase = fun [ Iik | Iikc | Iikv -> True | _ -> False ]
 and vkrid_phase = fun [ Vokc | Vokv -> True | _ -> False ]

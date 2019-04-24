@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Prints morphological information, including derivative morphology.
@@ -65,9 +65,7 @@ value print_morphs (seg_num,sub) morphs = match seg_num with
    [pu : word -> unit] prints un-analysed chunks. *)
 value print_inv_morpho pe pne pu form (seg_num,sub) generative (delta,morphs) = 
   let stem = Word.patch delta form in do (* stem may have homo index *)
-    { ps "{ "
-    ; print_morphs (seg_num,sub) morphs 
-    ; ps " }[" 
+    { ps "[" 
     ; if generative then (* interpret stem as unique name *)
         let (homo,bare_stem) = homo_undo stem in
         let krit_infos = Deco.assoc bare_stem unique_kridantas in 
@@ -87,7 +85,9 @@ value print_inv_morpho pe pne pu form (seg_num,sub) generative (delta,morphs) =
 	   [ [ Unanalysed ] -> pu stem 
 	   | _ -> pe stem 
 	   ]
-    ; ps "]"
+    ; ps "]{"
+    ; print_morphs (seg_num,sub) morphs
+    ; ps "}"
     }
 ;
 (* Decomposes a preverb sequence into the list of its components *)

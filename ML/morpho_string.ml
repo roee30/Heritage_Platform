@@ -113,7 +113,7 @@ and   string_modal  (c,i) = (string_conjugation c) ^ (string_invar i)
 ;
 value string_morph = fun
   [ Noun_form g n c 
-  | Part_form _ g n c -> (string_case c) ^ (string_number n) ^ (string_gender g)
+  | Part_form _ g n c -> (string_gender g) ^ (string_number n) ^ (string_case c) 
   | Bare_stem | Avyayai_form -> "iic."
   | Avyayaf_form -> "ind."
   | Verb_form f n p -> (string_finite f) ^ (string_number n) ^ (string_person p)

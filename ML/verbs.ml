@@ -2329,8 +2329,8 @@ value compute_condm conj stem entry =
 value compute_future stem entry = 
   match entry with
     [ "as#1" -> () (* uses bhuu *) 
-    | "iiz#1" | "lii" | "knuu" -> do (* Para allowed in future *)
-         { compute_futurea Primary stem entry  
+    | "iiz#1" | "lii" | "knuu" | "baadh" -> do (* Para allowed in future *)
+         { compute_futurea Primary stem entry 
          ; compute_futurem Primary stem entry  
          }
     | _ -> match voices_of entry with
@@ -5584,6 +5584,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
 no - may be obtained as opt[9] *) 
      | "daa#1" -> let wstem = revcode "de" (* Henry§298 aa {\R} e *) in 
         conjug_benedictivea Primary wstem entry (* puissé-je donner! *)
+     | "i" ->  conjug_benedictivea Primary [ 4 ] entry (* iiyaat Ram. *)
      | "m.r" -> let sibstem = revcode "m.r.s" in
         conjug_benedictivem Primary sibstem entry (* m.r.sii.s.ta \Pan{1,3,61} *)
      | "luu#1" -> let sibstem = revcode "lavi.s" in

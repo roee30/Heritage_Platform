@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Transduction = struct i*)
@@ -193,8 +193,11 @@ EXTEND Gram (* skt to url *)
       | "@" {\R} "%40"
       | ":" {\R} "%3A"
       | ";" {\R} "%3B"
-      | "?" {\R} "%3F"
+      | "<" {\R} "%3C"
+      | "|" {\R} "%7C"
       | "=" {\R} "%3D"
+      | ">" {\R} "%3E"
+      | "?" {\R} "%3F"
       | "/" {\R} "%2F"
       | "," {\R} "%2C" i*)
       | i = LETTER -> i 

@@ -639,8 +639,10 @@ value look_up_and_display font gana entry =
    ; let infos = (* should be a call to a service that gives one [entry_infos] *)
      (Gen.gobble public_roots_infos_file : Deco.deco root_infos) in
      let entry_infos = Deco.assoc (Encode.code_string entry) infos in 
-     if gana = 0 then secondary_conjugs entry_infos 
-     else print_conjug Primary Parts.participles.val 
+     if gana = 0 then secondary_conjugs entry_infos (* legacy *)
+     else do { print_conjug Primary Parts.participles.val 
+             ; secondary_conjugs entry_infos (* new *)
+             }
    }
 ;
 value in_lexicon entry = (* entry as a string in VH transliteration *)

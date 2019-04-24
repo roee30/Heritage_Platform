@@ -978,7 +978,7 @@ value compute_athematic_present2m strong weak set entry third =
    ; (Plural, let l =
         [ conjugw First  "mahe" 
         ; if entry = "as#1" then (Second, code "dhve") else
-          if entry = "aas#2" then (Second, code "aadhve") else (* #Whitney§612 *)
+          if entry = "aas#2" then (Second, code "aadhve") else (* -Whitney§612 *)
           conjugw Second "dhve" 
         ; if entry = "zii#1" then conjugw Third "rate" (* \Pan{7,1,6} *)
           else conjugw Third "ate" 
@@ -1060,7 +1060,7 @@ value compute_athematic_impft2m strong weak set entry =
                 ] @ l else l (* Whitney§627 *))
     ; (Plural, let l =
         [ conjugw First  "mahi"
-        ; if entry = "aas#2" then (Second, code "aadhvam") (* #Whitney§620 *) 
+        ; if entry = "aas#2" then (Second, code "aadhvam") (* -Whitney§620 *) 
           else conjugw Second "dhvam"
         ; if entry = "zii#1" then conjugw Third "rata" (* \Pan{7,1,6} *) else
           if entry = "i" then conjugw Third "yata" (* Bucknell 128 *) else
@@ -1202,7 +1202,7 @@ value compute_athematic_imperative2m strong weak set entry =
              else l (* Whitney§627 *))
    ; (Plural, let l =
         [ conjugs First  "aamahai"
-        ; if entry = "aas#2" then (Second, code "aadhvam") (* #Whitney§617 *) 
+        ; if entry = "aas#2" then (Second, code "aadhvam") (* -Whitney§617 *) 
           else conjugw Second "dhvam"
         ; if entry = "zii#1" then conjugw Third "rataam" (* \Pan{7,1,6} *)
           else conjugw Third "ataam"
@@ -5579,13 +5579,13 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
         conjug_benedictivea Primary rstem entry (* Whitney§922b *) 
      | "k.r#1" | "k.sip" | "grah"  | "bandh" | "yaj#1" | "zaas" | "stu" -> 
         conjug_benedictivea Primary (passive_stem entry rstem) entry  
-(*   | "puu#1" -> let wstem = revcode "punii" (* weak stem of gana 9 *) in
-        conjug_benedictivea Primary wstem entry (* puniiyaat Vi.s.nu sahasran *)
-no - may be obtained as opt[9] *) 
-     | "daa#1" -> let wstem = revcode "de" (* Henry§298 aa {\R} e *) in 
+(*[  | "puu1" -> let wstem = revcode "punii" (* weak stem of gana 9 *) in
+        conjug_benedictivea Primary wstem entry] (* puniiyaat Vi.s.nu sahasran *)
+     no - may be obtained as opt[9] *) 
+     | "daa1" -> let wstem = revcode "de" (* Henry§298 aa {\R} e *) in 
         conjug_benedictivea Primary wstem entry (* puissé-je donner! *)
      | "i" ->  conjug_benedictivea Primary [ 4 ] entry (* iiyaat Ram. *)
-     | "m.r" -> let sibstem = revcode "m.r.s" in
+     | "m.r" -> let sibstem = revcode "m.r.s" in 
         conjug_benedictivem Primary sibstem entry (* m.r.sii.s.ta \Pan{1,3,61} *)
      | "luu#1" -> let sibstem = revcode "lavi.s" in
         conjug_benedictivem Primary sibstem entry (* lavi.sii.s.ta \Pan{3,4,116} *)
@@ -5748,7 +5748,7 @@ no - may be obtained as opt[9] *)
 
 (* Various Vedic subjunctives needed for citations Whitney§562 *)
 (* No attempt for full paradigms, only specific attested forms *)
-(* TODO add paradigms for i a. and aas#2 m. Whitney§614 *)
+(* TODO add paradigms for i a. and aas2 m. Whitney§614 *)
 value compute_subjunctives () = 
   let enter_subjunctivea conj root tin =
       enter1 root (Conju (conj,Conjug Subjunctive Active) [ tin ])

@@ -119,7 +119,7 @@ value cached = (* potentially cached lexicon acquisitions *)
 value initial1 =
    (* All phases but Ifc, Abso, Auxi, Auxik, Auxiick, Lopa, Lopak. *)
    [ Inde; Iicv; Iicc; Nouv; Nouc; Pron; A; An; Root; Kriv; Kric; Iikv; Iikc
-   ; Peri; Pv; Pvc; Pvv; Pvkv; Pvkc; Iiv; Iivv; Iivc; Iiy; Inv; Ai; Ani
+   ; Peri; Pv; Pvkv; Pvkc; Iiv; Iivv; Iivc; Iiy; Inv; Ai; Ani
    ; Absv; Absc; Inftu; Vocv; Vocc; Vokv; Vokc ] @ cached
 and initial2 =  (* simplified segmenter with less phases, no generation *)
    [ Inde; Iic2; Noun2; Pron; Root; Pv; Iiv; Absv; Absc ] 
@@ -589,9 +589,8 @@ value validate out = match out with
                    [ (Comp (Pv,Peri) pv peri_form,cpd_form,s) :: r ]
                 else []
       ]
-  | [ (Abso,rev_abso_form,s) :: [ (Pv,prev,sv) :: r ] ] 
-  | [ (Abso,rev_abso_form,s) :: [ (Pvv,prev,sv) :: r ] ] 
-  | [ (Abso,rev_abso_form,s) :: [ (Pvc,prev,sv) :: r ] ] ->
+  | [ (Abso,rev_abso_form,s) :: [ (ph,prev,sv) :: r ] ] 
+           when preverb_phase ph ->
       (* Takes care of absolutives in -ya *)
       let pv = Word.mirror prev in 
       let pv_str = Canon.decode pv 

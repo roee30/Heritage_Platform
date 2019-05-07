@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Int_sandhi = struct i*)
@@ -511,7 +511,8 @@ let adoh = duhify (Encode.rev_code_string "adoh") in
 assert (decode (int_sandhi adoh (code "t")) = "adhok");  (* she milked - not "adho.t" *) 
 
 (* Not fully correct - still to be improved 
-   Special cases - to be accommodated at proper point in the derivation Macdonell §60 footnote 1 p 26
+   Special cases - to be accommodated at proper point in the derivation 
+   cf. Macdonell §60 footnote 1 p 26
 d is assimilated before primary suffix -na: ad+na -> anna
 t and d are assimilated before secondary suffixes -mat and -maya: vidyunmat m.rnmaya *)
 

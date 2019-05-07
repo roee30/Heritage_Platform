@@ -50,8 +50,8 @@ value voices_of = fun
   | "draa#1" | "dru#1" | "druh#1" | "dham" | "dhaa#2" | "dhru" | "dhvan" 
   | "dhv.r" | "na.t" | "nad" | "nand" | "nam" | "nard" | "naz#1" | "nind"
   | "nu#1" | "n.rt" | "pa.t" | "pat#1" | "path" | "paa#1" | "paa#2" | "pi#2" 
-  | "piz#1" | "pi.s" | "pu.t" | "p.r#1" | "p.r.s" | "p.rr" | "praa#1" | "phal" 
-  | "bal" | "b.rh#1" | "b.rh#2" | "bha~nj" | "bha.n" | "bha.s" 
+  | "piz#1" | "pi.s" | "pu.t" | "p.r#1" | "p.r.s" | "p.rr" | "praa#1" 
+  | "phal" | "bal" | "b.rh#1" | "b.rh#2" | "bha~nj" | "bha.n" | "bha.s" 
   | "bhas" | "bhaa#1" | "bhii#1" | "bhuj#1" | "bhuu#1" | "bhuu.s" | "bhram" 
   | "majj" | "ma.n.d" | "mad#1" | "manth" | "mah" | "maa#3" | "mi.s" | "mih" 
   | "miil" | "mu.s#1" | "muh" | "muurch" | "m.r.d" | "m.rz" | "mnaa" | "mre.d"
@@ -64,7 +64,7 @@ value voices_of = fun
   | "v.rj" | "v.r.s" | "v.rh" | "ven" | "vyac"| "vyadh" | "vraj" | "vrazc"
   | "za.ms" | "zak" | "zam#1" | "zam#2" | "zal" | "zaz" | "zas" | "zaas"
   | "zi.s" | "ziil" | "zuc#1" | "zudh" | "zumbh" | "zu.s" | "zuu" | "z.rr"
-  | "zcut#1" | "zram" | "zru" | "zli.s" | "zvas#1" | ".s.thiiv" | "sa~nj"
+  | "zcut#1" | "zraa" | "zru" | "zli.s" | "zvas#1" | ".s.thiiv" | "sa~nj"
   | "sad#1" | "sap#1" | "saa#1" | "sidh#1" | "sidh#2" | "siiv" | "sur" | "s.r"
   | "s.rj#1" | "s.rp" | "skand" | "skhal" | "stan" | "stubh" | "sthag" | "snaa" 
   | "snih#1" | "snu" | "snuh#1" | "sp.r" | "sphal" | "sphu.t" | "sphur" 
@@ -80,6 +80,7 @@ value voices_of = fun
 (*| "van"    Atma needed for vanute *)
 (*| "mah"    Atma needed for pft. maamahe *)
 (*| "cit#1"  Atma needed for pft. cikite *)
+(*| "zram"   Atma needed for vizramate *)
 (*| "kaafk.s" | "han#1" occur also in Atma in BhG: kaafk.se hani.sye *)
 (*| "has"    Atma needed for hasate *)
 (*| "zu.s" Atma for zu.syate WR epic *)
@@ -124,9 +125,9 @@ value voices_of = fun
   | "lafgh" | "lak.s" | "labh" | "la.s" | "lip" | "lih#1" | "lup" | "luu#1"
   | "vad" | "vap#1" | "vap#2" | "val" | "vah#1" | "vaa#3" | "vic" | "vij" 
   | "viij" | "v.r#2" | "v.rt#1" | "vyath" | "vyaa" | "zap" | "zaa" | "zu.s" 
-  | "zubh#1" | "zyaa" | "zri" | "san#1" | "sah#1" | "sic" | "su#2" | "suud" 
-  | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" | "sp.rh" | "smi" 
-  | "syand" | "svad" | "had" | "hikk" | "hu" | "huu" | "h.r#1" ] *)
+  | "zubh#1" | "zyaa" | "zram" | "zri" | "san#1" | "sah#1" | "sic" | "su#2" 
+  | "suud" | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" | "sp.rh" 
+  | "smi" | "syand" | "svad" | "had" | "hikk" | "hu" | "huu" | "h.r#1" ] *)
   (* + corr. "pa.th" | "sthaa#1" | "praz" | "k.rr" | "p.rc" | "bandh" *)
   (* NB. "ah" "rip" "vadh" have no pr, "mand2" is fictitious *) 
   (* "iiz1", "lii" and "knuu" allowed Para in future *)
@@ -291,6 +292,7 @@ value voices_of_pv upasarga gana = fun (* gana only used for "tap" "i" ".r" *)
                        | _ -> Para 
                        ]
 | "zii#1" -> if upasarga = "sam" then Ubha else Atma
+| "zram" -> if upasarga = "vi" then Ubha (* epic vizramate *) else Para
 | "krii" -> match upasarga with
             [ "vi" | "pari" | "ava" -> Atma 
             | _ -> Para (* \Pan{1,3,18} *)
@@ -298,8 +300,8 @@ value voices_of_pv upasarga gana = fun (* gana only used for "tap" "i" ".r" *)
 (* Next three equivalent to marking "unused" in lexicon *)
 | "ta~nc" | "saa#1" | "zam#2" | "zal" (* also "khyaa" ? *) ->
    match upasarga with 
-   [ "" -> raise Unattested
-   | _ -> Para
+   [ "" -> raise Unattested (* thus braa.hmasya "Ô Brahmane, tue" unrecognized *)
+   | _ -> Para 
    ]  
 | "loc" | "zrambh" | "hnu" -> match upasarga with 
    [ "" -> raise Unattested

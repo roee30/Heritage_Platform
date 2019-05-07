@@ -1819,7 +1819,7 @@ value build_mas_ac stem entry =
    ]
 ;
 value build_pums pum pums entry = (* for pu.ms et napu.ms *)
-(* hi.ms pu.ms no retroflexion of s - Whitney§183a *)
+(* hi.ms pu.ms no retroflexion of s - Whitney§183a Kale §113 *)
   let decline case suff = (case,List2.unstack pum (code suff)) 
   and declines case suff = (case,List2.unstack pums (code suff)) in
   enter entry 
@@ -5905,17 +5905,48 @@ value compute_extra iic_only_stems = do
   ; [compute_extra_ifc bahu_suffixes] eg Fem -padaa for meter formation *) 
   }
 ;
-value enter_extra_ifcs () = do
-  { let entry = "bhogya" in (* for retroflexion in var.sabhogye.na *)
+value enter_extra_ifcs () = do (* archaic retroflexion in cpds Pan{8,4,13} *)
+  { let entry = "bhogya" in (* var.sabhogye.na Meghaduuta 1b *)
         let ins_sg = [ (Singular,[ (Ins,code "bhogye.na") ]) ]
-        and gen_pl = [ (Plural,[ (Gen,code "bhogyaa.naam") ]) ] in do
+        and gen_pl = [ (Plural,  [ (Gen,code "bhogyaa.naam") ]) ] in do
         { enter1 entry (Declined Noun Mas ins_sg)
         ; enter1 entry (Declined Noun Mas gen_pl)
         ; enter1 entry (Declined Noun Neu ins_sg)
         ; enter1 entry (Declined Noun Neu gen_pl)
         ; enter1 entry (Declined Noun Fem gen_pl)
         }
-  } 
+  ; let entry = "yogin" in (* pu.spayogi.nah Renou yogi-fleur? *)
+        let form = code "yogi.nas" in do
+        { enter1 entry (Declined Noun Mas [ (Singular, [ (Gen,form) ]) ])
+        ; enter1 entry (Declined Noun Mas [ (Singular, [ (Abl,form) ]) ])
+        ; enter1 entry (Declined Noun Neu [ (Singular, [ (Gen,form) ]) ])
+        ; enter1 entry (Declined Noun Neu [ (Singular, [ (Abl,form) ]) ])
+        ; enter1 entry (Declined Noun Mas [ (Plural,   [ (Nom,form) ]) ])
+        ; enter1 entry (Declined Noun Mas [ (Plural,   [ (Acc,form) ]) ])
+        }
+  ; let entry = "yuga" in do 
+      { let form = code "yugaa.ni" in do (* v.r.sabhayugaa.ni vastrayugaa.ni *)
+        { enter1 entry (Declined Noun Neu [ (Plural,   [ (Nom,form) ]) ])
+        ; enter1 entry (Declined Noun Neu [ (Plural,   [ (Acc,form) ]) ])
+        }
+      ; let form = code "yuge.na" in do (* vastrayuge.na kharayuge.na *)
+        { enter1 entry (Declined Noun Neu [ (Singular, [ (Ins,form) ]) ])
+        ; enter1 entry (Declined Noun Mas [ (Singular, [ (Ins,form) ]) ])(*bahu*)
+        } 
+      } (* NB "vastrayugi.nas", "vastrayugi.nau" etc. OK since stem autonomous *)
+  ; let entry = "kaamin" in (* svargakaami.nau *)
+        let form = code "kaami.nau" in do
+        { enter1 entry (Declined Noun Mas [ (Dual,   [ (Nom,form) ]) ])
+        ; enter1 entry (Declined Noun Mas [ (Dual,   [ (Acc,form) ]) ])
+        ; enter1 entry (Declined Noun Mas [ (Dual,   [ (Voc,form) ]) ])
+        }
+  ; let entry = "gaamin" in (* v.r.sagaami.nau *)
+        let form = code "gaami.nau" in do
+        { enter1 entry (Declined Noun Mas [ (Dual,   [ (Nom,form) ]) ])
+        ; enter1 entry (Declined Noun Mas [ (Dual,   [ (Acc,form) ]) ])
+        ; enter1 entry (Declined Noun Mas [ (Dual,   [ (Voc,form) ]) ])
+        }
+  }
 ;
 value enter_extra_iifcs () = do
   { let entry = "ahan" in (* for -aha- like pu.nyaahavaacanam *)

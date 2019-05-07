@@ -4067,7 +4067,7 @@ value compute_aorist entry =
       { compute_thematic_aorista stem entry
       ; compute_thematic_aoristm stem entry 
       }
-    | "zuu" | "zcut#1" -> compute_thematic_aorista weak entry
+    | "zuu" | "zcut#1" | "zram" -> compute_thematic_aorista weak entry
     | "zru"   -> compute_thematic_aorista (revcode "zrav") entry
     | "khyaa" -> compute_thematic_aorista (revcode "khy") entry
     | "as#2"  -> compute_thematic_aorista (revcode "asth") entry
@@ -4241,7 +4241,8 @@ value compute_injunctive entry =
       { compute_thematic_injuncta weak entry
       ; compute_thematic_injunctm weak entry (* middle is very rare *)
       }
-    | "vac" -> compute_thematic_injuncta (revcode "voc") entry (* vocat *)
+    | "zram" -> compute_thematic_injuncta weak entry (* zramat *)
+    | "vac" -> compute_thematic_injuncta (revcode "voc") entry (* vocat *) 
     | "zru" -> compute_thematic_injuncta (revcode "zrav") entry (* zravat *)
     | _ -> () 
     ]

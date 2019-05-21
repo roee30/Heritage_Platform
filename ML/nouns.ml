@@ -5900,6 +5900,8 @@ value compute_extra iic_only_stems = do
   ; compute_extra_iic iic_only_stems (* aajaanu etc. *)
   ; compute_extra_iic iicf_extra (* abalaa etc. *)
   ; compute_extra_iiv iiv_krids (* zuddhii *) 
+  ; enter1 "u" (* Vedic *) decl 
+    where decl = Indecl Interj [ 5 ] (* u *)
     (* Unplugged presently because of overgeneration
   ; [compute_extra_iic gen_prefixes] 
   ; [compute_extra_ifc bahu_suffixes] eg Fem -padaa for meter formation *) 

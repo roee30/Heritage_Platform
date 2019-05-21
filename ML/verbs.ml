@@ -2559,14 +2559,8 @@ and   sVa s = Va (revstem s)
 (* Computes the Primary ppp stems of roots *)
 value compute_ppp_stems entry rstem = 
   match entry with
-    [ (* we first filter out roots with no attested ppp *)
-      "ak.s" (* vedic a.s.ta overgenerates with a.s.tan *) | "as#1" | "kan" 
-    | "k.si" | "gaa#1" | "paz" | "paa#2" | "praa#1" (* vedic praata omitted *)
-    | "bal" | "ma.mh" | "vaz" | "vyac" | "zaz" | "zam#2" | "sac" | "sap" 
-    | "h.r#2" (* | "spaz#1" *)
-      -> []
-      (* now participles in -na *) 
-    | "vrazc" -> [ sNa "v.rk" ] (* exception - v.rk root stem of vrazc *)
+      (* First participles in -na *) 
+    [ "vrazc" -> [ sNa "v.rk" ] (* exception - v.rk root stem of vrazc *)
     (* Most roots starting with 2 consonants take -na \Pan{8,2,43} *)
     (* but not "k.svi.d" "zrath" *)
     | "iir" | "und" | "k.rr" | "klid" | "k.sii" | "k.sud" | "k.svid" | "khid" 
@@ -2638,7 +2632,7 @@ value compute_ppp_stems entry rstem =
            | ".rj"    -> revcode "arj" (* strong *)
            | "k.svi.d" -> revcode "k.sve.d"
            | "vip"    -> revcode "vep"
-           | "m.rg"    -> revcode "marg" (* strong *)
+           | "m.rg"   -> revcode "marg" (* strong *)
            | "jak.s"  -> revcode "jagh" (* jagdha *)
            | "trai"   -> revcode "traa" (* glai given in -na section *)
            | "k.san"  -> revcode "k.sa" (* removal of final nasal *) 
@@ -2853,15 +2847,27 @@ value compute_future_10 rstem entry =
 
 value admits_passive = fun 
   [ (* We filter out roots with no attested passive forms *)
-    "an#2" | "av" | "as#1" | "iiz#1" | "uc" | "kan" | "kuu" | "k.lp" | "knuu" 
-  | "k.si" | "kha.n.d" | "daa#2" | "dyut#1" | "dru#1" | "pat#2" | "paz" | "paa#2"
-  | "pi#2" | "praa#1" | "ruc#1" | "vas#4" | "vidh#1" | "vip" | "vyac" | "zam#1"
-  | "zi~nj" | "zrambh" | "zvit" | "sap" | "siiv" | "spaz#1" | "spardh" | "h.r#2" 
-  | "hrii#1" | "ma.mh" (* supplied by "mah" *)
+    "an#2" | "arh" | "av" | "as#1" | "ah" | "iiz#1" | "uc" | "kan" | "kuu" 
+  | "knuu" | "k.sar" | "k.si" | "kha.n.d" | "daa#2" | "dyut#1" | "dru#1" 
+  | "pat#2" | "paz" | "paa#2" | "pi#2" | "praa#1" | "bruu" | "ruc#1" | "vas#4"
+  | "vidh#1" | "vip" | "vyac" | "zam#1" | "zi~nj" | "zrambh" | "zvit" | "sap#1"
+  | "siiv" | "spaz#1" | "spardh" | "h.r#2" | "hrii#1" 
+  | "ma.mh" (* supplied by "mah" *)
       -> False 
-(* But "iiz#1" "uc" "kuu" "k.lp" "dru#1" "pi#2" "ruc#1" "vip" "zam#1" "zi~nj"
-       "zrambh" "siiv" "spardh" "hrii#1" admit ppp. and "k.lp" admits pfp. *)
+(* But "iiz#1" "uc" "kuu" "k.sar" "dru#1" "pi#2" "ruc#1" "vip" "zam#1" 
+       "zi~nj" "zrambh" "siiv" "spardh" "hrii#1" admit ppp. *)
   | _ -> True 
+  ]
+;
+value admits_ppp_abs = fun
+  [ "ak.s" (* vedic a.s.ta overgenerates with a.s.tan *) 
+  | "ad#1" (* jak.s jagdha \Pan{2,4,36} *)
+  | "bruu" (* vac *) 
+  | "paz"  (* d.rz *) 
+  | "as#1" | "kan" | "k.si" | "gaa#1" | "paa#2" | "praa#1" (* omit ved. praata *)
+  | "bal" | "ma.mh" | "vaz" | "vyac" | "zaz" | "zam#2" | "zvit" | "sac" | "sap#1"
+  | "h.r#2" (* | "spaz#1" *) -> False
+  | _ -> True
   ]
 ;
 
@@ -2959,6 +2965,8 @@ value compute_passive_system conj root pastem = do
   ; record_part_m_th (vpprp conj) pastem root 
   }
 ;
+(* NB. For gana 4 verbs passive differs from middle mostly by accent
+   but distinction necessary since different regime *)
 value compute_passive conj root stem = 
   let ps_stem = affix_y stem (* "y" marks passive *) in 
   compute_passive_system conj root ps_stem 
@@ -4255,7 +4263,7 @@ value compute_injunctive entry =
     | _ -> () 
     ]
   ; match entry with (* 4. sigma injunct *)
-    [ "k.r#1" | "chid#1" | "pac" | "bhii#1" | "sidh#1" -> do
+    [ "k.r#1" | "chid#1" | "pac" | "praz" | "bhii#1" | "sidh#1" -> do
       { let stema = long in
         compute_ath_s_injuncta stema entry 
       ; if entry = "chid#1" then compute_ath_s_injuncta strong entry else ()
@@ -4522,7 +4530,6 @@ value pfp_ya rstem entry =
         ]
     | [ 6 (* uu *) :: _ ] -> match entry with 
         [ "huu" -> revcode "hav" (* havya WR (?) *)
-        | "bruu" -> raise Not_attested 
         | _ -> strong 
         ] 
     | [ 7 (* .r *) :: _ ] -> match entry with 
@@ -4576,7 +4583,7 @@ value pfp_aniiya rstem entry =
   let iya_stem = 
      match entry with 
      [ "uk.s" | "cint" -> rstem (*i others ? PB [strong_stem] ? i*)
-     | "as#1" | "yu#1" | "yu#2" | "bruu" | "paz" -> raise Not_attested 
+     | "yu#1" | "yu#2" -> raise Not_attested 
      | "dham" -> revcode "dhmaa"  (* \Pan{7,3,78} *)
      | "vyadh" -> revcode "vedh"
      | _ -> match Word.mirror rstem with
@@ -5268,12 +5275,6 @@ value compute_present_system entry rstem gana pada third =
 (* Passive system *)
 (******************)
 
-(* NB. For gana 4 verbs passive differs from middle mostly by accent
-   but distinction necessary since different regime *)
-value compute_passive_primary entry ps_stem = 
-  if admits_passive entry then compute_passive Primary entry ps_stem 
-  else ()
-;
 (* Passive future participle (gerundive) in -ya and -aniiya *)
 value record_pfp entry rstem = do
   { try pfp_ya rstem entry with [ Not_attested -> () ]
@@ -5532,6 +5533,29 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
  [ Conj_infos.Prim 11 pada third -> 
       (* note: pada of denominative verbs is lexicalized *)
       compute_denominative entry pada third
+ | Conj_infos.Prim 10 pada third -> 
+   (* root in gana 10, pada is True for Para, False for Atma of third form *)
+   let rstem = revstem entry in (* root stem reversed *)  
+   try do
+   { (* Present system plus perif pft and future, infinitives and pfp-tavya *)
+     compute_present_system entry rstem 10 pada third 
+     (* Future and Conditional *) 
+   ; compute_future_10 rstem entry 
+     (* Passive *)
+   ; let ps_stem = passive_stem entry rstem in 
+     compute_passive_10 entry (strong ps_stem) 
+   ; record_pfp_10 entry rstem  
+     (* Ppp and Absolutives *)
+   ; let ystem = rfix rstem "ay" 
+     and ppstem = rfix rstem "ita" in do  
+     { record_part_ppp ppstem entry 
+     ; record_abso_tvaa (fix ystem "itvaa") entry
+     ; let ya_stem = if light_10 rstem then ystem else rstem in
+       record_abso_ya (fix ya_stem "ya") entry 
+     }
+     (* No Perfect -- periphrastic perfect generated by process10 above *)
+   }
+   with [ Control.Warning s -> output_string stdout (s ^ "\n") ]
  | Conj_infos.Prim gana pada third -> 
    (* gana is root class, pada is True for Para, False for Atma of third form *)
    (* Primary conjugation *)
@@ -5555,24 +5579,22 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
      | "vyadh" -> compute_future_gen (revcode "vidh") entry 
      | "zuu" -> compute_future_gen (revcode "zve") entry 
      | "knuu" -> compute_future_gen (revcode "knuuy") entry 
-     | _ -> if gana=10 then compute_future_10 rstem entry 
-            else compute_future_gen rstem entry 
+     | _ -> compute_future_gen rstem entry 
      ]
    ; (* Periphrastic future, Infinitive, Passive future part. in -tavya *)
-     if gana=10 then () (* see [process10] above *)
-     else match entry with
-          [ "ifg" | "paz" (* for d.rz *) | "bruu" (* for vac *) 
-          | "cud" | "dhii#1" | "pat#2" | "praa#1" | "vidh#1"
-          | "haa#2" -> () (* no perif *)
-          | "saa#1" -> do { compute_perif (revcode "si") entry 
-                          ; compute_perif rstem entry
-                          }
-          | "vyadh" -> compute_perif (revcode "vidh") entry 
-          | "zuu" -> compute_perif (revcode "zve") entry 
-          | "knuu" -> compute_perif (revcode "knuuy") entry 
-          | "stambh" -> compute_perif (revcode "stabh") entry 
-          | _ -> compute_perif rstem entry 
-          ]
+     match entry with
+     [ "ifg" | "paz" (* for d.rz *) | "bruu" (* for vac *) 
+     | "cud" | "dhii#1" | "pat#2" | "praa#1" | "vidh#1"
+     | "haa#2" -> () (* no perif *)
+     | "saa#1" -> do { compute_perif (revcode "si") entry 
+                     ; compute_perif rstem entry
+                     }
+     | "vyadh" -> compute_perif (revcode "vidh") entry 
+     | "zuu" -> compute_perif (revcode "zve") entry 
+     | "knuu" -> compute_perif (revcode "knuuy") entry 
+     | "stambh" -> compute_perif (revcode "stabh") entry 
+     | _ -> compute_perif rstem entry 
+     ]
    ; (* Precative - active rare, middle unknown in classical language except
         2 occs in Abhisamayaalafkaara (David Reigle) *)
      match entry with
@@ -5593,45 +5615,28 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
      | _ -> ()
      ]
    ; (* Passive *)
-     let ps_stem = passive_stem entry rstem in 
-     if gana=10 then do
-        { compute_passive_10 entry (strong ps_stem)
-        ; record_pfp_10 entry rstem 
-        }
-     else do
-        { compute_passive_primary entry ps_stem
+     if admits_passive entry then 
+        let ps_stem = passive_stem entry rstem in do
+        { if entry = "k.lp" then () (* admits pfp but no passive *)
+          else compute_passive Primary entry ps_stem 
           (* Passive future participle (gerundive) in -ya and -aniiya *)
         ; record_pfp entry rstem 
         }
+     else ()
    ; (* Ppp computation and recording (together with absolutives) *)
-     match entry with
-     [ "ad#1" (* jak.s jagdha \Pan{2,4,36} *)
-     | "bruu" (* vac *) 
-     | "paz"  (* d.rz *) 
-     | "zvit" -> ()
-     | _ -> if gana=10 then 
-              let ystem = rfix rstem "ay" 
-              and ppstem = rfix rstem "ita" in do  
-              { record_part_ppp ppstem entry 
-              ; record_abso_tvaa (fix ystem "itvaa") entry
-              ; let ya_stem = if light_10 rstem then ystem else rstem in
-                record_abso_ya (fix ya_stem "ya") entry 
-              }
-            else do
-              { let ppstems = compute_ppp_stems entry rstem in 
-                record_ppp_abs_stems entry rstem ppstems
-              ; record_abso_am entry (* rare *)
-              }
-     ]
+     if admits_ppp_abs entry then do 
+        { let ppstems = compute_ppp_stems entry rstem in 
+          record_ppp_abs_stems entry rstem ppstems
+        ; record_abso_am entry (* rare *)
+        }
+     else ()
    ; (* Perfect *) 
-     if gana=10 then () (* use periphrastic perfect *)
-     else match entry with
-          [ "paz"  (* d.rz *) | "bruu" (* vac *) | "ma.mh" (* mah *)
-          | "ind" | "indh" | "inv" | "cakaas" | "dhii#1" | "vidh#1" -> ()
-            (* no perfect *)
-          | "uuh" -> () (* periphrastic *)
-          | _ -> compute_perfect entry
-          ]
+     match entry with
+     [ "paz"  (* d.rz *) | "bruu" (* vac *) | "ma.mh" (* mah *) | "ind" 
+     | "indh" | "inv" | "cakaas" | "dhii#1" | "vidh#1" -> () (* no perfect *)
+     | "uuh" -> () (* periphrastic *)
+     | _ -> compute_perfect entry
+     ]
    ; (* Periphrastic Perfect *) (* .namul on demand - except gana 10 above *)
      try let stem = peri_perf_stem entry in
          build_perpft Primary stem entry
@@ -5639,7 +5644,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
    ; (* Aorist *) compute_aorist entry
    ; (* Injunctive *) compute_injunctive entry
    }
-    with [ Control.Warning s -> output_string stdout (s ^ "\n") ]
+   with [ Control.Warning s -> output_string stdout (s ^ "\n") ]
    (* end of Primary conjugation (including passive) *) 
  | Conj_infos.Causa third -> 
      (* Here we extract the causative stem from the third given in Dico *)
@@ -5718,7 +5723,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
          { record_pppdes st entry
          ; record_pfp_aniiya Desiderative st entry 
          ; record_pfp_ya Desiderative st entry 
-(*i      ; record_des_aa Desiderative st entry (* TODO *) 
+(*i      ; record_des_aa Desiderative st entry (* Des k.rdantas TODO *) 
          ; record_des_u Desiderative st entry i*)
          ; perif Desiderative [ 3 :: st ] entry 
          } in

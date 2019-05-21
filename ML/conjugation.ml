@@ -422,8 +422,8 @@ value look_up_and_display font gana entry =
   [ [] -> acc 
   | [ x :: rest ] -> match x with 
       [ Parts.Pppa_ con stem _ when con=conj -> 
-        let sm = Parts.fix stem "at"
-        and sf = Parts.fix stem "atii" in do
+        let sm = Parts.fix stem "vat"
+        and sf = Parts.fix stem "vatii" in do
         { display_part font entry Pppa sm sf
         ; p acc rest
         }

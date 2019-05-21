@@ -147,7 +147,7 @@ value call_parser text cpts =
             ";cpts=" ^ string_points cpts ^ ";n=1" in
   anchor Green_ (invoke cgi) check_sign
 ;
-(* Legacy interface with Sanskrit Library [
+(*i Legacy interface with Sanskrit Library [
 value call_SL text cpts mode corpus solutions sent_id link_num = 
   let cgi = tomcat ^ corpus ^ "/SaveTagging?slp1Sentence=" 
             ^ text ^ "&numSolutions=" ^ (string_of_int solutions) 
@@ -160,7 +160,7 @@ value call_SL text cpts mode corpus solutions sent_id link_num =
 value invoke_SL text cpts corpus_id count sent_id link_num =
   ps (td_wrap (call_SL text cpts "t" corpus_id count sent_id link_num 
                ^ "Sanskrit Library Interface"))
-;] *)
+;] i*)
 value sort_check cpts = 
   let compare_index (a,_,_) (b,_,_) = compare a b in
   List.sort compare_index cpts
@@ -440,11 +440,6 @@ value check_sentence translit us text_orig checkpoints sentence
   ; table_end |> pl
   ; div_end |> ps (* Latin12 *)
   ; html_break |> pl
-  ; reset_graph () 
-  ; reset_visual ()
-  ; set_cur_offset 0
-  ; chkpts.segment_checks := []
-  ; max_col.val := 0
   }
 ;
 value arguments trans lex cache st us cp input topic abs sol_num corpus id ln
@@ -569,10 +564,10 @@ value graph_engine () = do
     and rev_ind = int_of_string (get "rev_ind" env "-1") in 
    try do
    { match (revised,rev_off,rev_ind) with
-     [ ("",-1,-1) -> (* Standard input processing *** main call *** *)
+     [ ("",-1,-1) -> (* Standard input processing *** Main call *** *)
        check_sentence translit uns text checkpoints input sol_num
                       corpus sent_id link_num
-     | (new_word,word_off,chunk_ind) (* User-aid revision *) -> 
+     | (new_word,word_off,chunk_ind) (* User-aid revision mode *) -> 
        let chunks = Sanskrit.read_sanskrit (Encode.switch_code translit) input in
        let rec decoded init ind = fun
            [ [] -> String.sub init 0 ((String.length init)-1)
@@ -601,6 +596,7 @@ value graph_engine () = do
        check_sentence translit uns updated_text revised_check 
                       new_input sol_num corpus sent_id link_num
      ]
+     (* Rest of the code concerns Corpus mode *)
      (* automatically refreshing the page only if guess parameter *)
    ; if String.length guess_morph > 0 then 
         ps ("<script>\nwindow.onload = function () {window.location=\"" ^

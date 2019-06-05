@@ -3555,12 +3555,13 @@ value peri_perf_stem entry =
   let stem = match entry with 
   [ "iik.s" | "ii.d" | "iir" | "iih" | "uk.s" | "uc" | "ujjh" | "uuh" | "edh" 
     (* Macdonell§140a1 Whitney§1071c *)
-  | "ind" | "indh" | "inv" | "umbh" | "cakaas" -> entry
+  | "ind" | "indh" | "inv" | "ii.s" | "umbh" | "cakaas" -> entry
   | "aas#2"  -> "aas" (* trim *)
   | "u.s"    -> "o.s" (* guna WR *) 
   | "jaag.r" -> "jaagar" (* Macdonell§140a2 *)
   | "bh.r"   -> "bibhar" 
   | "nii#1"  -> "nay" 
+  | "i"      -> "ay" (* Whitney roots *)
   | "vyaa"   -> "vye" (* Whitney roots *)
   | "huu"    -> "hve" (* Macdonell§140a3 *)
   | "hrii#1" -> "jihre" (* Whitney roots *)
@@ -4549,7 +4550,9 @@ value pfp_ya rstem entry =
     | [ 47; 7 ] (* .r.sya autonomous *)
     | [ 32; 7; 17 ] (* k.rt *) -> raise Not_attested (* k.rtya comes from k.r1 *)
     | [ 48; 1 ] (* as1 *) -> raise Not_attested (* bhuu for as *) 
-    | [ 33; 36; 1; 43; 19 ] (* granth *) -> revcode "grath" 
+    | [ 48; 1; 46 ] (* zas *) -> rstem (* zasya *) 
+    | [ 48; 2; 46 ] (* zaas *) -> revcode "zaa.s" (* zaa.sya + zi.sya extra *)
+    | [ 33; 36; 1; 43; 19 ] (* granth *) -> revcode "grath"  
     | [ 35; 1; 45 ] (* vadh/han *) -> rstem (* vadhya *) 
     | [ 36; 1; 49 ] (* han *) -> revcode "ghaat" (* (h=h') \Pan{7,3,32+54} *)
     | [ 35; 1; 42; 45 ] (* vyadh *) -> revcode "vedh"
@@ -5317,10 +5320,7 @@ value record_pfp entry rstem = do
     | "guh"    -> record_extra_pfp_ya "guhya" (* Vart \Pan{3,1,109} *) 
     | "duh#1"  -> record_extra_pfp_ya "duhya" (* idem *)
     | "za.ms"  -> record_extra_pfp_ya "zasya" (* idem *)
-    | "zaas"   -> do 
-      { record_extra_pfp_ya "zi.sya"  (* \Pan{3,1,109} *)
-      ; record_extra_pfp_ya "za.sya" (* (zaasya) *)
-      }
+    | "zaas"   -> record_extra_pfp_ya "zi.sya"  (* \Pan{3,1,109} *)
       (* Following examples show that gunification is often optional. *)
       (* Some of the following forms seem actually preferable. *)
     | ".r"     -> record_extra_pfp_ya "arya"  (* (aarya) \Pan{3,1,103} (owner) *) 
@@ -5811,7 +5811,11 @@ value compute_conjugs root (infos : Conj_infos.root_infos) =
   let root_entry = Canon.decode root in compute_conjugs_stems root_entry infos
 ;
 (* Supplementary forms *)
-value compute_extra_car () = do
+value compute_extra_i () = do (* WR *)
+   { enter1 "i" (Conju perfa [ (Singular, [ (First, code "iiyaaya") ]) 
+                             ; (Plural,   [ (Third, code "iiyur") ]) ])
+   }
+and compute_extra_car () = do
   { enter1 "car" (Absotvaa Primary (code "cartvaa"))
   ; enter1 "car" (Absotvaa Primary (code "ciirtvaa"))
   ; enter1 "car" (Invar (Primary,Infi) (code "cartum")) (* epic *)
@@ -5940,6 +5944,7 @@ value compute_extra () = do
   ; compute_extra_syand ()
   ; compute_extra_hims ()
   ; compute_extra_huu ()
+  ; compute_extra_i ()
   ; build_infinitive Primary (revcode "rami") "ram"
   ; build_infinitive Primary (revcode "aas") "aas#2" (* Whitney§968d *)
   ; build_infinitive Causative (revcode "bhaavi") "bhuu#1" (* Whitney§1051c *)
@@ -5967,7 +5972,8 @@ value fake_compute_conjugs (gana : int) (entry : string) = do
     let vmorph = Conj_infos.Prim gana pada no_third in do
     { compute_conjugs_stems entry (vmorph,False)
     ; match entry with (* extra forms - to be completed from [compute_extra] *)
-      [ ".rc#1"  -> compute_extra_rc ()
+      [ "i"      -> compute_extra_i ()
+      | ".rc#1"  -> compute_extra_rc ()
       | "k.sii"  -> record_part_ppp (revcode "k.sita") entry
       | "khan"   -> compute_extra_khan ()
       | "gup"    -> record_part_ppp (revcode "gupta") entry 

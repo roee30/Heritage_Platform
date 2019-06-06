@@ -3019,10 +3019,10 @@ value redup_perf root =
       ] in
   match Word.mirror revw with (* ugly double reversal to get the stem *)
   [ [] -> error_empty 14
-  | [ 3 ] (* i *) -> let wk = [ 3; 42 ] (* iy *) 
-                     and st = [ 3; 42; 10 ] (* iye *) (* iyaya *)
-                     and lg = [ 3; 42; 11 ] (* iyai *) (* iyaaya *) in
-                     (rev st, rev wk, Some (rev lg), False, True)
+  | [ 3 ] (* "i" *) -> let wk = [ 4; 42 ] (* iiy \Pan{7,4,69} *) 
+                       and st = [ 3; 42; 10 ] (* iye *) (* iyaya *) 
+                       and lg = [ 3; 42; 11 ] (* iyai *) (* iyaaya *) in
+                       (rev st, rev wk, Some (rev lg), False, True)
   | [ c1 :: r ] ->  
       if vowel c1 then let (s,w) = match c1 with
          [ 1 (* a *) -> let w = match r with
@@ -3123,7 +3123,7 @@ value redup_perf root =
                 [ [ c' ] when consonant c' -> 
                      (revaffix True [ 10 (* e *); c ] w,True,True)
                      (* roots of form c.a.c' with c,c' consonant or .m Scharf *)
-                     (* cf. Pan{6,4,119-126 *) (* ZZ may lead to hiatus *)
+                     (* cf. \Pan{6,4,119-126 *) (* ZZ may lead to hiatus *)
                 | _ -> (glue revw,False,False)
                 ]
               ] 
@@ -5811,11 +5811,7 @@ value compute_conjugs root (infos : Conj_infos.root_infos) =
   let root_entry = Canon.decode root in compute_conjugs_stems root_entry infos
 ;
 (* Supplementary forms *)
-value compute_extra_i () = do (* WR *)
-   { enter1 "i" (Conju perfa [ (Singular, [ (First, code "iiyaaya") ]) 
-                             ; (Plural,   [ (Third, code "iiyur") ]) ])
-   }
-and compute_extra_car () = do
+value compute_extra_car () = do
   { enter1 "car" (Absotvaa Primary (code "cartvaa"))
   ; enter1 "car" (Absotvaa Primary (code "ciirtvaa"))
   ; enter1 "car" (Invar (Primary,Infi) (code "cartum")) (* epic *)
@@ -5944,7 +5940,6 @@ value compute_extra () = do
   ; compute_extra_syand ()
   ; compute_extra_hims ()
   ; compute_extra_huu ()
-  ; compute_extra_i ()
   ; build_infinitive Primary (revcode "rami") "ram"
   ; build_infinitive Primary (revcode "aas") "aas#2" (* Whitney§968d *)
   ; build_infinitive Causative (revcode "bhaavi") "bhuu#1" (* Whitney§1051c *)
@@ -5972,8 +5967,7 @@ value fake_compute_conjugs (gana : int) (entry : string) = do
     let vmorph = Conj_infos.Prim gana pada no_third in do
     { compute_conjugs_stems entry (vmorph,False)
     ; match entry with (* extra forms - to be completed from [compute_extra] *)
-      [ "i"      -> compute_extra_i ()
-      | ".rc#1"  -> compute_extra_rc ()
+      [ ".rc#1"  -> compute_extra_rc ()
       | "k.sii"  -> record_part_ppp (revcode "k.sita") entry
       | "khan"   -> compute_extra_khan ()
       | "gup"    -> record_part_ppp (revcode "gupta") entry 

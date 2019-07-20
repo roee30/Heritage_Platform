@@ -343,7 +343,7 @@ value nahify stem = match stem with
   ]
 ;
 (* Aspiration of initial consonant of root stems ending in aspirate.
-   The syllabic loop is necessary for e.g. druh -> dhruk. See Whitney §155. *)
+   The syllabic loop is necessary for e.g. druh -> dhruk. See Whitney§155. *)
 value syll_decomp = fun
   [ [ c :: rest ] -> decomp_rec [] c rest
       where rec decomp_rec cs c w = match w with
@@ -360,7 +360,7 @@ value mk_aspirate w = (* c-cs-vow is the syllable ending in vow *)
       [ 19 (* g *) -> 20 (* gh *)
       | 34 (* d *) -> 35 (* dh *) (* e.g. duh {\R} dhuk *)
       | 39 (* b *) -> 40 (* bh *) (* e.g. budh {\R} bhut *)
-      | _ -> c (* e.g. v{\d r}dh *)
+      | _ -> c (* e.g. v{\d r}dh samidh *)
       ] in
   List2.unstack cs [ aspc :: rest ] 
 ;

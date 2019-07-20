@@ -592,7 +592,7 @@ and o_it = fun (* these roots have ppp in -na \Pan{8,2,45} - unused here *)
     | "nud" | "pad#1" | "pi#2" | "p.rr" | "pyaa" | "bhid#1" | "majj" | "man"
     | "mid" | "mlaa" | "ri" | "lii" | "luu#1" | "vid#2" | "vlii" | "zad" | "z.rr"
     | "sad#1" | "skand" | "st.rr" | "styaa" | "syand" | "svid#2" | "had" *)
- (* aussi "suu#2" suuna *)
+ (* aussi "suu#2" suuna "vrii" vrii.na *)
       -> True 
   | _ -> False
   ]
@@ -2568,15 +2568,15 @@ value compute_ppp_stems entry rstem =
     | "tud#1" | "t.rd" | "t.rr" | "dagh" | "d.rr" | "dev" | "draa#1" | "draa#2"
     | "nud" | "pad#1" | "pi#2" | "p.rr" | "pyaa" | "bha~nj" | "bhid#1" | "bhuj#1"
     | "majj" | "man" | "mid" | "mlaa" | "ri" | "lii" | "luu#1" | "vij" | "vid#2"
-    | "vlii" | "zad" | "zuu" | "z.rr" | "sad#1" | "skand" | "st.rr" | "styaa"
-    | "syand" | "svid#2" | "had" | "haa#2" 
+    | "vrii" | "vlii" | "zad" | "zuu" | "z.rr" | "sad#1" | "skand" | "st.rr"
+    | "styaa" | "syand" | "svid#2" | "had" | "haa#2" 
       -> 
       (* except lag which is "nipaatana" (exception) \Pan{7,2,18} *)
       let ppna w = [ Na w ] in
       match rstem with 
       [ [ 2 :: _ ] | [ 4 :: _ ] | [ 6 :: _ ] (* stems in aa ii uu *)
         -> ppna rstem 
-      | [ 3 :: r ] -> ppna [ 4 :: r ]  (* piina rii.na *)
+      | [ 3 :: r ] -> ppna [ 4 :: r ]  (* piina rii.na vrii.na *)
       | [ 8 :: r ] (* .rr -> r+vow *) -> 
         let vow = 
           match entry with
@@ -2847,13 +2847,13 @@ value compute_future_10 rstem entry =
 
 value admits_passive = fun 
   [ (* We filter out roots with no attested passive forms *)
-    "an#2" | "arh" | "av" | "as#1" | "ah" | "iiz#1" | "uc" | "kan" | "kuu" 
+    "an#2" | "av" | "as#1" | "ah" | "iiz#1" | "uc" | "kan" | "kuu" 
   | "knuu" | "k.sar" | "k.si" | "kha.n.d" | "daa#2" | "dyut#1" | "dru#1" 
   | "pat#2" | "paz" | "paa#2" | "pi#2" | "praa#1" | "bruu" | "ruc#1" | "vas#4"
   | "vidh#1" | "vip" | "vyac" | "zam#1" | "zi~nj" | "zrambh" | "zvit" | "sap#1"
   | "siiv" | "spaz#1" | "spardh" | "h.r#2" | "hrii#1" 
-  | "ma.mh" (* supplied by "mah" *)
-      -> False 
+  | "ma.mh" (* supplied by "mah" *) (* | "arh" | "k.lp" no ps but pfp *)
+      -> False
 (* But "iiz#1" "uc" "kuu" "k.sar" "dru#1" "pi#2" "ruc#1" "vip" "zam#1" 
        "zi~nj" "zrambh" "siiv" "spardh" "hrii#1" admit ppp. *)
   | _ -> True 
@@ -3218,8 +3218,9 @@ value compute_perfect_c strong weak olengthened eweak iopt entry =
            { compute_perfectm Primary weak entry
            ; compute_perfectm Primary (revcode "cikitr") entry (* WR *)
            }
-        | "vac" -> record_part_m_ath ppftm weak entry (* anuucaana *)
-        | _ -> ()
+        | "vac" -> compute_perfectm Primary weak entry
+(* record_part_m_ath ppftm weak entry (* anuucaana *) *)
+        | _ -> () 
         ]
       }
   | Atma -> let stem = match entry with 
@@ -4087,11 +4088,11 @@ value compute_aorist entry =
     | _ -> () 
     ]
   ; match entry with (* 3. reduplicated aorist caf *)
-    [ "am" | ".rc#1" | "kath" | "k.r.s" | "ga.n" | "gam" | "gaah" | "car" 
-    | "ce.s.t" | "jan" | "ji" | "tvar" | "tvi.s#1" | "dah#1" | "diz#1" | "dih" 
-    | "diip" | "dru#1" | "dh.r" | "naz" | "pac" | "pa.th" | "miil" | "muc#1"
-    | "yaj#1" | "rak.s" | "ric" | "viz#1" | "v.r#1" | "v.rt#1" | "vyadh" 
-    | "zri" | "zru" | "stu" (* | "dhaa#1" *) -> 
+    [ "am" | ".rc#1" | "kath" | "k.r.s" | "k.lp" | "ga.n" | "gam" | "gaah" 
+    | "car" | "ce.s.t" | "jan" | "ji" | "tvar" | "tvi.s#1" | "dah#1" | "diz#1"
+    | "dih" | "diip" | "dru#1" | "dh.r" | "naz" | "pac" | "pa.th" | "miil"
+    | "muc#1" | "yaj#1" | "rak.s" | "ric" | "viz#1" | "v.r#1" | "v.rt#1" 
+    | "vyadh" | "zri" | "zru" | "stu" (* | "dhaa#1" *) -> 
       let stem = redup_aor weak entry in do
       { compute_redup_aorista stem entry (* but atu.s.tavam RV (WR) *)  
       ; compute_redup_aoristm stem entry 
@@ -4549,8 +4550,10 @@ value pfp_ya rstem entry =
     | [ 24; 7; 41 ] (* m.rj *) -> long (* maarj \Pan{7,2,114} *)
     | [ 47; 7 ] (* .r.sya autonomous *)
     | [ 32; 7; 17 ] (* k.rt *) -> raise Not_attested (* k.rtya comes from k.r1 *)
-    | [ 48; 1 ] (* as1 *) -> raise Not_attested (* bhuu for as *) 
-    | [ 48; 1; 46 ] (* zas *) -> rstem (* zasya *) 
+    | [ 48; 1 ] (* as1 *) -> 
+            if entry = "as#1" then raise Not_attested (* use bhuu *) 
+                              else rstem (* asya - may overgenerate *)   
+    | [ 48; 1; 46 ] (* zas *) -> rstem 
     | [ 48; 2; 46 ] (* zaas *) -> revcode "zaa.s" (* zaa.sya + zi.sya extra *)
     | [ 33; 36; 1; 43; 19 ] (* granth *) -> revcode "grath"  
     | [ 35; 1; 45 ] (* vadh/han *) -> rstem (* vadhya *) 
@@ -4629,6 +4632,7 @@ value record_abs_ya entry rstem w = do
             | "dhaa#1" (* \Pan{7,4,42} *)
                    -> rstem 
             | "zii#1" -> revcode "zay" (* \Pan{7,4,22} *)
+            | "arh" -> revcode "argh" (* arghya (h=h') *)
             | _ -> w
             ] in match entry with
                  [ "hi.ms" -> code "hi.msya" (* no retroflex s Whitney§183 *)
@@ -5395,10 +5399,10 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
    | "nau#1"  -> [ 45 :: [ 2 :: trunc rstem ] ] (* au -> aav  Kale§642 *)
    | "raajan" -> [ 4 :: trunc (trunc rstem) ]   (* nasal amui Kale§642 *)
      (* now the general case: keep the nominal stem - to cause (transitive) *)
-   | "a.mza" | "afka" | "afkha" | "andha" | "aparok.sa" | "apahasta"
-   | "amitra" | "aakar.na" | "aakula" | "aavila" | "i.sa" | "upahasta" 
+   | "a.mza" | "afka" | "afkha" | "andha" | "aparok.sa" | "apahasta" | "amitra"
+   | "aakar.na" | "aakula" | "aavila" | "i.sa" | "unmuula" | "upahasta" 
    | "ka.thora" | "kadartha" | "kar.na" | "kalafka" | "kalu.sa" | "kavala"
-   | "ku.t.ta" | "kusuma" | "kha.da" | "garva" | "gopaa" | "carca"
+   | "ku.t.ta" | "kusuma" | "kha.da" | "garva" | "gocara" | "gopaa" | "carca"
    | "cuur.na" | "chala" | "chidra" | "tantra" | "tapas" | "tarafga" | "taru.na"
    | "tuhina" | "da.n.da" | "deva" | "dola" | "dravat" | "dhiira#1"
    | "nirmuula" | "nuutana" | "pa.tapa.taa" | "pallava"
@@ -5454,7 +5458,7 @@ value den_stem_m entry = (* in general intransitive or reflexive Whitney§1059c 
    | "kurafga" | "pu.skara" | "yuga" | "vi.sa" | "zizu"  | "samudra#1" 
    | "gomaya" | "sa.mdhyaa"  (* resemble *)
    | "puru.sa" (* imitate *)
-   | "manda" | "bhuusvarga" (* to become *)
+   | "k.r.s.na" | "manda" | "bhuusvarga" (* to become *)
        -> lengthen rstem (* reflexive causative middle to become \Pan{3,1,13} *)
    | _ -> failwith ("Unknown denominative " ^ entry)
    ] 
@@ -5617,7 +5621,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
    ; (* Passive *)
      if admits_passive entry then 
         let ps_stem = passive_stem entry rstem in do
-        { if entry = "k.lp" then () (* admits pfp but no passive *)
+        { if entry = "arh" || entry = "k.lp" then () (* admits pfp but no ps *)
           else compute_passive Primary entry ps_stem 
           (* Passive future participle (gerundive) in -ya and -aniiya *)
         ; record_pfp entry rstem 
@@ -5841,7 +5845,11 @@ value compute_extra_car () = do
      { let stem = revcode e in compute_passive Primary e stem 
      ; enter1 e (Conju (Primary,via 2) [ (Singular,[ (Second, code "azaat") ]) ])
      }
- and compute_extra_dhaa () = (* Gaayatrii dhiimahi precative m. Whitney§837b *)
+and compute_extra_tri () = do 
+  { build_infinitive Primary (revcode "tarii") "t.rr" (* id. *)
+  ; build_infinitive Primary (revcode "tar") "t.rr" (* Whitney roots *)
+  }
+and compute_extra_dhaa () = (* Gaayatrii dhiimahi precative m. Whitney§837b *)
   enter1 "dhaa#1" (Conju benem [ (Plural,[ (First, code "dhiimahi") ]) ])
 (* also "vidmahi" on yantra ? *)
  and compute_extra_bhr () = (* Epics sa.mbhriyantu Oberlies 8.7 *) 
@@ -5919,12 +5927,12 @@ value compute_extra () = do
   ; compute_aorist "k.r#2" 
   ; compute_extra_vadh () 
   ; compute_passive_raw "d.r#1"
-  ; compute_passive_raw "p.r#2"
   (* Now for specific extra forms *)
   ; compute_extra_rc () 
   ; compute_extra_khan ()
   ; compute_extra_car () 
   ; compute_extra_jnaa () 
+  ; compute_extra_tri () 
   ; compute_extra_dhaa () 
   ; compute_extra_nind () 
   ; compute_extra_prr () 
@@ -5973,6 +5981,7 @@ value fake_compute_conjugs (gana : int) (entry : string) = do
       | "gup"    -> record_part_ppp (revcode "gupta") entry 
       | "car"    -> compute_extra_car ()
       | "j~naa#1"-> compute_extra_jnaa () 
+      | "t.rr"   -> compute_extra_tri () 
       | "dhaa#1" -> compute_extra_dhaa () 
       | "nind"   -> compute_extra_nind ()
       | "p.rr"   -> compute_extra_prr ()

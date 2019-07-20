@@ -2545,10 +2545,10 @@ value build_uudhan stem entry = (* stem = "uudh" *) (* Whitney §430d *)
         [ decline Voc "ar"
         ; decline Nom "ar"
         ; decline Acc "ar"
-        ; decline Voc "as"
-        ; decline Nom "as"
-        ; decline Acc "as"
-        ; decline Ins "naa"
+(*      ; decline Voc "as" redundant *)
+(*      ; decline Nom "as" redundant *)
+(*      ; decline Acc "as" redundant *)
+        ; decline Ins "naa" 
         ; decline Dat "ne"
         ; decline Abl "nas"
         ; decline Gen "nas"
@@ -5675,6 +5675,7 @@ value iic_indecl = (* should be lexicalized *)
   ; "ubhayatas" (* ubhayata.hsasya *)
   ; "evam"      (* eva.mvid *)
   ; "tatra"     (* tatrabhavat *)
+  ; "divaa"     (* divaanidraa *)
   ; "na~n"      (* na~nvaada *)
   ; "naanaa"    (* naanaaruupa *)
   ; "param"     (* para.mtapa *)
@@ -5948,7 +5949,12 @@ value enter_extra_ifcs () = do (* archaic retroflexion in cpds Pan{8,4,13} *)
         ; enter1 entry (Declined Noun Mas [ (Dual,   [ (Acc,form) ]) ])
         ; enter1 entry (Declined Noun Mas [ (Dual,   [ (Voc,form) ]) ])
         }
-  }
+  ; let entry = "dh.rt" in (* ruupadh.rk *)
+        let form = code "dh.rk" in do
+        { enter1 entry (Declined Noun Mas [ (Singular,   [ (Nom,form) ]) ])
+        ; enter1 entry (Declined Noun Neu [ (Singular,   [ (Nom,form) ]) ])
+        }
+   }
 ;
 value enter_extra_iifcs () = do
   { let entry = "ahan" in (* for -aha- like pu.nyaahavaacanam *)

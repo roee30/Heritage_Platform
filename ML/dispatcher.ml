@@ -59,7 +59,8 @@ value transducer = fun
   | Peri -> transducers.peri (* periphrastic perfect *)
   | Lopa -> transducers.lopa (* e/o root forms *)
   | Lopak -> transducers.lopak (* e/o kridanta forms *)
-  | Ifc  -> transducers.ifc  (* in fine composi forms *)
+  | Ifcv  -> transducers.ifcv  (* vowel-initial ifc forms *)
+  | Ifcc  -> transducers.ifcc  (* consonant-initial ifc forms *)
   | Ifc2 -> transducers.ifc2 (* idem in mode non gen *)
   | Pv   -> transducers.prev (* preverbs *) 
   | Pvkc | Pvc -> transducers.pvc  (* preverbs starting with consonant *) 
@@ -81,10 +82,10 @@ value transducer = fun
   | Inftu -> transducers.inftu (* infinitives in -tu iic. Renou HLS 72 *)
   | Kama -> transducers.kama (* ifcs of kaama/manas: tyaktukaama dra.s.tumanas *)
   | Cache -> transducers.cache (* cached forms *)
-  | Noun | Iic | Iik | Voca | Krid | Pvk | Vok
+  | Noun | Iic | Iik | Ifc | Voca | Krid | Pvk | Vok
     -> raise (Control.Anomaly "composite phase")
   | Unknown -> raise (Control.Anomaly "transducer - Unknown")
-  | _ -> raise (Control.Anomaly "no transducer for fake phase") 
+  | _ -> raise (Control.Anomaly "no transducer for Comp fake phase") 
   ]
 ; 
 (* Tests whether a word starts with a phantom phoneme (precooked aa-prefixed
@@ -119,7 +120,7 @@ value cached = (* potentially cached lexicon acquisitions *)
 value initial1 =
    (* All phases but Ifc, Abso, Auxi, Auxik, Auxiick, Lopa, Lopak. *)
    [ Inde; Iicv; Iicc; Nouv; Nouc; Pron; A; An; Root; Kriv; Kric; Iikv; Iikc
-   ; Peri; Pv; Pvkv; Pvkc; Iiv; Iivv; Iivc; Iiy; Inv; Ai; Ani
+   ; Peri; Pv; Pvkv; Pvkc; Iiv; Iivv; Iivc; Iiy; Inv; Ai; Ani 
    ; Absv; Absc; Inftu; Vocv; Vocc; Vokv; Vokc ] @ cached
 and initial2 =  (* simplified segmenter with less phases, no generation *)
    [ Inde; Iic2; Noun2; Pron; Root; Pv; Iiv; Absv; Absc ] 
@@ -128,21 +129,21 @@ value initial full = if full then initial1 else initial2
 ;
 (* dispatch1: Word.word -> phase -> phases *)
 value dispatch1 w = fun (* w is the current input word *)
-  [ Nouv | Nouc | Pron | Inde | Abso | Auxi | Auxik | Kama | Ifc 
+  [ Nouv | Nouc | Pron | Inde | Abso | Auxi | Auxik | Kama | Ifcv | Ifcc 
   | Kriv | Kric | Absv | Absc | Avy | Lopak | Root | Lopa ->
        if phantomatic w then [ Root; Kriv; Kric; Iikv; Iikc; Abso ] (* aa- pv *) 
        else initial1
   | A -> if phantomatic w then []
-         else [ Iicc; Nouc; Iikc; Kric; Pvkc; Iivc; Vocc; Vokc ]
-  | An -> if phantomatic w then [] 
-          else [ Iicv; Nouv; Iikv; Kriv; Pvkv; Iivv; Vocv; Vokv
-          ; A (* eg anak.sara *) ; An (* attested ? *) ]
+         else [ Iicc; Nouc; Iikc; Kric; (* Ifcc; *) Pvkc; Iivc; Vocc; Vokc ]
+  | An -> if phantomatic w then []  
+          else [ Iicv; Nouv; Iikv; Kriv; (* Ifcv; *) Pvkv; Iivv; Vocv; Vokv
+               ; A (* eg anak.sara *) ; An (* attested ? *) ] 
   | Ai -> [ Absc; Pvc ]
   | Ani -> [ Absv; Pvv ]
     (* This assumes that privative prefixes cannot prefix Ifc forms 
        justified by \Pan{2,2,6} a-x only if x is a subanta. *)
   | Iicv | Iicc | Iikv | Iikc | Iiif | Auxiick -> (* Compounding *)
-       [ Iicv; Iicc; Nouv; Nouc; A; An; Ifc; Iikv; Iikc; Kriv; Kric
+       [ Iicv; Iicc; Nouv; Nouc; A; An; Ifcv; Ifcc; Iikv; Iikc; Kriv; Kric
        ; Pvkv; Pvkc; Iiif; Iivv; Iivc; Vocv; Vocc; Vokv; Vokc ] @ cached
   | Pv -> if phantomatic w then [] else  
           if amuitic w then [ Lopa ] else [ Root; Abso; Peri; Inftu ]
@@ -187,7 +188,7 @@ value terminal = (* Accepting phases *)
    ; Kric 
    ; Inde
    ; Abso; Absv; Absc
-   ; Ifc; Ifc2
+   ; Ifcv; Ifcc; Ifc2
    ; Auxi; Auxik
    ; Vocc; Vocv; Vokv; Vokc; Inv 
    ; Lopa; Lopak
@@ -603,8 +604,8 @@ value validate out = match out with
                 if List.exists valid tags then
                    let form = apply_sandhi prev abso_form sv in 
                    let cpd_form = Word.mirror form in
-                   [ (Comp (Pv,Abso) pv abso_form,cpd_form,s) :: r ]
-                else []
+                   [ (Comp (Pv,Abso) pv abso_form,cpd_form,s) :: r ] 
+                else [] 
       ]
     (* We now prevent overgeneration of forms "sa" and "e.sa" \Pan{6,1,132} *)
   | [ (ph,form,_) :: [ (Pron,[ 1; 48 ],_) :: _ ] ] (* sa *) -> 
@@ -664,7 +665,7 @@ value rec color_of_phase = fun
         -> Yellow
   | Auxiick | Iivv | Iivc | Peri | Iiv -> Orange
   | Voca | Vocv | Vocc | Inv | Vok | Vokv | Vokc -> Lawngreen
-  | Ifc | Ifc2 -> Cyan
+  | Ifc | Ifcv | Ifcc | Ifc2 -> Cyan
   | Unknown -> Grey
   | Comp (_,ph) _ _ -> color_of_phase ph 
   | Pv | Pvv | Pvc | Pvk | Pvkc | Pvkv -> failwith "Illegal preverb segment" 

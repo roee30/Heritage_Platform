@@ -33,6 +33,7 @@ type phase =
   | A | An (* privative nan-compounds formations in a- or -an *)
   | Ai | Ani (* initial privative nan-compounds *)
   | Iicv | Iicc (* split of Iic by first letter resp. vowel or consonant *)
+  | Ifcv | Ifcc (* idem for Ifc *)
   | Nouv | Nouc (* idem for Noun *)
   | Krid (* Kridantas eg participles *) 
   | Vok (* Kridanta vocatives *)  
@@ -88,6 +89,8 @@ value rec string_of_phase = fun
   | Ani   -> "Ani" 
   | Iicv  -> "Iicv"
   | Iicc  -> "Iicc" 
+  | Ifcv  -> "Ifcv"
+  | Ifcc  -> "Ifcc" 
   | Nouv  -> "Nouv"
   | Nouc  -> "Nouc"  
   | Krid  -> "Krid"
@@ -146,6 +149,8 @@ and phase_of_string = fun (* unsafe *)
   | "Ani"   -> Ani
   | "Iicv"  -> Iicv
   | "Iicc"  -> Iicc
+  | "Ifcv"  -> Ifcv
+  | "Ifcc"  -> Ifcc
   | "Nouv"  -> Nouv
   | "Nouc"  -> Nouc
   | "Krid"  -> Krid

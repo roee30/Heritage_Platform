@@ -89,10 +89,10 @@ value rec contains phase_w = fun
   | [ (phase,word,_) :: rest ] -> phase_w=(phase,word) || contains phase_w rest
   ] 
 ;
-(* This validation comes from the Summary mode, which sets checkpoints that
-   have to be verified for each solution. This is probably temporary, 
-   [solution] ought to be checked progressively by [react], 
-   with proper pruning of backtracking. *)
+(* This validation comes from the Summary mode with Interface, which sets 
+   checkpoints that have to be verified for each solution. 
+   This is probably temporary, [solution] ought to be checked progressively 
+   by [react], with proper pruning of backtracking. *)
 value check_chunk solution = 
    let position = offset_chunk.val 
    and checkpoints = all_checks.val in

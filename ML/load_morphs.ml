@@ -34,7 +34,8 @@ module Morphs
   | Pv (* Preverb optional before Root or Lopa or mandatory before Abso *)
   | Pvc | Pvv (* privative Abso *)
   | Pvk | Pvkc | Pvkv (* Preverb optional before Krid or Iik or Lopak *) 
-  | A | An | Ai | Ani | Iicv | Iicc | Nouv | Nouc (* privative nan-compounds *)
+  | A | An | Ai | Ani (* privative nan-compounds *)
+  | Iicv | Iicc | Ifcv | Ifcc | Nouv | Nouc 
   | Krid (* K.ridaantaas - used to be called Parts *) 
   | Vok (* K.ridaanta vocatives *) 
   | Iik (* K.ridaantaas as left component - used to be called Piic *) 
@@ -133,7 +134,7 @@ value morpho_tags = fun
     | Auxiick            -> morpho.auxiicks
     | Voca | Vocv | Vocc -> morpho.vocas
     | Inv                -> morpho.invs
-    | Ifc                -> morpho.ifcs
+    | Ifc | Ifcv | Ifcc  -> morpho.ifcs
     | Iic | Iicv | Iicc  -> morpho.iics
     | Iiv | Iivv | Iivc  -> morpho.iivs 
     | Iiif               -> morpho.iifs

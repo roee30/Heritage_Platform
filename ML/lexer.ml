@@ -7,10 +7,9 @@
 (* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-(* Sanskrit Phrase Lexer in 40 phases version. *)
-(* Used by Parser, and Rank for Reader/Regression. 
+(* Sanskrit Phrase Lexer - Used by Parser, and Rank for Reader/Regression. 
    Uses Phases from Dispatcher to define phase.
-   Loads the transducers, calls Dispatch to create Disp. 
+   Loads the transducers, calls Dispatch to create module Disp. 
    Calls Segment to build Viccheda, the Sanskrit lexer that undoes sandhi 
    in order to produce a padapatha.
    Exports various print functions for the various modes. *)
@@ -80,7 +79,7 @@ value print_tags pvs seg_num phase form tags =
   let _ = List.fold_left ptag 1 tags in ()
 ;
 value rec scl_phase = fun
-  [ Pv | Pvk | Pvkc | Pvkv -> "pv"
+  [ Pv | Pvk | Pvc | Pvv | Pvkc | Pvkv -> "pv"
   | Noun | Noun2 | Nouc | Nouv | Krid | Kriv | Kric | Lopak | Pron | Auxik 
     -> "noun"
   | Root | Lopa | Auxi -> "root"
@@ -93,7 +92,7 @@ value rec scl_phase = fun
   | Inftu -> "inftu" 
   | Kama -> "kama" 
   | Voca | Vocv | Vocc | Inv | Vok | Vokv | Vokc -> "voca"
-  | Ifc | Ifc2 -> "ifc"
+  | Ifc | Ifcv | Ifcc | Ifc2 -> "ifc"
   | Unknown -> "unknown"
   | Cache -> "Cache" 
   | Comp (_,ph) _ _ -> "preverbed " ^ scl_phase ph

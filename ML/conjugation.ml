@@ -791,6 +791,7 @@ value resolve_homonym entry =
     | "k.r"
     | "dhuu"
     | "v.r" -> first entry
+    | "p.r"
     | "su" 
     | "hi" -> second entry
     | _ -> entry

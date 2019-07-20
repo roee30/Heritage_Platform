@@ -40,9 +40,9 @@ type transducer_vect =
   ; auxi : auto (* their k.r and bhuu finite forms supports *) 
   ; auxik : auto (* their k.r and bhuu kridanta forms supports *) 
   ; auxiick : auto (* their k.r and bhuu iic kridanta forms supports *) 
-  ; ifc  : auto (* ifc forms *)
-(*  ; ifcv : auto (* vowel-initial ifc *)
-  ; ifcc : auto (* consonant-initial ifc *) *)
+(*; ifc  : auto (* ifc forms *) *)
+  ; ifcv : auto (* vowel-initial ifc *) 
+  ; ifcc : auto (* consonant-initial ifc *)  
   ; ifc2 : auto (* ifc forms in mode non gen *)
   ; iiy  : auto (* iic avyayiibhava *) 
   ; avya : auto (* ifc avyayiibhava *)
@@ -163,6 +163,7 @@ value transducers =
   (* now we split the subanta stems and forms starting with vowel or consonant *)
   let (transnv,transnc) = split_auto transn
   and (transiv,transic) = split_auto transi  
+  and (ifcv,ifcc) = split_auto transf 
   and (kriv,kric) = split_auto transk
   and (iikv,iikc) = split_auto transik  
   and (iivv,iivc) = split_auto iiv
@@ -180,8 +181,8 @@ value transducers =
   ; abso = load_transducer "Absya"
   ; iic2 = load_transducer "Iic2" 
   ; iifc = load_transducer "Iiif"  
-  ; ifc  = transf
-  ; ifc2  = load_transducer "Ifc2"
+(*; ifc  = transf *)
+  ; ifc2  = load_transducer "Ifc2" 
   ; iiv = iiv 
   ; auxi  = load_transducer "Auxi"
   ; auxik = load_transducer "Auxik"
@@ -198,6 +199,8 @@ value transducers =
   ; an = an_trans
   ; iicv = transiv
   ; iicc = transic
+  ; ifcv = ifcv
+  ; ifcc = ifcc
   ; iivv = iivv
   ; iivc = iivc
   ; nouv = transnv

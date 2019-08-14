@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Similar to Tagger but returns tagging if unique, fails otherwise.
@@ -98,6 +98,7 @@ value load_morphs () =
   ; sfxs  = load_morpho Install.public_sfxs_file
   ; isfxs = load_morpho Install.public_isfxs_file
   ; caches = load_morpho Install.public_cache_file
+  ; cacheis = load_morpho Install.public_cachei_file
   ; prevs = load_preverbs Install.public_preverbs_file
   } 
 ;

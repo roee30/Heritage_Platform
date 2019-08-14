@@ -24,6 +24,7 @@
 open Auto.Auto; 
 open Load_transducers; (* [transducer_vect Trans roots_morpho krids_morpho] *)
 open Skt_morph;
+open Phonetics; (* phantomatic amuitic *)
 open Morphology; (* [inflected inflected_map Verb_form morphology] *)
 open Naming; (* [homo_undo look_up_homo unique_kridantas] *)  
 open Phases.Phases; (* phase etc. *)
@@ -82,7 +83,8 @@ value transducer = fun
   | Inftu -> transducers.inftu (* infinitives in -tu iic. Renou HLS 72 *)
   | Kama -> transducers.kama (* ifcs of kaama/manas: tyaktukaama dra.s.tumanas *)
   | Cache -> transducers.cache (* cached forms *)
-  | Noun | Iic | Iik | Ifc | Voca | Krid | Pvk | Vok
+  | Cachei -> transducers.cachei (* cached iic forms *)
+  | Noun | Iic | Iik | Ifc | Voca | Krid | Vok
     -> raise (Control.Anomaly "composite phase")
   | Unknown -> raise (Control.Anomaly "transducer - Unknown")
   | _ -> raise (Control.Anomaly "no transducer for Comp fake phase") 
@@ -91,7 +93,7 @@ value transducer = fun
 (* Tests whether a word starts with a phantom phoneme (precooked aa-prefixed
    finite or participial or infinitive or abs-ya root form *)
 value phantomatic = fun
-  [ [ c :: _ ] -> c<(-2)
+  [ [ c :: _ ] -> c<(-2) || c=123
   | _ -> False
   ]
 (* Amuitic forms start wiih -2 = [-] which elides preceding -a or -aa from Pv *)
@@ -114,7 +116,7 @@ The following is obtained from the above recursion equation by Brzozowski's
 derivatives like in Berry-Sethi's translator. *)
 
 value cached = (* potentially cached lexicon acquisitions *) 
-  if Web.cache_active.val="t" then [ Cache ] else []
+  if Web.cache_active.val="t" then [ Cache; Cachei ] else []
 ;
 (* initial1, initial2: phases *)
 value initial1 =
@@ -128,51 +130,42 @@ and initial2 =  (* simplified segmenter with less phases, no generation *)
 value initial full = if full then initial1 else initial2
 ;
 (* dispatch1: Word.word -> phase -> phases *)
-value dispatch1 w = fun (* w is the current input word *)
+value dispatch1 w = fun (* w is the current input word *) 
   [ Nouv | Nouc | Pron | Inde | Abso | Auxi | Auxik | Kama | Ifcv | Ifcc 
-  | Kriv | Kric | Absv | Absc | Avy | Lopak | Root | Lopa ->
-       if phantomatic w then [ Root; Kriv; Kric; Iikv; Iikc; Abso ] (* aa- pv *) 
-       else initial1
-  | A -> if phantomatic w then []
-         else [ Iicc; Nouc; Iikc; Kric; (* Ifcc; *) Pvkc; Iivc; Vocc; Vokc ]
-  | An -> if phantomatic w then []  
-          else [ Iicv; Nouv; Iikv; Kriv; (* Ifcv; *) Pvkv; Iivv; Vocv; Vokv
-               ; A (* eg anak.sara *) ; An (* attested ? *) ] 
+  | Kriv | Kric | Absv | Absc | Avy | Lopak | Root | Lopa | Cache -> initial1
+  | A -> [ Iicc; Nouc; Iikc; Kric; Pvkc; Iivc; Vocc; Vokc ]
+  | An -> [ Iicv; Nouv; Iikv; Kriv; Pvkv; Iivv; Vocv; Vokv
+          ; A (* eg anak.sara *) ; An (* attested ? *) ] 
   | Ai -> [ Absc; Pvc ]
   | Ani -> [ Absv; Pvv ]
     (* This assumes that privative prefixes cannot prefix Ifc forms 
        justified by \Pan{2,2,6} a-x only if x is a subanta. *)
-  | Iicv | Iicc | Iikv | Iikc | Iiif | Auxiick -> (* Compounding *)
+  | Iicv | Iicc | Iikv | Iikc | Iiif | Auxiick | Cachei -> (* Compounding *)
        [ Iicv; Iicc; Nouv; Nouc; A; An; Ifcv; Ifcc; Iikv; Iikc; Kriv; Kric
        ; Pvkv; Pvkc; Iiif; Iivv; Iivc; Vocv; Vocc; Vokv; Vokc ] @ cached
-  | Pv -> if phantomatic w then [] else  
-          if amuitic w then [ Lopa ] else [ Root; Abso; Peri; Inftu ]
-  | Pvc | Pvv -> if phantomatic w then [] else  [ Abso ]
-  | Pvkc | Pvkv -> if phantomatic w then [] else 
+  | Pv -> if amuitic w then [ Lopa ] else [ Root; Abso; Peri; Inftu ]
+  | Pvc | Pvv -> [ Abso ]
+  | Pvkc | Pvkv -> 
           if amuitic w then [ Lopak ] else [ Iikv; Iikc; Kriv; Kric; Vokv; Vokc ]
   | Iiv -> [ Auxi ] (* as bhuu and k.r finite forms *)
   | Iivv | Iivc -> [ Auxik; Auxiick ] (* bhuu and k.r kridanta forms *)
   | Iiy -> [ Avy ]
   | Peri -> [ Auxi ] (* overgenerates, should be only perfect forms *) 
   | Inftu -> [ Kama ] 
-  | Vocc | Vocv | Vokv | Vokc | Cache -> [] 
+  | Vocc | Vocv | Vokv | Vokc -> [] 
       (* only chunk-final vocatives so no Iic overlap *) 
   | Inv -> [ Vocv; Vocc; Vokv; Vokc ] (* invocations before vocatives *) 
 (* Privative prefixes A and An are not allowed to prefix Ifc like a-dhii *)
-  | Noun | Iic | Iik | Voca | Krid | Noun2 | Iic2 | Ifc2 | Pvk | Vok
+  | Noun | Iic | Iik | Voca | Krid | Noun2 | Iic2 | Ifc2 | Vok
   | Unknown -> failwith "Dispatcher anomaly"
-  | ph -> failwith ("Dispatcher fake phase: " ^ string_of_phase ph)
+  | ph -> failwith ("Dispatcher fake phase: " ^ string_of_phase ph) 
   ]
 and dispatch2 w = fun (* simplified segmenter *)
-  [ Noun2 | Pron | Inde | Abso | Absv | Absc | Auxi | Ifc2 ->
-       if phantomatic w then [ Root; Abso ]
-       else initial2
-  | Root | Lopa -> if phantomatic w then [] (* no consecutive verbs in chunk *)
-                   else [ Inde; Iic2; Noun2; Pron ]
-  | Iic2 -> if phantomatic w then []
-            else [ Iic2; Noun2; Ifc2 ]  
-  | Pv -> if phantomatic w then [] else  
-          if amuitic w then [ Lopa ] else [ Root; Abso ]
+  [ Noun2 | Pron | Inde | Abso | Absv | Absc | Auxi | Ifc2 -> initial2
+  | Root | Lopa -> (* no consecutive verbs in chunk *)
+                   [ Inde; Iic2; Noun2; Pron ]
+  | Iic2 -> [ Iic2; Noun2; Ifc2 ]  
+  | Pv -> if amuitic w then [ Lopa ] else [ Root; Abso ]
   | Iiv -> [ Auxi ] 
   | _ -> failwith "Dispatcher anomaly"
   ]
@@ -346,7 +339,6 @@ value validate_pv_k pv krit_form (delta,_) = (* see [Morpho.print_inv_morpho] *)
       if conj=Primary then attested_verb gana_pada pv root else attested pv root
   with [ Unvoiced -> attested pv root ]
 ;
-(* We should verify aa- validation for phantomatic forms *)
 value autonomous_form root_form = 
   match Deco.assoc root_form morpho.roots with
     [ [] -> fail_inconsistency root_form
@@ -362,7 +354,6 @@ value filter_out_krit krit root = match Canon.decode root with
   | _ -> False
   ] 
 ;
-(* We should verify aa- validation for phantomatic forms *)
 value autonomous_form_k krid_form (delta,_) =
   let stem = Word.patch delta krid_form in 
   let (homo,bare_stem) = homo_undo stem in
@@ -427,8 +418,6 @@ value apply_sandhi rleft right = fun
  Things would be much simpler if we generated forms of verbs and kridantas
  with (only valid) preverbs attached, since this check would be unnecessary.
  On the other hand, we would have to solve the ihehi problem. *)
-(* NB. A similar kind of aggregation is effected for a few generative taddhitas,
-   but this is still experimental. *)
 value validate out = match out with
   [ [] -> []
   | [ (Root,rev_root_form,s) :: [ (Pv,prev,sv) :: r ] ] ->
@@ -441,10 +430,10 @@ value validate out = match out with
          (* We glue the two segments with a composite tag keeping information *)
          [ (Comp (Pv,Root) pv root_form,verb_form,s) :: r ] 
       else []
-  | [ (Root,rev_root_form,_) :: next ] ->
+  | [ (Root,rev_root_form,s) :: next ] ->
       let root_form = Word.mirror rev_root_form in 
-      if autonomous_form root_form && sa_before_check root_form next
-      then out else [] 
+      if autonomous_form root_form && sa_before_check root_form next 
+         then out else [] 
   | [ (Lopa,rev_lopa_form,s) :: [ (Pv,prev,sv) :: r ] ] -> 
       let pv = Word.mirror prev in 
       let pv_str = Canon.decode pv 
@@ -460,10 +449,10 @@ value validate out = match out with
       else []
   | [ (Lopa,rev_lopa_form,_) :: next ] -> 
       let lopa_form = Word.mirror rev_lopa_form in 
-      let verb_form =  match lopa_form with 
+      let verb_form = match lopa_form with 
                       [ [ -2 :: rf ] -> rf | _ -> failwith "Wrong lopa form" ] in
       if autonomous_form verb_form && sa_before_check lopa_form next
-         then  out else []
+         then out else []
   | (* infinitives in -tu with preverbs *)
     [ (Inftu,rev_root_form,s) :: [ (Pv,prev,sv) :: r ] ] ->
       let pv = Word.mirror prev in 
@@ -484,19 +473,19 @@ value validate out = match out with
       match Deco.assoc krid_form morpho.krids with
       [ [] -> failwith ("Unknown krid_form: " ^ Canon.decode krid_form)
       | tags -> if List.exists (validate_pv_k pv_str krid_form) tags then
-                   let form = apply_sandhi prev krid_form sv in
+                   let form = apply_sandhi prev krid_form sv in 
                    let cpd_form = Word.mirror form in
                    [ (Comp (ph,phk) pv krid_form,cpd_form,s) :: r ] 
-                else []
+                (* else [] *)
+      else []
       ]
-  | [ (Kriv,rev_krid_form,_) :: next ] ->
-      let krid_form = Word.mirror rev_krid_form in
-      if phantomatic krid_form then failwith "Kriv phantom" else (* PB *)
-      match Deco.assoc krid_form morpho.krids with
-      [ [] -> failwith ("Unknown krid_form: " ^ Canon.decode krid_form) 
-      | tags -> if List.exists (autonomous_form_k krid_form) tags && not_sa_v next
-                then out else []
-      ]
+  | [ (Kriv,rev_krid_form,s) :: next ] ->
+    let krid_form = Word.mirror rev_krid_form in
+     match Deco.assoc krid_form morpho.krids with 
+     [ [] -> failwith ("Unknown krid_form: " ^ Canon.decode krid_form) 
+     | tags -> if List.exists (autonomous_form_k krid_form) tags && not_sa_v next
+               then out else []
+     ] 
   | [ (Kric,rev_krid_form,_) :: _ ] ->
       let krid_form = Word.mirror rev_krid_form in 
       match Deco.assoc krid_form morpho.krids with
@@ -607,6 +596,8 @@ value validate out = match out with
                    [ (Comp (Pv,Abso) pv abso_form,cpd_form,s) :: r ] 
                 else [] 
       ]
+  | [ (Abso,rev_abso_form,s) :: next ] -> 
+      raise (Control.Anomaly "Isolated Abso form")
     (* We now prevent overgeneration of forms "sa" and "e.sa" \Pan{6,1,132} *)
   | [ (ph,form,_) :: [ (Pron,[ 1; 48 ],_) :: _ ] ] (* sa *) -> 
       if Phonetics.consonant_initial (Word.mirror form)  
@@ -633,8 +624,9 @@ value validate out = match out with
       raise (Control.Anomaly m) (* all preverbs ought to have been processed *)
 (* [ | [ (pv,_,_) :: _ ] when preverb_phase pv -> out ] noop
 This pv is not terminal, and should be chopped off by the next item *) 
-  | [ _ :: [ (_,w,_) :: _ ] ] when phantomatic (Word.mirror w) -> 
-    raise (Control.Anomaly "Bug phantomatic segment")
+  | [ (_,w,_) :: _ ] when phantomatic (Word.mirror w) -> 
+    raise (Control.Anomaly ("Bug phantomatic segment" ^ Canon.decode (Word.mirror w)))
+
   | _ -> out (* default identity *)
   ]
 ;
@@ -644,13 +636,6 @@ value terminal_sa = fun
   | _ -> False 
   ]
 ;
-(*i unused [
-value terminal_sas = fun 
-  [ [ (Pron,[ 48; 1; 48 ],_) :: _ ] (* sas *)  
-  | [ (Pron,[ 48; 1; 47; 10 ],_) :: _ ] (* e.sas *) -> True 
-  | _ -> False 
-  ]
-; ] i*)
 open Html;
 value rec color_of_phase = fun
   [ Noun | Noun2 | Lopak | Nouc | Nouv | Kriv | Kric | Krid | Auxik | Kama
@@ -662,13 +647,14 @@ value rec color_of_phase = fun
   | Avy -> Magenta
   | Inftu -> Salmon 
   | Iic | Iic2 | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif 
-        -> Yellow
+        | Cachei -> Yellow
   | Auxiick | Iivv | Iivc | Peri | Iiv -> Orange
   | Voca | Vocv | Vocc | Inv | Vok | Vokv | Vokc -> Lawngreen
   | Ifc | Ifcv | Ifcc | Ifc2 -> Cyan
   | Unknown -> Grey
   | Comp (_,ph) _ _ -> color_of_phase ph 
-  | Pv | Pvv | Pvc | Pvk | Pvkc | Pvkv -> failwith "Illegal preverb segment" 
+  | Pv | Pvv | Pvc | Pvkc | Pvkv -> failwith "Illegal preverb segment" 
+(*| _ -> raise (Control.Anomaly "Unexpected color") *)
 (*i NB: unused background colors: Pink Green Aquamarine Chamois i*)
   ]
 ; 

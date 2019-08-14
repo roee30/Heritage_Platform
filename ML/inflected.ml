@@ -41,7 +41,7 @@ grinding, and used for the [unique_kridantas] computation in the second. *)
 value access_lexical_krid stem = Deco.assoc stem lexicalized_kridantas.val
 ;
 (* We look up the lexicalized kridantas register to see if entry is a krid. *)
-(* This test should be done before, in [Print_dict] that has the info ? *)
+(*i This test should be done before, in [Print_dict] that has the info ? i*)
 value is_kridanta entry = try
   let (hom,stem) = Encode.decompose_str entry in 
   let krids = access_lexical_krid stem in 
@@ -175,6 +175,9 @@ value add_morphabsya w d i aapv = do
        | [ 7 :: r ] -> 
            let fake = [ (* *r *) -6 :: r ] in
            absya.val := Lexmap.addl absya.val fake (d fake,i)
+       | [ 23 :: r ] -> (* aa-ch gives *C *)
+           let fake = [ (* *C *) 123 :: r ] in
+           absya.val := Lexmap.addl absya.val fake (d fake,i)
        | _ -> ()
        ]
     else ()
@@ -208,6 +211,9 @@ value add_morphc w d i aapv = do
            roots.val := Lexmap.addl roots.val fake (d fake,i)
        | [ 7 :: r ] -> 
            let fake = [ (* *r *) -6 :: r ] in
+           roots.val := Lexmap.addl roots.val fake (d fake,i)
+       | [ 23 :: r ] -> (* aa-ch gives *C *)
+           let fake = [ (* *C *) 123 :: r ] in
            roots.val := Lexmap.addl roots.val fake (d fake,i)
        | _ -> ()
        ]
@@ -258,6 +264,9 @@ value add_morphpa w stem i aapv = do
        | [ 7 :: r ] -> (* aa-.r gives *r *)
            let fake = [ (* *r *) -6 :: r ] in
            parts.val := Lexmap.addl parts.val fake (diff fake stem,i)
+       | [ 23 :: r ] -> (* aa-ch gives *C *)
+           let fake = [ (* *C *) 123 :: r ] in
+           parts.val := Lexmap.addl parts.val fake (diff fake stem,i)
        | _ -> ()
        ]
     else ()
@@ -297,6 +306,9 @@ value add_morphpav w stem i aapv = do
        | [ 7 :: r ] -> (* aa-.r gives *r *)
            let fake = [ (* *r *) -6 :: r ] in
            partvocs.val := Lexmap.addl partvocs.val fake (diff fake stem,i)
+       | [ 23 :: r ] -> (* aa-ch gives *C *)
+           let fake = [ (* *C *) 123 :: r ] in
+           partvocs.val := Lexmap.addl partvocs.val fake (diff fake stem,i)
        | _ -> ()
        ]
     else ()
@@ -330,6 +342,9 @@ value add_morphpi w stem i aapv = do
        | [ 7 :: r ] -> (* aa-.r gives *r *)
            let fake = [ (* *r *) -6 :: r ] in
            piics.val := Lexmap.addl piics.val fake (diff fake stem,i)
+       | [ 23 :: r ] -> (* aa-ch gives *C *)
+           let fake = [ (* *C *) 123 :: r ] in
+           piics.val := Lexmap.addl piics.val fake (diff fake stem,i)
        | _ -> ()
        ]
     else ()
@@ -353,7 +368,7 @@ value inftu = ref (Deco.empty : inflected_map)
 and kama = ref (Deco.empty : inflected_map)
 ;
 value add_morphinftu w d i = (* similar to [add_morphind] *)
-  if Phonetics.phantomatic w then () else 
+                    if Phonetics.phantomatic w then () else
   inftu.val := Lexmap.addl inftu.val w (d w,i)
 and add_morphkama w d i = (* similar to [add_morph] *)
   kama.val := Lexmap.addl kama.val w (d w,i)
@@ -499,7 +514,7 @@ value enter_form stem =
              if root = "i" || root = "edh" then () (* \Pan{6,1,89} *)
              else add_morphlopak w stem p aapv
           else ()
-(* TODO [; if v=Pfutp && root="zak" then imitate enter1] inftu-zakya *)
+(*i TODO [; if v=Pfutp && root="zak" then imitate enter1] inftu-zakya i*)
         } 
    | Bare (Krid (_,Action_noun) root) w -> 
        add_morphauxiick w stem Bare_stem (* cvi patch *)

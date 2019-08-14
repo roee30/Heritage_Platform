@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Sanskrit sentence segmenter - analyses (external) sandhi                   *)
@@ -180,7 +180,7 @@ value sandhi_aa = fun
              [ 1 | 2 -> [ 2 ]
              | 3 | 4 -> Encode.code_string "yaa"
              | 5 | 6 -> Encode.code_string "vaa"
-             | 7 | 8 -> Encode.code_string "raa"
+             | 7 | 8 | 48 -> Encode.code_string "raa"
              | 9 -> Encode.code_string "laa"
              | c -> [ Phonetics.voiced c; 2 ]
              ]
@@ -188,7 +188,7 @@ value sandhi_aa = fun
   ]
 ;
 (* Expands phantom-initial or lopa-initial segments *)
-(* NB phase [(aa_phase ph)] of "aa" is Pv for verbal ph, Pvkv for nominal ones *)
+(* phase [(aa_phase ph)] of "aa" is Pv for verbal ph, Pvkv for nominal ones *)
 value accrue ((ph,revword,rule) as segment) previous_segments =
   match Word.mirror revword with 
   [ (* First Lopa *)
@@ -260,7 +260,15 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
            where new_segment = (ph,Word.mirror [ 7 :: r ],rule)
        | _ -> failwith "accrue anomaly"
        ]
-  | _ -> [ segment :: previous_segments ]
+  | [ 123 (* *C *) :: r ] -> match previous_segments with
+       [ [ (phase,rword,Euphony (_,u,[ 123 ])) :: rest ] -> 
+         let w = sandhi_aa u in
+         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2; 22; 23 ],[ 2 ], [ 23 ])) 
+                       :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
+           where new_segment = (ph,Word.mirror [ 23 :: r ],rule)
+       | _ -> failwith "accrue anomaly"
+       ]
+ | _ -> [ segment :: previous_segments ]
   ]
 ;
 
@@ -319,7 +327,7 @@ value rec react phase input output back occ = fun
     let (keep,cut,input') = match input with 
        [ [ 0 :: rest ] -> (* explicit "-" compound break hint *) 
               (ii_phase phase,True,rest) 
-       | [ -10 :: rest ] -> (* mandatory segmentation + *)
+       | [ 100 :: rest ] -> (* mandatory segmentation + *)
               (True,True,rest)  
        | _ -> (True,False,input) (* no hint in input *)
        ] in         

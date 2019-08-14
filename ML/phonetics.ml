@@ -96,19 +96,10 @@ value lengthen = fun
   | [] -> failwith "Bad arg to lengthen"
   ]
 ;
-(* unphantom - sed in [Compile_sandhi] *)
-value uph = fun
-  [ -3 -> [ 2 ]
-  | -4 -> [ 10 ]
-  | -5 -> [ 12 ]
-  | -6 -> [ 2; 43 ] (* aar *)
-  | r -> [ r ]
-  ]
-;
 (* homophonic vowels *)
 value savarna v1 v2 = v1<9 && v2<9 && (long v1 = long v2)
 ;
-(* special version where c may be a phantom *)
+(* special version where c may be a phantom for Sandhi *)
 value savarna_ph v c = (vowel c && savarna v c) || (c=(-3) && avarna v)
 ;
 value velar   c = c > 16 && c < 22 (* gutturals    : k kh g gh f       *)
@@ -272,7 +263,7 @@ value rec brief = fun
   ] 
 ; 
 (* Sandhi of preverb aa- *)
-(* Unused, but simulated by Inflected. Related to asandhi below. *)
+(* Unused, but simulated by Inflected - related to asandhi below. *)
 value mkphantom = fun (* arg is vowel not avarna and not .rr or .l *)
   [ 1 | 2   -> [ -3 ]   (* aa-a *)
   | 3 | 4   -> [ -4 ]   (* aa-i *)
@@ -283,13 +274,15 @@ value mkphantom = fun (* arg is vowel not avarna and not .rr or .l *)
   | _       -> failwith "mkphantom"
   ]
 ; *)
-(* Sandhi of a and aa with initial vowel (or phantom) (for [Compile_sandhi]) *)
-(* arg is (vowel not avarna and not .rr or .l) or -2,-4,-5,-6 *)
+(* Sandhi of a and aa with initial vowel (or phantom) (for [Sandhi]) *)
+(* arg is (vowel not avarna and not .rr or .l) or -2,-4,-5,-6,-7,-8 *)
+(*i Should be deprecated i*)
 value asandhi = fun 
-  [ 3 | 4 | -4 -> [ 10 ]    (* e for i, ii and e-phantom *e *)
-  | 5 | 6 | -5 -> [ 12 ]    (* o for u, uu and o-phantom *o *)
+  [ 3 | 4 | -4 | -7 -> [ 10 ]    (* e for i, ii and e-phantoms *i *I *)
+  | 5 | 6 | -5 | -8 -> [ 12 ]    (* o for u, uu and o-phantoms *u *U *)
   | 7          -> [ 1; 43 ] (* ar *)
   | -6         -> [ 2; 43 ] (* aar *)
+  | 123        -> [ 2; 22; 23 ] (* aacch *)
   | 10 | 11    -> [ 11 ]    (* ai *)
   | 12 | 13    -> [ 13 ]    (* au *)
   | -2         -> [] (* amuissement *)
@@ -300,24 +293,13 @@ value vowel_or_phantom c = vowel c || phantom c
 ;
 (* Tests whether a word starts with a phantom phoneme (precooked aa-prefixed
    finite or participial or infinitive or abs-ya root form) 
-   Used by Morpho, Inflected. Copied in Dispatch. *)
+   Used by Morpho, Inflected. Copied in Dispatcher. *)
 value phantomatic = fun
-  [ [ c :: _ ] -> c<(-2) 
+  [ [ c :: _ ] -> c<(-2) || c=123
   | _ -> False
   ]
 (* Amuitic forms start with -2 = [-] which elides preceding -a or -aa from Pv *)
 and amuitic = fun [ [ -2 :: _ ] -> True | _ -> False ]
-;
-value end_aa = fun [ [ 2 :: _ ] -> True | _ -> False ]
-;
-value phantom_elim = fun
-  [ [ -2 :: w ] -> w
-  | [ -3 :: w ] -> [ 1 :: w ]
-  | [ -4 :: w ] -> [ 3 :: w ]
-  | [ -5 :: w ] -> [ 5 :: w ]
-  | [ -6 :: w ] -> [ 7 :: w ]
-  | w -> w
-  ]
 ;
 (* For m.rj-like verbs (Whitney§219-a) Panini{8,2,36} 
    "bhraaj" "m.rj" "yaj1" "raaj1" "vraj" "s.rj1" "bh.rjj"
@@ -462,7 +444,7 @@ value finalize_r stem = match stem with
        ]
   ] 
 ;
-(* internal sandhi with vowel or 'y' according to Macdonell §59 -- unused
+(*i internal sandhi with vowel or 'y' according to Macdonell §59 -- unused
 [value diphthong_split = fun
   [ 10 (* e *)  -> [ 42; 1 ] (* ay *)
   | 11 (* ai *) -> [ 42; 2 ] (* aay *) 
@@ -470,7 +452,7 @@ value finalize_r stem = match stem with
   | 13 (* au *) -> [ 45; 2 ] (* aav *)
   | c -> [ c ]
   ]
-;] *)
+;] i*)
 
 (* Caution. 
 Phantom phonemes *a (-3), *i (-4), *u (-5) and *r (-6) are NOT vowels, 

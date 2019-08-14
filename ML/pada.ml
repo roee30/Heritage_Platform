@@ -29,7 +29,7 @@ exception Unattested (* when a root/pada is attested only for some pvs *)
 ;
 value voices_of = fun 
   (* Simplification: invariant when prefixing by preverbs *)
-  [ "ak.s" | "afg" | "aj" | "a.t" | "at" | "ad#1" | "an#2" | "am"
+  [ "ak.s" | "afg" | "aj" | "a.t" | "at" | "ad#1" | "an#2" | "am"| "argh" 
   | "ard" | "av" | "az#2" | "as#1" | "as#2" | "aap" | "ifg" | "in" | "ind" 
   | "inv" | "il" | "i.s#2" | "iifkh" | "iir.s" | "uk.s" | "ujjh" | "u~nch"
   | "und" | "umbh" | "u.s" | ".rc#1" | ".rdh" | ".r.s" | "ej" | "kas" | "kiil"
@@ -49,7 +49,7 @@ value voices_of = fun
   | "du" | "du.s" | "d.rp" | "d.rbh" | "d.rz#1" | "d.rh" | "d.rr" | "dhyaa"
   | "draa#1" | "dru#1" | "druh#1" | "dham" | "dhaa#2" | "dhru" | "dhvan" 
   | "dhv.r" | "na.t" | "nad" | "nand" | "nam" | "nard" | "naz#1" | "nind"
-  | "nu#1" | "n.rt" | "pa.t" | "pat#1" | "path" | "paa#1" | "paa#2" | "pi#2" 
+  | "nu#1" | "n.rt" | "pa.t" | "pat#1" | "path" | "paa#1" | "paa#2" | "pii" 
   | "piz#1" | "pi.s" | "pu.t" | "p.r#1" | "p.r#2" | "p.r.s" | "p.rr" | "praa#1" 
   | "phal" | "bal" | "b.rh#1" | "b.rh#2" | "bha~nj" | "bha.n" | "bha.s" 
   | "bhas" | "bhaa#1" | "bhii#1" | "bhuj#1" | "bhuu#1" | "bhuu.s" | "bhram" 
@@ -299,7 +299,8 @@ value voices_of_pv upasarga gana = fun (* gana only used for "tap" "i" ".r" *)
 | "zii#1" -> if upasarga = "sam" then Ubha else Atma
 | "zram" -> if upasarga = "vi" then Ubha (* epic vizramate *) else Para
 | "krii" -> match upasarga with
-            [ "vi" | "pari" | "ava" -> Atma 
+            [ "vi" -> Ubha (* vikrii.naati/vikrii.niite *)
+            | "pari" | "ava" -> Atma 
             | _ -> Para (* \Pan{1,3,18} *)
             ]
 (* Next three equivalent to marking "unused" in lexicon *)

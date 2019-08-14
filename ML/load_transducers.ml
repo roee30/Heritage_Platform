@@ -64,6 +64,7 @@ type transducer_vect =
   ; kriv : auto (* vowel-initial krids *)
   ; kric : auto (* consonant-initial krids *)
   ; cache : auto (* user-defined supplement to noun *)
+  ; cachei : auto (* user-defined supplement to iic *)
   }
 ;
 
@@ -111,7 +112,8 @@ value load_transducer cat =
       | "Voca"    -> Web.public_transvoca_file
       | "Inv"     -> Web.public_transinv_file 
       | "Prev"    -> Web.public_transp_file
-      | "Cache"   -> Web.public_transca_file 
+      | "Cache"   -> Web.public_trans_cache_file 
+      | "Cachei"  -> Web.public_trans_cachei_file 
       | _ -> failwith ("Unexpected category: " ^ cat) 
       ] in 
   try (Gen.gobble file : auto) 
@@ -181,7 +183,6 @@ value transducers =
   ; abso = load_transducer "Absya"
   ; iic2 = load_transducer "Iic2" 
   ; iifc = load_transducer "Iiif"  
-(*; ifc  = transf *)
   ; ifc2  = load_transducer "Ifc2" 
   ; iiv = iiv 
   ; auxi  = load_transducer "Auxi"
@@ -216,6 +217,7 @@ value transducers =
   ; absv = absv
   ; absc = absc
   ; cache = load_transducer "Cache"
+  ; cachei = load_transducer "Cachei"
   }
 ;
 

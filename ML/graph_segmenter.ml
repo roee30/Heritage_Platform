@@ -22,7 +22,7 @@ module Segment
          and phases = list phase;
          value unknown : phase;
          value aa_phase : phase -> phase;
-         value preverb_phase : phase -> bool;
+         value preverb_phase : phase -> bool; 
          value ii_phase : phase -> bool;
          value un_lopa : phase -> phase;
          end)
@@ -280,16 +280,11 @@ value sandhi_aa = fun
              [ 1 | 2 -> [ 2 ]
              | 3 | 4 -> Encode.code_string "yaa"
              | 5 | 6 -> Encode.code_string "vaa"
-             | 7 | 8 -> Encode.code_string "raa"
+             | 7 | 8 | 48 -> Encode.code_string "raa"
              | 9     -> Encode.code_string "laa"
              | c     -> [ Phonetics.voiced c; 2 ]
              ]
   | _ -> failwith "sandhi_aa"
-  ]
-;
-value merge_aa = fun
-  [ [ c :: r ] -> unstack (Word.mirror (sandhi_aa [ c ])) r
-  | _ -> failwith "merge_aa"
   ]
 ;
 (* Expands phantom-initial or lopa-initial segments *)
@@ -364,6 +359,14 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
            where new_segment = (ph,Word.mirror [ 7 :: r ],rule)
        | _ -> failwith "accrue anomaly"
        ]
+  | [ 123 (* *C *) :: r ] -> match previous_segments with
+       [ [ (phase,rword,Euphony (_,u,[123])) :: rest ] -> 
+         let w = sandhi_aa u in 
+         [ new_seg :: [ (aa_phase ph,[ 2 ],Euphony ([ 2; 22; 23 ],[ 2 ], [ 23 ]))
+                   :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
+           where new_seg = (ph,Word.mirror [ 23 :: r ],rule)
+       | _ -> failwith "accrue anomaly"
+       ]
   | _ -> [ segment :: previous_segments ]
   ]
 ;
@@ -378,7 +381,7 @@ value check_sa contracted =
      not (cur_chunk.last && terminal_sa contracted)    (* forbid sa last *)
 (* [ && (not (terminal_sas contracted) || cur_chunk.last) (* sa.h last only *) ]
    This is too strict, in view of padapatha and und-sandhied mode 
-   et on a donc un peu d'overgeneration, avec eg "sa.h yogii" *)
+   and we get some overgeneration, e;G; with "sa.h yogii" *)
 ;
 
 (* Service routines of the segmenter *)
@@ -410,7 +413,7 @@ value schedule phase input output w cont =
    [output] is the current result of type [output]
    [back] is the backtrack stack of type [resumption]
    [occ] is the current reverse access path in the deterministic part
-   the last argument is the current state of type [auto]. *)
+   the last anonymous argument is the current state of type [auto]. *)
 (* Instead of functioning in coroutine with the Reader, one solution at a time,
    it computes all solutions, populating the graph structure for later display *)
 value rec react phase input output back occ = fun 
@@ -429,7 +432,7 @@ value rec react phase input output back occ = fun
     let (keep,cut,input') = match input with 
        [ [ 0 :: rest ] -> (* explicit "-" compound break hint *) 
               (ii_phase phase,True,rest) 
-       | [ -10 :: rest ] -> (* mandatory segmentation "+" *)
+       | [ 100 :: rest ] -> (* mandatory segmentation "+" *)
               (True,True,rest)
        | _ -> (True,False,input) (* no hint in input *)
        ] in         
@@ -542,7 +545,6 @@ value segment_iter chunks = segment_chunks (True,1) chunks
     | [] -> acc
     ]
 ;
-
 
 end; (* Segment *)
 

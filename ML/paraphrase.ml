@@ -69,7 +69,7 @@ value reg_stem = fun (* regular english verbs paraphrase *)
   | "pac"     -> "cook"
   | "pa.th"   -> "learn"
   | "paa#2"   -> "protect"
-  | "pi#2"    -> "increase"
+  | "pii"     -> "increase"
   | "praz"    -> "ask"
   | "bhaa.s"  -> "talk"
   | "tarj" 

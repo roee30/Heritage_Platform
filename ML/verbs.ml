@@ -589,7 +589,7 @@ and o_it = fun (* these roots have ppp in -na \Pan{8,2,45} - unused here *)
  (* | "iir" | "und" | "k.rr" | "klid" | "k.sii" | "k.sud" | "k.svid" | "khid"
     | "g.rr#1" | "glai" | "chad#1" | "chid#1" | "ch.rd" | "j.rr" | ".dii"
     | "tud#1" | "t.rd" | "t.rr" | "dagh" | "d.rr" | "dev" | "draa#1" | "draa#2"
-    | "nud" | "pad#1" | "pi#2" | "p.rr" | "pyaa" | "bhid#1" | "majj" | "man"
+    | "nud" | "pad#1" | "pii" | "p.rr" | "pyaa" | "bhid#1" | "majj" | "man"
     | "mid" | "mlaa" | "ri" | "lii" | "luu#1" | "vid#2" | "vlii" | "zad" | "z.rr"
     | "sad#1" | "skand" | "st.rr" | "styaa" | "syand" | "svid#2" | "had" *)
  (* aussi "suu#2" suuna "vrii" vrii.na *)
@@ -2566,7 +2566,7 @@ value compute_ppp_stems entry rstem =
     | "iir" | "und" | "k.rr" | "klid" | "k.sii" | "k.sud" | "k.svid" | "khid" 
     | "g.rr#1" | "glai" | "chad#1" | "chid#1" | "ch.rd" | "j.rr" | ".dii"
     | "tud#1" | "t.rd" | "t.rr" | "dagh" | "d.rr" | "dev" | "draa#1" | "draa#2"
-    | "nud" | "pad#1" | "pi#2" | "p.rr" | "pyaa" | "bha~nj" | "bhid#1" | "bhuj#1"
+    | "nud" | "pad#1" | "pii" | "p.rr" | "pyaa" | "bha~nj" | "bhid#1" | "bhuj#1"
     | "majj" | "man" | "mid" | "mlaa" | "ri" | "lii" | "luu#1" | "vij" | "vid#2"
     | "vrii" | "vlii" | "zad" | "zuu" | "z.rr" | "sad#1" | "skand" | "st.rr"
     | "styaa" | "syand" | "svid#2" | "had" | "haa#2" 
@@ -2849,12 +2849,12 @@ value admits_passive = fun
   [ (* We filter out roots with no attested passive forms *)
     "an#2" | "av" | "as#1" | "ah" | "iiz#1" | "uc" | "kan" | "kuu" 
   | "knuu" | "k.sar" | "k.si" | "kha.n.d" | "daa#2" | "dyut#1" | "dru#1" 
-  | "pat#2" | "paz" | "paa#2" | "pi#2" | "praa#1" | "bruu" | "ruc#1" | "vas#4"
+  | "pat#2" | "paz" | "paa#2" | "pii" | "praa#1" | "bruu" | "ruc#1" | "vas#4"
   | "vidh#1" | "vip" | "vyac" | "zam#1" | "zi~nj" | "zrambh" | "zvit" | "sap#1"
   | "siiv" | "spaz#1" | "spardh" | "h.r#2" | "hrii#1" 
   | "ma.mh" (* supplied by "mah" *) (* | "arh" | "k.lp" no ps but pfp *)
       -> False
-(* But "iiz#1" "uc" "kuu" "k.sar" "dru#1" "pi#2" "ruc#1" "vip" "zam#1" 
+(* But "iiz#1" "uc" "kuu" "k.sar" "dru#1" "pii" "ruc#1" "vip" "zam#1" 
        "zi~nj" "zrambh" "siiv" "spardh" "hrii#1" admit ppp. *)
   | _ -> True 
   ]
@@ -5103,7 +5103,7 @@ value compute_present_system entry rstem gana pada third =
          compute_thematic_present ystem 
      | 6 -> let stem = match rstem with
             [ [ 3 :: rest ] | [ 4 :: rest ]-> [ 42 :: [ 3 :: rest ] ] 
-              (* -.i -> -iy eg [k.si] [pi#2] *)
+              (* -.i -> -iy eg [k.si] [pii] *)
             | [ 5 :: rest ] | [ 6 :: rest ] -> [ 45 :: [ 5 :: rest ] ] 
               (* -.u -> -uv eg [dhru] also kuu -> kuv *)
             | [ 7 :: rest ] -> [ 42 :: [ 3 :: [ 43 :: rest ] ] ] (* mriyate *)

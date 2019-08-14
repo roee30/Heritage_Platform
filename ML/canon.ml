@@ -72,7 +72,8 @@ value canon = fun
   | -7 -> "aa|I" (* sandhi of aa and ii *I *)
   | -8 -> "aa|U" (* sandhi of aa and uu *U *)
   | -9 -> "aa|A" (* sandhi of aa and aa *A *)
-  | -10 -> "+" (* notation for segmentation hint *)
+  | 123 -> "aa|C" (* sandhi of aa and ch *C for ch gemination in cch *)
+  | 100 -> "+" (* notation for segmentation hint *)
   | 124 -> failwith "Canon: Unrestored special phoneme j'"  (* j/z *)
   | 149 -> failwith "Canon: Unrestored special phoneme h'"  (* h/gh *)
   | 249 -> failwith "Canon: Unrestored special phoneme h''" (* h/dh *)
@@ -180,11 +181,15 @@ value canon_WX = fun
   | 50 -> "_" (* hiatus *)
   | -1 -> "Z" (* avagraha *)
   | -2 -> "[-]" (* amuissement - lopa of current aa- or preceding a- or aa- *)
-  | -3 -> "A|a" (* sandhi of aa and (a,aa) *a *)
-  | -4 -> "A|i" (* sandhi of aa and (i,ii) *e *)
-  | -5 -> "A|u" (* sandhi of aa and (u,uu) *u *)
-  | -6 -> "A|r" (* sandhi of aa and .r     *r *)
-  | -10 -> "+" (* explicit compound with no sandhi - experimental *)
+  | -3 -> "A|a" (* sandhi of aa and a *a *)
+  | -4 -> "A|i" (* sandhi of aa and i *e *)
+  | -5 -> "A|u" (* sandhi of aa and u *u *)
+  | -6 -> "A|r" (* sandhi of aa and .r *r *)
+  | -7 -> "aa|I" (* sandhi of aa and I *I *)
+  | -8 -> "aa|U" (* sandhi of aa and U *U *)
+  | -9 -> "aa|A" (* sandhi of aa and A *A *)
+  | 123 -> "aa|C" (* sandhi of aa and C *C for duplication *)
+  | 100 -> "+" (* explicit compound with no sandhi - experimental *)
   | n -> if n<0 || n>59 then failwith mess
             where mess = "Canon: Illegal char " ^ string_of_int n
          else "#" ^ Char.escaped (Char.chr (n-2)) (* homo index 1 to 9 *)
@@ -196,7 +201,7 @@ value decode_WX word =
 (* Sanskrit Library SLP1 decoding *)
 value canon_SL = fun
   [ 0 -> "-"
-  | -10 -> "+"
+  | 100 -> "+"
   | 1  -> "a"
   | 2  -> "A"
   | 3  -> "i"
@@ -259,7 +264,7 @@ value decode_SL word =
 (* Kyoto-Harvard decoding *)
 value canon_KH = fun
   [ 0 -> "-"
-  | -10 -> "+"
+  | 100 -> "+"
   | 1  -> "a"
   | 2  -> "A"
   | 3  -> "i"
@@ -330,7 +335,7 @@ value switch_decode = fun (* normalizes anusvaara in its input *)
 (* Decoding without double quotes *)
 value canon2 = fun
   [ 0 -> "-"
-  | -10 -> "+"
+  | 100 -> "+"
   | 1  -> "a"
   | 2  -> "A"
   | 3  -> "i"
@@ -383,10 +388,14 @@ value canon2 = fun
   | 50 -> "_" (* hiatus *)
   | -1 -> "'"
   | -2 -> "[-]" 
-  | -3 -> "A|a" (* sandhi of A and (a,A) - phantom phoneme *)
-  | -4 -> "A|i" (* sandhi of A and (i,I) - phantom phoneme *) 
-  | -5 -> "A|u" (* sandhi of A and (u,U) - phantom phoneme *)
-  | -6 -> "A|.r" (* sandhi of A and .r) - phantom phoneme *)
+  | -3 -> "aa|a" (* sandhi of A and a *a *)
+  | -4 -> "aa|i" (* sandhi of A and i *i *) 
+  | -5 -> "aa|u" (* sandhi of A and u *u *)
+  | -6 -> "aa|r" (* sandhi of A and .r *r *)
+  | -7 -> "aa|I" (* sandhi of aa and I *I *)
+  | -8 -> "aa|U" (* sandhi of aa and U *U *)
+  | -9 -> "aa|A" (* sandhi of aa and A *A *)
+  | 123 -> "aa|C" (* sandhi of aa and C *C *)
   | n -> if n<0 || n>59 then failwith ("canon2: " ^ string_of_int n)
          else ("#" ^ Char.escaped (Char.chr (n-2)))
   ]
@@ -458,7 +467,7 @@ value decode_ref word =
 ;
 value canon_html = fun
   [ 0  -> "-"
-  | -10 -> "+"
+  | 100 -> "+"
   | 1  -> "a"
   | 2  -> "aa"
   | 3  -> "i"
@@ -562,7 +571,7 @@ value canon_upper_html = fun
 (* Roman with diacritics Unicode - latin extended *)
 value canon_uniromcode = fun
   [ 0 -> "-"
-  | -10 -> "+"
+  | 100 -> "+"
   | 1  -> "a"
   | 2  -> "&#257;"
   | 3  -> "i"
@@ -650,7 +659,7 @@ value stem_to_string html =
 exception Hiatus
 ;
 value indic_unicode_point = fun
-  [ 0  | -10 -> (* - *)  "70"
+  [ 0  | 100 -> (* - *)  "70"
   | 1  -> (* a *)  "05"
   | 2  -> (* aa *) "06"
   | 3  -> (* i *)  "07"
@@ -712,7 +721,7 @@ value indic_unicode_point = fun
          else "" (* homo index dropped *)
   ]
 and matra_indic_unicode_point = fun
-  [ -10   (* + *) (* necessary for word form ending in consonant *)
+  [ 100   (* + *) (* necessary for word form ending in consonant *)
   | 0  -> (* - *)  "70" (* id for iics *)
   | 1  -> (* a *)  "" (* default *)
   | 2  -> (* aa *) "3E"

@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Nouns : sig i*)
@@ -26,12 +26,14 @@ value compute_extra : list string -> unit;
 value enter_extra_ifcs : unit -> unit; 
 value enter_extra_iifcs : unit -> unit; 
 value fake_compute_decls : 
-     nmorph -> string -> ( inflected_map    (* nouns *)
-                         * inflected_map    (* pronouns *)
-                         * inflected_map    (* vocas *)
-                         * inflected_map    (* iics *)
-                         * inflected_map ); (* adverbs ifcs *)
-
-value extract_current_cache : string -> inflected_map; (* used in Interface *)
+     nmorph -> string -> ( inflected_map (* nouns *)
+                         * inflected_map (* pronouns *)
+                         * inflected_map (* vocas *)
+                         * inflected_map (* iics *)
+                         * inflected_map (* adverbs ifcs *)
+                         );
+(* Used in Interface for User-aid *)
+value extract_current_caches : string -> ( inflected_map * inflected_map )
+;
 
 (*i end; i*)

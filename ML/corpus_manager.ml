@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Idir Lankri                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 open Html;
@@ -251,7 +251,7 @@ value body dir permission =
 value mk_page dir permission =
   let title_str =
     "Sanskrit Corpus " ^
-    (permission |> Web_corpus.string_of_permission |> String.capitalize)
+    (permission |> Web_corpus.string_of_permission |> String.capitalize_ascii)
   in
   let clickable_title =
     let query =

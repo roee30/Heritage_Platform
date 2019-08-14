@@ -155,6 +155,7 @@ EXTEND Gram (* skt to HTML string *)
       | "|"; LETTER "i" -> "|i" (* phantom phoneme *i *)
       | "|"; LETTER "u" -> "|u" (* phantom phoneme *u *)
       | "|"; LETTER "r" -> "|&#7771;" (* phantom phoneme *r *)
+      | "|"; LETTER "C" -> "|ch" (* phantom phoneme *C *)
       | "["; "-"; "]" -> "[-]" (* amuissement *)
       | i = LETTER -> i 
       | i = INT -> i 
@@ -414,7 +415,7 @@ EXTEND Gram (* skt to nat *)
       | "~"; LETTER "n" -> 26
 (* OBS | "+"; c=lower -> c (* prevent hyphenation in TeX *) *)
       | "-" -> 0  (* notation for affixing *)
-      | "+" -> -10 (* notation for compounding *) 
+      | "+" -> 100 (* notation for compounding *) 
       | "&" -> -1 (* \& = alternate avagraha preserved - legacy *)
       | "_" -> 50 (* sentential hiatus *) 
       | "'"; LETTER "a"; LETTER "a" -> 2 (* accented vowels - accent is lost *)
@@ -448,6 +449,7 @@ EXTEND Gram (* skt to nat *)
       | LETTER "a"; LETTER "a"; "|"; LETTER "I" -> -7 (* *i *)
       | LETTER "a"; LETTER "a"; "|"; LETTER "U" -> -8 (* *u *)
       | LETTER "a"; LETTER "a"; "|"; LETTER "r" -> -6 (* *r *)
+      | LETTER "a"; LETTER "a"; "|"; LETTER "C" -> 123 (* *C *)
       | LETTER "a"; LETTER "a" -> 2
       | LETTER "a"; LETTER "i" -> 11
       | LETTER "a"; LETTER "u" -> 13
@@ -499,6 +501,7 @@ EXTEND Gram (* skt to nat *)
      code -7 -> "aa|I" (* sandhi of aa and ii *)
      code -8 -> "aa|U" (* sandhi of aa and uu *)
      code -9 -> "aa|A" (* sandhi of aa and aa *)
+     code 123 -> "aa|C" (* sandhi of aa and ch *)
      codes 101 to 149 reserved for upper case encodings in [Canon.decode_ref]
      codes 124, 149, 249 used for variants resp. j' of j 24 and h',h'' of h 49 
            in [Int_sandhi]  *)
@@ -556,7 +559,7 @@ EXTEND Gram (* skt to nat *)
       | LETTER "s" -> 48
       | LETTER "h" -> 49
       | "-" -> 0  (* notation for affixing *)
-      | "+" -> -10 (* notation for compounding *)
+      | "+" -> 100 (* notation for compounding *)
       | "_" -> 50 (* sentential hiatus *) 
       | LETTER "Z" -> -1 (* avagraha *)
       | "#"; i = INT -> 50+int_of_string i (* 0 *) 
@@ -615,7 +618,7 @@ EXTEND Gram (* skt to nat *)
       | LETTER "h" -> 49
       | "'"  -> -1  (* avagraha *)
       | "-" -> 0  (* notation for affixing *)
-      | "+" -> -10 (* notation for compounding *)
+      | "+" -> 100 (* notation for compounding *)
       | "_" -> 50 (* sentential hiatus *) 
       (* avagraha missing *)
       | "#"; i = INT -> 50+int_of_string i (* 0 *) 
@@ -674,7 +677,7 @@ EXTEND Gram (* skt to nat *)
       | LETTER "h" -> 49
       | "'"  -> -1 (* avagraha *)
       | "-" -> 0  (* notation for affixing *)
-      | "+" -> -10 (* notation for compounding *)
+      | "+" -> 100 (* notation for compounding *)
       | "_" -> 50 (* sentential hiatus *) 
       | "#"; i = INT -> 50+int_of_string i (* 0 *) 
     ] ];

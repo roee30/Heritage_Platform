@@ -29,7 +29,7 @@ type phase =
   | Lopak (* e/o kridantas forms with lopa *) 
   | Pv (* Preverb optional before Root or Lopa or mandatory before Abso *)
   | Pvc | Pvv (* privative Abso *)
-  | Pvk | Pvkc | Pvkv (* Preverb optional before Krid or Iik or Lopak *)
+  | Pvkc | Pvkv (* Preverb optional before Krid or Iik or Lopak *)
   | A | An (* privative nan-compounds formations in a- or -an *)
   | Ai | Ani (* initial privative nan-compounds *)
   | Iicv | Iicc (* split of Iic by first letter resp. vowel or consonant *)
@@ -41,7 +41,7 @@ type phase =
   | Iikv | Iikc | Kriv | Kric | Vocv | Vocc | Vokv | Vokc
   | Iiy | Avy (* Avyayiibhaavas *)
   | Inftu | Kama (* vaktukaama cpds *) 
-  | Cache   (* Lexicon acquisition *) 
+  | Cache | Cachei (* Lexicon acquisition *) 
   | Unknown (* Unrecognized chunk *)
   (* now pseudo phase tagging root/kridanta forms with preverbs *)
   | Comp of tag and (* pv *) Word.word and (* root/krid in tag *) Word.word 
@@ -80,7 +80,6 @@ value rec string_of_phase = fun
   | Pv    -> "Pv" 
   | Pvc   -> "Pvc" 
   | Pvv   -> "Pvv" 
-  | Pvk   -> "Pvk"
   | Pvkc  -> "Pvkc" 
   | Pvkv  -> "Pvkv"
   | A     -> "A"
@@ -110,6 +109,7 @@ value rec string_of_phase = fun
   | Inftu -> "Inftu"
   | Kama  -> "Kama" 
   | Cache -> "Cache" 
+  | Cachei -> "Cachei" 
   | Unknown -> "Unknown"
   | _ -> failwith "string_of_phase"
   ] 
@@ -140,7 +140,6 @@ and phase_of_string = fun (* unsafe *)
   | "Pv"    -> Pv
   | "Pvv"   -> Pvv
   | "Pvc"   -> Pvc
-  | "Pvk"   -> Pvk
   | "Pvkc"  -> Pvkc
   | "Pvkv"  -> Pvkv
   | "A"     -> A
@@ -170,21 +169,22 @@ and phase_of_string = fun (* unsafe *)
   | "Kama"  -> Kama
   | "Unknown" -> Unknown
   | "Cache" -> Cache
+  | "Cachei" -> Cachei
   | s -> failwith ("Unknown phase " ^ s)
   ]
 ;
 value unknown = Unknown
 and aa_phase = fun (* phase of preverb "aa" according to following phase *)
-    [ Root | Abso | Peri -> Pv | _ -> Pvkv ]
+    [ Root | Abso | Peri | Inftu -> Pv | _ -> Pvkv ]
 and un_lopa = fun (* phase of origin of lopa *)
     [ Lopa -> Root | Lopak -> Kriv | _ -> failwith "un_lopa" ] 
 and preverb_phase = fun 
-    [ Pv | Pvv | Pvc | Pvk | Pvkc | Pvkv -> True | _ -> False ]
+    [ Pv | Pvv | Pvc | Pvkc | Pvkv -> True | _ -> False ]
 and krid_phase = fun [ Krid | Kric | Kriv -> True | _ -> False ]
 and ikrid_phase = fun [ Iik | Iikc | Iikv -> True | _ -> False ]
 and vkrid_phase = fun [ Vokc | Vokv -> True | _ -> False ]
 and ii_phase = fun [ Iicv | Iicc | Iikv | Iikc | A | An -> True | _ -> False ]
-and is_cache phase = (phase = Cache)
+and is_cache phase = (phase = Cache) || (phase = Cachei)
 ;
 (* Needed as argument of [Morpho.print_inv_morpho] *)
 value rec generative = fun

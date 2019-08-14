@@ -67,6 +67,15 @@ value visargcompv first (* vowel *) = fun
    However, phantom is tested in the code in order to keep consistency with 
    [Compile_sandhi], which builds the sandhi rules for transducers decorations.
    This function is also used for glueing preverbs in Roots. *)
+(* unphantom - should instead call [Phonetics.un_phantom] *)
+value uph = fun 
+  [ -3 -> [ 2 ] 
+  | -4 -> [ 10 ] 
+  | -5 -> [ 12 ] 
+  | -6 -> [ 2; 43 ] (* aar *) 
+  | r -> [ r ] 
+  ] 
+; 
 value ext_sandhi_pair wl wr = 
   match wl with 
     [ [] -> failwith "left arg of sandhi empty"

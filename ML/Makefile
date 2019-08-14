@@ -48,7 +48,7 @@ GRAM = index.ml phonetics.ml int_sandhi.ml skt_morph.mli morphology.mli \
        constraints.ml multilingual.ml paraphrase.mli paraphrase.ml \
        bank_lexer.ml checkpoints.ml graph_segmenter.ml \
        automaton.ml interface.mli interface.ml user_aid.ml reset_caches.ml \
-       params.mli params.ml
+       restore_caches.ml params.mli params.ml
 
 # WEB package - HTML, HTTP, CGI utilities for Web interface
 WEB = html.ml web.ml css.ml cgi.ml morpho_html.ml chapters.ml morpho_scl.ml \
@@ -63,6 +63,7 @@ CORPUS = corpus.mli corpus.ml web_corpus.mli web_corpus.ml		\
 	 mkdir_corpus_cgi.ml mk_corpus.ml
 
 # extra file SCLpaths.ml for SCL interfacing - not distributed.
+# debug statseg.ml
 
 # TREE package - tree bank manager and syntax analyser - legacy
 TREE = parse_tree.ml parse_apte.ml stemmer.ml tag_tree.ml tag_apte.ml 
@@ -70,7 +71,7 @@ TREE = parse_tree.ml parse_apte.ml stemmer.ml tag_tree.ml tag_apte.ml
 DEBUG=debug.ml 
 
 ENGINE=$(CORE) $(GRAM) $(WEB) $(CORPUS)
-INACTIVE=$(TREE) nyaaya.ml mk_nyaaya_page.ml regression.ml 
+INACTIVE=$(TREE) nyaaya.ml mk_nyaaya_page.ml regression.ml statseg.ml
 
 SOURCES=$(ENGINE) $(DEBUG) $(INACTIVE) 
 
@@ -101,7 +102,7 @@ test_version: paths.cmx gen.cmx version.cmx control.cmx test_stamp.cmx
 static_pages: css mk_index_page mk_grammar_page mk_sandhi_page mk_reader_page \
 		mk_corpus_page
 
-all: engine static_pages reset_caches sandhi_test
+all: engine static_pages reset_caches restore_caches sandhi_test
 
 # legacy in need of re-design
 regression: rank.cmx regression.cmx
@@ -121,8 +122,12 @@ install:
 	echo "go back to development directory to do make install"
 
 reset_caches: reset_caches.cmx
-	$(LINK) $(CORENATIVES) str.cmxa unix.cmxa trie.cmx deco.cmx html.cmx date.cmx \
-SCLpaths.cmx web.cmx reset_caches.cmx -o reset_caches
+	$(LINK) $(CORENATIVES) str.cmxa unix.cmxa trie.cmx deco.cmx html.cmx \
+date.cmx SCLpaths.cmx web.cmx reset_caches.cmx -o reset_caches
+
+restore_caches: restore_caches.cmx
+	$(LINK) $(CORENATIVES) trie.cmx deco.cmx share.cmx mini.cmx str.cmxa \
+html.cmx SCLpaths.cmx date.cmx web.cmx control.cmx lexmap.cmx inflected.cmx bank_lexer.cmx int_sandhi.cmx nouns.cmx automaton.cmx restore_caches.cmx -o restore_caches
 
 # clears the cached lexicon (irreversible operation)
 clear_cache: reset_caches

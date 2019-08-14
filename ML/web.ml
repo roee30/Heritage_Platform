@@ -143,7 +143,6 @@ and absya_file    = data "absya.rem"  (* created by [make_roots] etc. *)
 and abstvaa_file  = data "abstvaa.rem"  (* created by [make_roots] etc. *)
 and inftu_file    = data "inftu.rem"  (* created by [make_roots] etc. *)
 and kama_file     = data "kama.rem"  (* created by [make_nouns] etc. *)
-and cache_file    = data "cache.rem"
 
 (* Then transducers files, made by [make_automaton], invoked by DATA/Makefile *)
 (* NB The [transxxx_file] identifiers are just here for documentation,
@@ -181,7 +180,6 @@ and transabsya_file   = data "transabsya.rem"   (* [absolya_automaton] *)
 and transabstvaa_file = data "transabstvaa.rem" (* [absoltvaa_automaton] *) 
 and transinftu_file   = data "transinftu.rem"   (* [inftu_automaton] *) 
 and transkama_file    = data "transkama.rem"    (* [kama_automaton] *) 
-and transca_file      = data "transca.rem"      (* [cache_automaton] *)
 and transstems_file   = data "transstems.rem"   (* [stems_automaton] *)
 and declstxt_file     = data "nouns.txt"   (* created by [decline -ascii] *)
 and declstex_file     = data "nouns.tex"   (* created by [decline -tex] *)
@@ -266,11 +264,13 @@ and public_transabsya_file = public_data "transabsya.rem"
 and public_transabstvaa_file = public_data "transabstvaa.rem" 
 and public_transinftu_file   = public_data "transinftu.rem" 
 and public_transkama_file    = public_data "transkama.rem" 
-and public_transca_file    = public_data "transca.rem"
+and public_trans_cache_file  = public_data "transca.rem"
+and public_trans_cachei_file = public_data "transcai.rem"
 and public_transstems_file = public_data "transstems.rem"
 and public_sandhis_id_file = public_data "sandhis_id.rem" 
-and public_cache_file      = public_data "cache.rem"
-and public_cache_txt_file  = public_data "cache.txt"
+and public_cache_file      = public_data "cache.rem" (* cache genders *)
+and public_cachei_file     = public_data "cachei.rem" (* cache iics *)
+and public_cache_txt_file  = public_data "cache.txt" (* master cache *) 
 ;
 value skt_dir_url = Paths.skt_dir_url
 ;
@@ -625,7 +625,7 @@ value javascript_tooltip ="wz_tooltip.js"
 (* Maybe should be put back in config? but versioning problem... *)
 value remote_server_host = "http://sanskrit.inria.fr/" 
 ;
-(* This toogle controls accessibility of University of Hyderabad tools.
+(* This toggle controls accessibility of University of Hyderabad tools.
    It is controled by [ML/SCLpaths.ml], which is not part of the git repository,
    and is initialised by default to [SETUP/dummy_SCLpaths.ml] at make time. *)
 value scl_toggle =

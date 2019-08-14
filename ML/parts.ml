@@ -619,11 +619,15 @@ and build_part_vas c stem inter stemf root =
    conjugation engine, in order to display the kridanta stems associated to
    the argument root. Thus [participles] is always a short list just used as
    a stack and not searched, so no need of sophisticated data structure. *)
+(*i Wrong - participles is global, and thus big i*)
 
 value participles = ref ([] : list memo_part)
+and participles_aa = ref ([] : list memo_part)
 ;
 value record_part memo = (* called from Verbs *)
-  participles.val := List2.union1 memo participles.val
+  if admits_aa.val then 
+    participles_aa.val := List2.union1 memo participles_aa.val
+  else participles.val := List2.union1 memo participles.val
 ;
 (* Called by [compute_participles] *)
 value build_part = fun
@@ -677,7 +681,9 @@ value build_part = fun
    by [Conjugation.look_up_and_display] through [Verbs.fake_compute_conjugs]. *)
 value compute_participles () = do
   { List.iter build_part participles.val
-  ; participles.val := []
+  (* Now for roots admitting preverb aa *)
+  ; admits_aa.val := True 
+  ; List.iter build_part participles_aa.val
   }
 ;
 

@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Syntactico/semantic analysis and penalty computations. *)
@@ -130,7 +130,7 @@ value root_regime = fun
   | "t.r.s#1" | "trap" | "tras" | "tvar" | "tsar" | "dak.s" | "dal" | "das" 
   | "dah#1" | "dih" | "diik.s" | "diip" | "du.s" | "d.rh" | "dev#1" | "dyut#1" 
   | "draa#1" | "draa#2" | "dhaav#1" | "dhru" | "dhvan" | "dhv.r" | "na.t" 
-  | "nand" | "nard" | "naz#1" | "nah" | "nii#1" | "n.rt" | "pat#1" | "pi#2" 
+  | "nand" | "nard" | "naz#1" | "nah" | "nii#1" | "n.rt" | "pat#1" | "pii" 
   | "puuy" | "p.r#2" | "pyaa" | "prath" | "phal" | "ba.mh" | "bal" | "bha.n.d"
   | "bhand" | "bha.s" | "bhaa#1" | "bhaas#1" | "bhii#1" | "bhuj#1" | "bhuu#1" 
   | "bhra.mz" | "bhram" | "bhraaj" | "ma.mh" | "majj" | "mad#1" | "mud#1" | "muh"

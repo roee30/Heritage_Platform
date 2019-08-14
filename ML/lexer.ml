@@ -79,13 +79,13 @@ value print_tags pvs seg_num phase form tags =
   let _ = List.fold_left ptag 1 tags in ()
 ;
 value rec scl_phase = fun
-  [ Pv | Pvk | Pvc | Pvv | Pvkc | Pvkv -> "pv"
+  [ Pv | Pvc | Pvv | Pvkc | Pvkv -> "pv"
   | Noun | Noun2 | Nouc | Nouv | Krid | Kriv | Kric | Lopak | Pron | Auxik 
-    -> "noun"
+         | Cache -> "noun"
   | Root | Lopa | Auxi -> "root"
   | Inde | Abso | Absv | Absc | Avy -> "inde"
   | Iic | Iic2 | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif | Auxiick
-  | Ai | Ani -> "iic"
+        | Ai | Ani | Cachei -> "iic"
   | Iiv | Iivv | Iivc -> "iiv" 
   | Iiy -> "iiy" 
   | Peri -> "peri" 
@@ -94,7 +94,6 @@ value rec scl_phase = fun
   | Voca | Vocv | Vocc | Inv | Vok | Vokv | Vokc -> "voca"
   | Ifc | Ifcv | Ifcc | Ifc2 -> "ifc"
   | Unknown -> "unknown"
-  | Cache -> "Cache" 
   | Comp (_,ph) _ _ -> "preverbed " ^ scl_phase ph
   ]
 ;

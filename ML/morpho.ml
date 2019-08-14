@@ -96,7 +96,7 @@ value decomp_pvs pvs =
 ;
 (* Used in [Morpho_html] *)
 value print_inv_morpho_link pvs pe pne pu form =
-  let pv = if Phonetics.phantomatic form then [ 2 ] (* aa- *)
+  let pv = if Phonetics.phantomatic form then [ 2 ] (* aa- *)(*i OBSOLETE i*)
            else pvs in
   let encaps print e = (* encapsulates prefixing with possible preverbs *)
      if pv = [] then print e else 

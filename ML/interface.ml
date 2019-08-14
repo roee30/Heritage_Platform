@@ -89,14 +89,14 @@ value print_morph pvs seg_num cached gen form n tag =
   Morpho_html.print_graph_link pvs cached form (seg_num,n) gen tag 
 ;
 (* tags : Morphology.multitag is the multi-tag of the form of a given phase *)
-value print_tags pvs seg_num phase form tags =
+value print_tags pvs seg_num phase form tags = 
   let gen = generative phase 
   and cached = is_cache phase in 
   let ok_tags = if pvs = [] then tags 
                 else trim_tags (generative phase) form (Canon.decode pvs) tags
   (* NB Existence of the segment warrants that [ok_tags] is not empty *)
   and ptag = print_morph pvs seg_num cached gen form in 
-  fold_vert ptag ok_tags  
+  fold_vert ptag ok_tags 
 ;
 (* This is called "printing morphology interface style". *)
 value print_morpho phase word = 
@@ -192,7 +192,7 @@ value build_visual k segments =
       match seg with
       [ [] -> ()
       | [ (phase,(w1,tr)) :: rest ] -> match phase with 
-           [ Phases.Pv | Phases.Pvk | Phases.Pvkc | Phases.Pvkv -> 
+           [ Phases.Pv | Phases.Pvkc | Phases.Pvkv -> 
              failwith "Preverb in build_visual"
            | _ -> do
              { visual.(start_ind) := visual.(start_ind) @ [ (w1,tr,phase,k) ]
@@ -205,7 +205,7 @@ value build_visual k segments =
 (* We check whether the current segment [(w,tr,phase,k)] is conflicting with 
    others at previous offset [n]; if not it is mandatory and marked blue. *)
 (* Returns True for blue mandatory segments, False for green/red optional ones *)
-(* Warning: hairy code, do not change without understanding the theory.  *)
+(* Warning: very hairy code, do not change without understanding the theory.  *)
 value is_conflicting ((w,tr,ph,k) as segment) =
  let l = seg_length w in is_conflicting_rec 0
  where rec is_conflicting_rec n = (* n is position in input string *)
@@ -333,7 +333,7 @@ value print_word last_ind text cpts (rword,phase,k,conflict) =
     pl (table_begin back)
   ; ps tr_begin
   ; ps ("<td " ^ display_morph_action ^ "=\"showBox('")
-  ; print_morpho phase word
+  ; print_morpho phase word 
   ; let close_box = 
         "<a href=&quot;javascript:hideBox()&quot;> " ^ x_sign ^ "</a>', '" in 
     ps (close_box ^ rgb (color_of_phase phase) ^ "', this, event)\">")
@@ -351,7 +351,7 @@ value print_row text cpts =  print_this text cpts 0
   where rec print_this text cpts last_ind = fun 
   [ [] -> let adjust = max_col.val - last_ind in
           if adjust > 0 then print_extra adjust else ()
-  | [ (word,phase,k,conflict) :: rest ] -> do
+  | [ (word,phase,k,conflict) :: rest ] -> do 
       { print_word last_ind text cpts (word,phase,k,conflict)
       ; print_this text cpts (k + seg_length word) rest
       }
@@ -362,8 +362,8 @@ value print_interf text cpts () = vgrec 0
   match visual_width.(k) with
   [ 0 -> ()
   | _ -> do
-    { ps tr_begin
-    ; print_row text cpts visual_conf.(k)
+    { ps tr_begin 
+    ; print_row text cpts visual_conf.(k) 
     ; pl tr_end
     ; vgrec (succ k)
     }
@@ -398,7 +398,7 @@ value check_sentence translit us text_orig checkpoints sentence
              [ "0" -> update_text_with_sol text_orig count
              | _ -> text_orig
              ] in do
-  { make_visual cur_chunk.offset
+  {make_visual cur_chunk.offset
   ; find_conflict 0
   ; html_break |> pl
   ; html_latin16 "Sentence: " |> pl
@@ -460,11 +460,16 @@ value arguments trans lex cache st us cp input topic abs sol_num corpus id ln
 ;
 
 (* Cache management *)
-value make_cache_transducer (cache : Morphology.inflected_map) = 
-  let deco_cache = Mini.minimize (Deco.forget_deco cache) in
-  let auto_cache = Automaton.compile Deco.empty deco_cache in do
+(* [ (Morphology.inflected_map * Morphology.inflected_map) -> unit] *)
+value make_cache_transducers (cache,cachei) =
+  let deco_cache = Mini.minimize (Deco.forget_deco cache) 
+  and deco_cachei = Mini.minimize (Deco.forget_deco cachei) in
+  let auto_cache = Automaton.compile Deco.empty deco_cache 
+  and auto_cachei = Automaton.compile Deco.empty deco_cachei in do
   { Gen.dump cache public_cache_file (* for [Load_morphs] *)
-  ; Gen.dump auto_cache public_transca_file (* for [Load_transducers] *)
+  ; Gen.dump cachei public_cachei_file (* id *)
+  ; Gen.dump auto_cache public_trans_cache_file (* for [Load_transducers] *)
+  ; Gen.dump auto_cachei public_trans_cachei_file (* id *)
   }
 ;
 (* We fill gendered entries incrementally in [public_cache_txt_file] *)
@@ -555,8 +560,8 @@ value graph_engine () = do
                                     ] in do
                { append_cache entry gender
                ; let cache_txt_file = public_cache_txt_file in
-                 let cache = Nouns.extract_current_cache cache_txt_file in
-                 make_cache_transducer cache
+                 let caches = Nouns.extract_current_caches cache_txt_file in
+                 make_cache_transducers caches
                }
             else () in
     let revised = decode_url (get "revised" env "") (* User-aid revision *)
@@ -605,8 +610,8 @@ value graph_engine () = do
      else ()
      (* Save sentence button *)
    ; if corpus_permission = Web_corpus.Annotator then
-     (* TODO: use [segment_iter] to compute the nb of sols instead of
-        passing 0 to [nb_sols]. *)
+     (*i TODO: use [segment_iter] to compute the nb of sols instead of
+        passing 0 to [nb_sols]. i*)
         save_button query 0 |> pl
      else () 
    ; html_break |> pl

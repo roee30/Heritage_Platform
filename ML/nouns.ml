@@ -2392,9 +2392,9 @@ value build_neu_yuvan entry =
         ; decline Loc "uunos"
         ])
    ; (Plural, 
-        [ decline Voc "uvaanii"
-        ; decline Nom "uvaanii"
-        ; decline Acc "uvaanii"
+        [ decline Voc "uvaani"
+        ; decline Nom "uvaani"
+        ; decline Acc "uvaani"
         ; decline Ins "uvabhis"
         ; decline Dat "uvabhyas"
         ; decline Abl "uvabhyas"
@@ -2431,9 +2431,9 @@ value build_neu_brahman entry =
         ; decline Loc "a.nos"
         ])
    ; (Plural,
-        [ decline Voc "aa.nii"
-        ; decline Nom "aa.nii"
-        ; decline Acc "aa.nii"
+        [ decline Voc "aa.ni"
+        ; decline Nom "aa.ni"
+        ; decline Acc "aa.ni"
         ; decline Ins "abhis"
         ; decline Dat "abhyas"
         ; decline Abl "abhyas"
@@ -6020,12 +6020,13 @@ value update_index ic =
 	  }
   with [ End_of_file -> close_in ic ] 
 ;
-value extract_current_cache cache_txt_file = do (* cache forms computation *)
+value extract_current_caches cache_txt_file = do (* cache forms computation *)
   { nouns.val := Deco.empty 
+  ; iics.val := Deco.empty 
   ; morpho_gen.val := False
   ; let ic = open_in cache_txt_file in 
     update_index ic
-  ; nouns.val
+  ; (nouns.val,iics.val)
   }
 ;
       

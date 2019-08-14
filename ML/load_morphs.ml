@@ -33,7 +33,7 @@ module Morphs
   | Lopak (* e/o kridantas forms with lopa *)
   | Pv (* Preverb optional before Root or Lopa or mandatory before Abso *)
   | Pvc | Pvv (* privative Abso *)
-  | Pvk | Pvkc | Pvkv (* Preverb optional before Krid or Iik or Lopak *) 
+  | Pvkc | Pvkv (* Preverb optional before Krid or Iik or Lopak *) 
   | A | An | Ai | Ani (* privative nan-compounds *)
   | Iicv | Iicc | Ifcv | Ifcc | Nouv | Nouc 
   | Krid (* K.ridaantaas - used to be called Parts *) 
@@ -42,6 +42,7 @@ module Morphs
   | Iikv | Iikc | Kriv | Kric | Vocv | Vocc | Vokv | Vokc
   | Iiy | Avy | Inftu | Kama
   | Cache (* Cached lexicon acquisitions *) 
+  | Cachei (* Cached iic lexicon acquisitions *) 
   | Unknown (* Unrecognized chunk *) 
   | Comp of (phase * phase) and (* pv *) Word.word and (* root form *) Word.word
   ]; end)
@@ -115,6 +116,7 @@ value load_morphs () =
   ; inftu = load_morpho Web.public_inftu_file
   ; kama = load_morpho Web.public_kama_file
   ; caches = load_morpho_cache Web.public_cache_file
+  ; cacheis = load_morpho_cache Web.public_cachei_file
   } 
 ;
 value morpho = load_morphs () (* costly *)
@@ -149,6 +151,7 @@ value morpho_tags = fun
     | Inftu              -> morpho.inftu
     | Kama               -> morpho.kama
     | Cache              -> morpho.caches 
+    | Cachei             -> morpho.cacheis 
     | _ -> raise (Control.Anomaly "morpho_tags") 
     ]
 ;
@@ -156,7 +159,7 @@ value morpho_tags = fun
 (* Used in Lexer/Reader/Parser and Interface *) 
 value tags_of phase word = 
   match phase with
-  [ Pv | Pvk | Pvkc | Pvkv -> failwith "Preverb in tags_of" 
+  [ Pv | Pvkc | Pvkv -> failwith "Preverb in tags_of" 
     (* all preverbs ought to have been captured by [Dispatcher.validate] *)
   | A | Ai   -> Atomic a_tag 
   | An | Ani -> Atomic an_tag 

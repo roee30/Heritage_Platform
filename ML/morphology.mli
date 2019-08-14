@@ -72,6 +72,7 @@ type morphology =
   ; iiys     : inflected_map
   ; avys     : inflected_map 
   ; caches   : inflected_map
+  ; cacheis  : inflected_map
   }
 ;
 

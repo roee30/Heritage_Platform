@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* [Reset_caches] *)
@@ -20,8 +20,12 @@ and empty_trans = Auto.State(False,[],[]) (* dummy empty transducer *)
 
 Gen.dump empty_inflected_map Web.public_cache_file
 ;
-Gen.dump empty_trans Web.public_transca_file
+Gen.dump empty_inflected_map Web.public_cachei_file
 ;
-
+Gen.dump empty_trans Web.public_trans_cache_file
+;
+Gen.dump empty_trans Web.public_trans_cachei_file
+;
 Unix.system (":>" ^ Web.public_cache_txt_file) (* resets the master text cache *)
 ;
+

@@ -257,7 +257,7 @@ ML/rank.ml ML/scl_parser.ml ML/reader.ml ML/parser.ml ML/constraints.mli \
 ML/constraints.ml ML/multilingual.ml ML/paraphrase.mli ML/paraphrase.ml \
 ML/bank_lexer.ml ML/regression.ml ML/checkpoints.ml \
 ML/graph_segmenter.ml ML/interface.mli ML/interface.ml ML/user_aid.ml \
-ML/reset_caches.ml ML/params.mli ML/params.ml
+ML/reset_caches.ml ML/restore_caches.ml ML/params.mli ML/params.ml
 
 # WEB package - HTML, HTTP, CGI ad-hoc utilities for Web interface
 WEB=ML/html.ml ML/web.ml ML/css.ml ML/cgi.ml ML/morpho_html.ml ML/chapters.ml \
@@ -372,7 +372,8 @@ DICOREMS=entries.rem defs.rem dummies.rem
 DATAMW=$(DATA)/mw_exceptions.rem $(DATA)/mw_index.rem $(DATA)/guess_index.rem
 
 # cache related files in $(SERVERPUBLICDIR)$(DATA)
-CACHES=cache.txt cache.rem minica.rem transca.rem
+CACHES=cache.txt cache.rem cachei.rem transca.rem transcai.rem
+CACHEI=cachei.rem transcai.rem
 
 # Linguistic resources: Sanskrit morphology documents
 
@@ -747,6 +748,8 @@ depot: # depot ANL - only SktPlatform, no linguistic data
 install: #after distribution to host site: "./configure; make; sudo make install"
 	SETUP/issudo.sh
 	test -f $(SERVERPUBLICDIR)DATA/cache.txt && echo "cold install" || $(MAKE) cold
+	cd $(SERVERPUBLICDIR)DATA; touch $(CACHES); chmod a+w $(CACHES)
+	make restore_caches
 	test -f $(SERVERPUBLICDIR)$(VAR)/regression.txt && echo "regression install" || $(MAKE) install_regression
 	$(MAKE) release
 
@@ -755,9 +758,9 @@ cold: # for first install
 	mkdir -p $(SERVERPUBLICDIR)IMAGES
 	mkdir -p $(SERVERPUBLICDIR)DATA
 	mkdir -p $(SERVERPUBLICDIR)DOC
-	cd $(SERVERPUBLICDIR)DATA; touch $(CACHES); chmod a+w $(CACHES)
 	cp -R $(IMAGES) $(SERVERPUBLICDIR)IMAGES
 	cp -p $(SCRIPTS) $(SERVERPUBLICDIR)
+	cd $(SERVERPUBLICDIR)DATA; touch $(CACHES); chmod a+w $(CACHES)
 	$(MAKE) empty_caches
 #	$(MAKE) install_counter # only for master site migration
 
@@ -766,6 +769,9 @@ install_regression: # for initialisation of regression suite - su privilege
 	chmod a+rw $(SERVERPUBLICDIR)$(VAR)
 #TODO	cp -p $(STAT)/regression_template $(SERVERPUBLICDIR)$(VAR)/regression.txt
 #TODO	chmod a+rw $(SERVERPUBLICDIR)$(VAR)/regression.txt
+
+restore_caches: ML/restore_caches # caution: will reset the caches
+	ML/restore_caches
 
 empty_caches: ML/reset_caches # caution: will reset the caches
 	ML/reset_caches

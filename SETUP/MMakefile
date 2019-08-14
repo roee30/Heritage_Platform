@@ -749,7 +749,7 @@ install: #after distribution to host site: "./configure; make; sudo make install
 	SETUP/issudo.sh
 	test -f $(SERVERPUBLICDIR)DATA/cache.txt && echo "cold install" || $(MAKE) cold
 	cd $(SERVERPUBLICDIR)DATA; touch $(CACHES); chmod a+w $(CACHES)
-	make restore_caches
+	ML/restore_caches
 	test -f $(SERVERPUBLICDIR)$(VAR)/regression.txt && echo "regression install" || $(MAKE) install_regression
 	$(MAKE) release
 
@@ -769,9 +769,6 @@ install_regression: # for initialisation of regression suite - su privilege
 	chmod a+rw $(SERVERPUBLICDIR)$(VAR)
 #TODO	cp -p $(STAT)/regression_template $(SERVERPUBLICDIR)$(VAR)/regression.txt
 #TODO	chmod a+rw $(SERVERPUBLICDIR)$(VAR)/regression.txt
-
-restore_caches: # restores the caches from master txt file
-	ML/restore_caches
 
 empty_caches: ML/reset_caches # caution: will reset the caches
 	ML/reset_caches

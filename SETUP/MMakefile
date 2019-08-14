@@ -770,7 +770,7 @@ install_regression: # for initialisation of regression suite - su privilege
 #TODO	cp -p $(STAT)/regression_template $(SERVERPUBLICDIR)$(VAR)/regression.txt
 #TODO	chmod a+rw $(SERVERPUBLICDIR)$(VAR)/regression.txt
 
-restore_caches: ML/restore_caches # caution: will reset the caches
+restore_caches: ML/restore_caches # restores the caches from master txt file
 	ML/restore_caches
 
 empty_caches: ML/reset_caches # caution: will reset the caches

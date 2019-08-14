@@ -50,7 +50,7 @@ published recently as
 <a href="http://jlm.ipipan.waw.pl/index.php/JLM/article/view/108/140">Design and
 analysis of a lean interface for Sanskrit corpus annotation</a>.
 <p>
-Written on April 24th 2019, for Sanskrit Engine Version 3.15.
+Written on August 14th 2019, for Sanskrit Engine Version 3.18.
 
 <h2 class="b2" id="tour">First approach to using the Sanskrit Heritage engine</h2>
 
@@ -742,17 +742,20 @@ not lexicalized. It proposes you various hypothetical lemmatizations for
 the unrecognized stems. Among those, the ones that are lexicalized in the
 Monier-Williams dictionary are underlined, indicating a lexicon link that you
 may consult to verify whether its meaning is appropriate. Each lemmatization
-is marked with a selection button. For instance, if you choose acc. sg. n.
-of stem <i>paṭhana</i> and press Submit Morphology, you are brought back
+is marked with a selection button. For instance, if you select acc. sg. m.
+of stem <i>pathama</i> and press Submit Morphology, you are brought back
 to the Sanskrit Segmenter Summary, where now segment <i>patamam</i> is blue.
 This way you may progressively augment the recognized forms or correct faulty
-input.
+input. Please note that if you click on the blue <i>patamam</i> segment
+you get a morphology lemma linking to entry <i>patama</i> in the Monier-Williams
+dictionary. 
 <p>
 
 Furthermore, your choice has entered the stem <i>patama</i> to a local
 cached lexicon on your platform. Thus, if later you encounter sentence
 <i>patamāḥ śrūyante</i>, the segment <i>patamāḥ</i> will be
-recognized as a bona fide form of stem <i>patama</i>. 
+recognized as a bona fide plural form of masculine stem <i>patama</i>.
+Furthermore, the compound <i>patamapakṣaḥ</i> is now correctly recognized.
 <p>
 
 It may also happen that a chunk of text is successfully analysed, but none
@@ -769,7 +772,8 @@ the Sanskrit Heritage Engine on your own workstation.
 
 <p>
 The lexicon cache is reset by command "make empty_caches" in the installation
-directory. 
+directory. But re-installing a new version of the Heritage Engine will
+preserve the current cache. 
 
 <h3 class="b3" id="user-aid">Fine-grained input considerations</h3>
 

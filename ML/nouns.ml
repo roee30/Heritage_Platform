@@ -5045,7 +5045,7 @@ value compute_nouns_stem_form e stem d p =
                    else build_mas_mat r2 e
                  | [ 45 :: r3 ] (* -vat *) -> 
                    if p="Ppra" || pprvat e then build_mas_at r1 e
-                                           else build_mas_mat r2 e
+                   else if e="maghavat" then build_mas_maghavan e                                   else build_mas_mat r2 e
                  | [ 49 :: [ 1 :: [ 41 :: _ ] ] ] (* mahat, sumahat *) 
                           -> build_mas_mahat r2 e
                  | [ 34 ] (* dat *) -> build_root_weak Mas stem "danta" 
@@ -5075,8 +5075,8 @@ value compute_nouns_stem_form e stem d p =
                                                (* takes care of eg dharmazvan *)
                | [ 45 :: r3 ] (* -van *) -> match e with
                   [ "yuvan" -> build_mas_yuvan e
-                  | "maghavat" | "maghavan" -> build_mas_maghavan e 
-                      (* NB: entry is maghavat but interface allows maghavan *)
+                  | "maghavan" -> build_mas_maghavan e 
+                    (* NB: entry is maghavat but interface allows maghavan *)
                   | _ -> build_van Mas r3 e
                   ]
                | [ 49 :: r3 ] (* -han *) -> build_han r3 e

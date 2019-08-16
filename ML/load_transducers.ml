@@ -117,7 +117,7 @@ value load_transducer cat =
       | _ -> failwith ("Unexpected category: " ^ cat) 
       ] in 
   try (Gen.gobble file : auto) 
-  with [ _ -> if cat="Cache" (* uninitialized cache *)
+  with [ _ -> if cat="Cache" || cat="Cachei" (* uninitialized cache *)
                  then empty_trans (* initialised to empty transducer *)
               else do { Prel.prelude (); abort cat } ]
 ; 

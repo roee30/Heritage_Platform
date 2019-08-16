@@ -749,9 +749,9 @@ install: #after distribution to host site: "./configure; make; sudo make install
 	SETUP/issudo.sh
 	test -f $(SERVERPUBLICDIR)DATA/cache.txt && echo "cold install" || $(MAKE) cold
 	cd $(SERVERPUBLICDIR)DATA; touch $(CACHES); chmod a+w $(CACHES)
-	ML/restore_caches
 	test -f $(SERVERPUBLICDIR)$(VAR)/regression.txt && echo "regression install" || $(MAKE) install_regression
 	$(MAKE) release
+	ML/restore_caches
 
 # for first installation, do "sudo make cold" before "sudo make install"
 cold: # for first install

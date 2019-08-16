@@ -28,6 +28,6 @@ let cache_txt_file = Web.public_cache_txt_file in
 let caches = Nouns.extract_current_caches cache_txt_file in
 make_cache_transducers caches
 ;
-restore_caches
+restore_caches ()
 ;
 

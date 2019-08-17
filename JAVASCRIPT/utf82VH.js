@@ -212,10 +212,10 @@ function convert2() {
 	if(trans.value=='DN'){
 		focus1.value=convertDeva(String(focus1.value).trim());
 		focus2.value=convertDeva(String(focus2.value).trim());
-		elt.value='VH';
+		trans.value='VH';
 	}else	if(trans.value=='RN'){
 		focus1.value=convertRoma(String(focus1.value).trim());
 		focus2.value=convertRoma(String(focus2.value).trim());
-		elt.value='VH';
+		trans.value='VH';
 	}
 }

@@ -45,10 +45,76 @@ function normalizeUCharCodeLen(l) {
 	}
 }
 function convertDeva(orig) {
-	var inHex=["05","06","07","08","09","0a","0b","60","0c","0f","10","13","14","02","01","03","3d","4d"];
-	var outVH=["a","aa","i","ii","u","uu",".r",".rr",".l","e","ai","o","au",".m","~l",".h","'",""];
-	var matIn=["3e","3f","40","41","42","43","44","62","47","48","4b","4c"];
-	var consIn=["15","16","17", "18","19","1a","1b","1c","1d","1e","1f","20","21","22","23","24","25","26","27","28","2a","2b","2c","2d","2e","2f","30","32","35","36","37","38","39","00"];
+	var vowDict={
+		"05": "a",
+		"06": "aa",
+		"07": "i",
+		"08": "ii",
+		"09": "u",
+		"0a": "uu",
+		"0b": ".r",
+		"60": ".rr",
+		"0c": ".l",
+		"0f": "e",
+		"10": "ai",
+		"13": "o",
+		"14": "au",
+		"02": ".m",
+		"01": "~l",
+		"03": ".h",
+		"3d": "'",
+		"4d": ""
+	};
+	var matDict={
+		"3e": "aa",
+		"3f": "i",
+		"40": "ii",
+		"41": "u",
+		"42": "uu",
+		"43": ".r",
+		"44": ".rr",
+		"62": ".l",
+		"47": "e",
+		"48": "ai",
+		"4b": "o",
+		"4c": "au"
+	};
+	var consDict={
+		"15": "k",
+		"16": "kh",
+		"17": "g",
+		"18": "gh",
+		"19": "f",
+		"1a": "c",
+		"1b": "ch",
+		"1c": "j",
+		"1d": "jh",
+		"1e": "~n",
+		"1f": ".t",
+		"20": ".th",
+		"21": ".d",
+		"22": ".dh",
+		"23": ".n",
+		"24": "t",
+		"25": "th",
+		"26": "d",
+		"27": "dh",
+		"28": "n",
+		"2a": "p",
+		"2b": "ph",
+		"2c": "b",
+		"2d": "bh",
+		"2e": "m",
+		"2f": "y",
+		"30": "r",
+		"32": "l",
+		"35": "v",
+		"36": "z",
+		"37": ".s",
+		"38": "s",
+		"39": "h",
+		"00": null
+	};
 	var output=''; var wasCons=false;
 	for(i=0;i<orig.length;i++){
 		var origC=orig.charAt(i);
@@ -56,46 +122,54 @@ function convertDeva(orig) {
 		var check=l.substring(2);
 		var init=l.substring(0,2);
 		if(init!='09'){check='00';}
-		var consOut=["k","kh","g","gh","f","c","ch","j","jh","~n",".t",".th",".d",".dh",".n","t","th","d","dh","n","p","ph","b","bh","m","y","r","l","v","z",".s","s","h",origC+""];
-		for(j=0;j<inHex.length;j++){
-			if(check==inHex[j]){
-				if((check=="03")||(check=="01")||(check=="02")||(check=="3d")){
-					if(wasCons){output=output.concat("a"+outVH[j]);}
-					else{output=output.concat(outVH[j]);}
-				}
-				else{output=output.concat(outVH[j]);}
-				wasCons=false;
+		consIn["00"] = origC+"";
+		if(vowDict[check]!==undefined){
+			if((check=="03")||(check=="01")||(check=="02")||(check=="3d")){
+				if(wasCons){output=output.concat("a"+vowDict[check]);}
+				else{output=output.concat(vowDict[check]);}
 			}
+			else{output=output.concat(vowDict[check]);}
+			wasCons=false;
 		}
-		for(j=0;j<consIn.length;j++){
-			if(check==consIn[j]){
-				if(wasCons){output=output.concat("a"+consOut[j]);}
-				else{output=output.concat(consOut[j]);}
-				if(check!='00'){	wasCons=true;}
-				else{wasCons=false;}
-				if(i==orig.length-1){output=output.concat("a");}
-			}
+		if(consDict[check]!==undefined){
+			if(wasCons){output=output.concat("a"+consDict[check]);}
+			else{output=output.concat(consDict[check]);}
+			if(check!='00'){	wasCons=true;}
+			else{wasCons=false;}
+			if(i==orig.length-1){output=output.concat("a");}
 		}
-		for(j=0;j<matIn.length;j++){
-			if(check==matIn[j]){output=output.concat(outVH[j+1]);wasCons=false;}
+		if(matDict[check]!==undefined){
+			output=output.concat(matDict[check]);
+			wasCons=false;
 		}
 	}
 	return output;
 }
 function convertRoma(orig) {
-	var inRom= ["7773","0257","0299","0363","7771","7735","7749","0241","7789","7693","7751","7747","7779","0347","7717"];
-	var outVH= [".rr","aa","ii","uu",".r",".l","f","~n",".t",".d",".n",".m",".s","z",".h"];
+	var romDict={
+		"7773": ".rr",
+		"0257": "aa",
+		"0299": "ii",
+		"0363": "uu",
+		"7771": ".r",
+		"7735": ".l",
+		"7749": "f",
+		"0241": "~n",
+		"7789": ".t",
+		"7693": ".d",
+		"7751": ".n",
+		"7747": ".m",
+		"7779": ".s",
+		"0347": "z",
+		"7717": ".h"
+	};
 	var output='';
 	for(i=0;i<orig.length;i++){
 		var origC=orig.charAt(i);
 		var check=normalizeUCharCodeLen(orig.charCodeAt(i).toString(10));
-		var isC=false;
-		for(j=0;j<inRom.length;j++){
-			if(check==inRom[j]){
-				output=output.concat(outVH[j]);isC=true;
-			}
-		}
-		if(!isC){
+		if(romDict[check]!==undefined){
+			output=output.concat(romDict[check]);
+		}else{
 			output=output.concat(origC);
 		}
 	}

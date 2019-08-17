@@ -160,7 +160,8 @@ function convertRoma(orig) {
 		"7747": ".m",
 		"7779": ".s",
 		"0347": "z",
-		"7717": ".h"
+		"7717": ".h",
+		"7745": "~~"
 	};
 	var output='';
 	for(i=0;i<orig.length;i++){

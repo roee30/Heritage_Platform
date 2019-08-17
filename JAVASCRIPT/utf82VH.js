@@ -118,6 +118,15 @@ function convertDeva(orig) {
 		"3d": "'"
 	}
 	var output=''; var wasCons=false;
+	function tryDict(dict, check, checkWasCons) {
+		if(dict[check]!==undefined){
+			if(checkWasCons && wasCons){output=output.concat("a");}
+			output=output.concat(dict[check]);
+			wasCons=(dict===consDict);
+			return true;
+		}
+		return false;
+	}
 	for(i=0;i<orig.length;i++){
 		var origC=orig.charAt(i);
 		var l=normalizeUCharCodeLen(orig.charCodeAt(i).toString(16));
@@ -125,24 +134,10 @@ function convertDeva(orig) {
 		var init=l.substring(0,2);
 		if(init!='09'){check='00';}
 		specDict["00"] = origC+"";
-		if(vowDict[check]!==undefined){
-			output=output.concat(vowDict[check]);
-			wasCons=false;
-		}
-		if(specDict[check]!==undefined){
-			if(wasCons){output=output.concat("a"+specDict[check]);}
-			else{output=output.concat(specDict[check]);}
-			wasCons=false;
-		}
-		if(consDict[check]!==undefined){
-			if(wasCons){output=output.concat("a"+consDict[check]);}
-			else{output=output.concat(consDict[check]);}
-			wasCons=true;
-		}
-		if(matDict[check]!==undefined){
-			output=output.concat(matDict[check]);
-			wasCons=false;
-		}
+		tryDict(vowDict,check) ||
+		tryDict(matDict,check) ||
+		tryDict(specDict,check,true) ||
+		tryDict(consDict,check,true);
 	}
 	if(wasCons){output=output.concat("a");}
 	return output;

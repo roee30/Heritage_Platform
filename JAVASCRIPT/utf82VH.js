@@ -112,7 +112,7 @@ function convertDeva(orig) {
 	};
 	var specDict = {
 		"00": null,
-		"01": "~l",
+		"01": "~~",
 		"02": ".m",
 		"03": ".h",
 		"3d": "'",

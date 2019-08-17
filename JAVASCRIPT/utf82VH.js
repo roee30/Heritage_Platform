@@ -115,7 +115,9 @@ function convertDeva(orig) {
 		"01": "~l",
 		"02": ".m",
 		"03": ".h",
-		"3d": "'"
+		"3d": "'",
+		"64": "|",
+		"65": "||"
 	}
 	var output=''; var wasCons=false;
 	function tryDict(dict, check, checkWasCons) {

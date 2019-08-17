@@ -59,10 +59,6 @@ function convertDeva(orig) {
 		"10": "ai",
 		"13": "o",
 		"14": "au",
-		"02": ".m",
-		"01": "~l",
-		"03": ".h",
-		"3d": "'",
 		"4d": ""
 	};
 	var matDict={
@@ -112,9 +108,15 @@ function convertDeva(orig) {
 		"36": "z",
 		"37": ".s",
 		"38": "s",
-		"39": "h",
-		"00": null
+		"39": "h"
 	};
+	var specDict = {
+		"00": null,
+		"01": "~l",
+		"02": ".m",
+		"03": ".h",
+		"3d": "'"
+	}
 	var output=''; var wasCons=false;
 	for(i=0;i<orig.length;i++){
 		var origC=orig.charAt(i);
@@ -122,27 +124,27 @@ function convertDeva(orig) {
 		var check=l.substring(2);
 		var init=l.substring(0,2);
 		if(init!='09'){check='00';}
-		consIn["00"] = origC+"";
+		specDict["00"] = origC+"";
 		if(vowDict[check]!==undefined){
-			if((check=="03")||(check=="01")||(check=="02")||(check=="3d")){
-				if(wasCons){output=output.concat("a"+vowDict[check]);}
-				else{output=output.concat(vowDict[check]);}
-			}
-			else{output=output.concat(vowDict[check]);}
+			output=output.concat(vowDict[check]);
+			wasCons=false;
+		}
+		if(specDict[check]!==undefined){
+			if(wasCons){output=output.concat("a"+specDict[check]);}
+			else{output=output.concat(specDict[check]);}
 			wasCons=false;
 		}
 		if(consDict[check]!==undefined){
 			if(wasCons){output=output.concat("a"+consDict[check]);}
 			else{output=output.concat(consDict[check]);}
-			if(check!='00'){	wasCons=true;}
-			else{wasCons=false;}
-			if(i==orig.length-1){output=output.concat("a");}
+			wasCons=true;
 		}
 		if(matDict[check]!==undefined){
 			output=output.concat(matDict[check]);
 			wasCons=false;
 		}
 	}
+	if(wasCons){output=output.concat("a");}
 	return output;
 }
 function convertRoma(orig) {

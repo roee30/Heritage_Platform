@@ -2487,8 +2487,8 @@ value intercalate_pp root rstem =
              (* NB zaas vet for stem zaas but admits also zi.s only anit *)
            | "aj" | "a.t" | "at" | "an#2" | "az#2" | "aas#2" | "i.s#2"
            | "ii.d" | "iir" | "iiz#1" | "ii.s" | "iih" | "uc" | ".rc#1" | ".rj" 
-           | "ej" | "edh" | "kath" | "kal" | "kaaz" | "kiil" | "kuc"
-           | "kup" | "kuuj" | "k.rz" | "krii.d" | "klav" | "kvath" | "k.sam" 
+           | "ej" | "edh" | "kath" | "kal" | "kaaz" | "kiil" | "kuc" | "kup"
+           | "ku.s" | "kuuj" | "k.rz" | "krii.d" | "klav" | "kvath" | "k.sam" 
            | "k.sar" | "k.sudh#1" | "k.svi.d" | "khaad" | "ga.n" | "gad" | "gal" 
            | "granth" | "gha.t" | "ghaat" | "cak" | "ca.t" | "car" | "cal"
            | "cud" | "cur" | "chal" | "jiiv" | "jval" | "ta.d" | "tam" | "tul" 

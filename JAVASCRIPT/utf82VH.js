@@ -111,7 +111,6 @@ function convertDeva(orig) {
 		"39": "h"
 	};
 	var specDict = {
-		"00": null,
 		"01": "~~",
 		"02": ".m",
 		"03": ".h",
@@ -120,26 +119,26 @@ function convertDeva(orig) {
 		"65": "||"
 	}
 	var output=''; var wasCons=false;
-	function tryDict(dict, check, checkWasCons) {
-		if(dict[check]!==undefined){
-			if(checkWasCons && wasCons){output=output.concat("a");}
-			output=output.concat(dict[check]);
-			wasCons=(dict===consDict);
+	function tryChar(char,finalizeCons,isCons) {
+		if(char!==undefined){
+			if(finalizeCons && wasCons){output=output.concat("a"+char);}
+			else{output=output.concat(char);}
+			wasCons=!!isCons;
 			return true;
 		}
 		return false;
 	}
 	for(i=0;i<orig.length;i++){
-		var origC=orig.charAt(i);
-		var l=normalizeUCharCodeLen(orig.charCodeAt(i).toString(16));
-		var check=l.substring(2);
-		var init=l.substring(0,2);
-		if(init!='09'){check='00';}
-		specDict["00"] = origC+"";
-		tryDict(vowDict,check) ||
-		tryDict(matDict,check) ||
-		tryDict(specDict,check,true) ||
-		tryDict(consDict,check,true);
+		var charCode = orig.charCodeAt(i)
+		if(charCode>=0x0900 && charCode<=0x097F){ // Unicode 12.0 Devanagari range
+			var check=normalizeUCharCodeLen(charCode.toString(16)).substring(2);
+			tryChar(vowDict[check]) ||
+			tryChar(matDict[check]) ||
+			tryChar(specDict[check],true) ||
+			tryChar(consDict[check],true,true);
+		} else {
+			tryChar(orig.charAt(i),true);
+		}
 	}
 	if(wasCons){output=output.concat("a");}
 	return output;
@@ -165,12 +164,11 @@ function convertRoma(orig) {
 	};
 	var output='';
 	for(i=0;i<orig.length;i++){
-		var origC=orig.charAt(i);
 		var check=normalizeUCharCodeLen(orig.charCodeAt(i).toString(10));
 		if(romDict[check]!==undefined){
 			output=output.concat(romDict[check]);
 		}else{
-			output=output.concat(origC);
+			output=output.concat(orig.charAt(i));
 		}
 	}
 	return output;

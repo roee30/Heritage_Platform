@@ -119,6 +119,7 @@ function convertDeva(orig) {
 		"65": "||"
 	}
 	var output=''; var wasCons=false;
+	var i;
 	function tryChar(char,finalizeCons,isCons) {
 		if(char!==undefined){
 			if(finalizeCons && wasCons){output=output.concat("a"+char);}
@@ -163,6 +164,7 @@ function convertRoma(orig) {
 		"7745": "~~"
 	};
 	var output='';
+	var i;
 	for(i=0;i<orig.length;i++){
 		var check=normalizeUCharCodeLen(orig.charCodeAt(i).toString(10));
 		if(romDict[check]!==undefined){

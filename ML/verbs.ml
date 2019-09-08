@@ -3547,16 +3547,16 @@ and compute_perfect_desidm st entry =
   let (_, weak, _, _, _) = redup_perf (Canon.rdecode st) in
   compute_perfectm Desiderative weak entry
 ;
-(*********************************)
-(* Periphrastic perfect : .namul *)
-(*********************************)
+(*****************************)
+(* Periphrastic perfect li.t *)
+(*****************************)
 (* Construction of the periphrastic perfect, used for perfect of secondary 
 conjugations, denominative verbs and a few roots. It builds a form in -aam
 suffixed by a perfect form of the auxiliairies k.r bhuu et as \Pan{3,1,35-40} *)
 value peri_perf_stem entry = 
   let stem = match entry with 
   [ "iik.s" | "ii.d" | "iir" | "iih" | "uk.s" | "uc" | "ujjh" | "uuh" | "edh" 
-    (* Macdonell§140a1 Whitney§1071c *)
+    (* Macdonell§140a1 Whitney§1071c Filliozat§66 edhaa.mcakre *)
   | "ind" | "indh" | "inv" | "ii.s" | "umbh" | "cakaas" -> entry
   | "aas#2"  -> "aas" (* trim *)
   | "u.s"    -> "o.s" (* guna WR *) 

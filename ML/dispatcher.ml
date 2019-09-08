@@ -135,7 +135,7 @@ value dispatch1 w = fun (* w is the current input word *)
   | Kriv | Kric | Absv | Absc | Avy | Lopak | Root | Lopa | Cache -> initial1
   | A -> [ Iicc; Nouc; Iikc; Kric; Pvkc; Iivc; Vocc; Vokc ]
   | An -> [ Iicv; Nouv; Iikv; Kriv; Pvkv; Iivv; Vocv; Vokv
-          ; A (* eg anak.sara *) ; An (* attested ? *) ] 
+          ; A (* eg anak.sara anavadya *) ; An (* attested ? *) ] 
   | Ai -> [ Absc; Pvc ]
   | Ani -> [ Absv; Pvv ]
     (* This assumes that privative prefixes cannot prefix Ifc forms 

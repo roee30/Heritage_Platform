@@ -3287,8 +3287,9 @@ value compute_perfect_aa stem entry =
   match voices_of entry with
   [ Para -> compute_perfecta_aa stem entry
   | Atma -> compute_perfectm_aa stem entry
-  | _ -> do { compute_perfecta_aa stem entry
-            ; compute_perfectm_aa stem entry
+  | _ -> do { if entry = "traa" then () (* to avoid parasitic tatra *)
+              else compute_perfecta_aa stem entry 
+            ; compute_perfectm_aa stem entry (* eg tatre WR *)
             }
   ]
 ;
@@ -4057,8 +4058,8 @@ value compute_aorist entry =
       }
     | "p.rr" -> compute_root_aoristp (revcode "puur") entry 
     | "kaaz" |  "k.sip" | "diip" | "duh#1" | "d.rz#1" | "dvi.s#1" | "budh#1"
-    | "vid#1" | "s.rj#1" 
-        -> compute_root_aoristp strong entry
+    | "yuj#1" | "vid#1" | "s.rj#1" 
+        -> compute_root_aoristp strong entry 
     | "rabh" -> compute_root_aoristp (revcode "rambh") entry 
     | "ci" | "jaag.r" | "t.rr" | "pac" | "pad#1" | "zru" | "stu" | "hu"
         -> compute_root_aoristp long entry
@@ -4067,7 +4068,7 @@ value compute_aorist entry =
     ]
   ; match entry with (* 2. thematic aorist af *)
     [ "aap" | "krudh" | "gam" | "g.rdh" | "ghas" | "das" | "dyut#1" | "muc#1" 
-    | "yuj#1" | "ric" | "ruc#1" | "rudh#2" | "ruh" | "vid#2" | "v.rt#1"
+    | "yuj#1" | "ric" | "ruc#1" | "rudh#2" | "ruh" | "vid#2" | "v.rt#1" 
     | "zuc#1" | "zudh" | "sic" | "stan" | "huu" 
      -> do
       { compute_thematic_aorista weak entry
@@ -4077,7 +4078,7 @@ value compute_aorist entry =
       { compute_thematic_aorista stem entry
       ; compute_thematic_aoristm stem entry 
       }
-    | "zuu" | "zcut#1" | "zram" -> compute_thematic_aorista weak entry
+    | "zak" | "zuu" | "zcut#1" | "zram" -> compute_thematic_aorista weak entry
     | "zru"   -> compute_thematic_aorista (revcode "zrav") entry
     | "khyaa" -> compute_thematic_aorista (revcode "khy") entry
     | "as#2"  -> compute_thematic_aorista (revcode "asth") entry
@@ -4088,11 +4089,11 @@ value compute_aorist entry =
     | _ -> () 
     ]
   ; match entry with (* 3. reduplicated aorist caf *)
-    [ "am" | ".rc#1" | "kath" | "k.r.s" | "k.lp" | "ga.n" | "gam" | "gaah" 
-    | "car" | "ce.s.t" | "jan" | "ji" | "tvar" | "tvi.s#1" | "dah#1" | "diz#1"
-    | "dih" | "diip" | "dru#1" | "dh.r" | "naz" | "pac" | "pa.th" | "miil"
-    | "muc#1" | "yaj#1" | "rak.s" | "ric" | "viz#1" | "v.r#1" | "v.rt#1" 
-    | "vyadh" | "zri" | "zru" | "stu" (* | "dhaa#1" *) -> 
+    [ "am" | ".rc#1" | "kath" | "k.r#1" | "k.r.s" | "k.lp" | "ga.n" | "gam"
+    | "gaah" | "car" | "ce.s.t" | "jan" | "ji" | "tvar" | "tvi.s#1" | "dah#1"
+    | "diz#1" | "dih" | "diip" | "dru#1" | "dh.r" | "naz" | "pac" | "pa.th"
+    | "miil" | "muc#1" | "yaj#1" | "rak.s" | "ric" | "viz#1" | "v.r#1" 
+    | "v.rt#1" | "vyadh" | "zri" | "zru" | "stu" (* | "dhaa#1" *) -> 
       let stem = redup_aor weak entry in do
       { compute_redup_aorista stem entry (* but atu.s.tavam RV (WR) *)  
       ; compute_redup_aoristm stem entry 
@@ -4127,7 +4128,7 @@ value compute_aorist entry =
     | _ -> () 
     ]
   ; match entry with (* 4. sigma aorist sic *)
-    [ "aap" | "k.r#1"  | "gup" | "chid#1" | "ji" | "tud" | "t.rr"
+    [ "aap" | "k.r#1"  | "gup" | "chid#1" | "ji" | "tud" | "t.rr" | "tyaj#1" 
     | "dah#1" | "daa#1" | "d.rz#1" | "draa#2" | "dhaa#1" | "dhyaa" | "dhyai" 
     | "dhv.r" | "nak.s" | "nii#1" | "pac" | "praz" | "prii" 
     | "budh#1" | "bhaa#1" | "bhii#1" | "muc#1" | "yaj#1" | "yuj#1" | "ram" 
@@ -4163,11 +4164,11 @@ value compute_aorist entry =
   ; match entry with (* 5. i.s aorist se.t-sic *)
     [ "ak.s" | "aj" | "aas#2" | "i.s#1" | "iik.s" | "uk.s" | "uc" | "u.s" 
     | "uuh" | ".rc#1" | "k.rt#1" | "krand" | "kram" | "k.san"  | "khan"
-    | "car" | "ce.s.t" | "jalp" | "jaag.r" | "t.rr" | "diip" | "pa.th" | "puu#1"
-    | "p.rc"| "pru.s#1" | "baadh" | "budh#1" | "mad#1" | "mud#1" | "muurch" 
-    | "mlecch" | "yaac" | "ruc#1" | "lu~nc" | "luu#1" | "vad" | "vadh" | "vid#1" 
-    | "v.r#1" | "vraj" | "z.rr" | "sidh#2" | "skhal" | "stan" | "stu"
-    | "hi.ms" -> do
+    | "car" | "ce.s.t" | "jap" | "jalp" | "jaag.r" | "t.rr" | "diip"
+    | "pa.th" | "puu#1" | "p.rc"| "pru.s#1" | "baadh" | "budh#1" | "mad#1" 
+    | "mud#1" | "muurch" | "mlecch" | "yaac" | "ruc#1" | "lu~nc" | "luu#1"
+    | "vad" | "vadh" | "vid#1" | "v.r#1" | "vraj" | "z.rr" | "sidh#2" 
+    | "skhal" | "stan" | "stu" | "hi.ms" -> do
       { let stem = match weak with
             [ [ 7 (* .r *) :: _ ] -> 
               if entry = "jaag.r" then strong (* jaagari.sam RF IC 2 p 88 *)
@@ -4257,7 +4258,7 @@ value compute_injunctive entry =
     | _ -> () 
     ]
   ; match entry with (* 3. reduplicated injunct *)
-    [ "gam" -> 
+    [ "k.r#1" | "gam" -> 
       let stem = redup_aor weak entry in do
       { compute_redup_injuncta stem entry
       ; compute_redup_injunctm stem entry 
@@ -4265,7 +4266,7 @@ value compute_injunctive entry =
     | _ -> () 
     ]
   ; match entry with (* 4. sigma injunct *)
-    [ "k.r#1" | "chid#1" | "pac" | "praz" | "bhii#1" | "sidh#1" -> do
+    [ "k.r#1" | "chid#1" | "tyaj#1" | "pac" | "praz" | "bhii#1" | "sidh#1" -> do
       { let stema = long in
         compute_ath_s_injuncta stema entry 
       ; if entry = "chid#1" then compute_ath_s_injuncta strong entry else ()
@@ -4285,10 +4286,11 @@ value compute_injunctive entry =
   ; match entry with (* 5. i.s injunct *)
     [ "ak.s" | "aj" | "aas#2" | "i.s#1" | "iik.s" | "uk.s" | "uc" | "u.s" 
     | "uuh" | ".rc#1" | "k.rt#1" | "krand" | "kram" | "k.san"  | "khan"  | "car" 
-    | "ce.s.t" | "jalp" | "jaag.r" | "t.rr" | "diip" | "pa.th" | "puu#1" | "p.rc"
-    | "baadh" | "budh#1" | "mad#1" | "mud#1" | "muurch" | "mlecch" | "yaac" 
-    | "ruc#1" | "lu~nc" | "luu#1" | "vad" | "vadh" | "vid#1" | "v.r#1" | "vraj"
-    | "z.rr" | "sidh#2" | "skhal" | "stan" | "stu" | "hi.ms" -> do
+    | "ce.s.t" | "jalp" | "jaag.r" | "t.rr" | "diip" | "pa.th" 
+    | "puu#1" | "p.rc" | "baadh" | "budh#1" | "mad#1" | "mud#1" | "muurch" 
+    | "mlecch" | "yaac" | "ruc#1" | "lu~nc" | "luu#1" | "vad" | "vadh" 
+    | "vid#1" | "v.r#1" | "vraj" | "z.rr" | "sidh#2" | "skhal" | "stan"
+    | "stu" | "hi.ms" -> do
       { let stem = match weak with
             [ [ 7 (* .r *) :: _ ] -> 
               if entry = "jaag.r" then strong (* jaagari.sam RF IC 2 p 88 *)
@@ -5815,12 +5817,19 @@ value compute_conjugs root (infos : Conj_infos.root_infos) =
   let root_entry = Canon.decode root in compute_conjugs_stems root_entry infos
 ;
 (* Supplementary forms *)
-value compute_extra_car () = do
+value compute_extra_rc () = (* vedic - \Pan{7,1,38} *)
+  enter1 ".rc#1" (Absotvaa Primary (code "arcya")) (* abs -ya with no preverb *)
+and compute_extra_khan () = (* WR MW *)
+  let root = "khan"
+  and conj = Primary 
+  and pstem = revcode "khaa" (* khaa substituted optionally in ps *) in 
+  compute_passive conj root pstem 
+and compute_extra_car () = do
   { enter1 "car" (Absotvaa Primary (code "cartvaa"))
   ; enter1 "car" (Absotvaa Primary (code "ciirtvaa"))
   ; enter1 "car" (Invar (Primary,Infi) (code "cartum")) (* epic *)
   }
- and compute_extra_jnaa () =
+and compute_extra_jnaa () =
   let entry = "j~naa#1" in (* j~napta vet \Pan{7,2,27} *)
   let cstem = revcode "j~nap" in 
   let ppstem = [ 1 :: [ 32 :: cstem ] ] (* j~napta *) in do 
@@ -5828,55 +5837,35 @@ value compute_extra_car () = do
   ; record_part (Pppa_ Causative ppstem entry) (* pp-vat *)
   ; perif Causative cstem entry 
   }
- and compute_extra_zru () = 
-  enter1 "zru" (* ved écoute *) 
-         (Conju (impera 5) [ (Singular,[ (Second, code "zrudhi") ]) ])
- and compute_extra_muc () =  do 
+and compute_extra_tri () = do 
+      { build_infinitive Primary (revcode "tarii") "t.rr" (* id. *)
+      ; build_infinitive Primary (revcode "tar") "t.rr" (* Whitney roots *)
+      }
+and compute_extra_dhaa () = (* Gaayatrii dhiimahi precative m. Whitney§837b *)
+    enter1 "dhaa#1" (Conju benem [ (Plural,[ (First, code "dhiimahi") ]) ])
+(* also "vidmahi" on yantra ? *)
+and compute_extra_nind () = (* WR: RV *)
+  enter1 "nand" (Conju perfa [ (Plural,[ (Third, code "ninidus") ])
+                             ; (Plural,[ (First, code "nindimas") ]) ])
+and compute_extra_prr () = (* paaryate as well as puuryate above *) 
+    let stem = revcode "paar" in compute_passive Primary "p.rr" stem
+and compute_extra_bhaas () = 
+    enter1 "bhaa.s" (Invar (Primary,Infi) (code "bhaa.s.tum")) (* WR epic *)
+and compute_extra_bhuj2 () = 
+    enter1 "hhuj#2" (Conju (Primary,voa 7) (* epics Wh{688a} *) 
+                           [ (Singular,[ (First, code "bhu~njiiyaam") ])
+                           ; (Singular,[ (Second, code "bhu~njiiyaas") ])
+                           ; (Singular,[ (Third, code "bhu~njiiyaat") ])
+                           ])
+and compute_extra_bhr () = (* Epics sa.mbhriyantu Oberlies 8.7 *) 
+   enter1 "bh.r" (Conju (Primary,vmp) [ (Plural,[ (Third, code "bhriyantu") ]) ])
+and compute_extra_bhram () = (* MW: Mah *)
+  enter1 "bhram" (Conju perfa [ (Plural,[ (Third, code "bhremur") ]) ])
+and compute_extra_muc () =  do 
   { (* ved precative `fasse que je sois libéré' *)
     enter1 "muc#1" (Conju benem [ (Singular,[ (First, code "muk.siiya") ]) ])
   ; build_infinitive Causative (revcode "moci") "muc#1"    (* Whitney§1051c *)
   }
- and compute_extra_prr () = (* paaryate as well as puuryate above *) 
-  let stem = revcode "paar" in compute_passive Primary "p.rr" stem
- and compute_extra_rc () = (* vedic - \Pan{7,1,38} *)
-  enter1 ".rc#1" (Absotvaa Primary (code "arcya")) (* abs -ya with no preverb *)
- and compute_extra_zaas () = 
-   let e = "zaas" in do (* epics zaasyate + Renou gram §29 *) 
-     { let stem = revcode e in compute_passive Primary e stem 
-     ; enter1 e (Conju (Primary,via 2) [ (Singular,[ (Second, code "azaat") ]) ])
-     }
-and compute_extra_tri () = do 
-  { build_infinitive Primary (revcode "tarii") "t.rr" (* id. *)
-  ; build_infinitive Primary (revcode "tar") "t.rr" (* Whitney roots *)
-  }
-and compute_extra_dhaa () = (* Gaayatrii dhiimahi precative m. Whitney§837b *)
-  enter1 "dhaa#1" (Conju benem [ (Plural,[ (First, code "dhiimahi") ]) ])
-(* also "vidmahi" on yantra ? *)
- and compute_extra_bhr () = (* Epics sa.mbhriyantu Oberlies 8.7 *) 
-  enter1 "bh.r" (Conju (Primary,vmp) [ (Plural,[ (Third, code "bhriyantu") ]) ])
- and compute_extra_bhram () = (* MW: Mah *)
-  enter1 "bhram" (Conju perfa [ (Plural,[ (Third, code "bhremur") ]) ])
- and compute_extra_bhaas () = 
-  enter1 "bhaa.s" (Invar (Primary,Infi) (code "bhaa.s.tum")) (* WR epic *)
-and compute_extra_hims () = do 
-  { (* Renou gram §29 *) enter1 "hi.ms" 
-    (Conju (Primary,via 7) [ (Singular,[ (Second, code "ahi.msat") ]) ])
-  ; (* MW *) enter1 "hi.ms" 
-    (Conju (presa 7) [ (Singular,[ (Second, code "hi.msi") ]) ])
-  }
-and compute_extra_nind () = (* WR: RV *)
-  enter1 "nand" (Conju perfa [ (Plural,[ (Third, code "ninidus") ])
-                             ; (Plural,[ (First, code "nindimas") ]) ])
-and compute_extra_sanj () = (* WR *)
-  let root = "sa~nj" 
-  and conj = Primary
-  and pastem = revcode "sajj" (* "y" replaced by j in passive *) in 
-  compute_passive_system conj root pastem 
-and compute_extra_khan () = (* WR MW *)
-  let root = "khan"
-  and conj = Primary 
-  and pstem = revcode "khaa" (* khaa substituted optionally in ps *) in 
-  compute_passive conj root pstem 
 and compute_extra_vadh () = (* no present - use "han#1" *)
   let root = "vadh"
   and rstem = revcode "vadh" in do 
@@ -5885,6 +5874,19 @@ and compute_extra_vadh () = (* no present - use "han#1" *)
   ; compute_passive_raw root
   (* [record_pfp root rstem] is computed by [compute_extra_participles] *)
   }
+and compute_extra_zaas () = 
+   let e = "zaas" in do (* epics zaasyate + Renou gram §29 *) 
+     { let stem = revcode e in compute_passive Primary e stem 
+     ; enter1 e (Conju (Primary,via 2) [ (Singular,[ (Second, code "azaat") ]) ])
+     }
+and compute_extra_zru () = 
+  enter1 "zru" (* ved écoute *) 
+         (Conju (impera 5) [ (Singular,[ (Second, code "zrudhi") ]) ])
+and compute_extra_sanj () = (* WR *)
+  let root = "sa~nj" 
+  and conj = Primary
+  and pastem = revcode "sajj" (* "y" replaced by j in passive *) in 
+  compute_passive_system conj root pastem 
 and compute_extra_skand () = do (* WR *)  
   { enter1 "skand" (Invar (Primary,Infi) (code "skanditum")) 
   ; record_abso_ya (code "skadya") "skand"
@@ -5892,6 +5894,12 @@ and compute_extra_skand () = do (* WR *)
 and compute_extra_syand () = do (* WR *)
   { record_abso_tvaa (code "syattvaa") "syand" 
   ; record_abso_ya (code "syadya") "syand" 
+  }
+and compute_extra_hims () = do 
+  { (* Renou gram §29 *) enter1 "hi.ms" 
+    (Conju (Primary,via 7) [ (Singular,[ (Second, code "ahi.msat") ]) ])
+  ; (* MW *) enter1 "hi.ms" 
+    (Conju (presa 7) [ (Singular,[ (Second, code "hi.msi") ]) ])
   }
 and compute_extra_huu () = do (* WR *)
    { compute_futurem Primary (revstem "hvaasy") "huu" 
@@ -5937,6 +5945,7 @@ value compute_extra () = do
   ; compute_extra_nind () 
   ; compute_extra_prr () 
   ; compute_extra_bhaas () 
+  ; compute_extra_bhuj2 ()
   ; compute_extra_bhr ()
   ; compute_extra_bhram ()
   ; compute_extra_muc () 
@@ -5986,6 +5995,7 @@ value fake_compute_conjugs (gana : int) (entry : string) = do
       | "nind"   -> compute_extra_nind ()
       | "p.rr"   -> compute_extra_prr ()
       | "bhaa.s" -> compute_extra_bhaas ()
+      | "bhuj#2" -> compute_extra_bhuj2 ()
       | "bh.r"   -> compute_extra_bhr ()
       | "bhram"  -> compute_extra_bhram ()
       | "muc#1"  -> compute_extra_muc ()

@@ -92,7 +92,7 @@ value voices_of = fun
   | "az#1" | "aas#2" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" | "ii.s" 
   | "iih"  | "edh" | "katth" | "kam" | "kamp" | "kaaz" | "kaas#1" | "kuu" 
   | "k.rp" | "k.lp" (* but Henry: {cak.lpur} "ils s'arrangèrent" *)
-  | "knuu" | "klav" | "k.sad" | "k.sam" | "galbh" | "gaah" | "gur" | "glah" 
+  | "knuu" | "klav" | "k.sad" | "k.sam" | "galbh" | "gur" | "glah" 
   | "gha.t" | "jabh#1" | "ju.s#1" | "j.rmbh" | ".damb" | ".dii" | "tandr"
   | "tij" | "trap" | "trai" | "tvar" | "dak.s" | "day" | "diik.s" | "diip"
   | "d.r#1" | "dhii#1" | "dhuk.s" | "pa.n" | "pad#1" | "pi~nj" 
@@ -105,26 +105,27 @@ value voices_of = fun
   | "sva~nj" | "haa#2" | "hu.n.d" | "h.r#2" | "hnu" | "hraad" | "hlaad" 
 (*| "m.r" Ubha needed for non present tenses - see \Pan{1,3,61} for exact rule *)
 (*| "smi" Ubha needed for smitavat *)
-(*| "bhuj#2"  Ubha needed for bhunakti to govern *)
+(*| "bhuj#2" Ubha needed for bhunakti to govern *)
+(*| "gaah" Ubha needed for gaahet epics *)
    (* DRP restriction: "dyut#1" *) 
       -> Atma (* "deponent" verbs: middle only *)
   | _ -> Ubha (* default *) 
   (* Attested Ubha (over all ga.nas) : 
   [ "a~nc" | "arh" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" | ".r" | ".rj"
   | "ka.n.d" | "kal" | "ka.s" | "ku.t.t" | "ku.n.d" | "k.r#1" | "k.r#2" | "k.r.s"
-  | "kram" | "krii" | "k.san" | "k.sap#1" | "k.sal" | "k.sip" | "k.sud"
-  | "k.s.nu" | "khan" | "gam" | "garh" | "guh" | "gras" | "gha.t.t" | "cat" 
-  | "carc" | "ci" | "cint" | "cud" | "ce.s.t" | "cyu" | "chad#1" | "chand"
-  | "chid#1" | "jan" | "juu" | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d" | "tan#1"
-  | "tan#2" | "tap" | "tud#1" | "tul" | "t.rd" | "traa" | "daa#1" | "daaz#1"
-  | "diz#1" | "dih" | "duh#1" | "dev#1" | "draa#2" | "dvi.s#1" | "dhaa#1"
-  | "dhaav#1" | "dhaav#2" | "dhuu#1" | "dh.r" | "dhva.ms" | "nah" | "naath" 
-  | "nij" | "nii#1" | "nud" | "pac" | "paz" | "pa.th" | "pii.d" | "pu.s#1" 
-  | "puu#1" | "puuj" | "puuy" | "p.rth" | "prii" | "pru.s#1" | "budh#1" 
-  | "bruu" | "bhak.s" | "bhaj" | "bharts" | "bhaas#1" | "bhid#1" | "bhuj#2" 
-  | "bh.r" | "bh.rjj" | "maa#4" | "mi" | "mith" | "mil" | "mii" | "muc#1" 
-  | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.r.s" | "yaj#1" | "yam" | "yaac"
-  | "yu#1" | "yuj#1" | "rac" | "ra~nj" | "ram" | "rah" | "raaj#1" | "ri" 
+  | "kram" | "krii" | "k.san" | "k.sap#1" | "k.sal" | "k.sip" | "k.sud" 
+  | "k.s.nu" | "khan" | "gam" | "garh" | "gaah" | "guh" | "gras" | "gha.t.t" 
+  | "cat" | "carc" | "ci" | "cint" | "cud" | "ce.s.t" | "cyu" | "chad#1"
+  | "chand" | "chid#1" | "jan" | "juu" | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d"
+  | "tan#1" | "tan#2" | "tap" | "tud#1" | "tul" | "t.rd" | "traa" | "daa#1"
+  | "daaz#1" | "diz#1" | "dih" | "duh#1" | "dev#1" | "draa#2" | "dvi.s#1" 
+  | "dhaa#1" | "dhaav#1" | "dhaav#2" | "dhuu#1" | "dh.r" | "dhva.ms" | "nah" 
+  | "naath" | "nij" | "nii#1" | "nud" | "pac" | "paz" | "pa.th" | "pii.d" 
+  | "pu.s#1" | "puu#1" | "puuj" | "puuy" | "p.rth" | "prii" | "pru.s#1" 
+  | "budh#1" | "bruu" | "bhak.s" | "bhaj" | "bharts" | "bhaas#1" | "bhid#1"
+  | "bhuj#2" | "bh.r" | "bh.rjj" | "maa#4" | "mi" | "mith" | "mil" | "mii" 
+  | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.r.s" | "yaj#1" | "yam"
+  | "yaac" | "yu#1" | "yuj#1" | "rac" | "ra~nj" | "ram" | "rah" | "raaj#1" | "ri"
   | "ric" | "rud#1" | "rudh#2" | "lafgh" | "lak.s" | "labh" | "la.s" | "lip"
   | "lih#1" | "lup" | "luu#1" | "vad" | "vap#1" | "vap#2" | "val" | "vah#1"
   | "vaa#3" | "vic" | "vij" | "viij" | "v.r#2" | "v.rt#1" | "vyath" | "vyaa" 

@@ -2363,6 +2363,7 @@ value build_aatman entry =
    ]             
    ; Bare Pron (code "aatma") 
    ; Avyayaf  (code "aatmam") (* aatmaanam Acc ? *)
+   ; Cvi (code "aatmii") 
    ]
 ;
 value build_neu_yuvan entry = 
@@ -4541,7 +4542,7 @@ value build_asau_f () =
    ] ]
 ;
 value build_ena g entry = 
-  enter entry (* Whitney§500 *)
+  enter "idam" (* Whitney§500 *)
    [ Declined Pron g
    [ (Singular, 
     (* No nominative - anaphoric pronoun - in non accented position *) 
@@ -4675,7 +4676,7 @@ value build_tvad () =
 ;
 (* Numerals *)
 
-value build_dva entry = 
+value build_dvi entry = 
   let stem = revcode "dv" in 
   let decline case suff = (case,fix stem suff) in 
   enter entry 
@@ -4931,7 +4932,7 @@ value compute_nouns_stem_form e stem d p =
             | [ 45; 46; 3; 45 ] (* vizva *) 
             | [ 45; 32 ] (* tva *) 
             | [ 45; 48 ] (* sva *) -> build_pron_a Mas r1 e
-            | [ 36; 10 ] (* ena *) -> build_ena Mas e
+            | [ 36; 10 ] (* ena *) -> build_ena Mas "idam"
             | [ 47; 10 ] (* e.sa *) when (e="etad" || e="e.sa#1" || e="e.sa")
                  -> build_sa_tad Mas [ 10 ] e 
             | [ 48 ] (* sa *) when (e="tad" || e="sa#2" || e="sa")
@@ -5254,8 +5255,8 @@ value compute_nouns_stem_form e stem d p =
                  }
             | [ 32; 10 ] (* etad *) -> build_sa_tad Neu [ 10 ] e
             | [ 42; 32 ] (* tyad *) -> build_sya_tyad Neu e
-            | [ 36; 10 ] (* enad *) -> build_ena Neu e
-            | [ 37 ] (* pad *) -> build_root_weak Neu stem "paada"
+            | [ 36; 10 ] (* enad *) -> build_ena Neu "idam"
+            | [ 37 ] (* pad *) -> build_root_weak Neu stem "paada" 
             | [ 37 :: s ]  (* -pad *) -> build_pad Neu s e
             | [ 42 ] (* yad *) 
             | [ 45; 32 ] (* tvad *) 
@@ -5399,7 +5400,7 @@ value compute_nouns_stem_form e stem d p =
             | [ 45; 48 ]               (* svaa *) 
             | [ 45; 32 ]               (* tvaa *) 
                   -> build_pron_aa r1 e
-            | [ 36; 10 ] (* enaa *)  -> build_ena Fem e 
+            | [ 36; 10 ] (* enaa *)  -> build_ena Fem "idam"
             | [ 47; 10 ] (* e.saa *) when e="etad" || e="e.saa"
                   -> build_saa [ 10 ] e  
             | [ 48 ] (* saa *)       -> build_saa [] e 
@@ -5578,7 +5579,7 @@ value compute_nouns_stem_form e stem d p =
       | (* yu.smad *) [ 34; 1; 41; 47; 5; 42 ] (* tradition *) -> build_tvad ()
       | (* aatman *) [ 36; 1; 41; 32; 2 ] -> build_aatman e
       | (* eka *) [ 1; 17; 10 ] -> warn stem "a Mas or Neu" (* pn in Dico *)
-      | (* dva *) [ 1; 45; 34 ] -> build_dva e
+      | (* dvi *) [ 3; 45; 34 ] -> build_dvi e
       | (* tri *) [ 3; 43; 32 ] -> build_tri e
       | (* tis.r *) [ 7; 48; 3; 32 ]
       | (* trayas *) [ 48; 1; 42; 1; 43; 32 ] 

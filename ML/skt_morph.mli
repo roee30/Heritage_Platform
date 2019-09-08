@@ -105,6 +105,15 @@ and invar =
   | Perpft  (* periphrastic perfect (li.t) *)
   ]
 ;
+(* Varieties of na~n-samaasas *)
+type nan_kind =
+  [ Neg  (* logical negation: adj -> adj *)
+  | Not (* sentential negation: adv -> adv *)
+  | Opp (* opposite notion: subst -> subst preserving gender *)
+  | Priv (* bahuvrihi: noun -> adj with gender-raising *)
+  | Abse  (* noun -> noun in n. *) 
+  ]
+;
 type sadhana = (* karaka, action or absolutive - coarser than krit *)
   [ Agent
   | Action
@@ -113,6 +122,7 @@ type sadhana = (* karaka, action or absolutive - coarser than krit *)
   | Orig (* unused *)
   | Loca 
   | Absolu
+  | Nan of nan_kind
   ]
 ;
 (* Primary nominal formations (k.rdantas) *)

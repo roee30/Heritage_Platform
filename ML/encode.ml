@@ -18,6 +18,7 @@ exception In_error of string (* Error in user or corpus input *)
 value is_vowel c = vowel c || c>100 && c<114 (* accounts for upper case *)
 ;
 (* anusvara substituted by nasal or normalized to 14 when original *)
+(* anunaasika before vowels treated as anusvaara *)
 value rec normalize = normal_rec False
   where rec normal_rec after_vow = fun
   [ [] -> []
@@ -26,6 +27,10 @@ value rec normalize = normal_rec False
     if after_vow then
        let c' = homonasal c in [ c' :: [ c :: normal_rec (is_vowel c) l ] ]
     else raise (In_error "Anusvaara should follow vowel")
+  | [ 15 (* ~~ *) :: [ c :: l ] ] -> (* 31-08-19 anunaasika normalisation *)
+    if after_vow then (* anunaasika assimilated to anasvaara *)
+       let c' = homonasal c in [ c' :: [ c :: normal_rec (is_vowel c) l ] ] 
+    else [ 15 :: normal_rec False [ c :: l ] ]
   | [ 16 (* .h *) ] -> 
     if after_vow then [ 16 ]
     else raise (In_error "Visarga should follow vowel")

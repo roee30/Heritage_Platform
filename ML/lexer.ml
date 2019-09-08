@@ -11,16 +11,15 @@
    Uses Phases from Dispatcher to define phase.
    Loads the transducers, calls Dispatch to create module Disp. 
    Calls Segment to build Viccheda, the Sanskrit lexer that undoes sandhi 
-   in order to produce a padapatha.
+   in order to produce a padapaa.tha.
    Exports various print functions for the various modes. *)
 
 open Transduction;
 open Canon;
-open Skt_morph;
-open Morphology; (* [inflected inflected_map] *)
+open Skt_morph; (* verbal *) 
 open Auto.Auto; (* auto State *)
 open Segmenter; (* Segment *)
-open Dispatcher; (* [Dispatch transition phase_of_sort trim_tags] *) 
+open Dispatcher; (* Dispatch *) 
 open Word; (* word length mirror patch *)
 
 module Lexer (* takes its prelude and control arguments as module parameters *)
@@ -45,9 +44,8 @@ open Load_transducers; (* [transducer_vect Trans] *)
 module Transducers = Trans Prel;
 
 module Disp = Dispatch Transducers Lemmas;
-open Disp (* [transducer initial accepting dispatch input color_of_phase 
-              transition trim_tags] *) 
-;
+open Disp; (* [color_of_phase transition trim_tags] *) 
+
 module Viccheda = Segment Phases Disp Control 
                   (* [init_segment continue set_offset] *)
 ;
@@ -236,18 +234,19 @@ value rec decode_list = fun
   | [] -> ""
   ]
 ;
-value string_of_tag = fun
-  [ (x,y,a,b) -> if y = Pv then "${" ^ Canon.decode_ref x ^ "}$&"
-	         else "${" ^ Canon.decode_ref x ^ ":" ^ string_of_phase y
+value string_of_tag (x,y,a,b) = 
+  if y = Pv then "${" ^ Canon.decode_ref x ^ "}$&"
+	    else "${" ^ Canon.decode_ref x ^ ":" ^ string_of_phase y
                       ^ "{ " ^ morph_list b  ^ "}" ^ "[" 
                       ^ match a with 
-     [ Gen_krid ((z, c),(d, e)) -> 
-        z ^ ":" ^ Canon.decode_ref c ^ " { " ^ Morpho_string.string_verbal d
-        ^ " }[" ^ Canon.decode_ref e ^ "]"
-     | Lexical c -> Canon.decode_ref c
-     | Preverbs_list c -> decode_list c
-     ]  ^ "]}$&"
-  ]
+                        [ Gen_krid ((z, c),(d, e)) -> 
+                              z ^ ":" ^ Canon.decode_ref c 
+                                ^ " { " ^ Morpho_string.string_verbal d 
+                                ^ " }[" ^ Canon.decode_ref e ^ "]"
+                        | Lexical c -> Canon.decode_ref c
+                        | Preverbs_list c -> decode_list c
+                        ]  
+                      ^ "]}$&"
 ;
 value rec return_morph = fun
   [ [ a :: rest ] -> string_of_tag a ^ return_morph rest

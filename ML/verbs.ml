@@ -5912,6 +5912,7 @@ value record_extra_participles () = do
   ; record_part_ppp (revstem "zaata") "zaa" 
   ; record_part_ppp (revstem "kaanta") "kam" 
   ; record_part_ppp (revstem "k.sita") "k.sii" 
+  ; record_part_ppp (revstem "diipita") "diip" 
   ; record_part_ppp (revstem "spa.s.ta") "spaz#1"
   ; record_part (Ppra_ 1 Intensive (revstem "jaajam") (revstem "jaajamat") "jam")
   ; record_pfp "d.r#1" (revcode "d.r")

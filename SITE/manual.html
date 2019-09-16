@@ -50,7 +50,7 @@ published recently as
 <a href="http://jlm.ipipan.waw.pl/index.php/JLM/article/view/108/140">Design and
 analysis of a lean interface for Sanskrit corpus annotation</a>.
 <p>
-Written on August 14th 2019, for Sanskrit Engine Version 3.18.
+Written on September 16th 2019, for Sanskrit Engine Version 3.19.
 
 <h2 class="b2" id="tour">First approach to using the Sanskrit Heritage engine</h2>
 
@@ -193,7 +193,7 @@ and a final All that is to be used for deictic personal pronouns,
 and for numbers. 
 <p>
 
-The Conjugation tool accepts 12 Present class parameters: 1 to 10 are used
+The Conjugation tool accepts 11 Present class parameters: 1 to 10 are used
 for the traditional quality (gaṇa). 11 is used for denominative verbs.
 Secondary conjugations: causative, intensive, and desiderative are listed
 as well. 
@@ -223,7 +223,7 @@ you will get a Gender anomaly report.
 This morphological engine is available from within the dictionary pages,
 where the gender indications of nouns, and the present family indications
 of roots, are active links which activate the Sanskrit Grammarian with the
-right parameters. 
+correct parameters. 
 
 <h3 class="b3" id="stemmer">Stemmer</h3>
 Conversely, an inflected form which is derivable from the dictionary entries
@@ -264,7 +264,7 @@ The Sanskrit Heritage Dictionary is the latest edition of a Sanskrit
 to French Dictionary
 "Dictionnaire Français de l'Héritage Sanskrit" compiled by
 Gérard Huet since 1994. This dictionary is freely available
-as a 966 pages <a href="Heritage.pdf">book</a> under the pdf format,
+as a 983 pages <a href="Heritage.pdf">book</a> under the pdf format,
 easily readable with Acrobat Reader, a free Adobe product.  
 This dictionary is still under development, and is
 automatically updated along with the site,
@@ -443,8 +443,8 @@ The summary interface returns a page
 showing you your input sentence in blue devanāgarī, then a line with a number
 of green check marks, the first one being labeled Undo, then the graphical
 display where segments may be selected or discarded, as explained above.
-The third button is labeled "All 14 Solutions". It indicates that there is a
-total of 14 segmentation solutions at this initial stage. Indeed, when you
+The third button is labeled "All 18 Solutions". It indicates that there is a
+total of 18 segmentation solutions at this initial stage. Indeed, when you
 select segments by clicking on their green check signs (resp. discard
 them by clicking on their red check signs) you see the count of solutions
 decrease. Thus selecting segment <i>dhyānam</i> brings this count to only 2.
@@ -454,7 +454,9 @@ segment indicating a possible privative compound. We remark <i>en passant</i>
 that the only way to get the correct intended interpretation is to discard
 this parasitic privative segment, which is entirely absorbed by sandhi
 with the final <i>-ā</i> of segment <i>gatvā</i>, and thus cannot be rejected
-from other segment selections. This shows the necessity of the red cross signs.
+from other segment selections. This shows the necessity of the red cross signs,
+even though they are rarely needed, and convergence is usually faster using
+positive selections. 
 <p>
 
 From the state after selection of <i>dhyānam</i>, click on the green check
@@ -466,7 +468,7 @@ on the green check after the index of the solution. For instance,
 let us select Solution 1. 
 <p>
 
-We are facing now another user interface called the Sanskrit Parser Assistant.
+We are now facing yet another user interface called the Sanskrit Parser Assistant.
 The selected solution is displayed in 3 columns. The 1st column, yellow, is
 the <i>padapāṭha</i>. The 2nd column displays possible stemmings as a sequence of
 morphological multitags. For instance, on the first row, <i>vanam</i>
@@ -481,7 +483,7 @@ The right column attempts to represent the cases by semantic roles,
 with occasional English gloss of verbal forms. This representation is an
 approximation which is actually slightly misleading,
 since it attempts to relate nominatives to an
-evasive syntactic notion of Subject which is of little relevance to Sanskrit.
+evasive syntactic notion of Subject which is not a central concept in Sanskrit.
 Actualy nominative
 forms denote just names of the "unexpressed" (<i>anabhihita</i>) semantic role.
 Thus at best this representation is some approximation of syntax. 
@@ -490,7 +492,7 @@ Thus at best this representation is some approximation of syntax.
 Below the three columns you find a button labeled Submit. You may press it
 to validate the morphological choices, and the resulting page gives you
 a unique parse as a hypertext <i>padapāṭha</i> which you may save in user space.
-<!-- Deprecated
+<!-- Obsolete
 Actually, if you install the software on your own workstation, by configuring it
 in mode Station you will have in the page a Validate button
 usable to record this solution in a non-regression suite. -->
@@ -511,7 +513,7 @@ a button labeled "Filtered Solutions". If you click on it, you see a listing
 of solutions similar to what we saw in the last section, but now
 solutions are listed according to some constraint satisfaction ranking.
 The first one (labeled 2) is the intended one, followed by another one
-(labeled 5), proposing <i>ādhyānam</i> in place of <i>dhyānam</i>.
+(labeled 7), proposing <i>ādhyānam</i> in place of <i>dhyānam</i>.
 You may select the one you prefer, and go directly to the Parser
 Assistant page as seen above. You may also go back to the graphical summary
 interface, allowing mutual interaction between the two modes of operation.
@@ -521,9 +523,9 @@ Let us illustrate this shallow parsing facility on a much-discussed
 ambiguous sentence going back to Patañjali. 
 Go back to the Reader interface, and enter
 <i>zvetodhaavati</i>, using Summary Mode. You see a display of the
-16 segmentation solutions. You are also offered a green check sign labeled
+26 segmentation solutions. You are also offered a green check sign labeled
 Filtered Solutions. Click on it.
-You see one particular solution, labeled 9, formed with blue <i>śvetaḥ</i>
+You see one particular solution, labeled 14, formed with blue <i>śvetaḥ</i>
 in the nominative, followed by red <i>dhāvati</i>, a verbal form in the present.
 Actually form <i>dhāvati</i> is marked as ambiguous, since it may result from
 root <i>dhāv_1</i> (running) or from root <i>dhāv_2</i> (cleaning).
@@ -536,15 +538,15 @@ penalty. Clicking on the green heart sign, or equivalently to the preset Submit
 button brings you to the fully disambiguated padapāṭha
 "The white one is running".
 The other segmentation has some penalty, explained with the "-Obj" indication,
-marking the absence of the object to a transitive verb.
+marking the absence of the object or goal to a transitive verb.
 <p>
 
 In this example, the machine has succeeded in focusing on a correct solution
 automatically, among many interpretations.
 If we come back to the initial selection, it indeed tells
-"1 solution kept among 16",
-but actually lists also 3 other plausible additional solutions. Indeed, among
-them, Solution 13 gives another correct decomposition <i>śvā+itaḥ+dhāvati</i>
+"1 solution kept among 26",
+but actually lists also 5 other plausible additional solutions. Indeed, among
+them, Solution 23 gives another correct decomposition <i>śvā+itaḥ+dhāvati</i>
 "The dog is running towards here". Here too, the tool analyses <i>dhāv_1</i>
 as fitting the grammatical constraints. It has penalty 0 as well, but
 was just disfavored over the first interpretation because it has 3 segments
@@ -558,7 +560,7 @@ segmentation candidates is below a threshold set by default to 100.
 This is in contrast with the situation with the graphical interface, which
 is fast and robust. Thus entering the following verse from Kālidāsa, we obtain
 very quicky a display factorizing an astronomical number
-(37310091175526400) of solutions:
+(40926376750694400) of solutions:
 <i>yaa tapovize.saparizafkitasya sukumaaramprahara.nam mahendrasyapratyaadeza.h ruupagarvitaayaa.h zriya.h ala.mkaara.h svargasyasaana.h priyasakhyurvazii kuberabhavanaat pratinivartamaanaasamaapattid.r.s.tena kezinaadaanavenacitralekhaadvitiiyaa bandigraaha.mg.rhiitaa</i>.
 
 <h3 class="b3" id="parser3">Lexical categories</h3>
@@ -569,7 +571,7 @@ The main lexical categories exhibited so far are:<br>
 * finite verbal forms (red)<br>
 * undeclinable forms such as adverbs, conjunctions, prepositions (mauve)<br>
 * pronominal forms (light blue)<br>
-* left part of compounds (yellow)<br>
+* initial part of compounds (yellow)<br>
 <p>
 Actually, complex compounds with n+1 components appear as a sequence of n
 yellow segments denoting stems, followed by a blue nominal inflected form.
@@ -583,7 +585,7 @@ ambiguities concerning the bracketing of their constituents. Let us examine
 a few typical situations. <p>
 
 First of all, some of the constituents may constitute a <i>dvandva</i>
-compound. For instance, consider <i>yakṣagandharvanāgāḥ</i>.
+compound. For instance, consider (IAST) <i>yakṣagandharvanāgāḥ</i>.
 It is a <i>dvandva</i> compound with 3 components <i>yakṣa</i>,
 <i>gandharva</i>, and <i>nāgāḥ</i>. The first two are bare stems, only
 the third one bears declension (<i>vibhakti</i>). Note that actually we
@@ -591,7 +593,8 @@ distinguish two cases of the last segment: a blue one for nominative,
 and a green one for vocative. This distinction between vocatives
 and other cases is important, since vocatives are not really syntactic
 components of a sentence, but rather separate interjections, part of the
-communicative structure.
+communicative structure. We also note on this example the parasitic <i>nā</i>
+- a rare form for man (<i>nṛ</i>). 
 <p>
 
 Let us now consider binary branching compounds. A three component display
@@ -609,7 +612,7 @@ compound (<i>bahuvrīhi</i>), of adjectival meaning "who wears a yellow garment"
 Thus, on input <i>pitāmbaram</i>, in mode Word, we have two solutions,
 sharing the yellow initial component <i>pitā</i>. The first solution proposes
 a blue neuter nominal segment <i>ambaram</i>, analysed as accusative or
-nominative of stem <i>ambara</i>.
+nominative of stem <i>ambara</i> in the neuter gender.
 The second <i>ambaram</i> however is of a distinct cyan colour,
 and is analysed as masculine accusative. This second solution is mandatorily
 the exocentric compound "he who wears a yellow garment", typically an
@@ -627,7 +630,7 @@ There exists yet another variety of compound, the so-called <i>avyayībhāva</i>
 of segments, first the preposition <i>nis</i>, colored lavender, and then the
 stem <i>makṣikā</i>, turned into an invariable form <i>makṣikam</i>,
 colored magenta. We remark that the segment <i>makṣikam</i> is not accepted
-as stand-alone input. Please also note with this last example that an
+as stand-alone input. Please also note on this last example that an
 unrecognized chunk of input yields a grey rectangle with undefined morphology.
 <p>
 
@@ -648,7 +651,8 @@ and its right part a finite verb form of one of the auxiliaries,
 like <i>kadarthīkaroti</i> (he despises) or <i>mṛdūbhavati</i> (it softens).
 It in turns gives rise to primary derivatives (<i>kṛdanta</i>) like
 <i>khilībhūtaḥ</i> (abandoned). Here too the left part is orange,
-and the right part is either red for verbal forms or blue for participial forms. 
+and the right part is either red for verbal forms or blue for participial forms,
+like <i>kadarthīkṛtaḥ</i>
 <p>
 
 This concludes the main grammatical paradigms implemented by our machinery.

@@ -82,10 +82,8 @@ value gen_stem (v,root) stem = (* stem is a bare stem with no homo index *)
             }
           | [ (_,n) :: _ ] -> (* last homonym entered [stem_n] *)
             let p=n+1 in 
-            if p>9 then failwith "Gensym exceeds homo index" else do
-            { register_krid stem (etym,p)
-            ; gensym stem p
-            }
+            if p>9 then failwith "Gensym exceeds homo index" 
+            else do { register_krid stem (etym,p); gensym stem p}
           ]
        ]
   else stem
@@ -608,7 +606,7 @@ and build_part_vas c stem inter stemf root =
   ; build_part_ii verbal stemf prati root (* u.sii *)
   }
 ;
-(* Participles are stored here by calls in Verbs to [record_part] below; *)
+(* Participle stems are stored here by calls in Verbs to [record_part] below; *)
 (* this is necessary for the conjugation cgi to display participle stems *)
 (* That is, the internal morphology generation is done in a first pass
    generating kridanta stems. The stems are declined in a second pass,
@@ -618,16 +616,24 @@ and build_part_vas c stem inter stemf root =
    morphology data banks for each root. This mechanism is also used by the
    conjugation engine, in order to display the kridanta stems associated to
    the argument root. Thus [participles] is always a short list just used as
-   a stack and not searched, so no need of sophisticated data structure. *)
-(*i Wrong - participles is global, and thus big i*)
+   a stack and not searched, so no need of sophisticated data structure. 
+   Of course it is bigger at generation time. *)
 
 value participles = ref ([] : list memo_part)
 and participles_aa = ref ([] : list memo_part)
+(* the second case is to provide extra phantom forms for kridantas of roots
+   accepting aa- as a preverb, in order to recognize eg meghairaacchannaa.h *)
 ;
 value record_part memo = (* called from Verbs *)
-  if admits_aa.val then 
-    participles_aa.val := List2.union1 memo participles_aa.val
-  else participles.val := List2.union1 memo participles.val
+  (* This different treatment in full generation and in single evocation
+     by Conjugation between aa-prefixable roots and others is terrible *)
+  (* The structure of [Conj_infos] is wrong and should be a pair of
+     all admissible preverbs and of an a-list of conjugation patterns *)
+  if morpho_gen.val then (* generation of forms: phantom phonemes matter *)
+     if admits_aa.val then (* ugly distinction *)
+          participles_aa.val := List2.union1 memo participles_aa.val
+     else participles.val := List2.union1 memo participles.val
+  else participles.val := List2.union1 memo participles.val (* Conjugation *)
 ;
 (* Called by [compute_participles] *)
 value build_part = fun
@@ -682,7 +688,7 @@ value build_part = fun
 value compute_participles () = do
   { List.iter build_part participles.val
   (* Now for roots admitting preverb aa *)
-  ; admits_aa.val := True 
+  ; admits_aa.val := True (* triggering phantom generation - ugly global *)
   ; List.iter build_part participles_aa.val
   }
 ;

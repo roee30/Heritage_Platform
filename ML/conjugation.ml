@@ -611,7 +611,6 @@ value look_up_and_display font gana entry =
      } (* end [print_conjug] *) in  
     let compute_conjugs = List.iter (Verbs.compute_conjugs_stems entry) in
     let secondary_conjugs infos =
-      (*i TO DO : fix for factorization of aa flag below i*)
       let cau_filter = fun [ (Causa _,_) -> True | _ -> False ]
       and int_filter = fun [ (Inten _,_) -> True | _ -> False ]
       and des_filter = fun [ (Desid _,_) -> True | _ -> False ] in do
@@ -625,7 +624,7 @@ value look_up_and_display font gana entry =
         if intensives = [] then () else do
           { roots.val := Deco.empty 
           ; compute_conjugs intensives
-          ; print_conjug Intensive Parts.participles.val 
+          ; print_conjug Intensive Parts.participles.val
           } 
       ; let desideratives = List.filter des_filter infos in
         if desideratives = [] then () else do
@@ -639,10 +638,10 @@ value look_up_and_display font gana entry =
    ; let infos = (* should be a call to a service that gives one [entry_infos] *)
      (Gen.gobble public_roots_infos_file : Deco.deco root_infos) in
      let entry_infos = Deco.assoc (Encode.code_string entry) infos in 
-     if gana = 0 then secondary_conjugs entry_infos (* legacy *)
-     else do { print_conjug Primary Parts.participles.val 
-             ; secondary_conjugs entry_infos (* new *)
-             }
+     (* if gana = 0 then secondary_conjugs entry_infos else -- legacy *)
+     do { print_conjug Primary Parts.participles.val 
+        ; secondary_conjugs entry_infos 
+        }
    }
 ;
 value in_lexicon entry = (* entry as a string in VH transliteration *)

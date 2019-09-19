@@ -23,6 +23,10 @@ open Word;
 (* preverbs is accumulator for the set of preverb sequences                 *)
 (* [segmenting_mode] tells whether phantom phonemes are generated or not.   *)
 
+(* This code serves 2 purposes: at building morphology time, it generates
+all the forms to populate the morphology banks. It is also reused at execution
+time, by Declension and Conjugation cgis. *)
+
 (* Admits aa- as a preverb -- global set in [Verbs.compute_conjugs_stems] *)
 value admits_aa = ref False  
 and admits_lopa = ref False 

@@ -5926,7 +5926,6 @@ value record_extra_participles () = do
 (* called by [Make_roots.roots_to_conjugs] at generation time *)
 value compute_extra () = do
   { compute_perfect "ah"   (* verbs with no present system *)
-  ; compute_perfect "kam" 
   ; compute_aorist "kan" 
   ; compute_perfect "kam" 
   ; compute_perfect "ghas" 
@@ -5934,7 +5933,6 @@ value compute_extra () = do
   ; compute_perfect "spaz#1" 
   ; compute_aorist "spaz#1" 
   ; compute_aorist "k.r#2" 
-  ; compute_extra_vadh () 
   ; compute_passive_raw "d.r#1"
   (* Now for specific extra forms *)
   ; compute_extra_rc () 
@@ -5983,7 +5981,7 @@ value fake_compute_conjugs (gana : int) (entry : string) = do
   { morpho_gen.val := False (* Do not generate phantom forms *) 
   ; let no_third = [] and pada = True in (* hacks to disable check warning *)
     let vmorph = Conj_infos.Prim gana pada no_third in do
-    { compute_conjugs_stems entry (vmorph,False)
+    { compute_conjugs_stems entry (vmorph,False) (* False since no-op in fake *)
     ; match entry with (* extra forms - to be completed from [compute_extra] *)
       [ ".rc#1"  -> compute_extra_rc ()
       | "k.sii"  -> record_part_ppp (revcode "k.sita") entry

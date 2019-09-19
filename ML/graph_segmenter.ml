@@ -360,7 +360,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
        | _ -> failwith "accrue anomaly"
        ]
   | [ 123 (* *C *) :: r ] -> match previous_segments with
-       [ [ (phase,rword,Euphony (_,u,[123])) :: rest ] -> 
+       [ [ (phase,rword,Euphony (_,u,[ 123 ])) :: rest ] -> 
          let w = sandhi_aa u in 
          [ new_seg :: [ (aa_phase ph,[ 2 ],Euphony ([ 2; 22; 23 ],[ 2 ], [ 23 ]))
                    :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]

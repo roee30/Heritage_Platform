@@ -1253,7 +1253,7 @@ value build_mas_in stem entry =
    ]
    ; Bare Noun bare
    ; Avyayaf bare
-   ; Cvi (wrap stem 4) (* "saak.sin" "sthaayin" *)
+   ; Cvi (wrap stem 4) (* "saak.sin" "sthaayin" overgenerates with vi.saayin *)
    ])
 ;
 value build_as gen stem entry = 

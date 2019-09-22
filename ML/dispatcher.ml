@@ -647,8 +647,8 @@ value rec color_of_phase = fun
   | Avy -> Magenta
   | Inftu -> Salmon 
   | Iic | Iic2 | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif 
-        | Cachei -> Yellow
-  | Auxiick | Iivv | Iivc | Peri | Iiv -> Orange
+        | Auxiick | Cachei -> Yellow
+  | Peri | Iiv | Iivv | Iivc -> Orange
   | Voca | Vocv | Vocc | Inv | Vok | Vokv | Vokc -> Lawngreen
   | Ifc | Ifcv | Ifcc | Ifc2 -> Cyan
   | Unknown -> Grey

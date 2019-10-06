@@ -5450,7 +5450,7 @@ value den_stem_m entry = (* in general intransitive or reflexive Whitney§1059c 
    | "taru.na" | "nika.sa" | "parok.sa" | "piiyuu.savar.sa" | "pu.spa" | "priya"
    | "bh.rza" | "maalyagu.na" | "lohita" | "zalabha" | "zithila" | "ziighra" 
    | "zyaama" | "zyena" | "safka.ta"
-   | "ka.n.du" | "karu.naa" | "sukhaa" (* feel \Pan{3,1,18} *)
+   | "ka.n.du" | "karu.na" | "sukha" | "su.hkha" (* feel \Pan{3,1,18} *)
    | "abhra" | "ka.nva" | "kalaha" | "k.sepa" | "megha" | "vaira" | "zabda" 
    | "z.rfga" (* do \Pan{3,1,17} *)
    | "durdina" | "sudina" | "niihaara" (* id. vaartika *)

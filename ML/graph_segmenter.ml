@@ -39,7 +39,7 @@ module Segment
          and segment = (Phases.phase * Word.word * transition)
          and output = list segment; 
          value validate : output -> output; (* consistency check / compress *) 
-         value terminal_sa : output -> bool;
+         value terminal_sa : output -> option output; 
          end)
   (Control: sig value star : ref bool; (* chunk= if star then word+ else word *)
                 value full : ref bool; (* all kridantas and nan cpds if full *)
@@ -148,7 +148,7 @@ value cur_chunk = { offset = 0; segmentable = False; last = False }
 ;
 value set_cur_offset n = cur_chunk.offset := n
 and set_segmentable b = cur_chunk.segmentable := b
-and set_last b = cur_chunk.last := b
+and set_last b = cur_chunk.last := b 
 ;
 value set_offset (offset,checkpoints) = do
   { set_cur_offset offset
@@ -377,11 +377,13 @@ type backtrack =
   ]
 and resumption = list backtrack (* coroutine resumptions *)
 ;
-value check_sa contracted =
-     not (cur_chunk.last && terminal_sa contracted)    (* forbid sa last *)
-(* [ && (not (terminal_sas contracted) || cur_chunk.last) (* sa.h last only *) ]
-   This is too strict, in view of padapatha and und-sandhied mode 
-   and we get some overgeneration, e;G; with "sa.h yogii" *)
+
+(* Service routine which deals with terminal sa *)
+value check_sa sol = match terminal_sa sol with
+   [ None -> Some sol (* no terminal sa *)
+   | some -> if cur_chunk.last then None (* forbid sa last *) 
+             else some (* sas restored *)
+   ]
 ;
 
 (* Service routines of the segmenter *)
@@ -442,9 +444,8 @@ value rec react phase input output back occ = fun
        match validate out (* validate and compact partial output *) with 
        [ [] -> if cut then continue cont else deter cont 
        | contracted -> match input' with
-              [ [] -> if accepting phase (* solution found *)
-                         && check_sa contracted (* forbid sa last *)
-                         then do { log_chunk contracted; continue cont } 
+              [ [] -> if accepting phase (* solution found *) then
+                         register contracted cont
                       else continue cont 
               | [ first :: _ ] -> (* we first try the longest matching word *)
                       let cont' = schedule phase input' contracted [] cont in
@@ -468,9 +469,8 @@ and choose phase input output back occ = fun
            [ [] -> continue cont 
            | contracted ->
               if v=[] (* final sandhi *) then
-                 if rest=[] && accepting phase (* solution found *)
-                    && check_sa contracted (* forbid sa last *)
-                 then do { log_chunk contracted; continue cont }
+                 if rest=[] && accepting phase (* solution found *) then
+                    register contracted cont
                  else continue cont
               else continue (schedule phase rest contracted v cont)
            ]
@@ -492,6 +492,10 @@ and continue = fun
 from Segmenter. It does not return one solution at a time in coroutine manner, 
 but sweeps the whole solution space. In particular, it returns () rather than 
 an optional solution. *)
+and register solution cont = match check_sa solution with
+    [ Some final -> do { log_chunk final; continue cont } 
+    | None -> continue cont 
+    ]
 ;
 value init_segment_initial entries sentence = 
   List.map (fun phase -> Advance phase sentence [] []) entries

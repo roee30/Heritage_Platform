@@ -58,8 +58,11 @@ and finally adapted to the HTML Heritage look and feel by Pawan Goyal.
 The Sanskrit Heritage dictionary is thus mirrored in the Monier-Williams, which
 allows compatibility of the grammatical tools.
 <p>
-The choice of the dictionary is set to a default by the configuration of the
-server site. But each dictionary is accessible separately by its search page,
+The choice of the dictionary is set to Heritage by default by accessing
+the standard entry page "sanskrit.inria.fr", but is set to Monier-Williams
+if you invoke rather  <a href="https://sanskrit.inria.fr/index.en.html">
+"https://sanskrit.inria.fr/index.en.html"</a>
+Each dictionary is accessible separately by its search page,
 respectively <a href="DICO/index.fr.html">
 <strong><span class="red">Sanskrit Heritage</span></strong></a> and
 <a href="DICO/index.en.html"><strong><span class="red">Monier-Williams</span></strong></a>.
@@ -86,7 +89,8 @@ in loading its 5 Mb. This is a still on-going effort, lexical acquisition
 implies quick obsolescense of this document which grows along with versions.
 
 <br>
-The Sanskrit Heritage dictionary is also available in an ebook format,
+The Sanskrit Heritage dictionary is also available in an older version,
+in an ebook format,
 usable with the Babyloo, Stardict or Goldendict software.
 Please visit the <a href="goldendict.html">Golden Sanskrit Heritage</a> page.
 
@@ -116,7 +120,7 @@ selection, and thus encoding is specified as Unicode compliant (UTF-8 encoding).
 </p>
 <p>
 Note that many words are given with their etymology as hypertext links. You
-may thus navigate from a word to is morphological components, down to its roots.
+may thus navigate from a word to its morphological components, down to its roots.
 Also, the gender declarations of
 the main entries are mouse-sensitive, and give you direct access to the
 relevant declension table. Similarly, the present class mark of the verbal roots
@@ -168,7 +172,7 @@ desiderative) are also generated, for the full present and future systems.
 Try out this <a href="DICO/grammar.html#roots">conjugation engine</a>
 with data such as "bhuu" 1, "as" 2, "m.rj" 2, "han" 2, "haa" 3, "hu" 3,
 "daa" 4, "su" 5, "p.r" 6, "yuj" 7, "k.r" 8, "j~naa" 9, "cur" 10, "namas" 11.
-In order to get the secondary conjugations of a root, enter code 0.
+In order to get only the secondary conjugations of a root, enter code 0.
 You may cascade by generating declensions of the generated participial stems.
 </p>
 <p>

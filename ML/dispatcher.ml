@@ -379,15 +379,38 @@ value trim_tags gen form pv tags = List.fold_right trim tags []
         if ok_morphs = [] then acc else [ (delta,ok_morphs) :: acc ] 
 ;
 (* Preventing overgeneration of forms "sa" and "e.sa" \Pan{6,1,132} *)
+(* This enforces the conditions, without having to complicate the automaton *)
 value not_sa_v = fun (* Assumes next pada starts with a vowel *)
   [ [ (Pron,[ 1; 48 ],_) :: _ ] (* sa *)
   | [ (Pron,[ 1; 47; 10 ],_) :: _ ] (* e.sa *) -> False 
   | _ -> True
   ]
-and sa_before_check form = fun (* Next pada should start with a consonant *)
-  [ [ (Pron,[ 1; 48 ],_) :: _ ] (* sa *)
-  | [ (Pron,[ 1; 47; 10 ],_) :: _ ] (* e.sa *) -> Phonetics.consonant_initial form
-  | _ -> True
+(* [prune_sa] checks that sa is before consonants and recontructs the sandhi *)
+(* NB called with last = (_,mirror form,_) out = [ last :: next ] *)
+and prune_sa out form last = fun (* next *)
+  [ [ (Pron,[ 1; 48 ],_) :: rest ] (* sa *) -> match form with
+      [ [ c :: _ ] when consonant c ->
+         let sandhi = Euphony ([ 48; 1; c], [ 48; 1; 48 ], [ c ]) in
+         [ last :: [ (Pron,[ 48; 1; 48 ],sandhi) :: rest ] ] 
+      | _ -> []
+      ]
+(* It also checks conversely that sas/sa.h does not occur before consonants *)
+  | [ (Pron,[ 48; 1; 48 ],_) :: rest ] (* sas *) -> match form with
+      [ [ c :: _ ] when consonant c -> []
+      | _ -> out 
+      ]
+(* Similar conditions for pronoun e.sa *)
+  | [ (Pron,[ 1; 47; 10 ],_) :: rest ] (* e.sa *) -> match form with
+      [ [ c :: _ ] when consonant c ->
+         let sandhi = Euphony ([ 10; 47; 1; c], [ 48; 1; 47; 10 ], [ c ]) in
+         [ last :: [ (Pron,[ 48; 1; 47; 10 ],sandhi) :: rest ] ] 
+      | _ -> []
+      ]
+  | [ (Pron,[ 48; 1; 47; 10 ],_) :: rest ] (* sas *) -> match form with
+      [ [ c :: _ ] when consonant c -> []
+      | _ -> out 
+      ]
+  | _ -> out
   ]
 ;
 (* Similar to [List2.subtract] but raises Anomaly exception *)
@@ -411,6 +434,7 @@ value apply_sandhi rleft right = fun
     | Id -> List2.unstack rleft right
     ]
 ;
+
 (* [validate : output -> output] - dynamic consistency check in Segmenter.
    It refines the regular language of dispatch by contextual conditions
    expressing that preverbs are consistent with the following verbal form. 
@@ -430,10 +454,9 @@ value validate out = match out with
          (* We glue the two segments with a composite tag keeping information *)
          [ (Comp (Pv,Root) pv root_form,verb_form,s) :: r ] 
       else []
-  | [ (Root,rev_root_form,s) :: next ] ->
+  | [ ((Root,rev_root_form,s) as last) :: next ] ->
       let root_form = Word.mirror rev_root_form in 
-      if autonomous_form root_form && sa_before_check root_form next 
-         then out else [] 
+      if autonomous_form root_form then prune_sa out root_form last next else []
   | [ (Lopa,rev_lopa_form,s) :: [ (Pv,prev,sv) :: r ] ] -> 
       let pv = Word.mirror prev in 
       let pv_str = Canon.decode pv 
@@ -447,12 +470,11 @@ value validate out = match out with
         let verb_form = Word.mirror form in
         [ (Comp (Pv,Lopa) pv lopa_form,verb_form,s) :: r ] 
       else []
-  | [ (Lopa,rev_lopa_form,_) :: next ] -> 
+  | [ ((Lopa,rev_lopa_form,_) as last) :: next ] -> 
       let lopa_form = Word.mirror rev_lopa_form in 
       let verb_form = match lopa_form with 
                       [ [ -2 :: rf ] -> rf | _ -> failwith "Wrong lopa form" ] in
-      if autonomous_form verb_form && sa_before_check lopa_form next
-         then out else []
+      if autonomous_form verb_form then prune_sa out verb_form last next else []
   | (* infinitives in -tu with preverbs *)
     [ (Inftu,rev_root_form,s) :: [ (Pv,prev,sv) :: r ] ] ->
       let pv = Word.mirror prev in 
@@ -486,12 +508,12 @@ value validate out = match out with
      | tags -> if List.exists (autonomous_form_k krid_form) tags && not_sa_v next
                then out else []
      ] 
-  | [ (Kric,rev_krid_form,_) :: _ ] ->
+  | [ ((Kric,rev_krid_form,_) as last)  :: next ] ->
       let krid_form = Word.mirror rev_krid_form in 
       match Deco.assoc krid_form morpho.krids with
       [ [] -> failwith ("Unknown krid_form: " ^ (Canon.decode krid_form))
       | tags -> if List.exists (autonomous_form_k krid_form) tags
-                then out else [] 
+                then prune_sa out krid_form last next else []
       ]
    | (* iic kridanta forms with preverbs *)
      [ (phk,rev_ikrid_form,s) :: [ (ph,prev,sv) :: r ] ] 
@@ -514,12 +536,12 @@ value validate out = match out with
       | tags -> if List.exists (autonomous_form_k krid_form) tags && not_sa_v next
                 then out else []
       ]
-  | [ (Iikc,rev_krid_form,_) :: _ ] ->
+  | [ ((Iikc,rev_krid_form,_) as last) :: next ] ->
       let krid_form = Word.mirror rev_krid_form in
       match Deco.assoc krid_form morpho.iiks with
       [ [] -> failwith ("Unknown krid_form: " ^ Canon.decode krid_form)
       | tags -> if List.exists (autonomous_form_k krid_form) tags
-        then out else []
+        then prune_sa out krid_form last next else []
       ]
   | (* vocative kridanta forms with preverbs *)
     [ (phk,rev_krid_form,s) :: [ (ph,prev,sv) :: r ] ] 
@@ -542,12 +564,12 @@ value validate out = match out with
       | tags -> if List.exists (autonomous_form_k krid_form) tags && not_sa_v next
                 then out else []
       ]
-  | [ (Vokc,rev_krid_form,_) :: _ ] ->
+  | [ ((Vokc,rev_krid_form,_) as last) :: next ] ->
       let krid_form = Word.mirror rev_krid_form in
       match Deco.assoc krid_form morpho.voks with
       [ [] -> failwith ("Unknown krid_form: " ^ Canon.decode krid_form)
       | tags -> if List.exists (autonomous_form_k krid_form) tags
-                then out else []
+                then prune_sa out krid_form last next else []
       ]
   | [ (Lopak,rev_lopak_form,s) :: [ (ph,prev,sv) :: r ] ]  
         when preverb_phase ph ->
@@ -597,45 +619,28 @@ value validate out = match out with
                 else [] 
       ]
   | [ (Abso,rev_abso_form,s) :: next ] -> 
-      raise (Control.Anomaly "Isolated Abso form")
-    (* We now prevent overgeneration of forms "sa" and "e.sa" \Pan{6,1,132} *)
-  | [ (ph,form,_) :: [ (Pron,[ 1; 48 ],_) :: _ ] ] (* sa *) -> 
-      if Phonetics.consonant_initial (Word.mirror form)  
-      then out else [] 
-    (* Alternatively, if one wants to replace "sa" with "sa.h" : [
-  | [ ((ph,form,_) as last) :: [ (Pron,[ 1; 48 ],_) :: rest ] ] (* sa *) -> 
-      let initial = List.hd (Word.mirror form) in 
-      if Phonetics.consonant initial then 
-         let sandhi = Euphony ([ 48; 1; initial], [ 48; 1; 48 ], [ initial ]) in
-         [ last :: [ (Pron,[ 48; 1; 48 ],sandhi) :: rest ] ] 
-      else [] ] - But we should do it between chunks as well *)
-  | [ (ph,form,_) :: [ (Pron,[ 1; 47; 10 ],_) :: _ ] ] (* e.sa *) ->
-      if Phonetics.consonant_initial (Word.mirror form)  
-      then out else [] 
-  | [ (ph,form,_) :: [ (Pron,[ 48; 1; 48 ],_) :: _ ] ] (* sas *) ->  
-      if Phonetics.consonant_initial (Word.mirror form) then [] 
-      else out 
-  | [ (ph,form,_) :: [ (Pron,[ 48; 1; 47; 10 ],_) :: _ ] ] (* e.sas *) ->  
-      if Phonetics.consonant_initial (Word.mirror form) then [] 
-      else out 
-    (*i TODO: similar test for dual forms i*)
+      raise (Control.Anomaly "Isolated Abso form") (* phase enforced *)
+  | [ (_,w,_) :: _ ] when phantomatic (Word.mirror w) -> 
+    let mess = "Bug phantomatic segment: " ^ Canon.rdecode w in
+    raise (Control.Anomaly mess)
   | [ (phase,_,_) :: [ (pv,_,_) :: _ ] ] when preverb_phase pv ->  
       let m = "validate: " ^ string_of_phase pv ^ " " ^ string_of_phase phase in 
       raise (Control.Anomaly m) (* all preverbs ought to have been processed *)
-(* [ | [ (pv,_,_) :: _ ] when preverb_phase pv -> out ] noop
-This pv is not terminal, and should be chopped off by the next item *) 
-  | [ (_,w,_) :: _ ] when phantomatic (Word.mirror w) -> 
-    raise (Control.Anomaly ("Bug phantomatic segment" ^ Canon.decode (Word.mirror w)))
-
-  | _ -> out (* default identity *)
+    (* We now prevent overgeneration of forms "sa" and "e.sa" \Pan{6,1,132} *)
+  | [ ((ph,rform,_) as last) :: next ] -> let form = Word.mirror rform in
+                                          prune_sa out form last next 
   ]
 ;
+(* Used in [Graph_segmenter] *)
 value terminal_sa = fun 
-  [ [ (Pron,[ 1; 48 ],_) :: _ ] (* sa *) 
-  | [ (Pron,[ 1; 47; 10 ],_) :: _ ] (* e.sa *) -> True
-  | _ -> False 
+  [ [ (Pron,[ 1; 48 ],_) :: rest ] (* sa *) -> 
+       Some [ (Pron,[ 48; 1; 48 ],Id) :: rest ] (* restores sas *)
+  | [ (Pron,[ 1; 47; 10 ],_) :: rest ] (* e.sa *) -> 
+       Some [ (Pron,[ 48; 1; 47; 10 ],Id) :: rest ] (* idem e.sas *)
+  | _ -> None 
   ]
-;
+; 
+
 open Html;
 value rec color_of_phase = fun
   [ Noun | Noun2 | Lopak | Nouc | Nouv | Kriv | Kric | Krid | Auxik | Kama

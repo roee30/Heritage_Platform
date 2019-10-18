@@ -5,7 +5,7 @@
 #                        Gérard Huet & Pawan Goyal                         #
 #                                                                          #
 ############################################################################
-# Makefile of Sanskrit Heritage Software  31-12-2018  Copyright INRIA 2018 #
+# Makefile of Sanskrit Heritage Software  14-10-2019  Copyright INRIA 2019 #
 ############################################################################
 # Prerequisites: Ocaml 4.07 and Camlp4 preprocessor
 
@@ -19,7 +19,7 @@ ZEN=../ZEN
 DATA=../DATA
 
 # Literate programming tool ocamlweb (available from Ocaml hump) J.C. Filliatre
-NOWEB=ocamlweb 
+NOWEB=./ocamlweb 
 
 ZENSOURCES=gen.ml list2.ml word.ml share.mli share.ml unshare.ml trie.ml \
 mini.ml deco.ml lexmap.ml minimap.mli minimap.ml # zen_lexer.ml

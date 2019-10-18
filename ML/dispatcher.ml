@@ -220,9 +220,8 @@ and attested prev root = (* prev is attested preverb sequence for root *)
   let pvs = assoc_word root roots_usage in
   List.mem prev pvs (* NB attested here means lexicalized entry *)
 ;
-
 value gana_o = fun 
-  [ None -> 0 (* arbitrary *)
+  [ None -> 0 (* arbitrary - beware this marks non-present forms in Pada *)
   | Some g -> g (* only used for "tap" *)
   ] 
 and voice_o v = fun
@@ -386,7 +385,7 @@ value not_sa_v = fun (* Assumes next pada starts with a vowel *)
   | _ -> True
   ]
 (* [prune_sa] checks that sa is before consonants and recontructs the sandhi *)
-(* NB called with last = (_,mirror form,_) out = [ last :: next ] *)
+(* NB called with last = [(_,mirror form,_)] out = [ last :: next ] *)
 and prune_sa out form last = fun (* next *)
   [ [ (Pron,[ 1; 48 ],_) :: rest ] (* sa *) -> match form with
       [ [ c :: _ ] when consonant c ->
@@ -659,7 +658,7 @@ value rec color_of_phase = fun
   | Unknown -> Grey
   | Comp (_,ph) _ _ -> color_of_phase ph 
   | Pv | Pvv | Pvc | Pvkc | Pvkv -> failwith "Illegal preverb segment" 
-(*| _ -> raise (Control.Anomaly "Unexpected color") *)
+(*[| _ -> raise (Control.Anomaly "Unexpected color")] *)
 (*i NB: unused background colors: Pink Green Aquamarine Chamois i*)
   ]
 ; 

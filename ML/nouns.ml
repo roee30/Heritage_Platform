@@ -246,6 +246,7 @@ value build_mas_i stem trunc entry = (* declension of "ghi" class *)
    ]
    ; Bare Noun (mirror stem)
    ; Avyayaf (mirror stem)
+   ; Avyayaf (mirror stem)
    ; Indecl Tas (fix stem "tas")
    ; Cvi (wrap trunc 4) (* "aadhi1" "pratinidhi" *)
    ])
@@ -5898,6 +5899,7 @@ value compute_extra iic_only_stems = do
   ; enter1 "viz#2" (* Vedic Whitney§218a *) decl
     where decl = Declined Noun Fem [ (Plural,[ (Loc,code "vik.su") ]) ]
   ; iter enter_iiy iic_avya
+  ; enter1 "giri" (Avyayaf (code "giram")) (* \Pan{5,4,112} upagiram *)
   ; iter enter_gati gatis
   ; tasil_extra ()
   ; compute_extra_iic iic_indecl (* antar *) 
@@ -5911,7 +5913,7 @@ value compute_extra iic_only_stems = do
   ; [compute_extra_ifc bahu_suffixes] eg Fem -padaa for meter formation *) 
   }
 ;
-value enter_extra_ifcs () = do (* archaic retroflexion in cpds Pan{8,4,13} *)
+value enter_extra_ifcs () = do (* archaic retroflexion in cpds \Pan{8,4,13} *)
   { let entry = "bhogya" in (* var.sabhogye.na Meghaduuta 1b *)
         let ins_sg = [ (Singular,[ (Ins,code "bhogye.na") ]) ]
         and gen_pl = [ (Plural,  [ (Gen,code "bhogyaa.naam") ]) ] in do
@@ -6023,7 +6025,7 @@ value update_index ic =
 	  }
   with [ End_of_file -> close_in ic ] 
 ;
-(* Cache forms computation - used in Interface and Restore_caches *)
+(* Cache forms computation - used in Interface and [Restore_caches] *)
 value extract_current_caches cache_txt_file = do 
   { nouns.val := Deco.empty 
   ; iics.val := Deco.empty 

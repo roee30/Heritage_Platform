@@ -200,6 +200,7 @@ value check entry gana third ((_,form) as res) = do
     else match entry with 
          [ "a~nc" | "kalu.s" | "kram" | "grah" | "cam" | "tul" | "t.rr"
          | "manth" | "v.r#1" | "huu" | "putr" 
+           (* these roots have multiple ga.nas, i.e. different entries in DP *)
              -> () (* 2 forms - avoids double warning *)
          | _ -> report entry gana third form
          ]
@@ -528,13 +529,11 @@ value redup3 entry rstem =
           [ "s.r" -> revaffix False [ rv; rc ] (* no retroflexion: sisarti *)
           | _ -> revaffix True [ rv; rc ] 
           ] in (glue strong,glue weak,iiflag) 
- (*        if entry="s.r" then (*i ad-hoc nonsense to avoid si.sarti ? i*)
-             (revcode "sisar",revcode "sis.r",iiflag) 
-        else (glue strong,glue weak,iiflag) *)
     ]
 ;
 
-(* Dhatupatha markers (from AK's listing) *)
+(* Dhatupatha it markers (from AK's listing) *)
+(* NB Use of these markers should progressively replace lists of exceptions *)
 value aa_it = fun
   [ (* "muurch" | WRONG ? *) 
     "phal" | "zvit" | "svid#2" | "tvar" | "dh.r.s" -> True
@@ -592,7 +591,7 @@ and o_it = fun (* these roots have ppp in -na \Pan{8,2,45} - unused here *)
     | "nud" | "pad#1" | "pii" | "p.rr" | "pyaa" | "bhid#1" | "majj" | "man"
     | "mid" | "mlaa" | "ri" | "lii" | "luu#1" | "vid#2" | "vlii" | "zad" | "z.rr"
     | "sad#1" | "skand" | "st.rr" | "styaa" | "syand" | "svid#2" | "had" *)
- (* aussi "suu#2" suuna "vrii" vrii.na *)
+ (* also "suu#2" suuna and "vrii" vrii.na *)
       -> True 
   | _ -> False
   ]
@@ -3123,7 +3122,7 @@ value redup_perf root =
                 [ [ c' ] when consonant c' -> 
                      (revaffix True [ 10 (* e *); c ] w,True,True)
                      (* roots of form c.a.c' with c,c' consonant or .m Scharf *)
-                     (* cf. \Pan{6,4,119-126 *) (* ZZ may lead to hiatus *)
+                     (* cf. \Pan{6,4,119-126} -- ZZ may lead to hiatus *)
                 | _ -> (glue revw,False,False)
                 ]
               ] 
@@ -3219,7 +3218,7 @@ value compute_perfect_c strong weak olengthened eweak iopt entry =
            ; compute_perfectm Primary (revcode "cikitr") entry (* WR *)
            }
         | "vac" -> compute_perfectm Primary weak entry
-(* record_part_m_ath ppftm weak entry (* anuucaana *) *)
+(* [record_part_m_ath ppftm weak entry] (* anuucaana *) *)
         | _ -> () 
         ]
       }
@@ -5243,6 +5242,7 @@ value compute_present_system entry rstem gana pada third =
    | 9 -> let (stem,vow) = match entry with (* vow = vowel ending root *)
         [ "j~naa#1" -> (revcode "jaa"  ,True) (* \Pan{7,3,79} *)
         | "jyaa#1"  -> (revcode "ji"   ,True)
+        | "zraa"    -> (revcode "zrii" ,True)
         | "umbh"    -> (revcode "ubh"  ,False) (* elision penul nasal *)
         | "granth"  -> (revcode "grath",False) (* id *)
         | "bandh"   -> (revcode "badh" ,False) (* id *)
@@ -5414,7 +5414,7 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
    | "m.rga" | "yantra" | "rasa" | "ruuk.sa" | "lagha" (* u -> a *) 
    | "var.na" | "vaasa#3" | "vizada" | "vra.na" | "zaanta" | "zithila"
    | "zyena" | ".sa.n.dha" | "sapi.n.da" | "saphala" | "sabhaaja" | "saantva" 
-   | "saavadhaana" | "suutra" | "stena" | "sthaga" (* practice \Pan{3,1,15} *)
+   | "saavadhaana" | "suutra" | "stena" (* practice \Pan{3,1,15} *)
    | "u.sas" | "namas" | "varivas" (* do \Pan{3,1,19} *)
    | "udan" (* Kale§645 *)
    | "kelaa" | "rekhaa" | "tiras" | "uras" | "payas" (* Kale§660 *)
@@ -5882,7 +5882,7 @@ and compute_extra_zaas () =
 and compute_extra_zru () = 
   enter1 "zru" (* ved écoute *) 
          (Conju (impera 5) [ (Singular,[ (Second, code "zrudhi") ]) ])
-and compute_extra_sanj () = (* WR *)
+and compute_extra_sanj () = (* WR Oberlies p LI but maybe prm of variant sajj *)
   let root = "sa~nj" 
   and conj = Primary
   and pastem = revcode "sajj" (* "y" replaced by j in passive *) in 

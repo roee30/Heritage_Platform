@@ -246,12 +246,14 @@ value voices_of_gana g root = match g with
         | "arth" -> Atma
         | _ -> voices_of root (* other denominatives will take Ubha as default *)
         ]
- | _ -> voices_of root 
+ | _ -> voices_of root (* in particular, for non-present forms, without gana *)
  ]
 ;
 
 (* Refining with potential preverb *)
-value voices_of_pv upasarga gana = fun (* gana only used for "tap" "i" ".r" *)
+value voices_of_pv upasarga gana = fun 
+   (* Beware: gana only used for "tap" "i" ".r" 
+      but gana=0 for non-present forms *)
 (* Paninian requirements *)
 [ "zru" | "gam" | "svar" | "vid#1" (* | "praz" *) -> 
              if upasarga = "sam" then Atma else Para (* \Pan{1,3,29} *)
@@ -293,11 +295,18 @@ value voices_of_pv upasarga gana = fun (* gana only used for "tap" "i" ".r" *)
                          [ "ut" | "vi" -> Ubha 
                          | _ -> Para (* \Pan{1,3,27} *)
                          ]
-| "i" when gana = 2 -> match upasarga with
-                       [ "adhi" -> Ubha 
-                       | _ -> Para 
-                       ]
-| "zii#1" -> if upasarga = "sam" then Ubha else Atma
+| "i"  -> match gana with
+          [ 2 |  0 -> match upasarga with
+                      [ "adhi" | "anu" | "abhi" -> Ubha 
+                      | _ -> Para 
+                      ]
+          | _ (* 1 | 4 *) -> match upasarga with
+                             [ "" -> Atma
+                          (* | "antar" -> Para (* gana 1 antarayati *) *)
+                             | _ -> raise Unattested
+                             ]
+          ]
+| "zii#1" -> if upasarga = "sam" then Ubha else Atma 
 | "zram" -> if upasarga = "vi" then Ubha (* epic vizramate *) else Para
 | "krii" -> match upasarga with
             [ "vi" -> Ubha (* vikrii.naati/vikrii.niite *)
@@ -327,7 +336,7 @@ value voices_of_pv upasarga gana = fun (* gana only used for "tap" "i" ".r" *)
           [ "" -> raise Unattested
           | _ -> Ubha
           ]
-| root ->  voices_of_gana gana root
+| root -> voices_of_gana gana root
 ]
 ;
 

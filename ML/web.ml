@@ -11,7 +11,7 @@
 
 (* Module Web reads localisation parameters from paths.ml, 
    created by "make configure" in main directory, called by configure script.
-   Describes all installation parameters and resources other than Inastall. *)
+   Describes all installation parameters and resources other than Install. *)
 
 (*  Dynamic html rendering, used by cgis *)
 

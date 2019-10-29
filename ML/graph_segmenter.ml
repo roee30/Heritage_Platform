@@ -113,7 +113,7 @@ value get_pada pada = getrec where rec getrec = fun
   | [ (p,tr) :: rest ] -> if p=pada then (Some tr) else getrec rest
   ]
 ;
-value register index (phase,pada,sandhi) = 
+value register_pada index (phase,pada,sandhi) = 
   (* We search for bucket of given phase in graph *)
   let (al,ar) = split phase graph.(index) 
   and allowed_right = match sandhi with
@@ -238,7 +238,7 @@ value log_chunk revsol =
          where rec log_rec index = fun 
          [ [] -> ()
          | [ ((phase,word,sandhi) as triple) :: rest ] -> do 
-             { register index triple
+             { register_pada index triple
              ; log_rec (index + Word.length word + offset sandhi) rest
              }
          ]

@@ -17,8 +17,7 @@
 (*i module Rank = struct i*)
 
 open Constraints;  
-(* [roles_of extract sort_flatten truncate_groups eval_penalty] *)
-open Morphology; 
+(* [roles_of sort_flatten eval_penalty] *)
 
 module Prel = struct  
  value prelude () = Web.reader_prelude Web.reader_title;

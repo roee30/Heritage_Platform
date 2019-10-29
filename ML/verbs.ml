@@ -5420,6 +5420,7 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
    | "kelaa" | "rekhaa" | "tiras" | "uras" | "payas" (* Kale§660 *)
    | "vaac" (* consonant Kale§642 *)
    | "dantura" (* possess *)
+   | "k.r.s.na" (* agir comme *)
    | "viira" | "zabda" | "tira" (* MW *) | "ma~njara" | "sraja" | "manas" 
        -> rstem (* -yati *) (* standard causative meaning *)  
    | "madhu" | "v.r.sa" (* also madhvasyati v.r.siiyati *) 

@@ -5688,6 +5688,7 @@ value iic_indecl = (* should be lexicalized *)
   ; "yathaa"    (* yathaanirdi.s.ta *)
   ; "vinaa"     (* vinaabhava *)
   ; "satraa"    (* satraajit *)
+  ; "sadaa"     (* sadaananda *)
   ; "saha#2"    (* problematic -- overgenerates  *)
   ; "saak.saat"
   ; "saaci"

@@ -405,7 +405,7 @@ and prune_sa out form last = fun (* next *)
          [ last :: [ (Pron,[ 48; 1; 47; 10 ],sandhi) :: rest ] ] 
       | _ -> []
       ]
-  | [ (Pron,[ 48; 1; 47; 10 ],_) :: rest ] (* sas *) -> match form with
+  | [ (Pron,[ 48; 1; 47; 10 ],_) :: rest ] (* esas *) -> match form with
       [ [ c :: _ ] when consonant c -> []
       | _ -> out 
       ]
@@ -626,8 +626,8 @@ value validate out = match out with
       let m = "validate: " ^ string_of_phase pv ^ " " ^ string_of_phase phase in 
       raise (Control.Anomaly m) (* all preverbs ought to have been processed *)
     (* We now prevent overgeneration of forms "sa" and "e.sa" \Pan{6,1,132} *)
-  | [ ((ph,rform,_) as last) :: next ] -> let form = Word.mirror rform in
-                                          prune_sa out form last next 
+  | [ ((_,rform,_) as last) :: next ] -> let form = Word.mirror rform in
+                                         prune_sa out form last next 
   ]
 ;
 (* Used in [Graph_segmenter] *)

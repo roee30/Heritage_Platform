@@ -30,7 +30,7 @@ open Html;
 open Web; (* ps pl abort etc. [remote_server_host] *)
 open Cgi; (* [get decode_url] *)
 open Phases; (* [Phases] *)
-open Rank; (* [Prel Lex segment_all iterate] *) 
+open Rank; (* [Prel Lex segment_all iterate Solutions] *) 
 
 (* Reader interface *)
 (* Mode parameter of the reader. Controled by service Reader for respectively

@@ -183,8 +183,8 @@ value print_inv_morpho_scl pvs form =
            else pvs in
   let encaps e = if pv = [] then print_scl_entry e
                  else let pv_list = decomp_pvs pvs in do 
-                      { List.iter pr_pv pv_list 
-                          where pr_pv pv = Canon.decode_WX pv ^ "_" |> ps
+                      { List2.process_list_sep pr_pv (fun () -> ps "_") pv_list 
+                          where pr_pv pv = Canon.decode_WX pv |> ps
                       ; print_scl_entry e 
                       } in
   print_inv_morpho_scl encaps form 

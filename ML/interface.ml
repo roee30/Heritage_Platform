@@ -132,8 +132,9 @@ value call_back text cpts (k,seg) conflict =
        and (out_cgi,sign,color) = 
            if unanalysed seg then (user_aid_cgi,spade_sign,Red_) 
                              else (graph_cgi,   check_sign,Green_) in
-       let cgi_select = out_cgi ^ "?" ^ text ^ ";cpts=" ^ (choices True)
-       and cgi_reject = out_cgi ^ "?" ^ text ^ ";cpts=" ^ (choices False) in
+       let call_back flag = out_cgi ^ "?" ^ text ^ ";cpts=" ^ choices flag in
+       let cgi_select = call_back True
+       and cgi_reject = call_back False in
        anchor color (invoke cgi_select) sign ^ 
           if unanalysed seg then "" else anchor Red_ (invoke cgi_reject) x_sign
 ;

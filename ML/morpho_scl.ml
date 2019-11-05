@@ -15,7 +15,8 @@
 
 open Skt_morph;
 open Morphology; (* [inflected] and its constructors [Noun_form], ... *)
-open Naming; (* [look_up_homo homo_undo unique_kridantas lexical_kridantas] *)
+open Naming; (* [look_up_homo homo_undo unique_kridantas lexical_kridantas
+                 preverbs_structure] *)
 
 value ps = print_string
 ;
@@ -172,11 +173,20 @@ value print_inv_morpho_scl pe form generative (delta,morphs) =
 value print_scl_entry w = (* ps offline in WX notation for UoH interface *)
   ps ("<entry wx=\"" ^ Canon.decode_WX w ^ "\"/>")
 ;
+(* Decomposes a preverb sequence into the list of its components *)
+(* Similar to [Morpho.decomp_pvs] *)
+value decomp_pvs pvs = 
+  Deco.assoc pvs preverbs_structure
+;
 value print_inv_morpho_scl pvs form = 
   let pv = if Phonetics.phantomatic form then [ 2 ] (* aa- *) 
            else pvs in
   let encaps e = if pv = [] then print_scl_entry e
-                 else do { ps (Canon.decode_WX pvs ^ "-"); print_scl_entry e } in
+                 else let pv_list = decomp_pvs pvs in do 
+                      { List.iter pr_pv pv_list 
+                          where pr_pv pv = Canon.decode_WX pv ^ "_" |> ps
+                      ; print_scl_entry e 
+                      } in
   print_inv_morpho_scl encaps form 
 ;
 (* Used in [Lexer.print_scl_morph] *)

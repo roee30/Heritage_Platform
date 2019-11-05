@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                      Gérard Huet & Amba Kulkarni                       *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Module [Scl_parser] used as interface with UoH dependency parser *)

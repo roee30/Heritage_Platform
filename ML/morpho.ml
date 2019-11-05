@@ -25,8 +25,8 @@ value pl s = ps (s ^ "\n")
 ;
 value pr_word w = ps (Canon.decode w)
 ;
-value print_morph m = ps (string_morph m)
-and print_verbal vb = ps (string_verbal vb)
+value print_morph m = string_morph m |> ps
+and print_verbal vb = string_verbal vb |> ps
 ;
 (*i Anomaly: Morpho should be independent of Html i*)
 value select_morph (seg_num,sub,seg_count) morph = do 
@@ -34,9 +34,9 @@ value select_morph (seg_num,sub,seg_count) morph = do
     and seg = (string_of_int sub) ^ "," ^ (string_of_int seg_count) in
     let radio_cond = Html.radio_input_dft string_num seg "" in
     match (sub,seg_count) with 
-    [ (1,1) -> ps (radio_cond True ^ " ") 
+    [ (1,1) -> radio_cond True ^ " " |> ps 
                   (* NB: only the first button is selected *)
-    | _     -> ps (radio_cond False ^ " ")
+    | _     -> radio_cond False ^ " " |> ps
     ]
   ; print_morph morph
   }

@@ -884,7 +884,7 @@ value conjs_engine () = do
       | "9" -> 9
       | "10" -> 10
       | "11" -> 11 (* denominative verbs *)
-      | "0" -> 0 (* secondary conjugations *)
+(*    | "0" -> 0 (* secondary conjugations *) -- obsolete *)
       | s -> raise (Control.Fatal ("Weird present class: " ^ s)) 
       ] 
     and encoding_function = Encode.switch_code translit 

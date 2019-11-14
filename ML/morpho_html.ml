@@ -23,7 +23,7 @@ value mw_defining_page s =
   let mw_exceptions = 
     try (Gen.gobble public_mw_exc_file : Deco.deco int)  
     with [ _ -> failwith "mw_exceptions" ] in
-    Chapters.mw_defining_page_exc s mw_exceptions
+  Chapters.mw_defining_page_exc s mw_exceptions
 ;
 (* Absolute url on local site *)
 value url s = 
@@ -81,20 +81,20 @@ value skt_graph_anchor_R cache form =
   anchor_graph Navy_ (url_function form) s 
 ;
 
-value print_stem w = ps (Canon.uniromcode w) (* w in lexicon or not *)
-and print_chunk w = ps (Canon.uniromcode w)
-and print_entry w = ps (skt_anchor_R False (Canon.decode w)) (* w in lexicon *)
-and print_ext_entry ps w = ps (skt_anchor_R False (Canon.decode w)) (* idem *)
-and print_cache w = ps (skt_anchor_R True (Canon.decode w))
-and print_graph_entry w = ps (skt_graph_anchor_R False (Canon.decode w))
-and print_graph_cache w = ps (skt_graph_anchor_R True (Canon.decode w))
+value print_stem w = Canon.uniromcode w |> ps (* w in lexicon or not *)
+and print_chunk w = Canon.uniromcode w |> ps
+and print_entry w = skt_anchor_R False (Canon.decode w) |> ps (* w in lexicon *)
+and print_ext_entry ps w = skt_anchor_R False (Canon.decode w) |> ps (* idem *)
+and print_cache w = skt_anchor_R True (Canon.decode w) |> ps
+and print_graph_entry w = skt_graph_anchor_R False (Canon.decode w) |> ps
+and print_graph_cache w = skt_graph_anchor_R True (Canon.decode w) |> ps
 ;
 
 (* Used in [Indexer] and [Lemmatizer] *)
 value print_inflected gen word inverse = do
   { Morpho.print_inv_morpho print_entry print_stem print_chunk word (0,0) 
                             gen inverse 
-  ; pl html_break 
+  ; html_break |> pl
   }
 ;
 (* Used in [Lexer.print_morph] *)
@@ -127,7 +127,7 @@ value hdecode word = Transduction.skt_to_html (Canon.decode word)
 ;
 value html_blue_off offset text = 
   (* Temporary use of title attribute for XHTML 1.0 Strict offset recording, *)
-  (* should be replaced by data-offset in future HTML 5 compliance. *)
+  (* should be replaced by data-offset for future HTML 5 compliance. *)
   (* This is only needed for the SL annotator interface. *)
   (* It has the unpleasant side effect of showing offsets on mouse over. *)
   let offset_attr offset = ("title",string_of_int offset) in
@@ -138,31 +138,31 @@ value blue_word_off word offset = (* deprecated *)
   html_blue_off offset (emph (hdecode word))
 ;
 value print_sandhi u v w = do 
-  { ps (html_magenta (hdecode (visargify u))) (* visarga form *)
-  ; ps (html_green "|")
-  ; ps (html_magenta (hdecode v))
-  ; ps (html_blue " &rarr; ") (* -> *)
-  ; ps (html_red (hdecode w))
+  { html_magenta (hdecode (visargify u)) |> ps (* visarga form *)
+  ; html_green "|" |> ps
+  ; html_magenta (hdecode v) |> ps
+  ; html_blue " &rarr; " |> ps (* -> *)
+  ; html_red (hdecode w) |> ps
   }
 ;
 value print_signifiant rword =
   let word = visargify rword in (* visarga form : final s and r visarged *) 
-  ps (html_blue (hdecode word)) 
+  html_blue (hdecode word) |> ps 
 ;
 (* used in [Lexer.print_segment] with offset indication *)
 value print_signifiant_off rword offset = 
   let word = visargify rword in (* visarga form : final s and r visarged *) 
-  ps (blue_word_off word offset)
+  blue_word_off word offset |> ps
 ;
 (* used in [Lexer.print_proj] *)
 value print_signifiant_yellow rword = do
-  { ps th_begin 
-  ; pl (table_begin_style (background Yellow) [ padding5 ])
-  ; ps td_begin
+  { th_begin |> ps
+  ; table_begin_style (background Yellow) [ padding5 ] |> pl
+  ; td_begin |> ps
   ; print_signifiant rword 
-  ; ps td_end
-  ; ps table_end
-  ; ps th_end
+  ; td_end |> ps
+  ; table_end |> ps
+  ; th_end |> ps
   }
 ;
 

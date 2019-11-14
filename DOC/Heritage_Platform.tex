@@ -36058,9 +36058,9 @@ $\ocwlowerid{value}~\ocwlowerid{pr\_word}~\ocwlowerid{w}~=~\ocwlowerid{ps}~(\ocw
 \ocwindent{0.00em}
 ;\ocweol
 \ocwindent{0.00em}
-$\ocwlowerid{value}~\ocwlowerid{print\_morph}~\ocwlowerid{m}~=~\ocwlowerid{ps}~(\ocwlowerid{string\_morph}~\ocwlowerid{m})$\ocweol
+$\ocwlowerid{value}~\ocwlowerid{print\_morph}~\ocwlowerid{m}~=~\ocwlowerid{string\_morph}~\ocwlowerid{m}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{0.00em}
-\ocwkw{and}~$\ocwlowerid{print\_verbal}~\ocwlowerid{vb}~=~\ocwlowerid{ps}~(\ocwlowerid{string\_verbal}~\ocwlowerid{vb})$\ocweol
+\ocwkw{and}~$\ocwlowerid{print\_verbal}~\ocwlowerid{vb}~=~\ocwlowerid{string\_verbal}~\ocwlowerid{vb}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{0.00em}
 ;\ocweol
 \ocwindent{0.00em}
@@ -36074,11 +36074,11 @@ $\ocwlowerid{value}~\ocwlowerid{select\_morph}~(\ocwlowerid{seg\_num},\ocwloweri
 \ocwindent{2.00em}
 \ocwkw{match}~$(\ocwlowerid{sub},\ocwlowerid{seg\_count})~$\ocwkw{with}~\ocweol
 \ocwindent{2.00em}
-$[~(1,1)~\rightarrow{}~\ocwlowerid{ps}~(\ocwlowerid{radio\_cond}~\ocwupperid{True}~$\^{}~\ocwstring{"\ocwvspace{}"}$)~$\ocweol
+$[~(1,1)~\rightarrow{}~\ocwlowerid{radio\_cond}~\ocwupperid{True}~$\^{}~\ocwstring{"\ocwvspace{}"}~|\ensuremath{>}~$\ocwlowerid{ps}~$\ocweol
 \ocwindent{9.00em}
 \ocwbc{} NB: only the first button is selected \ocwec{}\ocweol
 \ocwindent{2.00em}
-$\mid{}~\ocwlowerid{\_}~\rightarrow{}~\ocwlowerid{ps}~(\ocwlowerid{radio\_cond}~\ocwupperid{False}~$\^{}~\ocwstring{"\ocwvspace{}"}$)$\ocweol
+$\mid{}~\ocwlowerid{\_}~\rightarrow{}~\ocwlowerid{radio\_cond}~\ocwupperid{False}~$\^{}~\ocwstring{"\ocwvspace{}"}~|\ensuremath{>}~$\ocwlowerid{ps}$\ocweol
 \ocwindent{2.00em}
 $]$\ocweol
 \ocwindent{1.00em}
@@ -36128,7 +36128,7 @@ $]$\ocweol
    \ocwbegindcode{}$\ocwlowerid{pne}~:~\ocwlowerid{word}~\rightarrow{}~$\ocwbt{unit}\ocwenddcode{} is \ocwbegindcode{}$\ocwupperid{Morpho\_html}.\ocwlowerid{print\_stem}$\ocwenddcode{},
    \ocwbegindcode{}$\ocwlowerid{pu}~:~\ocwlowerid{word}~\rightarrow{}~$\ocwbt{unit}\ocwenddcode{} prints un-analysed chunks. 
 \ocweol
-\label{morpho.ml:2587}%
+\label{morpho.ml:2591}%
 \medskip
 \ocwbegincode{}\ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{print\_inv\_morpho}~\ocwlowerid{pe}~\ocwlowerid{pne}~\ocwlowerid{pu}~\ocwlowerid{form}~(\ocwlowerid{seg\_num},\ocwlowerid{sub})~\ocwlowerid{generative}~(\ocwlowerid{delta},\ocwlowerid{morphs})~=~$\ocweol
@@ -36222,7 +36222,7 @@ $\ocwlowerid{print\_inv\_morpho}~(\ocwlowerid{encaps}~\ocwlowerid{pe})~(\ocwlowe
 \ocwendcode{}\ocwindent{0.00em}
 Used in \ocwbegindcode{}$\ocwupperid{Lexer}.\ocwlowerid{record\_tagging}$\ocwenddcode{} for regression analysis 
 \ocweol
-\label{morpho.ml:4636}%
+\label{morpho.ml:4640}%
 \medskip
 \ocwbegincode{}\ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{report\_morph}~\ocwlowerid{gen}~\ocwlowerid{form}~(\ocwlowerid{delta},\ocwlowerid{morphs})~=$\ocweol
@@ -36263,7 +36263,7 @@ $]$\ocweol
 \ocwindent{0.00em}
 ;\medskip
 
-\label{morpho.ml:5392}%
+\label{morpho.ml:5396}%
 \ocwindent{0.00em}
 \ocwkw{end};\ocweol
 \ocwendcode{}\typeout{OcamlWeb file Declension.ml}
@@ -38669,8 +38669,8 @@ $\mid{}~$\ocwstring{"9"}~$\rightarrow{}~9$\ocweol
 $\mid{}~$\ocwstring{"10"}~$\rightarrow{}~10$\ocweol
 \ocwindent{3.00em}
 $\mid{}~$\ocwstring{"11"}~$\rightarrow{}~11~$\ocwbc{} denominative verbs \ocwec{}\ocweol
-\ocwindent{3.00em}
-$\mid{}~$\ocwstring{"0"}~$\rightarrow{}~0~$\ocwbc{} secondary conjugations \ocwec{}\ocweol
+\ocwindent{0.00em}
+\ocwbc{}    | \ocwstring{"0"} -> 0 \ocwbc{} secondary conjugations \ocwec{} -- obsolete \ocwec{}\ocweol
 \ocwindent{3.00em}
 $\mid{}~\ocwlowerid{s}~\rightarrow{}~\ocwlowerid{raise}~(\ocwupperid{Control.Fatal}~($\ocwstring{"Weird\ocwvspace{}present\ocwvspace{}class:\ocwvspace{}"}~\^{}~$\ocwlowerid{s}))~$\ocweol
 \ocwindent{3.00em}
@@ -55575,7 +55575,7 @@ $\ocwlowerid{value}~\ocwlowerid{mw\_defining\_page}~\ocwlowerid{s}~=$\ocweol
 \ocwkw{try}~$(\ocwupperid{Gen.}\ocwlowerid{gobble}~\ocwlowerid{public\_mw\_exc\_file}~:~\ocwupperid{Deco.}\ocwlowerid{deco}~$\ocwbt{int}$)~$\ocweol
 \ocwindent{2.00em}
 \ocwkw{with}~$[~\ocwlowerid{\_}~\rightarrow{}~\ocwlowerid{failwith}~$\ocwstring{"mw\_exceptions"}~$]~$\ocwkw{in}\ocweol
-\ocwindent{2.00em}
+\ocwindent{1.00em}
 $\ocwupperid{Chapters.}\ocwlowerid{mw\_defining\_page\_exc}~\ocwlowerid{s}~\ocwlowerid{mw\_exceptions}$\ocweol
 \ocwindent{0.00em}
 ;\ocweol
@@ -55685,28 +55685,28 @@ $\ocwlowerid{anchor\_graph}~\ocwupperid{Navy\_}~(\ocwlowerid{url\_function}~\ocw
 \ocwindent{0.00em}
 ;\medskip
 
-\label{morpho_html.ml:3360}%
+\label{morpho_html.ml:3358}%
 \ocwindent{0.00em}
-$\ocwlowerid{value}~\ocwlowerid{print\_stem}~\ocwlowerid{w}~=~\ocwlowerid{ps}~(\ocwupperid{Canon.}\ocwlowerid{uniromcode}~\ocwlowerid{w})~$\ocwbc{} w in lexicon or not \ocwec{}\ocweol
+$\ocwlowerid{value}~\ocwlowerid{print\_stem}~\ocwlowerid{w}~=~\ocwupperid{Canon.}\ocwlowerid{uniromcode}~\ocwlowerid{w}~|\ensuremath{>}~\ocwlowerid{ps}~$\ocwbc{} w in lexicon or not \ocwec{}\ocweol
 \ocwindent{0.00em}
-\ocwkw{and}~$\ocwlowerid{print\_chunk}~\ocwlowerid{w}~=~\ocwlowerid{ps}~(\ocwupperid{Canon.}\ocwlowerid{uniromcode}~\ocwlowerid{w})$\ocweol
+\ocwkw{and}~$\ocwlowerid{print\_chunk}~\ocwlowerid{w}~=~\ocwupperid{Canon.}\ocwlowerid{uniromcode}~\ocwlowerid{w}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{0.00em}
-\ocwkw{and}~$\ocwlowerid{print\_entry}~\ocwlowerid{w}~=~\ocwlowerid{ps}~(\ocwlowerid{skt\_anchor\_R}~\ocwupperid{False}~(\ocwupperid{Canon.}\ocwlowerid{decode}~\ocwlowerid{w}))~$\ocwbc{} w in lexicon \ocwec{}\ocweol
+\ocwkw{and}~$\ocwlowerid{print\_entry}~\ocwlowerid{w}~=~\ocwlowerid{skt\_anchor\_R}~\ocwupperid{False}~(\ocwupperid{Canon.}\ocwlowerid{decode}~\ocwlowerid{w})~|\ensuremath{>}~\ocwlowerid{ps}~$\ocwbc{} w in lexicon \ocwec{}\ocweol
 \ocwindent{0.00em}
-\ocwkw{and}~$\ocwlowerid{print\_ext\_entry}~\ocwlowerid{ps}~\ocwlowerid{w}~=~\ocwlowerid{ps}~(\ocwlowerid{skt\_anchor\_R}~\ocwupperid{False}~(\ocwupperid{Canon.}\ocwlowerid{decode}~\ocwlowerid{w}))~$\ocwbc{} idem \ocwec{}\ocweol
+\ocwkw{and}~$\ocwlowerid{print\_ext\_entry}~\ocwlowerid{ps}~\ocwlowerid{w}~=~\ocwlowerid{skt\_anchor\_R}~\ocwupperid{False}~(\ocwupperid{Canon.}\ocwlowerid{decode}~\ocwlowerid{w})~|\ensuremath{>}~\ocwlowerid{ps}~$\ocwbc{} idem \ocwec{}\ocweol
 \ocwindent{0.00em}
-\ocwkw{and}~$\ocwlowerid{print\_cache}~\ocwlowerid{w}~=~\ocwlowerid{ps}~(\ocwlowerid{skt\_anchor\_R}~\ocwupperid{True}~(\ocwupperid{Canon.}\ocwlowerid{decode}~\ocwlowerid{w}))$\ocweol
+\ocwkw{and}~$\ocwlowerid{print\_cache}~\ocwlowerid{w}~=~\ocwlowerid{skt\_anchor\_R}~\ocwupperid{True}~(\ocwupperid{Canon.}\ocwlowerid{decode}~\ocwlowerid{w})~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{0.00em}
-\ocwkw{and}~$\ocwlowerid{print\_graph\_entry}~\ocwlowerid{w}~=~\ocwlowerid{ps}~(\ocwlowerid{skt\_graph\_anchor\_R}~\ocwupperid{False}~(\ocwupperid{Canon.}\ocwlowerid{decode}~\ocwlowerid{w}))$\ocweol
+\ocwkw{and}~$\ocwlowerid{print\_graph\_entry}~\ocwlowerid{w}~=~\ocwlowerid{skt\_graph\_anchor\_R}~\ocwupperid{False}~(\ocwupperid{Canon.}\ocwlowerid{decode}~\ocwlowerid{w})~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{0.00em}
-\ocwkw{and}~$\ocwlowerid{print\_graph\_cache}~\ocwlowerid{w}~=~\ocwlowerid{ps}~(\ocwlowerid{skt\_graph\_anchor\_R}~\ocwupperid{True}~(\ocwupperid{Canon.}\ocwlowerid{decode}~\ocwlowerid{w}))$\ocweol
+\ocwkw{and}~$\ocwlowerid{print\_graph\_cache}~\ocwlowerid{w}~=~\ocwlowerid{skt\_graph\_anchor\_R}~\ocwupperid{True}~(\ocwupperid{Canon.}\ocwlowerid{decode}~\ocwlowerid{w})~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{0.00em}
 ;\medskip
 
 \ocwendcode{}\ocwindent{0.00em}
 Used in \ocwbegindcode{}$\ocwupperid{Indexer}$\ocwenddcode{} and \ocwbegindcode{}$\ocwupperid{Lemmatizer}$\ocwenddcode{} 
 \ocweol
-\label{morpho_html.ml:3883}%
+\label{morpho_html.ml:3888}%
 \medskip
 \ocwbegincode{}\ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{print\_inflected}~\ocwlowerid{gen}~\ocwlowerid{word}~\ocwlowerid{inverse}~=~$\ocwkw{do}\ocweol
@@ -55715,7 +55715,7 @@ $\ocwlowerid{value}~\ocwlowerid{print\_inflected}~\ocwlowerid{gen}~\ocwlowerid{w
 \ocwindent{14.00em}
 $\ocwlowerid{gen}~\ocwlowerid{inverse}~$\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{pl}~\ocwlowerid{html\_break}~$\ocweol
+;~$\ocwlowerid{html\_break}~|\ensuremath{>}~\ocwlowerid{pl}$\ocweol
 \ocwindent{1.00em}
 \}\ocweol
 \ocwindent{0.00em}
@@ -55776,7 +55776,7 @@ $\ocwlowerid{value}~\ocwlowerid{html\_blue\_off}~\ocwlowerid{offset}~\ocwlowerid
 \ocwindent{1.00em}
 \ocwbc{} Temporary use of title attribute for XHTML 1.0 Strict offset recording, \ocwec{}\ocweol
 \ocwindent{1.00em}
-\ocwbc{} should be replaced by data-offset in future HTML 5 compliance. \ocwec{}\ocweol
+\ocwbc{} should be replaced by data-offset for future HTML 5 compliance. \ocwec{}\ocweol
 \ocwindent{1.00em}
 \ocwbc{} This is only needed for the SL annotator interface. \ocwec{}\ocweol
 \ocwindent{1.00em}
@@ -55798,15 +55798,15 @@ $\ocwlowerid{html\_blue\_off}~\ocwlowerid{offset}~(\ocwlowerid{emph}~(\ocwloweri
 \ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{print\_sandhi}~\ocwlowerid{u}~\ocwlowerid{v}~\ocwlowerid{w}~=~$\ocwkw{do}~\ocweol
 \ocwindent{1.00em}
-\{~$\ocwlowerid{ps}~(\ocwlowerid{html\_magenta}~(\ocwlowerid{hdecode}~(\ocwlowerid{visargify}~\ocwlowerid{u})))~$\ocwbc{} visarga form \ocwec{}\ocweol
+\{~$\ocwlowerid{html\_magenta}~(\ocwlowerid{hdecode}~(\ocwlowerid{visargify}~\ocwlowerid{u}))~|\ensuremath{>}~\ocwlowerid{ps}~$\ocwbc{} visarga form \ocwec{}\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~(\ocwlowerid{html\_green}~$\ocwstring{"|"}$)$\ocweol
+;~$\ocwlowerid{html\_green}~$\ocwstring{"|"}~|\ensuremath{>}~$\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~(\ocwlowerid{html\_magenta}~(\ocwlowerid{hdecode}~\ocwlowerid{v}))$\ocweol
+;~$\ocwlowerid{html\_magenta}~(\ocwlowerid{hdecode}~\ocwlowerid{v})~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~(\ocwlowerid{html\_blue}~$\ocwstring{"\ocwvspace{}\&rarr;\ocwvspace{}"}$)~$\ocwbc{} -> \ocwec{}\ocweol
+;~$\ocwlowerid{html\_blue}~$\ocwstring{"\ocwvspace{}\&rarr;\ocwvspace{}"}~|\ensuremath{>}~$\ocwlowerid{ps}~$\ocwbc{} -> \ocwec{}\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~(\ocwlowerid{html\_red}~(\ocwlowerid{hdecode}~\ocwlowerid{w}))$\ocweol
+;~$\ocwlowerid{html\_red}~(\ocwlowerid{hdecode}~\ocwlowerid{w})~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
 \}\ocweol
 \ocwindent{0.00em}
@@ -55816,7 +55816,7 @@ $\ocwlowerid{value}~\ocwlowerid{print\_signifiant}~\ocwlowerid{rword}~=$\ocweol
 \ocwindent{1.00em}
 \ocwkw{let}~$\ocwlowerid{word}~=~\ocwlowerid{visargify}~\ocwlowerid{rword}~$\ocwkw{in}~\ocwbc{} visarga form : final s and r visarged \ocwec{}~\ocweol
 \ocwindent{1.00em}
-$\ocwlowerid{ps}~(\ocwlowerid{html\_blue}~(\ocwlowerid{hdecode}~\ocwlowerid{word}))~$\ocweol
+$\ocwlowerid{html\_blue}~(\ocwlowerid{hdecode}~\ocwlowerid{word})~|\ensuremath{>}~\ocwlowerid{ps}~$\ocweol
 \ocwindent{0.00em}
 ;\ocweol
 \ocwindent{0.00em}
@@ -55826,7 +55826,7 @@ $\ocwlowerid{value}~\ocwlowerid{print\_signifiant\_off}~\ocwlowerid{rword}~\ocwl
 \ocwindent{1.00em}
 \ocwkw{let}~$\ocwlowerid{word}~=~\ocwlowerid{visargify}~\ocwlowerid{rword}~$\ocwkw{in}~\ocwbc{} visarga form : final s and r visarged \ocwec{}~\ocweol
 \ocwindent{1.00em}
-$\ocwlowerid{ps}~(\ocwlowerid{blue\_word\_off}~\ocwlowerid{word}~\ocwlowerid{offset})$\ocweol
+$\ocwlowerid{blue\_word\_off}~\ocwlowerid{word}~\ocwlowerid{offset}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{0.00em}
 ;\ocweol
 \ocwindent{0.00em}
@@ -55834,19 +55834,19 @@ $\ocwlowerid{ps}~(\ocwlowerid{blue\_word\_off}~\ocwlowerid{word}~\ocwlowerid{off
 \ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{print\_signifiant\_yellow}~\ocwlowerid{rword}~=~$\ocwkw{do}\ocweol
 \ocwindent{1.00em}
-\{~$\ocwlowerid{ps}~\ocwlowerid{th\_begin}~$\ocweol
+\{~$\ocwlowerid{th\_begin}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{pl}~(\ocwlowerid{table\_begin\_style}~(\ocwlowerid{background}~\ocwupperid{Yellow})~[~\ocwlowerid{padding5}~])$\ocweol
+;~$\ocwlowerid{table\_begin\_style}~(\ocwlowerid{background}~\ocwupperid{Yellow})~[~\ocwlowerid{padding5}~]~|\ensuremath{>}~\ocwlowerid{pl}$\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~\ocwlowerid{td\_begin}$\ocweol
+;~$\ocwlowerid{td\_begin}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
 ;~$\ocwlowerid{print\_signifiant}~\ocwlowerid{rword}~$\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~\ocwlowerid{td\_end}$\ocweol
+;~$\ocwlowerid{td\_end}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~\ocwlowerid{table\_end}$\ocweol
+;~$\ocwlowerid{table\_end}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~\ocwlowerid{th\_end}$\ocweol
+;~$\ocwlowerid{th\_end}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
 \}\ocweol
 \ocwindent{0.00em}
@@ -56783,9 +56783,10 @@ Uses WX for transliteration output.
 \ocwindent{0.00em}
 \ocwkw{open}~$\ocwupperid{Morphology};~$\ocwbc{} \ocwbegindcode{}$\ocwlowerid{inflected}$\ocwenddcode{} and its constructors \ocwbegindcode{}$\ocwupperid{Noun\_form}$\ocwenddcode{}, ... \ocwec{}\ocweol
 \ocwindent{0.00em}
-\ocwkw{open}~$\ocwupperid{Naming};~$\ocwbc{} \ocwbegindcode{}$\ocwlowerid{look\_up\_homo}~\ocwlowerid{homo\_undo}~\ocwlowerid{unique\_kridantas}~\ocwlowerid{lexical\_kridantas}$\ocwenddcode{} \ocwec{}\medskip
+\ocwkw{open}~$\ocwupperid{Naming};~$\ocwbc{} \ocwbegindcode{}$\ocwlowerid{look\_up\_homo}~\ocwlowerid{homo\_undo}~\ocwlowerid{unique\_kridantas}~\ocwlowerid{lexical\_kridantas}
+~\ocwlowerid{preverbs\_structure}$\ocwenddcode{} \ocwec{}\medskip
 
-\label{morpho_scl.ml:978}%
+\label{morpho_scl.ml:1014}%
 \ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{ps}~=~\ocwlowerid{print\_string}$\ocweol
 \ocwindent{0.00em}
@@ -57097,6 +57098,16 @@ $\ocwlowerid{ps}~($\ocwstring{"\ensuremath{<}entry\ocwvspace{}wx=\symbol{92}""}~
 \ocwindent{0.00em}
 ;\ocweol
 \ocwindent{0.00em}
+\ocwbc{} Decomposes a preverb sequence into the list of its components \ocwec{}\ocweol
+\ocwindent{0.00em}
+\ocwbc{} Similar to \ocwbegindcode{}$\ocwupperid{Morpho}.\ocwlowerid{decomp\_pvs}$\ocwenddcode{} \ocwec{}\ocweol
+\ocwindent{0.00em}
+$\ocwlowerid{value}~\ocwlowerid{decomp\_pvs}~\ocwlowerid{pvs}~=~$\ocweol
+\ocwindent{1.00em}
+$\ocwupperid{Deco.}\ocwlowerid{assoc}~\ocwlowerid{pvs}~\ocwlowerid{preverbs\_structure}$\ocweol
+\ocwindent{0.00em}
+;\ocweol
+\ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{print\_inv\_morpho\_scl}~\ocwlowerid{pvs}~\ocwlowerid{form}~=~$\ocweol
 \ocwindent{1.00em}
 \ocwkw{let}~$\ocwlowerid{pv}~=~$\ocwkw{if}~$\ocwupperid{Phonetics.}\ocwlowerid{phantomatic}~\ocwlowerid{form}~$\ocwkw{then}~$[~2~]~$\ocwbc{} aa- \ocwec{}~\ocweol
@@ -57105,7 +57116,15 @@ $\ocwlowerid{value}~\ocwlowerid{print\_inv\_morpho\_scl}~\ocwlowerid{pvs}~\ocwlo
 \ocwindent{1.00em}
 \ocwkw{let}~$\ocwlowerid{encaps}~\ocwlowerid{e}~=~$\ocwkw{if}~$\ocwlowerid{pv}~=~[\,]~$\ocwkw{then}~$\ocwlowerid{print\_scl\_entry}~\ocwlowerid{e}$\ocweol
 \ocwindent{8.50em}
-\ocwkw{else}~\ocwkw{do}~\{~$\ocwlowerid{ps}~(\ocwupperid{Canon.}\ocwlowerid{decode\_WX}~\ocwlowerid{pvs}~$\^{}~\ocwstring{"\symbol{45}"}$);~\ocwlowerid{print\_scl\_entry}~\ocwlowerid{e}~\}~$\ocwkw{in}\ocweol
+\ocwkw{else}~\ocwkw{let}~$\ocwlowerid{pv\_list}~=~\ocwlowerid{decomp\_pvs}~\ocwlowerid{pvs}~$\ocwkw{in}~\ocwkw{do}~\ocweol
+\ocwindent{11.00em}
+\{~$\ocwupperid{List2.}\ocwlowerid{process\_list\_sep}~\ocwlowerid{pr\_pv}~($\ocwkw{fun}~$()~\rightarrow{}~\ocwlowerid{ps}~$\ocwstring{"\_"}$)~\ocwlowerid{pv\_list}~$\ocweol
+\ocwindent{13.00em}
+$\ocwlowerid{where}~\ocwlowerid{pr\_pv}~\ocwlowerid{pv}~=~\ocwupperid{Canon.}\ocwlowerid{decode\_WX}~\ocwlowerid{pv}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
+\ocwindent{11.00em}
+;~$\ocwlowerid{print\_scl\_entry}~\ocwlowerid{e}~$\ocweol
+\ocwindent{11.00em}
+\}~\ocwkw{in}\ocweol
 \ocwindent{1.00em}
 $\ocwlowerid{print\_inv\_morpho\_scl}~\ocwlowerid{encaps}~\ocwlowerid{form}~$\ocweol
 \ocwindent{0.00em}

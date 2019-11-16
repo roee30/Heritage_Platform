@@ -7,9 +7,9 @@
 (* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-(*i module Automaton = struct i*)
-(* ZZZ special version of Automata, for use for the cache - should disappear *)
-
+(*i module Automata = struct i*)
+(* same as Platform's Automaton, except debugging tools, and taking the
+   sandhi rules locally from Data rather than dynamically from Web *)
 open Canon; (* decode rdecode *)
 open Phonetics; 
 open Auto.Auto; (* rule auto stack *)
@@ -64,7 +64,12 @@ type rules = array stack
 value (sandhis, sandhir, sandhin, sandhif, sandhio) = 
   (Gen.gobble Data.sandhis_file : (rules * rules * rules * rules * rules))
 ;
-value get_sandhi = fun (* argument is [mirror (code u)] *) 
+(* Special patch for preverbs automaton to ignore cesura rules *)
+value filter_cesura sandhis = 
+  List.map (List.filter (fun (w,_,_) -> not (List.mem 50 w))) sandhis
+;
+(* flag_pv =True for preverbs automaton *)
+value get_sandhi flag_pv = fun (* argument is [mirror (code u)] *) 
   [ [] -> failwith "get_sandhi 0"
   | [ 43 (* r *) :: before ] -> match before with
         [ [] -> failwith "get_sandhi 1"
@@ -85,7 +90,8 @@ value get_sandhi = fun (* argument is [mirror (code u)] *)
         ] 
   | [ c :: _ ] -> if c < 0 then failwith "get_sandhi 5"
                   else if c > 49 then failwith "get_sandhi 6"
-                  else sandhio.(c)
+                  else let sandhis = sandhio.(c) in 
+                       if flag_pv then filter_cesura sandhis else sandhis
   ]
 ;
 (* Same as [Compile_sandhi.merge] *)
@@ -137,12 +143,13 @@ and hash1 letter key sum = sum + letter*key
 and hash b arcs rules = (* NB. [abs] needed because possible integer overflow *)
     (abs (arcs + Gen.dirac b + List.length rules)) mod hash_max
 ;
-value build_auto (rewrite : rewrite_set) = traverse
+(* flag_pv =True for prverbs automaton *)
+value build_auto flag_pv (rewrite : rewrite_set) = traverse 
   (* [traverse: word -> lexicon -> (auto * stack * rewrite_set * int)] *)
   (* The occurrence list [occ] is the reverse of the access word. *)
   where rec traverse occ = fun
   [ Trie.Trie (b,arcs) -> 
-     let local_stack = if b then get_sandhi occ else [] 
+     let local_stack = if b then get_sandhi flag_pv occ else [] 
      and local_rewrite = if b then rewrite else empty in
      let f (deter, stack, rewrite, span) (n,t) = 
          let current = [ n :: occ ] in  (* current occurrence *)
@@ -168,15 +175,121 @@ However, it is crucial to maintain proper order for operations such as [split],
 which splits an automaton into vowel-initial and consonant-initial subparts. 
 Thus reversal was enforced when split was introduced in V2.43. *)
 
+(* What follows is for debugging. *)
+value print_sandhi ps (w,u,v) = do
+   { ps (rdecode u)
+   ; ps "|"
+   ; ps (decode v)
+   ; ps " -> "
+   ; ps (decode w)
+   ; ps "\n"
+   }
+;
+value print_cont_sandhi ps word rule = do
+   { ps ("[" ^ (rdecode word) ^ "]") 
+   ; print_sandhi ps rule
+   }
+;
+value record degree assoc = (* [assoc] is a list [[ (deg1,count1); ... ]] *)
+  let (left,right) = List2.zip degree assoc in
+  let update = match right with 
+      [ [] -> [ (degree,1) :: right ]
+      | [ (d,n) :: rest ] -> if d=degree then [ (d,n+1) :: rest ]
+                             else [ (degree,1) :: right ]
+      ] in
+  List2.unstack left update
+;
+value inspect_bool states = 
+  let count (t,f) = fun 
+     [ State (b,_,_) -> if b then (t+1,f) else (t,f+1) ] in
+  List.fold_left count (0,0) states
+;
+value add2 (sumt,sumf) states = 
+  let (t,f) = inspect_bool states in (sumt+t,sumf+f)
+;
+value inspect_choices spans states = 
+  let degrees sp = fun
+      [ State (_,_,choices) -> record (List.length choices) sp ] in
+  List.fold_left degrees spans states
+;
+(* Print automaton statistics in file [automaton.txt]. *)
+value print_stats ps memo = 
+  let pi n = ps (string_of_int n) in
+  let (tt,tf) = Array.fold_left add2 (0,0) memo
+  and spans = Array.fold_left inspect_choices [] memo
+  and print_spans = List.iter psp 
+      where psp (sp,count) = do
+          { pi count; ps " states of degree "; pi sp; ps "\n" }
+  and print_sandhis =
+        List.iter (fun l -> List.iter (print_sandhi ps) l)
+  and print_cont_sandhis cont = fun
+        [ [ lev1; lev2 ] -> do
+             { List.iter (print_cont_sandhi ps cont) lev1 
+             ; List.iter (print_sandhi ps) lev2
+             }
+        | [ lev1 ] -> List.iter (print_cont_sandhi ps cont) lev1 
+        | [] -> ()
+        | _ -> failwith "ill-formed sandhi table"
+        ] in
+  let print_sandhi_rules () =
+      let print_table tab =
+          for i=1 to 49 do { print_sandhis tab.(i) }
+      and print_table_in_context tab =
+          for i=1 to 49 do { print_cont_sandhis [ i ] tab.(i) } in do
+      { print_table sandhio
+      ; print_table_in_context sandhir
+      ; print_table_in_context sandhis
+      } in do
+  { ps "total number of states: "; pi (tt+tf)
+  ; ps " of which "; pi tt; ps " accepting\n" 
+  ; ps "nondeterminism degrees:\n"; print_spans spans 
+  ; ps "sandhi rules:\n"; print_sandhi_rules ()
+  }
+;
 (* Compile builds a tagging transducer from a lexicon index. *)
-(* [compile : bool -> rewrites -> Trie.trie -> Auto.auto] *)
-value compile rewrite lexicon = 
-  let (transducer, stack, _, _) = build_auto rewrite [] lexicon in
+(* [compile : bool -> rewrites -> Trie.trie -> Auto.auto] 
+    called by [Make_automaton] and [Make_preverb_automaton] *)
+value compile stats_flag rewrite lexicon = 
+  let (transducer, stack, _, _) = build_auto False rewrite [] lexicon in
   match stack with
-  [ [] -> transducer
+  [ [] -> do { if stats_flag then (* optional monitoring *)
+                  let cho = open_out Data.automaton_stats in
+                  let ps = output_string cho in do
+                  { print_stats ps Auto.memo; close_out cho } 
+               else () 
+             ; transducer
+             }
   | _ -> (* Error: some sandhi rule has action beyond one word in the lexicon *)
          raise Overlap 
   ]
 ;
+(* Special case: preverb automaton *)
+value compile_pv stats_flag rewrite lexicon = 
+  let (transducer, stack, _, _) = build_auto True rewrite [] lexicon in
+  match stack with
+  [ [] -> do { if stats_flag then (* optional monitoring *)
+                  let cho = open_out Data.automaton_stats in
+                  let ps = output_string cho in do
+                  { print_stats ps Auto.memo; close_out cho } 
+               else () 
+             ; transducer
+             }
+  | _ -> (* Error: some sandhi rule has action beyond one word in the lexicon *)
+         raise Overlap 
+  ]
+;
+(* (For debugging) visualise automaton (undoing sharing). *)
+value rec visual = fun
+  [ State (b,deter,choices) -> do
+     { print_string "<State"
+     ; print_string (if b then "*" else " ")
+     ; List.iter print_det deter
+     ; print_string " ! "
+     ; List.iter (print_sandhi print_string) choices
+     ; print_string " >"
+     }
+  ]
+and print_det (n,state) = do { print_int n; visual state }
+; 
 
 (*i end; i*)

@@ -243,27 +243,28 @@ DISTR_CORE=ML/control.ml ML/dico.mli ML/version.ml ML/date.ml ML/install.ml \
 ML/canon.ml ML/transduction.ml ML/encode.ml ML/order.ml ML/padapatha.ml \
 ML/sanskrit.mli ML/sanskrit.ml ML/skt_lexer.ml \
 ML/dir.mli ML/dir.ml
-CORE=$(DISTR_CORE) ML/paths.ml
+CORE=$(DISTR_CORE) ML/paths.ml ML/data.ml
 
 # GRAM package - phonetics, morphology, segmentation and tagging engines
 GRAM=ML/index.ml ML/phonetics.ml ML/int_sandhi.ml ML/morphology.mli \
-ML/naming.ml ML/inflected.mli ML/inflected.ml ML/sandhi.ml ML/sandhicheck.ml \
+ML/naming.ml ML/inflected.mli ML/inflected.ml ML/sandhi.ml \
 ML/sandhier.ml ML/pada.ml ML/nouns.mli ML/nouns.ml ML/conj_infos.mli \
-ML/verbs.mli ML/verbs.ml ML/parts.ml ML/morpho.ml ML/declension.ml \
+ML/verbs.mli ML/verbs.ml ML/parts.ml ML/automaton.ml ML/automata.ml \
+ML/make_automaton.ml ML/make_preverb_automaton.ml ML/make_transducers.ml \
+ML/morpho_string.ml ML/morpho.ml ML/declension.ml \
 ML/conjugation.ml ML/indexer.ml ML/indexerd.ml ML/phases.ml ML/lemmatizer.ml \
 ML/auto.mli ML/load_transducers.ml ML/dispatcher.mli ML/dispatcher.ml \
-ML/morpho_string.ml ML/segmenter.ml ML/load_morphs.ml ML/lexer.mli ML/lexer.ml \
+ML/segmenter.ml ML/load_morphs.ml ML/lexer.mli ML/lexer.ml \
 ML/rank.ml ML/scl_parser.ml ML/reader.ml ML/parser.ml ML/constraints.mli \
 ML/constraints.ml ML/multilingual.ml ML/paraphrase.mli ML/paraphrase.ml \
-ML/bank_lexer.ml ML/regression.ml ML/checkpoints.ml \
-ML/graph_segmenter.ml ML/interface.mli ML/interface.ml ML/user_aid.ml \
-ML/reset_caches.ml ML/restore_caches.ml ML/params.mli ML/params.ml
+ML/bank_lexer.ml ML/checkpoints.ml ML/graph_segmenter.ml ML/interface.mli \
+ML/interface.ml ML/user_aid.ml ML/reset_caches.ml ML/restore_caches.ml \
+ML/params.mli ML/params.ml
 
 # WEB package - HTML, HTTP, CGI ad-hoc utilities for Web interface
 WEB=ML/html.ml ML/web.ml ML/css.ml ML/cgi.ml ML/morpho_html.ml ML/chapters.ml \
 ML/mk_index_page.ml ML/mk_grammar_page.ml ML/mk_reader_page.ml \
-ML/mk_sandhi_page.ml ML/mk_corpus_page.ml ML/morpho_scl.ml \
-ML/compute_mw_links.ml
+ML/mk_sandhi_page.ml ML/mk_corpus_page.ml ML/morpho_scl.ml 
 
 # TREE package - tree bank manager and syntax analyser - deprecated
 TREE=ML/stemmer.ml ML/parse_tree.ml ML/parse_apte.ml ML/tag_tree.ml \
@@ -279,7 +280,7 @@ DEBUG= ML/morpho_debug.ml ML/debug.ml
 
 # Historical versions of the segmenter, tagger and reader with single phase
 OBSOLETE_ML=ML/segmenter1.ml ML/tagger1.ml ML/reader1.ml ML/tagger.ml \
-ML/nyaaya.ml ML/mk_nyaaya_page.ml \
+ML/nyaaya.ml ML/mk_nyaaya_page.ml ML/regression.ml \
 ML/patch_auto.ml # awful hack for patching automata structures - now unused
 
 # Modules of all software packages are in library ML (besides the ZEN library)
@@ -336,18 +337,26 @@ OBSOLETE_DOCS=DOC/sanskrit.pdf
 DOCS=DOC/sanskrit.pdf DOC/wsc.pdf DOC/tagger.pdf DOC/wcre.pdf DOC/coling.pdf \
 DOC/Mumbai.pdf DOC/Brown.pdf DOC/IWRIDL.pdf DOC/COLING_2012.pdf DOC/WSC13.pdf
 DOC_ML=DOC/Heritage_Platform.pdf
-# Automata databases for use by the Sanskrit Engine
 
-AUTOMATA=$(DATA)/nouns.rem $(DATA)/roots.rem $(DATA)/preverbs.rem \
-$(DATA)/lopas.rem $(DATA)/pronouns.rem $(DATA)/transpn.rem $(DATA)/parts.rem \
+# Automata databases for use by the Sanskrit Engine
+# Imported from Heritage_Resources:
+INFLECTED=$(DATA)/nouns.rem $(DATA)/roots.rem $(DATA)/preverbs.rem \
+$(DATA)/lopas.rem $(DATA)/pronouns.rem $(DATA)/parts.rem $(DATA)/peris.rem \
 $(DATA)/lopaks.rem $(DATA)/indecls.rem $(DATA)/abstvaa.rem $(DATA)/absya.rem \
 $(DATA)/iics.rem $(DATA)/piics.rem $(DATA)/ifcs.rem $(DATA)/iivs.rem \
 $(DATA)/iifcs.rem $(DATA)/auxi.rem $(DATA)/voca.rem $(DATA)/invs.rem \
 $(DATA)/inftu.rem $(DATA)/kama.rem $(DATA)/nouns2.rem $(DATA)/iics2.rem \
-$(DATA)/avyayais.rem $(DATA)/avyayafs.rem $(DATA)/ifcs2.rem $(DATA)/sandhis.rem \
-$(DATA)/sandhis_pv.rem $(DATA)/sandhis_ph.rem $(DATA)/peris.rem \
-$(DATA)/transperi.rem $(DATA)/transn.rem $(DATA)/transr.rem \
-$(DATA)/transiiy.rem $(DATA)/transavy.rem $(DATA)/transp.rem \
+$(DATA)/avyayais.rem $(DATA)/avyayafs.rem $(DATA)/ifcs2.rem 
+
+SANDHIS=$(DATA)/sandhis.rem $(DATA)/sandhis_pv.rem $(DATA)/sandhis_ph.rem \
+$(DATA)/sandhis_id.rem 
+
+DHATUS=$(DATA)/roots_infos.rem $(DATA)/roots_usage.rem 
+KRIDS=$(DATA)/unique_kridantas.rem $(DATA)/lexical_kridantas.rem
+
+# Synthesized at make time:
+TRANSDUCERS=$(DATA)/transpn.rem $(DATA)/transperi.rem $(DATA)/transn.rem \
+$(DATA)/transr.rem $(DATA)/transiiy.rem $(DATA)/transavy.rem $(DATA)/transp.rem \
 $(DATA)/transpa.rem $(DATA)/transic.rem $(DATA)/transif.rem \
 $(DATA)/transpic.rem $(DATA)/transiif.rem $(DATA)/transabsya.rem \
 $(DATA)/transabstvaa.rem $(DATA)/transiv.rem $(DATA)/transinde.rem \
@@ -355,10 +364,11 @@ $(DATA)/partvocs.rem $(DATA)/transpav.rem $(DATA)/translopak.rem \
 $(DATA)/transauxi.rem $(DATA)/transvoca.rem $(DATA)/translopa.rem \
 $(DATA)/transn2.rem $(DATA)/transif2.rem $(DATA)/transic2.rem \
 $(DATA)/auxik.rem $(DATA)/auxiick.rem $(DATA)/transauxik.rem \
-$(DATA)/transauxiick.rem $(DATA)/transinv.rem \
-$(DATA)/transinftu.rem $(DATA)/transkama.rem \
-$(DATA)/roots_infos.rem $(DATA)/roots_usage.rem \
-$(DATA)/sandhis_id.rem $(DATA)/unique_kridantas.rem $(DATA)/lexical_kridantas.rem
+$(DATA)/transauxiick.rem $(DATA)/transinv.rem $(DATA)/transinftu.rem \
+$(DATA)/transkama.rem 
+
+# All are installed in the server area at make install
+AUTOMATA=$(INFLECTED) $(SANDHIS) $(DHATUS) $(TRANSDUCERS) 
 
 # roots_infos.rem is used at run time for generating abs and ger of verbs
 # roots_usage.rem is used at run time by Dispatcher.validate
@@ -405,8 +415,10 @@ all:
 #	cd ML && $(MAKE) depend # reset dependencies (might be partial subset)
 	test -e ML/SCLpaths.ml && echo "SCL config detected" \
 || cp SETUP/dummy_SCLpaths.ml ML/SCLpaths.ml
-	cd ML && $(MAKE) test_version
+	cd ML && $(MAKE) test_version 
 	ML/test_stamp
+	cd ML && $(MAKE) make_transducers
+	$(MAKE) transducers
 	cd ML && $(MAKE) # make engine (testing the data stamp)
 	$(MAKE) web_services # then all Web services
 
@@ -453,6 +465,9 @@ version:
 	(cat $(ML_COPYRIGHT); \
 echo "(* Generated by make version - see main Makefile *)"; \
 echo "value version=\"$(VERSION)\" and version_date=\"$(DATE)\";") > ML/version.ml
+
+transducers: 
+	ML/make_transducers 
 
 full: $(ZEN)
 	cd ML && $(MAKE) clean && $(MAKE) depend && $(MAKE) all
@@ -708,42 +723,6 @@ distrib_full: distrib# assumes distrib has been run, and thus directory DISTR ex
 	cp -p $(DIC) DISTR                # Sanskrit Heritage Dictionary source
 	cp -p $(LEX) DISTR/ML             # Skt Engine Compiling ML source code
 	cp -p $(AUT) DISTR/ML             # Skt Automaton
-	cp -p $(AUT1) DISTR/ML            # Skt Automaton experimental
-	cp -p $(TREE) DISTR/ML            # Skt Treebank and Syntax manager
-	cp -p $(DEBUG) DISTR/ML           # Debugging tools
-	cp -p $(BOOKSOURCE) DISTR/BOOK    # Book introduction
-	cp -Rp $(DOCSOURCE) DISTR/DOC     # Software documentation source
-	cp -p $(SITESOURCE) $(WEBSOURCES) DISTR/SITE # Web pages
-#	cp  $(PDF_MORPHOLOGY) DISTR/$(DATA) # Skt PDF Morphology very big
-	cp -Rp $(DATASOURCE) DISTR/$(DATA) # Morphology introduction
-	cp -Rp CORPUS DISTR # Corpus - under development
-	cp -Rp $(STAT) DISTR              # Statistical data, logs, notes
-#	touch DISTR/dictionary # for make dictionary to succeed vacuously
-	mv DISTR SktPlatform.$(VERSION)   # SktPlatform.$(VERSION) fresh
-
-# deprecated: now we may use Git for distribution
-distrib_platform: distrib_full # create distribution tar file of full SktPlatform
-	tar czvf SktPlatform.$(VERSION).tar.gz SktPlatform.$(VERSION)
-	rm -rf SktPlatform.$(VERSION)
-
-depot: # depot ANL - only SktPlatform, no linguistic data
-	mkdir DISTR                # Distribution directory
-	mkdir DISTR/ML             # Source code library for all packages
-	mkdir DISTR/SETUP          # SETUP dir
-	cp $(UTIL) DISTR/ML        # Skt script utilities
-	cp $(CORE) DISTR/ML        # Skt Core Engine ML source code
-	cp $(GRAM) DISTR/ML        # Skt Grammatical Engine ML source code
-	cp $(WEB) DISTR/ML         # Skt Site Manager ML source code
-	cp -Rp $(SYSTEM_SETUP) DISTR/SETUP  # SETUP
-	cp -p $(SYSTEM_configure) DISTR # configure at top level
-	cp $(INFOS) DISTR          # installation instructions, scripts
-	cp $(SOFT_LICENSE) DISTR/ML/LICENSE # customised software license
-	mkdir DISTR/DOC
-	cp -p DOC/doc.pdf DISTR/DOC       # Skt Engine pdf documentation
-	cp -p $(DOCS) DISTR/DOC           # Various documentation and articles
-	cp -p $(LEX) DISTR/ML             # Skt Engine Compiling ML source code
-	cp -p $(TREE) DISTR/ML            # Skt Treebank and Syntax manager
-	mv DISTR SktPlatform_$(VERSION)     # Skt_Platform distribution
 
 install: #after distribution to host site: "./configure; make; sudo make install"
 	SETUP/issudo.sh

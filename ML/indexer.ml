@@ -41,11 +41,11 @@ value ok (mess,s) = do { ps mess; pl (Morpho_html.skt_anchor_R False s) }
 (* Should share [Lemmatizer.load_inflected] *)
 value load_inflected file = (Gen.gobble file : Morphology.inflected_map)
 ;
-value load_nouns   () = load_inflected public_nouns_file
-and   load_roots   () = load_inflected public_roots_file
-and   load_vocas   () = load_inflected public_vocas_file
-and   load_indecls () = load_inflected public_inde_file
-and   load_parts   () = load_inflected public_parts_file
+value load_nouns   () = load_inflected Data.public_nouns_file
+and   load_roots   () = load_inflected Data.public_roots_file
+and   load_vocas   () = load_inflected Data.public_vocas_file
+and   load_indecls () = load_inflected Data.public_inde_file
+and   load_parts   () = load_inflected Data.public_parts_file
 ;
 value back_ground = background Chamois
 ;
@@ -99,7 +99,7 @@ value print_word word (entry,lex,page) = match lex with
   ]
 ;
 value read_mw_index () = 
-  (Gen.gobble public_mw_index_file : Deco.deco (string * string * string)) 
+  (Gen.gobble Data.public_mw_index_file : Deco.deco (string * string * string)) 
 ;
 value index_engine () = do
   { pl http_header

@@ -636,7 +636,7 @@ value look_up_and_display font gana entry =
    (* Main [look_up_and_display] *)
    { Verbs.fake_compute_conjugs gana entry (* builds temporaries roots.val etc *)
    ; let infos = (* should be a call to a service that gives one [entry_infos] *)
-     (Gen.gobble public_roots_infos_file : Deco.deco root_infos) in
+     (Gen.gobble Data.public_roots_infos_file : Deco.deco root_infos) in
      let entry_infos = Deco.assoc (Encode.code_string entry) infos in 
      do { print_conjug Primary Parts.participles.val 
         ; secondary_conjugs entry_infos 

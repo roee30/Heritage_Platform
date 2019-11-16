@@ -141,7 +141,7 @@ value check_chunk solution =
 (* Uses [sandhis_id] computed by [Compile_sandhi] *)
 (* This is used to check legitimate Id sandhi. *)
 value allowed_trans =
-  (Gen.gobble Web.public_sandhis_id_file : Deco.deco Word.word)
+  (Gen.gobble Data.public_sandhis_id_file : Deco.deco Word.word)
 ;
 value check_id_sandhi revl first = 
   let match_right allowed = not (List.mem [ first ] allowed) in

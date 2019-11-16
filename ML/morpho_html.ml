@@ -21,7 +21,7 @@ module Morpho = Morpho.Morpho_out Out_chan;
 (* This loads dynamically the MW exceptions database *)
 value mw_defining_page s =
   let mw_exceptions = 
-    try (Gen.gobble public_mw_exc_file : Deco.deco int)  
+    try (Gen.gobble Data.public_mw_exc_file : Deco.deco int)  
     with [ _ -> failwith "mw_exceptions" ] in
   Chapters.mw_defining_page_exc s mw_exceptions
 ;

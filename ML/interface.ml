@@ -467,16 +467,16 @@ value make_cache_transducers (cache,cachei) =
   and deco_cachei = Mini.minimize (Deco.forget_deco cachei) in
   let auto_cache = Automaton.compile Deco.empty deco_cache 
   and auto_cachei = Automaton.compile Deco.empty deco_cachei in do
-  { Gen.dump cache public_cache_file (* for [Load_morphs] *)
-  ; Gen.dump cachei public_cachei_file (* id *)
-  ; Gen.dump auto_cache public_trans_cache_file (* for [Load_transducers] *)
-  ; Gen.dump auto_cachei public_trans_cachei_file (* id *)
+  { Gen.dump cache Data.public_cache_file (* for [Load_morphs] *)
+  ; Gen.dump cachei Data.public_cachei_file (* id *)
+  ; Gen.dump auto_cache Data.public_trans_cache_file (* for [Load_transducers] *)
+  ; Gen.dump auto_cachei Data.public_trans_cachei_file (* id *)
   }
 ;
 (* We fill gendered entries incrementally in [public_cache_txt_file] *)
 value append_cache entry gender =    
   let cho = open_out_gen [ Open_wronly; Open_append; Open_text ] 0o777 
-                         public_cache_txt_file in do
+                         Data.public_cache_txt_file in do
   { output_string cho ("[{" ^ entry ^ "}] ({" ^ gender  ^ "})\n")
   ; close_out cho
   }
@@ -560,7 +560,7 @@ value graph_engine () = do
                                     | g -> (guess_morph,g) 
                                     ] in do
                { append_cache entry gender
-               ; let cache_txt_file = public_cache_txt_file in
+               ; let cache_txt_file = Data.public_cache_txt_file in
                  let caches = Nouns.extract_current_caches cache_txt_file in
                  make_cache_transducers caches
                }

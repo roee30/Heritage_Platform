@@ -5,7 +5,7 @@
 #                        Gérard Huet & Pawan Goyal                         #
 #                                                                          #
 ############################################################################
-# Makefile of Sanskrit Heritage Software  14-10-2019  Copyright INRIA 2019 #
+# Makefile of Sanskrit Heritage Software  15-11-2019  Copyright INRIA 2019 #
 ############################################################################
 # Prerequisites: Ocaml 4.07 and Camlp4 preprocessor
 
@@ -14,9 +14,6 @@ MAKE=make
 
 # ZEN computational linguistics toolkit Ocaml library 
 ZEN=../ZEN
-
-# Linguistic database
-DATA=../DATA
 
 # Literate programming tool ocamlweb (available from Ocaml hump) J.C. Filliatre
 NOWEB=./ocamlweb 
@@ -32,7 +29,7 @@ VPATH=$(ZEN)
 # $(MAKE) clean; $(MAKE) depend; $(MAKE) all
 
 # CORE package - utilities, transducers, sanskrit and french lexers, dico spec
-CORE=$(DISTR_CORE) paths.ml 
+CORE=$(DISTR_CORE) paths.ml data.ml
 DISTR_CORE = control.ml version.ml date.ml canon.ml min_lexer.ml \
              transduction.ml encode.ml order.ml padapatha.ml skt_lexer.ml \
              sanskrit.mli sanskrit.ml test_stamp.ml dir.mli dir.ml
@@ -41,13 +38,15 @@ DISTR_CORE = control.ml version.ml date.ml canon.ml min_lexer.ml \
 GRAM = index.ml phonetics.ml int_sandhi.ml skt_morph.mli morphology.mli \
        naming.ml inflected.mli inflected.ml sandhi.ml sandhier.ml pada.ml \
        nouns.mli nouns.ml verbs.mli verbs.ml parts.ml conj_infos.mli \
+       automaton.ml automata.ml make_automaton.ml make_preverb_automaton.ml \
+       make_transducers.ml \
        morpho_string.ml morpho.ml declension.ml conjugation.ml indexer.ml \
        indexerd.ml phases.ml lemmatizer.ml auto.mli load_transducers.ml \
        dispatcher.mli dispatcher.ml segmenter.ml load_morphs.ml lexer.mli \
        lexer.ml rank.ml scl_parser.ml reader.ml parser.ml constraints.mli \
        constraints.ml multilingual.ml paraphrase.mli paraphrase.ml \
        bank_lexer.ml checkpoints.ml graph_segmenter.ml \
-       automaton.ml interface.mli interface.ml user_aid.ml reset_caches.ml \
+       interface.mli interface.ml user_aid.ml reset_caches.ml \
        restore_caches.ml params.mli params.ml
 
 # WEB package - HTML, HTTP, CGI utilities for Web interface
@@ -70,14 +69,14 @@ TREE = parse_tree.ml parse_apte.ml stemmer.ml tag_tree.ml tag_apte.ml
 
 DEBUG=debug.ml 
 
-ENGINE=$(CORE) $(GRAM) $(WEB) $(CORPUS)
+ENGINE=$(CORE) $(GRAM) $(WEB) $(CORPUS) 
 INACTIVE=$(TREE) nyaaya.ml mk_nyaaya_page.ml regression.ml statseg.ml
 
 SOURCES=$(ENGINE) $(DEBUG) $(INACTIVE) 
 
 CORENATIVES=list2.cmx gen.cmx paths.cmx version.cmx word.cmx canon.cmx \
 min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx skt_lexer.cmx \
-padapatha.cmx sanskrit.cmx order.cmx
+padapatha.cmx sanskrit.cmx order.cmx data.cmx
 
 ANNOTFLAGS = -annot -bin-annot
 
@@ -91,8 +90,15 @@ LINK=ocamlopt -I $(ZEN) -I +camlp4 dynlink.cmxa camlp4lib.cmxa
 
 # standard installation of Sanskrit Heritage platform - assumes ZEN library
 
-engine: test_version cgis reset_caches restore_caches static_pages mk_corpus
-# reader_plugin  parse_apte regression 
+engine: test_version cgis reset_caches restore_caches static_pages mk_corpus 
+
+# reader_plugin parse_apte regression 
+
+make_transducers: $(CORENATIVES) make_transducers.cmx make_automaton.cmx \
+make_preverb_automaton.cmx
+	$(LINK) $(CORENATIVES) share.cmx trie.cmx mini.cmx deco.cmx \
+automata.cmx make_automaton.cmx make_preverb_automaton.cmx \
+make_transducers.cmx -o make_transducers
 
 # testing consistency of Heritage_resources and Heritage_platform
 test_version: paths.cmx gen.cmx version.cmx control.cmx test_stamp.cmx
@@ -161,85 +167,88 @@ corpus_manager save_corpus mkdir_corpus
 indexer: indexer.cmx
 	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
 control.cmx word.cmx canon.cmx trie.cmx deco.cmx min_lexer.cmx phonetics.cmx \
-transduction.cmx encode.cmx html.cmx SCLpaths.cmx web.cmx cgi.cmx index.cmx \
-naming.cmx morpho_string.cmx morpho.cmx order.cmx chapters.cmx morpho_html.cmx \
-indexer.cmx -o indexer
+transduction.cmx encode.cmx html.cmx SCLpaths.cmx data.cmx web.cmx cgi.cmx \
+index.cmx naming.cmx morpho_string.cmx morpho.cmx order.cmx chapters.cmx \
+morpho_html.cmx indexer.cmx -o indexer
 
 indexerd: indexerd.cmx 
-	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx control.cmx \
-word.cmx min_lexer.cmx canon.cmx phonetics.cmx transduction.cmx encode.cmx \
-deco.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx cgi.cmx morpho_string.cmx \
-morpho.cmx order.cmx chapters.cmx morpho_html.cmx indexerd.cmx -o indexerd
+	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
+control.cmx word.cmx min_lexer.cmx canon.cmx phonetics.cmx transduction.cmx \
+encode.cmx deco.cmx html.cmx SCLpaths.cmx data.cmx web.cmx naming.cmx cgi.cmx \
+morpho_string.cmx morpho.cmx order.cmx chapters.cmx morpho_html.cmx \
+indexerd.cmx -o indexerd
 
 lemmatizer: lemmatizer.cmx 
-	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx control.cmx \
-word.cmx deco.cmx min_lexer.cmx canon.cmx phonetics.cmx transduction.cmx \
-encode.cmx html.cmx SCLpaths.cmx web.cmx cgi.cmx naming.cmx morpho_string.cmx \
-morpho.cmx order.cmx chapters.cmx morpho_html.cmx lemmatizer.cmx -o lemmatizer
+	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
+control.cmx word.cmx deco.cmx min_lexer.cmx canon.cmx phonetics.cmx \
+transduction.cmx encode.cmx html.cmx SCLpaths.cmx data.cmx web.cmx cgi.cmx \
+naming.cmx morpho_string.cmx morpho.cmx order.cmx chapters.cmx morpho_html.cmx \
+lemmatizer.cmx -o lemmatizer
 
 declension: declension.cmx share.cmx
-	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx control.cmx \
-word.cmx canon.cmx min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx \
-deco.cmx int_sandhi.cmx lexmap.cmx inflected.cmx bank_lexer.cmx html.cmx \
-SCLpaths.cmx web.cmx nouns.cmx naming.cmx morpho_string.cmx morpho.cmx order.cmx \
-chapters.cmx morpho_html.cmx cgi.cmx share.cmx trie.cmx index.cmx \
-multilingual.cmx declension.cmx -o declension
+	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
+control.cmx word.cmx canon.cmx min_lexer.cmx phonetics.cmx transduction.cmx \
+encode.cmx deco.cmx int_sandhi.cmx lexmap.cmx inflected.cmx bank_lexer.cmx \
+html.cmx SCLpaths.cmx data.cmx web.cmx nouns.cmx naming.cmx morpho_string.cmx \
+morpho.cmx order.cmx chapters.cmx morpho_html.cmx cgi.cmx share.cmx trie.cmx \
+index.cmx multilingual.cmx declension.cmx -o declension
 
 conjugation: conjugation.cmx
-	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx control.cmx \
-word.cmx canon.cmx min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx \
-deco.cmx int_sandhi.cmx lexmap.cmx inflected.cmx parts.cmx pada.cmx verbs.cmx \
-html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx order.cmx \
-chapters.cmx morpho_html.cmx cgi.cmx share.cmx trie.cmx index.cmx \
-multilingual.cmx conjugation.cmx -o conjugation
+	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
+control.cmx word.cmx canon.cmx min_lexer.cmx phonetics.cmx transduction.cmx \
+encode.cmx deco.cmx int_sandhi.cmx lexmap.cmx inflected.cmx parts.cmx pada.cmx \
+verbs.cmx html.cmx SCLpaths.cmx data.cmx web.cmx naming.cmx morpho_string.cmx \
+morpho.cmx order.cmx chapters.cmx morpho_html.cmx cgi.cmx share.cmx trie.cmx \
+index.cmx multilingual.cmx conjugation.cmx -o conjugation
 
 sandhier: sandhier.cmx
-	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx control.cmx word.cmx \
-min_lexer.cmx canon.cmx phonetics.cmx transduction.cmx encode.cmx sandhi.cmx \
-int_sandhi.cmx date.cmx html.cmx SCLpaths.cmx web.cmx cgi.cmx sandhier.cmx \
--o sandhier
+	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx control.cmx \
+word.cmx min_lexer.cmx canon.cmx phonetics.cmx transduction.cmx encode.cmx \
+sandhi.cmx int_sandhi.cmx date.cmx html.cmx SCLpaths.cmx data.cmx web.cmx \
+cgi.cmx sandhier.cmx -o sandhier
 
 reader: reader.cmx 
-	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
-control.cmx word.cmx canon.cmx min_lexer.cmx phonetics.cmx transduction.cmx \
-encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx \
-inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
-load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
-chapters.cmx morpho_html.cmx cgi.cmx segmenter.cmx morpho_scl.cmx \
-load_morphs.cmx lexer.cmx constraints.cmx rank.cmx bank_lexer.cmx \
-scl_parser.cmx checkpoints.cmx reader.cmx -o reader 
+	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx \
+date.cmx control.cmx word.cmx canon.cmx min_lexer.cmx phonetics.cmx \
+transduction.cmx encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx \
+lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx web.cmx naming.cmx \
+morpho_string.cmx morpho.cmx load_transducers.cmx pada.cmx phases.cmx \
+dispatcher.cmx order.cmx chapters.cmx morpho_html.cmx cgi.cmx segmenter.cmx \
+morpho_scl.cmx load_morphs.cmx lexer.cmx constraints.cmx rank.cmx \
+bank_lexer.cmx scl_parser.cmx checkpoints.cmx reader.cmx -o reader 
 
 LEGACY=
 # LEGACY= nums.cmxa 
 
 interface: interface.cmx minimap.cmx
-	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
-control.cmx word.cmx canon.cmx min_lexer.cmx phonetics.cmx transduction.cmx \
-encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx \
-inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
-load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
-chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx load_morphs.cmx \
-int_sandhi.cmx nouns.cmx share.cmx minimap.cmx mini.cmx $(LEGACY) \
+	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx \
+date.cmx control.cmx word.cmx canon.cmx min_lexer.cmx phonetics.cmx \
+transduction.cmx encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx \
+lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx web.cmx naming.cmx \
+morpho_string.cmx morpho.cmx load_transducers.cmx pada.cmx phases.cmx \
+dispatcher.cmx order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx \
+load_morphs.cmx int_sandhi.cmx nouns.cmx share.cmx minimap.cmx mini.cmx \
 graph_segmenter.cmx checkpoints.cmx automaton.cmx params.cmx \
-save_corpus_params.cmx dir.cmx corpus.cmx web_corpus.cmx interface.cmx -o interface
+save_corpus_params.cmx dir.cmx corpus.cmx web_corpus.cmx interface.cmx \
+-o interface
 
 user_aid: user_aid.cmx
 	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
 control.cmx word.cmx canon.cmx deco.cmx min_lexer.cmx phonetics.cmx \
 transduction.cmx encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx html.cmx \
-SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx order.cmx chapters.cmx \
-morpho_html.cmx bank_lexer.cmx cgi.cmx phases.cmx checkpoints.cmx user_aid.cmx \
--o user_aid
+SCLpaths.cmx data.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx order.cmx \
+chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx phases.cmx checkpoints.cmx \
+user_aid.cmx -o user_aid
 
 parser: parser.cmx 
-	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
-control.cmx word.cmx canon.cmx min_lexer.cmx phonetics.cmx transduction.cmx \
-encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx lexmap.cmx \
-inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx \
-load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx order.cmx \
-chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx segmenter.cmx \
-morpho_scl.cmx load_morphs.cmx lexer.cmx constraints.cmx checkpoints.cmx \
-paraphrase.cmx scl_parser.cmx parser.cmx -o parser
+	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx \
+date.cmx control.cmx word.cmx canon.cmx min_lexer.cmx phonetics.cmx \
+transduction.cmx encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx \
+lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx web.cmx naming.cmx \
+morpho_string.cmx morpho.cmx load_transducers.cmx pada.cmx phases.cmx \
+dispatcher.cmx order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx \
+segmenter.cmx morpho_scl.cmx load_morphs.cmx lexer.cmx constraints.cmx \
+checkpoints.cmx paraphrase.cmx scl_parser.cmx parser.cmx -o parser
 
 # corpus manager by Idir Lankri:
 corpus_manager: corpus_manager_cgi.cmx
@@ -247,8 +256,8 @@ corpus_manager: corpus_manager_cgi.cmx
 		version.cmx date.cmx control.cmx word.cmx canon.cmx	\
 		min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
 		skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx	\
-		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx web.cmx	\
-		naming.cmx morpho_string.cmx morpho.cmx			\
+		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx \
+		web.cmx	naming.cmx morpho_string.cmx morpho.cmx		\
 		load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx	\
 		order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx	\
 		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
@@ -263,8 +272,8 @@ save_corpus: save_corpus_cgi.cmx
 		version.cmx date.cmx control.cmx word.cmx canon.cmx	\
 		min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
 		skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx	\
-		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx web.cmx	\
-		naming.cmx morpho_string.cmx morpho.cmx			\
+		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx	\
+		web.cmx naming.cmx morpho_string.cmx morpho.cmx		\
 		load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx	\
 		order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx	\
 		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
@@ -279,8 +288,8 @@ mkdir_corpus: mkdir_corpus_cgi.cmx
 		version.cmx date.cmx control.cmx word.cmx canon.cmx	\
 		min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
 		skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx	\
-		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx web.cmx	\
-		naming.cmx morpho_string.cmx morpho.cmx			\
+		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx	\
+		web.cmx naming.cmx morpho_string.cmx morpho.cmx		\
 		load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx	\
 		order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx	\
 		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
@@ -295,8 +304,8 @@ mk_corpus: mk_corpus.cmx
 		version.cmx date.cmx control.cmx word.cmx canon.cmx	\
 		min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
 		skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx	\
-		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx web.cmx	\
-		naming.cmx morpho_string.cmx morpho.cmx			\
+		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx	\
+		web.cmx naming.cmx morpho_string.cmx morpho.cmx		\
 		load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx	\
 		order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx	\
 		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
@@ -308,15 +317,15 @@ mk_corpus: mk_corpus.cmx
 
 css: css.cmx
 	$(LINK) str.cmxa gen.cmx paths.cmx version.cmx date.cmx html.cmx \
-SCLpaths.cmx web.cmx css.cmx -o css
+SCLpaths.cmx data.cmx web.cmx css.cmx -o css
 
 mk_index_page: mk_index_page.cmx 
 	$(LINK) str.cmxa gen.cmx paths.cmx version.cmx date.cmx html.cmx \
-SCLpaths.cmx web.cmx mk_index_page.cmx -o mk_index_page
+SCLpaths.cmx data.cmx web.cmx mk_index_page.cmx -o mk_index_page
 
 mk_grammar_page: mk_grammar_page.cmx 
 	$(LINK) str.cmxa gen.cmx paths.cmx version.cmx date.cmx html.cmx \
-SCLpaths.cmx web.cmx mk_grammar_page.cmx -o mk_grammar_page
+SCLpaths.cmx data.cmx web.cmx mk_grammar_page.cmx -o mk_grammar_page
 
 mk_reader_page: mk_reader_page.cmx
 	$(LINK) $(CORENATIVES) str.cmxa unix.cmxa control.cmx cgi.cmx date.cmx SCLpaths.cmx html.cmx web.cmx params.cmx dir.cmx corpus.cmx web_corpus.cmx mk_reader_page.cmx -o mk_reader_page
@@ -327,7 +336,7 @@ html.cmx SCLpaths.cmx web.cmx cgi.cmx mk_nyaaya_page.cmx -o mk_nyaaya_page
 
 mk_sandhi_page: mk_sandhi_page.cmx
 	$(LINK) str.cmxa gen.cmx paths.cmx version.cmx date.cmx html.cmx \
-SCLpaths.cmx web.cmx mk_sandhi_page.cmx -o mk_sandhi_page
+SCLpaths.cmx data.cmx web.cmx mk_sandhi_page.cmx -o mk_sandhi_page
 
 mk_corpus_page: mk_corpus_page.cmx
 	$(LINK) $(CORENATIVES) str.cmxa unix.cmxa date.cmx	\

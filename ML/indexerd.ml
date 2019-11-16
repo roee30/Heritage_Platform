@@ -52,7 +52,7 @@ value print_word c = pl (Morpho_html.skt_anchor_R False (Canon.decode_ref c))
 (* Each dummy is mapped to a list of words - all the words which
    give back the dummy by normalisation such as removing diacritics *)
 value read_dummies () =
-  (Gen.gobble public_dummies_file : Deco.deco Word.word)
+  (Gen.gobble Data.public_dummies_file : Deco.deco Word.word)
 ;
 value index_engine () = 
   let abor = abort Html.French (* may not preserve the current lang *) in

@@ -120,10 +120,10 @@ value print_hidden topic st cp us lex cache abs translit corpus sent_id
   }
 ;
 value read_guess_index () = 
-  (Gen.gobble public_guess_auto : Deco.deco (string * string)) 
+  (Gen.gobble Data.public_guess_auto : Deco.deco (string * string)) 
 ;
 value read_mw_index () = 
-  (Gen.gobble public_mw_index_file: Deco.deco (string * string * string))
+  (Gen.gobble Data.public_mw_index_file: Deco.deco (string * string * string))
 ;
 
 value rec mw_sol cur_sol word = fun

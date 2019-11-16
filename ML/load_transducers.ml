@@ -83,37 +83,37 @@ value empty_trans = State(False,[],[]) (* dummy empty transducer *)
    etc. created by [Make_inflected] followed by [Make_automaton]. *)
 value load_transducer cat = 
   let file = match cat with 
-      [ "Noun"    -> Web.public_transn_file
-      | "Noun2"   -> Web.public_transn2_file
-      | "Pron"    -> Web.public_transpn_file
-      | "Verb"    -> Web.public_transr_file
-      | "Krid"    -> Web.public_transpa_file
-      | "Vok"     -> Web.public_transpav_file
-      | "Peri"    -> Web.public_transperi_file
-      | "Lopa"    -> Web.public_translopa_file
-      | "Lopak"   -> Web.public_translopak_file
-      | "Inde"    -> Web.public_transinde_file
-      | "Iic"     -> Web.public_transic_file
-      | "Iic2"    -> Web.public_transic2_file
-      | "Iiif"    -> Web.public_transiif_file
-      | "Iik"     -> Web.public_transpic_file
-      | "Iiv"     -> Web.public_transiv_file
-      | "Ifc"     -> Web.public_transif_file
-      | "Ifc2"    -> Web.public_transif2_file
-      | "Iiy"     -> Web.public_transiiy_file
-      | "Avya"    -> Web.public_transavy_file
-      | "Abstvaa" -> Web.public_transabstvaa_file
-      | "Absya"   -> Web.public_transabsya_file
-      | "Inftu"   -> Web.public_transinftu_file
-      | "Kama"    -> Web.public_transkama_file
-      | "Auxi"    -> Web.public_transauxi_file
-      | "Auxik"   -> Web.public_transauxik_file 
-      | "Auxiick" -> Web.public_transauxiick_file
-      | "Voca"    -> Web.public_transvoca_file
-      | "Inv"     -> Web.public_transinv_file 
-      | "Prev"    -> Web.public_transp_file
-      | "Cache"   -> Web.public_trans_cache_file 
-      | "Cachei"  -> Web.public_trans_cachei_file 
+      [ "Noun"    -> Data.public_transn_file
+      | "Noun2"   -> Data.public_transn2_file
+      | "Pron"    -> Data.public_transpn_file
+      | "Verb"    -> Data.public_transr_file
+      | "Krid"    -> Data.public_transpa_file
+      | "Vok"     -> Data.public_transpav_file
+      | "Peri"    -> Data.public_transperi_file
+      | "Lopa"    -> Data.public_translopa_file
+      | "Lopak"   -> Data.public_translopak_file
+      | "Inde"    -> Data.public_transinde_file
+      | "Iic"     -> Data.public_transic_file
+      | "Iic2"    -> Data.public_transic2_file
+      | "Iiif"    -> Data.public_transiif_file
+      | "Iik"     -> Data.public_transpic_file
+      | "Iiv"     -> Data.public_transiv_file
+      | "Ifc"     -> Data.public_transif_file
+      | "Ifc2"    -> Data.public_transif2_file
+      | "Iiy"     -> Data.public_transiiy_file
+      | "Avya"    -> Data.public_transavy_file
+      | "Abstvaa" -> Data.public_transabstvaa_file
+      | "Absya"   -> Data.public_transabsya_file
+      | "Inftu"   -> Data.public_transinftu_file
+      | "Kama"    -> Data.public_transkama_file
+      | "Auxi"    -> Data.public_transauxi_file
+      | "Auxik"   -> Data.public_transauxik_file 
+      | "Auxiick" -> Data.public_transauxiick_file
+      | "Voca"    -> Data.public_transvoca_file
+      | "Inv"     -> Data.public_transinv_file 
+      | "Prev"    -> Data.public_transp_file
+      | "Cache"   -> Data.public_trans_cache_file 
+      | "Cachei"  -> Data.public_trans_cachei_file 
       | _ -> failwith ("Unexpected category: " ^ cat) 
       ] in 
   try (Gen.gobble file : auto) 
@@ -223,7 +223,7 @@ value transducers =
 
 (* Lexicalized root informations needed for Dispatcher *)
 value roots_usage = (* attested preverb sequences *)
-  try (Gen.gobble Web.public_roots_usage_file : Deco.deco string) 
+  try (Gen.gobble Data.public_roots_usage_file : Deco.deco string) 
   with [ _ ->  do { Prel.prelude (); abort "RU" } ]
 ; 
 

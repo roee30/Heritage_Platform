@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* CGI-bin lemmatizer for searching the inflected forms databases         *)
@@ -46,18 +46,18 @@ value give_up phase =
 ;
 value load_inflected phase = 
   let file = match phase with 
-      [ "Noun"    -> public_nouns2_file (* bigger than nouns *)
-      | "Pron"    -> public_pronouns_file
-      | "Verb"    -> public_roots_file
-      | "Part"    -> public_parts_file
-      | "Inde"    -> public_inde_file
-      | "Absya"   -> public_absya_file
-      | "Abstvaa" -> public_abstvaa_file
-      | "Iic"     -> public_iics2_file (* bigger than iics *)
-      | "Iiv"     -> public_iivs_file
-      | "Ifc"     -> public_ifcs2_file (* bigger than ifcs *)
-      | "Piic"    -> public_piics_file
-      | "Voca" -> public_vocas_file
+      [ "Noun"    -> Data.public_nouns2_file (* bigger than nouns *)
+      | "Pron"    -> Data.public_pronouns_file
+      | "Verb"    -> Data.public_roots_file
+      | "Part"    -> Data.public_parts_file
+      | "Inde"    -> Data.public_inde_file
+      | "Absya"   -> Data.public_absya_file
+      | "Abstvaa" -> Data.public_abstvaa_file
+      | "Iic"     -> Data.public_iics2_file (* bigger than iics *)
+      | "Iiv"     -> Data.public_iivs_file
+      | "Ifc"     -> Data.public_ifcs2_file (* bigger than ifcs *)
+      | "Piic"    -> Data.public_piics_file
+      | "Voca"    -> Data.public_vocas_file
       | _ -> raise (Control.Fatal "Unexpected phase") (* Pv Auxi Eort *)
       ] in 
   try (Gen.gobble file : Morphology.inflected_map)

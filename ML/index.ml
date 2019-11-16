@@ -83,7 +83,7 @@ value search w t = access w t Trie.Top
      ]
 ;
 value read_entries () = 
-  (Gen.gobble Web.public_entries_file : trie)
+  (Gen.gobble Data.public_entries_file : trie)
 ;
 value is_in_lexicon word =
   (* Checks whether entry [word] actually appears in the lexicon, *)

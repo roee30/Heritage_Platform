@@ -43,10 +43,10 @@ value look_up_homo homo = look_rec
   ] 
 ;
 value unique_kridantas =  
-  try (Gen.gobble Web.public_unique_kridantas_file : deco_krid) 
+  try (Gen.gobble Data.public_unique_kridantas_file : deco_krid) 
   with [ _ -> failwith "unique_kridantas" ] 
 and lexical_kridantas =  
-  try (Gen.gobble Web.public_lexical_kridantas_file : deco_krid) 
+  try (Gen.gobble Data.public_lexical_kridantas_file : deco_krid) 
   with [ _ -> failwith "lexical_kridantas" ] 
 ;
 (* This mechanism is used by [Make_roots] at morphology generation time,
@@ -57,7 +57,7 @@ at segmenting time. *)
    This is experimental, and incurs too many conversions between strings
    and words, suggesting a restructuring of preverbs representation. *)
 value preverbs_structure = (* Used in Morpho for display of pvs *) 
-  try (Gen.gobble Web.public_preverbs_file : Deco.deco Word.word) 
+  try (Gen.gobble Data.public_preverbs_file : Deco.deco Word.word) 
   with [ _ -> failwith "preverbs_structure" ]
 ;
 

@@ -18,14 +18,14 @@ value empty_inflected_map = (Deco.empty : inflected_map) (* dummy morpho bank *)
 and empty_trans = Auto.State(False,[],[]) (* dummy empty transducer *)
 ;
 
-Gen.dump empty_inflected_map Web.public_cache_file
+Gen.dump empty_inflected_map Data.public_cache_file
 ;
-Gen.dump empty_inflected_map Web.public_cachei_file
+Gen.dump empty_inflected_map Data.public_cachei_file
 ;
-Gen.dump empty_trans Web.public_trans_cache_file
+Gen.dump empty_trans Data.public_trans_cache_file
 ;
-Gen.dump empty_trans Web.public_trans_cachei_file
+Gen.dump empty_trans Data.public_trans_cachei_file
 ;
-Unix.system (":>" ^ Web.public_cache_txt_file) (* resets the master text cache *)
+Unix.system (":>" ^ Data.public_cache_txt_file) (* resets the master text cache *)
 ;
 

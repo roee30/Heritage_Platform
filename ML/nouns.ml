@@ -5235,7 +5235,7 @@ value compute_nouns_stem_form e stem d p =
                 { build_root Neu stem e
                 ; build_archaic_yuj [ 24; 26; 5; 42 ] (* yu~nj *) Neu e
                 }
-            | _ -> build_root Neu stem e (* -s.rk as.rjk *) *)
+            | _ -> build_root Neu stem e (* -s.rk as.rjk *)
             ] 
        | [ 32 :: r1 ] (* -t *) -> match r1 with
             [ [ 1 :: r2 ] (* -at *) -> if is_redup r2 then build_neu_red r1 e

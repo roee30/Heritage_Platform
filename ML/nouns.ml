@@ -5230,13 +5230,12 @@ value compute_nouns_stem_form e stem d p =
       | [ 24 :: r1 ] (* -j *) -> match r1 with (* m.rjify *)
             [ [ 2 :: [ 43 :: _ ] ] (* -raaj2 viraaj2 *) 
             | [ 2 :: [ 42 :: _ ] ] (* -yaaj2 *) 
-            | [ 7 :: [ 48 :: _ ] ] (* -s.rj2 as.rj *)
-                  -> build_root Neu [ 124 (* j' *) :: r1 ] e
+                -> build_root Neu [ 124 (* j' *) :: r1 ] e
             | [ 5; 42 ] (* yuj2 *) -> do  
                 { build_root Neu stem e
                 ; build_archaic_yuj [ 24; 26; 5; 42 ] (* yu~nj *) Neu e
                 }
-            | _ -> build_root Neu stem e 
+            | _ -> build_root Neu stem e (* -s.rk as.rjk *) *)
             ] 
        | [ 32 :: r1 ] (* -t *) -> match r1 with
             [ [ 1 :: r2 ] (* -at *) -> if is_redup r2 then build_neu_red r1 e

@@ -289,7 +289,7 @@ value sandhi revstem wsuff =
 (* But [int_sandhi] may provoke too much retroflexion, such as *si.sarti 
    instead of sisarti for root s.r in redup3 below. 
    Same pb to avoid *pu.sphora as perfect of sphur, instead of pusphora. 
-   Thus need of the boolean argument retr: *)
+   Thus need of the boolean argument retr in the following: *)
 value revaffix retr revpref rstem = 
   let glue = if retr then Int_sandhi.int_sandhi else List2.unstack in
   rev (glue revpref (rev rstem)) (*i too many revs - ugly i*)
@@ -386,8 +386,7 @@ value stems root =
      ]
 ;
 value drop_penultimate_nasal = fun
-  [ [ c :: [ n :: s ] ] -> if nasal n then [ c :: s ] 
-                           else failwith "No penultimate nasal"
+  [ [ c :: [ n :: s ] ] when nasal n -> [ c :: s ] 
   | _ -> failwith "No penultimate nasal"
   ]
 ;
@@ -434,10 +433,12 @@ value passive_stem entry rstem = (* Panini yak (k : no guna, samprasaara.na) *)
   match weak with
     [ [ c :: rst ] -> match c with
         [ 2 (* aa *) -> match rst with
-            [ [ 42 (* y *) :: r ] -> [ 4 (* ii *) :: r ] (* ziiyate stiiyate *)
+            [ [ 42 (* y *) ] (* yaa1 *)
+            | [ 42 (* y *); 18 (* kh *) ] (* kyaa *) 
+            | [ 42 (* y *); 35 (* dh *) ] (* dhyaa *) -> weak
+            | [ 42 (* y *) :: r ] -> [ 4 (* ii *) :: r ] (* ziiyate stiiyate *)
             | _ -> match entry with
-               [ "j~naa#1" | "dhyaa" | "bhaa#1" | "mnaa" | "yaa#1" | "laa"  
-               | "zaa" | "haa#2" 
+               [ "j~naa#1" | "bhaa#1" | "mnaa" | "laa" | "zaa" | "haa#2" 
                    -> weak
                | _ -> [ 4 (* ii *) :: rst ]
                ]
@@ -591,7 +592,7 @@ and o_it = fun (* these roots have ppp in -na \Pan{8,2,45} - unused here *)
     | "nud" | "pad#1" | "pii" | "p.rr" | "pyaa" | "bhid#1" | "majj" | "man"
     | "mid" | "mlaa" | "ri" | "lii" | "luu#1" | "vid#2" | "vlii" | "zad" | "z.rr"
     | "sad#1" | "skand" | "st.rr" | "styaa" | "syand" | "svid#2" | "had" *)
- (* also "suu#2" suuna and "vrii" vrii.na *)
+ (* also "suu#2" suuna and "vrii" vrii.na and "k.saa" k.saa.na *)
       -> True 
   | _ -> False
   ]
@@ -2335,8 +2336,9 @@ value compute_future stem entry =
     | _ -> match voices_of entry with
        [ Para -> do (* active only *) 
          { compute_futurea Primary stem entry 
-         ; match entry with (* conditional on demand *)
+         ; match entry with (* conditional or atma on demand *)
            [ "gam" | "bhuu#1" -> compute_conda Primary stem entry
+           | "khaad" -> compute_futurem Primary stem entry 
            | _ -> ()
            ]
          }
@@ -2400,12 +2402,12 @@ value intercalates root =
        else if semivowel c then set
        else match root with
             [ "ak.s" | "a~nj" | "k.rt#1" | "k.rp" | "k.lp" | "kram" | "k.sam" 
-            | "klid" | "gup" | "guh" | "ghu.s" | "jan" | "ta~nc" | "tap" | "t.rd"
-            | "tyaj#1" | "dah#1" | "d.rp" | "nam" | "naz" | "n.rt" | "bandh" 
-            | "bhaj" | "majj" | "man" | "m.rj" | "yam" | "ruh" | "labh" | "likh"
-            | "vap#2" | "vas#1" | "vah#1" | "vij" | "vid#1" | "v.rj" | "v.rt#1" 
-            | "vrazc" | "sad#1" | "sah#1" | "sidh#2" | "svap" | "han#1" 
-            | "syand"  (* WR says set for atma, anit for para  *)
+            | "klid" | "kliz" | "gup" | "guh" | "ghu.s" | "jan" | "ta~nc" 
+            | "tap" | "t.rd" | "tyaj#1" | "dah#1" | "d.rp" | "nam" | "naz" 
+            | "n.rt" | "bandh" | "bhaj" | "majj" | "man" | "m.rj" | "yam" 
+            | "ruh" | "labh" | "likh" | "vap#2" | "vas#1" | "vah#1" | "vij"
+            | "vid#1" | "v.rj" | "v.rt#1" | "vrazc" | "sad#1" | "sah#1"
+            | "sidh#2" | "svap" | "han#1" | "syand" (* WR: set atma, anit para *)
                 -> vet  
             | "grah" -> setl
             | "s.rj#1" -> [ 3 ] (* sra.s.taa *)
@@ -2482,12 +2484,12 @@ value intercalate_pp root rstem =
            | "ghu.s" (* \Pan{7,2,23} *) | "ka.s" (* \Pan{7,2,22} *) 
            | "dh.r.s" (* \Pan{7,2,19} *) 
            | "am" | "tvar" (* \Pan{7,2,28} *) -> vet (* but only set for -tvaa *)
-           | "kas" | "gup" | "dyut#1" | "dham" | "nud" | "m.rj" -> vet 
+           | "kas" | "k.sam" | "gup" | "dyut#1" | "dham" | "nud" | "m.rj" -> vet 
              (* NB zaas vet for stem zaas but admits also zi.s only anit *)
            | "aj" | "a.t" | "at" | "an#2" | "az#2" | "aas#2" | "i.s#2"
            | "ii.d" | "iir" | "iiz#1" | "ii.s" | "iih" | "uc" | ".rc#1" | ".rj" 
            | "ej" | "edh" | "kath" | "kal" | "kaaz" | "kiil" | "kuc" | "kup"
-           | "ku.s" | "kuuj" | "k.rz" | "krii.d" | "klav" | "kvath" | "k.sam" 
+           | "ku.s" | "kuuj" | "k.rz" | "krii.d" | "klav" | "kvath" 
            | "k.sar" | "k.sudh#1" | "k.svi.d" | "khaad" | "ga.n" | "gad" | "gal" 
            | "granth" | "gha.t" | "ghaat" | "cak" | "ca.t" | "car" | "cal"
            | "cud" | "cur" | "chal" | "jiiv" | "jval" | "ta.d" | "tam" | "tul" 
@@ -2562,14 +2564,14 @@ value compute_ppp_stems entry rstem =
     [ "vrazc" -> [ sNa "v.rk" ] (* exception - v.rk root stem of vrazc *)
     (* Most roots starting with 2 consonants take -na \Pan{8,2,43} *)
     (* but not "k.svi.d" "zrath" *)
-    | "iir" | "und" | "k.rr" | "klid" | "k.sii" | "k.sud" | "k.svid" | "khid" 
-    | "g.rr#1" | "glai" | "chad#1" | "chid#1" | "ch.rd" | "j.rr" | ".dii"
-    | "tud#1" | "t.rd" | "t.rr" | "dagh" | "d.rr" | "dev" | "draa#1" | "draa#2"
-    | "nud" | "pad#1" | "pii" | "p.rr" | "pyaa" | "bha~nj" | "bhid#1" | "bhuj#1"
-    | "majj" | "man" | "mid" | "mlaa" | "ri" | "lii" | "luu#1" | "vij" | "vid#2"
-    | "vrii" | "vlii" | "zad" | "zuu" | "z.rr" | "sad#1" | "skand" | "st.rr"
-    | "styaa" | "syand" | "svid#2" | "had" | "haa#2" 
-      -> 
+    | "iir" | "und" | "k.rr" | "klid" | "k.saa" | "k.sii" | "k.sud" | "k.svid"
+    | "khid" | "g.rr#1" | "glai" | "chad#1" | "chid#1" | "ch.rd" | "j.rr" 
+    | ".dii" | "tud#1" | "t.rd" | "t.rr" | "dagh" | "d.rr" | "dev" | "draa#1"
+    | "draa#2" | "nud" | "pad#1" | "pii" | "p.rr" | "pyaa" | "bha~nj" 
+    | "bhid#1" | "bhuj#1" | "majj" | "man" | "mid" | "mlaa" | "ri" | "lii" 
+    | "luu#1" | "vij" | "vid#2" | "vrii" | "vlii" | "zad" | "zuu" | "z.rr" 
+    | "sad#1" | "skand" | "st.rr" | "styaa" | "syand" | "svid#2" | "had"
+    | "haa#2" -> 
       (* except lag which is "nipaatana" (exception) \Pan{7,2,18} *)
       let ppna w = [ Na w ] in
       match rstem with 
@@ -2645,7 +2647,7 @@ value compute_ppp_stems entry rstem =
            | "khan"   -> revcode "khaa" (* \Pan{6,4,42} lengthening of vowel *)
            | "jan"    -> revcode "jaa"  (* id *)
            | "san#1"  -> revcode "saa"  (* id *)
-           | "am"     -> revcode "aan" (* -am -> -aan \Pan{6,4,15} *)
+           | "am"     -> revcode "aan" (* -am -> -aan \Pan{6,4,15} Wh§955a *)
            | "kam"    -> revcode "kaan" 
            | "kram"   -> revcode "kraan"
            | "cam"    -> revcode "caan"
@@ -2655,7 +2657,7 @@ value compute_ppp_stems entry rstem =
            | "vam"    -> revcode "vaan"
            | "zram"   -> revcode "zraan" 
            | "zam#1" | "zam#2" -> revcode "zaan"
-           | "dhvan"   -> revcode "dhvaan" (* id. for final n *) (* Whit§955a *)
+           | "dhvan"   -> revcode "dhvaan" (* id. for final n *) (* Wh§955a *)
            | "daa#2"   -> revcode "di" (* aa -> i \Pan{7,4,40} *)
            | "maa#1"   -> revcode "mi"
            | "zaa"     -> revcode "zi"
@@ -3077,6 +3079,7 @@ value redup_perf root =
           [ "ce.s.t" | "diiv#1" | "dev" |"sev" | "mlecch" | "vye" 
               -> 3 (* i *) (* vye for vyaa *)
           | _ -> 1 (* a *) (* also bhuu elsewhere *)
+          (* but Vedic k.lp etc have long aa Whitney§786a *)
           ]
         else match root with
           [ "maa#3" -> 3 (* i *) (* analogy with present *)
@@ -3589,7 +3592,7 @@ value sigma augment stem suff =
       | _ -> error_empty 17
       ]
     | [ c :: _ ] -> [ 48 (* s *) :: sfx ]
-    | _ -> error_empty 18
+    | [ ] -> []
     ] in 
   let form = sandhi stem ssfx in
   if augment then aug form else form
@@ -4127,9 +4130,9 @@ value compute_aorist entry =
     | _ -> () 
     ]
   ; match entry with (* 4. sigma aorist sic *)
-    [ "aap" | "k.r#1"  | "gup" | "chid#1" | "ji" | "tud" | "t.rr" | "tyaj#1" 
-    | "dah#1" | "daa#1" | "d.rz#1" | "draa#2" | "dhaa#1" | "dhyaa" | "dhyai" 
-    | "dhv.r" | "nak.s" | "nii#1" | "pac" | "praz" | "prii" 
+    [ "aap" | "k.r#1" | "khan" | "gup" | "chid#1" | "ji" | "tud" | "t.rr" 
+    | "tyaj#1" | "dah#1" | "daa#1" | "d.rz#1" | "draa#2" | "dhaa#1" | "dhyaa"
+    | "dhyai" | "dhv.r" | "nak.s" | "nii#1" | "pac" | "praz" | "prii" 
     | "budh#1" | "bhaa#1" | "bhii#1" | "muc#1" | "yaj#1" | "yuj#1" | "ram" 
     | "labh" | "v.r#2" | "vyadh" | "zru" | "sidh#1" | "s.rj#1" | "stu" 
     | "sp.rz#1" | "hu" -> do
@@ -4139,11 +4142,21 @@ value compute_aorist entry =
             | _ -> long
             ] in
         compute_ath_s_aorista stem entry 
+      ; match entry with (* Whitney§890 *)
+            [ "khan" (* akhaan *)
+            | "dah#1" (* adhaak *)
+            (* | "d.rz1" adraak wrong *adaar.t below TODO use [ar_ra] *)
+            | "yaj#1" (* ayaa.t *)
+            (* | "s.rj1" asraak wrong *asaar.t below *)
+              -> let lopa = sigma True long "" in
+                 enter1 entry (Conju (aora 4) [ (Singular,[ (Third, lopa) ]) ])
+            | _ -> ()
+            ]
       ; if entry = "yuj#1" || entry = "chid#1" 
            then compute_ath_s_aorista strong entry else ()
         (* ayok.siit and acchetsiit besides ayauk.siit and acchaitsiit *)
       ; match entry with
-        [ "gup" -> ()  (* active only *)
+        [ "gup" | "d.rz#1" | "s.rj#1" -> ()  (* active only *)
         | _ -> let stemm = match weak with
             [ [ c :: r ] -> match c with 
                 [ 3 | 4 | 5 | 6 (* i ii u uu *) -> strong
@@ -4215,11 +4228,11 @@ value compute_aorist entry =
     | _ -> ()
     ]
 ; match entry with (* 7. sa aorist ksa *)
-      [ "guh" | "diz#1" | "dih" | "duh#1" | "lih#1" | "viz#1" | "v.rj" 
-      | "sp.rz#1" -> do
-      (* \Pan{7,3,72-73} *)
+      [ "kruz" | "kliz" | "guh" | "diz#1" | "dih" | "duh#1" | "lih#1" | "viz#1"
+      | "v.rj" | "sp.rz#1" -> do (* \Pan{7,3,72-73} *)
       { compute_ath_sa_aorista weak entry   
-      ; compute_ath_sa_aoristm weak entry 
+      ; if entry = "kruz" || entry = "kliz" then ((* Para *)) 
+        else compute_ath_sa_aoristm weak entry 
       }
     | "pac" -> do (* Kiparsky apaak.sam *)
       { compute_ath_sa_aorista long entry 
@@ -4351,8 +4364,8 @@ value compute_aor_ca cpstem entry =
   | "t.rr" (* atiitarat *)
   | "vah#1" (* aviivahat *) 
   | "hlaad" (* ajihladat *) 
-(*  | "jan"  (* wrong *ajijiinat for ajiijanat *)
-    | "sp.rz#1" (* wrong *apii.spazat for apisp.rzat *) TODO *) ->
+(*| "jan"  (* wrong *ajijiinat for ajiijanat *)
+  | "sp.rz#1" (* wrong *apii.spazat for apisp.rzat *) TODO *) ->
       match cpstem with (* cpstem-ayati is the ca stem *)
      [ [ 37 :: [ 2 :: w ] ] ->  (* w-aapayati *)
          let voy = if entry = "daa#1" then 1 (* a *)
@@ -4369,11 +4382,11 @@ value compute_aor_ca cpstem entry =
          }
      | [ c :: w ] -> 
          let (v,light,r) = look_rec True w
-              where rec look_rec b = fun
-                     [ [ ] -> error_empty 31
-                     | [ x :: w' ] -> if vowel x then (x,b && short_vowel x,w')
-                                      else look_rec False w' 
-                     ] in
+             where rec look_rec b = fun
+             [ [ ] -> error_empty 31
+             | [ x :: w' ] -> if vowel x then (x,b && short_vowel x,w')
+                              else look_rec False w' 
+             ] in
          let voy = match v with
               [ 5 (* u *) -> 6 
               | 6 (* uu *) -> 5
@@ -5573,7 +5586,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
      match entry with
      [ "ifg" | "paz" | "cint" (* d.rz cit *)
      | "bruu" (* vac *)
-     | "cud" | "dhii#1" | "pat#2" |"praa#1" | "vidh#1" | "zlath"
+     | "k.saa" | "cud" | "dhii#1" | "pat#2" |"praa#1" | "vidh#1" | "zlath"
         -> () (* no future *)
      | "tud#1" | "cakaas" -> () (* only periphrastic *)
      | "bharts" -> compute_future_gen rstem entry (* exception gana 10 *)
@@ -5591,7 +5604,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
    ; (* Periphrastic future, Infinitive, Passive future part. in -tavya *)
      match entry with
      [ "ifg" | "paz" (* for d.rz *) | "bruu" (* for vac *) 
-     | "cud" | "dhii#1" | "pat#2" | "praa#1" | "vidh#1"
+     | "k.saa" | "cud" | "dhii#1" | "pat#2" | "praa#1" | "vidh#1"
      | "haa#2" -> () (* no perif *)
      | "saa#1" -> do { compute_perif (revcode "si") entry 
                      ; compute_perif rstem entry
@@ -5640,7 +5653,8 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
    ; (* Perfect *) 
      match entry with
      [ "paz"  (* d.rz *) | "bruu" (* vac *) | "ma.mh" (* mah *) | "ind" 
-     | "indh" | "inv" | "cakaas" | "dhii#1" | "vidh#1" -> () (* no perfect *)
+     | "indh" | "inv" | "k.saa" | "cakaas" | "dhii#1" | "vidh#1" 
+        -> () (* no perfect *)
      | "uuh" -> () (* periphrastic *)
      | _ -> compute_perfect entry
      ]

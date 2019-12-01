@@ -219,7 +219,7 @@ Mini.reset ()
 
 (* Special treatment for [preverbs_file] created by [Make_preverbs] *)
 let deco = make_preverbs Data.preverbs_file in
-let transducer = Make_automaton.make_transducer deco in
+let transducer = Make_preverb_automaton.make_transducer deco in
 Gen.dump transducer Data.transp_file 
 ;
 

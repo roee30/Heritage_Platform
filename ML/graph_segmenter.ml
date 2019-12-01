@@ -306,7 +306,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
    | [ -3 (* *a *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[-3])) :: rest ] -> 
          let w = sandhi_aa u in
-         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2 ],[ 2 ], [ 1 ])) 
+         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2 ],[ 2 ],[ 1 ])) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 1 :: r ],rule)
        | _ -> failwith "accrue anomaly"
@@ -314,7 +314,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
   | [ -9 (* *A *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[-9])) :: rest ] -> 
          let w = sandhi_aa u in
-         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2 ],[ 2 ], [ 2 ])) 
+         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2 ],[ 2 ],[ 2 ])) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 2 :: r ],rule)
        | _ -> failwith "accrue anomaly"
@@ -322,7 +322,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
   | [ -4 (* *i *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[-4])) :: rest ] -> 
          let w = sandhi_aa u in 
-         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 10 ],[ 2 ], [ 3 ])) 
+         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 10 ],[ 2 ],[ 3 ])) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ] 
            where new_segment = (ph,Word.mirror [ 3 :: r ],rule)
        | _ -> failwith "accrue anomaly"
@@ -330,7 +330,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
   | [ -7 (* *I *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[-7])) :: rest ] -> 
          let w = sandhi_aa u in
-         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 10 ],[ 2 ], [ 4 ])) 
+         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 10 ],[ 2 ],[ 4 ])) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 4 :: r ],rule)
        | _ -> failwith "accrue anomaly"
@@ -338,7 +338,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
   | [ -5 (* *u *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[-5])) :: rest ] -> 
          let w = sandhi_aa u in
-         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 12 ],[ 2 ], [ 5 ])) 
+         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 12 ],[ 2 ],[ 5 ])) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 5 :: r ],rule)
        | _ -> failwith "accrue anomaly"
@@ -346,7 +346,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
   | [ -8 (* *U *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[-8])) :: rest ] -> 
          let w = sandhi_aa u in
-         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 12 ],[ 2 ], [ 6 ])) 
+         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 12 ],[ 2 ],[ 6 ])) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 6 :: r ],rule)
        | _ -> failwith "accrue anomaly"
@@ -354,15 +354,16 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
   | [ -6 (* *r *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[-6])) :: rest ] -> 
          let w = sandhi_aa u in
-         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2; 43 ],[ 2 ], [ 7 ])) 
+         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2; 43 ],[ 2 ],[ 7 ])) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 7 :: r ],rule)
        | _ -> failwith "accrue anomaly"
        ]
   | [ 123 (* *C *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[ 123 ])) :: rest ] -> 
+         if preverb_phase phase then failwith "accrue C with aa" else 
          let w = sandhi_aa u in 
-         [ new_seg :: [ (aa_phase ph,[ 2 ],Euphony ([ 2; 22; 23 ],[ 2 ], [ 23 ]))
+         [ new_seg :: [ (aa_phase ph,[ 2 ],Euphony ([ 2; 22; 23 ],[ 2 ],[ 23 ]))
                    :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_seg = (ph,Word.mirror [ 23 :: r ],rule)
        | _ -> failwith "accrue anomaly"
@@ -400,7 +401,7 @@ value access phase = acc (transducer phase) []
            ]
       ]
 ;
-(* The scheduler gets its phase transitions from dispatcher *)
+(* The scheduler gets its phase transitions from Dispatcher.dispatch *)
 value schedule phase input output w cont =
   let add phase cont = [ Advance phase input output w :: cont ] in
   let transitions = 

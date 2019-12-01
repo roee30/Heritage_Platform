@@ -35,11 +35,11 @@ value voices_of = fun
   | "und" | "umbh" | "u.s" | ".rc#1" | ".rdh" | ".r.s" | "ej" | "kas" | "kiil"
   | "ku.t" | "ku.n.th" | "kunth" | "kup" | "kul" | "ku.s" | "kuuj" | "k.rt#1"
   | "k.rz" | "krand" | "krii.d" | "kru~nc#1" | "krudh#1" | "kruz" | "klam" 
-  | "klid" | "kliz" | "kvath" | "k.sar" | "k.sal" | "k.si" | "k.sii" | "k.su" 
-  | "k.sudh#1" | "k.subh" | "k.svi.d" | "kha~nj#1" | "khaad" | "khid" | "khel" 
-  | "khyaa" | "gaj" | "gad" | "garj" | "gard" | "gal" | "gaa#1" | "gaa#2"
-  | "gu~nj" | "gu.n.th" | "gup" | "gumph" | "g.rdh" | "g.rr#1" | "g.rr#2" 
-  | "granth" | "grah" | "glai" | "ghas" | "ghu.s" | "gh.r" | "gh.r.s" 
+  | "klid" | "kliz" | "kvath" | "k.sar" | "k.sal" | "k.saa" | "k.si" | "k.sii"
+  | "k.su" | "k.sudh#1" | "k.subh" | "k.svi.d" | "kha~nj#1" | "khaad" | "khid"
+  | "khel" | "khyaa" | "gaj" | "gad" | "garj" | "gard" | "gal" | "gaa#1" 
+  | "gaa#2" | "gu~nj" | "gu.n.th" | "gup" | "gumph" | "g.rdh" | "g.rr#1" 
+  | "g.rr#2" | "granth" | "grah" | "glai" | "ghas" | "ghu.s" | "gh.r" | "gh.r.s" 
   | "ghraa" | "cakaas" | "ca.t" | "cand" | "cam" | "car" | "cal" | "cit#1" 
   | "cumb" | "chur" | "ch.rd" | "jak.s" | "jap" | "jabh#2" | "jam" | "jalp"
   | "jas" | "jaag.r" | "jinv" | "jiiv" | "jvar" | "jval" | "tak" | "tak.s"
@@ -92,7 +92,7 @@ value voices_of = fun
   | "az#1" | "aas#2" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" | "ii.s" 
   | "iih"  | "edh" | "katth" | "kam" | "kamp" | "kaaz" | "kaas#1" | "kuu" 
   | "k.rp" | "k.lp" (* but Henry: {cak.lpur} "ils s'arrangèrent" *)
-  | "knuu" | "klav" | "k.sad" | "k.sam" | "galbh" | "gur" | "glah" 
+  | "knuu" | "klav" | "k.sad" | "galbh" | "gur" | "glah" 
   | "gha.t" | "jabh#1" | "ju.s#1" | "j.rmbh" | ".damb" | ".dii" | "tandr"
   | "tij" | "trap" | "trai" | "tvar" | "dak.s" | "day" | "diik.s" | "diip"
   | "d.r#1" | "dhii#1" | "dhuk.s" | "pa.n" | "pad#1" | "pi~nj" 
@@ -107,13 +107,14 @@ value voices_of = fun
 (*| "smi" Ubha needed for smitavat *)
 (*| "bhuj#2" Ubha needed for bhunakti to govern *)
 (*| "gaah" Ubha needed for gaahet epics *)
+(*| "k.sam" Ubha needed for k.samati epics *)
    (* DRP restriction: "dyut#1" *) 
       -> Atma (* "deponent" verbs: middle only *)
   | _ -> Ubha (* default *) 
   (* Attested Ubha (over all ga.nas) : 
   [ "a~nc" | "arh" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" | ".r" | ".rj"
   | "ka.n.d" | "kal" | "ka.s" | "ku.t.t" | "ku.n.d" | "k.r#1" | "k.r#2" | "k.r.s"
-  | "kram" | "krii" | "k.san" | "k.sap#1" | "k.sal" | "k.sip" | "k.sud" 
+  | "kram" | "krii" | "k.san" | "k.sap#1" | "k.sam" | "k.sal" | "k.sip" | "k.sud"
   | "k.s.nu" | "khan" | "gam" | "garh" | "gaah" | "guh" | "gras" | "gha.t.t" 
   | "cat" | "carc" | "ci" | "cint" | "cud" | "ce.s.t" | "cyu" | "chad#1"
   | "chand" | "chid#1" | "jan" | "juu" | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d"
@@ -127,9 +128,9 @@ value voices_of = fun
   | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.r.s" | "yaj#1" | "yam"
   | "yaac" | "yu#1" | "yuj#1" | "rac" | "ra~nj" | "ram" | "rah" | "raaj#1" | "ri"
   | "ric" | "rud#1" | "rudh#2" | "lafgh" | "lak.s" | "labh" | "la.s" | "lip"
-  | "lih#1" | "lup" | "luu#1" | "vad" | "vap#1" | "vap#2" | "val" | "vah#1"
-  | "vaa#3" | "vic" | "vij" | "viij" | "v.r#2" | "v.rt#1" | "vyath" | "vyaa" 
-  | "vrii" | "zap" | "zaa" | "zu.s" | "zubh#1" | "zyaa" | "zram" | "zri" 
+  | "lih#1" | "lup" | "luu#1" | "vad" | "van" | "vap#1" | "vap#2" | "val"
+  | "vah#1" | "vaa#3" | "vic" | "vij" | "viij" | "v.r#2" | "v.rt#1" | "vyath"
+  | "vyaa" | "vrii" | "zap" | "zaa" | "zu.s" | "zubh#1" | "zyaa" | "zram" | "zri"
   | "zru" | "sru" | "san#1" | "sah#1" | "sic" | "su#2" | "suud" | "stambh"
   | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" | "sp.rh" | "smi" | "syand" 
   | "svad" | "had" | "hikk" | "hu" | "huu" | "h.r#1" ] *)
@@ -228,12 +229,11 @@ value voices_of_gana g root = match g with
         ]
  | 7 -> match root with
         [ "vid#2" -> Atma
-        | "ric" -> Para
         | _ -> voices_of root
         ]
  | 8 -> match root with
         [ "man" -> Atma
-        | _ -> voices_of root (* van Ubha *)
+        | _ -> voices_of root 
         ]
  | 9 -> match root with
         [ "jyaa#1" | "pu.s#1" | "mii" | "m.rd#1" | "ri" | "vrii" | "stambh"
@@ -313,8 +313,8 @@ value voices_of_pv upasarga gana = fun
             | "pari" | "ava" -> Atma 
             | _ -> Para (* \Pan{1,3,18} *)
             ]
-(* Next three equivalent to marking "unused" in lexicon *)
-| "ta~nc" | "saa#1" | "zam#2" | "zal" (* also "khyaa" ? *) ->
+(* Next four equivalent to marking "unused" in lexicon *)
+| "ta~nc" | "saa#1" | "zam#2" | "zal" (* | "khyaa" ? *) ->
    match upasarga with 
    [ "" -> raise Unattested (* thus braa.hmasya "Ô Brahmane, tue" unrecognized *)
    | _ -> Para 

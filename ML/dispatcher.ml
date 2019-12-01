@@ -133,8 +133,10 @@ value initial full = if full then initial1 else initial2
 value dispatch1 w = fun (* w is the current input word *) 
   [ Nouv | Nouc | Pron | Inde | Abso | Auxi | Auxik | Kama | Ifcv | Ifcc 
   | Kriv | Kric | Absv | Absc | Avy | Lopak | Root | Lopa | Cache -> initial1
-  | A -> [ Iicc; Nouc; Iikc; Kric; Pvkc; Iivc; Vocc; Vokc ]
-  | An -> [ Iicv; Nouv; Iikv; Kriv; Pvkv; Iivv; Vocv; Vokv
+  | A -> if phantomatic w then [] else
+         [ Iicc; Nouc; Iikc; Kric; Pvkc; Iivc; Vocc; Vokc ]
+  | An -> if phantomatic w then [] else
+          [ Iicv; Nouv; Iikv; Kriv; Pvkv; Iivv; Vocv; Vokv
           ; A (* eg anak.sara anavadya *) ; An (* attested ? *) ] 
   | Ai -> [ Absc; Pvc ]
   | Ani -> [ Absv; Pvv ]
@@ -143,9 +145,10 @@ value dispatch1 w = fun (* w is the current input word *)
   | Iicv | Iicc | Iikv | Iikc | Iiif | Auxiick | Cachei -> (* Compounding *)
        [ Iicv; Iicc; Nouv; Nouc; A; An; Ifcv; Ifcc; Iikv; Iikc; Kriv; Kric
        ; Pvkv; Pvkc; Iiif; Iivv; Iivc; Vocv; Vocc; Vokv; Vokc ] @ cached
-  | Pv -> if amuitic w then [ Lopa ] else [ Root; Abso; Peri; Inftu ]
-  | Pvc | Pvv -> [ Abso ]
-  | Pvkc | Pvkv -> 
+  | Pv -> if phantomatic w then [] else
+          if amuitic w then [ Lopa ] else [ Root; Abso; Peri; Inftu ]
+  | Pvc | Pvv -> if phantomatic w then [] else [ Abso ]
+  | Pvkc | Pvkv -> if phantomatic w then [] else
           if amuitic w then [ Lopak ] else [ Iikv; Iikc; Kriv; Kric; Vokv; Vokc ]
   | Iiv -> [ Auxi ] (* as bhuu and k.r finite forms *)
   | Iivv | Iivc -> [ Auxik; Auxiick ] (* bhuu and k.r kridanta forms *)
@@ -161,11 +164,14 @@ value dispatch1 w = fun (* w is the current input word *)
   | ph -> failwith ("Dispatcher fake phase: " ^ string_of_phase ph) 
   ]
 and dispatch2 w = fun (* simplified segmenter *)
-  [ Noun2 | Pron | Inde | Abso | Absv | Absc | Auxi | Ifc2 -> initial2
-  | Root | Lopa -> (* no consecutive verbs in chunk *)
-                   [ Inde; Iic2; Noun2; Pron ]
+  [ Noun2 | Pron | Inde | Abso | Absv | Absc | Auxi | Ifc2 -> 
+      if phantomatic w then [ Root; Abso ] else initial2
+  | Root | Lopa -> 
+      if phantomatic w then [] (* no consecutive verbs in chunk *)
+      else [ Inde; Iic2; Noun2; Pron ]
   | Iic2 -> [ Iic2; Noun2; Ifc2 ]  
-  | Pv -> if amuitic w then [ Lopa ] else [ Root; Abso ]
+  | Pv -> if phantomatic w then [] else 
+          if amuitic w then [ Lopa ] else [ Root; Abso ]
   | Iiv -> [ Auxi ] 
   | _ -> failwith "Dispatcher anomaly"
   ]
@@ -309,7 +315,7 @@ value valid_morph_pv_k pv krit_stem morph = (* morph of form [Part_form] *)
   if conj=Primary then attested_verb gana_pada pv root else attested pv root 
   with [ Unvoiced -> attested pv root ]
 ;
-value validate_pv pv root_form = (* generalizes [roots_of] *) 
+value validate_pv pv root_form = 
   match Deco.assoc root_form morpho.roots with
     [ [] -> fail_inconsistency root_form
     | tags -> List.exists valid tags 
@@ -433,6 +439,17 @@ value apply_sandhi rleft right = fun
     | Id -> List2.unstack rleft right
     ]
 ;
+
+(* debug for validate -- vomit in interface 
+[value printout seg = 
+  let print_seg (ph,w,_) = do 
+  { print_string (string_of_phase ph) 
+  ; print_string (" " ^ (Canon.rdecode w) ^ "<br />\n")
+  } in do
+  { print_int (List.length seg); print_string " : "
+  ; List.iter print_seg seg; print_string "<hr /><br />\n"
+  }
+;] *)
 
 (* [validate : output -> output] - dynamic consistency check in Segmenter.
    It refines the regular language of dispatch by contextual conditions
@@ -617,12 +634,12 @@ value validate out = match out with
                    [ (Comp (Pv,Abso) pv abso_form,cpd_form,s) :: r ] 
                 else [] 
       ]
-  | [ (Abso,rev_abso_form,s) :: next ] -> 
+  | [ (Abso,rev_abso_form,s) :: next ] -> (* impossible since Abso follows Pv *)
       raise (Control.Anomaly "Isolated Abso form") (* phase enforced *)
   | [ (_,w,_) :: _ ] when phantomatic (Word.mirror w) -> 
     let mess = "Bug phantomatic segment: " ^ Canon.rdecode w in
     raise (Control.Anomaly mess)
-  | [ (phase,_,_) :: [ (pv,_,_) :: _ ] ] when preverb_phase pv ->  
+  | [ (phase,_,_) :: [ (pv,_,_) :: _ ] ] when preverb_phase pv -> 
       let m = "validate: " ^ string_of_phase pv ^ " " ^ string_of_phase phase in 
       raise (Control.Anomaly m) (* all preverbs ought to have been processed *)
     (* We now prevent overgeneration of forms "sa" and "e.sa" \Pan{6,1,132} *)

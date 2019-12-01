@@ -140,15 +140,7 @@ and transabstvaa_file = data "transabstvaa.rem" (* [absoltvaa_automaton] *)
 and transinftu_file   = data "transinftu.rem"   (* [inftu_automaton] *) 
 and transkama_file    = data "transkama.rem"    (* [kama_automaton] *) 
 and transstems_file   = data "transstems.rem"   (* [stems_automaton] *)
-and declstxt_file     = data "nouns.txt"   (* created by [decline -ascii] *)
-and declstex_file     = data "nouns.tex"   (* created by [decline -tex] *)
-and declsxml_file     = data "nouns.xml"   (* created by [decline -xml] *)
-and rootstxt_file     = data "roots.txt"   (* created by [conjug -ascii] *)
-and rootstex_file     = data "roots.tex"   (* created by [conjug -tex] *)
-and rootsxml_file     = data "roots.xml"   (* created by [conjug -xml] *)
-and partstxt_file     = data "parts.txt"   (* created by [declinep -ascii] *)
-and partstex_file     = data "parts.tex"   (* created by [declinep -tex] *)
-and partsxml_file     = data "parts.xml"   (* created by [declinep -xml] *)
+
 and mw_exc_file       = data "mw_exceptions.rem" (* for MW indexing *)
 and mw_index_file     = data "mw_index.rem"
 and guess_auto        = data "guess_index.rem"

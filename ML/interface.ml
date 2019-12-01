@@ -192,15 +192,13 @@ value build_visual k segments =
           if k < visual_width.(n) then find_ind_rec (n+1) else n in 
       match seg with
       [ [] -> ()
-      | [ (phase,(w1,tr)) :: rest ] -> match phase with 
-           [ Phases.Pv | Phases.Pvkc | Phases.Pvkv -> 
-             failwith "Preverb in build_visual"
-           | _ -> do
+      | [ (phase,(w1,tr)) :: rest ] -> 
+            if preverb_phase phase then failwith "Preverb in build_visual"
+            else do
              { visual.(start_ind) := visual.(start_ind) @ [ (w1,tr,phase,k) ]
              ; visual_width.(start_ind) := (seg_length w1) + k
              ; ass_rec rest
              }
-           ]
       ]
 ;
 (* We check whether the current segment [(w,tr,phase,k)] is conflicting with 

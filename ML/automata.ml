@@ -68,7 +68,7 @@ value (sandhis, sandhir, sandhin, sandhif, sandhio) =
 value filter_cesura sandhis = 
   List.map (List.filter (fun (w,_,_) -> not (List.mem 50 w))) sandhis
 ;
-(* flag_pv =True for preverbs automaton *)
+(* [flag_pv=True] for preverbs automaton *)
 value get_sandhi flag_pv = fun (* argument is [mirror (code u)] *) 
   [ [] -> failwith "get_sandhi 0"
   | [ 43 (* r *) :: before ] -> match before with
@@ -143,7 +143,7 @@ and hash1 letter key sum = sum + letter*key
 and hash b arcs rules = (* NB. [abs] needed because possible integer overflow *)
     (abs (arcs + Gen.dirac b + List.length rules)) mod hash_max
 ;
-(* flag_pv =True for prverbs automaton *)
+(* [flag_pv=True] for preverbs automaton *)
 value build_auto flag_pv (rewrite : rewrite_set) = traverse 
   (* [traverse: word -> lexicon -> (auto * stack * rewrite_set * int)] *)
   (* The occurrence list [occ] is the reverse of the access word. *)

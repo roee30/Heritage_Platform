@@ -25,7 +25,7 @@ DATE=#DATE
 # Sanskrit resources are defined at configuration time:
 SKTRESOURCES=#SKTRESOURCES
 
-DATA=$(SKTRESOURCES)DATA# morphological data and transducers
+DATA=$(SKTRESOURCES)DATA# morphological data, sandhi tables and transducers
 HERITAGE=$(SKTRESOURCES)DICO# hypertext Heritage read-only
 DICO=DICO# hypertext Heritage
 BOOK=$(SKTRESOURCES)BOOK# Heritage.pdf abrevs.pdf
@@ -276,7 +276,7 @@ CORPUS = ML/corpus.mli ML/corpus.ml ML/web_corpus.mli ML/web_corpus.ml	\
 	ML/corpus_manager_cgi.ml ML/save_corpus_cgi.ml			\
 	ML/mkdir_corpus_cgi.ml ML/mk_corpus.ml
 
-DEBUG= ML/morpho_debug.ml ML/debug.ml
+DEBUG= ML/debug.ml
 
 # Historical versions of the segmenter, tagger and reader with single phase
 OBSOLETE_ML=ML/segmenter1.ml ML/tagger1.ml ML/reader1.ml ML/tagger.ml \
@@ -284,7 +284,7 @@ ML/nyaaya.ml ML/mk_nyaaya_page.ml ML/regression.ml \
 ML/patch_auto.ml # awful hack for patching automata structures - now unused
 
 # Modules of all software packages are in library ML (besides the ZEN library)
-ML=$(UTIL) $(CORE) $(GRAM) $(WEB) $(TREE) $(LEGAL) $(CORPUS)
+ML=$(UTIL) $(CORE) $(GRAM) $(WEB) $(TREE) $(LEGAL) $(CORPUS) $(DEBUG)
 
 # Directory STAT contains a few log and regression files like regression_template
 # Also files mw_exc.txt and mw_index_txt_file.txt for Monier-Williams alignment
@@ -634,95 +634,7 @@ mkdir_corpus: ML/mkdir_corpus
 
 #### Version Management and Distribution are now managed by Git ####
 
-##############################
-####  Version Management  #### Obsolete
-##############################
-
-# For release of Heritage_Platform, make distrib_platform
-
-# next operations to perform on http server platform for site update
-platform_unload: SktPlatform.$(VERSION).tar.gz
-	gunzip SktPlatform.$(VERSION).tar.gz
-	tar xvf SktPlatform.$(VERSION).tar
-
-software_doc: # needs to have ocamlweb installed
-	cd ML && $(MAKE) doc
-
-########################
-####  Distribution  #### Obsolete - now distribution through Git
-########################
-
-# customise LICENSEs above before distributing
-# Directory DISTR should not exist for next 4 scripts
-# Note cp -p used instead of tar for incrementality
-distr_engine:  # distribution of packages CORE GRAM abd WEB under SOFT_LICENSE
-	rm -rf DISTR
-#	cd $(STAT); cat stats.txt >> distribs # recording of statistics
-	mkdir DISTR                # Distribution directory
-	mkdir DISTR/ML             # Source code library for all packages
-	mkdir DISTR/SETUP          # SETUP directory
-	mkdir DISTR/JAVASCRIPT     # JAVASCRIPT scripts directory
-	cp -p $(UTIL) DISTR/ML     # Skt script utilities
-	cp -p $(DISTR_CORE) DISTR/ML     # Skt Core Engine ML source code
-	cp -p $(GRAM) DISTR/ML     # Skt Grammatical Engine ML source code
-	cp -p $(WEB) DISTR/ML      # Skt Site Manager ML source code
-	cp -p $(AUT) DISTR/ML      # Skt Automaton production source code
-	cp -p $(SCRIPTS) DISTR/JAVASCRIPT # Scripts
-	cp -Rp $(SYSTEM_SETUP) DISTR/SETUP  # SETUP
-	cp -p $(SYSTEM_configure) DISTR # configure at top level
-#	cp -Rp $(SYSTEM_supplements) DISTR/SETUP  # supplements
-	cp -p $(INFOS) DISTR # installation instructions, scripts
-	cp -p $(SOFT_LICENSE) DISTR/ML/LICENSE # customised software license
-	mkdir DISTR/SITE           # For Skt Platform portal
-	cp -p $(WEBSOURCES) DISTR/SITE       # Skt site entry page
-	cp -p $(SITESOURCE) DISTR/SITE
-#	cp -p $(GOLDENDICT) DISTR/SITE # enormous - separately distributed
-	mkdir DISTR/IMAGES         # For Web site images
-	cp -Rp $(IMAGES) DISTR/IMAGES # Web site images
-	cp -Rp MW DISTR            # Hypertext Monier Williams with grammar links
-#	mkdir DISTR/FONTS          # Fonts mirroring
-#	cp -p $(FONTS) DISTR/FONTS # Fonts
-
-distr_automata: # distribution of data derived from Heritage Dictionary
-	$(MAKE) distr_engine
-	mkdir -p DISTR/$(DATA)            # Linguistic data and derived automata
-	mkdir -p DISTR/$(DATA)/XML        # Linguistic data in XML - empty now
-	cp -p $(DATA)/XML/*.gz $(DATA)/XML/index.html DISTR/$(DATA)/XML
-	cp -p $(DATA_LICENSE) DISTR/$(DATA_LICENSE) # customised data license
-	cp -p $(XMLDATA)/SL_morph.dtd $(XMLDATA)/WX_morph.dtd DISTR/$(DATA)/XML
-	cp -p $(AUTOMATA) DISTR/$(DATA)   # Data for Skt_Platform cgi executables
-	cp -p $(DATAMW) DISTR/$(DATA) # MW alignment
-#	touch DISTR/automata   # for make automata to succeed vacuously
-
-distrib: # distribution of Heritage under HTML & PDF formats
-	$(MAKE) distr_automata
-#	cp -p SETUP/zen.tar DISTR/SETUP # Zen toolkit distribution not included
-# DICO is assumed to be customized for the distribution site
-	cp -Rp $(DICO) DISTR     # Hypertext Heritage Dictionary for browsing
-	mkdir DISTR/BOOK
-	cp -p $(BOOKPRINTS) DISTR/BOOK # Heritage Skt Dictionary for printing
-	mkdir DISTR/DOC
-	cd ML; $(MAKE) doc
-	cp -p DOC/Heritage_platform.pdf DISTR/DOC
-	cp -p DOC/transliterations.pdf DISTR/DOC
-	cp -p $(MANUAL) DISTR/SITE # user's manual
-#	cp -p $(ROBOTS) DISTR/SITE # robots permissions
-	mkdir DISTR/$(STAT)
-#	cp -p $(STAT)/regression_template DISTR/$(STAT) # for regression analysis suite
-#	touch DISTR/dictionary # for make dictionary to succeed vacuously
-#	touch DISTR/xmlmorphology # for make xmlmorphology to succeed vacuously
-
-# creates an archive SktPlatform.$(VERSION) with the full distribution (55Mb)
-distrib_full: distrib# assumes distrib has been run, and thus directory DISTR exists
-	test -e DISTR || (echo "DISTR inexistant"; exit 1)
-	test -e SktPlatform.$(VERSION) && echo "Distribution dir exists" \
-&& exit 1 || echo "OK"
-	cd DISTR && mkdir $(DATA)/ML
-	cp -p DOC/doc.pdf DISTR/DOC       # Skt Platform pdf documentation
-	cp -p $(DOCS) DISTR/DOC           # Various documentation and articles
-	cp -p $(DIC) DISTR                # Sanskrit Heritage Dictionary source
-	cp -p $(LEX) DISTR/ML             # Skt Engine Compiling ML source code
-	cp -p $(AUT) DISTR/ML             # Skt Automaton
+#### Installation ####
 
 install: #after distribution to host site: "./configure; make; sudo make install"
 	SETUP/issudo.sh
@@ -788,3 +700,6 @@ commit-corpus:
 	cp -Rp $(SERVERCORPUS) $(SKTRESOURCES)
 # TODO: git add des nouvelles citations, git commit, git push
 
+VERSION=320c
+save: # saving sources of Heritage_Platform (after make clean in ML)
+	tar cvf ../ARCHIVE/Heritage_Platform_$(VERSION).tar ML SITE JAVASCRIPT SETUP configure INSTALLATION DOC IMAGES README 

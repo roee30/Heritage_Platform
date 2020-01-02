@@ -72,7 +72,7 @@ value monosyl = Phonetics.all_consonants (* Z NOT Phonetics monosyllabic *)
 (* eg loc sg fem abhii = abhiyi (Zukla) or abhyaam (Malhar) ?       *)
 (* Malhar actually says: 3 forms abhyi according to commentators    *)
 (* if consonant clutter before ii or uu, then not nadii \Pan{1.4.4} *)
-(* This is dubious, see -vii lower *)
+(* This is dubious, see -vii -nii below *)
 (* See Kale §76 §77 *)
 value compound_monosyl_ii = fun
   [ [ 40 :: l ] (* -bhii *) -> match l with  
@@ -93,10 +93,10 @@ value compound_monosyl_ii = fun
       [ [ 1; 41; 2; 43; 19 ] (* graama- *) -> True (* wrong - \Pan{6,4,82} *)
       | _ -> False 
       ] *)
-  | [ 36 :: l ] (* -nii *) -> match l with
-      [ [ 2; 36; 10; 48 ] (* senaa- *) -> True
+(*| [ 36 :: l ] (* -nii *) -> match l with
+      [ [ 2; 36; 10; 48 ] (* senaa- *) -> True (* wrong Deshpande gr p146 *)
       | _ -> False 
-      ]
+      ] *)
 (*| [ 45 :: l ] (* -vii *) -> match l with (* wrong: padaviim *)
       [ [ 1; 34; 1; 37 ] -> True (* pada- *)
       | _ -> False 
@@ -109,7 +109,7 @@ value compound_monosyl_uu = fun
   [ [ 40 :: _ ] (* -bhuu *) -> True (* abhiibhuu (may be too wide) *) 
   | [ 48 :: _ ] (* -suu *) -> True (* prasuu  (may be too wide) *)
   | [ 43 :: [ 40 ::  _ ] ] (* -bhruu *) -> True (* subhruu (may be too wide) *)
-  | _ -> False (* to be completed for other stems *)
+  | _ -> False (* eg m. khalapuu to be completed for other stems *)
   ]
 ;
 
@@ -127,11 +127,12 @@ value pronominal_usage = fun
 (* Masculine a-entries may be all used as iiv (inchoative cvi suffix) *)
 (* NB pronouns "eka" and "sva" produces cvi form in [build_pron_a] *)
 (* idem for masculines in -i and -in *)
-(* Now for neuter stems *)
+(* Now for neuter stems (ad-hoc - should be more general) *)
 value a_n_iiv = fun
-  [ "aaspada" | "kara.na" | "t.r.na" | "nimitta" | "paatra" | "pi~njara" 
-  | "pratibimba" | "pratyak.sa" | "pramaa.na" | "prahara.na" | "yuddha"
-  | "vahana" | "vize.sa.na" | "vi.sa" | "vyajana" | "zayana" | "zo.na" | "sukha" 
+  [ "aaspada" | "kara.na" | "go.spada" | "t.r.na" | "nimitta" | "paatra" 
+  | "pi~njara" | "pratibimba" | "pratyak.sa" | "pramaa.na" | "prahara.na"
+  | "yuddha" | "vahana" | "vize.sa.na" | "vi.sa" | "vyajana" | "zayana"
+  | "zo.na" | "sukha" 
   | (* NavyaNyaaya *) "adhikara.na" | "kaara.na" | "saadhana"
     (* missing compound: "si.mhavyaaghraami.sa" *)
       -> True
@@ -1304,7 +1305,9 @@ value build_as gen stem entry =
    ; (Plural, 
       let direct = match gen with
           [ Mas | Fem -> "asas"
-          | Neu  -> "aa.msi"
+          | Neu  -> "aa.msi" 
+(* eg chandaa.msi: chandas-as Pan{7,1,20}{1,1,42} chandas-zi Pan{7,1,72} 
+      chandans-i Pan{6,4,10} chandaans-i Pan{8,3,24} chandaa.msi *)
           | _ -> raise (Control.Anomaly "Nouns")
           ] in
         [ decline Voc direct
@@ -3041,6 +3044,7 @@ value build_fem_ii trunc entry =
         ])
    ]             
    ; Bare Noun (mirror steml) 
+   ; Bare Noun (mirror stems) (* Pan{6,3,61} *)
    ; Avyayaf (mirror stems) 
    ] @ match entry with 
        [ "nadii" | "paur.namasii" | "aagrahaaya.nii" 
@@ -3259,6 +3263,7 @@ value build_fem_uu stem entry =
         ])
    ]
    ; Bare Noun (wrap stem 6) 
+   ; Bare Noun (wrap stem 5) (* Pan{6,3,61} *)
    ; Avyayaf (wrap stem 5) 
    ]
 ;
@@ -3798,7 +3803,7 @@ value build_root g stem entry =
   and declfin case suff = 
       (* [finalize_r] for doubling of vowel in r roots Whitney §245b *)
       (case,fix (finalize_r stem) suff) 
-  and bare = mirror (finalize stem) in 
+  and bare = mirror (finalize_r stem) in 
   enter entry 
    [ Declined Noun g
    [ (Singular,
@@ -4976,7 +4981,7 @@ value compute_nouns_stem_form e stem d p =
       | [ 6; 49; 6; 49 ] (* huuhuu *) -> build_huuhuu e  
       | [ 6 :: r1 ] (* -uu - rare *) -> 
           if monosyl r1 then build_mono_uu Mas r1 e (* puu2 *)
-          else build_poly_uu Mas r1 e (* sarvatanuu *)
+          else build_poly_uu Mas r1 e (* sarvatanuu khalapuu pratibhuu *)
              (* vedic polysyllabic in uu are of utmost rarity - Whitney §355 *)
       | [ 7 :: r1 ] (* -.r *) -> match r1 with
           [ [ 27; 47; 12; 43; 17 ] -> build_krostu r1 e (* kro.s.t.r Muller §236 *)
@@ -5691,6 +5696,7 @@ value iic_indecl = (* should be lexicalized *)
   ; "saha#2"    (* problematic -- overgenerates  *)
   ; "saak.saat"
   ; "saaci"
+  ; "svayam"
   ]
 ;
 (* Feminine stems iic for productive adjectives                       *)
@@ -5824,6 +5830,7 @@ value gatis =
   ; "nicacane"
   ; "haste" (* Pan{1,4,77} upayamana (mariage) *)
   ; "paa.nau"
+  ; "svayam"
   ]
 ;
 value enter_gati gati = (* assumes gati has lexical entry *)
@@ -6030,8 +6037,7 @@ value extract_current_caches cache_txt_file = do
   { nouns.val := Deco.empty 
   ; iics.val := Deco.empty 
   ; morpho_gen.val := False
-  ; let ic = open_in cache_txt_file in 
-    update_index ic
+  ; let ic = open_in cache_txt_file in update_index ic
   ; (nouns.val,iics.val)
   }
 ;

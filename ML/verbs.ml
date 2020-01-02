@@ -407,8 +407,8 @@ value passive_stem entry rstem = (* Panini yak (k : no guna, samprasaara.na) *)
     | "vaz" | "vac" | "vap" | "vap#1" | "vap#2" | "vad" | "vas#1" | "vas#4" 
     | "vah#1" (* idem - specific code for va-x roots *)
               -> match rstem with 
-                 [ [ 48 :: _ ] -> [ 47 ; 5 (* u *) ] (* vas \R u.s *)
-                 | [ c :: _ ] -> [ c ; 5 (* u *) ] (* va-x \R u-x *)
+                 [ [ 48 :: _ ] -> [ 47 ; 5 (* u *) ] (* vas  \R u.s *)
+                 | [ c :: _ ] -> [ c ; 5 (* u *) ]   (* va-x \R u-x *)
                  | [] -> failwith "Anomalous passive_stem"
                  ]
     | "vaa#3" -> revcode "uu" (* \Pan{6,1,15} *) 
@@ -2221,7 +2221,7 @@ value compute_present9 sstem wstem short vow stem entry third pada padam =
   ]
 ;
 
-(* Benedictive/precative. Formed from [conjug_optativea] *)
+(* Benedictive/precative, formed from [conjug_optativea] with aorist stem *)
 (* NB. Whitney§837 makes it an optative mode of the root aorist *)
 value conjug_benedictivea conj weak entry = 
   let conjugw person suff = (person,fix weak suff) in
@@ -2249,19 +2249,19 @@ value conjug_benedictivem conj sibstem entry =
   enter1 entry 
   (Conju (fbenem conj)
    [ (Singular, 
-        [ (* conjugw First "iiya" - ambig opt *)
-          conjug Second "ii.s.thaas" 
+        [ conjug First  "iiya"
+        ; conjug Second "ii.s.thaas" 
         ; conjug Third  "ii.s.ta"  
         ])
    ; (Dual, 
-        [ (* conjugw First "iivahi" - ambig opt *)
-          conjug Second "iiyaasthaam"
-          (* conjug Third  "iiyaastaam" *)
+        [ conjug First  "iivahi" 
+        ; conjug Second "iiyaasthaam"
+        ; conjug Third  "iiyaastaam" 
         ])
    ; (Plural, 
-        [ (* conjugw First "iimahi" - ambig opt *)
-          conjug Second "ii.dhvam"
-          (* conjugw Third "iiran" - ambig opt *)
+        [ conjug First  "iimahi"
+        ; conjug Second "ii.dhvam"
+        ; conjug Third  "iiran"
         ]) 
    ]) 
 ;
@@ -2337,7 +2337,7 @@ value compute_future stem entry =
        [ Para -> do (* active only *) 
          { compute_futurea Primary stem entry 
          ; match entry with (* conditional or atma on demand *)
-           [ "gam" | "bhuu#1" -> compute_conda Primary stem entry
+           [ "bhuu#1" -> compute_conda Primary stem entry
            | "khaad" -> compute_futurem Primary stem entry 
            | _ -> ()
            ]
@@ -2348,7 +2348,7 @@ value compute_future stem entry =
          { compute_futurea Primary stem entry 
          ; compute_futurem Primary stem entry 
          ; match entry with (* rare conditional *)
-           [ "i" | "k.r#1" | "tap" | "daa#1" -> do
+           [ "i" | "k.r#1" | "gam" | "tap" | "daa#1" -> do
               { compute_conda Primary stem entry 
               ; compute_condm Primary stem entry 
               }
@@ -2373,6 +2373,8 @@ value compute_future_ca stem entry = do
 ;
 (* Possible intercalating vowel i for se.t and ve.t roots Whitney§935 *)
 (* [intercalates] returns a set of possible intercalations.           *)
+(* 3 indicates metathesis: ar becomes ra by [ar_ra] below             *)
+(* 4 is specific to naz nasalisation                                  *)
 (* This information should be lexicalised with a generative lexicon.  *)
 value intercalates root = 
   let anit = [ 0 ]    (* no intercalation *) 
@@ -3631,7 +3633,7 @@ value compute_ath_s_aoristm stem entry =
           [ [ 1 (* a *) :: _ ] | [ 2 (* aa *) :: _ ] -> "dhvam"
           | [ 43 (* r *) :: _ ] -> ".dhvam"
           | [ c :: _ ] -> if vowel c then ".dhvam" else "dhvam"
-          | _ -> error_empty 19
+          | _ -> error_empty 18
           ] in 
       (person,fix_augment stem suff) in 
   let conjugc = if entry = "k.r#1" (* Whitney§882a *)
@@ -3669,7 +3671,7 @@ value compute_ath_s_injunctm stem entry =
           [ [ 1 (* a *) :: _ ] | [ 2 (* aa *) :: _ ] -> "dhvam"
           | [ 43 (* r *) :: _ ] -> ".dhvam"
           | [ c :: _ ] -> if vowel c then ".dhvam" else "dhvam"
-          | _ -> error_empty 20
+          | _ -> error_empty 19
           ] in 
       (person,fix stem suff) in 
   let conjugc = if entry = "k.r#1" then conjugroot else conjug in
@@ -3949,7 +3951,7 @@ value amui = fun (* root with a amui - used in [redup_aor] *)
 value redup_aor weak root = 
   let mess = "Redup_aor " ^ root in 
   match rev weak with (* ugly double reversal *)
-    [ [] -> error_empty 21
+    [ [] -> error_empty 20
     | [ c1 :: r ] -> 
       if vowel c1 then match c1 with (* very rare - Whitney§862 *)
          [ 1 (* a *) -> match r with
@@ -4022,7 +4024,7 @@ value redup_aor weak root =
                             | _ -> weak (* Whitney§866-868 *)
                             ]            
                  else weak
-               | _ -> error_empty 22
+               | _ -> error_empty 21
                ]
         ] in
       revaffix True [ rv; rc ] strengthened
@@ -4164,7 +4166,7 @@ value compute_aorist entry =
                 | 7 (* .r *) -> if entry = "dhv.r" then revcode "dhuur" else weak
                 | _ -> weak
                 ]
-            | _ -> error_empty 23
+            | _ -> error_empty 22
             ] in compute_ath_s_aoristm stemm entry 
         ]
       }
@@ -4194,7 +4196,7 @@ value compute_aorist entry =
                    [ "kan" | "khan" |"car" | "mad#1" | "vad" | "skhal" -> long 
                    | _ -> strong
                    ]
-            | [] -> error_empty 24
+            | [] -> error_empty 23
             ] in
         compute_ath_is_aorista stem entry 
       ; compute_ath_is_aoristm strong entry 
@@ -4289,7 +4291,7 @@ value compute_injunctive entry =
                | 2 (* aa *) -> [ 3 :: r ] (* turn aa to i *)
                | _ -> weak
                ]
-            | _ -> error_empty 25
+            | _ -> error_empty 24
             ] in
         compute_ath_s_injunctm stemm entry 
       }
@@ -4316,7 +4318,7 @@ value compute_injunctive entry =
                    [ "kan" | "khan" |"car" | "mad#1" | "vad" | "skhal" -> long 
                    | _ -> strong
                    ]
-            | [] -> error_empty 24
+            | [] -> error_empty 25
             ] in
         compute_ath_is_injuncta stem entry 
       ; compute_ath_is_injunctm strong entry 
@@ -4383,7 +4385,7 @@ value compute_aor_ca cpstem entry =
      | [ c :: w ] -> 
          let (v,light,r) = look_rec True w
              where rec look_rec b = fun
-             [ [ ] -> error_empty 31
+             [ [ ] -> error_empty 26
              | [ x :: w' ] -> if vowel x then (x,b && short_vowel x,w')
                               else look_rec False w' 
              ] in
@@ -4400,7 +4402,7 @@ value compute_aor_ca cpstem entry =
          { compute_redup_aorista_ca stem entry (* adidiipat *) 
          ; compute_redup_aoristm_ca stem entry  
          }
-     | _ -> error_empty 26
+     | _ -> error_empty 27
      ] 
   | _ -> () 
   ] 
@@ -4946,7 +4948,7 @@ value compute_intensive_imperativea strong weak iiflag entry =
             [ [ c :: _  ] -> fix3w weak iiflag False suff 
               where suff = if vowel c then "hi" (* "dhi" or "hi" after vowel *)
                             else "dhi"
-            | _ -> error_empty 27
+            | _ -> error_empty 28
             ] ) 
         ; conjugs Third  "tu"
         ; conjugs Third  "iitu"
@@ -5212,7 +5214,7 @@ value compute_present_system entry rstem gana pada third =
            (* possibly other penultimate nasal lopa ? *)
          | [ c :: rest ] -> if vowel c then ([ short c :: rest ],True)
                             else (rstem,False)  
-         | [] -> error_empty 28
+         | [] -> error_empty 29
          ] in
      let wstem = rev (sandhi stem [ 36; 5 ]) (* stem-nu *)
      and sstem = rev (sandhi stem [ 36; 12 ]) (* stem-no *) in do
@@ -5227,7 +5229,7 @@ value compute_present_system entry rstem gana pada third =
      [ [ c :: rest ] when consonant c ->
        let stem = match rest with 
            [ [ hd :: tl ] -> if nasal hd then tl else rest (* hi.ms *)
-           | [] -> error_empty 29
+           | [] -> error_empty 30
            ] 
        and nasal = homonasal c in
        let wstem = 
@@ -5267,7 +5269,7 @@ value compute_present_system entry rstem gana pada third =
             [ [ c :: w ] -> (st,vowel c) 
               where st = if c=6 (* uu *) then [ 5 :: w ] (* Whitney§728a *)
                     else if c=8 (* .rr *) then [ 7 :: w ] else rstem
-            | [] -> error_empty 30
+            | [] -> error_empty 31
             ] 
         ] in (* Macdonell§127.6 *)
      (* NB Retroflexion prevented in k.subh: k.subhnaati \Pan{8,4,39} *)
@@ -5348,12 +5350,12 @@ value record_pfp entry rstem = do
     | "mad"    -> record_extra_pfp_ya "madya" (* maadya for pv- \Pan{3,1,100} *)
     | "tyaj#1" -> record_extra_pfp_ya "tyajya" (* for sa.mtyajya (tyaajya) *) 
     | "bhid#1" -> record_extra_pfp_ya "bhidya" (* \Pan{3,1,115} for river *) 
-    | "d.rz#1" -> record_extra_pfp_ya "darzya" (* WR only RV. *) 
+    | "d.rz#1" -> record_extra_pfp_ya "darzya" (* WR only RV *) 
     | "yaj#1"  -> record_extra_pfp_ya "yajya"  (* devayajya \Pan{3,1,123} *) 
     | "yat"    -> record_extra_pfp_ya "yatya"  (* Vart \Pan{3,1,97} -WR *)
     | "ruc#1"  -> record_extra_pfp_ya "rucya"  (* (rocya) \Pan{3,1,114} *) 
     | "va~nc"  -> record_extra_pfp_ya "va~ncya" (* \Pan{7,3,63} for motion *) 
-    | "vah#1"  -> record_extra_pfp_ya "vahya"  (* (vaahya) \Pan{3,1,102} instr. *)
+    | "vah#1"  -> record_extra_pfp_ya "vahya"  (* (vaahya) \Pan{3,1,102} instr *)
     | "v.r.s"  -> record_extra_pfp_ya "var.sya" (* \Pan{3,1,120} (v.r.sya) *)
     | "sa~nj"  -> record_extra_pfp_ya "sajya"  (* for prasajya (not Paninian?) *)
     (* ? takya catya hasya *)
@@ -5385,9 +5387,9 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
    let rstem = revstem entry in 
    match entry with
    [ "putrakaama" | "rathakaama" (* \Pan{3,1,9} *)
-   | "pu.spa" | "sukha" | "du.hkha" (* also "adhvara" "m.rga" below *)
+   | "sukha" | "du.hkha" (* also "adhvara" "m.rga" below *)
    | "i.sudhi" | "gadgada" (* \Pan{3,1,27} *)
-   | "agada" (* Kale§660 *) | "iras" 
+   | "agada" (* Kale§660 *) | "iras" (* | "pu.spa" replaced by root pu.sp *)
        -> trunc rstem (* -()yati *) (* lopa *) 
    (* | "maarg" | "mok.s" | "lak.s" | "suuc" 
     -> [ 1 :: rstem ] (* -ayati *) presently roots class 10 *)
@@ -5402,7 +5404,7 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
        -> lengthen rstem (* lengthening -aayati *) 
    | "asuuya" (* "asu" lengthened *) | "gomaya" | "vyaya" (* euphony *)
        -> trunc (trunc rstem) 
-   | "artha" | "veda" | "satya" (* \Pan{3,1,25} vt. *)
+   | "artha" | "veda" | "satya" (* \Pan{3,1,25} Vt. *)
        -> [ 1 :: [ 37 :: [ 2 :: trunc rstem ] ] ] (* -aapayati - interc p *) 
    (* |  (* very rare Whitney§1059d e.g. "putra" *)
        -> [ 3 :: trunc_a rstem ] (* -()iyati *) *)
@@ -5464,7 +5466,10 @@ value den_stem_m entry = (* in general intransitive or reflexive Whitney§1059c 
    | "taru.na" | "nika.sa" | "parok.sa" | "piiyuu.savar.sa" | "pu.spa" | "priya"
    | "bh.rza" | "maalyagu.na" | "lohita" | "zalabha" | "zithila" | "ziighra" 
    | "zyaama" | "zyena" | "safka.ta"
-   | "ka.n.du" | "karu.na" | "sukha" | "su.hkha" (* feel \Pan{3,1,18} *)
+   | "ka.n.du" | "karu.na" | "sukha" | "du.hkha" (* feel \Pan{3,1,18} *)
+(* {sukhaadi,du.hkha,t.rpta,k.rcchra,asra,aasra,aliika,pratiipa,karu.na,so.dha}
+   take suffix kyaf in -aayate (ga.na) *)
+   | "t.rpta" (* -MW *)
    | "abhra" | "ka.nva" | "kalaha" | "k.sepa" | "megha" | "vaira" | "zabda" 
    | "z.rfga" (* do \Pan{3,1,17} *)
    | "durdina" | "sudina" | "niihaara" (* id. vaartika *)
@@ -5609,25 +5614,40 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
      | "saa#1" -> do { compute_perif (revcode "si") entry 
                      ; compute_perif rstem entry
                      }
-     | "vyadh" -> compute_perif (revcode "vidh") entry 
-     | "zuu" -> compute_perif (revcode "zve") entry 
-     | "knuu" -> compute_perif (revcode "knuuy") entry 
+     | "vyadh"  -> compute_perif (revcode "vidh") entry 
+     | "zuu"    -> compute_perif (revcode "zve") entry 
+     | "knuu"   -> compute_perif (revcode "knuuy") entry 
      | "stambh" -> compute_perif (revcode "stabh") entry 
      | _ -> compute_perif rstem entry 
      ]
-   ; (* Precative - active rare, middle unknown in classical language except
-        2 occs in Abhisamayaalafkaara (David Reigle) *)
+   ; (* Precative - active rare, middle unknown in classical language 
+      except viik.si.siiran et pratipatsiiran in Abhisamayaalafkaara 
+      (David Reigle) and several k.r.sii.s.ta in BhP and stotras (Harry Spier) *)
      match entry with
-     [ "jiiv" | "budh#1" | "bhuu#1" -> (* Macdonell§150 Kane§960 *)
-        conjug_benedictivea Primary rstem entry (* Whitney§922b *) 
-     | "k.r#1" | "k.sip" | "grah"  | "bandh" | "yaj#1" | "zaas" | "stu" -> 
+     [ "bhuu#1" -> do
+        { conjug_benedictivea Primary rstem entry (* Whitney§924 *) 
+        ; let sibstem = revcode "bhavi.s" in 
+          conjug_benedictivem Primary sibstem entry (* bhavi.sii.s.ta *)
+        }
+     | "jiiv" | "budh#1" -> (* Macdonell§150 Kane§960 *)
+        conjug_benedictivea Primary rstem entry
+     | "k.sip" | "gam" | "grah"  | "ji" | "nii#1" | "bandh" | "yaj#1" | "zaas"
+     | "stu" | "sm.r" -> 
         conjug_benedictivea Primary (passive_stem entry rstem) entry  
-(*[  | "puu1" -> let wstem = revcode "punii" (* weak stem of gana 9 *) in
-        conjug_benedictivea Primary wstem entry] (* puniiyaat Vi.s.nu sahasran *)
-     no - may be obtained as opt[9] *) 
+     | "k.r#1" -> do
+        { conjug_benedictivea Primary (passive_stem entry rstem) entry  
+        ; let sibstem = revcode "k.r.s" in (* k.r.sii.s.ta Kanakadhaarastotra *)
+          conjug_benedictivem Primary sibstem entry 
+        }
+     | "puu1" -> let wstem = revcode "punii" (* weak stem of gana 9 *) in
+        conjug_benedictivea Primary wstem entry (* puniiyaat Vi.s.nu sahasran *)
      | "daa1" -> let wstem = revcode "de" (* Henry§298 aa {\R} e *) in 
         conjug_benedictivea Primary wstem entry (* puissé-je donner! *)
      | "i" ->  conjug_benedictivea Primary [ 4 ] entry (* iiyaat Ram. *)
+     | "iik.s" -> let sibstem = revcode "iik.si.s" in 
+        conjug_benedictivem Primary sibstem entry (* viik.si.siiran *)
+     | "pad#1" -> let sibstem = revcode "pats" in 
+        conjug_benedictivem Primary sibstem entry (* pratipatsiiran *)
      | "m.r" -> let sibstem = revcode "m.r.s" in 
         conjug_benedictivem Primary sibstem entry (* m.r.sii.s.ta \Pan{1,3,61} *)
      | "luu#1" -> let sibstem = revcode "lavi.s" in

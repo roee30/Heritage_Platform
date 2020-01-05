@@ -434,7 +434,7 @@ value passive_stem entry rstem = (* Panini yak (k : no guna, samprasaara.na) *)
     [ [ c :: rst ] -> match c with
         [ 2 (* aa *) -> match rst with
             [ [ 42 (* y *) ] (* yaa1 *)
-            | [ 42 (* y *); 18 (* kh *) ] (* kyaa *) 
+            | [ 42 (* y *); 18 (* kh *) ] (* khyaa *) 
             | [ 42 (* y *); 35 (* dh *) ] (* dhyaa *) -> weak
             | [ 42 (* y *) :: r ] -> [ 4 (* ii *) :: r ] (* ziiyate stiiyate *)
             | _ -> match entry with
@@ -2265,6 +2265,42 @@ value conjug_benedictivem conj sibstem entry =
         ]) 
    ]) 
 ;
+value compute_benedictive rstem entry = 
+   (* Macdonell§150 Kale§960 Whitney§924 Henry§298 *)
+  let bene_stem = let ps_stem = passive_stem entry rstem in
+      match entry with (* Deshpande gram p328 *)
+      [ "j~naa#1" | "daa#1" | "paa#1" | "sthaa#1" | "haa#1" -> 
+           match ps_stem with 
+           [ [ 4 (* ii *) :: rest ] -> [ 10 (* e *) :: rest ] (* ii -> e *)
+           | _ -> failwith "Anomaly bene_stem"
+           ] (* NB Deshpande: also j~naayaat *)
+      | "puu#1" -> revcode "punii" (* weak gana 9 puniiyaat Vi.s.nu sahasr. *)
+      | _ -> ps_stem
+      ] in do
+  { conjug_benedictivea Primary bene_stem entry (* productive, although rare *)
+    (* middle very rare: viik.si.siiran et pratipatsiiran in Abhisamayaalafkaara
+       (David Reigle) and k.r.sii.s.ta in BhP and stotras (Harry Spier) *)
+  ; match entry with 
+    [ "bhuu#1" -> let sibstem = revcode "bhavi.s" in 
+        conjug_benedictivem Primary sibstem entry (* bhavi.sii.s.ta *)
+    | "k.r#1" -> let sibstem = revcode "k.r.s" in (* k.r.sii.s.ta *)
+        conjug_benedictivem Primary sibstem entry (* Kanakadhaarastotra *)
+    | "iik.s" -> let sibstem = revcode "iik.si.s" in 
+        conjug_benedictivem Primary sibstem entry (* viik.si.siiran *)
+    | "j~naa#1" -> let sibstem = revcode "j~naas" in 
+        conjug_benedictivem Primary sibstem entry (* j~naasi.s.ta Deshpande *)
+    | "daa#1" -> let sibstem = revcode "daas" in 
+        conjug_benedictivem Primary sibstem entry (* daasi.s.ta Deshpande *)
+    | "pad#1" -> let sibstem = revcode "pats" in 
+        conjug_benedictivem Primary sibstem entry (* pratipatsiiran *)
+    | "m.r" -> let sibstem = revcode "m.r.s" in 
+        conjug_benedictivem Primary sibstem entry (* m.r.sii.s.ta \Pan{1,3,61} *)
+    | "luu#1" -> let sibstem = revcode "lavi.s" in
+        conjug_benedictivem Primary sibstem entry (* lavi.sii.s.ta \Pan{3,4,116} *)
+    | _ -> ()
+    ]
+  }
+;
 (*****************)
 (* Future system *)
 (*****************)
@@ -2337,7 +2373,8 @@ value compute_future stem entry =
        [ Para -> do (* active only *) 
          { compute_futurea Primary stem entry 
          ; match entry with (* conditional or atma on demand *)
-           [ "bhuu#1" -> compute_conda Primary stem entry
+           [ "grah" | "jiiv" | "bhuu#1" | "zaas" | "stu" | "sm.r" | "haa#1" 
+                     -> compute_conda Primary stem entry
            | "khaad" -> compute_futurem Primary stem entry 
            | _ -> ()
            ]
@@ -2348,7 +2385,8 @@ value compute_future stem entry =
          { compute_futurea Primary stem entry 
          ; compute_futurem Primary stem entry 
          ; match entry with (* rare conditional *)
-           [ "i" | "k.r#1" | "gam" | "tap" | "daa#1" -> do
+           [ "i" | "k.r#1" | "gam" | "ji" | "j~naa#1" | "tap" | "daa#1" 
+           | "nii#1" | "bandh" | "budh#1" | "m.r" | "yaj#1" | "sthaa#1" -> do
               { compute_conda Primary stem entry 
               ; compute_condm Primary stem entry 
               }
@@ -2363,8 +2401,8 @@ value compute_future_ca stem entry = do
   ; compute_futurem Causative stem entry 
   ; match entry with (* rare conditional *)
     [ "j~naa#1" -> do
-       { compute_conda Primary stem entry 
-       ; compute_condm Primary stem entry 
+       { compute_conda Causative stem entry 
+       ; compute_condm Causative stem entry 
        }
     | _ -> ()
     ]
@@ -2406,9 +2444,9 @@ value intercalates root =
             [ "ak.s" | "a~nj" | "k.rt#1" | "k.rp" | "k.lp" | "kram" | "k.sam" 
             | "klid" | "kliz" | "gup" | "guh" | "ghu.s" | "jan" | "ta~nc" 
             | "tap" | "t.rd" | "tyaj#1" | "dah#1" | "d.rp" | "nam" | "naz" 
-            | "n.rt" | "bandh" | "bhaj" | "majj" | "man" | "m.rj" | "yam" 
-            | "ruh" | "labh" | "likh" | "vap#2" | "vas#1" | "vah#1" | "vij"
-            | "vid#1" | "v.rj" | "v.rt#1" | "vrazc" | "sad#1" | "sah#1"
+            | "n.rt" | "bandh" | "budh#1" | "bhaj" | "majj" | "man" | "m.rj"
+            | "yam" | "ruh" | "labh" | "likh" | "vap#2" | "vas#1" | "vah#1" 
+            | "vij" | "vid#1" | "v.rj" | "v.rt#1" | "vrazc" | "sad#1" | "sah#1"
             | "sidh#2" | "svap" | "han#1" | "syand" (* WR: set atma, anit para *)
                 -> vet  
             | "grah" -> setl
@@ -2419,7 +2457,7 @@ value intercalates root =
             | "k.sudh#1" | "khid" | "chid#1" | "tud#1" | "tu.s" | "t.rp#1"
             | "tvi.s#1" | "diz#1" | "dih" | "du.s" | "duh#1" | "d.rz#1" 
             | "dvi.s#1" | "nah" | "nij" | "nud" | "pac" | "pad#1" | "pi.s" 
-            | "pu.s#1" | "praz" | "budh#1" | "bha~nj" | "bha.s" | "bhid#1"
+            | "pu.s#1" | "praz" | "bha~nj" | "bha.s" | "bhid#1"
             | "bhuj#1" | "bhuj#2" | "mih" | "muc#1" | "m.rz" | "yaj#1" | "yabh" 
             | "yuj#1" | "yudh#1" | "ra~nj" | "rabh" | "ram" | "raadh" | "ric"
             | "ruj#1" | "rudh#1" | "rudh#2" | "ruh#1" | "lip" | "liz" | "lih#1"
@@ -5454,7 +5492,7 @@ value den_stem_m entry = (* in general intransitive or reflexive Whitney§1059c 
        -> trunc (trunc rstem) 
    | "tavi.sa" | "citra" (* do \Pan{3,1,19} *) | "sajja"
        -> [ 4 :: trunc_a rstem ] (* -()iiyate *)
-   | "arth" -> [ 1 :: trunc_a rstem ] (* arthayate for lexicon access *)
+   | "arth" -> [ 1 :: rstem ] (* arthayate for lexicon access *)
    | "apsaras" | "sumanas" (* act as, become \Pan{3,1,11-12} *) 
    | "unmanas" 
    | "uu.sman" (* emit \Pan{3,1,16} *)
@@ -5564,6 +5602,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
    try do
    { (* Present system plus perif pft and future, infinitives and pfp-tavya *)
      compute_present_system entry rstem 10 pada third 
+     (* missing: imperative in -taat Whitney§570-1 (post-vedic rare) *)
      (* Future and Conditional *) 
    ; compute_future_10 rstem entry 
      (* Passive *)
@@ -5620,40 +5659,8 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
      | "stambh" -> compute_perif (revcode "stabh") entry 
      | _ -> compute_perif rstem entry 
      ]
-   ; (* Precative - active rare, middle unknown in classical language 
-      except viik.si.siiran et pratipatsiiran in Abhisamayaalafkaara 
-      (David Reigle) and several k.r.sii.s.ta in BhP and stotras (Harry Spier) *)
-     match entry with
-     [ "bhuu#1" -> do
-        { conjug_benedictivea Primary rstem entry (* Whitney§924 *) 
-        ; let sibstem = revcode "bhavi.s" in 
-          conjug_benedictivem Primary sibstem entry (* bhavi.sii.s.ta *)
-        }
-     | "jiiv" | "budh#1" -> (* Macdonell§150 Kane§960 *)
-        conjug_benedictivea Primary rstem entry
-     | "k.sip" | "gam" | "grah"  | "ji" | "nii#1" | "bandh" | "yaj#1" | "zaas"
-     | "stu" | "sm.r" -> 
-        conjug_benedictivea Primary (passive_stem entry rstem) entry  
-     | "k.r#1" -> do
-        { conjug_benedictivea Primary (passive_stem entry rstem) entry  
-        ; let sibstem = revcode "k.r.s" in (* k.r.sii.s.ta Kanakadhaarastotra *)
-          conjug_benedictivem Primary sibstem entry 
-        }
-     | "puu1" -> let wstem = revcode "punii" (* weak stem of gana 9 *) in
-        conjug_benedictivea Primary wstem entry (* puniiyaat Vi.s.nu sahasran *)
-     | "daa1" -> let wstem = revcode "de" (* Henry§298 aa {\R} e *) in 
-        conjug_benedictivea Primary wstem entry (* puissé-je donner! *)
-     | "i" ->  conjug_benedictivea Primary [ 4 ] entry (* iiyaat Ram. *)
-     | "iik.s" -> let sibstem = revcode "iik.si.s" in 
-        conjug_benedictivem Primary sibstem entry (* viik.si.siiran *)
-     | "pad#1" -> let sibstem = revcode "pats" in 
-        conjug_benedictivem Primary sibstem entry (* pratipatsiiran *)
-     | "m.r" -> let sibstem = revcode "m.r.s" in 
-        conjug_benedictivem Primary sibstem entry (* m.r.sii.s.ta \Pan{1,3,61} *)
-     | "luu#1" -> let sibstem = revcode "lavi.s" in
-        conjug_benedictivem Primary sibstem entry (* lavi.sii.s.ta \Pan{3,4,116} *)
-     | _ -> ()
-     ]
+   ; (* Precative/Benedictive active rare, middle very rare in classical skt *)
+     compute_benedictive rstem entry 
    ; (* Passive *)
      if admits_passive entry then 
         let ps_stem = passive_stem entry rstem in do
@@ -5677,7 +5684,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
         -> () (* no perfect *)
      | "uuh" -> () (* periphrastic *)
      | _ -> compute_perfect entry
-     ]
+     ] (* NB perfect forms may have a passive meaning *)
    ; (* Periphrastic Perfect *) (* .namul on demand - except gana 10 above *)
      try let stem = peri_perf_stem entry in
          build_perpft Primary stem entry

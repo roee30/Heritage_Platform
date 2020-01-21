@@ -4,12 +4,12 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Html = struct i*)
 
-(* Pidgin ML comme langage de script du pauvre pour HTML et XML *)
+(* Pidgin ML as scripting langage of the poor for HTML and XML *)
 
 (**************************)
 (* Generic HTML scripting *)
@@ -475,47 +475,47 @@ value class_of = fun
     | Green_back      -> "green_back"
     | Lawngreen_back  -> "lawngreen_back"
     | Aquamarine_back -> "aquamarine_back"
-    | Grey_back    -> "grey_back"
-    | Blue_        -> "blue" 
-    | Green_       -> "green"
-    | Navy_        -> "navy"
-    | Red_         -> "red"
-    | Roma16o      -> "red16"
-    | Roma12o      -> "roma12o"
-    | Magenta_     -> "magenta"
-    | Header_deva  -> "header_deva"
-    | Header_tran  -> "header_tran"
-    | Latin12      -> "latin12"
-    | Deva         -> "deva"
-    | Devared_     -> "devared"
-    | Devac        -> "devac" 
-    | Deva16       -> "deva16"
-    | Deva16c      -> "deva16c"
-    | Deva20c      -> "deva20c"
-    | Alphabet     -> "alphabet"
-    | Title        -> "title"
-    | Trans12      -> "trans12"
-    | B1           -> "b1"
-    | B2           -> "b2"
-    | B3           -> "b3"
-    | C1           -> "c1"
-    | C2           -> "c2"
-    | C3           -> "c3"
-    | G2           -> "g2"
-    | Center_      -> "center"
-    | Tcenter      -> "center"
-    | Spacing20    -> "spacing20"
-    | Latin16      -> "latin16"
-    | Trans16      -> "trans16"
-    | Math         -> "math"
-    | Enpied       -> "enpied"
-    | Bandeau      -> "bandeau"
-    | Pad60        -> "pad60"
-    | Cell5        -> "cell5"
-    | Cell10       -> "cell10"
-    | Border2      -> "border2"
-    | Body         -> "body"
-    | Hidden_      -> "hidden"
+    | Grey_back       -> "grey_back"
+    | Blue_           -> "blue" 
+    | Green_          -> "green"
+    | Navy_           -> "navy"
+    | Red_            -> "red"
+    | Roma16o         -> "red16"
+    | Roma12o         -> "roma12o"
+    | Magenta_        -> "magenta"
+    | Header_deva     -> "header_deva"
+    | Header_tran     -> "header_tran"
+    | Latin12         -> "latin12"
+    | Deva            -> "deva"
+    | Devared_        -> "devared"
+    | Devac           -> "devac" 
+    | Deva16          -> "deva16"
+    | Deva16c         -> "deva16c"
+    | Deva20c         -> "deva20c"
+    | Alphabet        -> "alphabet"
+    | Title           -> "title"
+    | Trans12         -> "trans12"
+    | B1              -> "b1"
+    | B2              -> "b2"
+    | B3              -> "b3"
+    | C1              -> "c1"
+    | C2              -> "c2"
+    | C3              -> "c3"
+    | G2              -> "g2"
+    | Center_         -> "center"
+    | Tcenter         -> "center"
+    | Spacing20       -> "spacing20"
+    | Latin16         -> "latin16"
+    | Trans16         -> "trans16"
+    | Math            -> "math"
+    | Enpied          -> "enpied"
+    | Bandeau         -> "bandeau"
+    | Pad60           -> "pad60"
+    | Cell5           -> "cell5"
+    | Cell10          -> "cell10"
+    | Border2         -> "border2"
+    | Body            -> "body"
+    | Hidden_         -> "hidden"
     ]
 ; 
 (* Allows css style compiling even when browser does not support css *)
@@ -628,7 +628,7 @@ value anchor_pseudo url link =
 (***************************)
 
 value start_year = " 1994-"
-and current_year = "2019"
+and current_year = "2020"
 and author_name = "G&#233;rard Huet"
 ;
 value copyright = "&#169; " ^ author_name ^ start_year ^ current_year
@@ -761,13 +761,11 @@ value string_of_js_funcall f =
 ;
 value button ?id ?cl ?onclick label =
   let button = "button" in
-  let attrs =
-    add_opt_attrs
+  let attrs = add_opt_attrs
       [ ("onclick", Gen.opt_app string_of_js_funcall onclick)
       ; ("id", id)
       ; ("class", Gen.opt_app class_of cl)
-      ] []
-  in
+      ] [] in
   let button_begin = xml_begin_with_att button attrs in
   let button_end = xml_end button in
   button_begin ^ label ^ button_end
@@ -785,9 +783,8 @@ value escape s =
     ] in
   let escape s =
     try "&" ^ List.assoc s conversion_tbl ^ ";" with [ Not_found -> s ] in
-  let special_chars =
-    Str.regexp (
-      "[" ^ String.concat "" (conversion_tbl |> List.split |> fst) ^ " ]") in
+  let special_chars = Str.regexp 
+      ("[" ^ String.concat "" (conversion_tbl |> List.split |> fst) ^ " ]") in
   let subst s = s |> Str.matched_string |> escape in
   Str.global_substitute special_chars subst s
 ;

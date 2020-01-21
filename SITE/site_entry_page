@@ -5,7 +5,7 @@
 
 <title>The Sanskrit Heritage Site</title>
 <meta name="author" content="Gérard Huet">
-<meta property="dc:datecopyrighted" content="2019">
+<meta property="dc:datecopyrighted" content="2020">
 <meta property="dc:rightsholder" content="Gérard Huet">
 <meta name ="keywords" content="india,dictionary,indology,sanskrit,lexicography,linguistics,indo-european,dictionnaire,sanscrit,panini,indology,linguistics">
 <meta name="description" content="This site provides tools for Sanskrit processing: dictionary search, morphology generation and analysis, segmentation, tagging and parsing.">
@@ -220,7 +220,7 @@ The various grammatical abbreviations used in these lemmas are available
 N.B. Do not attempt to lemmatize verbal forms with preverbs - this will
 not work, it knows only how to invert root forms. Lemmatizing
 more complex forms is possible through the Sanskrit Reader interface,
-as we shall see below.
+as explained in the manual.
 
 <h2 class="b2"> Morphology </h2>
 
@@ -440,7 +440,7 @@ of programs implemented in the
 <a href="http://ocaml.org">Objective Caml</a>
 programming language. The Zen library and its documentation are available
 as free software under the Gnu Lesser General Public License (LGPL) from the
-<a href="http://pauillac.inria.fr/~huet/ZEN/">Zen site.</a>
+<a href="https://gitlab.inria.fr/huet/Zen.git">Zen gitlab site.</a>
 </p>
 <!-- Forum closed
 Please visit the <a href="http://sanskrit.inria.fr/zf/">Zen Forum</a> for
@@ -493,7 +493,7 @@ Artwork credits</h2>
 <a href="DICO/corpus.#LANG.html"><b>Corpus</b></a> |
 <a href="faq.#LANG.html"><strong>Help</strong></a> |
 <a href="portal.#LANG.html"><strong>Portal</strong></a>
-</td></tr><tr><td>© Gérard Huet 1994-2019</td></tr></table></td><td>
+</td></tr><tr><td>© Gérard Huet 1994-2020</td></tr></table></td><td>
 <a href="http://www.inria.fr/">
 <img src="IMAGES/logo_inria.png" alt="Logo Inria" height="50"></a>
 <br></td></tr></table></div>

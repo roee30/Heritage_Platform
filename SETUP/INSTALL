@@ -41,12 +41,11 @@ Unix operating system, such as FreeBSD, Linux or MacOSX.
 They may also apply under to versions of Windows under the Cigwin emulator, 
 but this has not been tested.
 
-
 The Sanskrit Heritage Platform, implemented as a set of Web services,
 uses a separate package Heritage_resources that defines the Sanskrit
 linguistic data necessary for its operation. It also uses the Zen
 computational linguistics Ocaml library.
-these packages may be pulled as Git packages. 
+These packages may be pulled as Git packages. 
 
 Create a clean installation directory HERITAGE, where you run successively:
 git clone git@gitlab.inria.fr:huet/Zen.git
@@ -185,7 +184,8 @@ LoadModule cgi_module ...
 
 Another route is to install the software with XAMPP, an open-source 
 lightweight Apache distribution that makes it easier for developers 
-to install a local web server. 
+to install a local web server. Another possible replacement for Apache
+is the MAMP package. 
 
 ______________
 

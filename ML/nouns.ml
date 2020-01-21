@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Nouns = struct i*)
@@ -149,7 +149,7 @@ and as_iiv = fun (* sn *)
   | _ -> False
   ]
 and aa_iiv = fun 
-  [ "kathaa"-> True  
+  [ "kathaa" -> True  
   | _ -> False   
   ]
 (* NB [aa_iic] obsolete, now use separate entry femcf marked fstem *)
@@ -5348,7 +5348,7 @@ value compute_nouns_stem_form e stem d p =
                  | _      (* other ppf *) -> build_neu_vas r3 e 
                  ]
                | [ 43 :: [ 48 :: _ ]] (* -sras *) -> build_root Neu stem e
-               | _  -> build_as Neu r2 e
+               | _ (* manas, ziras, ... *) -> build_as Neu r2 e 
                ]
             | [ 2 :: r2 ] (* -aas *) -> match r2 with
                [ [] -> build_neu_aas stem e (* aas3 irregular *)
@@ -5473,6 +5473,7 @@ value compute_nouns_stem_form e stem d p =
       | [ 11 :: r1 ](* -ai *) -> match r1 with
             [ [ 43 ] (* rai *) -> build_rai Fem [ 2; 43 ] e
 (*          | [ 39; 41; 5; 41 ] (* mumbai *) -> (* TO DO *) *)
+(*          | [ 48; 32; 32; 1; 48 ] (* sattasai *) -> (* idem *) *)
             | _ -> report stem Fem
             ]
       | [ 12 :: r1 ] (* -o *) ->  build_o Fem r1 e

@@ -114,7 +114,7 @@ value voices_of = fun
   (* Attested Ubha (over all ga.nas) : 
   [ "a~nc" | "arh" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" | ".r" | ".rj"
   | "ka.n.d" | "kal" | "ka.s" | "ku.t.t" | "ku.n.d" | "k.r#1" | "k.r#2" | "k.r.s"
-  | "kram" | "krii" | "k.san" | "k.sap#1" | "k.sam" | "k.sal" | "k.sip" | "k.sud"
+  | "kram" | "krii#1" | "k.san" | "k.sap#1" | "k.sam" | "k.sal" | "k.sip" | "k.sud"
   | "k.s.nu" | "khan" | "gam" | "garh" | "gaah" | "guh" | "gras" | "gha.t.t" 
   | "cat" | "carc" | "ci" | "cint" | "cud" | "ce.s.t" | "cyu" | "chad#1"
   | "chand" | "chid#1" | "jan" | "juu" | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d"
@@ -308,7 +308,7 @@ value voices_of_pv upasarga gana = fun
           ]
 | "zii#1" -> if upasarga = "sam" then Ubha else Atma 
 | "zram" -> if upasarga = "vi" then Ubha (* epic vizramate *) else Para
-| "krii" -> match upasarga with
+| "krii#1" -> match upasarga with
             [ "vi" -> Ubha (* vikrii.naati/vikrii.niite *)
             | "pari" | "ava" -> Atma 
             | _ -> Para (* \Pan{1,3,18} *)

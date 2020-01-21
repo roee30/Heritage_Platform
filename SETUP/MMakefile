@@ -5,7 +5,7 @@
 #                         Gérard Huet & Pawan Goyal                        #
 #                                                                          #
 ############################################################################
-#TEMPLATE Makefile of SKT Platform      #DATE      Copyright Gérard Huet 2019 #
+#TEMPLATE Makefile of SKT Platform      #DATE      Copyright Gérard Huet 2020 #
 ############################################################################
 #WARN
 
@@ -395,8 +395,6 @@ WX_XML_MORPHOLOGY=$(XMLDATA)/WX_morph.tar.gz
 XML_DTD=$(XMLDATA)/SL_morph.dtd $(XMLDATA)/WX_morph.dtd
 XML_MORPHOLOGY=$(SL_XML_MORPHOLOGY) $(WX_XML_MORPHOLOGY) $(XML_DTD)
 
-# Various test examples
-# CORPUS=CORPUS/APTE CORPUS/Baladarza CORPUS/NN CORPUS/S_Raama CORPUS/REGRESSION
 
 ###########
 # Scripts #
@@ -640,7 +638,6 @@ install: #after distribution to host site: "./configure; make; sudo make install
 	SETUP/issudo.sh
 	test -f $(SERVERPUBLICDIR)DATA/cache.txt && echo "cold install" || $(MAKE) cold
 	cd $(SERVERPUBLICDIR)DATA; touch $(CACHES); chmod a+w $(CACHES)
-	test -f $(SERVERPUBLICDIR)$(VAR)/regression.txt && echo "regression install" || $(MAKE) install_regression
 	$(MAKE) release
 	ML/restore_caches
 
@@ -654,12 +651,6 @@ cold: # for first install
 	cd $(SERVERPUBLICDIR)DATA; touch $(CACHES); chmod a+w $(CACHES)
 	$(MAKE) empty_caches
 #	$(MAKE) install_counter # only for master site migration
-
-install_regression: # for initialisation of regression suite - su privilege
-	mkdir -p $(SERVERPUBLICDIR)$(VAR)
-	chmod a+rw $(SERVERPUBLICDIR)$(VAR)
-#TODO	cp -p $(STAT)/regression_template $(SERVERPUBLICDIR)$(VAR)/regression.txt
-#TODO	chmod a+rw $(SERVERPUBLICDIR)$(VAR)/regression.txt
 
 empty_caches: ML/reset_caches # caution: will reset the caches
 	ML/reset_caches

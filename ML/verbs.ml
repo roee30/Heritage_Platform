@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Verbs defines the conjugation paradigms, and computes conjugated forms *)
@@ -2269,7 +2269,7 @@ value compute_benedictive rstem entry =
    (* Macdonell§150 Kale§960 Whitney§924 Henry§298 *)
   let bene_stem = let ps_stem = passive_stem entry rstem in
       match entry with (* Deshpande gram p328 *)
-      [ "j~naa#1" | "daa#1" | "paa#1" | "sthaa#1" | "haa#1" -> 
+      [ "daa#1" | "paa#1" | "sthaa#1" | "haa#1" -> (* not "j~naa#1" *) 
            match ps_stem with 
            [ [ 4 (* ii *) :: rest ] -> [ 10 (* e *) :: rest ] (* ii -> e *)
            | _ -> failwith "Anomaly bene_stem"
@@ -4116,6 +4116,10 @@ value compute_aorist entry =
       { compute_thematic_aorista weak entry
       ; compute_thematic_aoristm weak entry (* middle very rare *)
       }
+    | "vac" -> let stem = revcode "voc" in do
+      { compute_thematic_aorista stem entry
+      ; compute_thematic_aoristm stem entry 
+      }
     | "vyaa" -> let stem = revcode "vi" in do
       { compute_thematic_aorista stem entry
       ; compute_thematic_aoristm stem entry 
@@ -4125,7 +4129,6 @@ value compute_aorist entry =
     | "khyaa" -> compute_thematic_aorista (revcode "khy") entry
     | "as#2"  -> compute_thematic_aorista (revcode "asth") entry
     | "pat#1" -> compute_thematic_aorista (revcode "papt") entry
-    | "vac"   -> compute_thematic_aorista (revcode "voc") entry 
     | (* roots in .r or .rr take strong stem *)
       ".r" | "d.rz#1" -> compute_thematic_aorista strong entry
     | _ -> () 
@@ -4219,7 +4222,7 @@ value compute_aorist entry =
     | "car" | "ce.s.t" | "jap" | "jalp" | "jaag.r" | "t.rr" | "diip"
     | "pa.th" | "puu#1" | "p.rc"| "pru.s#1" | "baadh" | "budh#1" | "mad#1" 
     | "mud#1" | "muurch" | "mlecch" | "yaac" | "ruc#1" | "lu~nc" | "luu#1"
-    | "vad" | "vadh" | "vid#1" | "v.r#1" | "vraj" | "z.rr" | "sidh#2" 
+    | "vad" | "vaz" | "vadh" | "vid#1" | "v.r#1" | "vraj" | "z.rr" | "sidh#2" 
     | "skhal" | "stan" | "stu" | "hi.ms" -> do
       { let stem = match weak with
             [ [ 7 (* .r *) :: _ ] -> 
@@ -4305,7 +4308,10 @@ value compute_injunctive entry =
       ; compute_thematic_injunctm weak entry (* middle is very rare *)
       }
     | "zram" -> compute_thematic_injuncta weak entry (* zramat *)
-    | "vac" -> compute_thematic_injuncta (revcode "voc") entry (* vocat *) 
+    | "vac" -> let weak = revcode "voc" in do
+               { compute_thematic_injuncta weak entry (* vocat *) 
+               ; compute_thematic_injunctm weak entry (* vocantq *) 
+               }
     | "zru" -> compute_thematic_injuncta (revcode "zrav") entry (* zravat *)
     | _ -> () 
     ]
@@ -4340,7 +4346,7 @@ value compute_injunctive entry =
     | "uuh" | ".rc#1" | "k.rt#1" | "krand" | "kram" | "k.san"  | "khan"  | "car" 
     | "ce.s.t" | "jalp" | "jaag.r" | "t.rr" | "diip" | "pa.th" 
     | "puu#1" | "p.rc" | "baadh" | "budh#1" | "mad#1" | "mud#1" | "muurch" 
-    | "mlecch" | "yaac" | "ruc#1" | "lu~nc" | "luu#1" | "vad" | "vadh" 
+    | "mlecch" | "yaac" | "ruc#1" | "lu~nc" | "luu#1" | "vad" | "vadh" | "vaz" 
     | "vid#1" | "v.r#1" | "vraj" | "z.rr" | "sidh#2" | "skhal" | "stan"
     | "stu" | "hi.ms" -> do
       { let stem = match weak with
@@ -5505,8 +5511,8 @@ value den_stem_m entry = (* in general intransitive or reflexive Whitney§1059c 
    | "bh.rza" | "maalyagu.na" | "lohita" | "zalabha" | "zithila" | "ziighra" 
    | "zyaama" | "zyena" | "safka.ta"
    | "ka.n.du" | "karu.na" | "sukha" | "du.hkha" (* feel \Pan{3,1,18} *)
-(* {sukhaadi,du.hkha,t.rpta,k.rcchra,asra,aasra,aliika,pratiipa,karu.na,so.dha}
-   take suffix kyaf in -aayate (ga.na) *)
+(* Ga.na{sukhaadi} take suffix kyaf in -aayate :
+   {sukha,du.hkha,t.rpta,k.rcchra,asra,aasra,aliika,pratiipa,karu.na,so.dha}  *)
    | "t.rpta" (* -MW *)
    | "abhra" | "ka.nva" | "kalaha" | "k.sepa" | "megha" | "vaira" | "zabda" 
    | "z.rfga" (* do \Pan{3,1,17} *)
@@ -5660,7 +5666,10 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
      | _ -> compute_perif rstem entry 
      ]
    ; (* Precative/Benedictive active rare, middle very rare in classical skt *)
-     compute_benedictive rstem entry 
+      match entry with 
+      [ "as#1" -> () (* uses bhuu *) (* but Zriivara: staat *)
+      | _ -> compute_benedictive rstem entry 
+      ]
    ; (* Passive *)
      if admits_passive entry then 
         let ps_stem = passive_stem entry rstem in do

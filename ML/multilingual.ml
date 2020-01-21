@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Multilingual = struct i*)
@@ -36,7 +36,7 @@ value gender_caption gender = fun
       ])
   | Deva -> deva12_blue_center (Encode.skt_raw_to_deva (match gender with 
       [ Mas -> "pumaan"
-      | Fem -> "strii.h"
+      | Fem -> "strii"
       | Neu -> "napu.msakam"
       | Deictic _ -> "sarvam"
       ]))
@@ -48,9 +48,9 @@ and number_caption number = fun
       | Plural   -> "Plural" 
       ])
   | Deva -> deva12_blue_center (Encode.skt_raw_to_deva (match number with 
-      [ Singular -> "eka.h" 
-      | Dual     -> "dvau" 
-      | Plural   -> "bahava.h" 
+      [ Singular -> "eka" 
+      | Dual     -> "dvi" 
+      | Plural   -> "bahu" 
       ]))
   ]
 and case_caption case = fun

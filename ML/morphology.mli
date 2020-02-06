@@ -61,6 +61,7 @@ type morphology =
   ; iivs     : inflected_map
   ; peris    : inflected_map 
   ; auxis    : inflected_map 
+  ; auxiinvs : inflected_map 
   ; auxiks   : inflected_map 
   ; auxiicks : inflected_map 
   ; vocas    : inflected_map

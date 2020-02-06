@@ -14,7 +14,7 @@ A more complete installation procedure is described in file SETUP/INSTALL.
 0) Install OCaml (>= 4.07). See http://ocaml.org for installation
 instructions.
 
-Then install the Camplp4 processor in the corresponding distribution.
+Then install the Camplp4 processor in the corresponding distribution as follows.
 If OCaml has been installed through the OPAM package manager, then:
 
    opam install camlp4
@@ -34,23 +34,27 @@ to settle for not the most recent version of Ocaml.
 
    git clone https://gitlab.inria.fr/huet/Heritage_Resources.git
 
-3) Create your configuration file "config" in directory SETUP.
+3) Install the Heritage_platform package:
+
+   git clone https://gitlab.inria.fr/huet/Heritage_Platform.git
+
+4) Create your configuration file "config" in directory SETUP.
 
 Look at the SETUP/CONFIGS directory to find examples. All fields are
 explained in SETUP/config_help.txt.
 
-3) Launch configuration in main dir
+5) Launch configuration in main dir
 
    ./configure
 
-4) Launch compilation
+6) Launch compilation
 
    make
 
-5) Install it
+7) Install it
 
    sudo make install
 
-6) Enjoy :-)
+8) Enjoy :-)
 
 Report all problems to Gerard.Huet@inria.fr

@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* [Load_morphs] *)
@@ -26,7 +26,7 @@ module Morphs
   | Iic | Iic2 
   | Iiif 
   | Iiv | Iivv | Iivc
-  | Auxi | Auxik | Auxiick
+  | Auxi | Auxiinv | Auxik | Auxiick
   | Ifc | Ifc2
   | Peri (* periphrastic perfect *)
   | Lopa (* e/o conjugated root forms with lopa *) 
@@ -107,6 +107,7 @@ value load_morphs () =
   ; iiys  = load_morpho Data.public_avyayais_file
   ; avys  = load_morpho Data.public_avyayafs_file
   ; auxis = load_morpho Data.public_auxis_file
+  ; auxiinvs = load_morpho Data.public_auxiinvs_file
   ; auxiks = load_morpho Data.public_auxiks_file
   ; auxiicks = load_morpho Data.public_auxiicks_file
   ; vocas = load_morpho Data.public_vocas_file
@@ -132,6 +133,7 @@ value morpho_tags = fun
     | Absv | Absc        -> morpho.abstvaa
     | Abso               -> morpho.absya
     | Auxi               -> morpho.auxis
+    | Auxiinv            -> morpho.auxiinvs
     | Auxik              -> morpho.auxiks
     | Auxiick            -> morpho.auxiicks
     | Voca | Vocv | Vocc -> morpho.vocas

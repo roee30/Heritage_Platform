@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* [Load_transducers] *)
@@ -37,7 +37,8 @@ type transducer_vect =
   ; iifc : auto (* iic forms of ifc stems *) 
 (*; iik  : auto (* iik stems *) *)
   ; iiv  : auto (* iiv periphrastic stems *)
-  ; auxi : auto (* their k.r and bhuu finite forms supports *) 
+  ; auxi : auto (* as k.r and bhuu finite forms *) 
+  ; auxiinv : auto (* as k.r and bhuu abs and inf forms *) 
   ; auxik : auto (* their k.r and bhuu kridanta forms supports *) 
   ; auxiick : auto (* their k.r and bhuu iic kridanta forms supports *) 
 (*; ifc  : auto (* ifc forms *) *)
@@ -107,6 +108,7 @@ value load_transducer cat =
       | "Inftu"   -> Data.public_transinftu_file
       | "Kama"    -> Data.public_transkama_file
       | "Auxi"    -> Data.public_transauxi_file
+      | "Auxiinv" -> Data.public_transauxiinv_file
       | "Auxik"   -> Data.public_transauxik_file 
       | "Auxiick" -> Data.public_transauxiick_file
       | "Voca"    -> Data.public_transvoca_file
@@ -186,6 +188,7 @@ value transducers =
   ; ifc2  = load_transducer "Ifc2" 
   ; iiv = iiv 
   ; auxi  = load_transducer "Auxi"
+  ; auxiinv = load_transducer "Auxiinv"
   ; auxik = load_transducer "Auxik"
   ; auxiick = load_transducer "Auxiick"
   ; inv  = load_transducer "Inv" 

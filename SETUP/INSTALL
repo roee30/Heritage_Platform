@@ -38,7 +38,7 @@ sudo make install
 
 The following instructions assume installation under some version of the 
 Unix operating system, such as FreeBSD, Linux or MacOSX. 
-They may also apply under to versions of Windows under the Cigwin emulator, 
+They may also apply to versions of Windows under the Cigwin emulator, 
 but this has not been tested.
 
 The Sanskrit Heritage Platform, implemented as a set of Web services,

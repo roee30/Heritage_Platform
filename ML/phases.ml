@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 module Phases = struct 
@@ -22,7 +22,7 @@ type phase =
   | Iic | Iic2 (* first part of compounds *)
   | Iiif (* iic of ifc, atteinable from previous iic eg -vartin iic -varti- *) 
   | Iiv | Iivv | Iivc (* inchoatives - cvi verbal compounds *)
-  | Auxi | Auxik | Auxiick (* forms of auxiliary verbs as bhuu k.r *)
+  | Auxi | Auxiinv | Auxik | Auxiick (* forms of auxiliary verbs as bhuu k.r *)
   | Ifc | Ifc2 (* second part of compounds *)
   | Peri (* periphrastic perfect *)
   | Lopa (* e/o conjugated root forms with lopa *) 
@@ -71,6 +71,7 @@ value rec string_of_phase = fun
   | Iivv  -> "Iivv"
   | Iivc  -> "Iivc"
   | Auxi  -> "Auxi" 
+  | Auxiinv -> "Auxiinv" 
   | Auxik -> "Auxik" 
   | Auxiick -> "Auxiick" 
   | Ifc   -> "Ifc"
@@ -131,6 +132,7 @@ and phase_of_string = fun (* unsafe *)
   | "Iivv"  -> Iivv
   | "Iivc"  -> Iivc
   | "Auxi"  -> Auxi
+  | "Auxiinv" -> Auxiinv
   | "Auxik" -> Auxik 
   | "Auxiick" -> Auxiick
   | "Ifc"   -> Ifc

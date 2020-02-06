@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Make_transducers = struct  i*)
@@ -201,6 +201,10 @@ Mini.reset ()
 let inflected = make_inflected Data.auxis_file in
 let transducer = Make_automaton.make_transducer inflected in
 Gen.dump transducer Data.transauxi_file 
+;
+let inflected = make_inflected Data.auxiinvs_file in
+let transducer = Make_automaton.make_transducer inflected in
+Gen.dump transducer Data.transauxiinv_file 
 ;
 Mini.reset () 
 ;

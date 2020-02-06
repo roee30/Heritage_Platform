@@ -187,10 +187,10 @@ value voices_of_gana g root = match g with
         [ "cur" | "budh#1" | "van" | "v.r#1" | "su#2"
         | "suu#1" 
             -> Para 
-        | "i" | "gave.s" | "gha.t.t" | "ghuur.n" | ".damb" | "bhra.mz" | "mid"
+        | "gave.s" | "gha.t.t" | "ghuur.n" | ".damb" | "bhra.mz" | "mid"
         | "mok.s" | "lok" | "svid#2" 
             -> Atma
-        | "i.s#1" | ".r" (* ".r" Atma for pv sam \Pan{1,3,29} also "tap" *)  
+        | "i" | "i.s#1" | ".r" (* ".r" Atma for pv sam \Pan{1,3,29} also "tap" *)  
         | "j.rr" | "tap" | "daa#1" | "dh.r.s" | "as#2" | "kuc" | "k.r.s" 
         | "m.rj" | "m.rd#1" | "rud#1" | "stambh" 
             -> Ubha
@@ -302,7 +302,7 @@ value voices_of_pv upasarga gana = fun
                       ]
           | _ (* 1 | 4 *) -> match upasarga with
                              [ "" -> Atma
-                          (* | "antar" -> Para (* gana 1 antarayati *) *)
+                             | "antar" | "ut" -> Para (* gana 1 antarayati udayati *) 
                              | _ -> raise Unattested
                              ]
           ]

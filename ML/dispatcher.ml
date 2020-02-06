@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Dispatcher: Sanskrit Engine in 53 phases automaton (plus 2 fake ones) *)
@@ -54,9 +54,10 @@ value transducer = fun
   | Iiif -> transducers.iifc (* fake iic of ifc stems *) 
   | Iiv  -> transducers.iiv  (* in initio verbi nominal stems, perpft *) 
   | Inv  -> transducers.inv  (* invocations *)   
-  | Auxi -> transducers.auxi       (* k.r and bhuu finite forms *)
-  | Auxik -> transducers.auxik     (* k.r and bhuu kridanta forms *) 
-  | Auxiick -> transducers.auxiick (* k.r and bhuu kridanta bare forms *)
+  | Auxi -> transducers.auxi       (* k.r as and bhuu finite forms *)
+  | Auxiinv -> transducers.auxiinv (* k.r as and bhuu abs and inf forms *)
+  | Auxik -> transducers.auxik     (* k.r as and bhuu kridanta forms *) 
+  | Auxiick -> transducers.auxiick (* k.r as and bhuu kridanta bare forms *)
   | Peri -> transducers.peri (* periphrastic perfect *)
   | Lopa -> transducers.lopa (* e/o root forms *)
   | Lopak -> transducers.lopak (* e/o kridanta forms *)
@@ -120,7 +121,7 @@ value cached = (* potentially cached lexicon acquisitions *)
 ;
 (* initial1, initial2: phases *)
 value initial1 =
-   (* All phases but Ifc, Abso, Auxi, Auxik, Auxiick, Lopa, Lopak. *)
+   (* All phases but Ifc, Abso, Auxi, Auxiinv, Auxik, Auxiick, Lopa, Lopak. *)
    [ Inde; Iicv; Iicc; Nouv; Nouc; Pron; A; An; Root; Kriv; Kric; Iikv; Iikc
    ; Peri; Pv; Pvkv; Pvkc; Iiv; Iivv; Iivc; Iiy; Inv; Ai; Ani 
    ; Absv; Absc; Inftu; Vocv; Vocc; Vokv; Vokc ] @ cached
@@ -131,7 +132,7 @@ value initial full = if full then initial1 else initial2
 ;
 (* dispatch1: Word.word -> phase -> phases *)
 value dispatch1 w = fun (* w is the current input word *) 
-  [ Nouv | Nouc | Pron | Inde | Abso | Auxi | Auxik | Kama | Ifcv | Ifcc 
+  [ Nouv | Nouc | Pron | Inde | Abso | Auxi | Auxiinv | Auxik | Kama | Ifcv | Ifcc 
   | Kriv | Kric | Absv | Absc | Avy | Lopak | Root | Lopa | Cache -> initial1
   | A -> if phantomatic w then [] else
          [ Iicc; Nouc; Iikc; Kric; Pvkc; Iivc; Vocc; Vokc ]
@@ -150,7 +151,7 @@ value dispatch1 w = fun (* w is the current input word *)
   | Pvc | Pvv -> if phantomatic w then [] else [ Abso ]
   | Pvkc | Pvkv -> if phantomatic w then [] else
           if amuitic w then [ Lopak ] else [ Iikv; Iikc; Kriv; Kric; Vokv; Vokc ]
-  | Iiv -> [ Auxi ] (* as bhuu and k.r finite forms *)
+  | Iiv -> [ Auxi; Auxiinv ] (* as bhuu as and k.r finite, abs and inf  forms *)
   | Iivv | Iivc -> [ Auxik; Auxiick ] (* bhuu and k.r kridanta forms *)
   | Iiy -> [ Avy ]
   | Peri -> [ Auxi ] (* overgenerates, should be only perfect forms *) 
@@ -164,7 +165,7 @@ value dispatch1 w = fun (* w is the current input word *)
   | ph -> failwith ("Dispatcher fake phase: " ^ string_of_phase ph) 
   ]
 and dispatch2 w = fun (* simplified segmenter *)
-  [ Noun2 | Pron | Inde | Abso | Absv | Absc | Auxi | Ifc2 -> 
+  [ Noun2 | Pron | Inde | Abso | Absv | Absc | Auxi | Auxiinv | Ifc2 -> 
       if phantomatic w then [ Root; Abso ] else initial2
   | Root | Lopa -> 
       if phantomatic w then [] (* no consecutive verbs in chunk *)
@@ -172,7 +173,7 @@ and dispatch2 w = fun (* simplified segmenter *)
   | Iic2 -> [ Iic2; Noun2; Ifc2 ]  
   | Pv -> if phantomatic w then [] else 
           if amuitic w then [ Lopa ] else [ Root; Abso ]
-  | Iiv -> [ Auxi ] 
+  | Iiv -> [ Auxi; Auxiinv ] 
   | _ -> failwith "Dispatcher anomaly"
   ]
 ;
@@ -188,7 +189,7 @@ value terminal = (* Accepting phases *)
    ; Inde
    ; Abso; Absv; Absc
    ; Ifcv; Ifcc; Ifc2
-   ; Auxi; Auxik
+   ; Auxi; Auxiinv; Auxik
    ; Vocc; Vocv; Vokv; Vokc; Inv 
    ; Lopa; Lopak
    ; Avy; Kama
@@ -663,7 +664,7 @@ value rec color_of_phase = fun
          | Cache -> Deep_sky 
   | Pron -> Light_blue
   | Root | Auxi | Lopa -> Carmin  
-  | Inde | Abso | Absv | Absc | Ai | Ani -> Mauve
+  | Inde | Abso | Absv | Absc | Auxiinv | Ai | Ani -> Mauve
   | Iiy -> Lavender
   | Avy -> Magenta
   | Inftu -> Salmon 

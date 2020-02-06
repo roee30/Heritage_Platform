@@ -5808,30 +5808,38 @@ value enter_iiv entry =
 value compute_extra_iiv = iter enter_iiv 
 ;
 (* Gati forms used with auxiliary verbs, like Iiv -- form Absya *)
-value gatis =
+value gatis = (* Wh§1092 *)
   [ "saak.saat" (* Pan{1,4,74} in the sense of cvi - becoming *)
-  ; "mithyaa"
+  ; "mithyaa" (* ga.na saak.saadaadi *)
   ; "cintaa"
-  ; "rocanaa"
+  ; "bhadraa"
+  ; "locanaa"
+  ; "vibhaa.saa" (* sampatkaa ? *)
   ; "aasthaa"
   ; "amaa"
-  ; "amaa"
+  ; "zraddhaa" (* praajaryaa praajaruhaa viijaryaa viijaruhaa sa.msaryaa *)
   ; "arthe"
   ; "lava.nam"
-  ; "u.s.nam"
+  ; "u.s.nam" 
   ; "ziitam"
   ; "udakam"
   ; "aardram" 
   ; "agnau"
-  ; "vaze"
+  ; "vaze" (* vikampate ? vihasane prahasane pratapane *)
+  ; "praadur"
+  ; "namas"     (* namask.rtya *)
+  ; "aavis"
   ; "urasi" (* Pan{1,4,75} in the sense of anatyaadhaana cf Sharma *)
   ; "manasi"
   ; "anye" (* Pan{1,4,76} id *)
   ; "pade"
-  ; "nicacane"
+  ; "madhye"
+  ; "nivacane"
   ; "haste" (* Pan{1,4,77} upayamana (mariage) *)
   ; "paa.nau"
   ; "svayam"
+(* TODO: G(urii) 61 sat/asat 63 alam 64 antar 65 ka.ne/manas 66 puras 67 
+   astam-i/gam 68 accha 69 adas 70 tiras 71-72 *)
   ]
 ;
 value enter_gati gati = (* assumes gati has lexical entry *)

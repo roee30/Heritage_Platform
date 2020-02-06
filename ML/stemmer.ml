@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Similar to Tagger but returns tagging if unique, fails otherwise.
@@ -89,6 +89,7 @@ value load_morphs () =
   ; avys  = load_morpho Install.public_avyayafs_file
   ; peris = load_morpho Install.public_peris_file
   ; auxis = load_morpho Install.public_auxis_file
+  ; auxiinvs = load_morpho Install.public_auxiinvs_file
   ; auxiks = load_morpho Install.public_auxiks_file
   ; auxiicks = load_morpho Install.public_auxiicks_file
   ; vocas = load_morpho Install.public_vocas_file

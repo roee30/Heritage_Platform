@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Inflected : sig i*)
@@ -29,6 +29,7 @@ value piics    : ref inflected_map;
 value iivs     : ref inflected_map;
 value peri     : ref inflected_map;
 value auxi     : ref inflected_map;
+value auxiinv  : ref inflected_map;
 value auxik    : ref inflected_map;
 value auxiick  : ref inflected_map;
 value indecls  : ref inflected_map;

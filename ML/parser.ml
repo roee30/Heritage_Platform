@@ -76,7 +76,7 @@ value rec color_of_role = fun (* Semantic role of lexical category *)
   | Noun | Noun2 | Nouv | Nouc | Krid | Kriv | Kric | Ifc | Ifcv | Ifcc | Ifc2
   | Pron | Kama | Lopak | Auxik -> Cyan (* Actor or Predicate *)
   | Root | Lopa |  Auxi -> Pink (* abs-tvaa in Inde *) (* Process *) 
-  | Abso | Absv | Absc | Inde | Avy | Ai | Ani | Inftu (* Circumstance *)
+  | Abso | Absv | Absc | Inde | Avy | Ai | Ani | Inftu | Auxiinv (* Circumstance *)
     -> Lavender 
   | Unknown | Cache | Cachei -> Grey 
   | Comp (_,ph) _ _ -> color_of_role ph

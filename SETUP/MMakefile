@@ -346,7 +346,7 @@ $(DATA)/lopaks.rem $(DATA)/indecls.rem $(DATA)/abstvaa.rem $(DATA)/absya.rem \
 $(DATA)/iics.rem $(DATA)/piics.rem $(DATA)/ifcs.rem $(DATA)/iivs.rem \
 $(DATA)/iifcs.rem $(DATA)/auxi.rem $(DATA)/voca.rem $(DATA)/invs.rem \
 $(DATA)/inftu.rem $(DATA)/kama.rem $(DATA)/nouns2.rem $(DATA)/iics2.rem \
-$(DATA)/avyayais.rem $(DATA)/avyayafs.rem $(DATA)/ifcs2.rem \
+$(DATA)/avyayais.rem $(DATA)/avyayafs.rem $(DATA)/ifcs2.rem $(DATA)/auxiinv.rem \
 $(DATA)/auxik.rem $(DATA)/auxiick.rem $(DATA)/partvocs.rem 
 
 SANDHIS=$(DATA)/sandhis.rem $(DATA)/sandhis_pv.rem $(DATA)/sandhis_ph.rem \
@@ -361,8 +361,8 @@ $(DATA)/transr.rem $(DATA)/transiiy.rem $(DATA)/transavy.rem $(DATA)/transp.rem 
 $(DATA)/transpa.rem $(DATA)/transic.rem $(DATA)/transif.rem \
 $(DATA)/transpic.rem $(DATA)/transiif.rem $(DATA)/transabsya.rem \
 $(DATA)/transabstvaa.rem $(DATA)/transiv.rem $(DATA)/transinde.rem \
-$(DATA)/transpav.rem $(DATA)/translopak.rem \
-$(DATA)/transauxi.rem $(DATA)/transvoca.rem $(DATA)/translopa.rem \
+$(DATA)/transpav.rem $(DATA)/translopak.rem $(DATA)/transauxi.rem \
+$(DATA)/transauxiinv.rem $(DATA)/transvoca.rem $(DATA)/translopa.rem \
 $(DATA)/transn2.rem $(DATA)/transif2.rem $(DATA)/transic2.rem \
 $(DATA)/transauxik.rem $(DATA)/transauxiick.rem $(DATA)/transinv.rem \
 $(DATA)/transinftu.rem $(DATA)/transkama.rem 

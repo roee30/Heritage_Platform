@@ -39,7 +39,7 @@ GRAM = index.ml phonetics.ml int_sandhi.ml skt_morph.mli morphology.mli \
        naming.ml inflected.mli inflected.ml sandhi.ml sandhier.ml pada.ml \
        nouns.mli nouns.ml verbs.mli verbs.ml parts.ml conj_infos.mli \
        automaton.ml automata.ml make_automaton.ml make_preverb_automaton.ml \
-       make_transducers.ml \
+       automaton_vector.mli make_transducers.ml \
        morpho_string.ml morpho.ml declension.ml conjugation.ml indexer.ml \
        indexerd.ml phases.ml lemmatizer.ml auto.mli load_transducers.ml \
        dispatcher.mli dispatcher.ml segmenter.ml load_morphs.ml lexer.mli \
@@ -90,6 +90,8 @@ LINK=ocamlopt -I $(ZEN) -I +camlp4 dynlink.cmxa camlp4lib.cmxa
 
 # standard installation of Sanskrit Heritage platform - assumes ZEN library
 
+all: make_transducers engine sandhi_test
+
 engine: test_version cgis reset_caches restore_caches static_pages mk_corpus 
 
 # reader_plugin parse_apte regression 
@@ -107,8 +109,6 @@ test_version: paths.cmx gen.cmx version.cmx control.cmx test_stamp.cmx
         
 static_pages: css mk_index_page mk_grammar_page mk_sandhi_page mk_reader_page \
 		mk_corpus_page
-
-all: engine sandhi_test
 
 # legacy in need of re-design
 regression: rank.cmx regression.cmx

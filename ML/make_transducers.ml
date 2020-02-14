@@ -37,6 +37,10 @@ B. The multi-automata logic, used for more general sentences, does instead:
         [nouns_file], [roots_file], ... for tagging/lemmatizing.
 *)
 
+open Auto.Auto; (* [auto State ] *) 
+open Automata_vector; (* [transducers_datatype] *) 
+
+(* Takes a morphology map and contracts it to its underlying trie *)
 value make_inflected inflected_file = 
   try let inflected = (Gen.gobble inflected_file : Morphology.inflected_map) in
       Mini.minimize (Deco.forget_deco inflected) 
@@ -65,166 +69,114 @@ value make_preverbs preverbs_file =
      ]
 ;
 
-(* create all transducers files *)
-let inflected = make_inflected Data.nouns_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transn_file 
+(* Creates the transducers files *)
+(* For each lexical category, the trie obtained by forgetting the lemmas is then 
+   decorated as  transducer of type auto *)
+value transducer_of_lemmas deco = 
+  make_inflected deco |> Make_automaton.make_transducer
+and transducer_of_preverbs = (* special sandhi rules *)
+  make_preverbs Data.preverbs_file |> Make_preverb_automaton.make_transducer
+and empty_trans = State (False,[],[]) (* dummy empty transducer *)
 ;
-let inflected = make_inflected Data.nouns2_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transn2_file 
-;
-let inflected = make_inflected Data.kama_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transkama_file 
-;
-let inflected = make_inflected Data.pronouns_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transpn_file 
-;
-Mini.reset () (* since little overlap of finals in subantas and tinantas *)
-;
-let inflected = make_inflected Data.roots_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transr_file 
-;
-let inflected = make_inflected Data.lopas_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.translopa_file 
-;
-Mini.reset ()
-;
-let inflected = make_inflected Data.parts_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transpa_file 
-;
-let inflected = make_inflected Data.lopaks_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.translopak_file 
-;
-let inflected = make_inflected Data.partvocs_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transpav_file 
-;
-Mini.reset ()
-;
-let inflected = make_inflected Data.iics_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transic_file 
-;
-let inflected = make_inflected Data.iics2_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transic2_file 
-;
-Mini.reset ()
-;
-let inflected = make_inflected Data.avyayais_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transiiy_file 
-;
-Mini.reset ()
-;
-let inflected = make_inflected Data.avyayafs_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transavy_file 
-;
-Mini.reset ()
-;
-let inflected = make_inflected Data.vocas_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transvoca_file 
-;
-Mini.reset ()
-;
-let inflected = make_inflected Data.invs_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transinv_file 
-;
-Mini.reset () 
-;
-let inflected = make_inflected Data.piics_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transpic_file 
-;
-Mini.reset () 
-;
-let inflected = make_inflected Data.ifcs_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transif_file 
-;
-let inflected = make_inflected Data.ifcs2_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transif2_file 
-;
-let inflected = make_inflected Data.iifcs_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transiif_file 
-;
-Mini.reset () 
-;
-let inflected = make_inflected Data.indecls_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transinde_file 
-;
-Mini.reset () 
-;
-let inflected = make_inflected Data.inftu_file in
-let transducer = Make_preverb_automaton.make_transducer inflected in
-Gen.dump transducer Data.transinftu_file 
-;
-Mini.reset () 
-;
-let inflected = make_inflected Data.absya_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transabsya_file 
-;
-Mini.reset () 
-;
-let inflected = make_inflected Data.abstvaa_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transabstvaa_file 
-;
-Mini.reset () 
-;
-let inflected = make_inflected Data.iivs_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transiv_file 
-;
-Mini.reset () 
-;
-let inflected = make_inflected Data.peris_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transperi_file 
-;
-Mini.reset () 
-;
-let inflected = make_inflected Data.auxis_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transauxi_file 
-;
-let inflected = make_inflected Data.auxiinvs_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transauxiinv_file 
-;
-Mini.reset () 
-;
-let inflected = make_inflected Data.auxiks_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transauxik_file 
-;
-Mini.reset () 
-;
-let inflected = make_inflected Data.auxiicks_file in
-let transducer = Make_automaton.make_transducer inflected in
-Gen.dump transducer Data.transauxiick_file 
-;
-Mini.reset () 
-;
-
-(* Special treatment for [preverbs_file] created by [Make_preverbs] *)
-let deco = make_preverbs Data.preverbs_file in
-let transducer = Make_preverb_automaton.make_transducer deco in
-Gen.dump transducer Data.transp_file 
+value make_transducers = 
+  (* Remark. We could interleave with calls of [Mini.reset ()] for minimize speedup *)
+  let nouns    = transducer_of_lemmas Data.nouns_file 
+  and nouns2   = transducer_of_lemmas Data.nouns2_file 
+  and kama     = transducer_of_lemmas Data.kama_file 
+  and pronouns = transducer_of_lemmas Data.pronouns_file 
+  and roots    = transducer_of_lemmas Data.roots_file 
+  and lopas    = transducer_of_lemmas Data.lopas_file 
+  and parts    = transducer_of_lemmas Data.parts_file 
+  and lopaks   = transducer_of_lemmas Data.lopaks_file 
+  and partvocs = transducer_of_lemmas Data.partvocs_file 
+  and iics     = transducer_of_lemmas Data.iics_file 
+  and iics2    = transducer_of_lemmas Data.iics2_file 
+  and iifcs    = transducer_of_lemmas Data.iifcs_file 
+  and avyayais = transducer_of_lemmas Data.avyayais_file 
+  and avyayafs = transducer_of_lemmas Data.avyayafs_file 
+  and vocas    = transducer_of_lemmas Data.vocas_file 
+  and invs     = transducer_of_lemmas Data.invs_file 
+  and piics    = transducer_of_lemmas Data.piics_file 
+  and ifcs     = transducer_of_lemmas Data.ifcs_file 
+  and ifcs2    = transducer_of_lemmas Data.ifcs2_file 
+  and indecls  = transducer_of_lemmas Data.indecls_file 
+  and inftu    = transducer_of_lemmas Data.inftu_file 
+  and absya    = transducer_of_lemmas Data.absya_file 
+  and abstvaa  = transducer_of_lemmas Data.abstvaa_file 
+  and iivs     = transducer_of_lemmas Data.iivs_file 
+  and peris    = transducer_of_lemmas Data.peris_file 
+  and auxis    = transducer_of_lemmas Data.auxis_file 
+  and auxiinvs = transducer_of_lemmas Data.auxiinvs_file 
+  and auxiks   = transducer_of_lemmas Data.auxiks_file 
+  and auxiicks = transducer_of_lemmas Data.auxiicks_file 
+  and preverbs = transducer_of_preverbs in
+  let (transducers_data : transducers_datatype) =
+  { nouns    = nouns 
+  ; nouns2   = empty_trans 
+  ; kama     = kama 
+  ; pronouns = pronouns 
+  ; roots    = roots 
+  ; lopas    = lopas 
+  ; parts    = parts 
+  ; lopaks   = lopaks 
+  ; partvocs = partvocs 
+  ; iics     = iics 
+  ; iics2    = empty_trans
+  ; iifcs    = iifcs 
+  ; avyayais = avyayais 
+  ; avyayafs = avyayafs 
+  ; vocas    = vocas 
+  ; invs     = invs 
+  ; piics    = piics 
+  ; ifcs     = ifcs 
+  ; ifcs2    = empty_trans
+  ; indecls  = indecls 
+  ; inftu    = inftu 
+  ; absya    = absya 
+  ; abstvaa  = abstvaa 
+  ; iivs     = iivs 
+  ; peris    = peris 
+  ; auxis    = auxis 
+  ; auxiinvs = auxiinvs 
+  ; auxiks   = auxiks 
+  ; auxiicks = auxiicks 
+  ; preverbs = preverbs 
+  } 
+  and transducers_data2 =
+  { nouns    = empty_trans
+  ; nouns2   = nouns2 
+  ; kama     = empty_trans
+  ; pronouns = pronouns 
+  ; roots    = roots 
+  ; lopas    = lopas 
+  ; parts    = empty_trans
+  ; lopaks   = empty_trans
+  ; partvocs = empty_trans
+  ; iics     = empty_trans
+  ; iics2    = iics2 
+  ; iifcs    = empty_trans
+  ; avyayais = empty_trans
+  ; avyayafs = empty_trans
+  ; vocas    = empty_trans
+  ; invs     = invs 
+  ; piics    = empty_trans
+  ; ifcs     = empty_trans
+  ; ifcs2    = ifcs2 
+  ; indecls  = indecls 
+  ; inftu    = empty_trans
+  ; absya    = absya 
+  ; abstvaa  = abstvaa 
+  ; iivs     = iivs 
+  ; peris    = empty_trans
+  ; auxis    = auxis 
+  ; auxiinvs = auxiinvs 
+  ; auxiks   = empty_trans
+  ; auxiicks = empty_trans
+  ; preverbs = preverbs 
+  } in do
+  { Gen.dump transducers_data  Data.transducers_file  (* Complete mode *)
+  ; Gen.dump transducers_data2 Data.transducers_file2 (* Simple mode *)
+  }
 ;
 
 (*i end; i*)

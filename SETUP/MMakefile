@@ -250,8 +250,8 @@ GRAM=ML/index.ml ML/phonetics.ml ML/int_sandhi.ml ML/morphology.mli \
 ML/naming.ml ML/inflected.mli ML/inflected.ml ML/sandhi.ml \
 ML/sandhier.ml ML/pada.ml ML/nouns.mli ML/nouns.ml ML/conj_infos.mli \
 ML/verbs.mli ML/verbs.ml ML/parts.ml ML/automaton.ml ML/automata.ml \
-ML/make_automaton.ml ML/make_preverb_automaton.ml ML/make_transducers.ml \
-ML/morpho_string.ml ML/morpho.ml ML/declension.ml \
+ML/make_automaton.ml ML/make_preverb_automaton.ml ML/automaton_vector.mli \
+ML/make_transducers.ml ML/morpho_string.ml ML/morpho.ml ML/declension.ml \
 ML/conjugation.ml ML/indexer.ml ML/indexerd.ml ML/phases.ml ML/lemmatizer.ml \
 ML/auto.mli ML/load_transducers.ml ML/dispatcher.mli ML/dispatcher.ml \
 ML/segmenter.ml ML/load_morphs.ml ML/lexer.mli ML/lexer.ml \
@@ -356,17 +356,7 @@ DHATUS=$(DATA)/roots_infos.rem $(DATA)/roots_usage.rem
 KRIDS=$(DATA)/unique_kridantas.rem $(DATA)/lexical_kridantas.rem
 
 # Synthesized at make time:
-TRANSDUCERS=$(DATA)/transpn.rem $(DATA)/transperi.rem $(DATA)/transn.rem \
-$(DATA)/transr.rem $(DATA)/transiiy.rem $(DATA)/transavy.rem $(DATA)/transp.rem \
-$(DATA)/transpa.rem $(DATA)/transic.rem $(DATA)/transif.rem \
-$(DATA)/transpic.rem $(DATA)/transiif.rem $(DATA)/transabsya.rem \
-$(DATA)/transabstvaa.rem $(DATA)/transiv.rem $(DATA)/transinde.rem \
-$(DATA)/transpav.rem $(DATA)/translopak.rem $(DATA)/transauxi.rem \
-$(DATA)/transauxiinv.rem $(DATA)/transvoca.rem $(DATA)/translopa.rem \
-$(DATA)/transn2.rem $(DATA)/transif2.rem $(DATA)/transic2.rem \
-$(DATA)/transauxik.rem $(DATA)/transauxiick.rem $(DATA)/transinv.rem \
-$(DATA)/transinftu.rem $(DATA)/transkama.rem 
-
+TRANSDUCERS=$(DATA)/transducers.rem $(DATA)/transducers2.rem 
 # All are installed in the server area at make install
 AUTOMATA=$(INFLECTED) $(SANDHIS) $(DHATUS) $(KRIDS) $(TRANSDUCERS) 
 

@@ -5676,6 +5676,7 @@ value iic_indecl = (* should be lexicalized *)
   [ "atra"      (* atrabhavat *)
   ; "adhas"     (* adha.hzaakha adhazcara.nam *)
   ; "antar"     (* antarafga *)
+  ; "arvaak"    (* arvaakkaalika *)
   ; "alam"      (* (gati) ala.mk.rta *)
   ; "iti"       (* ityukta *)  
   ; "upari"     (* uparicara *)  
@@ -5688,6 +5689,7 @@ value iic_indecl = (* should be lexicalized *)
   ; "param"     (* para.mtapa *)
   ; "punar"     (* punarukta *)
   ; "puras"     (* (gati) pura.hstha *)
+  ; "praayas"   (* praayazcitta *)
   ; "mithyaa"   (* mithyaak.rta *)
   ; "tathaa"    (* tathaagata *)
   ; "yathaa"    (* yathaanirdi.s.ta *)
@@ -5721,21 +5723,22 @@ value iic_avya =
   ; "antaraa" (* antaraaz.fgam *)
   ; "apa"
 (*; "aa" -- overgenerates *)
+  ; "iti"
   ; "upa" (* upakumbham upak.r.s.naat upagafgam upanadam upaagni *)
-  ; "sa#1" (* sak.satram sacakram sat.r.nam saak.siptam saak.saat *)
-  ; "su#1"
+  ; "upari" (* uparibhuumi *)
   ; "dus" (* durbhik.sam *)
   ; "nis" (* nirmak.sikam *)
   ; "pari"
   ; "prati" (* pratyaham prativar.sam *)
-  ; "iti"
   ; "paare" (* paaregafgam *)
   ; "praak"
-  ; "yathaa" (* yathaazakti yathaakaamam yathaagatam yathaanyaasam yathaav.rddha                 yathaazraddham yathaasthaanam ... *)
-  ; "yaavat" (* yaavacchakyam yaavajjiivam \Pan{2,1,8} *)
   ; "bahir" (* bahirgraamam *)
-  ; "upari" (* uparibhuumi *)
   ; "madhye" (* madhyegafgam madhyejalaat *)
+  ; "yathaa" (* yathaazakti yathaakaamam yathaagatam yathaanyaasam yathaav.rddham
+                yathaazraddham yathaasthaanam ... *)
+  ; "yaavat" (* yaavacchakyam yaavajjiivam \Pan{2,1,8} *)
+  ; "sa#1" (* sak.satram sacakram sat.r.nam saak.siptam saak.saat *)
+  ; "su#1"
 (*  "dvyaha" (* dvyahatar.sam (adv+namul) dvyahaatyaasam (adv) *) *)
   ]
 (* Avyayiibhaava compounds not recognized as such: 

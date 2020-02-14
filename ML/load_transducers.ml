@@ -13,6 +13,7 @@
    link time. It also has some redundancy with [Load_morphs]. *)
 open Morphology; 
 open Auto.Auto; (* auto State *) 
+open Automata_vector; (* [transducers_datatype] *) 
 
 type transducer_vect = 
   { nouv : auto (* vowel-initial nouns *)
@@ -68,61 +69,35 @@ type transducer_vect =
   ; cachei : auto (* user-defined supplement to iic *)
   }
 ;
-
-module Trans (* takes its prelude and control arguments as parameters *)
-  (Prel: sig value prelude : unit -> unit; end) 
- = struct 
-
-value abort cat = 
+value abort_load cat = 
   let mess = "Missing " ^ cat ^ " database" in 
   raise (Control.Anomaly mess)
 ;
-value empty_trans = State(False,[],[]) (* dummy empty transducer *)
+module Trans (* takes its prelude and control arguments as parameters *)
+  (Prel: sig value prelude : unit -> unit; end) 
+  (Control: sig value full : ref bool; end)
+ = struct 
+
+value empty_trans = State (False,[],[]) (* dummy empty transducer *)
 ;
-(* Load persistent transducer automaton of given phase (lexical category). *)
-(* These files have been copied from their development version [transn_file]
-   etc. created by [Make_inflected] followed by [Make_automaton]. *)
-value load_transducer cat = 
-  let file = match cat with 
-      [ "Noun"    -> Data.public_transn_file
-      | "Noun2"   -> Data.public_transn2_file
-      | "Pron"    -> Data.public_transpn_file
-      | "Verb"    -> Data.public_transr_file
-      | "Krid"    -> Data.public_transpa_file
-      | "Vok"     -> Data.public_transpav_file
-      | "Peri"    -> Data.public_transperi_file
-      | "Lopa"    -> Data.public_translopa_file
-      | "Lopak"   -> Data.public_translopak_file
-      | "Inde"    -> Data.public_transinde_file
-      | "Iic"     -> Data.public_transic_file
-      | "Iic2"    -> Data.public_transic2_file
-      | "Iiif"    -> Data.public_transiif_file
-      | "Iik"     -> Data.public_transpic_file
-      | "Iiv"     -> Data.public_transiv_file
-      | "Ifc"     -> Data.public_transif_file
-      | "Ifc2"    -> Data.public_transif2_file
-      | "Iiy"     -> Data.public_transiiy_file
-      | "Avya"    -> Data.public_transavy_file
-      | "Abstvaa" -> Data.public_transabstvaa_file
-      | "Absya"   -> Data.public_transabsya_file
-      | "Inftu"   -> Data.public_transinftu_file
-      | "Kama"    -> Data.public_transkama_file
-      | "Auxi"    -> Data.public_transauxi_file
-      | "Auxiinv" -> Data.public_transauxiinv_file
-      | "Auxik"   -> Data.public_transauxik_file 
-      | "Auxiick" -> Data.public_transauxiick_file
-      | "Voca"    -> Data.public_transvoca_file
-      | "Inv"     -> Data.public_transinv_file 
-      | "Prev"    -> Data.public_transp_file
-      | "Cache"   -> Data.public_trans_cache_file 
-      | "Cachei"  -> Data.public_trans_cachei_file 
-      | _ -> failwith ("Unexpected category: " ^ cat) 
-      ] in 
-  try (Gen.gobble file : auto) 
-  with [ _ -> if cat="Cache" || cat="Cachei" (* uninitialized cache *)
-                 then empty_trans (* initialised to empty transducer *)
-              else do { Prel.prelude (); abort cat } ]
-; 
+value transducers_data full =
+  if full then Data.public_transducers_file  (* Complete mode *)
+          else Data.public_transducers_file2 (* Simple mode *)
+;
+value load_transducers full = 
+   let file = transducers_data full in
+   try (Gen.gobble file : transducers_datatype) 
+   with [ _ -> do { Prel.prelude (); abort_load "Transducers"} ]
+;
+value load_cache () = 
+   let file = Data.public_trans_cache_file in
+   try (Gen.gobble file : auto) 
+   with [ _ -> empty_trans ] (* initialised to empty transducer *)
+and load_cachei () = 
+   let file = Data.public_trans_cachei_file in
+   try (Gen.gobble file : auto) 
+   with [ _ -> empty_trans ] (* initialised to empty transducer *)
+;
 (* privative prefixes automata *)
 value a_trans = State(False,[(1,State(True,[],[ cch ]))],[])
   where cch = (([ 22; 23 ],[],[ 23 ]) : rule) (* a-ch \R acch *)
@@ -154,16 +129,19 @@ value split_auto = fun
   ]
 ;
 value transducers = 
-  let transn  = load_transducer "Noun"
-  and transi  = load_transducer "Iic" 
-  and transf  = load_transducer "Ifc" 
-  and transk  = load_transducer "Krid"
-  and transik = load_transducer "Iik" 
-  and transv  = load_transducer "Voca" 
-  and vok     = load_transducer "Vok"
-  and iiv     = load_transducer "Iiv"
-  and abstvaa = load_transducer "Abstvaa"
-  and pv = load_transducer "Prev" in
+  let full = Control.full.val in (* Simple/Complete nonsense *)
+  let transducers_data = load_transducers full in 
+  if full then 
+  let transn  = transducers_data.nouns
+  and transi  = transducers_data.iics 
+  and transf  = transducers_data.ifcs
+  and transk  = transducers_data.parts
+  and transik = transducers_data.piics
+  and transv  = transducers_data.vocas 
+  and vok     = transducers_data.partvocs
+  and iiv     = transducers_data.iivs
+  and abstvaa = transducers_data.abstvaa
+  and pv = transducers_data.preverbs in
   (* now we split the subanta stems and forms starting with vowel or consonant *)
   let (transnv,transnc) = split_auto transn
   and (transiv,transic) = split_auto transi  
@@ -175,27 +153,27 @@ value transducers =
   and (vokv,vokc) = split_auto vok
   and (absv,absc) = split_auto abstvaa
   and (pvkv,pvkc) = split_auto pv in
-  { noun2 = load_transducer "Noun2"
-  ; root = load_transducer "Verb"
-  ; pron = load_transducer "Pron"
-  ; peri = load_transducer "Peri" 
-  ; lopa = load_transducer "Lopa" 
-  ; lopak = load_transducer "Lopak"
-  ; inde = load_transducer "Inde"
-  ; abso = load_transducer "Absya"
-  ; iic2 = load_transducer "Iic2" 
-  ; iifc = load_transducer "Iiif"  
-  ; ifc2  = load_transducer "Ifc2" 
+  { noun2 = empty_trans
+  ; root = transducers_data.roots
+  ; pron = transducers_data.pronouns
+  ; peri = transducers_data.peris
+  ; lopa = transducers_data.lopas 
+  ; lopak = transducers_data.lopaks
+  ; inde = transducers_data.indecls
+  ; abso = transducers_data.absya
+  ; iic2 = empty_trans
+  ; iifc = transducers_data.iifcs
+  ; ifc2  = empty_trans
   ; iiv = iiv 
-  ; auxi  = load_transducer "Auxi"
-  ; auxiinv = load_transducer "Auxiinv"
-  ; auxik = load_transducer "Auxik"
-  ; auxiick = load_transducer "Auxiick"
-  ; inv  = load_transducer "Inv" 
-  ; iiy  = load_transducer "Iiy" 
-  ; avya = load_transducer "Avya" 
-  ; inftu = load_transducer "Inftu" 
-  ; kama = load_transducer "Kama" 
+  ; auxi  = transducers_data.auxis
+  ; auxiinv = transducers_data.auxiinvs
+  ; auxik = transducers_data.auxiks
+  ; auxiick = transducers_data.auxiicks
+  ; inv  = transducers_data.invs 
+  ; iiy  = transducers_data.avyayais 
+  ; avya = transducers_data.avyayafs
+  ; inftu = transducers_data.inftu
+  ; kama = transducers_data.kama
   ; prev = pv
   ; pvc = pvkc
   ; pvv = pvkv
@@ -219,15 +197,63 @@ value transducers =
   ; iikc = iikc
   ; absv = absv
   ; absc = absc
-  ; cache = load_transducer "Cache"
-  ; cachei = load_transducer "Cachei"
-  }
+  ; cache = load_cache () 
+  ; cachei = load_cachei () 
+  } else (* Simple mode *)
+  { noun2 = transducers_data.nouns2
+  ; root = transducers_data.roots
+  ; pron = transducers_data.pronouns
+  ; peri = empty_trans
+  ; lopa = transducers_data.lopas 
+  ; lopak = empty_trans
+  ; inde = transducers_data.indecls
+  ; abso = transducers_data.absya
+  ; iic2 = transducers_data.iics2
+  ; iifc = transducers_data.iifcs
+  ; ifc2  = transducers_data.ifcs2
+  ; iiv = empty_trans
+  ; auxi  = transducers_data.auxis
+  ; auxiinv = transducers_data.auxiinvs
+  ; auxik = empty_trans
+  ; auxiick = empty_trans
+  ; inv  = transducers_data.invs 
+  ; iiy  = empty_trans
+  ; avya = empty_trans
+  ; inftu = empty_trans
+  ; kama = empty_trans
+  ; prev = transducers_data.preverbs
+  ; pvc = empty_trans
+  ; pvv = empty_trans
+  ; a = empty_trans
+  ; an = empty_trans
+  ; iicv = empty_trans
+  ; iicc = empty_trans
+  ; ifcv = empty_trans
+  ; ifcc = empty_trans
+  ; iivv = empty_trans
+  ; iivc = empty_trans
+  ; nouv = empty_trans
+  ; nouc = empty_trans
+  ; vocv = empty_trans
+  ; vocc = empty_trans
+  ; vokv = empty_trans
+  ; vokc = empty_trans
+  ; kriv = empty_trans
+  ; kric = empty_trans
+  ; iikv = empty_trans
+  ; iikc = empty_trans
+  ; absv = empty_trans
+  ; absc = empty_trans
+  ; cache = load_cache () 
+  ; cachei = load_cachei () 
+  } 
+
 ;
 
 (* Lexicalized root informations needed for Dispatcher *)
 value roots_usage = (* attested preverb sequences *)
   try (Gen.gobble Data.public_roots_usage_file : Deco.deco string) 
-  with [ _ ->  do { Prel.prelude (); abort "RU" } ]
+  with [ _ ->  do { Prel.prelude (); abort_load "RU" } ]
 ; 
 
 end (* Trans *)

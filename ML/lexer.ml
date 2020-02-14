@@ -41,7 +41,7 @@ open Lemmas (* [morpho tag_sort tags_of] *)
 ;
 open Load_transducers; (* [transducer_vect Trans] *)
 
-module Transducers = Trans Prel;
+module Transducers = Trans Prel Control;
 
 module Disp = Dispatch Transducers Lemmas;
 open Disp; (* [color_of_phase transition trim_tags] *) 
@@ -81,7 +81,7 @@ value rec scl_phase = fun
   | Noun | Noun2 | Nouc | Nouv | Krid | Kriv | Kric | Lopak | Pron | Auxik 
          | Cache -> "noun"
   | Root | Lopa | Auxi -> "root"
-  | Inde | Abso | Absv | Absc | Avy -> "inde"
+  | Inde | Abso | Absv | Absc | Avy | Auxiinv -> "inde"
   | Iic | Iic2 | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif | Auxiick
         | Ai | Ani | Cachei -> "iic"
   | Iiv | Iivv | Iivc -> "iiv" 

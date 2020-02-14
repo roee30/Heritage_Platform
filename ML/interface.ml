@@ -41,25 +41,6 @@ module Prel = struct (* Interface's lexer prelude *)
 ;
  end (* Prel *)
 ;
-(* Service routines for morphological query, loading the morphology banks *)
-
-module Lemmas = Load_morphs.Morphs Prel Phases  
-;
-open Lemmas (* [tags_of morpho] *)
-;
-open Load_transducers (* [Trans] *)
-;
-module Transducers = Trans Prel
-;
-module Machine = Dispatch Transducers Lemmas
-;
-open Machine 
-;
-(* At this point we have a Finite Eilenberg machine ready to instantiate *)
-(* the Eilenberg component of the Segment module.                        *)
-
-(* Viccheda sandhi splitting *)
-
 (* Global parameters of the lexer *)
 value iterate = ref True (* by default a chunk is a list of words *)
 and complete  = ref True (* by default we call the complete segmenter *)
@@ -72,6 +53,26 @@ module Segment_control = struct
 ; 
 end (* [Segment_control] *)
 ;
+(* Service routines for morphological query, loading the morphology banks *)
+
+module Lemmas = Load_morphs.Morphs Prel Phases  
+;
+open Lemmas (* [tags_of morpho] *)
+;
+open Load_transducers (* [Trans load_transducers] *)
+;
+module Transducers = Trans Prel Segment_control
+;
+module Machine = Dispatch Transducers Lemmas
+;
+open Machine 
+;
+(* At this point we have a Finite Eilenberg machine ready to instantiate *)
+(* the Eilenberg component of the Segment module.                        *)
+
+(* Viccheda sandhi splitting *)
+
+
 module Viccheda = Segment Phases Machine Segment_control
 ;
 open Viccheda (* [segment_iter visual_width] etc. *)
@@ -397,7 +398,7 @@ value check_sentence translit us text_orig checkpoints sentence
              [ "0" -> update_text_with_sol text_orig count
              | _ -> text_orig
              ] in do
-  {make_visual cur_chunk.offset
+  { make_visual cur_chunk.offset
   ; find_conflict 0
   ; html_break |> pl
   ; html_latin16 "Sentence: " |> pl

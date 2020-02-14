@@ -22,7 +22,7 @@
    There are two versions: 1 for Complete, 2 for Simple.  *)
 
 open Auto.Auto; 
-open Load_transducers; (* [transducer_vect Trans roots_morpho krids_morpho] *)
+open Load_transducers; (* [transducer_vect roots_morpho krids_morpho] *)
 open Skt_morph;
 open Phonetics; (* phantomatic amuitic *)
 open Morphology; (* [inflected inflected_map Verb_form morphology] *)
@@ -34,7 +34,7 @@ module Dispatch
   (Trans: sig value transducers : transducer_vect;   
               value roots_usage : Deco.deco string; end) 
   (Lem: sig value morpho : morphology; end) = struct  
-open Trans; 
+open Trans; (* transducers *)
 open Lem;
 
 (* [ transducer : phase -> auto ] *)

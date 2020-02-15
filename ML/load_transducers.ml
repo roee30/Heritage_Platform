@@ -189,7 +189,7 @@ value split_auto = fun
   | _ -> failwith "Split_auto"
   ]
 ;
-value mk_transducers full = (* : transducter_vect *) 
+value mk_transducers full = (* : [transducter_vect] *) 
   let transducers_data = load_transducers full in
   if full then 
   let transn  = transducers_data.nouns

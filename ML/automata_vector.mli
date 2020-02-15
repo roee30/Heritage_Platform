@@ -7,8 +7,8 @@
 (* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-(* The vector of automata constructed by Make_transducers at make time
-   and loaded by Load_transducers at cgi running time *)
+(* The vector of automata constructed by [Make_transducers] at make time
+   and loaded by [Load_transducers] at cgi running time *)
 
 (* This bizarre datatype is a sum type of transducers used by one of the
    modes Simple or Complete. Thus nouns2, iics2 and ifcs2 are used only

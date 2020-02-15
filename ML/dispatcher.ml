@@ -35,7 +35,7 @@ module Dispatch
   (Lem: sig value morpho : morphology; end) 
   (Segment_control: sig value transducers_ref : ref transducer_vect; end)
   = struct  
-open Trans; (* transducers_ref *)
+open Trans; (* [transducers_ref] *)
 open Lem;
 
 (* [ transducer : phase -> auto ] *)

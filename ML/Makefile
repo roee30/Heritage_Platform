@@ -5,7 +5,7 @@
 #                        Gérard Huet & Pawan Goyal                         #
 #                                                                          #
 ############################################################################
-# Makefile of Sanskrit Heritage Software  15-11-2019  Copyright INRIA 2019 #
+# Makefile of Sanskrit Heritage Software  15-02-2020  Copyright INRIA 2020 #
 ############################################################################
 # Prerequisites: Ocaml 4.07 and Camlp4 preprocessor
 
@@ -39,7 +39,7 @@ GRAM = index.ml phonetics.ml int_sandhi.ml skt_morph.mli morphology.mli \
        naming.ml inflected.mli inflected.ml sandhi.ml sandhier.ml pada.ml \
        nouns.mli nouns.ml verbs.mli verbs.ml parts.ml conj_infos.mli \
        automaton.ml automata.ml make_automaton.ml make_preverb_automaton.ml \
-       automaton_vector.mli make_transducers.ml \
+       automata_vector.mli make_transducers.ml \
        morpho_string.ml morpho.ml declension.ml conjugation.ml indexer.ml \
        indexerd.ml phases.ml lemmatizer.ml auto.mli load_transducers.ml \
        dispatcher.mli dispatcher.ml segmenter.ml load_morphs.ml lexer.mli \

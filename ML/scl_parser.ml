@@ -29,8 +29,8 @@ and output_channel = ref stdout (* by default cgi output on standard output *)
 module Lexer_control = struct
  value star = iterate;
  value full = complete;
- value out_chan = output_channel
-; 
+ value out_chan = output_channel;
+ value transducers_ref = ref Load_transducers.dummy_transducer_vect;
 end (* [Lexer_control] *)
 ;
 (* Multi-phase lexer *)

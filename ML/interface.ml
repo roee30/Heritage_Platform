@@ -19,7 +19,7 @@ module Interface = struct
 open Graph_segmenter; (* [Segment cur_chunk set_cur_offset graph visual] *)
 open Phases; (* [Phases] *) 
 open Phases; (* [phase is_cache generative] *) 
-open Dispatcher; (* [transducer_vect phase Dispatch transition trim_tags] *) 
+open Dispatcher; (* [transducer_vect Dispatch transition trim_tags] *) 
 open Html; (* html constructors *)
 open Web; (* [ps pl abort reader_cgi scl_toggle] etc. *) 
 open Cgi; (* [url get decode_url] *)
@@ -46,24 +46,24 @@ value iterate = ref True (* by default a chunk is a list of words *)
 and complete  = ref True (* by default we call the complete segmenter *)
 and output_channel = ref stdout (* by default cgi output on standard output *)
 ;
-module Segment_control = struct
- value star = iterate;  (* vaakya vs pada *)
- value full = complete; (* complete vs simplified *)
- value out_chan = output_channel
-; 
-end (* [Segment_control] *)
-;
 (* Service routines for morphological query, loading the morphology banks *)
 
 module Lemmas = Load_morphs.Morphs Prel Phases  
 ;
 open Lemmas (* [tags_of morpho] *)
 ;
-open Load_transducers (* [Trans load_transducers] *)
+open Load_transducers (* [Trans mk_transducers dummy_transducer_vect] *)
 ;
-module Transducers = Trans Prel Segment_control
+module Lexer_control = struct
+ value star = iterate;  (* vaakya vs pada *)
+ value full = complete; (* complete vs simplified *)
+ value out_chan = output_channel;
+ value transducers_ref = ref (dummy_transducer_vect : transducer_vect);
+ end (* [Lexer_control] *)
 ;
-module Machine = Dispatch Transducers Lemmas
+module Transducers = Trans Prel 
+;
+module Machine = Dispatch Transducers Lemmas Lexer_control
 ;
 open Machine 
 ;
@@ -71,9 +71,7 @@ open Machine
 (* the Eilenberg component of the Segment module.                        *)
 
 (* Viccheda sandhi splitting *)
-
-
-module Viccheda = Segment Phases Machine Segment_control
+module Viccheda = Segment Phases Machine Lexer_control
 ;
 open Viccheda (* [segment_iter visual_width] etc. *)
 ;
@@ -529,7 +527,10 @@ value graph_engine () = do
     and input = decode_url url_encoded_input (* unnormalized string *)
     and uns = us="t" (* unsandhied vs sandhied corpus *) 
     and () = if st="f" then iterate.val:=False else () (* word stemmer? *)
-    and () = if cp="f" then complete.val:=False else () (* simplified reader? *) 
+    and () = let full = (cp="t") in do 
+          { Lexer_control.full.val:=full
+          ; Lexer_control.transducers_ref.val:=Transducers.mk_transducers full
+          }
     and () = toggle_lexicon lex (* sticky lexicon switch *)
     and corpus = get "corpus" env "" 
     and sent_id = get "sentenceNumber" env "0" 

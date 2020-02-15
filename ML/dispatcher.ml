@@ -22,7 +22,7 @@
    There are two versions: 1 for Complete, 2 for Simple.  *)
 
 open Auto.Auto; 
-open Load_transducers; (* [transducer_vect roots_morpho krids_morpho] *)
+open Load_transducers; (* [transducer_vect Trans mk_transducers roots_usage] *)
 open Skt_morph;
 open Phonetics; (* phantomatic amuitic *)
 open Morphology; (* [inflected inflected_map Verb_form morphology] *)
@@ -31,14 +31,16 @@ open Phases.Phases; (* phase etc. *)
 
 module Dispatch 
   (* To be instantiated by Transducers from Lexer or Interface *) 
-  (Trans: sig value transducers : transducer_vect;   
-              value roots_usage : Deco.deco string; end) 
-  (Lem: sig value morpho : morphology; end) = struct  
-open Trans; (* transducers *)
+  (Trans: sig value roots_usage : Deco.deco string; end) 
+  (Lem: sig value morpho : morphology; end) 
+  (Segment_control: sig value transducers_ref : ref transducer_vect; end)
+  = struct  
+open Trans; (* transducers_ref *)
 open Lem;
 
 (* [ transducer : phase -> auto ] *)
-value transducer = fun
+value transducer phase = 
+  let transducers = Segment_control.transducers_ref.val in match phase with 
   [ Nouv -> transducers.nouv (* vowel-initial noun *)
   | Nouc -> transducers.nouc (* consonant-initial noun *)
   | Noun2 -> transducers.noun2 (* idem in mode non gen *) 

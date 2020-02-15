@@ -43,12 +43,17 @@ value iterate = ref True (* by default we read a sentence (list of words) *)
 and  complete = ref True (* by default we call the fuller segmenter *)
 and output_channel = ref stdout (* by default cgi output *)
 ;
+open Load_transducers; (* [transducer_vect dummy_transducer_vect Trans] *)
 
 module Lexer_control = struct
  value star = iterate;
  value full = complete;
  value out_chan = output_channel;
+ value transducers_ref = 
+ ref (dummy_transducer_vect : transducer_vect);
 end (* [Lexer_control] *)
+;
+module Transducers = Trans Prel 
 ;
 module Lex = Lexer.Lexer Prel Lexer_control 
 (* [print_proj print_segment_roles print_ext_segment extract_lemma] *)
@@ -406,7 +411,10 @@ value parser_engine () = do
     and () = toggle_lexicon lex
     and () = if abs="t" then remote.val:=True else () (* Web service mode *)
     and () = if st="f" then iterate.val:=False else () (* word stemmer *)
-    and () = if cp="f" then complete.val:=False else () (* simplified reader *)
+    and () = let full = (cp="t") in do 
+          { Lexer_control.full.val:=full
+          ; Lexer_control.transducers_ref.val:=Transducers.mk_transducers full
+          }
     and sol_index = int_of_string (decode_url url_encoded_sol_index) 
     (* For Validate mode, register number of solutions *)
     and sol_num = int_of_string (get "allSol" alist "0")

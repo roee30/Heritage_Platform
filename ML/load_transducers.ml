@@ -9,11 +9,24 @@
 
 (* [Load_transducers] *)
 (* Used for loading the transducers as well as root informations *)
-(* Caution. This is an executable, that actually loads the transducers at
-   link time. It also has some redundancy with [Load_morphs]. *)
-open Morphology; 
+(* Caution. This is an executable, that actually loads [roots_usage] at
+   link time. It also defines a function [load_transducers] that loads 
+   [transducers_data] according to parameter [Lexer_control.full],
+   and build the relevant [transducter_vect] with [mk_transducers]. 
+   All this complication is due to the two modes Simple and Full. 
+   The actual transducter vector is stored in [Lexer_control.transducers_ref]
+   by a call to [mk_transducers] in [Interface.graph_engine] 
+   or [Reader.reader_engine]. *)
+
 open Auto.Auto; (* auto State *) 
 open Automata_vector; (* [transducers_datatype] *) 
+
+(* There are two different vector of transducers. The raw transducers
+   constructed as make time are of type [transducers_datatype] described in
+   [Automata_vector]. Then at cgi time the actual vector of transducers 
+   indexed by phases is of type [transducer_vect] below. Some of its slots are
+   relevant to Full mode, some are relevant to Simple, some are relevant to both.
+   This is really ugly, and the Simple mode may be deprecated in the future. *)
 
 type transducer_vect = 
   { nouv : auto (* vowel-initial nouns *)
@@ -69,26 +82,74 @@ type transducer_vect =
   ; cachei : auto (* user-defined supplement to iic *)
   }
 ;
+value empty_trans = State (False,[],[]) (* dummy empty transducer *)
+;
+value dummy_transducer_vect = (* needed for initialisation of [transducers_ref]*)
+  { noun2 = empty_trans
+  ; root = empty_trans
+  ; pron = empty_trans
+  ; peri = empty_trans
+  ; lopa = empty_trans
+  ; lopak = empty_trans
+  ; inde = empty_trans
+  ; abso = empty_trans
+  ; iic2 = empty_trans
+  ; iifc = empty_trans
+  ; ifc2  = empty_trans
+  ; iiv = empty_trans
+  ; auxi  = empty_trans
+  ; auxiinv = empty_trans
+  ; auxik = empty_trans
+  ; auxiick = empty_trans
+  ; inv  = empty_trans
+  ; iiy  = empty_trans
+  ; avya = empty_trans
+  ; inftu = empty_trans
+  ; kama = empty_trans
+  ; prev = empty_trans
+  ; pvc = empty_trans
+  ; pvv = empty_trans
+  ; a = empty_trans
+  ; an = empty_trans
+  ; iicv = empty_trans
+  ; iicc = empty_trans
+  ; ifcv = empty_trans
+  ; ifcc = empty_trans
+  ; iivv = empty_trans
+  ; iivc = empty_trans
+  ; nouv = empty_trans
+  ; nouc = empty_trans
+  ; vocv = empty_trans
+  ; vocc = empty_trans
+  ; vokv = empty_trans
+  ; vokc = empty_trans
+  ; kriv = empty_trans
+  ; kric = empty_trans
+  ; iikv = empty_trans
+  ; iikc = empty_trans
+  ; absv = empty_trans
+  ; absc = empty_trans
+  ; cache = empty_trans
+  ; cachei = empty_trans
+  } 
+;
 value abort_load cat = 
   let mess = "Missing " ^ cat ^ " database" in 
   raise (Control.Anomaly mess)
 ;
-module Trans (* takes its prelude and control arguments as parameters *)
+module Trans (* takes its prelude as parameter *)
   (Prel: sig value prelude : unit -> unit; end) 
-  (Control: sig value full : ref bool; end)
  = struct 
 
-value empty_trans = State (False,[],[]) (* dummy empty transducer *)
-;
 value transducers_data full =
-  if full then Data.public_transducers_file  (* Complete mode *)
+  if full then Data.public_transducers_file  (* Full mode *)
           else Data.public_transducers_file2 (* Simple mode *)
 ;
 value load_transducers full = 
    let file = transducers_data full in
    try (Gen.gobble file : transducers_datatype) 
    with [ _ -> do { Prel.prelude (); abort_load "Transducers"} ]
-;
+; 
 value load_cache () = 
    let file = Data.public_trans_cache_file in
    try (Gen.gobble file : auto) 
@@ -128,9 +189,8 @@ value split_auto = fun
   | _ -> failwith "Split_auto"
   ]
 ;
-value transducers = 
-  let full = Control.full.val in (* Simple/Complete nonsense *)
-  let transducers_data = load_transducers full in 
+value mk_transducers full = (* : transducter_vect *) 
+  let transducers_data = load_transducers full in
   if full then 
   let transn  = transducers_data.nouns
   and transi  = transducers_data.iics 
@@ -199,7 +259,8 @@ value transducers =
   ; absc = absc
   ; cache = load_cache () 
   ; cachei = load_cachei () 
-  } else (* Simple mode *)
+  } 
+  else (* Simple mode *)
   { noun2 = transducers_data.nouns2
   ; root = transducers_data.roots
   ; pron = transducers_data.pronouns
@@ -247,7 +308,6 @@ value transducers =
   ; cache = load_cache () 
   ; cachei = load_cachei () 
   } 
-
 ;
 
 (* Lexicalized root informations needed for Dispatcher *)

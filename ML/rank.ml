@@ -28,12 +28,17 @@ value iterate = ref True (* by default a chunk is a list of words *)
 and complete  = ref True (* by default we call the fuller segmenter *)
 and output_channel = ref stdout (* by default cgi output on standard output *)
 ;
+open Load_transducers; (* [transducer_vect dummy_transducer_vect Trans] *)
+
 module Lexer_control = struct
  value star = iterate;
  value full = complete;
- value out_chan = output_channel
-; 
+ value out_chan = output_channel;
+ value transducers_ref = 
+ ref (dummy_transducer_vect : transducer_vect);
 end (* [Lexer_control] *)
+;
+module Transducers = Trans Prel 
 ;
 (* Multi-phase lexer *)
 module Lex = Lexer.Lexer Prel Lexer_control (* [un_analyzable Disp Viccheda] *)

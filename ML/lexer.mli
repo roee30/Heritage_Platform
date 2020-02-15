@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Sanskrit Phrase Lexer *)
@@ -16,12 +16,14 @@ open Load_transducers; (* [transducer_vect morpho] *)
 
 module Lexer : functor (* takes its prelude and iterator control as parameters *)
   (Prel: sig value prelude : unit -> unit; end) -> functor
-  (Control: sig value star : ref bool; (* chunk= if start then word+ else word *)
-                value full : ref bool; (* all kridantas and nan cpds if full *)
-                value out_chan : ref out_channel;
-            end) -> sig
+    (Lexer_control: sig 
+        value star : ref bool; (* chunk = if star then word+ else word *)
+        value full : ref bool; (* all kridantas and nan cpds if full *)
+        value out_chan : ref out_channel; (* output channel *)
+        value transducers_ref : ref Load_transducers.transducer_vect;
+        end) -> sig
   
-  module Transducers : sig value transducers : transducer_vect; end;
+  module Transducers : sig value mk_transducers : bool -> transducer_vect; end;
 
   module Disp : sig
       value accepting : Phases.phase -> bool;

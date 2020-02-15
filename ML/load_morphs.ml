@@ -9,6 +9,7 @@
 
 (* [Load_morphs] *)
 (* Used for loading the (huge) morphology databanks. *)
+(* Caution. This is an executable, that actually loads the lemmas at link time.*)
 
 open Morphology; (* lemmas *)
 

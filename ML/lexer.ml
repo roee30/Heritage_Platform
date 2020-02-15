@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Sanskrit Phrase Lexer - Used by Parser, and Rank for Reader/Regression. 
@@ -24,10 +24,12 @@ open Word; (* word length mirror patch *)
 
 module Lexer (* takes its prelude and control arguments as module parameters *)
   (Prel: sig value prelude : unit -> unit; end) 
-  (Control: sig value star : ref bool; (* chunk = if star then word+ else word *)
-                value full : ref bool; (* all kridantas and nan cpds if full *)
-                value out_chan : ref out_channel; (* output channel *)
-            end) = struct 
+  (Lexer_control: sig 
+        value star : ref bool; (* chunk = if star then word+ else word *)
+        value full : ref bool; (* all kridantas and nan cpds if full *)
+        value out_chan : ref out_channel; (* output channel *)
+        value transducers_ref : ref Load_transducers.transducer_vect;
+        end) = struct 
 
 open Html;
 open Web; (* ps pl abort etc. *)
@@ -37,18 +39,17 @@ open Phases; (* phase generative *)
 
 module Lemmas = Load_morphs.Morphs Prel Phases
 ;
-open Lemmas (* [morpho tag_sort tags_of] *)
-;
+open Lemmas; (* [morpho tag_sort tags_of] *)
 open Load_transducers; (* [transducer_vect Trans] *)
 
-module Transducers = Trans Prel Control;
+module Transducers = Trans Prel;
 
-module Disp = Dispatch Transducers Lemmas;
+module Disp = Dispatch Transducers Lemmas Lexer_control;
 open Disp; (* [color_of_phase transition trim_tags] *) 
 
-module Viccheda = Segment Phases Disp Control 
+module Viccheda = Segment Phases Disp Lexer_control;
                   (* [init_segment continue set_offset] *)
-;
+
 value all_checks = Viccheda.all_checks
 and   set_offset = Viccheda.set_offset
 ;
@@ -212,7 +213,7 @@ value print_scl_segment counter (phase,rword) =
 ; 
 
 module Report_chan = struct 
-value chan = Control.out_chan; (* where to report *)
+value chan = Lexer_control.out_chan; (* where to report *)
 end;
 
 module Morpho_out = Morpho.Morpho_out Report_chan;

@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Dispatcher: Sanskrit Engine in 55 phases automaton (plus 2 fake ones) *)
@@ -25,9 +25,9 @@ open Morphology; (* [inflexion_tag Verb_form pada_tag morphology] *)
 open Phases.Phases; (* phase etc. *)
 
 module Dispatch : functor 
-  (Trans: sig value transducers : transducer_vect; 
-              value roots_usage : Deco.deco string; end) -> functor
-  (Lem: sig value morpho : morphology; end) -> sig
+  (Trans: sig value roots_usage : Deco.deco string; end) -> functor
+  (Lem: sig value morpho : morphology; end) -> functor
+  (Segment_control: sig value transducers_ref : ref transducer_vect; end) -> sig
 
 value transducer : phase -> auto  
 ; 

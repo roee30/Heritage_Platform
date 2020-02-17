@@ -11,7 +11,7 @@
    and loaded by [Load_transducers] at cgi running time *)
 
 (* This bizarre datatype is a sum type of transducers used by one of the
-   modes Simple or Complete. Thus nouns2, iics2 and ifcs2 are used only
+   modes Simple or Full. Thus nouns2, iics2 and ifcs2 are used only
    in mode Simple. This should be cleaned up, or the Simple mode deprecated *)
 open Auto.Auto; (* auto *) 
 

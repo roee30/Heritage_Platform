@@ -34,7 +34,7 @@ value voices_of = fun
   | "inv" | "il" | "i.s#2" | "iifkh" | "iir.s" | "uk.s" | "ujjh" | "u~nch"
   | "und" | "umbh" | "u.s" | ".rc#1" | ".rdh" | ".r.s" | "ej" | "kas" | "kiil"
   | "ku.t" | "ku.n.th" | "kunth" | "kup" | "kul" | "ku.s" | "kuuj" | "k.rt#1"
-  | "k.rz" | "krand" | "krii.d" | "kru~nc#1" | "krudh#1" | "kruz" | "klam" 
+  | "k.rz" | "krand" | "kru~nc#1" | "krudh#1" | "kruz" | "klam" 
   | "klid" | "kliz" | "kvath" | "k.sar" | "k.sal" | "k.saa" | "k.si" | "k.sii"
   | "k.su" | "k.sudh#1" | "k.subh" | "k.svi.d" | "kha~nj#1" | "khaad" | "khid"
   | "khel" | "khyaa" | "gaj" | "gad" | "garj" | "gard" | "gal" | "gaa#1" 
@@ -73,6 +73,7 @@ value voices_of = fun
   | "maarg" (* root rather than nominal verb *)
 (*| "viz#1"  Atma needed for eg nivizate \Pan{1,3,17} *)
 (*| "k.s.nu" Atma needed for sa.mk.s.ute \Pan{1,3,65} *)
+(*| "krii.d" Atma needed for aakrii.date \Pan{1,3,21} *)
 (*| "ji"     Atma needed for eg vijayate paraajayate \Pan{1,3,19} *)
 (*| "jyaa#1" Atma needed for jiiyate *)
 (*| "kan"    Atma needed for kaayamaana *)
@@ -113,8 +114,9 @@ value voices_of = fun
   | _ -> Ubha (* default *) 
   (* Attested Ubha (over all ga.nas) : 
   [ "a~nc" | "arh" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" | ".r" | ".rj"
-  | "ka.n.d" | "kal" | "ka.s" | "ku.t.t" | "ku.n.d" | "k.r#1" | "k.r#2" | "k.r.s"
-  | "kram" | "krii#1" | "k.san" | "k.sap#1" | "k.sam" | "k.sal" | "k.sip" | "k.sud"
+  | "ka.n.d" | "kal" | "ka.s" | "ku.t.t" | "ku.n.d" | "k.r#1" | "k.r#2" 
+  | "k.r.s" | "kram" | "krii#1" | "krii.d" | "k.san" | "k.sap#1" | "k.sam" 
+  | "k.sal" | "k.sip" | "k.sud"
   | "k.s.nu" | "khan" | "gam" | "garh" | "gaah" | "guh" | "gras" | "gha.t.t" 
   | "cat" | "carc" | "ci" | "cint" | "cud" | "ce.s.t" | "cyu" | "chad#1"
   | "chand" | "chid#1" | "jan" | "juu" | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d"
@@ -288,7 +290,7 @@ value voices_of_pv upasarga gana = fun
 | "krii.d" -> match upasarga with
               [ "aa" | "anu" | "pari" -> Atma (* \Pan{1,3,21} *)
               | "sam" -> Ubha (* \Pan{1,3,21} vaartikaa *)
-              | _ -> Para
+              | _ -> Para (* "" | "vi" *)
               ]
 | "m.rz" -> if upasarga = "pari" then Para else Ubha (* \Pan{1,3,82} *)
 | "tap" when gana = 1 -> match upasarga with

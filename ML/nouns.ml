@@ -2664,7 +2664,9 @@ value build_neu_aac stem entry =
         ; decline Gen "caam"
         ; decline Loc "k.su"
         ])
-   ] ]
+   ] 
+   ; Bare Noun (fix stem "k") (* eg praaguttara *)
+   ]
 ;
 value build_neu_yac stem entry = 
   let prevoc = if stem = revcode "tir" then "azc" 
@@ -4212,7 +4214,11 @@ value build_sya_tyad g entry = (* Vedic Whitney §499a *)
         ])
    ] ]
 ;
-(* pronominal stems (mirror+lopa) of pronouns usable as nominals *)
+(* Pronominal stems (mirror+lopa) of pronouns usable as nominals. 
+   When used as pronouns, they denote the relative position. *)
+(* Bhat: puurva, para, avara, dak.si.na, uttara, apara, adhara, sva, antara:
+   when used pronominally use optionally pronominal endings. 
+   Missing from his list: aneka, pazcima, nema, ubhaya, sarva, vizva *)
 value pseudo_nominal_basis = fun 
   [ [ 17; 10; 36; 1 ] (* aneka *) (* possibly also eka, anya ? *)
   | [ 31; 3; 47; 17; 1; 34 ] (* dak.si.na *) 
@@ -5710,7 +5716,6 @@ value iic_indecl = (* should be lexicalized *)
 value iicf_extra = 
   [ "abalaa" (* a-bala with fem abalaa *)  
   ; "kaantaa" (* kaanta pp *)
-  ; "jihvaa" (* since jihva mas skips it *)
   ] 
 ;
 value iic_avya = 
@@ -5780,6 +5785,7 @@ and gen_suffixes = (* productive suffixes cf. [Subst.taddhitas] *)
   ; "tva"
   ; "mat"
   ; "vat" 
+  ; ... many other taddhitas ka ika iika in etc.
   ]] i*)
 
 value enter_iic entry =  
@@ -6001,7 +6007,11 @@ value enter_extra_ifcs () = do (* archaic retroflexion in cpds \Pan{8,4,13} *)
 value enter_extra_iifcs () = do
   { let entry = "ahan" in (* for -aha- like pu.nyaahavaacanam *)
     enter1 entry (Bare Noun (code "aha"))
-    (* more entries are potentially concerned - TODO *)
+  ; let entry = "aakyaa#2" in (* for -aakhya- like pu.nyaahavaacanam *)
+    enter1 entry (Bare Noun (code "aakhya"))
+  ; let entry = "senaa" in (* for zuklasenadeva.h *)
+    enter1 entry (Bare Noun (code "sena"))
+    (* more entries are potentially concerned - for bahus of X-Y with Y fstem *)
   } 
 ;
 (* called by [Declension.emit_decls] and [Morpho_debug.emit_decls] *)

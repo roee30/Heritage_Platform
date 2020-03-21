@@ -18,10 +18,11 @@
 
 open Skt_morph;
 open Morphology; (* [Noun_form] etc. *)
-open Html;
+open Html; (* [narrow_screen html_red]  etc. *)
 open Web; (* ps pl etc. *)
-open Cgi;
-open Multilingual; (* [font Deva Roma compound_name avyaya_name] *)
+open Cgi; (* [create_env] etc.  *)
+open Multilingual; 
+     (* [font Deva Roma declension_title compound_name avyaya_name] *)
 
 value dtitle font = h1_title (declension_title narrow_screen font)
 and meta_title = title "Sanskrit Grammarian Declension Engine"
@@ -32,9 +33,9 @@ and hyperlink_title font link =
 ;
 
 value pr code =
-  ps (html_red (Canon.uniromcode code)) (* roman with diacritics *)
+  html_red (Canon.uniromcode code) |> ps (* roman with diacritics *)
 and pr_deva code =
-  ps (html_devared (Canon.unidevcode code)) (* devanagari *)
+  html_devared (Canon.unidevcode code) |> ps (* devanagari *)
 ;
 value pr_f font word = 
   let code = Morpho_html.final word (* visarga correction *) in do
@@ -277,7 +278,6 @@ value decls_engine () = do
     and url_encoded_source = get "r" env ""
         (* optional root origin - used by participles in conjugation tables *)
     and font = font_of_string (get "font" env Paths.default_display_font)
-(*  and stamp = get "v" env "" - Obsolete *)
     and translit = get "t" env "VH" (* DICO created in VH trans *)
     and lex = get "lex" env "SH" (* default Heritage *) in 
     let entry_tr = decode_url url_encoded_entry (* : string in translit *)
@@ -288,9 +288,7 @@ value decls_engine () = do
     and source = decode_url url_encoded_source (* cascading from conjug *)
     and () = toggle_lexicon lex in
     try do 
-      { (* if lex="MW" then () else if stamp=Install.stamp then ()
-           else raise (Control.Anomaly "Corrupt lexicon"); - OBS *)
-        display_title font
+      { display_title font
       ; let word = code entry_tr in
         let entry_VH = Canon.decode word in (* ugly detour via VH string *) 
                        (* will be avoided by unique name lookup *) 

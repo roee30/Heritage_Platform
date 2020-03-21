@@ -5416,8 +5416,8 @@ value record_pfp entry rstem = do
 [den_stem_a] and [den_stem_m] below (for Para and Atma respectively).
 They are derivative verbs from dative forms of substantives.
 Roots kept in ga.na 10 (debatable, this is subject to change), are:
-   ka.n.d kath kal kiirt kuts ga.n garh gup gha.t.t cint cur .damb 
-   tandr tark tul bharts m.r.d rac rah ruup lok suud sp.rh *)
+   arth ka.n.d kath kal kiirt kuts ga.n garh gup gha.t.t cint cur .damb 
+   tandr tark tul bharts mantr m.r.d rac rah ruup var.n lok suud sp.rh *)
 (* Also gave.s, because possible ga.na 1 and pp - should be added separately *)
 (* Also lelaa, which has a strange status (marked as verb rather than root) *)
 (* asu is bizarre, lexicalized under asuuya *)
@@ -5448,7 +5448,7 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
        -> lengthen rstem (* lengthening -aayati *) 
    | "asuuya" (* "asu" lengthened *) | "gomaya" | "vyaya" (* euphony *)
        -> trunc (trunc rstem) 
-   | "artha" | "veda" | "satya" (* \Pan{3,1,25} Vt. *)
+   | (* "artha" |*) "veda" | "satya" (* \Pan{3,1,25} Vt. *)
        -> [ 1 :: [ 37 :: [ 2 :: trunc rstem ] ] ] (* -aapayati - interc p *) 
    (* |  (* very rare Whitney§1059d e.g. "putra" *)
        -> [ 3 :: trunc_a rstem ] (* -()iyati *) *)
@@ -5468,14 +5468,18 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
    | "tuhina" | "da.n.da" | "deva" | "dola" | "dravat" | "dhiira#1"
    | "nirmuula" | "nuutana" | "pa.tapa.taa" | "pallava"
    | "pavitra" | "paaza" | "pi.n.da" | "pulaka" | "puula" | "pratikuula" 
-   | "prati.sedha" | "pradak.si.na" | "prasaada" | "bhi.saj" | "mantra" 
+   | "prati.sedha" | "pradak.si.na" | "prasaada" | "bhi.saj" (* | "mantra" *)
    | "malina" | "mizra" | "mukula" | "mukhara" | "mu.n.da" | "muutra" 
    | "m.rga" | "yantra" | "rasa" | "ruuk.sa" | "lagha" (* u -> a *) 
-   | "var.na" | "vaasa#3" | "vizada" | "vra.na" | "zaanta" | "zithila"
+   (*| "var.na"*) | "vaasa#3" | "vizada" | "vra.na" | "zaanta" | "zithila"
    | "zyena" | ".sa.n.dha" | "sapi.n.da" | "saphala" | "sabhaaja" | "saantva" 
    | "saavadhaana" | "suutra" | "stena" (* practice \Pan{3,1,15} *)
    | "u.sas" | "namas" | "varivas" (* do \Pan{3,1,19} *)
+   | "utpuccha" (* do \Pan{3,1,20} *)
+   | "zlak.s.na" (* make \Pan{3,1,21} *)
+   | "lava.na" (* desire Kale§645 \Pan{3,1,21} *)
    | "udan" (* Kale§645 *)
+   | "hala" (* take \Pan{3,1,21} *)
    | "kelaa" | "rekhaa" | "tiras" | "uras" | "payas" (* Kale§660 *)
    | "vaac" (* consonant Kale§642 *)
    | "dantura" (* possess *)
@@ -5483,7 +5487,7 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
    | "viira" | "zabda" | "tira" (* MW *) | "ma~njara" | "sraja" | "manas" 
        -> rstem (* -yati *) (* standard causative meaning *)  
    | "madhu" | "v.r.sa" (* also madhvasyati v.r.siiyati *) 
-   | "k.siira" | "lava.na" (* also putra *)
+   | "k.siira" (* also putra *)
        -> [ 48 :: rstem ] (* -syati *) (* Kale§643 *)
    | _ -> failwith ("Unknown denominative " ^ entry)
    ] 
@@ -5491,17 +5495,19 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
 value den_stem_m entry = (* in general intransitive or reflexive Whitney§1059c *)
    let rstem = revstem entry in 
    match entry with 
-   [ "artha" | "i.sa" | "kuha" | "carca" | "manas" | "mantra" | "muutra" 
+   [ "i.sa" | "utpuccha" | "kuha" | "carca" | "manas" | "muutra" 
+     (*| "artha" | "mantra" now ga.na 10 arth mantr *)
    | "m.rga" | "viira" | "safgraama" | "suutra" (* also zithila below *)
        -> rstem (* (a)-yate *) 
    | "asuuya" (* "asu" lengthened *) | "vyaya" (* euphony *)
        -> trunc (trunc rstem) 
    | "tavi.sa" | "citra" (* do \Pan{3,1,19} *) | "sajja"
        -> [ 4 :: trunc_a rstem ] (* -()iiyate *)
-   | "arth" -> [ 1 :: rstem ] (* arthayate for lexicon access *)
+(* | "arth" -> [ 1 :: rstem ] - arthayate for lexicon access - now ga.na 10 *)
    | "apsaras" | "sumanas" (* act as, become \Pan{3,1,11-12} *) 
    | "unmanas" 
    | "uu.sman" (* emit \Pan{3,1,16} *)
+   | "raajan" (* play the role of *)
        -> lengthen (trunc rstem) (* final consonant dropped *)
      (* now the general case: lengthen the nominal vowel stem *)
    | "pa.tapa.taa" | "mahii#2" | "m.r.saa" 

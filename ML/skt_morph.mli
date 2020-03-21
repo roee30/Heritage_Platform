@@ -43,7 +43,7 @@ and paradigm =
   | Presentm of gana and pr_mode (* aatmanepade *)
   | Presentp of pr_mode (* passive of present system *)
   | Conjug of tense and voice (* other tenses/modes/aspects *)
-  | Perfut of voice (* periphrastic futur (lu.t) *)
+  | Perfut of voice (* periphrastic futur (lu.t) - always active *)
   ]
 and voice = [ Active | Middle | Passive ] (* diathesis (pada: Para Atma Ubha) *)
 and pr_mode = 
@@ -65,7 +65,8 @@ and tense =
 (* NB from Indo-European: the present stem has the imperfective aspect,
    the aorist one the perfective aspect, and the perfect one the resultative. *)
 (* Vedic Subjunctive and Pluperfect are not yet taken into account. The only
-   non-present passive forms are some passive aorist forms in 3rd sg. *)
+   non-present passive forms are some passive aorist forms in 3rd sg. 
+   Future, Perfect and Aorist use Midddle forms for Passive. *)
 
 (* Verbal adjectives *)
 type kritya = int (* shades of intention of passive future/potential participle: 

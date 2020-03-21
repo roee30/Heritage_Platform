@@ -397,6 +397,7 @@ all:
 	cd $(ZEN) && $(MAKE) 
 	test -e $(DATA) && echo "Heritage_Resources detected" && exit 0 \
 || echo "You should first install Heritage_Resources at $(DATA)" && exit 1
+	test -f $(SERVERPUBLICDIR)DATA/cache.txt && echo "cold install" || $(MAKE) cold
 	ln -sf $(ZEN) ZEN
 	cp -Rp $(HERITAGE) . # local copy of DICO from Resources/DICO
 	cp -Rp $(MW) . # local copy of MW

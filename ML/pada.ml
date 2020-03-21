@@ -32,9 +32,9 @@ value voices_of = fun
   [ "ak.s" | "afg" | "aj" | "a.t" | "at" | "ad#1" | "an#2" | "am"| "argh" 
   | "ard" | "av" | "az#2" | "as#1" | "as#2" | "aap" | "ifg" | "in" | "ind" 
   | "inv" | "il" | "i.s#2" | "iifkh" | "iir.s" | "uk.s" | "ujjh" | "u~nch"
-  | "und" | "umbh" | "u.s" | ".rc#1" | ".rdh" | ".r.s" | "ej" | "kas" | "kiil"
-  | "ku.t" | "ku.n.th" | "kunth" | "kup" | "kul" | "ku.s" | "kuuj" | "k.rt#1"
-  | "k.rz" | "krand" | "kru~nc#1" | "krudh#1" | "kruz" | "klam" 
+  | "und" | "umbh" | "u.s" | ".rc#1" | ".rdh" | ".r.s" | "ej" | "kas" | "kiirt"
+  | "kiil" | "ku.t" | "ku.n.th" | "kunth" | "kup" | "kul" | "ku.s" | "kuuj" 
+  | "k.rt#1" | "k.rz" | "krand" | "kru~nc#1" | "krudh#1" | "kruz" | "klam" 
   | "klid" | "kliz" | "kvath" | "k.sar" | "k.sal" | "k.saa" | "k.si" | "k.sii"
   | "k.su" | "k.sudh#1" | "k.subh" | "k.svi.d" | "kha~nj#1" | "khaad" | "khid"
   | "khel" | "khyaa" | "gaj" | "gad" | "garj" | "gard" | "gal" | "gaa#1" 
@@ -59,13 +59,13 @@ value voices_of = fun
   | "ra.mh" | "rak.s" | "ra.n" | "rad" | "radh" | "raa#1" | "raadh" | "ri.s" 
   | "ru" | "ruj#1" | "rudh#1" | "ru.s#1" | "ruh#1" | "lag" | "lafg" | "lap" 
   | "lal" | "las" | "laa" | "laa~nch" | "likh" | "liz" | "lu.n.th" | "lubh"
-  | "lul" | "vak.s" | "vac" | "vaj" | "va~nc" | "van" | "vam" | "valg" | "vaz" 
-  | "vas#1" | "vaa#2" | "vas#4" | "vaa~nch" | "vid#1" | "vidh#1" | "vi.s#1" 
-  | "vii#1" | "v.rj" | "v.r.s" | "v.rh" | "ven" | "vyac"| "vyadh" | "vraj"
-  | "vrazc" | "za.ms" | "zak" | "zam#1" | "zam#2" | "zal" | "zaz" | "zas" 
-  | "zaas" | "zi.s" | "ziil" | "zuc#1" | "zudh" | "zumbh" | "zu.s" | "zuu" 
-  | "z.rr" | "zcut#1" | "zraa" | "zli.s" | "zvas#1" | ".s.thiiv" 
-  | "sa~nj" | "sad#1" | "sap#1" | "saa#1" | "sidh#1" | "sidh#2" | "siiv" 
+  | "lul" | "vak.s" | "vac" | "vaj" | "va~nc" | "van" | "vam" | "var.n" | "valg"
+  | "vaz" | "vas#1" | "vaa#2" | "vas#4" | "vaa~nch" | "vid#1" | "vidh#1" 
+  | "vi.s#1" | "vii#1" | "v.rj" | "v.r.s" | "v.rh" | "ven" | "vyac"| "vyadh"
+  | "vraj" | "vrazc" | "za.ms" | "zak" | "zam#1" | "zam#2" | "zal" | "zaz" 
+  | "zas" | "zaas" | "zi.s" | "ziil" | "zuc#1" | "zudh" | "zumbh" | "zu.s"
+  | "zuu" | "z.rr" | "zcut#1" | "zraa" | "zli.s" | "zvas#1" | ".s.thiiv" 
+  | "sad#1" | "sap#1" | "saa#1" | "sidh#1" | "sidh#2" | "siiv" 
   | "sur" | "s.r" | "s.rj#1" | "s.rp" | "skand" | "skhal" | "stan" | "stubh"
   | "sthag" | "snaa" | "snih#1" | "snu" | "snuh#1" | "sp.r" | "sphal" | "sphu.t"
   | "sphur" | "sm.r" | "svan" | "svap"  | "svar#1" | "svar#2" | "ha.th" 
@@ -90,9 +90,9 @@ value voices_of = fun
 (*| Doubt: "bhuu#1" could also be Atma bhavate *)
 (*| "zru" could be Atma in Vedic eg z.r.nu.sva *)
       -> Para (* active only *) 
-  | "az#1" | "aas#2" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" | "ii.s" 
-  | "iih"  | "edh" | "katth" | "kam" | "kamp" | "kaaz" | "kaas#1" | "kuu" 
-  | "k.rp" | "k.lp" (* but Henry: {cak.lpur} "ils s'arrangèrent" *)
+  | "az#1" | "aas#2" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" 
+  | "ii.s" | "iih"  | "edh" | "katth" | "kam" | "kamp" | "kaaz" | "kaas#1" 
+  | "kuu" | "k.rp" | "k.lp" (* but Henry: {cak.lpur} "ils s'arrangèrent" *)
   | "knuu" | "klav" | "k.sad" | "galbh" | "gur" | "glah" 
   | "gha.t" | "jabh#1" | "ju.s#1" | "j.rmbh" | ".damb" | ".dii" | "tandr"
   | "tij" | "trap" | "trai" | "tvar" | "dak.s" | "day" | "diik.s" | "diip"
@@ -113,8 +113,8 @@ value voices_of = fun
       -> Atma (* "deponent" verbs: middle only *)
   | _ -> Ubha (* default *) 
   (* Attested Ubha (over all ga.nas) : 
-  [ "a~nc" | "arh" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" | ".r" | ".rj"
-  | "ka.n.d" | "kal" | "ka.s" | "ku.t.t" | "ku.n.d" | "k.r#1" | "k.r#2" 
+  [ "a~nc" | "arth" | "arh" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" | ".r" 
+  | ".rj" | "ka.n.d" | "kal" | "ka.s" | "ku.t.t" | "ku.n.d" | "k.r#1" | "k.r#2" 
   | "k.r.s" | "kram" | "krii#1" | "krii.d" | "k.san" | "k.sap#1" | "k.sam" 
   | "k.sal" | "k.sip" | "k.sud"
   | "k.s.nu" | "khan" | "gam" | "garh" | "gaah" | "guh" | "gras" | "gha.t.t" 
@@ -126,16 +126,17 @@ value voices_of = fun
   | "naath" | "nij" | "nii#1" | "nud" | "pac" | "paz" | "pa.th" | "pii.d" 
   | "pu.s#1" | "puu#1" | "puuj" | "puuy" | "p.rth" | "prii" | "pru.s#1" 
   | "budh#1" | "bruu" | "bhak.s" | "bhaj" | "bharts" | "bhaas#1" | "bhid#1"
-  | "bhuj#2" | "bh.r" | "bh.rjj" | "maa#4" | "mi" | "mith" | "mil" | "mii" 
-  | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.r.s" | "yaj#1" | "yam"
-  | "yaac" | "yu#1" | "yuj#1" | "rac" | "ra~nj" | "ram" | "rah" | "raaj#1" | "ri"
-  | "ric" | "rud#1" | "rudh#2" | "lafgh" | "lak.s" | "labh" | "la.s" | "lip"
-  | "lih#1" | "lup" | "luu#1" | "vad" | "van" | "vap#1" | "vap#2" | "val"
-  | "vah#1" | "vaa#3" | "vic" | "vij" | "viij" | "v.r#2" | "v.rt#1" | "vyath"
-  | "vyaa" | "vrii" | "zap" | "zaa" | "zu.s" | "zubh#1" | "zyaa" | "zram" | "zri"
-  | "zru" | "sru" | "san#1" | "sah#1" | "sic" | "su#2" | "suud" | "stambh"
-  | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" | "sp.rh" | "smi" | "syand" 
-  | "svad" | "had" | "hikk" | "hu" | "huu" | "h.r#1" ] *)
+  | "bhuj#2" | "bh.r" | "bh.rjj" | "mantr" | "maa#4" | "mi" | "mith" | "mil" 
+  | "mii" | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.r.s" | "yaj#1" 
+  | "yam" | "yaac" | "yu#1" | "yuj#1" | "rac" | "ra~nj" | "ram" | "rah" 
+  | "raaj#1" | "ri" | "ric" | "rud#1" | "rudh#2" | "lafgh" | "lak.s" | "labh"
+  | "la.s" | "lip" | "lih#1" | "lup" | "luu#1" | "vad" | "van" | "vap#1" 
+  | "vap#2" | "val" | "vah#1" | "vaa#3" | "vic" | "vij" | "viij" | "v.r#2"
+  | "v.rt#1" | "vyath" | "vyaa" | "vrii" | "zap" | "zaa" | "zu.s" | "zubh#1"
+  | "zyaa" | "zram" | "zri" | "zru" | "sru" | "san#1" | "sa~nj" | "sah#1" 
+  | "sic" | "su#2" | "suud" | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" 
+  | "sp.rh" | "smi" | "syand" | "svad" | "had" | "hikk" | "hu" | "huu" | "h.r#1"
+  ] *)
   (* + corr. "pa.th" | "sthaa#1" | "praz" | "k.rr" | "p.rc" | "bandh" *)
   (* NB. "ah" "rip" "vadh" have no pr, "mand2" is fictitious *) 
   (* "iiz1", "lii" and "knuu" allowed Para in future *)
@@ -245,7 +246,6 @@ value voices_of_gana g root = match g with
  | 10 -> match root with
         [ "gha.t.t" | ".damb" | "mid" | "mok.s" | "lak.s" | "lok" 
             -> Para
-        | "arth" -> Atma
         | _ -> voices_of root (* other denominatives will take Ubha as default *)
         ]
  | _ -> voices_of root (* in particular, for non-present forms, without gana *)
@@ -310,6 +310,10 @@ value voices_of_pv upasarga gana = fun
           ]
 | "zii#1" -> if upasarga = "sam" then Ubha else Atma 
 | "zram" -> if upasarga = "vi" then Ubha (* epic vizramate *) else Para
+| "k.r#1" -> match upasarga with
+            [ "anu" | "paraa" -> Para (* \Pan{1,3,79} *)
+            |  _ -> Ubha
+            ]
 | "krii#1" -> match upasarga with
             [ "vi" -> Ubha (* vikrii.naati/vikrii.niite *)
             | "pari" | "ava" -> Atma 
@@ -338,6 +342,18 @@ value voices_of_pv upasarga gana = fun
           [ "" -> raise Unattested
           | _ -> Ubha
           ]
+| "mantr" -> match upasarga with 
+   [ "" -> Ubha
+   | "aa" | "ni" -> Atma
+   | "anu" | "sam" -> Para
+   | _ -> raise Unattested
+   ]  
+| "arth" -> match upasarga with 
+   [ "" -> Ubha
+   | "aa" | "ni" -> Atma
+   | "anu" | "sam" -> Para
+   | _ -> raise Unattested
+   ]  
 | root -> voices_of_gana gana root
 ]
 ;

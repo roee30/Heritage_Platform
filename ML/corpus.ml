@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Idir Lankri                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 module Section : sig
@@ -192,7 +192,7 @@ module type S = sig
   ;
   value mkdir : string -> unit
   ;
-  exception No_such_sentence
+  exception No_such_sentence of int
   ;
   value sentence : string -> int -> Sentence.t
   ;
@@ -228,12 +228,12 @@ module Make (Loc : Location) : S = struct
   value sentence_file subdir id =
     ~/subdir /^ Printf.sprintf "%d.%s" id sentence_ext
   ;
-  exception No_such_sentence
+  exception No_such_sentence of int
   ;
   value sentence subdir id =
     let file = sentence_file subdir id in
     if Sys.file_exists file then (Gen.gobble file : Sentence.t) 
-                            else raise No_such_sentence 
+                            else raise (No_such_sentence id)
   ;
   value contents subdir =
     let subdir = ~/subdir in

@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Idir Lankri                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Operations on the corpus tree *)
@@ -104,10 +104,9 @@ module type S = sig
      occurs.  *)
   value mkdir : string -> unit
   ;
-  exception No_such_sentence
+  exception No_such_sentence of int
   ;
-  (* Raise [No_such_sentence] if the requested sentence does not
-     exist.  *)
+  (* Raise [No_such_sentence i] if the sentence i does not exist.  *)
   value sentence : string -> int -> Sentence.t
   ;
   type permission = [ Reader | Annotator | Manager ]

@@ -4246,7 +4246,7 @@ value compute_aorist entry =
       compute_ath_is_aorista strong entry 
     | "zuu" -> 
       compute_ath_is_aorista (revcode "zve") entry 
-    | "kan" | "k.r#2"| "p.rr" -> (* active only *)
+    | "kan" | "k.r#2"| "p.rr" | "zaz" -> (* active only *)
       compute_ath_is_aorista long entry 
     | "kamp" | "jan" | "zii#1" | "spand" -> (* middle only *)
       compute_ath_is_aoristm strong entry 

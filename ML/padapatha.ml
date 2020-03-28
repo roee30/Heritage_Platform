@@ -49,10 +49,6 @@ value adjust c w = match Word.mirror w with
                        if Phonetics.vowel c then raise Hiatus else w
         | 2 (* aa *) -> if Phonetics.vowel c then raise Hiatus else 
                         if Phonetics.elides_visarg_aa c then raise Hiatus else w 
-                        (* NB "baalaa devaa" must be written "baalaadevaa" *)
-                        (* but also "tathaa hi" problematic *)
-                        (* Worse "raama aadhaara.h" not parsable with vocative *)
-                        (* also "vaa are" not analysed *)
         | 4 (* ii *) (* possible visarga vanishes, original vowel may be short *)
         | 6 (* uu *) -> if c=43 (* r *) then raise Glue else w
         (* next 4 rules attempt to revert [last] to 'd' in view of [c] *)

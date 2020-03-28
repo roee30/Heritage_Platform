@@ -127,9 +127,7 @@ value int_input ?id ?val ?(step = 1) ?(min = min_int) ?(max = max_int) name =
     ; ("max", string_of_int max)
     ] in
   let opt_attrs =
-    [ ("id", id)
-    ; ("value", Gen.opt_app string_of_int val)
-    ] in
+    [ ("id", id); ("value", Gen.opt_app string_of_int val) ] in
   let attrs = add_opt_attrs opt_attrs attrs in
   xml_empty_with_att "input" attrs
 ;
@@ -141,8 +139,8 @@ value select control =
   List.map (fun (label,v) -> radio_input control v label)
 ;
 value radio_input_dft control v label checked = 
-  let attrs = [ ("type","radio"); ("name",control); ("value",v) ]
-              @ (if checked then [ ("checked","checked") ] else []) in
+  let check = if checked then [ ("checked","checked") ] else [] in 
+  let attrs = [ ("type","radio"); ("name",control); ("value",v) ] @ check in
   (xml_empty_with_att "input" attrs) ^ label
 ;
 value select_default name = 
@@ -177,8 +175,7 @@ value ol ?id ?li_id_prefix ?(start = 1) items =
     li ?id item in
   let lines = List.mapi process items in 
   let list = String.concat "\n" lines in
-  let attrs =
-    add_opt_attrs [ ("id", id) ] [ ("start", string_of_int start) ] in
+  let attrs = add_opt_attrs [ ("id", id) ] [ ("start", string_of_int start) ] in
   xml_begin_with_att ol attrs ^ "\n" ^ list ^ "\n" ^ xml_end ol
 ;
 value fieldn name content = [ ("name",name); ("content",content) ]

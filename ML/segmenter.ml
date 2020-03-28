@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Sanskrit sentence segmenter - analyses (external) sandhi                   *)
@@ -273,7 +273,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
 ;
 
 (* Now for the segmenter proper *)
- type backtrack =
+type backtrack =
   [ Choose of phase and input and output and Word.word and Auto.choices 
   | Advance of phase and input and output and Word.word
   ]
@@ -281,6 +281,7 @@ and resumption = list backtrack (* coroutine resumptions *)
 ;
 value finished = ([]:resumption)
 ;
+
 (* Service routines *)
 
 (* [access : phase -> word -> option (auto * word)] *)
@@ -299,8 +300,8 @@ value access phase = acc (transducer phase) []
 value schedule phase input output w cont =
   let add phase cont = [ Advance phase input output w :: cont ] in
   let transitions = 
-    if accepting phase && not star.val then [] (* Word = Sanskrit padas *) 
-    else dispatch full.val w phase (* iterate Word+ *) in
+    if accepting phase && not star.val then [] (* Word = Sanskrit pada *) 
+    else dispatch full.val w phase (* iterate Word+ = Sanskrit vaakya *) in
   List.fold_right add transitions cont 
   (* respects dispatch order within a fair top-down search *)
 ; 
@@ -367,8 +368,8 @@ and choose phase input output back occ = fun
                  if rest=[] && accepting phase (* potential solution found *)
                     then if check_chunk contracted
                             then Some (contracted,cont) (* solution found *) 
-                         else continue cont
-                 else continue cont
+                            else continue cont
+                 else continue cont 
               else continue (schedule phase rest contracted v cont)
            ]
          | None -> continue cont

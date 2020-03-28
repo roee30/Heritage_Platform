@@ -53,8 +53,6 @@ value trim_tags :
 ;
 value validate : output -> output (* consistency check and glueing *) 
 ;
-value terminal_sa : output -> option output 
-;
 value color_of_phase : phase -> Html.color
 ;  
 end;

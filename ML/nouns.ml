@@ -3071,7 +3071,7 @@ value build_mono_ii g stem entry =
         ; decline Gen "iyas"
         ; decline Gen "iyaas"
         ; decline Loc "iyi"
-        ; decline Loc "iyaam"
+        ; decline Loc "iyaam" (* niyaam Kale§77 p46 *)
         ])
    ; (Dual,
         [ decline Voc "iyau"
@@ -3099,9 +3099,50 @@ value build_mono_ii g stem entry =
    ; Avyayaf (wrap stem 3) 
    ]
 ;
+(* g = Mas scheme [42] Bucknell p 26 & 90 *)
+value build_bicons_ii g stem entry = 
+  let decline case suff = (case,fix stem suff) in 
+  enter entry 
+   [ Declined Noun g 
+   [ (Singular,
+        [ decline Voc "iis"
+        ; decline Nom "iis"
+        ; decline Acc "iyam"
+        ; decline Ins "iyaa"
+        ; decline Dat "iye"
+        ; decline Abl "iyas"
+        ; decline Gen "iyas"
+        ; decline Loc "iyi"
+        ])
+   ; (Dual,
+        [ decline Voc "iyau"
+        ; decline Nom "iyau"
+        ; decline Acc "iyau"
+        ; decline Ins "iibhyaam"
+        ; decline Dat "iibhyaam"
+        ; decline Abl "iibhyaam"
+        ; decline Gen "iyos"
+        ; decline Loc "iyos"
+        ])
+   ; (Plural, 
+        [ decline Voc "iyas"
+        ; decline Nom "iyas"
+        ; decline Acc "iyas"
+        ; decline Ins "iibhis"
+        ; decline Dat "iibhyas"
+        ; decline Abl "iibhyas"
+        ; decline Gen "iyaam"
+        ; decline Loc "ii.su"
+        ])
+   ]
+   ; Bare Noun (wrap stem 4)
+   ; Avyayaf (wrap stem 3) 
+   ]
+;
 value poly_ii_decls decline =
    [ (Singular,
         [ decline Voc "i"
+        ; decline Voc "iis" (* Bucknell senaanii.h Table 7 Deshpande p146 *)
         ; decline Nom "iis"
         ; decline Acc "yam"
         ; decline Ins "yaa"
@@ -3109,6 +3150,7 @@ value poly_ii_decls decline =
         ; decline Abl "yas"
         ; decline Gen "yas"
         ; decline Loc "yi"
+        ; decline Loc "yaam" (* Bucknell senaanyaam Table 7 Deshpande p146 *)
         ])
    ; (Dual, 
         [ decline Voc "yaa"
@@ -4978,8 +5020,10 @@ value compute_nouns_stem_form e stem d p =
           | _ -> build_mas_i stem r1 e (* agni, etc (ghi) *) 
           ]
       | [ 4 :: r1 ] (* -ii - rare *) -> 
-          if monosyl r1 || compound_monosyl_ii r1 then build_mono_ii Mas r1 e 
-          else build_poly_ii Mas r1 e (* rathii sudhii *)
+          if bi_consonant r1 then build_bicons_ii Mas r1 e (* yavakrii *) 
+          else if monosyl r1 || compound_monosyl_ii r1 
+               then build_mono_ii Mas r1 e 
+               else build_poly_ii Mas r1 e (* rathii sudhii *)
       | [ 5 :: r1 ] (* -u *) -> match r1 with
           [ [ 27; 47; 12; 43; 17 ] -> build_krostu r1 e (* = kro.s.t.r *)
           | _ -> build_mas_u stem r1 e (* vaayu, etc (ghi) *) 

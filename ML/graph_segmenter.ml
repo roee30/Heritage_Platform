@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                        Gérard Huet & Pawan Goyal                       *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* This segmenter is inspired from old module Segmenter, but uses a graph 
@@ -39,7 +39,6 @@ module Segment
          and segment = (Phases.phase * Word.word * transition)
          and output = list segment; 
          value validate : output -> output; (* consistency check / compress *) 
-         value terminal_sa : output -> option output; 
          end)
   (Control: sig value star : ref bool; (* chunk= if star then word+ else word *)
                 value full : ref bool; (* all kridantas and nan cpds if full *)
@@ -379,14 +378,6 @@ type backtrack =
 and resumption = list backtrack (* coroutine resumptions *)
 ;
 
-(* Service routine which deals with terminal sa *)
-value check_sa sol = match terminal_sa sol with
-   [ None -> Some sol (* no terminal sa *)
-   | some -> if cur_chunk.last then None (* forbid sa last *) 
-             else some (* sas restored *)
-   ]
-;
-
 (* Service routines of the segmenter *)
 
 (* [access : phase -> word -> option (auto * word)] *)
@@ -493,10 +484,9 @@ and continue = fun
 from Segmenter. It does not return one solution at a time in coroutine manner, 
 but sweeps the whole solution space. In particular, it returns () rather than 
 an optional solution. *)
-and register solution cont = match check_sa solution with
-    [ Some final -> do { log_chunk final; continue cont } 
-    | None -> continue cont 
-    ]
+and register solution cont = do { log_chunk solution; continue cont }
+(* NB We should check if solution ends en sa/e.sa condition on next chunk
+   to exist and start with consonant - TODO *)
 ;
 value init_segment_initial entries sentence = 
   List.map (fun phase -> Advance phase sentence [] []) entries

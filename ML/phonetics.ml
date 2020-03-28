@@ -444,6 +444,13 @@ value finalize_r stem = match stem with
        ]
   ] 
 ;
+(* Used in Nouns *)
+value bi_consonant rstem = match rstem with
+  [ [ c1 :: [ c2 :: _ ] ] -> consonant c1 && consonant c2 
+  | _ -> False
+  ]
+;
+
 (*i internal sandhi with vowel or 'y' according to Macdonell §59 -- unused
 [value diphthong_split = fun
   [ 10 (* e *)  -> [ 42; 1 ] (* ay *)

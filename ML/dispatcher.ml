@@ -386,7 +386,7 @@ value trim_tags gen form pv tags = List.fold_right trim tags []
         let ok_morphs = List.filter valid_pv morphs in  
         if ok_morphs = [] then acc else [ (delta,ok_morphs) :: acc ] 
 ;
-(* Preventing overgeneration of forms "sa" and "e.sa" \Pan{6,1,132} *)
+(* Preventing overgeneration of forms "sa" and "e.sa" \Pan{6,1,132} Kale§50 *)
 (* This enforces the conditions, without having to complicate the automaton *)
 value not_sa_v = fun (* Assumes next pada starts with a vowel *)
   [ [ (Pron,[ 1; 48 ],_) :: _ ] (* sa *)
@@ -394,7 +394,7 @@ value not_sa_v = fun (* Assumes next pada starts with a vowel *)
   | _ -> True
   ]
 (* [prune_sa] checks that sa is before consonants and recontructs the sandhi *)
-(* NB called with last = [(_,mirror form,_)] out = [ last :: next ] *)
+(* NB called with last = [(_,mirror form,_)] and out = [ last :: next ] *)
 and prune_sa out form last = fun (* next *)
   [ [ (Pron,[ 1; 48 ],_) :: rest ] (* sa *) -> match form with
       [ [ c :: _ ] when consonant c ->
@@ -443,7 +443,7 @@ value apply_sandhi rleft right = fun
     ]
 ;
 
-(* debug for validate -- vomit in interface 
+(*i debug for validate -- vomit in interface 
 [value printout seg = 
   let print_seg (ph,w,_) = do 
   { print_string (string_of_phase ph) 
@@ -452,7 +452,7 @@ value apply_sandhi rleft right = fun
   { print_int (List.length seg); print_string " : "
   ; List.iter print_seg seg; print_string "<hr /><br />\n"
   }
-;] *)
+;] i*)
 
 (* [validate : output -> output] - dynamic consistency check in Segmenter.
    It refines the regular language of dispatch by contextual conditions
@@ -639,27 +639,20 @@ value validate out = match out with
       ]
   | [ (Abso,rev_abso_form,s) :: next ] -> (* impossible since Abso follows Pv *)
       raise (Control.Anomaly "Isolated Abso form") (* phase enforced *)
-  | [ (_,w,_) :: _ ] when phantomatic (Word.mirror w) -> 
+  | [ (_,w,_) :: _ ] when phantomatic (Word.mirror w) -> (* should not happen *)
     let mess = "Bug phantomatic segment: " ^ Canon.rdecode w in
     raise (Control.Anomaly mess)
   | [ (phase,_,_) :: [ (pv,_,_) :: _ ] ] when preverb_phase pv -> 
       let m = "validate: " ^ string_of_phase pv ^ " " ^ string_of_phase phase in 
       raise (Control.Anomaly m) (* all preverbs ought to have been processed *)
     (* We now prevent overgeneration of forms "sa" and "e.sa" \Pan{6,1,132} *)
+    (* NB Allows sa in last chunk, and "sa rest" with rest starting before vowel - TODO *)
+  | [ (Pron,[ 1; 48 ],_) ] -> [ (Pron,[ 48; 1; 48 ],Id) ] (* terminal sa *) 
+  | [ (Pron,[ 1; 47; 10 ],_) ] -> [ (Pron,[ 48; 1; 47; 10 ],Id) ] (* terminal e.sa *)
   | [ ((_,rform,_) as last) :: next ] -> let form = Word.mirror rform in
                                          prune_sa out form last next 
   ]
 ;
-(* Used in [Graph_segmenter] *)
-value terminal_sa = fun 
-  [ [ (Pron,[ 1; 48 ],_) :: rest ] (* sa *) -> 
-       Some [ (Pron,[ 48; 1; 48 ],Id) :: rest ] (* restores sas *)
-  | [ (Pron,[ 1; 47; 10 ],_) :: rest ] (* e.sa *) -> 
-       Some [ (Pron,[ 48; 1; 47; 10 ],Id) :: rest ] (* idem e.sas *)
-  | _ -> None 
-  ]
-; 
-
 open Html;
 value rec color_of_phase = fun
   [ Noun | Noun2 | Lopak | Nouc | Nouv | Kriv | Kric | Krid | Auxik | Kama

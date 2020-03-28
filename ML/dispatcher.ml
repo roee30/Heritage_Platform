@@ -647,8 +647,8 @@ value validate out = match out with
       raise (Control.Anomaly m) (* all preverbs ought to have been processed *)
     (* We now prevent overgeneration of forms "sa" and "e.sa" \Pan{6,1,132} *)
     (* NB Allows sa in last chunk, and "sa rest" with rest starting before vowel - TODO *)
-  | [ (Pron,[ 1; 48 ],_) ] -> [ (Pron,[ 48; 1; 48 ],Id) ] (* terminal sa *) 
-  | [ (Pron,[ 1; 47; 10 ],_) ] -> [ (Pron,[ 48; 1; 47; 10 ],Id) ] (* terminal e.sa *)
+  | [ (Pron,[ 1; 48 ],_) :: next ] -> [ (Pron,[ 48; 1; 48 ],Id) :: next ] (* terminal sa *) 
+  | [ (Pron,[ 1; 47; 10 ],_) :: next ] -> [ (Pron,[ 48; 1; 47; 10 ],Id) :: next ] (* terminal e.sa *)
   | [ ((_,rform,_) as last) :: next ] -> let form = Word.mirror rform in
                                          prune_sa out form last next 
   ]

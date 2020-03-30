@@ -2608,9 +2608,9 @@ value compute_ppp_stems entry rstem =
     | "khid" | "g.rr#1" | "glai" | "chad#1" | "chid#1" | "ch.rd" | "j.rr" 
     | ".dii" | "tud#1" | "t.rd" | "t.rr" | "dagh" | "d.rr" | "dev" | "draa#1"
     | "draa#2" | "nud" | "pad#1" | "pii" | "p.rr" | "pyaa" | "bha~nj" 
-    | "bhid#1" | "bhuj#1" | "majj" | "man" | "mid" | "mlaa" | "ri" | "lii" 
-    | "luu#1" | "vij" | "vid#2" | "vrii" | "vlii" | "zad" | "zuu" | "z.rr" 
-    | "sad#1" | "skand" | "st.rr" | "styaa" | "syand" | "svid#2" | "had"
+    | "bhid#1" | "bhuj#1" | "majj" | "man" | "mid" | "mlaa" | "ri" | "ruj#1"
+    | "lii" | "luu#1" | "vij" | "vid#2" | "vrii" | "vlii" | "zad" | "zuu" 
+    | "z.rr" | "sad#1" | "skand" | "st.rr" | "styaa" | "syand" | "svid#2" | "had"
     | "haa#2" -> 
       (* except lag which is "nipaatana" (exception) \Pan{7,2,18} *)
       let ppna w = [ Na w ] in

@@ -3099,7 +3099,7 @@ value build_mono_ii g stem entry =
    ; Avyayaf (wrap stem 3) 
    ]
 ;
-(* g = Mas scheme [42] Bucknell p 26 & 90 *)
+(* g = Mas scheme [42] Bucknell p26 p90 *)
 value build_bicons_ii g stem entry = 
   let decline case suff = (case,fix stem suff) in 
   enter entry 
@@ -4941,8 +4941,7 @@ value pprvat = fun
   | "dhaavat#2" | "bhavat#1" | "z.r.nvat" | "zaknuvat" -> True
   | _ -> False
   ]
-;
-value pprmat = fun 
+and pprmat = fun 
   [ "jamat" | "dyumat" | "bhaamat" -> True
   | _ -> False
   ]
@@ -5008,7 +5007,8 @@ value compute_nouns_stem_form e stem d p =
                            pa.nidhmaa zafkhadhmaa mukhadhmaa agnidhmaa *)
           | [ 42 :: [ 14 :: _ ] ] (* zubha.myaa *) 
           | [ 43 :: [ 17 :: _ ] ] (* -kraa dadhikraa *) 
-          | [ 43 ] (* raa2 *) -> build_mono_aa Mas r1 e 
+          | [ 43 :: _ ] (* -raa2 *) 
+              -> build_mono_aa Mas r1 e 
           | [ 49; 2; 49 ] (* haahaa *) 
           | [ 31; 2; 43 ] (* raa.naa *) -> build_mas_aa_no_root r1 e
           | _ -> report stem g (* monitoring *)

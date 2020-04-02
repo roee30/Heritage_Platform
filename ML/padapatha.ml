@@ -36,21 +36,25 @@ value adjust c w = match Word.mirror w with
         [ 14 (* .m *) -> Word.mirror [ 41 (* m *) :: rest ] (* revert .m to m *)
              (* note: .m coming from sandhi of n is followed by sibilant 
                 and chunking is allowed only after this sibilant *)
+        | 10 | 11 (* e ai *) when c = 43  (* r *) -> raise Hiatus 
+             (* For ai.h+r -> ai r Whitney§179 en fait, toute voyelle longue *)
         | 12 (* o *) -> if rest = [ 40 ] (* bh from bhos -> bho *) then 
                            Encode.code_string "bhos" (* "bho raama" "bho bhos" *)
                         else if rest = [ 49; 1 ] (* aho *) then 
-                           Encode.code_string "aho" (* "bho raama" "bho bhos" *)
+                           Encode.code_string "aho" (* "aho raama" *)
                         else if Phonetics.turns_visarg_to_o c || c=1 
                              (* zivoham must be entered as zivo'ham (avagraha) *)
                              then Word.mirror [ 16 :: [ 1 :: rest ] ] 
                              (* restore visarga, assuming original a.h form *)
+                             (* This may miss hiatus os + rx -> o rx *) 
                         else w 
         | 1 (* a *) -> if c=1 then w else
                        if Phonetics.vowel c then raise Hiatus else w
         | 2 (* aa *) -> if Phonetics.vowel c then raise Hiatus else 
-                        if Phonetics.elides_visarg_aa c then raise Hiatus else w 
-        | 4 (* ii *) (* possible visarga vanishes, original vowel may be short *)
-        | 6 (* uu *) -> if c=43 (* r *) then raise Glue else w
+                        if Phonetics.elides_visarg_aa c then raise Hiatus else 
+                        w (* Hiatus except c surd unaspirate ? *)
+        | 4 (* ii *) (* possible visarga vanishes *)
+        | 6 (* uu *) -> if c=43 (* r *) then raise Hiatus else w
         (* next 4 rules attempt to revert [last] to 'd' in view of [c] *)
         | 34 (* d *) -> if c=35 (* dh *) then raise Glue else 
                         if Phonetics.is_voiced c 

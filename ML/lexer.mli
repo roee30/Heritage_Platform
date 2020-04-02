@@ -42,6 +42,7 @@ module Lexer : functor (* takes its prelude and iterator control as parameters *
       type check = (int * (Phases.phase * Word.word) * bool);
       value all_checks : ref (list check);
       value set_offset : (int * list check) -> unit;
+      value set_sa_control : bool -> unit;
       end;
 
   value extract_lemma : Phases.phase -> Word.word -> list lemma;

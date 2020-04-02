@@ -44,7 +44,8 @@ module Segment
             ]
          and segment = (Phases.phase * Word.word * transition)
          and output = list segment;
-         value validate : output -> output; (* consistency check / compress *)
+         value validate : output -> output; (* consistency check *)
+         value sanitize_sa : bool -> output -> output;
          end)
   (Control: sig value star : ref bool; (* chunk= if star then word+ else word *) 
                 value full : ref bool; (* all kridantas and nan cpds if full *)
@@ -68,12 +69,15 @@ and check = (int * phased_pada * bool) (* checkpoint validation *)
 value all_checks = ref ([]: list check) (* checkpoints in rest of input *)
 and offset_chunk = ref 0
 and segmentable_chunk = ref False 
+and sa_control = ref False
 ;
-(* Used by [Reader.segment_chunks_filter] *)
+(* Used by [Rank.segment_chunks_filter] *)
 value set_offset (offset,checkpoints) = do
   { offset_chunk.val := offset 
   ; all_checks.val := checkpoints
   }
+;
+value set_sa_control b = sa_control.val := b
 ;
 (* The offset permits to align the padas with the input string *)
 value offset = fun
@@ -271,7 +275,6 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
  | _ -> [ segment :: previous_segments ]
   ]
 ;
-
 (* Now for the segmenter proper *)
 type backtrack =
   [ Choose of phase and input and output and Word.word and Auto.choices 
@@ -281,7 +284,6 @@ and resumption = list backtrack (* coroutine resumptions *)
 ;
 value finished = ([]:resumption)
 ;
-
 (* Service routines *)
 
 (* [access : phase -> word -> option (auto * word)] *)
@@ -335,7 +337,7 @@ value rec react phase input output back occ = fun
     if accept && keep then 
        let segment = (phase,occ,Id) in 
        let out = accrue segment output in 
-       match validate out with 
+       match sanitize_sa sa_control.val (validate out) with 
        [ [] -> deter cont
        | contracted -> match input' with
               [ [] -> if accepting phase then 
@@ -361,7 +363,7 @@ and choose phase input output back occ = fun
          [ Some rest -> 
            let segment = (phase,u @ occ,Euphony rule) in 
            let out = accrue segment output in
-           match validate out with
+           match sanitize_sa sa_control.val (validate out) with
            [ [] -> continue cont 
            | contracted ->
               if v=[] (* final sandhi *) then

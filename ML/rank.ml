@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                        Pawan Goyal & Gérard Huet                       *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* This library is used by Reader and Regression. It constructs a lexer Lex, 
@@ -149,9 +149,12 @@ value split_check limit = split_rec []
           else split_rec [ check :: acc ] rest 
       ]
 ;
-value segment_chunks_filter filter_mode chunks cpts = 
-  let (_,constrained_segs) = List.fold_left init ((0,cpts),[]) chunks
-  where init ((offset,checkpoints),stack) chunk = do
+value consonant_starts = fun
+  [ [ chunk :: _ ] -> Phonetics.consonant_initial chunk 
+  | _ -> False
+  ] 
+;
+value segment_chunk ((offset,checkpoints),stack) chunk sa_check = do
   { let ini_cont = Lex.Viccheda.init_segment chunk in 
     let chunk_length = Word.length chunk in
     let extremity = offset+chunk_length in 
@@ -159,16 +162,25 @@ value segment_chunks_filter filter_mode chunks cpts =
     let chunk_constraints = (offset,local) in
     ((succ extremity,future), do 
        { Lex.Viccheda.set_offset chunk_constraints (* Sets local constraints *)
+       ; Lex.Viccheda.set_sa_control sa_check (* inherit from chunks recursion *)
        ; let res = match Lex.Viccheda.continue ini_cont with
              [ Some c -> c 
              | None -> Lex.un_analyzable chunk
              ] in 
          [ (chunk_constraints,res) :: stack ]
        }) 
-  } in
+  } 
+;
+value segment_chunks_filter filter_mode chunks cpts = 
+  let (_,constrained_segs) = segment_chunks ((0,cpts),[]) chunks
+  where rec segment_chunks acc = fun
+    [ [ (* last *) chunk ] -> segment_chunk acc chunk False
+    | [ chunk :: rest ] -> let sa_check = consonant_starts rest in
+                           segment_chunks (segment_chunk acc chunk sa_check) rest
+    | [] -> acc
+    ] in 
   dove_tail filter_mode constrained_segs 
 ;
-
 value segment_all filter_mode chunks cpts = 
   segment_chunks_filter filter_mode chunks cpts
 ;

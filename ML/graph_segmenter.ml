@@ -38,7 +38,8 @@ module Segment
             ]
          and segment = (Phases.phase * Word.word * transition)
          and output = list segment; 
-         value validate : output -> output; (* consistency check / compress *) 
+         value validate : output -> output; (* consistency check *) 
+         value sanitize_sa : bool -> output -> output;
          end)
   (Control: sig value star : ref bool; (* chunk= if star then word+ else word *)
                 value full : ref bool; (* all kridantas and nan cpds if full *)
@@ -135,19 +136,20 @@ value register_pada index (phase,pada,sandhi) =
 ;
 
 (* To avoid heavy functional transmission of chunk global parameters,
-we define a record of chunk parameters.
-NB. offset and last are inherited attributes, segmentable is synthesized. *)
-
+    we define a record of chunk parameters. Attributes offset and [sa_control] 
+    are inherited, segmentable is synthesized. *)
+(* [sa_control] is True iff chunk is followed by chunk starting with consonant,
+   and it then authorizes its last segment to be sa or e.sa pronouns *)
 type chunk_params = { offset : mutable int
                     ; segmentable : mutable bool
-                    ; last : mutable bool (* for sa elimination in last chunk *)
+                    ; sa_control : mutable bool (* for inter-chunk sa check *)
                     }
 ;
-value cur_chunk = { offset = 0; segmentable = False; last = False }
+value cur_chunk = { offset = 0; segmentable = False ; sa_control = False }
 ;
 value set_cur_offset n = cur_chunk.offset := n
 and set_segmentable b = cur_chunk.segmentable := b
-and set_last b = cur_chunk.last := b 
+and set_sa_control b = cur_chunk.sa_control := b 
 ;
 value set_offset (offset,checkpoints) = do
   { set_cur_offset offset
@@ -294,12 +296,12 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
       [ [ (phase,pv,Euphony ([],u,[-2])) :: rest ] -> (* phase=Pv,Pvkv,Pvkc *)
           let v = match r with [ [ 10 (* e *) :: _ ] -> [ 10 ] 
                                | [ 12 (* o *) :: _ ] -> [ 12 ]
-                               | _ -> failwith "accrue anomaly" 
+                               | _ -> failwith "accrue anomaly 1" 
                                ] in 
           (* u is [ a ] or [ aa ], v is [ e ] or [ o ] *)
           [ un_lopa_segment :: [ (phase,pv,Euphony (v,u,v)) :: rest ] ]
             where un_lopa_segment = (un_lopa ph,Word.mirror r,rule) 
-       | _ -> failwith "accrue anomaly"
+       | _ -> failwith "accrue anomaly 2"
        ]
         (* Then phantom phonemes *)
    | [ -3 (* *a *) :: r ] -> match previous_segments with
@@ -308,7 +310,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
          [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2 ],[ 2 ],[ 1 ])) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 1 :: r ],rule)
-       | _ -> failwith "accrue anomaly"
+       | _ -> failwith "accrue anomaly 3"
        ]
   | [ -9 (* *A *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[-9])) :: rest ] -> 
@@ -316,7 +318,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
          [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2 ],[ 2 ],[ 2 ])) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 2 :: r ],rule)
-       | _ -> failwith "accrue anomaly"
+       | _ -> failwith "accrue anomaly 4"
        ]
   | [ -4 (* *i *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[-4])) :: rest ] -> 
@@ -324,7 +326,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
          [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 10 ],[ 2 ],[ 3 ])) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ] 
            where new_segment = (ph,Word.mirror [ 3 :: r ],rule)
-       | _ -> failwith "accrue anomaly"
+       | _ -> failwith "accrue anomaly 5"
        ]
   | [ -7 (* *I *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[-7])) :: rest ] -> 
@@ -332,7 +334,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
          [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 10 ],[ 2 ],[ 4 ])) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 4 :: r ],rule)
-       | _ -> failwith "accrue anomaly"
+       | _ -> failwith "accrue anomaly 6"
        ]
   | [ -5 (* *u *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[-5])) :: rest ] -> 
@@ -340,7 +342,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
          [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 12 ],[ 2 ],[ 5 ])) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 5 :: r ],rule)
-       | _ -> failwith "accrue anomaly"
+       | _ -> failwith "accrue anomaly 7"
        ]
   | [ -8 (* *U *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[-8])) :: rest ] -> 
@@ -348,7 +350,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
          [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 12 ],[ 2 ],[ 6 ])) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 6 :: r ],rule)
-       | _ -> failwith "accrue anomaly"
+       | _ -> failwith "accrue anomaly 8"
        ]
   | [ -6 (* *r *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[-6])) :: rest ] -> 
@@ -356,7 +358,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
          [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2; 43 ],[ 2 ],[ 7 ])) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 7 :: r ],rule)
-       | _ -> failwith "accrue anomaly"
+       | _ -> failwith "accrue anomaly 9"
        ]
   | [ 123 (* *C *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[ 123 ])) :: rest ] -> 
@@ -365,7 +367,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
          [ new_seg :: [ (aa_phase ph,[ 2 ],Euphony ([ 2; 22; 23 ],[ 2 ],[ 23 ]))
                    :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_seg = (ph,Word.mirror [ 23 :: r ],rule)
-       | _ -> failwith "accrue anomaly"
+       | _ -> failwith "accrue anomaly 10"
        ]
   | _ -> [ segment :: previous_segments ]
   ]
@@ -431,8 +433,8 @@ value rec react phase input output back occ = fun
        | _ -> (True,False,input) (* no hint in input *)
        ] in         
     if accept && keep then 
-       let segment = (phase,occ,Id) in
-       let out = accrue segment output in (*i unknown Id sandhi - TODO i*) 
+       let segment = (phase,occ,Id) in 
+       let out = accrue segment output in 
        match validate out (* validate and compact partial output *) with 
        [ [] -> if cut then continue cont else deter cont 
        | contracted -> match input' with
@@ -455,7 +457,7 @@ and choose phase input output back occ = fun
                   else [ Choose phase input output occ others :: back ] in
        match subtract input w with (* try to read [w] on [input] *)
          [ Some rest -> 
-           let segment = (phase,u @ occ,Euphony rule) in
+           let segment = (phase,u @ occ,Euphony rule) in 
            let out = accrue segment output in
            match validate out with
            [ [] -> continue cont 
@@ -484,9 +486,11 @@ and continue = fun
 from Segmenter. It does not return one solution at a time in coroutine manner, 
 but sweeps the whole solution space. In particular, it returns () rather than 
 an optional solution. *)
-and register solution cont = do { log_chunk solution; continue cont }
-(* NB We should check if solution ends en sa/e.sa condition on next chunk
-   to exist and start with consonant - TODO *)
+and register solution cont = (* Last check for sa/e.sa inter-chunk consistency *)
+  match sanitize_sa cur_chunk.sa_control solution with 
+  [ [] -> continue cont 
+  | chunk_sol -> do { log_chunk chunk_sol; continue cont }
+  ]
 ;
 value init_segment_initial entries sentence = 
   List.map (fun phase -> Advance phase sentence [] []) entries
@@ -514,11 +518,11 @@ value split_check limit = split_rec []
 (* We do not need to [dove_tail] like in Rank, since chunks are independent. *)
 (* Returns a pair (b,n) where b is True if all chunks are segmentable so far,
    and n is the number of potential solutions *)
-value segment_chunk (full,count) chunk last =
+value segment_chunk (full,count) chunk sa_check =
     let extremity = cur_chunk.offset+Word.length chunk in
     let (local,future) = split_check extremity chkpts.all_checks in do
     { chkpts.segment_checks := local
-    ; set_last last
+    ; set_sa_control sa_check (* inherited from chunks recursion *)
     ; let segmentable = segment chunk 
       and local_count = get_counter () in do
       { set_segmentable False
@@ -533,10 +537,16 @@ value segment_chunk (full,count) chunk last =
       }
     }
 ;
+value consonant_starts = fun
+  [ [ chunk :: _ ] -> Phonetics.consonant_initial chunk 
+  | _ -> False
+  ] 
+;
 value segment_iter chunks = segment_chunks (True,1) chunks
-  where rec segment_chunks acc = fun (* terminal recursion *) 
-    [ [ (* last *) chunk ] -> segment_chunk acc chunk True
-    | [ chunk :: rest ] -> segment_chunks (segment_chunk acc chunk False) rest
+  where rec segment_chunks acc = fun (* speedy terminal recursion *) 
+    [ [ (* last *) chunk ] -> segment_chunk acc chunk False
+    | [ chunk :: rest ] -> let sa_check = consonant_starts rest in
+                           segment_chunks (segment_chunk acc chunk sa_check) rest
     | [] -> acc
     ]
 ;

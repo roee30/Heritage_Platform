@@ -2441,14 +2441,15 @@ value intercalates root =
           else set 
        else if semivowel c then set
        else match root with
-            [ "ak.s" | "a~nj" | "k.rt#1" | "k.rp" | "k.lp" | "kram" | "k.sam" 
+            [ "k.rt#1" | "c.rt" | "ch.rd" | "t.rd" | "n.rt" (* Pan{7,2,57} *)
+            | "ak.s" | "a~nj" | "k.rp" | "k.lp" | "kram" | "k.sam" 
             | "klid" | "kliz" | "gup" | "guh" | "ghu.s" | "jan" | "ta~nc" 
-            | "tap" | "t.rd" | "tyaj#1" | "dah#1" | "d.rp" | "nam" | "naz" 
-            | "n.rt" | "bandh" | "budh#1" | "bhaj" | "majj" | "man" | "m.rj"
+            | "tap" | "tyaj#1" | "dah#1" | "d.rp" | "nam" | "naz" 
+            | "bandh" | "budh#1" | "bhaj" | "majj" | "man" | "m.rj"
             | "yam" | "ruh" | "labh" | "likh" | "vap#2" | "vas#1" | "vah#1" 
             | "vij" | "vid#1" | "v.rj" | "v.rt#1" | "vrazc" | "sad#1" | "sah#1"
             | "sidh#2" | "svap" | "han#1" | "syand" (* WR: set atma, anit para *)
-                -> vet  
+                -> vet 
             | "grah" -> setl
             | "s.rj#1" -> [ 3 ] (* sra.s.taa *)
             | "k.r.s" -> [ 3 :: vet ] (* ar -> ra optionally *)
@@ -4851,6 +4852,7 @@ value record_abso_am root =
   | "k.r#1"   -> record "kaaram" (* \Pan{3,4,26-28} *)
   | "khan"    -> record "khaanam"
   | "grah"    -> record "graaham"
+  | "c.rt"    -> record "c.rtam"
   | "jiiv"    -> record "jiivam" (* \Pan{3,4,30} *)
   | "j~naa#1" -> record "j~naayam"
   | "t.r.s#1" -> record "tar.sam"

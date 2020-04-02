@@ -52,6 +52,7 @@ module Viccheda = Segment Phases Disp Lexer_control;
 
 value all_checks = Viccheda.all_checks
 and   set_offset = Viccheda.set_offset
+and   set_sa_control = Viccheda.set_sa_control
 ;
 value un_analyzable (chunk : word) = 
   ([ (Unknown,mirror chunk,Disp.Id) ],Viccheda.finished)
@@ -211,7 +212,7 @@ value print_scl_segment counter (phase,rword) =
   ; counter+1
   } 
 ; 
-(* The following was used by Regression, now deprecated 
+(*i The following was used by Regression, now deprecated 
 module Report_chan = struct 
 value chan = Lexer_control.out_chan; (* where to report *)
 end;
@@ -275,6 +276,6 @@ value get_morph gen phase form (delta,morphs) =
   (form, lex_cat phase, generative_stem gen stem, morphs)
 ;
 
-end deprecated *) 
+end deprecated i*) 
 end;
 

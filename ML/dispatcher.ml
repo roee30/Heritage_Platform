@@ -94,12 +94,12 @@ value transducer phase =
   ]
 ; 
 (* Tests whether a word starts with a phantom phoneme (precooked aa-prefixed
-   finite or participial or infinitive or abs-ya root form *)
+   finite or participial or infinitive or abs-ya root form) *)
 value phantomatic = fun
   [ [ c :: _ ] -> c<(-2) || c=123
   | _ -> False
   ]
-(* Amuitic forms start wiih -2 = [-] which elides preceding -a or -aa from Pv *)
+(* Amuitic forms start with -2 = [-] which elides preceding -a or -aa from Pv *)
 and amuitic = fun
   [ [ -2 :: _ ] -> True 
   | _ -> False
@@ -398,7 +398,7 @@ value not_sa_v = fun (* Assumes next pada starts with a vowel *)
 and prune_sa out form last = fun (* next *)
   [ [ (Pron,[ 1; 48 ],_) :: rest ] (* sa *) -> match form with
       [ [ c :: _ ] when consonant c ->
-         let sandhi = Euphony ([ 48; 1; c], [ 48; 1; 48 ], [ c ]) in
+         let sandhi = Euphony ([ 48; 1; c ], [ 48; 1; 48 ], [ c ]) in
          [ last :: [ (Pron,[ 48; 1; 48 ],sandhi) :: rest ] ] 
       | _ -> []
       ]
@@ -454,7 +454,7 @@ value apply_sandhi rleft right = fun
   }
 ;] i*)
 
-(* [validate : output -> output] - dynamic consistency check in Segmenter.
+(* [validate : bool -> output -> output] dynamic consistency check in Segmenter.
    It refines the regular language of dispatch by contextual conditions
    expressing that preverbs are consistent with the following verbal form. 
    The forms are then compounded, otherwise rejected. 
@@ -645,14 +645,25 @@ value validate out = match out with
   | [ (phase,_,_) :: [ (pv,_,_) :: _ ] ] when preverb_phase pv -> 
       let m = "validate: " ^ string_of_phase pv ^ " " ^ string_of_phase phase in 
       raise (Control.Anomaly m) (* all preverbs ought to have been processed *)
-    (* We now prevent overgeneration of forms "sa" and "e.sa" \Pan{6,1,132} *)
-    (* NB Allows sa in last chunk, and "sa rest" with rest starting before vowel - TODO *)
-  | [ (Pron,[ 1; 48 ],_) :: next ] -> [ (Pron,[ 48; 1; 48 ],Id) :: next ] (* terminal sa *) 
-  | [ (Pron,[ 1; 47; 10 ],_) :: next ] -> [ (Pron,[ 48; 1; 47; 10 ],Id) :: next ] (* terminal e.sa *)
   | [ ((_,rform,_) as last) :: next ] -> let form = Word.mirror rform in
                                          prune_sa out form last next 
   ]
 ;
+(* Inter-chunk sa/e.sa check *)
+value sanitize_sa sa_final_check = fun 
+  [ [ (Pron,[ 1; 48 ],s) :: r ] -> 
+      if sa_final_check then 
+         [ (Pron,[ 48; 1; 48 ],s) :: r ] (* terminal sa *) 
+      else []
+  | [ (Pron,[ 1; 47; 10 ],s) :: r ] -> 
+      if sa_final_check then
+         [ (Pron,[ 48; 1; 47; 10 ],s) :: r ] (* terminal e.sa *) 
+      else []
+  | chunk_sol -> chunk_sol 
+  ]
+;
+
+
 open Html;
 value rec color_of_phase = fun
   [ Noun | Noun2 | Lopak | Nouc | Nouv | Kriv | Kric | Krid | Auxik | Kama

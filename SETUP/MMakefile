@@ -12,7 +12,7 @@
 # This software presupposes a Unix-like OS environment, with c, make and sed
 # Also python is assumed for package management, and javascript for scripts.
 # Stand-alone distribution ought to include Zen and Ocaml/Camlp4 distributions.
-# Also Apache for managing the Web site.
+# Also Apache for managing the Web site. And TeX/Ocamlweb for documeentation.
 
 ############################ VERSIONING ####################################
 
@@ -280,7 +280,7 @@ DEBUG= ML/debug.ml
 
 # Historical versions of the segmenter, tagger and reader with single phase
 OBSOLETE_ML=ML/segmenter1.ml ML/tagger1.ml ML/reader1.ml ML/tagger.ml \
-ML/nyaaya.ml ML/mk_nyaaya_page.ml ML/regression.ml \
+ML/nyaaya.ml ML/mk_nyaaya_page.ml ML/regression.ml regression_lexer.ml \
 ML/patch_auto.ml # awful hack for patching automata structures - now unused
 
 # Modules of all software packages are in library ML (besides the ZEN library)

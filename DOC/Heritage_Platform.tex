@@ -41658,6 +41658,50 @@ $]$\ocweol
 
 \label{phases.ml:6042}%
 \ocwindent{0.00em}
+\ocwkw{open}~$\ocwupperid{Html};$\ocweol
+\ocwindent{0.00em}
+$\ocwlowerid{value}~$\ocwkw{rec}~$\ocwlowerid{color\_of\_phase}~=~$\ocwkw{fun}\ocweol
+\ocwindent{1.00em}
+$[~\ocwupperid{Noun}~\mid{}~\ocwupperid{Noun2}~\mid{}~\ocwupperid{Lopak}~\mid{}~\ocwupperid{Nouc}~\mid{}~\ocwupperid{Nouv}~\mid{}~\ocwupperid{Kriv}~\mid{}~\ocwupperid{Kric}~\mid{}~\ocwupperid{Krid}~\mid{}~\ocwupperid{Auxik}~\mid{}~\ocwupperid{Kama}$\ocweol
+\ocwindent{4.50em}
+$\mid{}~\ocwupperid{Cache}~\rightarrow{}~\ocwupperid{Deep\_sky}~$\ocweol
+\ocwindent{1.00em}
+$\mid{}~\ocwupperid{Pron}~\rightarrow{}~\ocwupperid{Light\_blue}$\ocweol
+\ocwindent{1.00em}
+$\mid{}~\ocwupperid{Root}~\mid{}~\ocwupperid{Auxi}~\mid{}~\ocwupperid{Lopa}~\rightarrow{}~\ocwupperid{Carmin}~$\ocweol
+\ocwindent{1.00em}
+$\mid{}~\ocwupperid{Inde}~\mid{}~\ocwupperid{Abso}~\mid{}~\ocwupperid{Absv}~\mid{}~\ocwupperid{Absc}~\mid{}~\ocwupperid{Auxiinv}~\mid{}~\ocwupperid{Ai}~\mid{}~\ocwupperid{Ani}~\rightarrow{}~\ocwupperid{Mauve}$\ocweol
+\ocwindent{1.00em}
+$\mid{}~\ocwupperid{Iiy}~\rightarrow{}~\ocwupperid{Lavender}$\ocweol
+\ocwindent{1.00em}
+$\mid{}~\ocwupperid{Avy}~\rightarrow{}~\ocwupperid{Magenta}$\ocweol
+\ocwindent{1.00em}
+$\mid{}~\ocwupperid{Inftu}~\rightarrow{}~\ocwupperid{Salmon}~$\ocweol
+\ocwindent{1.00em}
+$\mid{}~\ocwupperid{Iic}~\mid{}~\ocwupperid{Iic2}~\mid{}~\ocwupperid{A}~\mid{}~\ocwupperid{An}~\mid{}~\ocwupperid{Iicv}~\mid{}~\ocwupperid{Iicc}~\mid{}~\ocwupperid{Iik}~\mid{}~\ocwupperid{Iikv}~\mid{}~\ocwupperid{Iikc}~\mid{}~\ocwupperid{Iiif}~$\ocweol
+\ocwindent{4.00em}
+$\mid{}~\ocwupperid{Auxiick}~\mid{}~\ocwupperid{Cachei}~\rightarrow{}~\ocwupperid{Yellow}$\ocweol
+\ocwindent{1.00em}
+$\mid{}~\ocwupperid{Peri}~\mid{}~\ocwupperid{Iiv}~\mid{}~\ocwupperid{Iivv}~\mid{}~\ocwupperid{Iivc}~\rightarrow{}~\ocwupperid{Orange}$\ocweol
+\ocwindent{1.00em}
+$\mid{}~\ocwupperid{Voca}~\mid{}~\ocwupperid{Vocv}~\mid{}~\ocwupperid{Vocc}~\mid{}~\ocwupperid{Inv}~\mid{}~\ocwupperid{Vok}~\mid{}~\ocwupperid{Vokv}~\mid{}~\ocwupperid{Vokc}~\rightarrow{}~\ocwupperid{Lawngreen}$\ocweol
+\ocwindent{1.00em}
+$\mid{}~\ocwupperid{Ifc}~\mid{}~\ocwupperid{Ifcv}~\mid{}~\ocwupperid{Ifcc}~\mid{}~\ocwupperid{Ifc2}~\rightarrow{}~\ocwupperid{Cyan}$\ocweol
+\ocwindent{1.00em}
+$\mid{}~\ocwupperid{Unknown}~\rightarrow{}~\ocwupperid{Grey}$\ocweol
+\ocwindent{1.00em}
+$\mid{}~\ocwupperid{Comp}~(\ocwlowerid{\_},\ocwlowerid{ph})~\ocwlowerid{\_}~\ocwlowerid{\_}~\rightarrow{}~\ocwlowerid{color\_of\_phase}~\ocwlowerid{ph}~$\ocweol
+\ocwindent{1.00em}
+$\mid{}~\ocwupperid{Pv}~\mid{}~\ocwupperid{Pvv}~\mid{}~\ocwupperid{Pvc}~\mid{}~\ocwupperid{Pvkc}~\mid{}~\ocwupperid{Pvkv}~\rightarrow{}~\ocwlowerid{failwith}~$\ocwstring{"Illegal\ocwvspace{}preverb\ocwvspace{}segment"}~\ocweol
+\ocwindent{0.00em}
+\ocwbc{}\ocwbegindcode{}$\mid{}~\ocwlowerid{\_}~\rightarrow{}~\ocwlowerid{raise}~(\ocwupperid{Control}.\ocwupperid{Anomaly}~$\ocwstring{"Unexpected\ocwvspace{}color"}$)$\ocwenddcode{} \ocwec{}\ocweol
+\ocwindent{1.00em}
+$]$\ocweol
+\ocwindent{0.00em}
+;\medskip
+
+\label{phases.ml:6875}%
+\ocwindent{0.00em}
 \ocwkw{end};~\ocwbc{} Phases \ocwec{}\ocweol
 \ocweol
 \ocwendcode{}\typeout{OcamlWeb file Lemmatizer.ml}
@@ -42689,10 +42733,6 @@ $\ocwlowerid{value}~\ocwlowerid{trim\_tags}~:~$\ocweol
 $\ocwlowerid{value}~\ocwlowerid{validate}~:~\ocwlowerid{output}~\rightarrow{}~\ocwlowerid{output}~$\ocwbc{} consistency check and glueing \ocwec{}~\ocweol
 \ocwindent{0.00em}
 ;\ocweol
-\ocwindent{0.00em}
-$\ocwlowerid{value}~\ocwlowerid{color\_of\_phase}~:~\ocwlowerid{phase}~\rightarrow{}~\ocwupperid{Html.}\ocwlowerid{color}$\ocweol
-\ocwindent{0.00em}
-;~\ocweol
 \ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{sanitize\_sa}~:~$\ocwbt{bool}~$\rightarrow{}~\ocwlowerid{output}~\rightarrow{}~\ocwlowerid{output}$\ocweol
 \ocwindent{0.00em}
@@ -43976,51 +44016,7 @@ $]$\ocweol
 \ocwindent{0.00em}
 ;\medskip
 
-\label{dispatcher.ml:29661}%
-\ocwindent{0.00em}
-\ocwkw{open}~$\ocwupperid{Html};$\ocweol
-\ocwindent{0.00em}
-$\ocwlowerid{value}~$\ocwkw{rec}~$\ocwlowerid{color\_of\_phase}~=~$\ocwkw{fun}\ocweol
-\ocwindent{1.00em}
-$[~\ocwupperid{Noun}~\mid{}~\ocwupperid{Noun2}~\mid{}~\ocwupperid{Lopak}~\mid{}~\ocwupperid{Nouc}~\mid{}~\ocwupperid{Nouv}~\mid{}~\ocwupperid{Kriv}~\mid{}~\ocwupperid{Kric}~\mid{}~\ocwupperid{Krid}~\mid{}~\ocwupperid{Auxik}~\mid{}~\ocwupperid{Kama}$\ocweol
-\ocwindent{4.50em}
-$\mid{}~\ocwupperid{Cache}~\rightarrow{}~\ocwupperid{Deep\_sky}~$\ocweol
-\ocwindent{1.00em}
-$\mid{}~\ocwupperid{Pron}~\rightarrow{}~\ocwupperid{Light\_blue}$\ocweol
-\ocwindent{1.00em}
-$\mid{}~\ocwupperid{Root}~\mid{}~\ocwupperid{Auxi}~\mid{}~\ocwupperid{Lopa}~\rightarrow{}~\ocwupperid{Carmin}~$\ocweol
-\ocwindent{1.00em}
-$\mid{}~\ocwupperid{Inde}~\mid{}~\ocwupperid{Abso}~\mid{}~\ocwupperid{Absv}~\mid{}~\ocwupperid{Absc}~\mid{}~\ocwupperid{Auxiinv}~\mid{}~\ocwupperid{Ai}~\mid{}~\ocwupperid{Ani}~\rightarrow{}~\ocwupperid{Mauve}$\ocweol
-\ocwindent{1.00em}
-$\mid{}~\ocwupperid{Iiy}~\rightarrow{}~\ocwupperid{Lavender}$\ocweol
-\ocwindent{1.00em}
-$\mid{}~\ocwupperid{Avy}~\rightarrow{}~\ocwupperid{Magenta}$\ocweol
-\ocwindent{1.00em}
-$\mid{}~\ocwupperid{Inftu}~\rightarrow{}~\ocwupperid{Salmon}~$\ocweol
-\ocwindent{1.00em}
-$\mid{}~\ocwupperid{Iic}~\mid{}~\ocwupperid{Iic2}~\mid{}~\ocwupperid{A}~\mid{}~\ocwupperid{An}~\mid{}~\ocwupperid{Iicv}~\mid{}~\ocwupperid{Iicc}~\mid{}~\ocwupperid{Iik}~\mid{}~\ocwupperid{Iikv}~\mid{}~\ocwupperid{Iikc}~\mid{}~\ocwupperid{Iiif}~$\ocweol
-\ocwindent{4.00em}
-$\mid{}~\ocwupperid{Auxiick}~\mid{}~\ocwupperid{Cachei}~\rightarrow{}~\ocwupperid{Yellow}$\ocweol
-\ocwindent{1.00em}
-$\mid{}~\ocwupperid{Peri}~\mid{}~\ocwupperid{Iiv}~\mid{}~\ocwupperid{Iivv}~\mid{}~\ocwupperid{Iivc}~\rightarrow{}~\ocwupperid{Orange}$\ocweol
-\ocwindent{1.00em}
-$\mid{}~\ocwupperid{Voca}~\mid{}~\ocwupperid{Vocv}~\mid{}~\ocwupperid{Vocc}~\mid{}~\ocwupperid{Inv}~\mid{}~\ocwupperid{Vok}~\mid{}~\ocwupperid{Vokv}~\mid{}~\ocwupperid{Vokc}~\rightarrow{}~\ocwupperid{Lawngreen}$\ocweol
-\ocwindent{1.00em}
-$\mid{}~\ocwupperid{Ifc}~\mid{}~\ocwupperid{Ifcv}~\mid{}~\ocwupperid{Ifcc}~\mid{}~\ocwupperid{Ifc2}~\rightarrow{}~\ocwupperid{Cyan}$\ocweol
-\ocwindent{1.00em}
-$\mid{}~\ocwupperid{Unknown}~\rightarrow{}~\ocwupperid{Grey}$\ocweol
-\ocwindent{1.00em}
-$\mid{}~\ocwupperid{Comp}~(\ocwlowerid{\_},\ocwlowerid{ph})~\ocwlowerid{\_}~\ocwlowerid{\_}~\rightarrow{}~\ocwlowerid{color\_of\_phase}~\ocwlowerid{ph}~$\ocweol
-\ocwindent{1.00em}
-$\mid{}~\ocwupperid{Pv}~\mid{}~\ocwupperid{Pvv}~\mid{}~\ocwupperid{Pvc}~\mid{}~\ocwupperid{Pvkc}~\mid{}~\ocwupperid{Pvkv}~\rightarrow{}~\ocwlowerid{failwith}~$\ocwstring{"Illegal\ocwvspace{}preverb\ocwvspace{}segment"}~\ocweol
-\ocwindent{0.00em}
-\ocwbc{}\ocwbegindcode{}$\mid{}~\ocwlowerid{\_}~\rightarrow{}~\ocwlowerid{raise}~(\ocwupperid{Control}.\ocwupperid{Anomaly}~$\ocwstring{"Unexpected\ocwvspace{}color"}$)$\ocwenddcode{} \ocwec{}\ocweol
-\ocwindent{1.00em}
-$]$\ocweol
-\ocwindent{0.00em}
-;\medskip
-
-\label{dispatcher.ml:30494}%
+\label{dispatcher.ml:29660}%
 \ocwindent{0.00em}
 \ocwkw{end};\ocweol
 \ocweol
@@ -45210,11 +45206,9 @@ $\ocwlowerid{value}~\ocwlowerid{accepting}~:~\ocwupperid{Phases.}\ocwlowerid{pha
 \ocwindent{3.00em}
 \ocwkw{and}~$\ocwlowerid{output}~=~$\ocwbt{list}~$\ocwlowerid{segment};$\ocweol
 \ocwindent{3.00em}
-$\ocwlowerid{value}~\ocwlowerid{color\_of\_phase}~:~\ocwupperid{Phases.}\ocwlowerid{phase}~\rightarrow{}~\ocwupperid{Html.}\ocwlowerid{color};$\ocweol
-\ocwindent{3.00em}
 \ocwkw{end};\medskip
 
-\label{lexer.mli:1615}%
+\label{lexer.mli:1558}%
 \ocwindent{1.00em}
 \ocwkw{module}~$\ocwupperid{Viccheda}~:~$\ocwkw{sig}~\ocweol
 \ocwindent{3.00em}
@@ -45236,7 +45230,7 @@ $\ocwlowerid{value}~\ocwlowerid{set\_sa\_control}~:~$\ocwbt{bool}~$\rightarrow{}
 \ocwindent{3.00em}
 \ocwkw{end};\medskip
 
-\label{lexer.mli:2036}%
+\label{lexer.mli:1979}%
 \ocwindent{1.00em}
 $\ocwlowerid{value}~\ocwlowerid{extract\_lemma}~:~\ocwupperid{Phases.}\ocwlowerid{phase}~\rightarrow{}~\ocwupperid{Word.}\ocwlowerid{word}~\rightarrow{}~$\ocwbt{list}~$\ocwlowerid{lemma};$\ocweol
 \ocwindent{1.00em}
@@ -45636,7 +45630,7 @@ $\ocwlowerid{value}~\ocwlowerid{print\_scl\_segment}~\ocwlowerid{counter}~(\ocwl
 \ocwindent{1.00em}
 \ocwkw{let}~$\ocwlowerid{word}~=~\ocwupperid{Morpho\_html.}\ocwlowerid{visargify}~\ocwlowerid{rword}~$\ocwkw{in}~\ocwkw{do}\ocweol
 \ocwindent{1.00em}
-\{~\ocwkw{let}~$\ocwlowerid{solid}~=~\ocwlowerid{background}~(\ocwupperid{Disp.}\ocwlowerid{color\_of\_phase}~\ocwlowerid{phase})~$\ocwkw{in}\ocweol
+\{~\ocwkw{let}~$\ocwlowerid{solid}~=~\ocwlowerid{background}~(\ocwupperid{Phases.}\ocwlowerid{color\_of\_phase}~\ocwlowerid{phase})~$\ocwkw{in}\ocweol
 \ocwindent{2.00em}
 $\ocwlowerid{td\_begin\_class}~\ocwlowerid{solid}~|\ensuremath{>}~\ocwlowerid{pl}$\ocweol
 \ocwindent{1.00em}
@@ -45659,7 +45653,7 @@ $\mid{}~\ocwupperid{Preverbed}~(\ocwlowerid{\_},\ocwlowerid{phase})~\ocwlowerid{
 \ocwkw{if}~$\ocwlowerid{pvs}~=~[\,]~$\ocwkw{then}~$\ocwlowerid{tags}~$\ocweol
 \ocwindent{5.50em}
 \ocwkw{else}~$\ocwlowerid{trim\_tags}~(\ocwlowerid{generative}~\ocwlowerid{phase})~\ocwlowerid{form}~(\ocwupperid{Canon.}\ocwlowerid{decode}~\ocwlowerid{pvs})~\ocwlowerid{tags}~$\ocwkw{in}\ocweol
-\ocwindent{5.00em}
+\ocwindent{4.50em}
 $\ocwlowerid{print\_scl\_tags}~\ocwlowerid{pvs}~\ocwlowerid{phase}~\ocwlowerid{form}~\ocwlowerid{ok\_tags}$\ocweol
 \ocwindent{2.00em}
 $]~$\ocweol
@@ -45688,7 +45682,7 @@ $(\ocwlowerid{form},~\ocwlowerid{lex\_cat}~\ocwlowerid{phase},~\ocwlowerid{gener
 \ocwindent{0.00em}
 ;\medskip
 
-\label{lexer.ml:9791}%
+\label{lexer.ml:9792}%
 \ocwindent{0.00em}
 \ocwkw{end}~$\ocwlowerid{deprecated}~\ocwlowerid{i}\times{})~$\ocweol
 \ocwindent{0.00em}

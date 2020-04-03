@@ -191,7 +191,7 @@ value print_segment offset (phase,rword,transition) = do
 (* Called from [Scl_parser.print_scl_output] *)
 value print_scl_segment counter (phase,rword) =  
   let word = Morpho_html.visargify rword in do
-  { let solid = background (Disp.color_of_phase phase) in
+  { let solid = background (Phases.color_of_phase phase) in
     td_begin_class solid |> pl
   ; let ic = string_of_int counter in
     "<input type=\"hidden\" name=\"field" ^ ic ^ "\" value='<form wx=\""
@@ -203,7 +203,7 @@ value print_scl_segment counter (phase,rword) =
          let ok_tags = 
            if pvs = [] then tags 
            else trim_tags (generative phase) form (Canon.decode pvs) tags in
-          print_scl_tags pvs phase form ok_tags
+         print_scl_tags pvs phase form ok_tags
     ] 
   ; "'>" |> ps (* closes <input *) 
   ; Canon.unidevcode word |> ps

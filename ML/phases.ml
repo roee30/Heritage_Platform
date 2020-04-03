@@ -196,4 +196,27 @@ value rec generative = fun
   ]
 ;
 
+open Html;
+value rec color_of_phase = fun
+  [ Noun | Noun2 | Lopak | Nouc | Nouv | Kriv | Kric | Krid | Auxik | Kama
+         | Cache -> Deep_sky 
+  | Pron -> Light_blue
+  | Root | Auxi | Lopa -> Carmin  
+  | Inde | Abso | Absv | Absc | Auxiinv | Ai | Ani -> Mauve
+  | Iiy -> Lavender
+  | Avy -> Magenta
+  | Inftu -> Salmon 
+  | Iic | Iic2 | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif 
+        | Auxiick | Cachei -> Yellow
+  | Peri | Iiv | Iivv | Iivc -> Orange
+  | Voca | Vocv | Vocc | Inv | Vok | Vokv | Vokc -> Lawngreen
+  | Ifc | Ifcv | Ifcc | Ifc2 -> Cyan
+  | Unknown -> Grey
+  | Comp (_,ph) _ _ -> color_of_phase ph 
+  | Pv | Pvv | Pvc | Pvkc | Pvkv -> failwith "Illegal preverb segment" 
+(*[| _ -> raise (Control.Anomaly "Unexpected color")] *)
+(*i NB: unused background colors: Pink Green Aquamarine Chamois i*)
+  ]
+; 
+
 end; (* Phases *)

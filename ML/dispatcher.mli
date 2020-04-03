@@ -53,8 +53,6 @@ value trim_tags :
 ;
 value validate : output -> output (* consistency check and glueing *) 
 ;
-value color_of_phase : phase -> Html.color
-; 
 value sanitize_sa : bool -> output -> output
 ;
 end;

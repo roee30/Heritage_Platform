@@ -70,7 +70,8 @@ TREE = parse_tree.ml parse_apte.ml stemmer.ml tag_tree.ml tag_apte.ml
 DEBUG=debug.ml 
 
 ENGINE=$(CORE) $(GRAM) $(WEB) $(CORPUS) 
-INACTIVE=$(TREE) nyaaya.ml mk_nyaaya_page.ml regression.ml statseg.ml
+INACTIVE=$(TREE) nyaaya.ml mk_nyaaya_page.ml regression.ml regression_lexer.ml \
+statseg.ml
 
 SOURCES=$(ENGINE) $(DEBUG) $(INACTIVE) 
 

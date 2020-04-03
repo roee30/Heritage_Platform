@@ -31,7 +31,6 @@ module Lexer : functor (* takes its prelude and iterator control as parameters *
       and transition
       and segment = (Phases.phase * Word.word * transition)
       and output = list segment;
-      value color_of_phase : Phases.phase -> Html.color;
       end; 
 
   module Viccheda : sig 

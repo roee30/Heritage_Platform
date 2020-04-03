@@ -135,12 +135,12 @@ value dove_tail filter_mode init =
                 | None -> crank [ i :: acc ] ii cc
                 ]
               }
-            | _ -> raise (Failure "dove_tail") (* does not occur by invariant *)
+            | _ -> raise (Control.Anomaly "dove_tail") (* imposs by invariant *)
             ]
          | [] -> emit (Some n) kept_sols (* dove-tailing finished *)
          ]
 ;
-(* From Interface: splitting checkpoints into current and future ones *)
+(* From [Graph_segmenter]: splitting checkpoints into current and future ones *)
 value split_check limit = split_rec []
   where rec split_rec acc checkpts = match checkpts with
       [ [] -> (List.rev acc,[])
@@ -148,11 +148,6 @@ value split_check limit = split_rec []
           if index > limit then (List.rev acc,checkpts)
           else split_rec [ check :: acc ] rest 
       ]
-;
-value consonant_starts = fun
-  [ [ chunk :: _ ] -> Phonetics.consonant_initial chunk 
-  | _ -> False
-  ] 
 ;
 value segment_chunk ((offset,checkpoints),stack) chunk sa_check = do
   { let ini_cont = Lex.Viccheda.init_segment chunk in 
@@ -171,17 +166,15 @@ value segment_chunk ((offset,checkpoints),stack) chunk sa_check = do
        }) 
   } 
 ;
-value segment_chunks_filter filter_mode chunks cpts = 
+value segment_all filter_mode chunks cpts = 
   let (_,constrained_segs) = segment_chunks ((0,cpts),[]) chunks
   where rec segment_chunks acc = fun
     [ [ (* last *) chunk ] -> segment_chunk acc chunk False
-    | [ chunk :: rest ] -> let sa_check = consonant_starts rest in
+    | [ chunk :: rest ] -> let sa_check = Phonetics.consonant_starts rest in
                            segment_chunks (segment_chunk acc chunk sa_check) rest
     | [] -> acc
     ] in 
   dove_tail filter_mode constrained_segs 
 ;
-value segment_all filter_mode chunks cpts = 
-  segment_chunks_filter filter_mode chunks cpts
-;
+
 (*i end; i*)

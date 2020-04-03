@@ -98,9 +98,9 @@ value rec scl_phase = fun
   ]
 ;
 value print_scl_morph pvs gen form tag = do
-  { ps (xml_begin "tag")
+  { xml_begin "tag" |> ps
   ; Morpho_scl.print_scl_inflected pvs form gen tag  
-  ; ps (xml_end "tag") 
+  ; xml_end "tag" |> ps
   }
 ;
 value print_scl_tags pvs phase form tags = 
@@ -212,70 +212,5 @@ value print_scl_segment counter (phase,rword) =
   ; counter+1
   } 
 ; 
-(*i The following was used by Regression, now deprecated 
-module Report_chan = struct 
-value chan = Lexer_control.out_chan; (* where to report *)
-end;
-
-module Morpho_out = Morpho.Morpho_out Report_chan;
-
-(* Structured entries with generative morphology *)
-type gen_morph =
-   [ Gen_krid of ((string * word) * (verbal * word))
-   | Lexical of word
-   | Preverbs_list of list word
-   ]
-;
-value rec morph_list = fun
-  [ [ a :: rest ] -> Morpho_string.string_morph a ^ " " ^ morph_list rest
-  | [] -> ""
-  ]
-;
-value rec decode_list = fun
-  [ [ a :: rest ] -> Canon.decode_ref a ^ " " ^ decode_list rest
-  | [] -> ""
-  ]
-;
-value string_of_tag (x,y,a,b) = 
-  if y = Pv then "${" ^ Canon.decode_ref x ^ "}$&"
-	    else "${" ^ Canon.decode_ref x ^ ":" ^ string_of_phase y
-                      ^ "{ " ^ morph_list b  ^ "}" ^ "[" 
-                      ^ match a with 
-                        [ Gen_krid ((z, c),(d, e)) -> 
-                              z ^ ":" ^ Canon.decode_ref c 
-                                ^ " { " ^ Morpho_string.string_verbal d 
-                                ^ " }[" ^ Canon.decode_ref e ^ "]"
-                        | Lexical c -> Canon.decode_ref c
-                        | Preverbs_list c -> decode_list c
-                        ]  
-                      ^ "]}$&"
-;
-value rec return_morph = fun
-  [ [ a :: rest ] -> string_of_tag a ^ return_morph rest
-  | [] -> ""
-  ]
-;
-value generative_stem gen stem = 
-   if gen then (* interpret stem as unique name *)
-        let (homo,bare_stem) = Naming.homo_undo stem in
-        let krid_infos = Deco.assoc bare_stem Naming.unique_kridantas in 
-        let (vb,root) = Naming.look_up_homo homo krid_infos in 
-        let look_up_stem =
-            match Deco.assoc stem Naming.lexical_kridantas with
-            [ [] (* not in lexicon *)        -> ("G",bare_stem)
-            | _  (* stem is lexical entry *) -> ("L",stem)
-            ] in
-        Gen_krid (look_up_stem,(vb,root))
-   else Lexical stem 
-;
-(* Applicative version of [Morpho.report_morph] *)
-value lex_cat phase = phase (*i TEMPORARY - TODO i*)
-;
-value get_morph gen phase form (delta,morphs) =
-  let stem = patch delta form in (* stem may have homo index *)
-  (form, lex_cat phase, generative_stem gen stem, morphs)
-;
-
-end deprecated i*) 
 end;
 

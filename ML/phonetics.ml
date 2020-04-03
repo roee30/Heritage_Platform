@@ -34,6 +34,11 @@ value consonant_initial = fun
   | _ -> False
   ]
 ;
+value consonant_starts = fun
+  [ [ chunk :: _ ] -> consonant_initial chunk 
+  | _ -> False
+  ] 
+;
 value monosyllabic = one_vowel
   where rec one_vowel = fun
     [ [] -> True

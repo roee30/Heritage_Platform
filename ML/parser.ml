@@ -176,8 +176,8 @@ value make_groups tagger = comp_rec 1 []
   [ [] -> stack (* result goes backward in time *)
   | [ (phase,rword,_) :: rest ] -> (* we ignore euphony transition *)
       let word = Word.mirror rword (* segment is mirror word *) in 
-      let keep = let tags = tagger phase word in 
-                 [ roles_of seg word tags :: stack ] in
+      let lemma = tagger phase word in
+      let keep = [ roles_of seg word lemma :: stack ] in
       comp_rec (seg+1) keep rest
   ] 
 ;
@@ -292,7 +292,7 @@ value dove_tail_until sol_index init =
          | [] -> raise Truncation
          ]
 ;
-(* From Interface: splitting checkpoints into current and future ones *)
+(* From [Graph_segmenter]: splitting checkpoints into current and future ones *)
 value split_check limit = split_rec []
    where rec split_rec acc checkpts = match checkpts with
       [ [] -> (List.rev acc,[])
@@ -301,25 +301,37 @@ value split_check limit = split_rec []
           else split_rec [ check :: acc ] rest 
       ]
 ;
-value segment_until sol_index chunks cpts = 
-   let (_,constrained_segs) = List.fold_left init ((0,cpts),[]) chunks
-   where init ((offset,checkpoints),stack) chunk = do
-   { let ini_cont = Lex.Viccheda.init_segment chunk in 
-     let chunk_length = Word.length chunk in
-     let extremity = offset+chunk_length in 
-     let (local,future) = split_check extremity checkpoints in
-     let chunk_constraints = (offset,local) in
-     ((succ extremity,future), do 
-        { Lex.Viccheda.set_offset chunk_constraints (* Sets local constraints *)
-        ; let res = match Lex.Viccheda.continue ini_cont with
-              [ Some c -> c 
-              | None -> Lex.un_analyzable chunk
-              ] in 
-          [ (chunk_constraints,res) :: stack ]
-        }) 
-   } in
-   dove_tail_until sol_index constrained_segs 
+(* From [Rank.segment_all] *)
+value segment_chunk ((offset,checkpoints),stack) chunk sa_check = do
+  { let ini_cont = Lex.Viccheda.init_segment chunk in 
+    let chunk_length = Word.length chunk in
+    let extremity = offset+chunk_length in 
+    let (local,future) = split_check extremity checkpoints in
+    let chunk_constraints = (offset,local) in
+    ((succ extremity,future), do 
+       { Lex.Viccheda.set_offset chunk_constraints (* Sets local constraints *)
+       ; Lex.Viccheda.set_sa_control sa_check (* inherit from chunks recursion *)
+       ; let res = match Lex.Viccheda.continue ini_cont with
+             [ Some c -> c 
+             | None -> Lex.un_analyzable chunk
+             ] in 
+         [ (chunk_constraints,res) :: stack ]
+       }) 
+  } 
 ;
+(* Follows logic of [Rank.segment_all] until solution reached *)
+value segment_until sol_index chunks cpts = 
+  let (_,constrained_segs) = segment_chunks ((0,cpts),[]) chunks
+  where rec segment_chunks acc = fun
+    [ [ (* last *) chunk ] -> segment_chunk acc chunk False
+    | [ chunk :: rest ] -> let sa_check = Phonetics.consonant_starts rest in
+                           segment_chunks (segment_chunk acc chunk sa_check) rest
+    | [] -> acc
+    ] in 
+  dove_tail_until sol_index constrained_segs 
+;
+
+(* Printing stuff *)
 value stamp = 
   "Heritage" ^ " " ^ Date.version
 ;

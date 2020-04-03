@@ -537,15 +537,10 @@ value segment_chunk (full,count) chunk sa_check =
       }
     }
 ;
-value consonant_starts = fun
-  [ [ chunk :: _ ] -> Phonetics.consonant_initial chunk 
-  | _ -> False
-  ] 
-;
 value segment_iter chunks = segment_chunks (True,1) chunks
   where rec segment_chunks acc = fun (* speedy terminal recursion *) 
     [ [ (* last *) chunk ] -> segment_chunk acc chunk False
-    | [ chunk :: rest ] -> let sa_check = consonant_starts rest in
+    | [ chunk :: rest ] -> let sa_check = Phonetics.consonant_starts rest in
                            segment_chunks (segment_chunk acc chunk sa_check) rest
     | [] -> acc
     ]

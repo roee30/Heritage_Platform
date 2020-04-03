@@ -324,23 +324,23 @@ value print_word last_ind text cpts (rword,phase,k,conflict) =
   { let extra_space = k-last_ind in 
     if extra_space > 0 then print_extra extra_space else ()
 (*i ZZ following not implementable with a fixed css -- not HTML5 compliant i*)
-  ; ps (td_begin_att [ ("colspan",string_of_int (seg_length word))
-                     ; ("align","left") 
-                     ])
+  ; td_begin_att [ ("colspan",string_of_int (seg_length word))
+                 ; ("align","left") 
+                 ] |> ps
   ; let back = background (color_of_phase phase) in 
-    pl (table_begin back)
-  ; ps tr_begin
-  ; ps ("<td " ^ display_morph_action ^ "=\"showBox('")
+    table_begin back |> pl
+  ; tr_begin |> ps
+  ; "<td " ^ display_morph_action ^ "=\"showBox('" |> ps
   ; print_morpho phase word 
   ; let close_box = 
         "<a href=&quot;javascript:hideBox()&quot;> " ^ x_sign ^ "</a>', '" in 
-    ps (close_box ^ rgb (color_of_phase phase) ^ "', this, event)\">")
+    close_box ^ rgb (color_of_phase phase) ^ "', this, event)\">" |> ps
   ; Morpho_html.print_final rword (* visarga correction *)
-  ; ps td_end
-  ; ps tr_end
-  ; ps table_end
-  ; ps (call_back text cpts (k,(phase,rword)) conflict)
-  ; ps td_end
+  ; td_end |> ps
+  ; tr_end |> ps
+  ; table_end |> ps 
+  ; call_back text cpts (k,(phase,rword)) conflict |> ps
+  ; td_end |> ps
   }
 ;
 value max_col = ref 0
@@ -360,17 +360,16 @@ value print_interf text cpts () = vgrec 0
   match visual_width.(k) with
   [ 0 -> ()
   | _ -> do
-    { ps tr_begin 
+    { tr_begin |> ps
     ; print_row text cpts visual_conf.(k) 
-    ; pl tr_end
+    ; tr_end |> ps
     ; vgrec (succ k)
     }
   ]
 ;
 value update_col_length chunk = 
   max_col.val := succ (max_col.val + Word.length chunk)
-;
-value update_text_with_sol text count = text ^ ";allSol=" ^ string_of_int count
+and update_text_with_sol text count = text ^ ";allSol=" ^ string_of_int count
 ;
 value call_undo text cpts  = 
   let string_pts = match cpts with 
@@ -410,7 +409,7 @@ value check_sentence translit us text_orig checkpoints sentence
         if scl_toggle then
            td_wrap (call_reader text cpts "o" ^ "UoH Analysis Mode") |> ps
         else () (* [scl_parser] is not visible unless toggle is set *) in
-    if count > max_count then 
+    if count > Web.max_count then 
        (* too many solutions would choke the parsers *) 
        td_wrap ("(" ^ string_of_int count ^ " Solutions)") |> ps
     else if count=1 (* Unique remaining solution *) then do
@@ -502,7 +501,7 @@ value quit_button corpmode corpdir sentno =
       cgi_end ^
   center_end
 ;
-(* Main body of graph segmenter cgi *)
+(* Main body of sktgraph cgi *)
 value graph_engine () = do
   { Prel.prelude () 
   ; let query = Sys.getenv "QUERY_STRING" in

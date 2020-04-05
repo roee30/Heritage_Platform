@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 (* Chunking mechanism for guessing partial padapatha form from list of chunks *)
 (* Essential for maximum parallelism in segmentation *)
@@ -36,8 +36,9 @@ value adjust c w = match Word.mirror w with
         [ 14 (* .m *) -> Word.mirror [ 41 (* m *) :: rest ] (* revert .m to m *)
              (* note: .m coming from sandhi of n is followed by sibilant 
                 and chunking is allowed only after this sibilant *)
-        | 10 | 11 (* e ai *) when c = 43  (* r *) -> raise Hiatus 
+        | 11 (* ai *) when c = 43  (* r *) -> raise Hiatus 
              (* For ai.h+r -> ai r Whitney§179 en fait, toute voyelle longue *)
+     (* | 10 | 13 No Hyatus: te rasasaarasafgrahavidhim *)
         | 12 (* o *) -> if rest = [ 40 ] (* bh from bhos -> bho *) then 
                            Encode.code_string "bhos" (* "bho raama" "bho bhos" *)
                         else if rest = [ 49; 1 ] (* aho *) then 

@@ -38,7 +38,7 @@ value adjust c w = match Word.mirror w with
                 and chunking is allowed only after this sibilant *)
         | 11 (* ai *) when c = 43  (* r *) -> raise Hiatus 
              (* For ai.h+r -> ai r Whitney§179 en fait, toute voyelle longue *)
-     (* | 10 | 13 No Hyatus: te rasasaarasafgrahavidhim *)
+     (* | 10 | 13 No Hyatus: te rasasaarasafgrahavidhim but es-r -> er missed *)
         | 12 (* o *) -> if rest = [ 40 ] (* bh from bhos -> bho *) then 
                            Encode.code_string "bhos" (* "bho raama" "bho bhos" *)
                         else if rest = [ 49; 1 ] (* aho *) then 
@@ -150,7 +150,9 @@ value adjust c w = match Word.mirror w with
         | 48 (* s *) -> match rest with
               [ [ 14 (* .m *) :: b ] -> if c=32 || c=33 (* t th *) then
                                         Word.mirror [ 36 (* n *) :: b ] else w 
-              | _ -> w
+
+              | _ -> if c=32 || c=33 (* t th *) then
+                     raise Glue else w 
               ]
         | _ -> w
         ]

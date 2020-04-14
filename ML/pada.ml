@@ -273,11 +273,14 @@ value voices_of_pv upasarga gana = fun
            | _ -> Para (* \Pan{1,3,28} and \Pan{1,3,56} *)
            ]
 | "vah#1" -> if upasarga = "pra" then Para else Ubha (* \Pan{1,3,81} *)
-| "vad" -> match upasarga with
-           [ "anu" -> Ubha (* \Pan{1,3,49} *)
-           | "apa" -> Atma (* \Pan{1,3,73} *)
+(* Complex vad (* \Pan{1,3,47-50,73} *) depends on meaning - now all Ubha 
+| "vad" -> match upasarga with 
+           [ "" | "sam" -> Ubha (* \Pan{1,3,47,48} *)
+           | "anu" -> Ubha (* \Pan{1,3,49} *)
+           | "pra" | "vipra" -> Ubha (* \Pan{1,3,49} *)
+           | "apa" -> Ubha (* \Pan{1,3,73} *)
            | _ -> Para
-           ]
+           ] *)
 | "g.rr#1" -> match upasarga with
            [ "ava" -> Atma (* \Pan{1,3,51} *)
            | "sam" -> Ubha (* \Pan{1,3,52} *)

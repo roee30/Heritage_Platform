@@ -38,7 +38,7 @@ value voices_of = fun
   | "klid" | "kliz" | "kvath" | "k.sar" | "k.sal" | "k.saa" | "k.si" | "k.sii"
   | "k.su" | "k.sudh#1" | "k.subh" | "k.svi.d" | "kha~nj#1" | "khaad" | "khid"
   | "khel" | "khyaa" | "gaj" | "gad" | "garj" | "gard" | "gal" | "gaa#1" 
-  | "gaa#2" | "gu~nj" | "gu.n.th" | "gup" | "gumph" | "g.rdh" | "g.rr#1" 
+  | "gaa#2" | "gu~nj" | "gu.n.th" | "gup" | "gumph" | "g.rdh" 
   | "g.rr#2" | "granth" | "grah" | "glai" | "ghas" | "ghu.s" | "gh.r" | "gh.r.s" 
   | "ghraa" | "cakaas" | "ca.t" | "cand" | "cam" | "car" | "cal" | "cit#1" 
   | "cumb" | "c.rt" | "chur" | "ch.rd" | "jak.s" | "jap" | "jabh#2" | "jam" 
@@ -74,6 +74,7 @@ value voices_of = fun
 (*| "viz#1"  Atma needed for eg nivizate \Pan{1,3,17} *)
 (*| "k.s.nu" Atma needed for sa.mk.s.ute \Pan{1,3,65} *)
 (*| "krii.d" Atma needed for aakrii.date \Pan{1,3,21} *)
+(*| "g.rr#1" Atma needed for avag.rr sa.mg.rr \Pan{1,3,51-52} *)
 (*| "ji"     Atma needed for eg vijayate paraajayate \Pan{1,3,19} *)
 (*| "jyaa#1" Atma needed for jiiyate *)
 (*| "kan"    Atma needed for kaayamaana *)
@@ -99,7 +100,7 @@ value voices_of = fun
   | "d.r#1" | "dhii#1" | "dhuk.s" | "pa.n" | "pad#1" | "pi~nj" 
   | "pyaa" | "prath" | "pru" | "plu" | "ba.mh" | "baadh" | "bha.n.d" | "bhand" 
   | "bhaa.s" | "bhraaj" | "ma.mh" | "man" | "mand#1" | "yat#1" 
-  | "yudh#1" | "rabh" | "ruc#1" | "lajj" | "lamb" | "lii" | "loc" | "vand" 
+  | "rabh" | "ruc#1" | "lajj" | "lamb" | "lii" | "loc" | "vand" 
   | "vas#2" | "vaaz" | "vip" | "v.rdh#1" | "ve.s.t" | "vrii.d" | "zafk" | "zad"
   | "zi~nj" | "zii#1" | "zrambh" | "zlaagh" | "zvit" | "sac" | "sev"
   | "styaa" | "spand" | "spardh" | "spaz#1" | "sphaa" | "sra.ms"
@@ -116,8 +117,8 @@ value voices_of = fun
   [ "a~nc" | "arth" | "arh" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" | ".r" 
   | ".rj" | "ka.n.d" | "kal" | "ka.s" | "ku.t.t" | "ku.n.d" | "k.r#1" | "k.r#2" 
   | "k.r.s" | "kram" | "krii#1" | "krii.d" | "k.san" | "k.sap#1" | "k.sam" 
-  | "k.sal" | "k.sip" | "k.sud"
-  | "k.s.nu" | "khan" | "gam" | "garh" | "gaah" | "guh" | "gras" | "gha.t.t" 
+  | "k.sal" | "k.sip" | "k.sud" | "k.s.nu" | "khan" | "gam" | "garh" 
+  | "gaah" | "guh" | "g.rr#1" | "gras" | "gha.t.t" 
   | "cat" | "carc" | "ci" | "cint" | "cud" | "ce.s.t" | "cyu" | "chad#1"
   | "chand" | "chid#1" | "jan" | "juu" | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d"
   | "tan#1" | "tan#2" | "tap" | "tud#1" | "tul" | "t.rd" | "traa" | "daa#1"
@@ -128,9 +129,9 @@ value voices_of = fun
   | "budh#1" | "bruu" | "bhak.s" | "bhaj" | "bharts" | "bhaas#1" | "bhid#1"
   | "bhuj#2" | "bh.r" | "bh.rjj" | "mantr" | "maa#4" | "mi" | "mith" | "mil" 
   | "mii" | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.r.s" | "yaj#1" 
-  | "yam" | "yaac" | "yu#1" | "yuj#1" | "rac" | "ra~nj" | "ram" | "rah" 
-  | "raaj#1" | "ri" | "ric" | "rud#1" | "rudh#2" | "lafgh" | "lak.s" | "labh"
-  | "la.s" | "lip" | "lih#1" | "lup" | "luu#1" | "vad" | "van" | "vap#1" 
+  | "yam" | "yaac" | "yu#1" | "yuj#1" | "yudh#1" | "rac" | "ra~nj" | "ram"
+  | "rah" | "raaj#1" | "ri" | "ric" | "rud#1" | "rudh#2" | "lafgh" | "lak.s"
+  | "labh" | "la.s" | "lip" | "lih#1" | "lup" | "luu#1" | "vad" | "van" | "vap#1"
   | "vap#2" | "val" | "vah#1" | "vaa#3" | "vic" | "vij" | "viij" | "v.r#2"
   | "v.rt#1" | "vyath" | "vyaa" | "vrii" | "zap" | "zaa" | "zu.s" | "zubh#1"
   | "zyaa" | "zram" | "zri" | "zru" | "sru" | "san#1" | "sa~nj" | "sah#1" 
@@ -291,10 +292,10 @@ value voices_of_pv upasarga gana = fun
           | _ ->  Ubha (* was Para but "satyam eva jayate" *) 
           ]
 | "krii.d" -> match upasarga with
-              [ "aa" | "anu" | "pari" -> Atma (* \Pan{1,3,21} *)
-              | "sam" -> Ubha (* \Pan{1,3,21} vaartikaa *)
-              | _ -> Para (* "" | "vi" *)
-              ]
+          [ "aa" | "anu" | "pari" -> Atma (* \Pan{1,3,21} *)
+          | "sam" -> Ubha (* \Pan{1,3,21} vaartikaa *)
+          | _ -> Para (* "" | "vi" *)
+          ]
 | "m.rz" -> if upasarga = "pari" then Para else Ubha (* \Pan{1,3,82} *)
 | "tap" when gana = 1 -> match upasarga with
                          [ "ut" | "vi" -> Ubha 
@@ -306,10 +307,10 @@ value voices_of_pv upasarga gana = fun
                       | _ -> Para 
                       ]
           | _ (* 1 | 4 *) -> match upasarga with
-                             [ "" -> Atma
-                             | "antar" | "ut" -> Para (* gana 1 antarayati udayati *) 
-                             | _ -> raise Unattested
-                             ]
+                      [ "" -> Atma
+                      | "antar" | "ut" -> Para (* gana 1 antarayati udayati *) 
+                      | _ -> raise Unattested
+                      ]
           ]
 | "zii#1" -> if upasarga = "sam" then Ubha else Atma 
 | "zram" -> if upasarga = "vi" then Ubha (* epic vizramate *) else Para

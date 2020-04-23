@@ -572,6 +572,8 @@ releasebook:
 releasexml: # Sanskrit morphology in XML copied from Data to Server
 	mkdir -p $(SERVERPUBLICDIR)DATA/XML
 	cp $(XML_MORPHOLOGY) $(SERVERPUBLICDIR)DATA/XML
+	cd $(SERVERPUBLICDIR)DATA/XML && mv WX_morph.dtd WX_morph_dtd.txt
+	cd $(SERVERPUBLICDIR)DATA/XML && mv SL_morph.dtd SL_morph_dtd.txt
 
 releasepdf: pdfmorphology # very big - useless - deprecated
 	cp $(PDF_MORPHOLOGY) $(SERVERPUBLICDIR)DATA/PDF

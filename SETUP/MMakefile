@@ -385,7 +385,7 @@ SL_XML_MORPHOLOGY=$(XMLDOC)/SL_morph.xml
 SL_XML_DTD=$(XMLDOC)/SL_morph.dtd 
 WX_XML_MORPHOLOGY=$(XMLDOC)/WX_morph.xml
 WX_XML_DTD=$(XMLDOC)/WX_morph.dtd
-XML_LICENCES==$(XMLDOC)/LICENSES
+XML_LICENCES=$(XMLDOC)/LICENSES
 XML_MORPHOLOGY=$(SL_XML_MORPHOLOGY).gz $(XW_XML_DTD) $(WX_XML_MORPHOLOGY).gz \
 $(XW_XML_DTD) $(XML_LICENCES)
 
@@ -572,7 +572,7 @@ releasebook:
 
 releasexml: # Sanskrit morphology in XML copied from Data to Server
 	mkdir -p $(SERVERPUBLICDIR)$(DATA)/XML
-	cp $(XML_MORPHOLOGY) $(SERVERPUBLICDIR)$(DATA)/XML
+	cp -R $(XML_MORPHOLOGY) $(SERVERPUBLICDIR)$(DATA)/XML
 
 releasepdf: pdfmorphology # very big - useless - deprecated
 	cp $(PDF_MORPHOLOGY) $(SERVERPUBLICDIR)$(DATA)

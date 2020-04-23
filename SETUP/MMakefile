@@ -555,7 +555,7 @@ sed '1,$$s|!CGIDECL|$(CGIBINURL)$(CGIDECL)|g' < $$i > temp; \
 sed '1,$$s|!CGICONJ|$(CGIBINURL)$(CGICONJ)|g' < temp > $$i; \
 rm temp); done # NB: no citation in MW
 	cp -p $(AUTOMATA) $(SERVERPUBLICDIR)DATA # Sanskrit Engine data
-	cp -Rp $(XML_MORPHOLOGY) $(SERVERPUBLICDIR)DATA # XML databanks
+#	cp -Rp $(XML_MORPHOLOGY) $(SERVERPUBLICDIR)DATA # XML databanks
 	cp -p $(SCRIPTS) $(SERVERPUBLICDIR)DICO # Javascript in DICO dir
 #	cp $(DOC_IMAGES) $(SERVERPUBLICDIR)IMAGES
 

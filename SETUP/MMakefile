@@ -385,9 +385,9 @@ SL_XML_MORPHOLOGY=$(XMLDOC)/SL_morph.xml
 SL_XML_DTD=$(XMLDOC)/SL_morph.dtd 
 WX_XML_MORPHOLOGY=$(XMLDOC)/WX_morph.xml
 WX_XML_DTD=$(XMLDOC)/WX_morph.dtd
-XML_LICENCES=$(XMLDOC)/LICENSES
+XML_LICENCE=$(XMLDOC)/LICENSES/LGPLLR.pdf
 XML_MORPHOLOGY=$(SL_XML_MORPHOLOGY).gz $(XW_XML_DTD) $(WX_XML_MORPHOLOGY).gz \
-$(XW_XML_DTD) $(XML_LICENCES)
+$(XW_XML_DTD) $(XML_LICENCE)
 
 ###########
 # Scripts #
@@ -555,7 +555,6 @@ sed '1,$$s|!CGIDECL|$(CGIBINURL)$(CGIDECL)|g' < $$i > temp; \
 sed '1,$$s|!CGICONJ|$(CGIBINURL)$(CGICONJ)|g' < temp > $$i; \
 rm temp); done # NB: no citation in MW
 	cp -p $(AUTOMATA) $(SERVERPUBLICDIR)DATA # Sanskrit Engine data
-#	cp -Rp $(XML_MORPHOLOGY) $(SERVERPUBLICDIR)DATA # XML databanks
 	cp -p $(SCRIPTS) $(SERVERPUBLICDIR)DICO # Javascript in DICO dir
 #	cp $(DOC_IMAGES) $(SERVERPUBLICDIR)IMAGES
 
@@ -572,7 +571,7 @@ releasebook:
 
 releasexml: # Sanskrit morphology in XML copied from Data to Server
 	mkdir -p $(SERVERPUBLICDIR)DATA/XML
-	cp -R $(XML_MORPHOLOGY) $(SERVERPUBLICDIR)DATA/XML
+	cp $(XML_MORPHOLOGY) $(SERVERPUBLICDIR)DATA/XML
 
 releasepdf: pdfmorphology # very big - useless - deprecated
 	cp $(PDF_MORPHOLOGY) $(SERVERPUBLICDIR)DATA/PDF

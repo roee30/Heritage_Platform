@@ -21,7 +21,7 @@
 <table border="0pt" cellpadding="0" cellspacing="15pt" width="100%">
 <tr><td>
 
-<h1 class=b1>Sanskrit linguistic resources</h1>
+<h1 class=title>Sanskrit linguistic resources</h1>
 
 <div class="center"> 
 <img src="IMAGES/Panini2.jpg" alt="Panini"/>
@@ -73,8 +73,8 @@ version #VERSION dated #DATE.
 <p>
 Use of these linguistic resources is granted according to the
 Lesser General Public Licence for Linguistic Resources.
-Copies of this license, in pdf as well as HTML, are provided here:
-<a href="DATA/XML/LICENCES">LICENCES</a>
+A pdf copy of this license is provided here:
+<a href="DATA/XML/LGPLLR.pdf</a>
 
 <h2 class=b2>Methodology</h2>
 

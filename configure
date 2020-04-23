@@ -133,7 +133,7 @@ def generate(config_path):
     portal_page_fr.close()
     print portal_page_fr_path, "(fr) generated"
     
-    # XML - obsolete, now managed by Resources
+    # XML RESOURCES
     xml_entry_page = open(xml_entry_page_path,'r')
     xml_entry_page_content = xml_entry_page.read()
     xml_entry_page.close()

@@ -227,10 +227,12 @@ as explained in the manual.
 A dictionary of inflected forms of Sanskrit words is provided
 in XML form under various transliteration schemes.
 Please visit the <a href="xml.html">Sanskrit linguistic resources page</a>.
+
+<!-- OBSOLETE
 This resource may now be downloaded as a git repository, using command:<br/>
 <span class="Green">
 git clone https://gitlab.inria.fr/huet/Heritage_Resources.git
-</span>
+</span> --> 
 
 <a id="reader"></a>
 <h2 class="b2"> Sanskrit Reader </h2>

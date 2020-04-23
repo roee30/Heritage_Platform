@@ -44,10 +44,10 @@ value public_entries_file = public_dico_page "entries.rem"
 and public_dummies_file = public_dico_page "dummies.rem" 
 (* created by [make releasedata], read by [indexerd] *)
 ;
-value sandhis_file = public_data "sandhis.rem"  
-and sandhis_pv_file = public_data "sandhis_pv.rem"  
-and sandhis_ph_file = public_data "sandhis_ph.rem"  
-and public_sandhis_id_file = public_data "sandhis_id.rem" 
+value sandhis_file = data "sandhis.rem"  
+and sandhis_pv_file = data "sandhis_pv.rem"  
+and sandhis_ph_file = data "sandhis_ph.rem"  
+and public_sandhis_id_file = data "sandhis_id.rem" 
 and automaton_stats = data "automaton.txt" 
     (* text file created by [make_automaton -stats] *)
 ;                              

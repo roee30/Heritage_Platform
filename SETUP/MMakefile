@@ -464,8 +464,8 @@ transducers:
 	ML/make_transducers 
 
 xml_data: 
-	ML/make_xml_data -trans "WX" > $(WX_XML_MORPHOLOGY) && gzip $(WX_XML_MORPHOLOGY)
-	ML/make_xml_data -trans "SL" > $(SL_XML_MORPHOLOGY) && gzip $(SL_XML_MORPHOLOGY)
+	ML/make_xml_data -trans "WX" > $(WX_XML_MORPHOLOGY) && gzip -f $(WX_XML_MORPHOLOGY)
+	ML/make_xml_data -trans "SL" > $(SL_XML_MORPHOLOGY) && gzip -f $(SL_XML_MORPHOLOGY)
 
 full: $(ZEN)
 	cd ML && $(MAKE) clean && $(MAKE) depend && $(MAKE) all

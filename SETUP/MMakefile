@@ -31,7 +31,9 @@ DICO=DICO# hypertext Heritage
 BOOK=$(SKTRESOURCES)BOOK# Heritage.pdf abrevs.pdf
 MW=$(SKTRESOURCES)MW# hypertext Monier-Williams
 GOLD=$(SKTRESOURCES)GOLD# Heritage in Goldendict format databases
-XMLBANKS=$(SKTRESOURCES)XML# Heritage Sanskrit morphology in XML databases
+XMLDOC=$(SKTRESOURCES)XML# Heritage Sanskrit morphology in XML databases
+# contains initially the dtds and the LICENCES, filled by make xml_data,
+# 
 
 # Path to global Sanskrit corpus downloaded from Git.
 SKTCORPUS=$(SKTRESOURCES)CORPUS
@@ -63,10 +65,10 @@ SHELL=/bin/sh
 # GitLab archive 15-04-2017
 # SCL parser interface 02-06-2017
 
-SOFT_LICENSE=LEGAL/LGPL/LICENSE # Free software license LGPL
+SOFT_LICENSE=ML/LICENSE # Free software license LGPL
 #SOFT_LICENSE=LEGAL/UoH/LICENSE # University of Hyderabad distribution
-DATA_LICENSE=$(DATA)/LGPLLR.pdf
-DATA_LICENSES=$(DATA)/LGPLLR.pdf $(DATA)/LGPLLR.tex $(DATA)/LGPLLR.html
+DATA_LICENSE=$(XMLDOC)/LICENCES/LGPLLR.pdf
+DATA_LICENSES=$(XMLDOC)/LGPLLR.pdf $(XMLDOC)/LGPLLR.tex $(XMLDOC)/LGPLLR.html
 LICENSES=$(SOFT_LICENSE) $(DATA_LICENSE)
 
 ML_COPYRIGHT=ML/COPYRIGHT
@@ -259,7 +261,7 @@ ML/rank.ml ML/scl_parser.ml ML/reader.ml ML/parser.ml ML/constraints.mli \
 ML/constraints.ml ML/multilingual.ml ML/paraphrase.mli ML/paraphrase.ml \
 ML/bank_lexer.ml ML/checkpoints.ml ML/graph_segmenter.ml ML/interface.mli \
 ML/interface.ml ML/user_aid.ml ML/reset_caches.ml ML/restore_caches.ml \
-ML/params.mli ML/params.ml
+ML/params.mli ML/params.ml ML/make_xml_data.ml
 
 # WEB package - HTML, HTTP, CGI ad-hoc utilities for Web interface
 WEB=ML/html.ml ML/web.ml ML/css.ml ML/cgi.ml ML/morpho_html.ml ML/chapters.ml \
@@ -323,11 +325,10 @@ ROBOTS=SITE/robots.txt # currently disabled to allow Google access
 WEBSOURCES=$(PORTAL) $(FAQ) $(ABREVS) $(GOLDEN) $(MANUAL) $(XMLPAGE)
 ALLWEBSOURCES=$(SITESOURCE) $(WEBSOURCES)
 # Sources of morphology documents
-XMLDATA=$(DATA)/XML
 DATASOURCE=$(DATA)/titn.tex $(DATA)/titpn.tex $(DATA)/titr.tex $(DATA)/titp.tex \
 $(DATA)/tita.tex $(DATA)/titb.tex $(DATA)/titf.tex $(DATA)/titi.tex \
 $(DATA)/titv.tex $(DATA)/tity.tex $(DATA)/titc.tex \
-$(XMLDATA)/SL_morph.dtd $(XMLDATA)/WX_morph.dtd \
+$(XMLDOC)/SL_morph.dtd $(XMLDOC)/WX_morph.dtd \
 $(DATA_LICENSES) $(DATA)/Makefile
 # All data sources
 SOURCE=$(DOCSOURCE) $(DATASOURCE) $(ALLWEBSOURCES)
@@ -378,13 +379,15 @@ CACHEI=cachei.rem transcai.rem
 # Linguistic resources: Sanskrit morphology documents
 
 PDF_MORPHOLOGY=$(DATA)/nouns.pdf $(DATA)/roots.pdf $(DATA)/parts.pdf \
-$(DATA)/indecls.pdf $(DATA)/final.pdf # enormous, useless
+$(DATA)/indecls.pdf $(DATA)/final.pdf # enormous, useless, deprecated
 
-SL_XML_MORPHOLOGY=$(XMLDATA)/SL_morph.tar.gz
-WX_XML_MORPHOLOGY=$(XMLDATA)/WX_morph.tar.gz
-XML_DTD=$(XMLDATA)/SL_morph.dtd $(XMLDATA)/WX_morph.dtd
-XML_MORPHOLOGY=$(SL_XML_MORPHOLOGY) $(WX_XML_MORPHOLOGY) $(XML_DTD)
-
+SL_XML_MORPHOLOGY=$(XMLDOC)/SL_morph.xml
+SL_XML_DTD=$(XMLDOC)/SL_morph.dtd 
+WX_XML_MORPHOLOGY=$(XMLDOC)/WX_morph.xml
+WX_XML_DTD=$(XMLDOC)/WX_morph.dtd
+XML_LICENCES==$(XMLDOC)/LICENSES
+XML_MORPHOLOGY=$(SL_XML_MORPHOLOGY).gz $(XW_XML_DTD) $(WX_XML_MORPHOLOGY).gz \
+$(XW_XML_DTD) $(XML_LICENCES)
 
 ###########
 # Scripts #
@@ -410,6 +413,8 @@ all:
 	$(MAKE) transducers
 	cd ML && $(MAKE) # make engine (testing the data stamp)
 	$(MAKE) web_services # then all Web services
+	cd ML && $(MAKE) make_xml_data # morphology data banks
+	$(MAKE) xml_data
 
 # When master Makefile SETUP/MMakefile has been changed, do manually:
 new:
@@ -458,15 +463,19 @@ echo "value version=\"$(VERSION)\" and version_date=\"$(DATE)\";") > ML/version.
 transducers: 
 	ML/make_transducers 
 
+xml_data: 
+	ML/make_xml_data -trans "WX" > $(WX_XML_MORPHOLOGY) && gzip $(WX_XML_MORPHOLOGY)
+	ML/make_xml_data -trans "SL" > $(SL_XML_MORPHOLOGY) && gzip $(SL_XML_MORPHOLOGY)
+
 full: $(ZEN)
 	cd ML && $(MAKE) clean && $(MAKE) depend && $(MAKE) all
 	$(MAKE) all
 	$(MAKE) supplements
 
 supplements:
-	cd $(DATA) && $(MAKE) statistics
-	cd $(DATA) && $(MAKE) pdf
-	cd $(XMLDATA) && $(MAKE) xml
+#OBS	cd $(DATA) && $(MAKE) statistics 
+#OBS	cd $(DATA) && $(MAKE) pdf
+#OBS	cd $(XMLDATA) && $(MAKE) xml
 	cd ML && $(MAKE) doc # requires installing ocamlweb
 
 index.html: mk_index_page
@@ -501,11 +510,10 @@ web_services: # Will write localized site pages in DICO and export cgis
 	cp -p SITE/xml.html DICO
 
 release: $(DICO) web_services releasecgi releaseMW releasedata releasedoc \
-releasebook releasecorpus
-# releasexml - no XML release on server - lookup Heritage_Resources
+releasebook releasecorpus releasexml
+
 # releasepdf disabled at present as bulky and un-finished
 	echo "Version $(VERSION) of Sanskrit site released on $(SERVERHOST)"
-
 
 # if one does not rebuild morphologic resources with make scratch, this will
 # just release the new software on the old data - convenient for debug/test.
@@ -546,9 +554,9 @@ rm temp1 temp2 ); done
 sed '1,$$s|!CGIDECL|$(CGIBINURL)$(CGIDECL)|g' < $$i > temp; \
 sed '1,$$s|!CGICONJ|$(CGIBINURL)$(CGICONJ)|g' < temp > $$i; \
 rm temp); done # NB: no citation in MW
-	cp $(AUTOMATA) $(SERVERPUBLICDIR)DATA # Sanskrit Engine data
-	cp $(DATAMW) $(SERVERPUBLICDIR)DATA # MW links
-	cp $(SCRIPTS) $(SERVERPUBLICDIR)DICO # Javascript in DICO dir
+	cp -p $(AUTOMATA) $(SERVERPUBLICDIR)DATA # Sanskrit Engine data
+	cp -Rp $(XML_MORPHOLOGY) $(SERVERPUBLICDIR)DATA # XML databanks
+	cp -p $(SCRIPTS) $(SERVERPUBLICDIR)DICO # Javascript in DICO dir
 #	cp $(DOC_IMAGES) $(SERVERPUBLICDIR)IMAGES
 
 releasecorpus:
@@ -562,12 +570,11 @@ BOOKPRINTS=$(BOOK)/Heritage.pdf $(BOOK)/abrevs.pdf
 releasebook:
 	cp $(BOOKPRINTS) $(SERVERPUBLICDIR)
 
-releasexml: # Sanskrit morphology in xml copied from Resources to Server
-# This should be deprecated soon, and XML banks released separately 
+releasexml: # Sanskrit morphology in XML copied from Data to Server
 	mkdir -p $(SERVERPUBLICDIR)$(DATA)/XML
 	cp $(XML_MORPHOLOGY) $(SERVERPUBLICDIR)$(DATA)/XML
 
-releasepdf: pdfmorphology # very big - useless
+releasepdf: pdfmorphology # very big - useless - deprecated
 	cp $(PDF_MORPHOLOGY) $(SERVERPUBLICDIR)$(DATA)
 
 releaseMW:

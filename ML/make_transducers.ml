@@ -9,7 +9,8 @@
 
 (*i module Make_transducers = struct  i*)
 
-(* Prepares the transducers from the databases of inflected forms in Resources *)
+(* Prepares the transducers from the morphology banks databases of 
+   inflected forms in Resources/DATA  *)
 
 (* The general scheme is that Resources morphology creates a revmap [nouns],
 its underlying minimized trie is used for constructing a segmenting
@@ -17,7 +18,7 @@ transducer [transn], and [nouns] is used for lemmatizing, for instance
 to give the tags of the segments.
 
 A. One-automaton logic for recognizing noun phrases (segmenter,tagger):
-  (This corresponds to our first prototype, with only one phase)
+  (This corresponds to our historical prototype, with a unique phase)
   1. [make_nouns] creates [nouns_file] from [genders_file] (* Resources *)
   2. [Make_automaton.make transducer] creates a shared trie from [nouns_file]
      and compiles it into a transducer dumped in Resources DATA directory
@@ -71,7 +72,7 @@ value make_preverbs preverbs_file =
 
 (* Creates the transducers files *)
 (* For each lexical category, the trie obtained by forgetting the lemmas is then 
-   decorated as  transducer of type auto *)
+   decorated as transducer of type auto *)
 value transducer_of_lemmas deco = 
   make_inflected deco |> Make_automaton.make_transducer
 and transducer_of_preverbs = (* special sandhi rules *)

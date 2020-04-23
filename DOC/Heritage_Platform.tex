@@ -4123,9 +4123,11 @@ $[~14~$\ocwbc{} .m \ocwec{}~$\rightarrow{}~\ocwupperid{Word.}\ocwlowerid{mirror}
 \ocwbc{} note: .m coming from sandhi of n is followed by sibilant 
                 and chunking is allowed only after this sibilant \ocwec{}\ocweol
 \ocwindent{4.00em}
-$\mid{}~10~\mid{}~11~$\ocwbc{} e ai \ocwec{}~\ocwkw{when}~$\ocwlowerid{c}~=~43~$\ocwbc{} r \ocwec{}~$\rightarrow{}~\ocwlowerid{raise}~\ocwupperid{Hiatus}~$\ocweol
+$\mid{}~11~$\ocwbc{} ai \ocwec{}~\ocwkw{when}~$\ocwlowerid{c}~=~43~$\ocwbc{} r \ocwec{}~$\rightarrow{}~\ocwlowerid{raise}~\ocwupperid{Hiatus}~$\ocweol
 \ocwindent{6.50em}
 \ocwbc{} For ai.h+r -> ai r Whitney§179 en fait, toute voyelle longue \ocwec{}\ocweol
+\ocwindent{2.50em}
+\ocwbc{} | 10 | 13 No Hyatus: te rasasaarasafgrahavidhim but es-r -> er missed \ocwec{}\ocweol
 \ocwindent{4.00em}
 $\mid{}~12~$\ocwbc{} o \ocwec{}~$\rightarrow{}~$\ocwkw{if}~$\ocwlowerid{rest}~=~[~40~]~$\ocwbc{} bh from bhos -> bho \ocwec{}~\ocwkw{then}~\ocweol
 \ocwindent{13.50em}
@@ -4345,9 +4347,13 @@ $\mid{}~48~$\ocwbc{} s \ocwec{}~$\rightarrow{}~$\ocwkw{match}~$\ocwlowerid{rest}
 \ocwindent{7.00em}
 $[~[~14~$\ocwbc{} .m \ocwec{}~::~$\ocwlowerid{b}~]~\rightarrow{}~$\ocwkw{if}~$\ocwlowerid{c}=32~\lor{}~\ocwlowerid{c}=33~$\ocwbc{} t th \ocwec{}~\ocwkw{then}\ocweol
 \ocwindent{20.00em}
-$\ocwupperid{Word.}\ocwlowerid{mirror}~[~36~$\ocwbc{} n \ocwec{}~::~$\ocwlowerid{b}~]~$\ocwkw{else}~$\ocwlowerid{w}~$\ocweol
+$\ocwupperid{Word.}\ocwlowerid{mirror}~[~36~$\ocwbc{} n \ocwec{}~::~$\ocwlowerid{b}~]~$\ocwkw{else}~$\ocwlowerid{w}$\medskip
+
+\label{padapatha.ml:8669}%
 \ocwindent{7.00em}
-$\mid{}~\ocwlowerid{\_}~\rightarrow{}~\ocwlowerid{w}$\ocweol
+$\mid{}~\ocwlowerid{\_}~\rightarrow{}~$\ocwkw{if}~$\ocwlowerid{c}=32~\lor{}~\ocwlowerid{c}=33~$\ocwbc{} t th \ocwec{}~\ocwkw{then}\ocweol
+\ocwindent{10.50em}
+$\ocwlowerid{raise}~\ocwupperid{Glue}~$\ocwkw{else}~$\ocwlowerid{w}~$\ocweol
 \ocwindent{7.00em}
 $]$\ocweol
 \ocwindent{4.00em}
@@ -5753,9 +5759,12 @@ $\ocwupperid{Trie.}\ocwlowerid{mem}~\ocwlowerid{word}~\ocwlowerid{entries\_trie}
 \ocwendcode{}\typeout{OcamlWeb file Phonetics.ml}
 \ocwmodule{Phonetics}
 \label{phonetics.ml:0}%
+Notation Pr{X} gives X as the pratyaahaara notation of a set of phonemes 
+\ocweol
+\ocwindent{0.00em}
 Sanskrit phonology 
 \ocweol
-\label{phonetics.ml:680}%
+\label{phonetics.ml:760}%
 \medskip
 \ocwbegincode{}\ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{vowel}~\ocwlowerid{c}~=~\ocwlowerid{c}>0~\land{}~\ocwlowerid{c}<14~$\ocwbc{} a aa i ii u uu .r .rr .l e ai o au \ocwec{}\ocwbc{} Pr{hac} \ocwec{}\ocweol
@@ -5801,6 +5810,16 @@ $[~[~\ocwlowerid{c}~::~\ocwlowerid{\_}~]~\rightarrow{}~\ocwlowerid{consonant}~\o
 $\mid{}~\ocwlowerid{\_}~\rightarrow{}~\ocwupperid{False}$\ocweol
 \ocwindent{1.00em}
 $]$\ocweol
+\ocwindent{0.00em}
+;\ocweol
+\ocwindent{0.00em}
+$\ocwlowerid{value}~\ocwlowerid{consonant\_starts}~=~$\ocwkw{fun}\ocweol
+\ocwindent{1.00em}
+$[~[~\ocwlowerid{chunk}~::~\ocwlowerid{\_}~]~\rightarrow{}~\ocwlowerid{consonant\_initial}~\ocwlowerid{chunk}~$\ocweol
+\ocwindent{1.00em}
+$\mid{}~\ocwlowerid{\_}~\rightarrow{}~\ocwupperid{False}$\ocweol
+\ocwindent{1.00em}
+$]~$\ocweol
 \ocwindent{0.00em}
 ;\ocweol
 \ocwindent{0.00em}
@@ -5884,7 +5903,7 @@ $]$\ocweol
 \ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{mult}~=~$\ocwkw{fun}\ocweol
 \ocwindent{1.00em}
-$[~[~\ocwlowerid{\_}~::~[~\ocwlowerid{c}~::~\ocwlowerid{\_}~]~]~\rightarrow{}~\ocwlowerid{consonant}~\ocwlowerid{c}$\ocweol
+$[~[~\ocwlowerid{\_}~$\ocwbc{} assumed consonant \ocwec{}~::~$[~\ocwlowerid{c}~::~\ocwlowerid{\_}~]~]~\rightarrow{}~\ocwlowerid{consonant}~\ocwlowerid{c}$\ocweol
 \ocwindent{1.00em}
 $\mid{}~\ocwlowerid{\_}~\rightarrow{}~\ocwupperid{False}$\ocweol
 \ocwindent{1.00em}
@@ -6054,7 +6073,7 @@ $\ocwlowerid{value}~\ocwlowerid{voiced\_consonant}~\ocwlowerid{c}~=~$\ocwbc{} Pr
 \ocwindent{1.00em}
 $\ocwupperid{List.}\ocwlowerid{mem}~\ocwlowerid{c}~[~19;~20;~24;~25;~29;~30;~34;~35;~39;~40~]$\medskip
 
-\label{phonetics.ml:5308}%
+\label{phonetics.ml:5510}%
 \ocwindent{0.00em}
 \ocwkw{and}~$\ocwlowerid{mute\_consonant}~\ocwlowerid{c}~=$\ocwbc{} Pr{khay} \ocwec{}\ocweol
 \ocwindent{1.00em}
@@ -6133,7 +6152,7 @@ $]$\ocweol
 \ocwendcode{}\ocwindent{0.00em}
 Macdonnel §125 - condition for root of gana 1 to take guna of its stem 
 \ocweol
-\label{phonetics.ml:6539}%
+\label{phonetics.ml:6741}%
 \medskip
 \ocwbegincode{}\ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{gunify}~=~$\ocwkw{fun}~\ocwbc{} arg word is reversed stem \ocwec{}\ocweol
@@ -6312,12 +6331,19 @@ $]$\ocweol
 \ocwindent{0.00em}
 \ocwkw{and}~$\ocwlowerid{amuitic}~=~$\ocwkw{fun}~$[~[~-2~::~\ocwlowerid{\_}~]~\rightarrow{}~\ocwupperid{True}~\mid{}~\ocwlowerid{\_}~\rightarrow{}~\ocwupperid{False}~]$\ocweol
 \ocwindent{0.00em}
-;\ocweol
+;\medskip
+
+\ocwendcode{}\ocwindent{0.00em}
+Following 4 functions are used in stem computations in Verbs. 
+\ocweol
 \ocwindent{0.00em}
-\ocwbc{} For m.rj-like verbs (Whitney§219-a) Panini{8,2,36} 
-   \ocwstring{"bhraaj"} \ocwstring{"m.rj"} \ocwstring{"yaj1"} \ocwstring{"raaj1"} \ocwstring{"vraj"} \ocwstring{"s.rj1"} \ocwstring{"bh.rjj"}
-   replace phoneme j=24 by j'=124 with sandhi j'+t = .s.t (j' is j going to z) \ocwec{}\ocweol
-\ocwindent{0.00em}
+For m.rj-like verbs (Whitney§219-a) Panini{8,2,36} 
+   "bhraaj" "m.rj" "yaj1" "raaj1" "vraj" "s.rj1" "bh.rjj"
+   replace phoneme j=24 by j'=124 with sandhi j'+t = .s.t (j' is j going to z) 
+\ocweol
+\label{phonetics.ml:10297}%
+\medskip
+\ocwbegincode{}\ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{mrijify}~\ocwlowerid{stem}~=~$\ocwkw{match}~$\ocwlowerid{stem}~$\ocwkw{with}\ocweol
 \ocwindent{1.00em}
 $[~[~24~::~\ocwlowerid{r}~]~\rightarrow{}~[~124~::~\ocwlowerid{r}~]$\ocweol
@@ -6330,7 +6356,8 @@ $]$\ocweol
 \ocwindent{0.00em}
 \ocwbc{} For \ocwstring{"duh"}-like verbs (Whitney§222) \ocwstring{"dah"} \ocwstring{"dih"} \ocwstring{"duh1"} Panini{8,2,32}
    optionnellement \ocwstring{"druh1"} \ocwstring{"muh"} \ocwstring{"snuh1"} \ocwstring{"snih1"} Panini{8,2,33}
-   replace phoneme h=49 by h'=149 with sandhi h'+t = gdh (h' is h going to gh) \ocwec{}\ocweol
+   replace phoneme h=49 by h'=149 with sandhi h'+t = gdh (h' is h going to gh) 
+   ( whereas normal h goes to .dh like pp(lih)=lii.dha) \ocwec{}\ocweol
 \ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{duhify}~\ocwlowerid{stem}~=~$\ocwkw{match}~$\ocwlowerid{stem}~$\ocwkw{with}\ocweol
 \ocwindent{1.00em}
@@ -6353,11 +6380,15 @@ $\mid{}~\ocwlowerid{\_}~\rightarrow{}~\ocwlowerid{failwith}~($\ocwstring{"nahify
 \ocwindent{1.00em}
 $]$\ocweol
 \ocwindent{0.00em}
-;\ocweol
-\ocwindent{0.00em}
-\ocwbc{} Aspiration of initial consonant of root stems ending in aspirate.
-   The syllabic loop is necessary for e.g. druh -> dhruk. See Whitney§155. \ocwec{}\ocweol
-\ocwindent{0.00em}
+;\medskip
+
+\ocwendcode{}\ocwindent{0.00em}
+Aspiration of initial consonant of root stems ending in aspirate.
+   The syllabic loop is necessary for e.g. druh -> dhruk. See Whitney§155. 
+\ocweol
+\label{phonetics.ml:11210}%
+\medskip
+\ocwbegincode{}\ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{syll\_decomp}~=~$\ocwkw{fun}\ocweol
 \ocwindent{1.00em}
 $[~[~\ocwlowerid{c}~::~\ocwlowerid{rest}~]~\rightarrow{}~\ocwlowerid{decomp\_rec}~[\,]~\ocwlowerid{c}~\ocwlowerid{rest}$\ocweol
@@ -6572,7 +6603,7 @@ $[~[~\ocwlowerid{c}~::~\ocwlowerid{l}~]~\rightarrow{}~$\ocwkw{if}~$\ocwlowerid{s
 \ocwindent{13.00em}
 \ocwkw{else}~$\ocwlowerid{stem}~$\ocweol
 \ocwindent{5.00em}
-$\mid{}~[\,]~\rightarrow{}~\ocwlowerid{failwith}~$\ocwstring{"Illegal\ocwvspace{}arg\ocwvspace{}r\ocwvspace{}to\ocwvspace{}finalize"}\ocweol
+$\mid{}~[\,]~\rightarrow{}~\ocwlowerid{failwith}~$\ocwstring{"Illegal\ocwvspace{}arg\ocwvspace{}r\ocwvspace{}to\ocwvspace{}finalize\_r"}\ocweol
 \ocwindent{5.00em}
 $]$\ocweol
 \ocwindent{3.50em}
@@ -22358,7 +22389,7 @@ $[~$\ocwstring{"atra"}~\ocwbc{} atrabhavat \ocwec{}\ocweol
 \ocwindent{1.00em}
 ;~\ocwstring{"upari"}~\ocwbc{} uparicara \ocwec{}~\ocweol
 \ocwindent{1.00em}
-;~\ocwstring{"ubhayatas"}~\ocwbc{} ubhayata.hsasya \ocwec{}\ocweol
+;~\ocwstring{"ubhayatas"}~\ocwbc{} ubhayata.hsasya - tasil \ocwec{}\ocweol
 \ocwindent{1.00em}
 ;~\ocwstring{"evam"}~\ocwbc{} eva.mvid \ocwec{}\ocweol
 \ocwindent{1.00em}
@@ -22660,7 +22691,7 @@ $\ocwlowerid{enter1}~\ocwlowerid{entry}~(\ocwupperid{Avyayai}~(\ocwlowerid{norma
 \ocwindent{0.00em}
 ;\ocweol
 \ocwindent{0.00em}
-\ocwbc{} Tasils are treated as vibhakti. Here are the lexicalized ones: Whitney§1098 
+\ocwbc{} Tasils are treated as adverbs. Here are the lexicalized ones: Whitney§1098 
    First tasils of pronouns, not needed if lexicalised 
   ; enter1 \ocwstring{"tad"}    (Indecl Tas (code \ocwstring{"tatas"}))   \ocwbc{} tasil on tad \Pan{5,3,7} \ocwec{} 
   ; enter1 \ocwstring{"ya\#1"}   (Indecl Tas (code \ocwstring{"yatas"}))   \ocwbc{} tasil on ya \Pan{5,3,7} \ocwec{} 
@@ -22698,14 +22729,14 @@ $\ocwlowerid{value}~\ocwlowerid{tasil\_extra}~()~=~$\ocwkw{do}~\ocwbc{} add non-
 ;~$\ocwlowerid{enter1}~$\ocwstring{"praagbhaava"}~$(\ocwupperid{Indecl}~\ocwupperid{Tas}~(\ocwlowerid{code}~$\ocwstring{"praagbhaavatas"}$))~$\ocwbc{} id \ocwec{}~\ocweol
 \ocwindent{1.00em}
 ;~$\ocwlowerid{enter1}~$\ocwstring{"svaravar.na"}~$(\ocwupperid{Indecl}~\ocwupperid{Tas}~(\ocwlowerid{code}~$\ocwstring{"svaravar.natas"}$))~$\ocwbc{} id \ocwec{}~\ocweol
-\ocwindent{0.00em}
-\ocwbc{} BhG. bhii.smadro.napramukhatas - how to treat such cpds ? \ocwec{}\ocweol
 \ocwindent{1.00em}
 ;~$\ocwlowerid{enter1}~$\ocwstring{"bhasad"}~$(\ocwupperid{Indecl}~\ocwupperid{Tas}~(\ocwlowerid{code}~$\ocwstring{"bhasattas"}$))~$\ocwbc{} tasil on consonant stem \ocwec{}\ocweol
 \ocwindent{0.00em}
 \ocwbc{}; enter1 \ocwstring{"nas\#2"} (Indecl Tas (code \ocwstring{"nastas"})) - idem but lexicalized \ocwec{}\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{enter1}~$\ocwstring{"yad.rcchaa"}~$(\ocwupperid{Indecl}~\ocwupperid{Tas}~(\ocwlowerid{code}~$\ocwstring{"yad.rcchaatas"}$))~$\ocwbc{} tasil on fstem \ocwec{}~\ocweol
+;~$\ocwlowerid{enter1}~$\ocwstring{"yad.rcchaa"}~$(\ocwupperid{Indecl}~\ocwupperid{Tas}~(\ocwlowerid{code}~$\ocwstring{"yad.rcchaatas"}$))~$\ocwbc{} tasil on fstem \ocwec{}\ocweol
+\ocwindent{0.00em}
+\ocwbc{} NB bhii.smadro.napramukhatas BhG{1,25} treated in \ocwbegindcode{}$\ocwlowerid{enter\_extra\_ifcs}$\ocwenddcode{} below \ocwec{}~\ocweol
 \ocwindent{1.00em}
 \}~\ocweol
 \ocwindent{0.00em}
@@ -22881,6 +22912,16 @@ $\ocwlowerid{value}~\ocwlowerid{enter\_extra\_ifcs}~()~=~$\ocwkw{do}~\ocwbc{} ar
 \ocwindent{4.00em}
 \}\ocweol
 \ocwindent{1.50em}
+\ocwbc{} tasil form usable as ifc: bhii.smadro.napramukhatas BhG{1,25} \ocwec{}\ocweol
+\ocwindent{1.50em}
+;~\ocwkw{let}~$\ocwlowerid{entry}~=~$\ocwstring{"pramukha"}~\ocwkw{in}~\ocweol
+\ocwindent{4.00em}
+\ocwkw{let}~$\ocwlowerid{form}~=~\ocwlowerid{code}~$\ocwstring{"pramukhatas"}~\ocwkw{in}~\ocwbc{} ad-hoc ablative \ocwec{}\ocweol
+\ocwindent{4.00em}
+$\ocwlowerid{enter1}~\ocwlowerid{entry}~(\ocwupperid{Declined}~\ocwupperid{Noun}~\ocwupperid{Mas}~[~(\ocwupperid{Singular},~[~(\ocwupperid{Abl},\ocwlowerid{form})~])~])$\ocweol
+\ocwindent{1.50em}
+\ocwbc{} Other tasils usable as postposition, like paritas, might be added ? \ocwec{}\ocweol
+\ocwindent{1.50em}
 \}\ocweol
 \ocwindent{0.00em}
 ;\ocweol
@@ -22926,7 +22967,7 @@ $\ocwlowerid{value}~\ocwlowerid{fake\_compute\_decls}~((\ocwlowerid{s},\ocwlower
 \ocwendcode{}\ocwindent{0.00em}
 For Interface - cache management 
 \ocweol
-\label{nouns.ml:194312}%
+\label{nouns.ml:194652}%
 \medskip
 \ocwbegincode{}\ocwindent{0.00em}
 \ocwkw{open}~$\ocwupperid{Bank\_lexer};~$\ocweol
@@ -22939,7 +22980,7 @@ For Interface - cache management
 \ocwindent{0.00em}
 \ocwkw{open}~$\ocwupperid{Skt\_morph};$\medskip
 
-\label{nouns.ml:194422}%
+\label{nouns.ml:194762}%
 \ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{full\_entry}~=~\ocwupperid{Gram.Entry.}\ocwlowerid{mk}~$\ocwstring{"full\_entry"}\ocweol
 \ocwindent{0.00em}
@@ -36345,11 +36386,9 @@ $\mid{}~\ocwupperid{Ppfta\_}~\ocwlowerid{c}~\ocwlowerid{stem}~\ocwlowerid{root}~
 \ocwindent{10.50em}
 \ocwkw{else}~$\ocwupperid{True}~$\ocweol
 \ocwindent{9.00em}
-\ocwkw{else}~\ocwkw{if}~$\ocwlowerid{root}=$\ocwstring{"likh"}~\ocwkw{then}~$\ocwupperid{True}~$\ocwbc{} source ? \ocwec{}\ocweol
-\ocwindent{9.00em}
 \ocwkw{else}~$\ocwupperid{False}$\ocweol
 \ocwindent{3.00em}
-\ocwkw{and}~$\ocwlowerid{f\_stem}~=~\ocwlowerid{rfix}~\ocwlowerid{stem}~$\ocwstring{"u.s"}~\ocwkw{in}~\ocweol
+\ocwkw{and}~$\ocwlowerid{f\_stem}~=~\ocwlowerid{rfix}~\ocwlowerid{stem}~$\ocwstring{"u.s"}~\ocwbc{} u.sii \ocwec{}~\ocwkw{in}~\ocweol
 \ocwindent{3.00em}
 $\ocwlowerid{build\_part\_vas}~\ocwlowerid{c}~\ocwlowerid{stem}~\ocwlowerid{inter}~\ocwlowerid{f\_stem}~\ocwlowerid{root}$\ocweol
 \ocwindent{1.00em}
@@ -45448,11 +45487,11 @@ $]$\ocweol
 \ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{print\_scl\_morph}~\ocwlowerid{pvs}~\ocwlowerid{gen}~\ocwlowerid{form}~\ocwlowerid{tag}~=~$\ocwkw{do}\ocweol
 \ocwindent{1.00em}
-\{~$\ocwlowerid{ps}~(\ocwlowerid{xml\_begin}~$\ocwstring{"tag"}$)$\ocweol
+\{~$\ocwlowerid{xml\_begin}~$\ocwstring{"tag"}~|\ensuremath{>}~$\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
 ;~$\ocwupperid{Morpho\_scl.}\ocwlowerid{print\_scl\_inflected}~\ocwlowerid{pvs}~\ocwlowerid{form}~\ocwlowerid{gen}~\ocwlowerid{tag}~$\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~(\ocwlowerid{xml\_end}~$\ocwstring{"tag"}$)~$\ocweol
+;~$\ocwlowerid{xml\_end}~$\ocwstring{"tag"}~|\ensuremath{>}~$\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
 \}\ocweol
 \ocwindent{0.00em}
@@ -45671,20 +45710,6 @@ $]~$\ocweol
 \}~\ocweol
 \ocwindent{0.00em}
 ;~\ocweol
-\ocwindent{0.00em}
-;\ocweol
-\ocwindent{0.00em}
-$\ocwlowerid{value}~\ocwlowerid{get\_morph}~\ocwlowerid{gen}~\ocwlowerid{phase}~\ocwlowerid{form}~(\ocwlowerid{delta},\ocwlowerid{morphs})~=$\ocweol
-\ocwindent{1.00em}
-\ocwkw{let}~$\ocwlowerid{stem}~=~\ocwlowerid{patch}~\ocwlowerid{delta}~\ocwlowerid{form}~$\ocwkw{in}~\ocwbc{} stem may have homo index \ocwec{}\ocweol
-\ocwindent{1.00em}
-$(\ocwlowerid{form},~\ocwlowerid{lex\_cat}~\ocwlowerid{phase},~\ocwlowerid{generative\_stem}~\ocwlowerid{gen}~\ocwlowerid{stem},~\ocwlowerid{morphs})$\ocweol
-\ocwindent{0.00em}
-;\medskip
-
-\label{lexer.ml:9792}%
-\ocwindent{0.00em}
-\ocwkw{end}~$\ocwlowerid{deprecated}~\ocwlowerid{i}\times{})~$\ocweol
 \ocwindent{0.00em}
 \ocwkw{end};\ocweol
 \ocwendcode{}\typeout{OcamlWeb file Rank.ml}
@@ -45932,7 +45957,7 @@ $]$\ocweol
 \ocwindent{7.00em}
 \}\ocweol
 \ocwindent{6.00em}
-$\mid{}~\ocwlowerid{\_}~\rightarrow{}~\ocwlowerid{raise}~(\ocwupperid{Failure}~$\ocwstring{"dove\_tail"}$)~$\ocwbc{} does not occur by invariant \ocwec{}\ocweol
+$\mid{}~\ocwlowerid{\_}~\rightarrow{}~\ocwlowerid{raise}~(\ocwupperid{Control.Anomaly}~$\ocwstring{"dove\_tail"}$)~$\ocwbc{} imposs by invariant \ocwec{}\ocweol
 \ocwindent{6.00em}
 $]$\ocweol
 \ocwindent{4.50em}
@@ -45942,7 +45967,9 @@ $]$\ocweol
 \ocwindent{0.00em}
 ;\ocweol
 \ocwindent{0.00em}
-\ocwbc{} From Interface: splitting checkpoints into current and future ones \ocwec{}\ocweol
+\ocwbc{} From \ocwbegindcode{}$\ocwupperid{Graph\_segmenter}$\ocwenddcode{} \ocwec{}\ocweol
+\ocwindent{0.00em}
+\ocwbc{} Splitting checkpoints into current and future ones \ocwec{}\ocweol
 \ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{split\_check}~\ocwlowerid{limit}~=~\ocwlowerid{split\_rec}~[\,]$\ocweol
 \ocwindent{1.00em}
@@ -45957,16 +45984,6 @@ $\mid{}~[~((\ocwlowerid{index},\ocwlowerid{\_},\ocwlowerid{\_})~$\ocwkw{as}~$\oc
 \ocwkw{else}~$\ocwlowerid{split\_rec}~[~\ocwlowerid{check}~::~\ocwlowerid{acc}~]~\ocwlowerid{rest}~$\ocweol
 \ocwindent{3.00em}
 $]$\ocweol
-\ocwindent{0.00em}
-;\ocweol
-\ocwindent{0.00em}
-$\ocwlowerid{value}~\ocwlowerid{consonant\_starts}~=~$\ocwkw{fun}\ocweol
-\ocwindent{1.00em}
-$[~[~\ocwlowerid{chunk}~::~\ocwlowerid{\_}~]~\rightarrow{}~\ocwupperid{Phonetics.}\ocwlowerid{consonant\_initial}~\ocwlowerid{chunk}~$\ocweol
-\ocwindent{1.00em}
-$\mid{}~\ocwlowerid{\_}~\rightarrow{}~\ocwupperid{False}$\ocweol
-\ocwindent{1.00em}
-$]~$\ocweol
 \ocwindent{0.00em}
 ;\ocweol
 \ocwindent{0.00em}
@@ -46004,7 +46021,7 @@ $[~(\ocwlowerid{chunk\_constraints},\ocwlowerid{res})~::~\ocwlowerid{stack}~]$\o
 \ocwindent{0.00em}
 ;\ocweol
 \ocwindent{0.00em}
-$\ocwlowerid{value}~\ocwlowerid{segment\_chunks\_filter}~\ocwlowerid{filter\_mode}~\ocwlowerid{chunks}~\ocwlowerid{cpts}~=~$\ocweol
+$\ocwlowerid{value}~\ocwlowerid{segment\_all}~\ocwlowerid{filter\_mode}~\ocwlowerid{chunks}~\ocwlowerid{cpts}~=~$\ocweol
 \ocwindent{1.00em}
 \ocwkw{let}~$(\ocwlowerid{\_},\ocwlowerid{constrained\_segs})~=~\ocwlowerid{segment\_chunks}~((0,\ocwlowerid{cpts}),[\,])~\ocwlowerid{chunks}$\ocweol
 \ocwindent{1.00em}
@@ -46012,7 +46029,7 @@ $\ocwlowerid{where}~$\ocwkw{rec}~$\ocwlowerid{segment\_chunks}~\ocwlowerid{acc}~
 \ocwindent{2.00em}
 $[~[~$\ocwbc{} last \ocwec{}~$\ocwlowerid{chunk}~]~\rightarrow{}~\ocwlowerid{segment\_chunk}~\ocwlowerid{acc}~\ocwlowerid{chunk}~\ocwupperid{False}$\ocweol
 \ocwindent{2.00em}
-$\mid{}~[~\ocwlowerid{chunk}~::~\ocwlowerid{rest}~]~\rightarrow{}~$\ocwkw{let}~$\ocwlowerid{sa\_check}~=~\ocwlowerid{consonant\_starts}~\ocwlowerid{rest}~$\ocwkw{in}\ocweol
+$\mid{}~[~\ocwlowerid{chunk}~::~\ocwlowerid{rest}~]~\rightarrow{}~$\ocwkw{let}~$\ocwlowerid{sa\_check}~=~\ocwupperid{Phonetics.}\ocwlowerid{consonant\_starts}~\ocwlowerid{rest}~$\ocwkw{in}\ocweol
 \ocwindent{13.50em}
 $\ocwlowerid{segment\_chunks}~(\ocwlowerid{segment\_chunk}~\ocwlowerid{acc}~\ocwlowerid{chunk}~\ocwlowerid{sa\_check})~\ocwlowerid{rest}$\ocweol
 \ocwindent{2.00em}
@@ -46023,13 +46040,6 @@ $]~$\ocwkw{in}~\ocweol
 $\ocwlowerid{dove\_tail}~\ocwlowerid{filter\_mode}~\ocwlowerid{constrained\_segs}~$\ocweol
 \ocwindent{0.00em}
 ;\ocweol
-\ocwindent{0.00em}
-$\ocwlowerid{value}~\ocwlowerid{segment\_all}~\ocwlowerid{filter\_mode}~\ocwlowerid{chunks}~\ocwlowerid{cpts}~=~$\ocweol
-\ocwindent{1.00em}
-$\ocwlowerid{segment\_chunks\_filter}~\ocwlowerid{filter\_mode}~\ocwlowerid{chunks}~\ocwlowerid{cpts}$\ocweol
-\ocwindent{0.00em}
-;\ocweol
-\ocweol
 \ocwendcode{}\typeout{OcamlWeb file Scl_parser.ml}
 \ocwmodule{Scl\_parser}
 \label{scl_parser.ml:0}%
@@ -47015,9 +47025,9 @@ $\mid{}~[~(\ocwlowerid{phase},\ocwlowerid{rword},\ocwlowerid{\_})~::~\ocwlowerid
 \ocwindent{3.00em}
 \ocwkw{let}~$\ocwlowerid{word}~=~\ocwupperid{Word.}\ocwlowerid{mirror}~\ocwlowerid{rword}~$\ocwbc{} segment is mirror word \ocwec{}~\ocwkw{in}~\ocweol
 \ocwindent{3.00em}
-\ocwkw{let}~$\ocwlowerid{keep}~=~$\ocwkw{let}~$\ocwlowerid{tags}~=~\ocwlowerid{tagger}~\ocwlowerid{phase}~\ocwlowerid{word}~$\ocwkw{in}~\ocweol
-\ocwindent{8.50em}
-$[~\ocwlowerid{roles\_of}~\ocwlowerid{seg}~\ocwlowerid{word}~\ocwlowerid{tags}~::~\ocwlowerid{stack}~]~$\ocwkw{in}\ocweol
+\ocwkw{let}~$\ocwlowerid{lemma}~=~\ocwlowerid{tagger}~\ocwlowerid{phase}~\ocwlowerid{word}~$\ocwkw{in}\ocweol
+\ocwindent{3.00em}
+\ocwkw{let}~$\ocwlowerid{keep}~=~[~\ocwlowerid{roles\_of}~\ocwlowerid{seg}~\ocwlowerid{word}~\ocwlowerid{lemma}~::~\ocwlowerid{stack}~]~$\ocwkw{in}\ocweol
 \ocwindent{3.00em}
 $\ocwlowerid{comp\_rec}~(\ocwlowerid{seg}+1)~\ocwlowerid{keep}~\ocwlowerid{rest}$\ocweol
 \ocwindent{1.00em}
@@ -47245,7 +47255,9 @@ $]$\ocweol
 \ocwindent{0.00em}
 ;\ocweol
 \ocwindent{0.00em}
-\ocwbc{} From Interface: splitting checkpoints into current and future ones \ocwec{}\ocweol
+\ocwbc{} Following two functions are same as in Rank \ocwec{}\ocweol
+\ocwindent{0.00em}
+\ocwbc{} Splitting checkpoints into current and future ones \ocwec{}\ocweol
 \ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{split\_check}~\ocwlowerid{limit}~=~\ocwlowerid{split\_rec}~[\,]$\ocweol
 \ocwindent{1.50em}
@@ -47263,44 +47275,68 @@ $]$\ocweol
 \ocwindent{0.00em}
 ;\ocweol
 \ocwindent{0.00em}
-$\ocwlowerid{value}~\ocwlowerid{segment\_until}~\ocwlowerid{sol\_index}~\ocwlowerid{chunks}~\ocwlowerid{cpts}~=~$\ocweol
-\ocwindent{1.50em}
-\ocwkw{let}~$(\ocwlowerid{\_},\ocwlowerid{constrained\_segs})~=~\ocwupperid{List.}\ocwlowerid{fold\_left}~\ocwlowerid{init}~((0,\ocwlowerid{cpts}),[\,])~\ocwlowerid{chunks}$\ocweol
-\ocwindent{1.50em}
-$\ocwlowerid{where}~\ocwlowerid{init}~((\ocwlowerid{offset},\ocwlowerid{checkpoints}),\ocwlowerid{stack})~\ocwlowerid{chunk}~=~$\ocwkw{do}\ocweol
-\ocwindent{1.50em}
+$\ocwlowerid{value}~\ocwlowerid{segment\_chunk}~((\ocwlowerid{offset},\ocwlowerid{checkpoints}),\ocwlowerid{stack})~\ocwlowerid{chunk}~\ocwlowerid{sa\_check}~=~$\ocwkw{do}\ocweol
+\ocwindent{1.00em}
 \{~\ocwkw{let}~$\ocwlowerid{ini\_cont}~=~\ocwupperid{Lex.Viccheda.}\ocwlowerid{init\_segment}~\ocwlowerid{chunk}~$\ocwkw{in}~\ocweol
-\ocwindent{2.50em}
+\ocwindent{2.00em}
 \ocwkw{let}~$\ocwlowerid{chunk\_length}~=~\ocwupperid{Word.}\ocwlowerid{length}~\ocwlowerid{chunk}~$\ocwkw{in}\ocweol
-\ocwindent{2.50em}
+\ocwindent{2.00em}
 \ocwkw{let}~$\ocwlowerid{extremity}~=~\ocwlowerid{offset}+\ocwlowerid{chunk\_length}~$\ocwkw{in}~\ocweol
-\ocwindent{2.50em}
+\ocwindent{2.00em}
 \ocwkw{let}~$(\ocwlowerid{local},\ocwlowerid{future})~=~\ocwlowerid{split\_check}~\ocwlowerid{extremity}~\ocwlowerid{checkpoints}~$\ocwkw{in}\ocweol
-\ocwindent{2.50em}
+\ocwindent{2.00em}
 \ocwkw{let}~$\ocwlowerid{chunk\_constraints}~=~(\ocwlowerid{offset},\ocwlowerid{local})~$\ocwkw{in}\ocweol
-\ocwindent{2.50em}
+\ocwindent{2.00em}
 $((\ocwlowerid{succ}~\ocwlowerid{extremity},\ocwlowerid{future}),~$\ocwkw{do}~\ocweol
-\ocwindent{4.00em}
+\ocwindent{3.50em}
 \{~$\ocwupperid{Lex.Viccheda.}\ocwlowerid{set\_offset}~\ocwlowerid{chunk\_constraints}~$\ocwbc{} Sets local constraints \ocwec{}\ocweol
-\ocwindent{4.00em}
+\ocwindent{3.50em}
+;~$\ocwupperid{Lex.Viccheda.}\ocwlowerid{set\_sa\_control}~\ocwlowerid{sa\_check}~$\ocwbc{} inherit from chunks recursion \ocwec{}\ocweol
+\ocwindent{3.50em}
 ;~\ocwkw{let}~$\ocwlowerid{res}~=~$\ocwkw{match}~$\ocwupperid{Lex.Viccheda.}\ocwlowerid{continue}~\ocwlowerid{ini\_cont}~$\ocwkw{with}\ocweol
-\ocwindent{7.00em}
+\ocwindent{6.50em}
 $[~\ocwupperid{Some}~\ocwlowerid{c}~\rightarrow{}~\ocwlowerid{c}~$\ocweol
-\ocwindent{7.00em}
+\ocwindent{6.50em}
 $\mid{}~\ocwupperid{None}~\rightarrow{}~\ocwupperid{Lex.}\ocwlowerid{un\_analyzable}~\ocwlowerid{chunk}$\ocweol
-\ocwindent{7.00em}
+\ocwindent{6.50em}
 $]~$\ocwkw{in}~\ocweol
-\ocwindent{5.00em}
+\ocwindent{4.50em}
 $[~(\ocwlowerid{chunk\_constraints},\ocwlowerid{res})~::~\ocwlowerid{stack}~]$\ocweol
-\ocwindent{4.00em}
+\ocwindent{3.50em}
 \}$)~$\ocweol
-\ocwindent{1.50em}
-\}~\ocwkw{in}\ocweol
-\ocwindent{1.50em}
-$\ocwlowerid{dove\_tail\_until}~\ocwlowerid{sol\_index}~\ocwlowerid{constrained\_segs}~$\ocweol
+\ocwindent{1.00em}
+\}~\ocweol
 \ocwindent{0.00em}
 ;\ocweol
 \ocwindent{0.00em}
+\ocwbc{} Follows logic of \ocwbegindcode{}$\ocwupperid{Rank}.\ocwlowerid{segment\_all}$\ocwenddcode{} until solution reached \ocwec{}\ocweol
+\ocwindent{0.00em}
+$\ocwlowerid{value}~\ocwlowerid{segment\_until}~\ocwlowerid{sol\_index}~\ocwlowerid{chunks}~\ocwlowerid{cpts}~=~$\ocweol
+\ocwindent{1.00em}
+\ocwkw{let}~$(\ocwlowerid{\_},\ocwlowerid{constrained\_segs})~=~\ocwlowerid{segment\_chunks}~((0,\ocwlowerid{cpts}),[\,])~\ocwlowerid{chunks}$\ocweol
+\ocwindent{1.00em}
+$\ocwlowerid{where}~$\ocwkw{rec}~$\ocwlowerid{segment\_chunks}~\ocwlowerid{acc}~=~$\ocwkw{fun}\ocweol
+\ocwindent{2.00em}
+$[~[~$\ocwbc{} last \ocwec{}~$\ocwlowerid{chunk}~]~\rightarrow{}~\ocwlowerid{segment\_chunk}~\ocwlowerid{acc}~\ocwlowerid{chunk}~\ocwupperid{False}$\ocweol
+\ocwindent{2.00em}
+$\mid{}~[~\ocwlowerid{chunk}~::~\ocwlowerid{rest}~]~\rightarrow{}~$\ocwkw{let}~$\ocwlowerid{sa\_check}~=~\ocwupperid{Phonetics.}\ocwlowerid{consonant\_starts}~\ocwlowerid{rest}~$\ocwkw{in}\ocweol
+\ocwindent{13.50em}
+$\ocwlowerid{segment\_chunks}~(\ocwlowerid{segment\_chunk}~\ocwlowerid{acc}~\ocwlowerid{chunk}~\ocwlowerid{sa\_check})~\ocwlowerid{rest}$\ocweol
+\ocwindent{2.00em}
+$\mid{}~[\,]~\rightarrow{}~\ocwlowerid{acc}$\ocweol
+\ocwindent{2.00em}
+$]~$\ocwkw{in}~\ocweol
+\ocwindent{1.00em}
+$\ocwlowerid{dove\_tail\_until}~\ocwlowerid{sol\_index}~\ocwlowerid{constrained\_segs}~$\ocweol
+\ocwindent{0.00em}
+;\medskip
+
+\ocwendcode{}\ocwindent{0.00em}
+Printing stuff 
+\ocweol
+\label{parser.ml:12226}%
+\medskip
+\ocwbegincode{}\ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{stamp}~=~$\ocweol
 \ocwindent{1.00em}
 \ocwstring{"Heritage"}~\^{}~\ocwstring{"\ocwvspace{}"}~\^{}~$\ocwupperid{Date.}\ocwlowerid{version}$\ocweol
@@ -47379,11 +47415,7 @@ $]~$\ocwkw{in}\ocweol
 \ocwindent{5.00em}
 $[~\ocwupperid{None}~\rightarrow{}~$\ocwkw{let}~$\ocwlowerid{\_}~=~\ocwupperid{List.}\ocwlowerid{fold\_left}~\ocwlowerid{print\_out}~1~\ocwlowerid{solution}~$\ocwkw{in}~$()$\ocweol
 \ocwindent{5.00em}
-$\mid{}~\ocwupperid{Some}~\ocwlowerid{triples}~\rightarrow{}~$\ocwkw{do}\ocweol
-\ocwindent{6.00em}
-\{~$\ocwlowerid{print\_project}~\ocwlowerid{triples}~\ocwlowerid{solution}$\ocweol
-\ocwindent{6.50em}
-\}\ocweol
+$\mid{}~\ocwupperid{Some}~\ocwlowerid{triples}~\rightarrow{}~\ocwlowerid{print\_project}~\ocwlowerid{triples}~\ocwlowerid{solution}$\ocweol
 \ocwindent{5.00em}
 $]$\ocweol
 \ocwindent{4.00em}
@@ -47405,7 +47437,7 @@ $]$\ocweol
 \ocwindent{0.00em}
 ;\medskip
 
-\label{parser.ml:14258}%
+\label{parser.ml:14128}%
 \ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{sort\_check}~\ocwlowerid{cpts}~=~$\ocweol
 \ocwindent{1.00em}
@@ -47415,7 +47447,7 @@ $\ocwupperid{List.}\ocwlowerid{sort}~\ocwlowerid{compare\_index}~\ocwlowerid{cpt
 \ocwindent{0.00em}
 ;\medskip
 
-\label{parser.ml:14371}%
+\label{parser.ml:14241}%
 \ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{parser\_engine}~()~=~$\ocwkw{do}\ocweol
 \ocwindent{0.00em}
@@ -49717,9 +49749,9 @@ $\ocwlowerid{value}~\ocwlowerid{print\_role}~:~(($\ocwbt{int}~$\times{}~$\ocwbt{
 English paraphrase of semantic analysis 
 \ocweol
 \ocwindent{0.00em}
-Deprecated 
+A bit ad-hoc admittedly 
 \ocweol
-\label{paraphrase.ml:719}%
+\label{paraphrase.ml:732}%
 \medskip
 \ocwbegincode{}\ocwindent{0.00em}
 \ocwkw{open}~$\ocwupperid{Skt\_morph};$\ocweol
@@ -49732,7 +49764,7 @@ Deprecated
 \ocwindent{0.00em}
 \ocwkw{open}~$\ocwupperid{Morphology};~$\ocwbc{} \ocwbegindcode{}$\ocwlowerid{inflexions}$\ocwenddcode{} \ocwec{}\medskip
 
-\label{paraphrase.ml:869}%
+\label{paraphrase.ml:882}%
 \ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{imperative\_paraphrase}~\ocwlowerid{pers}~\ocwlowerid{num}~=$\ocweol
 \ocwindent{1.00em}
@@ -49865,6 +49897,8 @@ $\mid{}~$\ocwstring{"zubh\#1"}~$\rightarrow{}~$\ocwstring{"shine"}\ocweol
 $\mid{}~$\ocwstring{"sp.rz\#1"}~$\rightarrow{}~$\ocwstring{"touch"}\ocweol
 \ocwindent{1.00em}
 $\mid{}~$\ocwstring{"svid\#2"}~$\rightarrow{}~$\ocwstring{"sweat"}\ocweol
+\ocwindent{1.00em}
+$\mid{}~$\ocwstring{"ha\#1"}~$\rightarrow{}~$\ocwstring{"kill"}\ocweol
 \ocwindent{1.00em}
 $\mid{}~\ocwlowerid{\_}~\rightarrow{}~\ocwlowerid{raise}~\ocwupperid{Unknown}$\ocweol
 \ocwindent{1.00em}
@@ -51911,23 +51945,13 @@ $\ocwlowerid{value}~\ocwlowerid{segment\_chunk}~(\ocwlowerid{full},\ocwlowerid{c
 \ocwindent{0.00em}
 ;\ocweol
 \ocwindent{0.00em}
-$\ocwlowerid{value}~\ocwlowerid{consonant\_starts}~=~$\ocwkw{fun}\ocweol
-\ocwindent{1.00em}
-$[~[~\ocwlowerid{chunk}~::~\ocwlowerid{\_}~]~\rightarrow{}~\ocwupperid{Phonetics.}\ocwlowerid{consonant\_initial}~\ocwlowerid{chunk}~$\ocweol
-\ocwindent{1.00em}
-$\mid{}~\ocwlowerid{\_}~\rightarrow{}~\ocwupperid{False}$\ocweol
-\ocwindent{1.00em}
-$]~$\ocweol
-\ocwindent{0.00em}
-;\ocweol
-\ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{segment\_iter}~\ocwlowerid{chunks}~=~\ocwlowerid{segment\_chunks}~(\ocwupperid{True},1)~\ocwlowerid{chunks}$\ocweol
 \ocwindent{1.00em}
 $\ocwlowerid{where}~$\ocwkw{rec}~$\ocwlowerid{segment\_chunks}~\ocwlowerid{acc}~=~$\ocwkw{fun}~\ocwbc{} speedy terminal recursion \ocwec{}~\ocweol
 \ocwindent{2.00em}
 $[~[~$\ocwbc{} last \ocwec{}~$\ocwlowerid{chunk}~]~\rightarrow{}~\ocwlowerid{segment\_chunk}~\ocwlowerid{acc}~\ocwlowerid{chunk}~\ocwupperid{False}$\ocweol
 \ocwindent{2.00em}
-$\mid{}~[~\ocwlowerid{chunk}~::~\ocwlowerid{rest}~]~\rightarrow{}~$\ocwkw{let}~$\ocwlowerid{sa\_check}~=~\ocwlowerid{consonant\_starts}~\ocwlowerid{rest}~$\ocwkw{in}\ocweol
+$\mid{}~[~\ocwlowerid{chunk}~::~\ocwlowerid{rest}~]~\rightarrow{}~$\ocwkw{let}~$\ocwlowerid{sa\_check}~=~\ocwupperid{Phonetics.}\ocwlowerid{consonant\_starts}~\ocwlowerid{rest}~$\ocwkw{in}\ocweol
 \ocwindent{13.50em}
 $\ocwlowerid{segment\_chunks}~(\ocwlowerid{segment\_chunk}~\ocwlowerid{acc}~\ocwlowerid{chunk}~\ocwlowerid{sa\_check})~\ocwlowerid{rest}$\ocweol
 \ocwindent{2.00em}
@@ -51937,7 +51961,7 @@ $]$\ocweol
 \ocwindent{0.00em}
 ;\medskip
 
-\label{graph_segmenter.ml:23887}%
+\label{graph_segmenter.ml:23789}%
 \ocwindent{0.00em}
 \ocwkw{end};~\ocwbc{} Segment \ocwec{}\ocweol
 \ocwendcode{}\typeout{OcamlWeb file Interface.mli}
@@ -52560,19 +52584,19 @@ $\ocwlowerid{value}~\ocwlowerid{print\_word}~\ocwlowerid{last\_ind}~\ocwlowerid{
 \ocwindent{2.00em}
 \ocwkw{if}~$\ocwlowerid{extra\_space}~>~0~$\ocwkw{then}~$\ocwlowerid{print\_extra}~\ocwlowerid{extra\_space}~$\ocwkw{else}~$()$\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~(\ocwlowerid{td\_begin\_att}~[~($\ocwstring{"colspan"},$\ocwlowerid{string\_of\_int}~(\ocwlowerid{seg\_length}~\ocwlowerid{word}))$\ocweol
-\ocwindent{10.50em}
+;~$\ocwlowerid{td\_begin\_att}~[~($\ocwstring{"colspan"},$\ocwlowerid{string\_of\_int}~(\ocwlowerid{seg\_length}~\ocwlowerid{word}))$\ocweol
+\ocwindent{8.50em}
 ;~$($\ocwstring{"align"},\ocwstring{"left"}$)~$\ocweol
-\ocwindent{10.50em}
-$])$\ocweol
+\ocwindent{8.50em}
+$]~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
 ;~\ocwkw{let}~$\ocwlowerid{back}~=~\ocwlowerid{background}~(\ocwlowerid{color\_of\_phase}~\ocwlowerid{phase})~$\ocwkw{in}~\ocweol
 \ocwindent{2.00em}
-$\ocwlowerid{pl}~(\ocwlowerid{table\_begin}~\ocwlowerid{back})$\ocweol
+$\ocwlowerid{table\_begin}~\ocwlowerid{back}~|\ensuremath{>}~\ocwlowerid{pl}$\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~\ocwlowerid{tr\_begin}$\ocweol
+;~$\ocwlowerid{tr\_begin}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~($\ocwstring{"\ensuremath{<}td\ocwvspace{}"}~\^{}~$\ocwlowerid{display\_morph\_action}~$\^{}~\ocwstring{"=\symbol{92}"showBox('"}$)$\ocweol
+;~\ocwstring{"\ensuremath{<}td\ocwvspace{}"}~\^{}~$\ocwlowerid{display\_morph\_action}~$\^{}~\ocwstring{"=\symbol{92}"showBox('"}~|\ensuremath{>}~$\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
 ;~$\ocwlowerid{print\_morpho}~\ocwlowerid{phase}~\ocwlowerid{word}~$\ocweol
 \ocwindent{1.00em}
@@ -52580,19 +52604,19 @@ $\ocwlowerid{pl}~(\ocwlowerid{table\_begin}~\ocwlowerid{back})$\ocweol
 \ocwindent{4.00em}
 \ocwstring{"\ensuremath{<}a\ocwvspace{}href=\&quot;javascript:hideBox()\&quot;\ensuremath{>}\ocwvspace{}"}~\^{}~$\ocwlowerid{x\_sign}~$\^{}~\ocwstring{"\ensuremath{<}/a\ensuremath{>}',\ocwvspace{}'"}~\ocwkw{in}~\ocweol
 \ocwindent{2.00em}
-$\ocwlowerid{ps}~(\ocwlowerid{close\_box}~$\^{}~$\ocwlowerid{rgb}~(\ocwlowerid{color\_of\_phase}~\ocwlowerid{phase})~$\^{}~\ocwstring{"',\ocwvspace{}this,\ocwvspace{}event)\symbol{92}"\ensuremath{>}"}$)$\ocweol
+$\ocwlowerid{close\_box}~$\^{}~$\ocwlowerid{rgb}~(\ocwlowerid{color\_of\_phase}~\ocwlowerid{phase})~$\^{}~\ocwstring{"',\ocwvspace{}this,\ocwvspace{}event)\symbol{92}"\ensuremath{>}"}~|\ensuremath{>}~$\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
 ;~$\ocwupperid{Morpho\_html.}\ocwlowerid{print\_final}~\ocwlowerid{rword}~$\ocwbc{} visarga correction \ocwec{}\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~\ocwlowerid{td\_end}$\ocweol
+;~$\ocwlowerid{td\_end}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~\ocwlowerid{tr\_end}$\ocweol
+;~$\ocwlowerid{tr\_end}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~\ocwlowerid{table\_end}$\ocweol
+;~$\ocwlowerid{table\_end}~|\ensuremath{>}~\ocwlowerid{ps}~$\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~(\ocwlowerid{call\_back}~\ocwlowerid{text}~\ocwlowerid{cpts}~(\ocwlowerid{k},(\ocwlowerid{phase},\ocwlowerid{rword}))~\ocwlowerid{conflict})$\ocweol
+;~$\ocwlowerid{call\_back}~\ocwlowerid{text}~\ocwlowerid{cpts}~(\ocwlowerid{k},(\ocwlowerid{phase},\ocwlowerid{rword}))~\ocwlowerid{conflict}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
-;~$\ocwlowerid{ps}~\ocwlowerid{td\_end}$\ocweol
+;~$\ocwlowerid{td\_end}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{1.00em}
 \}\ocweol
 \ocwindent{0.00em}
@@ -52632,11 +52656,11 @@ $[~0~\rightarrow{}~()$\ocweol
 \ocwindent{1.00em}
 $\mid{}~\ocwlowerid{\_}~\rightarrow{}~$\ocwkw{do}\ocweol
 \ocwindent{2.00em}
-\{~$\ocwlowerid{ps}~\ocwlowerid{tr\_begin}~$\ocweol
+\{~$\ocwlowerid{tr\_begin}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{2.00em}
 ;~$\ocwlowerid{print\_row}~\ocwlowerid{text}~\ocwlowerid{cpts}~\ocwlowerid{visual\_conf}.(\ocwlowerid{k})~$\ocweol
 \ocwindent{2.00em}
-;~$\ocwlowerid{pl}~\ocwlowerid{tr\_end}$\ocweol
+;~$\ocwlowerid{tr\_end}~|\ensuremath{>}~\ocwlowerid{ps}$\ocweol
 \ocwindent{2.00em}
 ;~$\ocwlowerid{vgrec}~(\ocwlowerid{succ}~\ocwlowerid{k})$\ocweol
 \ocwindent{2.00em}
@@ -52650,9 +52674,7 @@ $\ocwlowerid{value}~\ocwlowerid{update\_col\_length}~\ocwlowerid{chunk}~=~$\ocwe
 \ocwindent{1.00em}
 $\ocwlowerid{max\_col.}\ocwlowerid{val}~:=~\ocwlowerid{succ}~(\ocwlowerid{max\_col.}\ocwlowerid{val}~+~\ocwupperid{Word.}\ocwlowerid{length}~\ocwlowerid{chunk})$\ocweol
 \ocwindent{0.00em}
-;\ocweol
-\ocwindent{0.00em}
-$\ocwlowerid{value}~\ocwlowerid{update\_text\_with\_sol}~\ocwlowerid{text}~\ocwlowerid{count}~=~\ocwlowerid{text}~$\^{}~\ocwstring{";allSol="}~\^{}~$\ocwlowerid{string\_of\_int}~\ocwlowerid{count}$\ocweol
+\ocwkw{and}~$\ocwlowerid{update\_text\_with\_sol}~\ocwlowerid{text}~\ocwlowerid{count}~=~\ocwlowerid{text}~$\^{}~\ocwstring{";allSol="}~\^{}~$\ocwlowerid{string\_of\_int}~\ocwlowerid{count}$\ocweol
 \ocwindent{0.00em}
 ;\ocweol
 \ocwindent{0.00em}
@@ -52732,7 +52754,7 @@ $\ocwlowerid{td\_wrap}~(\ocwlowerid{call\_reader}~\ocwlowerid{text}~\ocwlowerid{
 \ocwindent{4.00em}
 \ocwkw{else}~$()~$\ocwbc{} \ocwbegindcode{}$\ocwlowerid{scl\_parser}$\ocwenddcode{} is not visible unless toggle is set \ocwec{}~\ocwkw{in}\ocweol
 \ocwindent{2.00em}
-\ocwkw{if}~$\ocwlowerid{count}~>~\ocwlowerid{max\_count}~$\ocwkw{then}~\ocweol
+\ocwkw{if}~$\ocwlowerid{count}~>~\ocwupperid{Web.}\ocwlowerid{max\_count}~$\ocwkw{then}~\ocweol
 \ocwindent{3.50em}
 \ocwbc{} too many solutions would choke the parsers \ocwec{}~\ocweol
 \ocwindent{3.50em}
@@ -52830,7 +52852,7 @@ Cache management
 \ocwindent{0.00em}
 \ocwbegindcode{}~$(\ocwupperid{Morphology}.\ocwlowerid{inflected\_map}~\times{}~\ocwupperid{Morphology}.\ocwlowerid{inflected\_map})~\rightarrow{}~$\ocwbt{unit}\ocwenddcode{} 
 \ocweol
-\label{interface.ml:18089}%
+\label{interface.ml:18107}%
 \medskip
 \ocwbegincode{}\ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{make\_cache\_transducers}~(\ocwlowerid{cache},\ocwlowerid{cachei})~=$\ocweol
@@ -52919,7 +52941,7 @@ $\ocwlowerid{center\_end}$\ocweol
 \ocwindent{0.00em}
 ;\ocweol
 \ocwindent{0.00em}
-\ocwbc{} Main body of graph segmenter cgi \ocwec{}\ocweol
+\ocwbc{} Main body of sktgraph cgi \ocwec{}\ocweol
 \ocwindent{0.00em}
 $\ocwlowerid{value}~\ocwlowerid{graph\_engine}~()~=~$\ocwkw{do}\ocweol
 \ocwindent{1.00em}

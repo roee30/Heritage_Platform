@@ -71,6 +71,8 @@ type flexion =
 ;
 value enter1 : string -> flexion -> unit
 ;
+value enter_ind_ifc : string -> flexion -> unit
+;
 value enter : string -> list flexion -> unit
 ;
 value enter_form : Word.word -> flexion -> unit

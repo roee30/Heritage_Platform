@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Parts = struct i*)
@@ -671,9 +671,8 @@ value build_part = fun
                      if root="vid#1" then False
                         (* [vid#1] stem=vid [vid#2] stem=vivid *)
                      else True 
-                  else if root="likh" then True (* source ? *)
                   else False
-      and f_stem = rfix stem "u.s" in 
+      and f_stem = rfix stem "u.s" (* u.sii *) in 
       build_part_vas c stem inter f_stem root
   | Ppftm_ c stem root -> build_part_a (c,Ppftm) stem root
   | Pfuta_ c stem root -> 

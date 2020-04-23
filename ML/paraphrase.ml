@@ -4,11 +4,11 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* English paraphrase of semantic analysis *)
-(* Deprecated *)
+(* A bit ad-hoc admittedly *)
 
 (*i module Paraphrase = struct i*)
 
@@ -84,6 +84,7 @@ value reg_stem = fun (* regular english verbs paraphrase *)
   | "zubh#1"  -> "shine"
   | "sp.rz#1" -> "touch"
   | "svid#2"  -> "sweat"
+  | "ha#1"    -> "kill"
   | _ -> raise Unknown
   ]
 ;

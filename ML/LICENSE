@@ -8,8 +8,8 @@
 # Free software license of SKT Engine            Copyright INRIA 2000-2020 #
 ############################################################################
 
-VERSION=3.21
-DATE=(14,02,2020)
+VERSION=3.23
+DATE=(23,04,2020)
 
 The Sanskrit Engine Software System is authored by Gerard Huet and Pawan Goyal.
 It is copyrighted as: Copyright 2000-2020 INRIA

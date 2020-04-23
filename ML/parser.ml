@@ -292,7 +292,8 @@ value dove_tail_until sol_index init =
          | [] -> raise Truncation
          ]
 ;
-(* From [Graph_segmenter]: splitting checkpoints into current and future ones *)
+(* Following two functions are same as in Rank *)
+(* Splitting checkpoints into current and future ones *)
 value split_check limit = split_rec []
    where rec split_rec acc checkpts = match checkpts with
       [ [] -> (List.rev acc,[])
@@ -301,7 +302,6 @@ value split_check limit = split_rec []
           else split_rec [ check :: acc ] rest 
       ]
 ;
-(* From [Rank.segment_all] *)
 value segment_chunk ((offset,checkpoints),stack) chunk sa_check = do
   { let ini_cont = Lex.Viccheda.init_segment chunk in 
     let chunk_length = Word.length chunk in
@@ -371,20 +371,7 @@ value process_until sol_index query topic mode_sent translit sentence
         ; pl (xml_begin_with_att "table" [ noborder; padding10; spacing5 ])
         ; match proj with 
           [ None -> let _ = List.fold_left print_out 1 solution in ()
-          | Some triples -> do
-            { print_project triples solution
- (*i Validate action: to be restored
-    If the cgi called with has [do_validate], we record the tagging in a file,
-    otherwise, we print a call back with [do_validate]. 
- -- TODO [; if Paths.platform = "Station" then 
-                match do_validate with
-                [ "f" -> ps (td_wrap (print_validate_button query 
-                             ^ html_green "Validate")) 
-                | _ -> Lex.record_tagging us mode_sent translit sol_num
-                                          sentence solution triples
-                ]
-              else ()] i*)
-            }
+          | Some triples -> print_project triples solution
           ]
         ; ps table_end 
         ; match proj with 

@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (****************************************************************)
@@ -13,6 +13,7 @@
 (****************************************************************)
 
 (* debugging context building - to adapt according to needs *)
+(* call with "make debug" to get interactive Ocaml loop and text *)
 
 #load "../ZEN/list2.cmo"; 
 #load "../ZEN/gen.cmo";

@@ -5730,7 +5730,7 @@ value iic_indecl = (* should be lexicalized *)
   ; "alam"      (* (gati) ala.mk.rta *)
   ; "iti"       (* ityukta *)  
   ; "upari"     (* uparicara *)  
-  ; "ubhayatas" (* ubhayata.hsasya *)
+  ; "ubhayatas" (* ubhayata.hsasya - tasil *)
   ; "evam"      (* eva.mvid *)
   ; "tatra"     (* tatrabhavat *)
   ; "divaa"     (* divaanidraa *)
@@ -5920,7 +5920,7 @@ value enter_gati gati = (* assumes gati has lexical entry *)
 value enter_iiy entry = 
   enter1 entry (Avyayai (normal_stem entry)) (* stripped entry *)
 ;
-(* Tasils are treated as vibhakti. Here are the lexicalized ones: Whitney§1098 
+(* Tasils are treated as adverbs. Here are the lexicalized ones: Whitney§1098 
    First tasils of pronouns, not needed if lexicalised 
   ; enter1 "tad"    (Indecl Tas (code "tatas"))   (* tasil on tad \Pan{5,3,7} *) 
   ; enter1 "ya#1"   (Indecl Tas (code "yatas"))   (* tasil on ya \Pan{5,3,7} *) 
@@ -5944,17 +5944,18 @@ value enter_iiy entry =
   ; enter1 "uttara#1" (Indecl Tas (code "uttaratas")) (* on pn \Pan{5,3,7} ? *)
   ; enter1 "ubhaya" (Indecl Tas (code "ubhayatas")) (* on pn \Pan{5,3,7} ? *)
 *)
-value tasil_extra () = do (* add non-generative tasils *) 
+value tasil_extra () = do (* add non-generative tasils - ad-hoc *) 
   { enter1 "aze.sa" (Indecl Tas (code "aze.satas")) (* tasil on privative cpd *)
   ; enter1 "ekaruupa" (Indecl Tas (code "ekaruupatas")) (* tasil on cpd *)  
   ; enter1 "d.r.s.taanta" (Indecl Tas (code "d.r.s.taantatas"))(* tasil on cpd *)
+  ; enter1 "guruvaktra" (Indecl Tas (code "guruvaktratas")) (* id *) 
   ; enter1 "paramaartha" (Indecl Tas (code "paramaarthatas")) (* id *) 
   ; enter1 "praagbhaava" (Indecl Tas (code "praagbhaavatas")) (* id *) 
   ; enter1 "svaravar.na" (Indecl Tas (code "svaravar.natas")) (* id *) 
-(* BhG. bhii.smadro.napramukhatas - how to treat such cpds ? *)
   ; enter1 "bhasad" (Indecl Tas (code "bhasattas")) (* tasil on consonant stem *)
 (*; enter1 "nas#2" (Indecl Tas (code "nastas")) - idem but lexicalized *)
-  ; enter1 "yad.rcchaa" (Indecl Tas (code "yad.rcchaatas")) (* tasil on fstem *) 
+  ; enter1 "yad.rcchaa" (Indecl Tas (code "yad.rcchaatas")) (* tasil on fstem *)
+(* NB bhii.smadro.napramukhatas BhG{1,25} treated in [enter_extra_ifcs] below *)  
   } 
 ; 
 (* Supplementary forms - called by [Make_nouns.genders_to_nouns]
@@ -6000,6 +6001,7 @@ value compute_extra iic_only_stems = do
   ; [compute_extra_ifc bahu_suffixes] eg Fem -padaa for meter formation *) 
   }
 ;
+(* Used in [Make_nouns] in Phase 2 ifc pass *)
 value enter_extra_ifcs () = do (* archaic retroflexion in cpds \Pan{8,4,13} *)
   { let entry = "bhogya" in (* var.sabhogye.na Meghaduuta 1b *)
         let ins_sg = [ (Singular,[ (Ins,code "bhogye.na") ]) ]
@@ -6046,6 +6048,11 @@ value enter_extra_ifcs () = do (* archaic retroflexion in cpds \Pan{8,4,13} *)
         { enter1 entry (Declined Noun Mas [ (Singular, [ (Nom,form) ]) ])
         ; enter1 entry (Declined Noun Neu [ (Singular, [ (Nom,form) ]) ])
         }
+   (* Now ad-hoc provision for specific adverbs usable as ifcs *)
+   ; let entry = "k.rtvas" in
+        enter_ind_ifc entry (Indecl Adv (code entry))
+   ; let entry  ="pramukha" in 
+        enter_ind_ifc entry (Indecl Tas (code "pramukhatas")) (* ifc tasil *)
    }
 ;
 value enter_extra_iifcs () = do

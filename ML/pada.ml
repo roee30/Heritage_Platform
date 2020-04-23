@@ -71,24 +71,24 @@ value voices_of = fun
   | "sphur" | "sm.r" | "svan" | "svap"  | "svar#1" | "svar#2" | "ha.th" 
   | "haa#1" | "hi#2" | "hi.ms" | "h.r.s" | "hras" | "hrii#1" | "hval"
   | "maarg" (* root rather than nominal verb *)
-(*| "viz#1"  Atma needed for eg nivizate \Pan{1,3,17} *)
+(*| "viz1"   Atma needed for eg nivizate \Pan{1,3,17} *)
 (*| "k.s.nu" Atma needed for sa.mk.s.ute \Pan{1,3,65} *)
 (*| "krii.d" Atma needed for aakrii.date \Pan{1,3,21} *)
-(*| "g.rr#1" Atma needed for avag.rr sa.mg.rr \Pan{1,3,51-52} *)
+(*| "g.rr1"  Atma needed for avag.rr sa.mg.rr \Pan{1,3,51-52} *)
 (*| "ji"     Atma needed for eg vijayate paraajayate \Pan{1,3,19} *)
-(*| "jyaa#1" Atma needed for jiiyate *)
+(*| "jyaa1"  Atma needed for jiiyate *)
 (*| "kan"    Atma needed for kaayamaana *)
 (*| "gam"    Atma needed for sa.mgacchate *)
 (*| "van"    Atma needed for vanute *)
 (*| "mah"    Atma needed for pft. maamahe *)
 (*| "cit#1"  Atma needed for pft. cikite *)
 (*| "zram"   Atma needed for vizramate *)
-(*| "kaafk.s" | "han#1" occur also in Atma in BhG: kaafk.se hani.sye *)
+(*| "kaafk.s" | "han1" occur also in Atma in BhG: kaafk.se hani.sye *)
 (*| "has"  Atma needed for hasate *)
 (*| "uc"   Atma needed for uuce *)
 (*| "zu.s" Atma for zu.syate WR epic *)
 (*| "a~nj" also Atma afkte | "naath" "praz" "sp.rz#1" idem *)
-(*| Doubt: "bhuu#1" could also be Atma bhavate *)
+(*| Doubt: "bhuu1" could also be Atma bhavate *)
 (*| "zru" could be Atma in Vedic eg z.r.nu.sva *)
       -> Para (* active only *) 
   | "az#1" | "aas#2" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" 
@@ -102,15 +102,16 @@ value voices_of = fun
   | "bhaa.s" | "bhraaj" | "ma.mh" | "man" | "mand#1" | "yat#1" 
   | "rabh" | "ruc#1" | "lajj" | "lamb" | "lii" | "loc" | "vand" 
   | "vas#2" | "vaaz" | "vip" | "v.rdh#1" | "ve.s.t" | "vrii.d" | "zafk" | "zad"
-  | "zi~nj" | "zii#1" | "zrambh" | "zlaagh" | "zvit" | "sac" | "sev"
+  | "zi~nj" | "zii#1" | "zrambh" | "zlaagh" | "zvit#1" | "sac" | "sev"
   | "styaa" | "spand" | "spardh" | "spaz#1" | "sphaa" | "sra.ms"
   | "sva~nj" | "haa#2" | "hu.n.d" | "h.r#2" | "hnu" | "hraad" | "hlaad" 
 (*| "m.r" Ubha needed for non present tenses - see \Pan{1,3,61} for exact rule *)
 (*| "smi" Ubha needed for smitavat *)
-(*| "bhuj#2" Ubha needed for bhunakti to govern *)
+(*| "bhuj2" Ubha needed for bhunakti to govern *)
 (*| "gaah" Ubha needed for gaahet epics *)
 (*| "k.sam" Ubha needed for k.samati epics *)
-   (* DRP restriction: "dyut#1" *) 
+(*| "yudh1" Ubha needed for yudhya BhG *)
+   (* DRP restriction: "dyut1" *) 
       -> Atma (* "deponent" verbs: middle only *)
   | _ -> Ubha (* default *) 
   (* Attested Ubha (over all ga.nas) : 
@@ -138,7 +139,7 @@ value voices_of = fun
   | "sic" | "su#2" | "suud" | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" 
   | "sp.rh" | "smi" | "syand" | "svad" | "had" | "hikk" | "hu" | "huu" | "h.r#1"
   ] *)
-  (* + corr. "pa.th" | "sthaa#1" | "praz" | "k.rr" | "p.rc" | "bandh" *)
+  (* + corr. "pa.th" | "sthaa1" | "praz" | "k.rr" | "p.rc" | "bandh" *)
   (* NB. "ah" "rip" "vadh" have no pr, "mand2" is fictitious *) 
   (* "iiz1", "lii" and "knuu" allowed Para in future *)
   ]

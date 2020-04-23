@@ -40,9 +40,6 @@ underlying the Sanskrit Heritage Dictionary. The version used for this
 generation is available <a href="Heritage.pdf">here</a> as a PDF document.
 <p>
 
-These databanks are regularly updated. They are available for public download
-as a public git archive in the Sanskrit Heritage development site:
-"https://gitlab.inria.fr/huet/Heritage_Resources".
 
 <h3 class=b3>Databanks description</h3>
 
@@ -60,25 +57,13 @@ University of Hyderabad</a>
 and SLP1, used by the
 <a href="http://sanskritlibrary.org/">Sanskrit Library</a>.
 
-The respective data banks are listed in directories WX and SL.
+The WX version is available as a downloadable gzip-compressed XML file
+<a href="XML/WX_morph.xml.gz">WX morphology</a>, conformant to its
+<a href="XML/WX_morph.dtd">dtd</a>.
 
-The morphological lemmas are distributed in 6 files in
-XML format, conformant to a common DTD.
-The nominal morphological declensions of nouns, adjectives and numbers,
-are covered in "T_nouns.xml" (where T is respectively WX or SL).
-Those of pronouns are covered in "T_pronouns.xml".
-The conjugated forms of roots in the present, imperfect, imperative, optative,
-perfect, aorist
-and future tenses, as well as passives of the present system,
-for the primary conjugation and for some secondary conjugations
-(causative, intensive, desiderative) are covered in "T_roots.xml".
-Additional declensions of derived participial forms are given in T_parts.xml.
-Absolutives, infinitives and other undeclinable words and particles
-are listed in "T_adverbs.xml". In addition, "T_final.xml" gives additional
-generative morphemes. The files are conformant to the DTD "T_morph.dtd".
-<p>
-Finally, the text file "X_preverbs.txt" lists common
-preverb sequences, given with their sandhi analysis.
+The SL version is available as a downloadable gzip-compressed XML file
+<a href="XML/SL_morph.xml.gz">SL morphology</a>, conformant to its
+<a href="XML/SL_morph.dtd">dtd</a>.
 
 <h3 class=b2>Intellectual Property</h3>
 
@@ -88,9 +73,8 @@ version #VERSION dated #DATE.
 <p>
 Use of these linguistic resources is granted according to the
 Lesser General Public Licence for Linguistic Resources.
-Copies of this license, in pdf as well as HTML, are provided at
-the Heritage_Resources distribution site in its XML subdirectory.
-Thank you for referencing the origin of this data if you use it in your own work.
+Copies of this license, in pdf as well as HTML, are provided here:
+<a href="XML/LICENCES">LICENCES</a>
 
 <h2 class=b2>Methodology</h2>
 

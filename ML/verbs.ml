@@ -537,7 +537,7 @@ value redup3 entry rstem =
 (* NB Use of these markers should progressively replace lists of exceptions *)
 value aa_it = fun
   [ (* "muurch" | WRONG ? *) 
-    "phal" | "zvit" | "svid#2" | "tvar" | "dh.r.s" -> True
+    "phal" | "zvit#1" | "svid#2" | "tvar" | "dh.r.s" -> True
   | _ -> False
   ]
 and i_it = fun (* unused but subset of set in intercalates *)
@@ -2892,7 +2892,7 @@ value admits_passive = fun
     "an#2" | "av" | "as#1" | "ah" | "iiz#1" | "uc" | "kan" | "kuu" 
   | "knuu" | "k.sar" | "k.si" | "kha.n.d" | "daa#2" | "dyut#1" | "dru#1" 
   | "pat#2" | "paz" | "paa#2" | "pii" | "praa#1" | "bruu" | "ruc#1" | "vas#4"
-  | "vidh#1" | "vip" | "vyac" | "zam#1" | "zi~nj" | "zrambh" | "zvit" | "sap#1"
+  | "vidh#1" | "vip" | "vyac" | "zam#1" | "zi~nj" | "zrambh" | "zvit#1" | "sap#1"
   | "siiv" | "spaz#1" | "spardh" | "h.r#2" | "hrii#1" 
   | "ma.mh" (* supplied by "mah" *) (* | "arh" | "k.lp" no ps but pfp *)
       -> False
@@ -2907,8 +2907,8 @@ value admits_ppp_abs = fun
   | "bruu" (* vac *) 
   | "paz"  (* d.rz *) 
   | "as#1" | "kan" | "k.si" | "gaa#1" | "paa#2" | "praa#1" (* omit ved. praata *)
-  | "bal" | "ma.mh" | "vaz" | "vyac" | "zaz" | "zam#2" | "zvit" | "sac" | "sap#1"
-  | "h.r#2" (* | "spaz#1" *) -> False
+  | "bal" | "ma.mh" | "vaz" | "vyac" | "zaz" | "zam#2" | "zvit#1" | "sac" 
+  | "sap#1" | "h.r#2" (* | "spaz#1" *) -> False
   | _ -> True
   ]
 ;

@@ -140,7 +140,8 @@ value dove_tail filter_mode init =
          | [] -> emit (Some n) kept_sols (* dove-tailing finished *)
          ]
 ;
-(* From [Graph_segmenter]: splitting checkpoints into current and future ones *)
+(* From [Graph_segmenter] *)
+(* Splitting checkpoints into current and future ones *)
 value split_check limit = split_rec []
   where rec split_rec acc checkpts = match checkpts with
       [ [] -> (List.rev acc,[])

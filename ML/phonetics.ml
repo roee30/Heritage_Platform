@@ -9,6 +9,8 @@
 
 (*i module Phonetics = struct i*)
 
+(* Notation Pr{X} gives X as the pratyaahaara notation of a set of phonemes *)
+
 (* Sanskrit phonology *)
 
 value vowel c = c>0 && c<14 (* a aa i ii u uu .r .rr .l e ai o au *)(* Pr{hac} *)
@@ -79,7 +81,7 @@ value syllables = syllables_rec [] []
 (* multi-consonant - used in Verbs for reduplicating aorist *)
 (* we call (mult w) with w starting with a consonant *)
 value mult = fun
-  [ [ _ :: [ c :: _ ] ] -> consonant c
+  [ [ _ (* assumed consonant *) :: [ c :: _ ] ] -> consonant c
   | _ -> False
   ]
 ;
@@ -306,6 +308,8 @@ value phantomatic = fun
 (* Amuitic forms start with -2 = [-] which elides preceding -a or -aa from Pv *)
 and amuitic = fun [ [ -2 :: _ ] -> True | _ -> False ]
 ;
+
+(* Following 4 functions are used in stem computations in Verbs. *)
 (* For m.rj-like verbs (Whitney§219-a) Panini{8,2,36} 
    "bhraaj" "m.rj" "yaj1" "raaj1" "vraj" "s.rj1" "bh.rjj"
    replace phoneme j=24 by j'=124 with sandhi j'+t = .s.t (j' is j going to z) *)
@@ -316,7 +320,8 @@ value mrijify stem = match stem with
 ;
 (* For "duh"-like verbs (Whitney§222) "dah" "dih" "duh1" Panini{8,2,32}
    optionnellement "druh1" "muh" "snuh1" "snih1" Panini{8,2,33}
-   replace phoneme h=49 by h'=149 with sandhi h'+t = gdh (h' is h going to gh) *)
+   replace phoneme h=49 by h'=149 with sandhi h'+t = gdh (h' is h going to gh) 
+   ( whereas normal h goes to .dh like pp(lih)=lii.dha) *)
 value duhify stem = match stem with
   [ [ 49 :: r ] -> [ 149 :: r ]
   | _ -> failwith ("duhify " ^ Canon.rdecode stem)
@@ -329,6 +334,7 @@ value nahify stem = match stem with
   | _ -> failwith ("nahify " ^ Canon.rdecode stem)
   ]
 ;
+
 (* Aspiration of initial consonant of root stems ending in aspirate.
    The syllabic loop is necessary for e.g. druh -> dhruk. See Whitney§155. *)
 value syll_decomp = fun
@@ -438,7 +444,7 @@ value finalize_r stem = match stem with
           [ [ c :: l ] -> if short_vowel c (* giir puurbhyas Whitney §245b *)
                           then [ 43 :: [ long c :: l ] ] 
                           else stem 
-          | [] -> failwith "Illegal arg r to finalize"
+          | [] -> failwith "Illegal arg r to finalize_r"
           ]
        | 48 (* s *) -> match rest with
           [ [ 1 :: [ 45 :: [ 35 :: _ ] ] ] -> [ 34 (* t *) :: rest ] (* dhvas *)

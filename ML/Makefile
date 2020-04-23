@@ -39,7 +39,7 @@ GRAM = index.ml phonetics.ml int_sandhi.ml skt_morph.mli morphology.mli \
        naming.ml inflected.mli inflected.ml sandhi.ml sandhier.ml pada.ml \
        nouns.mli nouns.ml verbs.mli verbs.ml parts.ml conj_infos.mli \
        automaton.ml automata.ml make_automaton.ml make_preverb_automaton.ml \
-       automata_vector.mli make_transducers.ml \
+       automata_vector.mli make_transducers.ml make_xml_data.ml \
        morpho_string.ml morpho.ml declension.ml conjugation.ml indexer.ml \
        indexerd.ml phases.ml lemmatizer.ml auto.mli load_transducers.ml \
        dispatcher.mli dispatcher.ml segmenter.ml load_morphs.ml lexer.mli \
@@ -91,7 +91,7 @@ LINK=ocamlopt -I $(ZEN) -I +camlp4 dynlink.cmxa camlp4lib.cmxa
 
 # standard installation of Sanskrit Heritage platform - assumes ZEN library
 
-all: make_transducers engine sandhi_test
+all: make_transducers make_xml_data engine sandhi_test
 
 engine: test_version cgis reset_caches restore_caches static_pages mk_corpus 
 
@@ -102,6 +102,10 @@ make_preverb_automaton.cmx
 	$(LINK) $(CORENATIVES) share.cmx trie.cmx mini.cmx deco.cmx \
 automata.cmx make_automaton.cmx make_preverb_automaton.cmx \
 make_transducers.cmx -o make_transducers
+
+make_xml_data: $(CORENATIVES) date.cmx html.cmx deco.cmx make_xml_data.cmx 
+	$(LINK) $(CORENATIVES) date.cmx str.cmxa html.cmx deco.cmx \
+make_xml_data.cmx -o make_xml_data
 
 # testing consistency of Heritage_resources and Heritage_platform
 test_version: paths.cmx gen.cmx version.cmx control.cmx test_stamp.cmx

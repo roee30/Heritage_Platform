@@ -626,9 +626,9 @@ value anchor_pseudo url link =
 
 value start_year = " 1994-"
 and current_year = "2020"
-and author_name = "G&#233;rard Huet"
+and author_name = "Gérard Huet"
 ;
-value copyright = "&#169; " ^ author_name ^ start_year ^ current_year
+value copyright = "© " ^ author_name ^ start_year ^ current_year
 ;
 value author = fieldn "author" author_name 
 and date_copyrighted = fieldp "dc:datecopyrighted" current_year

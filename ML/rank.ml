@@ -175,7 +175,7 @@ value segment_all filter_mode chunks cpts =
                            segment_chunks (segment_chunk acc chunk sa_check) rest
     | [] -> acc
     ] in 
-  dove_tail filter_mode constrained_segs 
+  dove_tail filter_mode constrained_segs (* infamous exponential dove-tailing *)
 ;
 
 (*i end; i*)

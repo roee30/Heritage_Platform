@@ -105,7 +105,7 @@ and read_iivs () =
     abort mess
   ]
 and read_avyayafs () = 
-  try read_inflected Data.avyayafs_file with 
+  try read_inflected Data.iivs_file with 
   [ Sys_error s ->
     let mess = s ^ "\n\n *** First call make_nouns ***\n"
                  ^ " to create " ^ Data.avyayafs_file ^ "\n" in 
@@ -121,6 +121,9 @@ and read_prevs () =
     abort mess
   ]
 ;
+(****************************************)
+(* Now printing in XML format on stdout *)
+(****************************************)
 
 value ps = print_string
 ;
@@ -148,67 +151,67 @@ value kind_attr k = " gn=\"" ^ string_of_int k ^ "\""
 ;
 (* present class aka ga.na, from 1 to 11 *)
 value pg k = if k>11 || k=0 (* redundant with conjugation *) then () 
-             else ps (kind_attr k)
+             else kind_attr k |> ps
 ;
 value print_number = fun 
-  [ Singular -> ps "<sg/>" 
-  | Dual     -> ps "<du/>"
-  | Plural   -> ps "<pl/>"
+  [ Singular -> "<sg/>" |> ps
+  | Dual     -> "<du/>" |> ps
+  | Plural   -> "<pl/>" |> ps
   ]
 and print_gender = fun 
-  [ Mas -> ps "<mas/>"
-  | Neu -> ps "<neu/>"
-  | Fem -> ps "<fem/>" 
-  | Deictic _ -> ps "<dei/>" 
+  [ Mas       -> "<mas/>" |> ps
+  | Neu       -> "<neu/>" |> ps
+  | Fem       -> "<fem/>" |> ps
+  | Deictic _ -> "<dei/>" |> ps
   ]
 and print_case = fun 
-  [ Nom -> ps "<nom/>"
-  | Acc -> ps "<acc/>"
-  | Ins -> ps "<ins/>"
-  | Dat -> ps "<dat/>"
-  | Abl -> ps "<abl/>"
-  | Gen -> ps "<gen/>" 
-  | Loc -> ps "<loc/>"
-  | Voc -> ps "<voc/>" 
+  [ Nom -> "<nom/>" |> ps
+  | Acc -> "<acc/>" |> ps
+  | Ins -> "<ins/>" |> ps
+  | Dat -> "<dat/>" |> ps
+  | Abl -> "<abl/>" |> ps
+  | Gen -> "<gen/>" |> ps
+  | Loc -> "<loc/>" |> ps
+  | Voc -> "<voc/>" |> ps
   ]
 and print_person = fun  
-  [ First  -> ps "<fst/>" 
-  | Second -> ps "<snd/>" 
-  | Third  -> ps "<trd/>" 
+  [ First  -> "<fst/>" |> ps
+  | Second -> "<snd/>" |> ps
+  | Third  -> "<trd/>" |> ps
   ]
 and print_voice = fun
-  [ Active  -> ps "<para/>" 
-  | Middle  -> ps "<atma/>"
-  | Passive -> ps "<pass/>"
+  [ Active  -> "<para/>" |> ps
+  | Middle  -> "<atma/>" |> ps
+  | Passive -> "<pass/>" |> ps
   ] 
 and print_conjugation cg = do
-  { ps "<cj>"
+  { "<cj>" |> ps
   ; match cg with 
-       [ Primary      -> ps "<prim/>"
-       | Causative    -> ps "<ca/>"
-       | Intensive    -> ps "<int/>"
-       | Desiderative -> ps "<des/>"
+       [ Primary      -> "<prim/>" |> ps
+       | Causative    -> "<ca/>"   |> ps
+       | Intensive    -> "<int/>"  |> ps
+       | Desiderative -> "<des/>"  |> ps
        ]
-  ; ps "</cj>"
+  ; "</cj>" |> ps
   }
 and print_pr_mode pr = do
-  { ps "<md>"
+  { "<md>" |> ps
   ; match pr with 
-       [ Present    -> ps "<pr/>"
-       | Imperative -> ps "<ip/>"
-       | Optative   -> ps "<op/>"
-       | Imperfect  -> ps "<im/>"
+       [ Present    -> "<pr/>" |> ps
+       | Imperative -> "<ip/>" |> ps
+       | Optative   -> "<op/>" |> ps
+       | Imperfect  -> "<im/>" |> ps
        ]
-  ; ps "</md>"
+  ; "</md>" |> ps
   }
 and print_tense = fun
-  [ Future       -> ps "<fut/>"
-  | Perfect      -> ps "<prf/>"
-  | Aorist k     -> do { ps "<aor"; ps (kind_attr k); ps "/>" }
-  | Injunctive k -> do { ps "<inj"; ps (kind_attr k); ps "/>" }
-  | Benedictive  -> ps "<ben/>"
-  | Conditional  -> ps "<cnd/>"
-  | Subjunctive  -> ps "<subj/>" 
+  [ Future       -> "<fut/>" |> ps
+  | Perfect      -> "<prf/>" |> ps
+  | Aorist k     -> do { "<aor" |> ps; kind_attr k |> ps; "/>" |> ps }
+  | Injunctive k -> do { "<inj" |> ps; kind_attr k |> ps; "/>" |> ps }
+  | Benedictive  -> "<ben/>" |> ps
+  | Conditional  -> "<cnd/>" |> ps
+  | Subjunctive  -> "<subj/>" |> ps
   ] 
 ;
 value pfutp_kind = fun
@@ -219,143 +222,143 @@ value pfutp_kind = fun
   ]
 ;
 value print_nominal = fun
-  [ Ppp     -> ps "<ppp/>"
-  | Pppa    -> ps "<ppa/>"
-  | Ppra k  -> do { ps "<ppr"; pg k; ps ">"; print_voice Active; ps "</ppr>" } 
-  | Pprm k  -> do { ps "<ppr"; pg k; ps ">"; print_voice Middle; ps "</ppr>" } 
-  | Pprp    -> ps "<pprp/>"
-  | Ppfta   -> do { ps "<ppft>"; print_voice Active; ps "</ppft>" }
-  | Ppftm   -> do { ps "<ppft>"; print_voice Middle; ps "</ppft>" }
-  | Pfuta   -> do { ps "<pfut>"; print_voice Active; ps "</pfut>" }
-  | Pfutm   -> do { ps "<pfut>"; print_voice Middle; ps "</pfut>" }
-  | Pfutp k -> do { ps "<pfutp"; ps (pfutp_kind k); ps "/>" }
-  | _       -> ps "<act/>" (* action verbal nouns *)
+  [ Ppp     -> "<ppp/>" |> ps
+  | Pppa    -> "<ppa/>" |> ps
+  | Ppra k  -> do { "<ppr" |> ps; pg k; ">" |> ps; print_voice Active; "</ppr>" |> ps } 
+  | Pprm k  -> do { "<ppr" |> ps; pg k; ">" |> ps; print_voice Middle; "</ppr>" |> ps } 
+  | Pprp    -> "<pprp/>" |> ps
+  | Ppfta   -> do { "<ppft>" |> ps; print_voice Active; "</ppft>" |> ps }
+  | Ppftm   -> do { "<ppft>" |> ps; print_voice Middle; "</ppft>" |> ps }
+  | Pfuta   -> do { "<pfut>" |> ps; print_voice Active; "</pfut>" |> ps }
+  | Pfutm   -> do { "<pfut>" |> ps; print_voice Middle; "</pfut>" |> ps }
+  | Pfutp k -> do { "<pfutp" |> ps; pfutp_kind k |> ps; "/>" |> ps }
+  | _       -> "<act/>" |> ps (* action verbal nouns *)
   ]
 ;
 value print_system = fun
-  [ Conjug t v    -> do { ps "<tp>"; print_tense t; print_voice v; ps "</tp>" }
-  | Presenta k pr -> do { ps "<prs"; pg k; ps ">"; 
-                          print_pr_mode pr; ps "<para/></prs>" }
-  | Presentm k pr -> do { ps "<prs"; pg k; ps ">"; 
-                          print_pr_mode pr; ps "<atma/></prs>" }
-  | Presentp pr   -> do { ps "<pas>"; print_pr_mode pr; ps "</pas>" }
-  | Perfut v      -> do { ps "<pef>"; print_voice v; ps "</pef>" }
+  [ Conjug t v    -> do { "<tp>" |> ps; print_tense t; print_voice v; "</tp>" |> ps }
+  | Presenta k pr -> do { "<prs" |> ps; pg k; ">" |> ps; 
+                          print_pr_mode pr; "<para/></prs>" |> ps }
+  | Presentm k pr -> do { "<prs" |> ps; pg k; ">" |> ps; 
+                          print_pr_mode pr; "<atma/></prs>" |> ps }
+  | Presentp pr   -> do { "<pas>" |> ps; print_pr_mode pr; "</pas>" |> ps }
+  | Perfut v      -> do { "<pef>" |> ps; print_voice v; "</pef>" |> ps }
   ]
 and print_invar = fun
-  [ Infi   -> ps "<inf/>"
-  | Absoya -> ps "<abs/>"
-  | Perpft -> ps "<per/>"
+  [ Infi   -> "<inf/>" |> ps
+  | Absoya -> "<abs/>" |> ps
+  | Perpft -> "<per/>" |> ps
   ]
 ;
 (* Next 3 functions print conjugation in different order than [Print_dict] *)
 value print_finite (c,p) = do 
   { print_conjugation c 
-  ; ps "<sys>"; print_system p; ps "</sys>"
+  ; "<sys>" |> ps; print_system p; "</sys>" |> ps
   }
  and print_verbal (c,n) = do 
   { print_conjugation c
-  ; ps "<no>"; print_nominal n; ps "</no>"
+  ; "<no>" |> ps; print_nominal n; "</no>" |> ps
   } 
  and print_modal (c,t) = do 
   { print_conjugation c
-  ; ps "<iv>"; print_invar t; ps "</iv>"
+  ; "<iv>" |> ps; print_invar t; "</iv>" |> ps
   }
 ;
 value print_morph = fun
   [ Noun_form g n c -> do
-      { ps "<na>"
+      { "<na>" |> ps
       ; print_case c
       ; print_number n
       ; print_gender g
-      ; ps "</na>"
+      ; "</na>" |> ps
       }
   | Part_form v g n c -> do
-      { ps "<pa><na>"
+      { "<pa><na>" |> ps
       ; print_case c
       ; print_number n
       ; print_gender g
-      ; ps "</na>"
-      ; ps "<kr>"
+      ; "</na>" |> ps
+      ; "<kr>" |> ps
       ; print_verbal v
-      ; ps "</kr></pa>"
+      ; "</kr></pa>" |> ps
       }
   | Verb_form f n p -> do
-      { ps "<v>"
+      { "<v>" |> ps
       ; print_finite f
-      ; ps "<np>"
+      ; "<np>" |> ps
       ; print_number n
       ; print_person p
-      ; ps "</np></v>"
+      ; "</np></v>" |> ps
       }
   | Ind_form k -> do
-      { ps "<uf>"
+      { "<uf>" |> ps
       ; match k with
-           [ Adv | Avya | Default -> ps "<ind/>"
-           | Interj -> ps "<interj/>"
-           | Part -> ps "<parti/>"
-           | Prep -> ps "<prep/>"
-           | Conj -> ps "<conj/>"
-           | Tas  -> ps "<tasil/>"
+           [ Adv | Avya | Default -> "<ind/>" |> ps
+           | Interj -> "<interj/>" |> ps
+           | Part -> "<parti/>" |> ps
+           | Prep -> "<prep/>" |> ps
+           | Conj -> "<conj/>" |> ps
+           | Tas  -> "<tasil/>" |> ps
            | Abs  -> () (* redundant absolutive forms *)
            | Infl -> () (* redundant inflected form *)
            | Nota -> () (* skipped grammatical notation *)
            ]
-      ; ps "</uf>"
+      ; "</uf>" |> ps
       }
-  | Avyayaf_form -> ps "<avya/>"
-  | Abs_root c -> do { ps "<ab>"; print_conjugation c; ps "</ab>" }
-  | Bare_stem | Avyayai_form -> ps "<iic/>"
-  | Gati -> ps "<iiv/>"
-  | Ind_verb m -> do { ps "<vu>"; print_modal m ; ps "</vu>" }
+  | Avyayaf_form -> "<avya/>" |> ps
+  | Abs_root c -> do { "<ab>" |> ps; print_conjugation c; "</ab>" |> ps }
+  | Bare_stem | Avyayai_form -> "<iic/>" |> ps
+  | Gati -> "<iiv/>" |> ps
+  | Ind_verb m -> do { "<vu>" |> ps; print_modal m ; "</vu>" |> ps }
   | _ -> failwith "Anomaly print_morph"
   ]
 ;
 value print_inverse_map_xml trans form (delta,morphs) = 
-  let print_skt s = ps ("\"" ^ s ^ "\"") in
-  (*i for diacritics in UTF-8: ps (Transduction.skt_to_html s) i*)
+  let print_skt s = "\"" ^ s ^ "\"" |> ps in
+  (*i for diacritics in UTF-8: Transduction.skt_to_html s |> ps i*)
   if Phonetics.phantomatic form then ((* phantomatic forms skipped *)) else do
-  { ps "<f form="
+  { "<f form=" |> ps
   ; print_skt (decode trans form)
-  ; ps ">"
+  ; ">" |> ps
   ; List.iter print_morph morphs
-  ; ps "<s stem="
+  ; "<s stem=" |> ps
   ; print_skt (decode trans (Word.patch delta form)) 
-  ; ps "/></f>\n"
+  ; "/></f>\n" |> ps
   }
 ;
 (* Outputs an XML stream on stdout *)
 value print_header trans = do
-  { pl "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
-  ; pl ("<!DOCTYPE forms SYSTEM \"" ^ trans ^ "_morph.dtd\">")
-  ; pl "<!-- Header"
-  ; ps "<meta name=\"title\" content=\"Sanskrit Morphology\""; pl "\">"
-  ; ps "<meta name=\"author\" content=\""; ps Html.author_name; pl "\">"
-  ; ps "<meta name=\"date\" content=\""; ps Date.dico_date; pl "\">"
-  ; ps "<meta name=\"copyright\" content=\""; ps Html.copyright; pl "\">"
-  ; pl "<meta name=\"keywords\" content=\"sanskrit; morphology\"> -->"
+  { "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" |> pl
+  ; "<!DOCTYPE forms SYSTEM \"" ^ trans ^ "_morph.dtd\">" |> pl
+  ; "<!-- Header" |> pl
+  ; "<meta name=\"title\" content=\"Sanskrit Morphology\"" |> ps; "\">" |> pl
+  ; "<meta name=\"author\" content=\"" |> ps; Html.author_name |> ps; "\">" |> ps
+  ; "<meta name=\"date\" content=\"" |> ps; Date.dico_date |> ps; "\">" |> pl
+  ; "<meta name=\"copyright\" content=\"" |> ps; Html.copyright |> ps; "\">" |> pl
+  ; "<meta name=\"keywords\" content=\"sanskrit; morphology\"> -->" |> pl
   }
 ;
 value print_xml trans inflected_map = do
   { print_header trans
-  ; pl "<forms>"
+  ; "<forms>" |> pl
   ; Deco.iter (print_inverse_map_xml trans) inflected_map
-  ; pl "</forms>"
+  ; "</forms>" |> pl
   }
 ;
 (* For printing preverb lists *)
 value print_xml_word trans (w,_) = do
-  { ps "<pv form="
-  ; pl ("\"" ^ (decode trans w) ^ "\"/>")
+  { "<pv form=" |> ps
+  ; "\"" ^ (decode trans w) ^ "\"/>" |> pl
   }
 ;
 value print_xml_list trans pairs prevs = do
   { print_header trans
-  ; pl "<forms>"
+  ; "<forms>" |> pl
   ; let print_segment inflected_map = 
         Deco.iter (print_inverse_map_xml trans) inflected_map in
     List.iter print_segment pairs
   ; List.iter (print_xml_word trans) (Deco.contents prevs)
-  ; pl "</forms>"
+  ; "</forms>" |> pl
   }
 ;
 

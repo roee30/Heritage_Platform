@@ -138,7 +138,7 @@ value check_chunk solution =
                     && check_sols solspt more2
                 ]
           ]
-      ]       
+      ] 
 ;
 
 (* Checking for legitimate Id sandhi *)
@@ -298,7 +298,7 @@ value access phase = acc (transducer phase) []
            ]
       ]
 ;
-(* The scheduler gets its phase transitions from dispatcher *)
+(* The scheduler gets its phase transitions from Dispatcher.dispatch *)
 value schedule phase input output w cont =
   let add phase cont = [ Advance phase input output w :: cont ] in
   let transitions = 
@@ -337,20 +337,18 @@ value rec react phase input output back occ = fun
     if accept && keep then 
        let segment = (phase,occ,Id) in 
        let out = accrue segment output in 
-       match sanitize_sa sa_control.val (validate out) with 
-       [ [] -> deter cont
+       match validate out with 
+       [ [] -> if cut then continue cont else deter cont (* ZZZ was deter cont *)
        | contracted -> match input' with
-              [ [] -> if accepting phase then 
-                      if check_chunk contracted
-                         then Some (contracted,cont) (* solution found *) 
-                         else continue cont 
-                      else continue cont 
-              | [ first :: _ ] -> (* we first try the longest matching word *)
-                      let cont' = schedule phase input' contracted [] cont in
-                      if cut then continue cont' else
-                      if check_id_sandhi occ first then (* legitimate Id *)
-                         deter cont' else deter cont 
-              ]
+           [ [] -> if accepting phase then (* potential solution found *)
+                      emit contracted cont
+                   else continue cont 
+           | [ first :: _ ] -> (* we first try the longest matching word *)
+               let cont' = schedule phase input' contracted [] cont in
+               if cut then continue cont' else
+               if check_id_sandhi occ first then (* legitimate Id *)
+                  deter cont' else deter cont 
+           ]
        ]
     else if cut then continue cont else deter cont 
   ]
@@ -363,15 +361,13 @@ and choose phase input output back occ = fun
          [ Some rest -> 
            let segment = (phase,u @ occ,Euphony rule) in 
            let out = accrue segment output in
-           match sanitize_sa sa_control.val (validate out) with
+           match validate out with
            [ [] -> continue cont 
            | contracted ->
               if v=[] (* final sandhi *) then
-                 if rest=[] && accepting phase (* potential solution found *)
-                    then if check_chunk contracted
-                            then Some (contracted,cont) (* solution found *) 
-                            else continue cont
-                 else continue cont 
+                if rest=[] && accepting phase then (* potential solution found *)
+                   emit contracted cont                    
+                else continue cont 
               else continue (schedule phase rest contracted v cont)
            ]
          | None -> continue cont
@@ -388,6 +384,13 @@ and continue = fun
           ]
       ] 
   ]
+and emit solution cont =
+  if check_chunk solution 
+     then match sanitize_sa sa_control.val solution with
+          [ [] -> continue cont
+          | ok -> Some (ok,cont) (* solution found *) 
+          ]
+  else continue cont 
 ;
 value init_segment_initial initial_phases sentence =  
   List.map (fun phase -> Advance phase sentence [] []) initial_phases

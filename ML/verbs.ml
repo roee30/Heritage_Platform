@@ -1395,7 +1395,7 @@ value compute_athematic_impft3m weak iiflag entry =
   let conjugw person suff = (person,fix3w_augment weak iiflag dadh_flag suff) in
   enter1 entry (conjug_impft_m 3 conjugw)
 ;
-(* Like [compute_athematic_optative2a] except for [yan#1] et [bruu] *)
+(* Like [compute_athematic_optative2a] except for [yan#1] and [bruu] *)
 value conjug_optativea gana conj conjugw =
   Conju (fopta gana conj)
    [ (Singular, 

@@ -464,8 +464,12 @@ transducers:
 	ML/make_transducers 
 
 xml_data: 
-	ML/make_xml_data -trans "WX" > $(WX_XML_MORPHOLOGY) && gzip -f $(WX_XML_MORPHOLOGY)
-	ML/make_xml_data -trans "SL" > $(SL_XML_MORPHOLOGY) && gzip -f $(SL_XML_MORPHOLOGY)
+	cd ML && $(MAKE) make_xml_data
+	ML/make_xml_data -trans "WX" > $(WX_XML_MORPHOLOGY) 
+#        xmllint --noout --dtdvalid http://sanskrit.inria.fr/SKT/DATA/XML/WX_morph_dtd.txt --valid 
+	gzip -f $(WX_XML_MORPHOLOGY)
+	ML/make_xml_data -trans "SL" > $(SL_XML_MORPHOLOGY) 
+	gzip -f $(SL_XML_MORPHOLOGY)
 
 full: $(ZEN)
 	cd ML && $(MAKE) clean && $(MAKE) depend && $(MAKE) all
@@ -572,6 +576,7 @@ releasebook:
 releasexml: # Sanskrit morphology in XML copied from Data to Server
 	mkdir -p $(SERVERPUBLICDIR)DATA/XML
 	cp $(XML_MORPHOLOGY) $(SERVERPUBLICDIR)DATA/XML
+# Following is disguisin the dtds as txt file for the browser - ugly
 	cd $(SERVERPUBLICDIR)DATA/XML && mv WX_morph.dtd WX_morph_dtd.txt
 	cd $(SERVERPUBLICDIR)DATA/XML && mv SL_morph.dtd SL_morph_dtd.txt
 

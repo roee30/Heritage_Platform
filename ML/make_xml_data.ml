@@ -231,7 +231,7 @@ value print_nominal = fun
   | Ppftm   -> do { "<ppft>" |> ps; print_voice Middle; "</ppft>" |> ps }
   | Pfuta   -> do { "<pfut>" |> ps; print_voice Active; "</pfut>" |> ps }
   | Pfutm   -> do { "<pfut>" |> ps; print_voice Middle; "</pfut>" |> ps }
-  | Pfutp k -> do { "<pfutp" |> ps; pfutp_kind k |> ps; "/>" |> ps }
+  | Pfutp k -> do { "<pfutp>" |> ps; pfutp_kind k |> ps; "</pfutp>" |> ps }
   | _       -> "<act/>" |> ps (* action verbal nouns *)
   ]
 ;
@@ -351,12 +351,12 @@ value print_xml_word trans (w,_) = do
   ; "\"" ^ (decode trans w) ^ "\"/>" |> pl
   }
 ;
-value print_xml_list trans pairs prevs = do
+value print_xml_list trans banks prevs = do
   { print_header trans
   ; "<forms>" |> pl
-  ; let print_segment inflected_map = 
+  ; let print_bank inflected_map = 
         Deco.iter (print_inverse_map_xml trans) inflected_map in
-    List.iter print_segment pairs
+    List.iter print_bank banks
   ; List.iter (print_xml_word trans) (Deco.contents prevs)
   ; "</forms>" |> pl
   }
@@ -364,17 +364,12 @@ value print_xml_list trans pairs prevs = do
 
 (* Prints big XML stream to stdout *)
 value print_xml_morphology trans = 
-  let nouns = read_nouns () in print_xml trans nouns 
-and print_xml_pn trans = 
-  let pronouns = read_pronouns () in print_xml trans pronouns
-and print_xml_r trans = 
-  let verbs = read_roots () in print_xml trans verbs
-and print_xml_p trans = 
-  let parts = read_parts () in print_xml trans parts
-and print_xml_a trans = 
-  let indecls = read_indecls () in print_xml trans indecls
-and print_xml_f trans = 
-  let abstva = read_abstvaa () 
+  let nouns = read_nouns () 
+  and pronouns = read_pronouns () 
+  and verbs = read_roots () 
+  and parts = read_parts () 
+  and indecls = read_indecls () 
+  and abstva = read_abstvaa () 
   and absya = read_absya () 
   and iics = read_iics () 
   and voca = read_voca () 
@@ -382,7 +377,8 @@ and print_xml_f trans =
   and avya = read_avyayafs ()
   and iivs = read_iivs () 
   and prevs = read_prevs () in
-  print_xml_list trans [ abstva; absya; iics; ifcs; avya; voca; iivs ] prevs
+  print_xml_list trans [ nouns; pronouns; verbs; parts; indecls; abstva; absya;
+                         iics; ifcs; avya; voca; iivs ] prevs
 ;
 
 (* Analyse the transliteration argument to command [make_xml_data] *)

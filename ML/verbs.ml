@@ -2768,11 +2768,12 @@ value compute_ppp_stems entry rstem =
 (* similaire order/ordre meter/mètre master/maître manner/manière *) 
 value ar_ra = fun  
   [ [ c :: [ 43 :: [ 1 :: r ] ] ] -> [ c :: [ 1 :: [ 43 :: r ] ] ] 
+  | [ c :: [ 43 :: [ 2 :: r ] ] ] -> [ c :: [ 2 :: [ 43 :: r ] ] ] 
   | w -> failwith ("metathesis failure " ^ Canon.rdecode w)
   ]
 ;
 (* Stems used for periphrastic futur, infinitive, and gerundive in -tavya *)
-(* Redundancy with intercalates ought to be addressed. *)
+(* Redundancy and discrepancies with intercalates ought to be addressed.  *)
 value perstems rstem entry =
   let sstem = strong_stem entry rstem in 
   let inter = match rstem with 
@@ -4212,6 +4213,11 @@ value compute_aorist entry =
             ] in compute_ath_s_aoristm stemm entry 
         ]
       }
+    | "k.r.s" -> do 
+       { let stem = long in compute_ath_s_aorista stem entry (* akaark.siit *)
+       ; let stem = ar_ra long in 
+         compute_ath_s_aorista stem entry         (* metathesis akraak.siit *)
+       }
     | "vrazc" -> let stem = revcode "vraak" in (* as for future *) 
                  compute_ath_s_aorista stem entry 
     | "spaz#1" | "smi" | "haa#2" -> compute_ath_s_aoristm weak entry (* middle only *)
@@ -4272,8 +4278,8 @@ value compute_aorist entry =
     | _ -> ()
     ]
 ; match entry with (* 7. sa aorist ksa *)
-      [ "kruz" | "kliz" | "guh" | "diz#1" | "dih" | "duh#1" | "lih#1" | "viz#1"
-      | "v.rj" | "sp.rz#1" -> do (* \Pan{7,3,72-73} *)
+      [ "k.r.s" | "kruz" | "kliz" | "guh" | "diz#1" | "dih" | "duh#1" | "lih#1" 
+      | "viz#1" | "v.rj" | "sp.rz#1" -> do (* \Pan{7,3,72-73} *)
       { compute_ath_sa_aorista weak entry   
       ; if entry = "kruz" || entry = "kliz" then ((* Para *)) 
         else compute_ath_sa_aoristm weak entry 

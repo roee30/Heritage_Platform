@@ -386,34 +386,14 @@ value trim_tags gen form pv tags = List.fold_right trim tags []
         let ok_morphs = List.filter valid_pv morphs in  
         if ok_morphs = [] then acc else [ (delta,ok_morphs) :: acc ] 
 ;
-(* Preventing overgeneration of forms "sa" and "e.sa" \Pan{6,1,132} Kale§50 *)
-(* This enforces the conditions, without having to complicate the automaton *)
-value not_sa_v = fun (* Assumes next pada starts with a vowel *)
-  [ [ (Pron,[ 1; 48 ],_) :: _ ] (* sa *)
-  | [ (Pron,[ 1; 47; 10 ],_) :: _ ] (* e.sa *) -> False 
-  | _ -> True
-  ]
-(* [prune_sa] checks that sa is before consonants and recontructs the sandhi *)
+(* [prune_sa] checks that sa.h does not occur before consonants (should be sa) *)
 (* NB called with last = [(_,mirror form,_)] and out = [ last :: next ] *)
-and prune_sa out form last = fun (* next *)
-  [ [ (Pron,[ 1; 48 ],_) :: rest ] (* sa *) -> match form with
-      [ [ c :: _ ] when consonant c ->
-         let sandhi = Euphony ([ 48; 1; c ], [ 48; 1; 48 ], [ c ]) in
-         [ last :: [ (Pron,[ 48; 1; 48 ],sandhi) :: rest ] ] 
-      | _ -> []
-      ]
-(* It also checks conversely that sas/sa.h does not occur before consonants *)
-  | [ (Pron,[ 48; 1; 48 ],_) :: rest ] (* sas *) -> match form with
+value prune_sa out form last = fun (* next *)
+  [ [ (Pron,[ 48; 1; 48 ],_) :: rest ] (* sas *) -> match form with
       [ [ c :: _ ] when consonant c -> []
       | _ -> out 
-      ]
-(* Similar conditions for pronoun e.sa *)
-  | [ (Pron,[ 1; 47; 10 ],_) :: rest ] (* e.sa *) -> match form with
-      [ [ c :: _ ] when consonant c ->
-         let sandhi = Euphony ([ 10; 47; 1; c], [ 48; 1; 47; 10 ], [ c ]) in
-         [ last :: [ (Pron,[ 48; 1; 47; 10 ],sandhi) :: rest ] ] 
-      | _ -> []
-      ]
+      ] 
+    (* Similar conditions for pronoun e.sa *)
   | [ (Pron,[ 48; 1; 47; 10 ],_) :: rest ] (* esas *) -> match form with
       [ [ c :: _ ] when consonant c -> []
       | _ -> out 
@@ -463,6 +443,9 @@ value apply_sandhi rleft right = fun
  On the other hand, we would have to solve the ihehi problem. *)
 value validate out = match out with
   [ [] -> []
+  (* Preventing overgeneration of forms "sa" and "e.sa" \Pan{6,1,132} Kale§50 *)
+  | [ _ :: [ (Pron,[ 1; 48 ],s_) :: _ ] ] (* sa must be chunk-terminal *)
+  | [ _ :: [ (Pron,[ 1; 47; 10 ],s_) :: _ ] ] -> [] (* same for e.sa *)
   | [ (Root,rev_root_form,s) :: [ (Pv,prev,sv) :: r ] ] ->
       let pv = Word.mirror prev in 
       let pv_str = Canon.decode pv 
@@ -524,7 +507,7 @@ value validate out = match out with
     let krid_form = Word.mirror rev_krid_form in
      match Deco.assoc krid_form morpho.krids with 
      [ [] -> failwith ("Unknown krid_form: " ^ Canon.decode krid_form) 
-     | tags -> if List.exists (autonomous_form_k krid_form) tags && not_sa_v next
+     | tags -> if List.exists (autonomous_form_k krid_form) tags 
                then out else []
      ] 
   | [ ((Kric,rev_krid_form,_) as last)  :: next ] ->
@@ -552,7 +535,7 @@ value validate out = match out with
       let krid_form = Word.mirror rev_krid_form in
       match Deco.assoc krid_form morpho.iiks with
       [ [] -> failwith ("Unknown krid_form: " ^ Canon.decode krid_form)
-      | tags -> if List.exists (autonomous_form_k krid_form) tags && not_sa_v next
+      | tags -> if List.exists (autonomous_form_k krid_form) tags
                 then out else []
       ]
   | [ ((Iikc,rev_krid_form,_) as last) :: next ] ->
@@ -580,7 +563,7 @@ value validate out = match out with
       let krid_form = Word.mirror rev_krid_form in
       match Deco.assoc krid_form morpho.voks with
       [ [] -> failwith ("Unknown krid_form: " ^ Canon.decode krid_form)
-      | tags -> if List.exists (autonomous_form_k krid_form) tags && not_sa_v next
+      | tags -> if List.exists (autonomous_form_k krid_form) tags 
                 then out else []
       ]
   | [ ((Vokc,rev_krid_form,_) as last) :: next ] ->
@@ -649,17 +632,12 @@ value validate out = match out with
                                          prune_sa out form last next 
   ]
 ;
-(* Inter-chunk sa/e.sa check *)
-value sanitize_sa sa_final_check = fun 
-  [ [ (Pron,[ 1; 48 ],s) :: r ] -> 
-      if sa_final_check then 
-         [ (Pron,[ 48; 1; 48 ],s) :: r ] (* terminal sa *) 
-      else []
-  | [ (Pron,[ 1; 47; 10 ],s) :: r ] -> 
-      if sa_final_check then
-         [ (Pron,[ 48; 1; 47; 10 ],s) :: r ] (* terminal e.sa *) 
-      else []
-  | chunk_sol -> chunk_sol 
+(* Inter-chunk sa/e.sa check :
+   [sa_check] is True iff sa/e.sa segment is last in chunk and chunk not last *)
+value sanitize_sa sa_check chunk = match chunk with
+  [ [ (Pron,[ 1; 47; 10 ],_) :: _ ] (* ... e.sa *) 
+  | [ (Pron,[ 1; 48 ],_) :: _ ] (* ... sa *)  -> if sa_check then chunk else []
+  | _ -> chunk
   ]
 ;
 

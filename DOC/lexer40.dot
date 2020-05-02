@@ -2,6 +2,8 @@ digraph lexer {
 	size="30."; 
 	S -> Subst;
 	S -> Pron;
+	S -> Inftu;
+	Inftu -> Kama;
 	S -> Verb;
 	Verb -> Root;
 	Verb -> Pv;
@@ -25,8 +27,6 @@ digraph lexer {
 	Subst -> Voka;
 	Subst -> Inv;
 	Subst -> Pvk;
-	Subst -> Inftu;
-	Inftu -> Kama;
 	Iic -> Subst;
 	Iic -> Ifc;
 	Iic -> Iiif;

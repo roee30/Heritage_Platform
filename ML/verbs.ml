@@ -865,8 +865,8 @@ value fix2w weak suff set =
 ;
 value fix2w_augment weak suff set = aug (fix2w weak suff set)
 ;
-value fix2wi suff = (* special for root i middle *)
-  match code suff with (* \Pan{6,4,77} *)
+value fix2wi suff = (* special for root i Atma ii -> iiy ai -> aiy *)
+  match code suff with (* \Pan{6,4,77} MacDonell§134.3d *)
     [ [ c :: _ ] -> fix2 (if vowel c then [ 42; 3 ] else [ 3 ]) suff False
     | [] -> error_suffix 15
     ]
@@ -956,7 +956,7 @@ value compute_athematic_present2m strong weak set entry third =
               else fix2s strong suff set)
   and conjugw person suff =
       (person,if entry = "han#1" then fix2whan suff 
-              else if entry = "i" then fix2wi suff 
+              else if entry = "i" then fix2wi suff (* Gonda§64.III *)
               else fix2w weak suff set) in
   enter1 entry (Conju (presm 2)
    [ (Singular, let l = 
@@ -999,17 +999,15 @@ value compute_athematic_impft2a strong weak set entry =
         ; if set then conjugs Second "as"
           else if entry = "as#1" then conjugs Second "iis" (* Whitney§621c *)
           else if entry = "ad#1" then conjugs Second "as"  (* Whitney§621c *)
-                    else conjugs Second "s" 
+          else conjugs Second "s" 
         ; if set then conjugs Third "at"
-          else if entry = "as#1" then conjugs Third "iit"     (* idem aasiit *)
-               else if entry = "ad#1" then conjugs Third "at" (* idem aadat *)
-                    else conjugs Third "t"
-        ] in if set then 
-        [ conjugs Second "iis"
-        ; conjugs Third  "iit" 
-        ] @ l else if entry = "bruu" 
-                   then [ (First, code "abruvam") (* Whitney§632 *) :: l ]
-                   else l)
+          else if entry = "as#1" then conjugs Third "iit" (* idem aasiit *)
+          else if entry = "ad#1" then conjugs Third "at"  (* idem aadat *)
+          else conjugs Third "t"
+        ] in if set then [ conjugs Second "iis"; conjugs Third  "iit" ] @ l 
+             else if entry = "bruu" 
+                  then [ (First, code "abruvam") (* Whitney§632 *) :: l ]
+             else l)
    ; (Dual,
         [ conjugw First  "va"
         ; conjugw Second "tam"
@@ -1063,7 +1061,7 @@ value compute_athematic_impft2m strong weak set entry =
         ; if entry = "aas#2" then (Second, code "aadhvam") (* -Whitney§620 *) 
           else conjugw Second "dhvam"
         ; if entry = "zii#1" then conjugw Third "rata" (* \Pan{7,1,6} *) else
-          if entry = "i" then conjugw Third "yata" (* Bucknell 128 *) else
+          if entry = "i" then conjugw Third "yata" (* Bucknell 128 *) else 
           conjugw Third "ata"
         ] in if entry = "m.rj" then [ conjugs Third "ata" :: l ] else
              if entry ="duh#1" then [ conjugw Third "ra" :: l ]
@@ -1098,10 +1096,11 @@ value compute_athematic_optative2a weak set entry =
 value compute_athematic_optative2m weak set entry =
   let conjugw person suff =
       (person,if entry = "han#1" then fix2whan suff 
-                                 else fix2w weak suff set)
+              else if entry = "i" then fix2wi suff (* adhiiyiita *)
+              else fix2w weak suff set)
   and conjugwmrij person suff = (person, fix2 (revcode "maarj") suff set) in
   enter1 entry (Conju (optm 2)
-   [ (Singular, let l =
+   [ (Singular, let l = (* ii below replaced by iyii for root i ? *)
         [ conjugw First  "iiya"
         ; conjugw Second "iithaas"
         ; conjugw Third  "iita"
@@ -1124,7 +1123,7 @@ value compute_athematic_optative2m weak set entry =
    ; (Plural, let l =
         [ conjugw First  "iimahi"
         ; conjugw Second "iidhvam"
-        ; conjugw Third  "iiran" (* TODO: Kane§429 like impft2 above *)
+        ; conjugw Third  "iiran" (* special dropping n TODO see Kane§429 *)
         ] in if entry = "m.rj" then 
                 [ conjugwmrij First  "iimahi"
                 ; conjugwmrij Second "iidhvam"
@@ -1272,16 +1271,16 @@ value fix3w_augment wstem iiflag dadh suff = aug (fix3w wstem iiflag dadh suff)
 ;
 value compute_athematic_present3a strong weak iiflag entry third = 
   let dadh_flag = (entry="dhaa#1") in 
-  let conjugs person suff = (person,fix strong suff) 
+  let conjugs person suff = (person,fix strong suff) (* gu.na *)
   and conjugw person suff = (person,fix3w weak iiflag dadh_flag suff)
   and conjughaa person suff = (person,fix (revstem "jahi") suff) 
                               (* weak = jahii but optionally jahi *)
   and haa_flag = (entry="haa#1") in do
   { enter1 entry (Conju (presa 3)
    [ (Singular, 
-        [ conjugs First  "mi"
-        ; conjugs Second "si"
-        ; check entry 3 third (conjugs Third "ti") 
+        [ conjugs First  "mi" (* Panini mip, where p indicates guna *)
+        ; conjugs Second "si" (* sip *)
+        ; check entry 3 third (conjugs Third "ti") (* tip *)
         ])
    ; (Dual, let l =
         [ conjugw First  "vas"
@@ -1464,6 +1463,7 @@ value compute_athematic_imperative3a strong weak iiflag entry =
             [ [ c :: _  ] -> fix3w weak iiflag dadh_flag suff 
               where suff = if vowel c then (* "dhi" or "hi" after vowel *)
                               if entry = "hu" then "dhi" else "hi" 
+                              (* "hu" only exception Pan{6,4,101} Müller p153 *)
                             else "dhi"
             | _ -> error_empty 7
             ] ) 
@@ -4232,7 +4232,7 @@ value compute_aorist entry =
     | "vad" | "vaz" | "vadh" | "vid#1" | "v.r#1" | "vraj" | "z.rr" | "sidh#2" 
     | "skhal" | "stan" | "stu" | "hi.ms" -> do
       { let stem = match weak with
-            [ [ 7 (* .r *) :: _ ] -> 
+            [ [ 7 (* .r *) :: _ ] -> (* complex Paninian see Müller Gram xii *)
               if entry = "jaag.r" then strong (* jaagari.sam RF IC 2 p 88 *)
               else long (* avaariit *)
             | [ 8 (* .rr *) :: _ ] -> 

@@ -15,6 +15,9 @@ value resources name = Paths.skt_resources_dir ^ name ^ "/"
 (* Read-only resources *)
 value heritage_dir  = resources "DICO" 
 and data_dir        = resources "DATA" 
+;
+(* Contains the locally computed transducers databases *)
+value local_data_dir  = "DATA/" 
 ; 
 (* Local resources *)
 value top_dev_dir name = Paths.skt_install_dir ^ name ^ "/" 
@@ -35,6 +38,7 @@ and regression_file_name = "regression" (* regression analysis stuff *)
 ; ]i*)
 
 value data name = data_dir ^ name
+and local_data name = local_data_dir ^ name
 and dico_page name = dico_dir ^ name
 and public_data name = public_data_dir ^ name
 and public_dico_page name = public_dico_dir ^ name
@@ -105,8 +109,8 @@ and inftu_file    = data "inftu.rem"   (* created by [make_roots] etc. *)
 and kama_file     = data "kama.rem"    (* created by [make_nouns] etc. *)
 
 (* The transducers files, made by [make_transducers] *)
-and transducers_file   = data "transducers.rem"   (* transducers (Complete) *)
-and transducers_file2  = data "transducers2.rem"  (* transducers (Simple)   *)
+and transducers_file   = local_data "transducers.rem"  (* transducers Complete *)
+and transducers_file2  = local_data "transducers2.rem" (* transducers Simple *)
 
 and mw_exc_file       = data "mw_exceptions.rem" (* for MW indexing *)
 and mw_index_file     = data "mw_index.rem"

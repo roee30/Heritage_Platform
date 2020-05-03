@@ -25,7 +25,8 @@ DATE=#DATE
 # Sanskrit resources are defined at configuration time:
 SKTRESOURCES=#SKTRESOURCES
 
-DATA=$(SKTRESOURCES)DATA# morphological data, sandhi tables and transducers
+DATA=$(SKTRESOURCES)DATA# morphological data, sandhi & verb tables
+LOCAL_DATA=DATA # The transducers
 HERITAGE=$(SKTRESOURCES)DICO# hypertext Heritage read-only
 DICO=DICO# hypertext Heritage
 BOOK=$(SKTRESOURCES)BOOK# Heritage.pdf abrevs.pdf
@@ -357,7 +358,7 @@ DHATUS=$(DATA)/roots_infos.rem $(DATA)/roots_usage.rem
 KRIDS=$(DATA)/unique_kridantas.rem $(DATA)/lexical_kridantas.rem
 
 # Synthesized at make time:
-TRANSDUCERS=$(DATA)/transducers.rem $(DATA)/transducers2.rem 
+TRANSDUCERS=DATA/transducers.rem DATA/transducers2.rem # Z local DATA
 # All are installed in the server area at make install
 AUTOMATA=$(INFLECTED) $(SANDHIS) $(DHATUS) $(KRIDS) $(TRANSDUCERS) 
 
@@ -409,12 +410,11 @@ all:
 || cp SETUP/dummy_SCLpaths.ml ML/SCLpaths.ml
 	cd ML && $(MAKE) test_version 
 	ML/test_stamp
+	mkdir -p DATA # local storage for transducers
 	cd ML && $(MAKE) make_transducers
 	$(MAKE) transducers
 	cd ML && $(MAKE) # make engine (testing the data stamp)
 	$(MAKE) web_services # then all Web services
-	cd ML && $(MAKE) make_xml_data # morphology data banks
-	$(MAKE) xml_data
 
 # When master Makefile SETUP/MMakefile has been changed, do manually:
 new:
@@ -478,7 +478,8 @@ full: $(ZEN)
 supplements:
 #OBS	cd $(DATA) && $(MAKE) statistics 
 #OBS	cd $(DATA) && $(MAKE) pdf
-#OBS	cd $(XMLDATA) && $(MAKE) xml
+	cd ML && $(MAKE) make_xml_data # morphology data banks
+	$(MAKE) xml_data
 	cd ML && $(MAKE) doc # requires installing ocamlweb
 
 index.html: mk_index_page

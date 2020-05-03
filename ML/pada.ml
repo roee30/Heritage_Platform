@@ -133,11 +133,12 @@ value voices_of = fun
   | "yam" | "yaac" | "yu#1" | "yuj#1" | "yudh#1" | "rac" | "ra~nj" | "ram"
   | "rah" | "raaj#1" | "ri" | "ric" | "rud#1" | "rudh#2" | "lafgh" | "lak.s"
   | "labh" | "la.s" | "lip" | "lih#1" | "lup" | "luu#1" | "vad" | "van" | "vap#1"
-  | "vap#2" | "val" | "vah#1" | "vaa#3" | "vic" | "vij" | "viij" | "v.r#2"
-  | "v.rt#1" | "vyath" | "vyaa" | "vrii" | "zap" | "zaa" | "zu.s" | "zubh#1"
-  | "zyaa" | "zram" | "zri" | "zru" | "sru" | "san#1" | "sa~nj" | "sah#1" 
-  | "sic" | "su#2" | "suud" | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" 
-  | "sp.rh" | "smi" | "syand" | "svad" | "had" | "hikk" | "hu" | "huu" | "h.r#1"
+  | "vap#2" | "val" | "vah#1" | "vaa#3" | "vic" | "vij" "viz#1" | "viij" 
+  | "v.r#2" | "v.rt#1" | "vyath" | "vyaa" | "vrii" | "zap" | "zaa" | "zu.s"
+  | "zubh#1" | "zyaa" | "zram" | "zri" | "zru" | "sru" | "san#1" | "sa~nj" 
+  | "sah#1" | "sic" | "su#2" | "suud" | "stambh" | "stu" | "st.rr" | "sthaa#1"
+  | "sp.rz#1" | "sp.rh" | "smi" | "syand" | "svad" | "had" | "hikk" | "hu" 
+  | "huu" | "h.r#1"
   ] *)
   (* + corr. "pa.th" | "sthaa1" | "praz" | "k.rr" | "p.rc" | "bandh" *)
   (* NB. "ah" "rip" "vadh" have no pr, "mand2" is fictitious *) 

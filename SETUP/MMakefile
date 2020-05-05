@@ -514,7 +514,7 @@ web_services: # Will write localized site pages in DICO and export cgis
 	cp -p SITE/xml.html DICO
 
 release: $(DICO) web_services releasecgi releaseMW releasedata releasedoc \
-releasebook releasecorpus releasexml
+releasebook releasecorpus #releasexml
 
 # releasepdf disabled at present as bulky and un-finished
 	echo "Version $(VERSION) of Sanskrit site released on $(SERVERHOST)"

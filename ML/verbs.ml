@@ -3772,9 +3772,14 @@ value isigma_m_paradigm conjug conjugdhvam =
         ])
    ]
 ;
+value sigma_j stem suff = (* horrible verrue pour "j~naa#1" selon Deshpande *)
+   aug (sandhi [ 48 :: stem ] (code suff)) 
+;
 value compute_ath_is_aoristm stem entry = 
   let long_i = (entry = "grah") in
-  let conjug person suff = (person,isigma True stem suff long_i)
+  let conjug person suff = (person, 
+              if entry = "j~naa#1" then sigma_j stem suff (* verrue *)
+              else isigma True stem suff long_i)
   and conjugdhvam person = (person,fix_augment stem suff)
       where suff = (if long_i then "ii" else "i") ^ "dhvam" in
   enter1 entry (Conju (aorm 5) (isigma_m_paradigm conjug conjugdhvam))
@@ -4073,7 +4078,7 @@ value redup_aor weak root =
 value compute_aorist entry =
   let (weak,strong,long) = stems entry in do (* 7 formations *)
   { match entry with (* 1. root aorist - Panini sic-luk *)
-    [ "k.r#1" | "kram" | "gam" | "gaa#1" | "jan" | "j~naa#1" 
+    [ "k.r#1" | "kram" | "gam" | "gaa#1" | "ci" | "jan" | "j~naa#1" 
     | "daa#1" | "daa#2" | "dhaa#1" | "dhaa#2" | "paa#1" | "bhuu#1" | "muc#1" 
     | "zaa" | "saa#1" | "sthaa#1" | "has" | "haa#1" -> do
       { compute_root_aorista weak strong entry 
@@ -4084,10 +4089,15 @@ value compute_aorist entry =
         | "dhaa#1" -> compute_root_aoristm (revstem "dhi") entry
         | _ -> ()
         ]
-      ; let stem = if entry = "muc#1" then strong else match long with 
-            [ [ 2 (* aa *) :: _ ] -> [ 42 (* y *) :: long ]
-            | _ -> long
-            ] in 
+      ; let stem = match entry with
+            [ "kram" | "gam" | "jan" -> weak (* ajani but Vedic ajaani *)
+            | "muc#1" -> strong 
+            | "ci" -> revstem "ce.s" (* Deshpande irregular *)
+            |  _ -> match long with 
+                    [ [ 2 (* aa *) :: _ ] -> [ 42 (* y *) :: long ]
+                    | _ -> long
+                    ] 
+            ] in
         compute_root_aoristp stem entry (* passive *)
       (* For root aorist participles, see Whitney§840 and Burrow p178 *)
       (* For optative mode Whitney§837 see benedictive/precative. *)
@@ -4105,15 +4115,15 @@ value compute_aorist entry =
     | "yuj#1" | "vid#1" | "s.rj#1" 
         -> compute_root_aoristp strong entry 
     | "rabh" -> compute_root_aoristp (revcode "rambh") entry 
-    | "ci" | "jaag.r" | "t.rr" | "pac" | "pad#1" | "zru" | "stu" | "hu"
+    | "jaag.r" | "t.rr" | "pac" | "pad#1" | "zru" | "stu" | "hu"
         -> compute_root_aoristp long entry
            (* NB "zru" -> azraavi WR while Whitney§844a *azraayi typo *) 
     | _ -> () (* "i" -> iiyaat hard *)
     ]
   ; match entry with (* 2. thematic aorist af *)
-    [ "aap" | "krudh" | "gam" | "g.rdh" | "ghas" | "das" | "dyut#1" | "muc#1" 
-    | "yuj#1" | "ric" | "ruc#1" | "rudh#2" | "ruh" | "vid#2" | "v.rt#1" 
-    | "zuc#1" | "zudh" | "sic" | "stan" | "huu" 
+    [ "aap" | "krudh" | "gam" | "g.rdh" | "ghas" | "chid#1" | "das" | "dyut#1" 
+    | "mad#1" | "muc#1" | "yuj#1" | "ric" | "ruc#1" | "rudh#2" | "ruh"
+    | "vid#2" | "v.rt#1" | "zuc#1" | "zudh" | "sic" | "stan" | "huu" 
      -> do
       { compute_thematic_aorista weak entry
       ; compute_thematic_aoristm weak entry (* middle very rare *)
@@ -4175,12 +4185,12 @@ value compute_aorist entry =
     | _ -> () 
     ]
   ; match entry with (* 4. sigma aorist sic *)
-    [ "aap" | "k.r#1" | "khan" | "gup" | "chid#1" | "ji" | "tud" | "t.rr" 
-    | "tyaj#1" | "dah#1" | "daa#1" | "d.rz#1" | "draa#2" | "dhaa#1" | "dhyaa"
-    | "dhyai" | "dhv.r" | "nak.s" | "nii#1" | "pac" | "praz" | "prii" 
-    | "budh#1" | "bhaa#1" | "bhii#1" | "muc#1" | "yaj#1" | "yuj#1" | "ram" 
-    | "labh" | "v.r#2" | "vyadh" | "zru" | "sidh#1" | "s.rj#1" | "stu" 
-    | "sp.rz#1" | "hu" -> do
+    [ "aap" | "k.r#1" | "khan" | "gup" | "gh.r" | "ci" | "chid#1" | "ji" 
+    | "tud#1" | "t.rr" | "tyaj#1" | "dah#1" | "daa#1" | "d.rz#1" | "draa#2" 
+    | "dhaa#1" | "dhyaa" | "dhyai" | "dhv.r" | "nak.s" | "nii#1" | "pac"
+    | "praz" | "prii" | "budh#1" | "bhii#1" | "muc#1" | "yaj#1" | "yuj#1" 
+    | "ram" | "rudh#2" | "labh" | "v.r#2" | "vyadh" | "zru" | "sidh#1"
+    | "s.rj#1" | "stu" | "sp.rz#1" | "haa#1" | "hu" -> do
       { let stem = match entry with
             [ "d.rz#1" | "s.rj#1" | "sp.rz#1" -> long_metathesis weak
             | "ram" -> weak 
@@ -4201,7 +4211,7 @@ value compute_aorist entry =
            then compute_ath_s_aorista strong entry else ()
         (* ayok.siit and acchetsiit besides ayauk.siit and acchaitsiit *)
       ; match entry with
-        [ "gup" | "d.rz#1" | "s.rj#1" -> ()  (* active only *)
+        [ "gup" | "gh.r" | "d.rz#1" | "s.rj#1" -> ()  (* active only *)
         | _ -> let stemm = match weak with
             [ [ c :: r ] -> match c with 
                 [ 3 | 4 | 5 | 6 (* i ii u uu *) -> strong
@@ -4220,17 +4230,18 @@ value compute_aorist entry =
        }
     | "vrazc" -> let stem = revcode "vraak" in (* as for future *) 
                  compute_ath_s_aorista stem entry 
-    | "spaz#1" | "smi" | "haa#2" -> compute_ath_s_aoristm weak entry (* middle only *)
+    | "gaah" | "spaz#1" | "smi" | "haa#2" -> 
+                 compute_ath_s_aoristm weak entry (* middle only *)
     | _ -> ()
     ]
   ; match entry with (* 5. i.s aorist se.t-sic *)
     [ "ak.s" | "aj" | "aas#2" | "i.s#1" | "iik.s" | "uk.s" | "uc" | "u.s" 
-    | "uuh" | ".rc#1" | "k.rt#1" | "krand" | "kram" | "k.san"  | "khan"
+    | "uuh" | ".rc#1" | "k.rt#1" | "krand" | "kram" | "kliz" | "k.san"  | "khan"
     | "car" | "ce.s.t" | "jap" | "jalp" | "jaag.r" | "t.rr" | "diip"
-    | "pa.th" | "puu#1" | "p.rc"| "pru.s#1" | "baadh" | "budh#1" | "mad#1" 
-    | "mud#1" | "muurch" | "mlecch" | "yaac" | "ruc#1" | "lu~nc" | "luu#1"
-    | "vad" | "vaz" | "vadh" | "vid#1" | "v.r#1" | "vraj" | "z.rr" | "sidh#2" 
-    | "skhal" | "stan" | "stu" | "hi.ms" -> do
+    | "puu#1" | "p.rc"| "pru.s#1" | "baadh" | "budh#1" | "mad#1" 
+    | "mud#1" | "muurch" | "mlecch" | "yaac" | "rak.s" | "ruc#1" | "lu~nc" 
+    | "luu#1" | "vad" | "vaz" | "vadh" | "vid#1" | "v.r#1" | "vraj" | "z.rr"
+    | "sidh#2" | "skhal" | "stan" | "stu" | "hi.ms" -> do
       { let stem = match weak with
             [ [ 7 (* .r *) :: _ ] -> (* complex Paninian see Müller Gram xii *)
               if entry = "jaag.r" then strong (* jaagari.sam RF IC 2 p 88 *)
@@ -4241,12 +4252,18 @@ value compute_aorist entry =
             | [ c :: _ ] -> 
               if vowel c then long 
               else match entry with 
-                   [ "kan" | "khan" |"car" | "mad#1" | "vad" | "skhal" -> long 
+                   [ "kan" | "khan" |"car" | "mad#1" | "vad" | "vraj" | "skhal" 
+                       -> long 
                    | _ -> strong
                    ]
             | [] -> error_empty 23
             ] in
         compute_ath_is_aorista stem entry 
+      ; compute_ath_is_aoristm strong entry 
+      } 
+    | "pa.th" -> do (* Deshpande *)
+      { compute_ath_is_aorista strong entry (* apa.thiit *)
+      ; compute_ath_is_aorista long entry   (* apaa.thiit *)
       ; compute_ath_is_aoristm strong entry 
       } 
     | "ku.s" | "gup" | "vrazc" | "zcut#1" | "sphu.t" -> (* active only *)
@@ -4255,7 +4272,7 @@ value compute_aorist entry =
       compute_ath_is_aorista (revcode "zve") entry 
     | "kan" | "k.r#2"| "p.rr" | "zaz" -> (* active only *)
       compute_ath_is_aorista long entry 
-    | "kamp" | "jan" | "zii#1" | "spand" -> (* middle only *)
+    | "kamp" | "gaah" | "jan" | "zii#1" | "spand" -> (* middle only *)
       compute_ath_is_aoristm strong entry 
     | "grah" -> do 
       { let stem = revcode "grah" in do (* same as group above *)
@@ -4271,7 +4288,7 @@ value compute_aorist entry =
     ]
   ; match entry with (* 6. si.s aorist se.t-sic *)
     [ "j~naa#1" | "dhyaa" | "dhyai" | "nam" | "paa#2" | "mnaa" | "yaa#1" | "laa" 
-    | "zaa" -> do (* dhyai for dhyaa *)
+    | "zaa" | "bhaa#1" -> do (* dhyai for dhyaa *)
       { compute_ath_sis_aorista strong entry 
       ; compute_ath_is_aoristm strong entry (* is aorist (5) used in middle *)
       }
@@ -5399,7 +5416,7 @@ value record_pfp entry rstem = do
     | ".r"     -> record_extra_pfp_ya "arya"  (* (aarya) \Pan{3,1,103} (owner) *) 
     | "kup"    -> record_extra_pfp_ya "kupya" (* (kopya) \Pan{3,1,114} *) 
     | "gad"    -> record_extra_pfp_ya "gadya" (* gaadya for pv- \Pan{3,1,100} *) 
-    | "mad"    -> record_extra_pfp_ya "madya" (* maadya for pv- \Pan{3,1,100} *)
+    | "mad#1"  -> record_extra_pfp_ya "madya" (* maadya for pv- \Pan{3,1,100} *)
     | "tyaj#1" -> record_extra_pfp_ya "tyajya" (* for sa.mtyajya (tyaajya) *) 
     | "bhid#1" -> record_extra_pfp_ya "bhidya" (* \Pan{3,1,115} for river *) 
     | "d.rz#1" -> record_extra_pfp_ya "darzya" (* WR only RV *) 

@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* The Sanskrit lexical processor *)
@@ -117,7 +117,7 @@ value code_skt_ref = Encode.code_skt_ref;
 value code_skt_ref_d = Encode.code_skt_ref_d;
 value decode_skt = Canon.decode
 ;
-open Padapatha (* [padapatha sanskrit_chunk] *)
+open Chunker (* [chunker avagraha_expand] *)
 ;
 value sanskrit_sentence strm = 
   try Gramskt.parse sanscrit Loc.ghost strm with
@@ -130,7 +130,7 @@ value sanskrit_sentence strm =
   | Loc.Exc_located loc ex -> raise ex
   ]
 ;
-(* No padapatha processing, each chunk is assumed to be in terminal sandhi 
+(* No chunk processing, each chunk is assumed to be in terminal sandhi 
    already. But normalizes away anusvara, contrarily to its name *)
 (* encode is [raw_sanskrit_word], [raw_sanskrit_word_KH], etc. *)
 value read_raw_skt_stream encode strm = 
@@ -142,9 +142,9 @@ value read_raw_skt_stream encode strm =
   ]
 ;
 value read_processed_skt_stream encode strm = 
-  let process = padapatha (sanskrit_chunk encode) in
+  let process = padapatha (avagraha_expand encode) in
   match sanskrit_sentence strm with 
-  [ [ l ] ->  process l
+  [ [ l ] -> process l
   | lines -> List.fold_right concat lines []
              where concat line lines = process line @ lines
   ]

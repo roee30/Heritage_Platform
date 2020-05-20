@@ -1060,8 +1060,7 @@ value build_mas_zvan stem entry =  (* \Pan{6,4,133} *)
    ]
 ;
 value build_athin stem entry = (* pathin, supathin, mathin *)
-  let decline case suff = (case,fix stem suff) 
-  and bare = fix stem "thi" in 
+  let decline case suff = (case,fix stem suff) in (* stem = pa for pathin *)
   enter entry 
    [ Declined Noun Mas
    [ (Singular,
@@ -1095,8 +1094,8 @@ value build_athin stem entry = (* pathin, supathin, mathin *)
         ; decline Loc "thisu"
         ])
    ]
-   ; Bare Noun bare
-   ; Avyayaf bare
+   ; Bare Noun (fix stem "thi")  (* pathi- *)
+   ; Avyayaf (fix stem "tham") (* upapatham *)
    ]
 ;
 value build_ribhuksin stem entry =
@@ -5140,7 +5139,7 @@ value compute_nouns_stem_form e stem d p =
                | _  -> build_an Mas r2 e (* raajan *)
                ]
             | [ 3 :: r2 ] (* -in *) -> match r2 with
-               [ [ 33 :: r3 ] (* -thin *)-> match r3 with
+               [ [ 33 :: r3 ] (* -thin *) -> match r3 with
                   [ [ 1 :: [ 37 :: _ ] ]   (* -pathin *) (* \Pan{7,1,85} *)
                   | [ 1 :: [ 41 :: _ ] ]   (* -mathin *) 
                      -> build_athin r3 e
@@ -5773,7 +5772,7 @@ value iic_avya =
   ; "apa"
 (*; "aa" -- overgenerates *)
   ; "iti"
-  ; "upa" (* upakumbham upak.r.s.naat upagafgam upanadam upaagni *)
+  ; "upa" (* upakumbham upak.r.s.naat upagafgam upanadam upaagni upapatham *)
   ; "upari" (* uparibhuumi *)
   ; "dus" (* durbhik.sam *)
   ; "nis" (* nirmak.sikam *)
@@ -5987,6 +5986,12 @@ value compute_extra iic_only_stems = do
   ; enter1 "viz#2" (* Vedic Whitney§218a *) decl
     where decl = Declined Noun Fem [ (Plural,[ (Loc,code "vik.su") ]) ]
   ; iter enter_iiy iic_avya
+  ; enter1 "tva" (* skipped in dico *) decl
+    where decl = Declined Noun Mas [ (Singular,[ (Nom,code "tvas") ]) ]
+  ; enter1 "tva" decl
+    where decl = Declined Noun Mas [ (Dual,[ (Nom,code "tvau") ]) ]
+  ; enter1 "tva" decl
+    where decl = Declined Noun Mas [ (Plural,[ (Nom,code "tve") ]) ]
   ; enter1 "giri" (Avyayaf (code "giram")) (* \Pan{5,4,112} upagiram *)
   ; iter enter_gati gatis
   ; tasil_extra ()

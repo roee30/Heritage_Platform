@@ -5,7 +5,7 @@
 #                        Gérard Huet & Pawan Goyal                         #
 #                                                                          #
 ############################################################################
-# Makefile of Sanskrit Heritage Software  15-02-2020  Copyright INRIA 2020 #
+# Makefile of Sanskrit Heritage Software  20-05-2020  Copyright INRIA 2020 #
 ############################################################################
 # Prerequisites: Ocaml 4.07 and Camlp4 preprocessor
 
@@ -31,7 +31,7 @@ VPATH=$(ZEN)
 # CORE package - utilities, transducers, sanskrit and french lexers, dico spec
 CORE=$(DISTR_CORE) paths.ml data.ml
 DISTR_CORE = control.ml version.ml date.ml canon.ml min_lexer.ml \
-             transduction.ml encode.ml order.ml padapatha.ml skt_lexer.ml \
+             transduction.ml encode.ml order.ml chunker.ml skt_lexer.ml \
              sanskrit.mli sanskrit.ml test_stamp.ml dir.mli dir.ml
 
 # GRAM package - phonetics, morphology, segmentation and tagging engines
@@ -77,7 +77,7 @@ SOURCES=$(ENGINE) $(DEBUG) $(INACTIVE)
 
 CORENATIVES=list2.cmx gen.cmx paths.cmx version.cmx word.cmx canon.cmx \
 min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx skt_lexer.cmx \
-padapatha.cmx sanskrit.cmx order.cmx data.cmx
+chunker.cmx sanskrit.cmx order.cmx data.cmx
 
 ANNOTFLAGS = -annot -bin-annot
 
@@ -215,7 +215,7 @@ cgi.cmx sandhier.cmx -o sandhier
 reader: reader.cmx 
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx \
 date.cmx control.cmx word.cmx canon.cmx min_lexer.cmx phonetics.cmx \
-transduction.cmx encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx \
+transduction.cmx encode.cmx skt_lexer.cmx chunker.cmx sanskrit.cmx deco.cmx \
 lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx web.cmx naming.cmx \
 morpho_string.cmx morpho.cmx load_transducers.cmx pada.cmx phases.cmx \
 dispatcher.cmx order.cmx chapters.cmx morpho_html.cmx cgi.cmx segmenter.cmx \
@@ -228,7 +228,7 @@ LEGACY=
 interface: interface.cmx minimap.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx \
 date.cmx control.cmx word.cmx canon.cmx min_lexer.cmx phonetics.cmx \
-transduction.cmx encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx \
+transduction.cmx encode.cmx skt_lexer.cmx chunker.cmx sanskrit.cmx deco.cmx \
 lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx web.cmx naming.cmx \
 morpho_string.cmx morpho.cmx load_transducers.cmx pada.cmx phases.cmx \
 dispatcher.cmx order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx \
@@ -240,7 +240,7 @@ save_corpus_params.cmx dir.cmx corpus.cmx web_corpus.cmx interface.cmx \
 user_aid: user_aid.cmx
 	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \
 control.cmx word.cmx canon.cmx deco.cmx min_lexer.cmx phonetics.cmx \
-transduction.cmx encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx html.cmx \
+transduction.cmx encode.cmx skt_lexer.cmx chunker.cmx sanskrit.cmx html.cmx \
 SCLpaths.cmx data.cmx web.cmx naming.cmx morpho_string.cmx morpho.cmx order.cmx \
 chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx phases.cmx checkpoints.cmx \
 user_aid.cmx -o user_aid
@@ -248,7 +248,7 @@ user_aid.cmx -o user_aid
 parser: parser.cmx 
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx \
 date.cmx control.cmx word.cmx canon.cmx min_lexer.cmx phonetics.cmx \
-transduction.cmx encode.cmx skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx \
+transduction.cmx encode.cmx skt_lexer.cmx chunker.cmx sanskrit.cmx deco.cmx \
 lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx web.cmx naming.cmx \
 morpho_string.cmx morpho.cmx load_transducers.cmx pada.cmx phases.cmx \
 dispatcher.cmx order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx \
@@ -260,7 +260,7 @@ corpus_manager: corpus_manager_cgi.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
 		version.cmx date.cmx control.cmx word.cmx canon.cmx	\
 		min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
-		skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx	\
+		skt_lexer.cmx chunker.cmx sanskrit.cmx deco.cmx	\
 		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx \
 		web.cmx	naming.cmx morpho_string.cmx morpho.cmx		\
 		load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx	\
@@ -276,7 +276,7 @@ save_corpus: save_corpus_cgi.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
 		version.cmx date.cmx control.cmx word.cmx canon.cmx	\
 		min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
-		skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx	\
+		skt_lexer.cmx chunker.cmx sanskrit.cmx deco.cmx	\
 		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx	\
 		web.cmx naming.cmx morpho_string.cmx morpho.cmx		\
 		load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx	\
@@ -292,7 +292,7 @@ mkdir_corpus: mkdir_corpus_cgi.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
 		version.cmx date.cmx control.cmx word.cmx canon.cmx	\
 		min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
-		skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx	\
+		skt_lexer.cmx chunker.cmx sanskrit.cmx deco.cmx	\
 		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx	\
 		web.cmx naming.cmx morpho_string.cmx morpho.cmx		\
 		load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx	\
@@ -308,7 +308,7 @@ mk_corpus: mk_corpus.cmx
 	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx		\
 		version.cmx date.cmx control.cmx word.cmx canon.cmx	\
 		min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx	\
-		skt_lexer.cmx padapatha.cmx sanskrit.cmx deco.cmx	\
+		skt_lexer.cmx chunker.cmx sanskrit.cmx deco.cmx	\
 		lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx	\
 		web.cmx naming.cmx morpho_string.cmx morpho.cmx		\
 		load_transducers.cmx pada.cmx phases.cmx dispatcher.cmx	\
@@ -380,14 +380,14 @@ tagger1: tagger1.cmx
 #	cd $(DATA) && $(MAKE) transn.rem
 	$(LINK) list2.cmx gen.cmx paths.cmx version.cmx \
 word.cmx canon.cmx min_lexer.cmx phonetics.cmx transduction.cmx \
-skt_lexer.cmx deco.cmx sandhi.cmx padapatha.cmx sanskrit.cmx naming.cmx \
+skt_lexer.cmx deco.cmx sandhi.cmx chunker.cmx sanskrit.cmx naming.cmx \
 morpho.cmx segmenter1.cmx tagger1.cmx -o tagger1
 
 # enter in ocaml toplevel '#use "debug.ml";' in order to debug 
 # adapt to your need in modules 
 # NB best used by first hiding all .mli, make clean, make depend 
 debug: gen.cmo version.cmo date.cmo word.cmo min_lexer.cmo order.cmo \
-canon.cmo phonetics.cmo min_lexer.cmo transduction.cmo padapatha.cmo \
+canon.cmo phonetics.cmo min_lexer.cmo transduction.cmo chunker.cmo \
 sanskrit.cmo sandhi.cmo int_sandhi.cmo share.cmo trie.cmo deco.cmo \
 skt_lexer.cmo encode.cmo order.cmo lexmap.cmo inflected.cmo parts.cmo \
 verbs.cmo morpho_html.cmo cgi.cmo html.cmo web.cmo indexer.cmo declension.cmo 

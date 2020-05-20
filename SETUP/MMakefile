@@ -243,7 +243,7 @@ UTIL=ML/Makefile $(ML_COPYRIGHT) ML/.ocamlinit ML/.depend
 
 # CORE package - utilities, transducers, sanskrit and french lexers, dico spec
 DISTR_CORE=ML/control.ml ML/dico.mli ML/version.ml ML/date.ml ML/install.ml \
-ML/canon.ml ML/transduction.ml ML/encode.ml ML/order.ml ML/padapatha.ml \
+ML/canon.ml ML/transduction.ml ML/encode.ml ML/order.ml ML/chunker.ml \
 ML/sanskrit.mli ML/sanskrit.ml ML/skt_lexer.ml \
 ML/dir.mli ML/dir.ml
 CORE=$(DISTR_CORE) ML/paths.ml ML/data.ml

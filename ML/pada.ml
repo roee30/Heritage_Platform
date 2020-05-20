@@ -96,7 +96,7 @@ value voices_of = fun
   | "kuu" | "k.rp" | "k.lp" (* but Henry: {cak.lpur} "ils s'arrangèrent" *)
   | "knuu" | "klav" | "k.sad" | "galbh" | "gur" | "glah" 
   | "gha.t" | "jabh#1" | "ju.s#1" | "j.rmbh" | ".damb" | ".dii" | "tandr"
-  | "tij" | "trap" | "trai" | "tvar" | "dak.s" | "day" | "diik.s" | "diip"
+  | "tij" | "trap" | "trai" | "tvar" | "dak.s" | "day" | "diik.s" 
   | "d.r#1" | "dhii#1" | "dhuk.s" | "pa.n" | "pad#1" | "pi~nj" 
   | "pyaa" | "prath" | "pru" | "plu" | "ba.mh" | "baadh" | "bha.n.d" | "bhand" 
   | "bhaa.s" | "bhraaj" | "ma.mh" | "man" | "mand#1" | "yat#1" 
@@ -111,6 +111,7 @@ value voices_of = fun
 (*| "gaah" Ubha needed for gaahet epics *)
 (*| "k.sam" Ubha needed for k.samati epics *)
 (*| "yudh1" Ubha needed for yudhya BhG *)
+(*| "diip" Ubha needed for epics *)
    (* DRP restriction: "dyut1" *) 
       -> Atma (* "deponent" verbs: middle only *)
   | _ -> Ubha (* default *) 
@@ -119,11 +120,11 @@ value voices_of = fun
   | ".rj" | "ka.n.d" | "kal" | "ka.s" | "ku.t.t" | "ku.n.d" | "k.r#1" | "k.r#2" 
   | "k.r.s" | "kram" | "krii#1" | "krii.d" | "k.san" | "k.sap#1" | "k.sam" 
   | "k.sal" | "k.sip" | "k.sud" | "k.s.nu" | "khan" | "gam" | "garh" 
-  | "gaah" | "guh" | "g.rr#1" | "gras" | "gha.t.t" 
-  | "cat" | "carc" | "ci" | "cint" | "cud" | "ce.s.t" | "cyu" | "chad#1"
-  | "chand" | "chid#1" | "jan" | "juu" | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d"
-  | "tan#1" | "tan#2" | "tap" | "tud#1" | "tul" | "t.rd" | "traa" | "daa#1"
-  | "daaz#1" | "diz#1" | "dih" | "duh#1" | "dev#1" | "draa#2" | "dvi.s#1" 
+  | "gaah" | "guh" | "g.rr#1" | "gras" | "gha.t.t" | "cat" | "carc" 
+  | "ci" | "cint" | "cud" | "ce.s.t" | "cyu" | "chad#1" | "chand" | "chid#1"
+  | "jan" | "juu" | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d" | "tan#1" | "tan#2"
+  | "tap" | "tud#1" | "tul" | "t.rd" | "traa" | "daa#1" | "daaz#1" | "diz#1"
+  | "dih" | "diip" | "duh#1" | "dev#1" | "draa#2" | "dvi.s#1" 
   | "dhaa#1" | "dhaav#1" | "dhaav#2" | "dhuu#1" | "dh.r" | "dhva.ms" | "nah" 
   | "naath" | "nij" | "nii#1" | "nud" | "pac" | "paz" | "pa.th" | "pii.d" 
   | "pu.s#1" | "puu#1" | "puuj" | "puuy" | "p.rth" | "prii" | "pru.s#1" 

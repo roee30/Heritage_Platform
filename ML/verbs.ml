@@ -4080,10 +4080,11 @@ value compute_aorist entry =
   { match entry with (* 1. root aorist - Panini sic-luk *)
     [ "k.r#1" | "kram" | "gam" | "gaa#1" | "ci" | "jan" | "j~naa#1" 
     | "daa#1" | "daa#2" | "dhaa#1" | "dhaa#2" | "paa#1" | "bhuu#1" | "muc#1" 
-    | "zaa" | "saa#1" | "sthaa#1" | "has" | "haa#1" -> do
+    | "v.r#1" | "zaa" | "saa#1" | "sthaa#1" | "has" | "haa#1" -> do
       { compute_root_aorista weak strong entry 
-      ; match entry with
-        [ "k.r#1" | "gam" | "jan" -> compute_root_aoristm weak entry (* rare *) 
+      ; match entry with (* Atma rare *) 
+        [ "k.r#1" | "gam" | "jan" | "v.r#1" -> 
+                    compute_root_aoristm weak entry 
         | "sthaa#1" (* Whitney§834a. *) ->
                     compute_root_aoristm (revstem "sthi") entry (* asthita *) 
         | "dhaa#1" -> compute_root_aoristm (revstem "dhi") entry
@@ -4104,7 +4105,7 @@ value compute_aorist entry =
       }
     | "prii" -> let st = revcode "priiyaa" in compute_root_aorista st st entry 
     | "svid#2" -> let st = revcode "svidyaa" in compute_root_aorista st st entry
-    | "iik.s" | "m.r" -> compute_root_aoristm weak entry
+    | "iik.s" |  "m.r" | "v.r#2" -> compute_root_aoristm weak entry
     (* Now other passive/impersonal aorist in -i *)
     | "vac" -> do (* passive aorist *)
       { compute_root_aoristp long entry 
@@ -4186,9 +4187,10 @@ value compute_aorist entry =
     ]
   ; match entry with (* 4. sigma aorist sic *)
     [ "aap" | "k.r#1" | "khan" | "gup" | "gh.r" | "ci" | "chid#1" | "ji" 
-    | "tud#1" | "t.rr" | "tyaj#1" | "dah#1" | "daa#1" | "d.rz#1" | "draa#2" 
+    | "tud#1" | "t.rr" | "tyaj#1" | "dah#1" | "d.rz#1" | "draa#2" 
     | "dhaa#1" | "dhyaa" | "dhyai" | "dhv.r" | "nak.s" | "nii#1" | "pac"
-    | "praz" | "prii" | "budh#1" | "bhii#1" | "muc#1" | "yaj#1" | "yuj#1" 
+    | "m.r" (* Deshpande gives am.rta [1] am.r.saataam [4] am.r.sata [4] *)
+    | "yaj#1" | "yuj#1" 
     | "ram" | "rudh#2" | "labh" | "v.r#2" | "vyadh" | "zru" | "sidh#1"
     | "s.rj#1" | "stu" | "sp.rz#1" | "haa#1" | "hu" -> do
       { let stem = match entry with
@@ -4236,11 +4238,11 @@ value compute_aorist entry =
     ]
   ; match entry with (* 5. i.s aorist se.t-sic *)
     [ "ak.s" | "aj" | "aas#2" | "i.s#1" | "iik.s" | "uk.s" | "uc" | "u.s" 
-    | "uuh" | ".rc#1" | "k.rt#1" | "krand" | "kram" | "kliz" | "k.san"  | "khan"
+    | "uuh" | ".rc#1" | "k.rt#1" | "krand" | "kram" | "kliz" | "k.san"  
     | "car" | "ce.s.t" | "jap" | "jalp" | "jaag.r" | "t.rr" | "diip"
     | "puu#1" | "p.rc"| "pru.s#1" | "baadh" | "budh#1" | "mad#1" 
     | "mud#1" | "muurch" | "mlecch" | "yaac" | "rak.s" | "ruc#1" | "lu~nc" 
-    | "luu#1" | "vad" | "vaz" | "vadh" | "vid#1" | "v.r#1" | "vraj" | "z.rr"
+    | "luu#1" | "vad" | "vadh" | "vaz" | "vid#1" | "v.r#1" | "vraj" | "z.rr"
     | "sidh#2" | "skhal" | "stan" | "stu" | "hi.ms" -> do
       { let stem = match weak with
             [ [ 7 (* .r *) :: _ ] -> (* complex Paninian see Müller Gram xii *)
@@ -4261,7 +4263,7 @@ value compute_aorist entry =
         compute_ath_is_aorista stem entry 
       ; compute_ath_is_aoristm strong entry 
       } 
-    | "pa.th" -> do (* Deshpande *)
+    | "khan" | "pa.th" -> do (* Deshpande *)
       { compute_ath_is_aorista strong entry (* apa.thiit *)
       ; compute_ath_is_aorista long entry   (* apaa.thiit *)
       ; compute_ath_is_aoristm strong entry 
@@ -4272,7 +4274,7 @@ value compute_aorist entry =
       compute_ath_is_aorista (revcode "zve") entry 
     | "kan" | "k.r#2"| "p.rr" | "zaz" -> (* active only *)
       compute_ath_is_aorista long entry 
-    | "kamp" | "gaah" | "jan" | "zii#1" | "spand" -> (* middle only *)
+    | "kamp" | "gaah" | "jan" | "v.rt#1" | "zii#1" | "spand" -> (* middle only *)
       compute_ath_is_aoristm strong entry 
     | "grah" -> do 
       { let stem = revcode "grah" in do (* same as group above *)
@@ -4287,8 +4289,8 @@ value compute_aorist entry =
     | _ -> ()
     ]
   ; match entry with (* 6. si.s aorist se.t-sic *)
-    [ "j~naa#1" | "dhyaa" | "dhyai" | "nam" | "paa#2" | "mnaa" | "yaa#1" | "laa" 
-    | "zaa" | "bhaa#1" -> do (* dhyai for dhyaa *)
+    [ "j~naa#1" | "daa#1" | "dhyaa" | "dhyai" | "nam" | "paa#2" | "mnaa" 
+    | "yaa#1" | "laa" | "zaa" | "bhaa#1" -> do (* dhyai for dhyaa *)
       { compute_ath_sis_aorista strong entry 
       ; compute_ath_is_aoristm strong entry (* is aorist (5) used in middle *)
       }
@@ -5952,6 +5954,7 @@ and compute_extra_vadh () = (* no present - use "han#1" *)
   let root = "vadh"
   and rstem = revcode "vadh" in do 
   { compute_aorist root
+  ; compute_injunctive root
   ; compute_future_gen rstem root 
   ; compute_passive_raw root
   (* [record_pfp root rstem] is computed by [compute_extra_participles] *)

@@ -269,18 +269,6 @@ value display_conjug font conj = do
   ; pl table_end (* Cyan *)
   ; pl html_paragraph
   }
-(* Deprecated 
-and display_title font = do
-  { pl html_paragraph
-  ; pl (table_begin (centered Gris))
-  ; ps tr_begin
-  ; ps th_begin 
-  ; ps (ctitle font)
-  ; ps th_end 
-  ; ps tr_end 
-  ; pl table_end (* Gris *)
-  ; pl html_paragraph
-  } *)
 and display_subtitle title = do
   { pl html_paragraph
   ; pl (table_begin (centered Deep_sky))
@@ -901,8 +889,7 @@ value conjs_engine () = do
         let entry = resolve_homonym entry_VH gana in (* VH string with homo *)
         let known = in_lexicon entry (* in lexicon? *) 
           (* we should check it is indeed a root or denominative *) in do 
-        { (* deprecated [display_title font] *)
-          let link = if known then Morpho_html.skt_anchor False font entry 
+        { let link = if known then Morpho_html.skt_anchor False font entry 
                      else doubt (Morpho_html.skt_roma entry) in 
           let subtitle = hyperlink_title font link in
           display_subtitle (h1_center subtitle)

@@ -374,6 +374,7 @@ value styles = fun
     | Yellow_cent     -> [ Bgcolor Yellow; Tablecenter; Border 5; Padding 10 ]
     | Lavender_cent   -> [ Bgcolor Lavender; Tablecenter; Border 5; Padding 10 ]
     | Inflection      -> [ Bgcolor Light_blue; Tablecenter; Border 2; Padding 5 ]
+
     | Deep_sky_cent   -> [ Bgcolor Deep_sky; Tablecenter; Border 5; Padding 10 ]
     | Gold_cent       -> [ Bgcolor Gold; Tablecenter; Border 0; Padding 10 ] 
     | Cyan_cent       -> [ Bgcolor Cyan; Tablecenter; Border 5; Padding 10 ] 

@@ -63,18 +63,7 @@ value prlist_font font =
        | [ x :: l ] -> do { pr x; ps bar; prlistrec l }
        ]
 ;
-value display_title font = do
-  { html_paragraph |> pl
-  ; table_begin (centered Mauve) |> pl
-  ; tr_begin |> ps
-  ; th_begin |> ps
-  ; dtitle font |> ps
-  ; th_end |> ps
-  ; tr_end |> ps 
-  ; table_end |> pl (* Mauve *)
-  ; html_paragraph |> pl
-  }
-and display_subtitle title = do
+value display_subtitle title = do
   { html_paragraph |> pl
   ; table_begin (centered Deep_sky) |> pl
   ; tr_begin |> ps
@@ -116,7 +105,7 @@ value print_ro1 caption s d p = do
 ;
 value print_row_font font case s d p = 
   let prlist = prlist_font font in do
-  { tr_mouse_begin (color Light_blue) (color Pale_yellow) |> ps
+  { tr_mouse_begin (color Lilac) (color Light_blue) |> ps
   ; th_begin |> ps
   ; case |> ps
   ; xml_next "th" |> ps
@@ -144,8 +133,8 @@ value display_gender font gender = fun
     and (v3,n3,a3,i3,d3,b3,g3,l3) = cases_of p
     and caption = gender_caption gender font 
     and print_row = print_row_font font in do
-    { pl html_paragraph
-    ; pl (table_begin_style Inflexion [ ("border","2"); padding5 ])
+    { html_paragraph |> pl
+    ; table_begin_style Inflection [ ("border","2"); padding5 ] |> pl
     ; let sing = number_caption Singular font
       and dual = number_caption Dual font 
       and plur = number_caption Plural font in
@@ -288,8 +277,7 @@ value decls_engine () = do
     and source = decode_url url_encoded_source (* cascading from conjug *)
     and () = toggle_lexicon lex in
     try do 
-      { display_title font
-      ; let word = code entry_tr in
+      { let word = code entry_tr in
         let entry_VH = Canon.decode word in (* ugly detour via VH string *) 
                        (* will be avoided by unique name lookup *) 
         let entry = resolve_homonym entry_VH in (* compute homonymy index *)

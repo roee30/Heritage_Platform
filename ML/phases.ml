@@ -205,7 +205,7 @@ value rec color_of_phase = fun
   | Inde | Abso | Absv | Absc | Auxiinv | Ai | Ani -> Mauve
   | Iiy -> Lavender
   | Avy -> Magenta
-  | Inftu -> Salmon 
+  | Inftu -> Orange
   | Iic | Iic2 | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif 
         | Auxiick | Cachei -> Yellow
   | Peri | Iiv | Iivv | Iivc -> Orange

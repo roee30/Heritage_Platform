@@ -43,7 +43,7 @@ value pr code =
 and pr_deva code =
   ps (html_devared (Canon.unidevcode code) ^ " ") (* devanagari *)
 ;
-value pr_f font word =
+value pr_font font word =
   let code = Morpho_html.final word in (* visarga correction *)
   match font with
   [ Deva -> pr_deva code
@@ -51,7 +51,7 @@ value pr_f font word =
   ]
 ;
 value prlist_font font = 
-  let pr = pr_f font 
+  let pr = pr_font font 
   and bar = html_green " | " in
   prlistrec 
      where rec prlistrec = fun
@@ -79,27 +79,27 @@ value numbers_of l =
    List.fold_left reorg init l
 ;
 value acell display s = do
-  { ps th_begin
+  { th_begin |> ps
   ; display s
-  ; ps th_end
+  ; th_end |> ps
   }
 ;
 value print_row1 caption s d p = do
-  { ps tr_begin
+  { tr_begin |> ps
   ; acell ps caption
   ; acell ps s
   ; acell ps d
   ; acell ps p
-  ; pl tr_end
+  ; tr_end |> ps
   }
 and print_row_font font caption s d p = 
   let prlist = prlist_font font in do
-  { ps (tr_mouse_begin (color Light_blue) (color Pale_yellow))
+  { tr_mouse_begin (color Lilac) (color Light_blue) |> ps
   ; acell ps caption
   ; acell prlist s
   ; acell prlist d
   ; acell prlist p
-  ; pl tr_end 
+  ; tr_end |> pl
   }
 ;
 value display font ovoice l =
@@ -110,7 +110,7 @@ value display font ovoice l =
    and caption = voice_name ovoice font
    and print_row = print_row_font font in do
        { pl html_break
-       ; pl (table_begin_style Inflexion [ ("border","2"); padding5 ])
+       ; pl (table_begin_style Inflection [ ("border","2"); padding5 ])
        ; let sing = number_caption Singular font
          and dual = number_caption Dual font 
          and plur = number_caption Plural font in
@@ -139,7 +139,7 @@ value display_table font ovoice = fun
 value print_caption font tense = ps (tense_name tense font)
 ;
 value display_amp font otense da dm dp = do 
-  { pl (table_begin (centered Mauve))
+  { pl (table_begin (centered Gris))
   ; ps tr_begin
   ; ps th_begin
   ; Gen.optional (print_caption font) otense
@@ -152,10 +152,10 @@ value display_amp font otense da dm dp = do
   ; pl table_end
   ; ps th_end
   ; pl tr_end
-  ; pl table_end (* Mauve *)
+  ; pl table_end (* Gris *)
   }
 and display_perfut font pfa = do
-  { pl (table_begin_style (centered Mauve) [])
+  { pl (table_begin_style (centered Gris) [])
   ; ps tr_begin
   ; ps th_begin
   ; ps (perfut_name font)
@@ -166,70 +166,74 @@ and display_perfut font pfa = do
   ; pl table_end
   ; ps th_end  
   ; pl tr_end
-  ; pl table_end (* Mauve *)
+  ; pl table_end (* Gris *)
   }
 ;
 value sort_out_v accu form = fun
   [ [ (_ (* delta *),morphs) ] -> List.fold_left reorg accu morphs 
-      where reorg (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,cm) = fun 
+      where reorg (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm) = fun 
         [ Verb_form (_(* conj *),te) n p -> let t = (n,p,form) in match te with 
           [ Presenta _ Present -> 
-     ([ t :: pa ],pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+     ([ t :: pa ],pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Presentm _ Present -> 
-     (pa,[ t :: pm ],ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+     (pa,[ t :: pm ],ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Presenta _ Imperfect -> 
-     (pa,pm,[ t :: ia ],im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+     (pa,pm,[ t :: ia ],im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Presentm _ Imperfect -> 
-     (pa,pm,ia,[ t :: im ],oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+     (pa,pm,ia,[ t :: im ],oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Presenta _ Optative -> 
-     (pa,pm,ia,im,[ t :: oa ],om,ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+     (pa,pm,ia,im,[ t :: oa ],om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Presentm _ Optative   -> 
-     (pa,pm,ia,im,oa,[ t :: om ],ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+     (pa,pm,ia,im,oa,[ t :: om ],ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Presenta _ Imperative -> 
-     (pa,pm,ia,im,oa,om,[ t :: ea ],em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+     (pa,pm,ia,im,oa,om,[ t :: ea ],em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Presentm _ Imperative -> 
-     (pa,pm,ia,im,oa,om,ea,[ t :: em ],fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+     (pa,pm,ia,im,oa,om,ea,[ t :: em ],fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Conjug Future Active -> 
-     (pa,pm,ia,im,oa,om,ea,em,[ t :: fa ],fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+     (pa,pm,ia,im,oa,om,ea,em,[ t :: fa ],fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Conjug Future Middle -> 
-     (pa,pm,ia,im,oa,om,ea,em,fa,[ t :: fm ],pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+     (pa,pm,ia,im,oa,om,ea,em,fa,[ t :: fm ],pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Conjug Perfect Active -> 
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,[ t :: pfa ],pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,[ t :: pfa ],pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Conjug Perfect Middle -> 
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,[ t :: pfm ],aa,am,ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,[ t :: pfm ],aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Conjug (Aorist _) Active -> 
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,[ t :: aa ],am,ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,cm)
-          | Conjug (Aorist _) Middle | Conjug (Aorist _) Passive -> (* passive-middle *)
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,[ t :: am],ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,[ t :: aa ],am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+          | Conjug (Aorist _) Middle ->
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,[ t :: am],ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+          | Conjug (Aorist _) Passive -> 
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,[ t :: ap],ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Conjug (Injunctive _) Active -> 
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,[ t :: ja ],jm,ba,bm,fpa,ps,ip,op,ep,ca,cm)
-          | Conjug (Injunctive _) Middle | Conjug (Injunctive _) Passive -> (* passive-middle *)
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ja,[ t :: jm ],ba,bm,fpa,ps,ip,op,ep,ca,cm)
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,[ t :: ja ],jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+          | Conjug (Injunctive _) Middle ->
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,[ t :: jm ],jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+          | Conjug (Injunctive _) Passive -> 
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,[ t :: jp ],ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Conjug Benedictive Active -> 
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,[ t :: ba ],bm,fpa,ps,ip,op,ep,ca,cm)
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,[ t :: ba ],bm,fpa,ps,ip,op,ep,ca,cm)
           | Conjug Benedictive Middle -> 
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,[ t :: bm ],fpa,ps,ip,op,ep,ca,cm)
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,[ t :: bm ],fpa,ps,ip,op,ep,ca,cm)
           | Perfut Active -> 
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,[ t :: fpa ],ps,ip,op,ep,ca,cm)
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,[ t :: fpa ],ps,ip,op,ep,ca,cm)
           | Presentp Present -> 
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,[ t :: ps ],ip,op,ep,ca,cm)
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,[ t :: ps ],ip,op,ep,ca,cm)
           | Presentp Imperfect -> 
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,[ t :: ip ],op,ep,ca,cm)
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,[ t :: ip ],op,ep,ca,cm)
           | Presentp Optative -> 
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,[ t :: op ],ep,ca,cm)
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,[ t :: op ],ep,ca,cm)
           | Presentp Imperative -> 
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,op,[ t :: ep ],ca,cm)
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,[ t :: ep ],ca,cm)
           | Conjug Conditional Active -> 
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,op,ep,[ t :: ca ],cm)
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,[ t :: ca ],cm)
           | Conjug Conditional Middle -> 
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,[ t :: cm ])
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,[ t :: cm ])
           | _ -> failwith "Unknown paradigm"
           ]
         | _ -> raise (Control.Fatal "Unexpected verbal form")
         ]
   | _ -> raise (Control.Fatal "Weird inverse map V")
   ]
-and init_v = ([],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[])
+and init_v = ([],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[],[])
 ;
 value display_tense3 font tense la lm lp =
    if la=[] && lm=[] && lp= [] then ()
@@ -265,17 +269,18 @@ value display_conjug font conj = do
   ; pl table_end (* Cyan *)
   ; pl html_paragraph
   }
+(* Deprecated 
 and display_title font = do
   { pl html_paragraph
-  ; pl (table_begin (centered Mauve))
+  ; pl (table_begin (centered Gris))
   ; ps tr_begin
   ; ps th_begin 
   ; ps (ctitle font)
   ; ps th_end 
   ; ps tr_end 
-  ; pl table_end (* Mauve *)
+  ; pl table_end (* Gris *)
   ; pl html_paragraph
-  }
+  } *)
 and display_subtitle title = do
   { pl html_paragraph
   ; pl (table_begin (centered Deep_sky))
@@ -289,7 +294,8 @@ and display_subtitle title = do
   }
 ;
 value display_inflected_v font 
-      (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ja,jm,ba,bm,fpa,ps,ip,op,ep,ca,cm) = do
+   (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,
+    fpa,ps,ip,op,ep,ca,cm) = do
  { pl center_begin 
  ; let tense = Present_tense Present in
    display_tense3 font tense pa pm ps
@@ -313,12 +319,12 @@ value display_inflected_v font
  ; if pfa=[] && pfm=[] then () else do 
      { pl html_break; let tense = Other_tense Perfect in
                       display_tense2 font tense pfa pfm }
- ; if aa=[] && am=[] then () else do
+ ; if aa=[] && am=[] && ap=[] then () else do
      { pl html_break; let tense = Other_tense (Aorist 0) in (* forget class *)
-                      display_tense2 font tense aa am }
- ; if ja=[] && jm=[] then () else do
-     { pl html_break; let tense = Other_tense (Injunctive 0) in (* forget class *)
-                      display_tense2 font tense ja jm }
+                      display_tense3 font tense aa am ap }
+ ; if ja=[] && jm=[] && jp=[] then () else do
+     { pl html_break; let tense = Other_tense (Injunctive 0) in (* idem *)
+                      display_tense3 font tense ja jm jp }
  ; if ba=[] && bm=[] then () else do
      { pl html_break; let tense = Other_tense Benedictive in 
                       display_tense2 font tense ba bm }
@@ -331,7 +337,7 @@ value display_ind ind font = List.iter disp
   { ps (h3_begin B3)
   ; ps ind
   ; pl html_break
-  ; pr_f font f
+  ; pr_font font f
   ; pl html_break
   ; ps h3_end
   }
@@ -382,12 +388,12 @@ value display_part font entry part stem_mn stem_f =
   { ps (h3_begin B3)
   ; ps (participle_name part font)
   ; pl html_break
-  ; pr_f font stem_mn
+  ; pr_font font stem_mn
   ; ps (decl_url Mas str_mn str_font entry part)
   ; ps " "
   ; ps (decl_url Neu str_mn str_font entry part)
   ; ps " "
-  ; pr_f font stem_f
+  ; pr_font font stem_f
   ; ps " "
   ; ps (decl_url Fem str_f str_font entry part)
   ; ps h3_end
@@ -396,7 +402,7 @@ value display_part font entry part stem_mn stem_f =
 value abort_display mess = do
   { ps th_end 
   ; ps tr_end 
-  ; pl table_end  (* Mauve *)
+  ; pl table_end  (* Gris *)
   ; pl center_end
   ; failwith mess
   }
@@ -572,7 +578,7 @@ value look_up_and_display font gana entry =
       ; display_inflected_v font buckets (* Display finite root forms *)
       ; pl html_paragraph
       ; pl center_begin (* Now display participial root forms *)
-      ; pl (table_begin_style (centered Mauve) [])
+      ; pl (table_begin_style (centered Gris) [])
       ; ps tr_begin 
       ; ps th_begin 
       ; ps (participles_caption font)
@@ -588,7 +594,7 @@ value look_up_and_display font gana entry =
         let _ = process_pftm rest    in (* Perfect Middle *) do
           { ps th_end 
           ; ps tr_end 
-          ; pl table_end  (* Mauve *)
+          ; pl table_end  (* Gris *)
           ; pl center_end
           ; pl html_paragraph (* Now display indeclinable root forms if any *)
           ; let (inf,_,_,abstvaa) = Deco.fold sort_out_u init_u abstvaa.val 
@@ -597,14 +603,14 @@ value look_up_and_display font gana entry =
             if absya=[] && per=[] && abstvaa=[] then () else do
             (* Display indeclinable forms *)
             { pl center_begin 
-            ; pl (table_begin_style (centered Mauve) [])
+            ; pl (table_begin_style (centered Gris) [])
             ; ps tr_begin
             ; ps th_begin
             ; ps (indeclinables_caption font)
             ; display_inflected_u font inf absya per abstvaa 
             ; ps th_end
             ; ps tr_end
-            ; pl table_end (* Mauve *)
+            ; pl table_end (* Gris *)
             ; pl center_end
             }
           } 
@@ -895,8 +901,8 @@ value conjs_engine () = do
         let entry = resolve_homonym entry_VH gana in (* VH string with homo *)
         let known = in_lexicon entry (* in lexicon? *) 
           (* we should check it is indeed a root or denominative *) in do 
-        { display_title font 
-        ; let link = if known then Morpho_html.skt_anchor False font entry 
+        { (* deprecated [display_title font] *)
+          let link = if known then Morpho_html.skt_anchor False font entry 
                      else doubt (Morpho_html.skt_roma entry) in 
           let subtitle = hyperlink_title font link in
           display_subtitle (h1_center subtitle)

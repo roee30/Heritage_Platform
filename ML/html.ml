@@ -188,8 +188,8 @@ and font_style = [ Normal | Italic | Slanted ]
 type color = 
   [ Black | White | Red | Blue | Green | Yellow | Orange | Deep_sky | Purple 
   | Grey | Navy | Cyan | Brown | Carmin | Chamois | Broon | Maroon | Aquamarine
-  | Gold | Magenta | Mauve | Pink | Salmon | Lime | Light_blue | Lavender 
-  | Lawngreen | Deep_pink | Pale_yellow | Pale_rose | Beige ]
+  | Gold | Magenta | Mauve | Pink | Gris | Lime | Light_blue | Lavender 
+  | Lawngreen | Deep_pink | Pale_rose | Beige | Lilac | Violet ]
 ;
 type basic_style = 
   [ Font_family of font_family  
@@ -238,10 +238,11 @@ value rgb = fun (* a few selected HTML colors in rgb data *)
   | Mauve       -> "#FF99FF" (* Orchid = "#D070D0" *)
   | Pink        -> "#FFC0C0" (* Hotpink = "#FF68B0" Thisle = "#D0C0D0" *)
   | Deep_pink   -> "#FF1493" 
-  | Salmon      -> "#F08070" 
+  | Gris        -> "#E2E6E9" (* Salmon = "#F08070" *)
   | Beige       -> "#FFCCA0" 
   | Lime        -> "#00FF00" (* Chartreuse = "#80FF00" *)
-  | Pale_yellow -> "#FFFF66"   
+  | Lilac       -> "#E6CCFF"
+  | Violet      -> "#461B7E"
   | Pale_rose   -> "#FFDDDD" (* Mistyrose = "#FFE4E1" *)
   | Light_blue  -> "#ADD8E6" 
   | Lavender    -> "#E6E6FA" (* or "#E0E8F0" *)
@@ -319,15 +320,15 @@ type style_class =
     [ Blue_ | Green_ | Navy_ | Red_ | Magenta_ | Hidden_
     | Header_deva | Header_tran | Bandeau | Body | Spacing20 | Pad60 | Border2
     | Latin12 | Trans12 | Deva | Devac | Deva16 | Deva16c | Deva20c 
-    | Roma16o | Roma12o | Inflexion
+    | Roma16o | Roma12o | Inflection
     | Alphabet | G2 | Title | Latin16 | Trans16 | Devared_ | Math | Enpied 
     | B1 | B2 | B3 | C1 | C2 | C3 | Cell5 | Cell10 | Center_ | Tcenter | Centered
-    | Gold_cent | Mauve_cent | Yellow_cent | Cyan_cent | Deep_sky_cent
-    | Yellow_back | Blue_back | Salmon_back | Light_blue_back | Gold_back 
+    | Gold_cent | Mauve_cent | Yellow_cent | Cyan_cent | Deep_sky_cent 
+    | Yellow_back | Blue_back | Gris_back | Light_blue_back | Gold_back 
     | Pink_back | Chamois_back | Cyan_back | Brown_back | Lime_back | Grey_back 
     | Deep_sky_back | Carmin_back | Orange_back | Red_back | Mauve_back 
     | Lavender_back | Lavender_cent | Green_back | Lawngreen_back | Magenta_back
-    | Aquamarine_back 
+    | Aquamarine_back | Gris_cent
     ]
 ;
 value background = fun
@@ -336,7 +337,7 @@ value background = fun
     | Pink        -> Pink_back
     | Chamois     -> Chamois_back
     | Yellow      -> Yellow_back
-    | Salmon      -> Salmon_back
+    | Gris        -> Gris_back
     | Cyan        -> Cyan_back
     | Gold        -> Gold_back
     | Brown       -> Brown_back
@@ -357,6 +358,7 @@ value background = fun
 and centered = fun
     [ Mauve    -> Mauve_cent
     | Yellow   -> Yellow_cent
+    | Gris     -> Gris_cent
     | Gold     -> Gold_cent
     | Deep_sky -> Deep_sky_cent
     | Cyan     -> Cyan_cent
@@ -368,9 +370,10 @@ and centered = fun
 value styles = fun
     [ Centered        -> [ Tablecenter ]
     | Mauve_cent      -> [ Bgcolor Mauve; Tablecenter; Border 8; Padding 10 ]
+    | Gris_cent       -> [ Bgcolor Gris; Tablecenter; Border 5; Padding 10 ]
     | Yellow_cent     -> [ Bgcolor Yellow; Tablecenter; Border 5; Padding 10 ]
     | Lavender_cent   -> [ Bgcolor Lavender; Tablecenter; Border 5; Padding 10 ]
-    | Inflexion       -> [ Bgcolor Yellow; Tablecenter; Border 2; Padding 5 ]
+    | Inflection      -> [ Bgcolor Light_blue; Tablecenter; Border 2; Padding 5 ]
     | Deep_sky_cent   -> [ Bgcolor Deep_sky; Tablecenter; Border 5; Padding 10 ]
     | Gold_cent       -> [ Bgcolor Gold; Tablecenter; Border 0; Padding 10 ] 
     | Cyan_cent       -> [ Bgcolor Cyan; Tablecenter; Border 5; Padding 10 ] 
@@ -379,7 +382,7 @@ value styles = fun
     | Aquamarine_back -> [ Bgcolor Aquamarine ]
     | Pink_back       -> [ Bgcolor Pale_rose; No_margin ] (* Pink *)
     | Yellow_back     -> [ Bgcolor Yellow ] 
-    | Salmon_back     -> [ Bgcolor Salmon ]
+    | Gris_back       -> [ Bgcolor Gris ]
     | Chamois_back    -> [ Bgcolor Chamois; No_margin; Full_width ]
     | Cyan_back       -> [ Bgcolor Cyan ]
     | Gold_back       -> [ Bgcolor Gold ]
@@ -446,7 +449,7 @@ value style cla = String.concat "; " (List.map style_sheet (styles cla))
 value class_of = fun
     [ Mauve_cent      -> "mauve_cent"
     | Yellow_cent     -> "yellow_cent"
-    | Inflexion       -> "inflexion"
+    | Inflection      -> "inflexion"
     | Deep_sky_cent   -> "deep_sky_cent"
     | Centered        -> "centered"
     | Cyan_cent       -> "cyan_cent"
@@ -457,7 +460,8 @@ value class_of = fun
     | Yellow_back     -> "yellow_back"
     | Blue_back       -> "blue_back"
     | Light_blue_back -> "light_blue_back"
-    | Salmon_back     -> "salmon_back"
+    | Gris_back       -> "gris_back"
+    | Gris_cent       -> "gris_cent"
     | Chamois_back    -> "chamois_back"
     | Cyan_back       -> "cyan_back"
     | Gold_back       -> "gold_back"

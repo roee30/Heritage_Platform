@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Automaton = struct i*)
@@ -62,7 +62,7 @@ type rules = array stack
 
 (* We read sandhi rules compiled by [compile_sandhi] *)
 value (sandhis, sandhir, sandhin, sandhif, sandhio) = 
-  (Gen.gobble Data.sandhis_file : (rules * rules * rules * rules * rules))
+  (Gen.gobble Data.public_sandhis_file : (rules * rules * rules * rules * rules))
 ;
 value get_sandhi = fun (* argument is [mirror (code u)] *) 
   [ [] -> failwith "get_sandhi 0"

@@ -5761,7 +5761,7 @@ value iicf_extra =
   ; "kaantaa" (* kaanta pp *)
   ] 
 ;
-value iic_avya = 
+value iic_avyas = 
 (* indeclinable stems used as iic of avyayiibhaava cpd *)
   [ "ati" (* atikambalam atinidram atyaasam *)
   ; "adhas" (* adhazcara.nam *)
@@ -5807,7 +5807,10 @@ value iic_avya =
    ifc. yatham: yathaayatham
 3. misc: ti.s.thadgu anu.svadham var.sabhogye.na (retroflexion) *)
 ;
-(*i Derivational morphology - unplugged at present 
+value enter_iic_avya entry = 
+  enter1 entry (Avyayai (normal_stem entry)) (* stripped entry *)
+;
+(*i Taddhitas generation - unplugged at present 
 [value gen_prefixes = (* productive prefixes *)
   [ "ku" (* rare *)
   ; "dus"
@@ -5828,7 +5831,7 @@ and gen_suffixes = (* productive suffixes cf. [Subst.taddhitas] *)
   ; "tva"
   ; "mat"
   ; "vat" 
-  ; ... many other taddhitas ka ika iika in etc.
+  ; ... many other taddhitas ka ika aka/ikaa iika in iiya etc.
   ]] i*)
 
 value enter_iic entry =  
@@ -5860,6 +5863,7 @@ value enter_iiv entry =
 ;
 value compute_extra_iiv = iter enter_iiv 
 ;
+
 (* Gati forms used with auxiliary verbs, like Iiv -- form Absya *)
 value gatis = (* G{saak.sat} Wh§1092 *)
   [ "saak.saat" (* Pan{1,4,74} in the sense of cvi - becoming Wh§1078a *)
@@ -5916,12 +5920,24 @@ value enter_gati gati = (* assumes gati has lexical entry *)
   let stem = normal_stem gati in 
   enter1 gati (Cvi stem)
 ;
-value enter_iiy entry = 
-  enter1 entry (Avyayai (normal_stem entry)) (* stripped entry *)
+(* Now for the construction "reduced to" with auxiliaries *)
+
+value gati_products = (* on demand for gati in -saat *)
+  [ "bhuumi"; "agni"; "bhasma"; "dasyu"; "braahma.na"; "aatma"; "cuur.na" ]
 ;
+(* Whitney§1108 -saat s does not go to retroflex .s *)
+value enter_saat_gati product =  (* assumes gati has lexical entry *)
+  let gati = product ^ "saat" in (* bhasmasaat = reducing to cinders *)
+  let stem = normal_stem gati in 
+  enter1 product (Cvi stem) 
+(* NB There is possible redundancy when the adverb in -saat is lexicalized,
+and is immediately followed by a form of k.r, as or bhuu (without space).
+The lexicalization is necessary when the construction is used with a different 
+auxiliary, such as yaa (bhasmasaat) or nii (Whitney) or sampad (gr.) *)
+
 (* Tasils are treated as adverbs. Here are the lexicalized ones: Whitney§1098 
    First tasils of pronouns, not needed if lexicalised 
-  ; enter1 "tad"    (Indecl Tas (code "tatas"))   (* tasil on tad \Pan{5,3,7} *) 
+ [; enter1 "tad"    (Indecl Tas (code "tatas"))   (* tasil on tad \Pan{5,3,7} *) 
   ; enter1 "ya#1"   (Indecl Tas (code "yatas"))   (* tasil on ya \Pan{5,3,7} *) 
   ; enter1 "ku#1"   (Indecl Tas (code "kutas"))   (* tasil on ku \Pan{5,3,7-8} *)
   ; enter1 "abhi"   (Indecl Tas (code "abhitas")) (* tasil on abhi \Pan{5,3,9} *)
@@ -5941,7 +5957,7 @@ value enter_iiy entry =
   ; enter1 "dak.si.na" (Indecl Tas (code "dak.si.natas"))  (* id *) 
   ; enter1 "avara"  (Indecl Tas (code "avaratas"))  (* \Pan{5,3,29} *)  
   ; enter1 "uttara#1" (Indecl Tas (code "uttaratas")) (* on pn \Pan{5,3,7} ? *)
-  ; enter1 "ubhaya" (Indecl Tas (code "ubhayatas")) (* on pn \Pan{5,3,7} ? *)
+  ; enter1 "ubhaya" (Indecl Tas (code "ubhayatas")) (* on pn \Pan{5,3,7} ? *)]
 *)
 value tasil_extra () = do (* add non-generative tasils - ad-hoc *) 
   { enter1 "aze.sa" (Indecl Tas (code "aze.satas")) (* tasil on privative cpd *)
@@ -5966,9 +5982,6 @@ value compute_extra iic_only_stems = do
   ; enter1 "yuu.sa" (* Siddhaanta kaumudii *) decl
     where decl = Declined Noun Mas [ (Plural,[ (Loc,code "yuu.h.su") ]) ]
   ; enter1 "avanam" (Cvi (code "avanamii")) (* exception *)
- (* For the moment, computed as form of n.r but skipped
- [; enter1 "nara" decl (* overgenerates badly ! *)
-    where decl = Declined Noun Mas [ (Singular,[ (Nom,code "naa") ]) ] ] *)
   ; enter1 "nara" decl 
     where decl = Declined Noun Mas [ (Plural,[ (Gen,code "n.rr.naam") ]) ]
   ; enter1 "nara" decl (* \Pan{6,4,6} *)
@@ -5985,7 +5998,7 @@ value compute_extra iic_only_stems = do
     where decl = Declined Noun Mas [ (Singular,[ (Nom,code "sudhi") ]) ]
   ; enter1 "viz#2" (* Vedic Whitney§218a *) decl
     where decl = Declined Noun Fem [ (Plural,[ (Loc,code "vik.su") ]) ]
-  ; iter enter_iiy iic_avya
+  ; iter enter_iic_avya iic_avyas
   ; enter1 "tva" (* skipped in dico *) decl
     where decl = Declined Noun Mas [ (Singular,[ (Nom,code "tvas") ]) ]
   ; enter1 "tva" decl
@@ -5994,6 +6007,7 @@ value compute_extra iic_only_stems = do
     where decl = Declined Noun Mas [ (Plural,[ (Nom,code "tve") ]) ]
   ; enter1 "giri" (Avyayaf (code "giram")) (* \Pan{5,4,112} upagiram *)
   ; iter enter_gati gatis
+  ; iter enter_saat_gati gati_products
   ; tasil_extra ()
   ; compute_extra_iic iic_indecl (* antar *) 
   ; compute_extra_iic iic_only_stems (* aajaanu etc. *)

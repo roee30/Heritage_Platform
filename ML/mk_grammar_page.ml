@@ -4,12 +4,12 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* This program produces the page grammar.html (Grammarian interface) *)
 
-(*i module Mk_grammar_page = struct i*)
+(*i executable module Mk_grammar_page = struct i*)
 
 open Html;
 open Web; (* ps pl abort etc. *)
@@ -61,7 +61,6 @@ value grammarian lang = do
   ; print_declension_help lang
   ; pl (cgi_begin decls_cgi "convert")
   ; pl (hidden_input "lex" (lexicon_of lang))
-(*[ pl (hidden_input "v" (Install.stamp))] OBS *)
   ; pl (text_input "focus" "q")
   ; print_transliteration_switch "trans" 
   ; pl html_break
@@ -79,7 +78,6 @@ value grammarian lang = do
   ; print_conjugation_help lang
   ; pl (cgi_begin conjs_cgi "convert1")
   ; pl (hidden_input "lex" (lexicon_of lang))
-(*[ pl (hidden_input "v" (Install.stamp))] OBS *)
   ; pl (text_input "focus1" "q")
   ; print_transliteration_switch "trans1" 
   ; pl html_break 

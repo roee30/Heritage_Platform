@@ -17,7 +17,7 @@ value avagraha_expand encode s =
   | x -> x
   ]
 ;
-(* Preprocessing of corpus to prepare padapatha form from list of chunks   *)
+(* Preprocessing of corpus to prepare partial padapatha from list of chunks   *)
 (* This is extremely important from the segmenter complexity point of view *)
 (* Since it takes hints at parallel treatment from non-ambiguous blanks. *)
 
@@ -162,8 +162,8 @@ value adjust c w = match Word.mirror w with
 ;
 (* Called from [Sanskrit.read_processed_skt_stream] for use in [read_sanskrit]
    with argument [read_chunk=sanskrit_chunk encode] *)
-value padapatha read_chunk l = (* l is list of chunks separated by blanks *)
-                     (* returns padapatha as list of forms in terminal sandhi *)
+value chunker read_chunk l = (* l is list of chunks separated by blanks *)
+                               (* returns list of chunks in terminal sandhi *)
   let rec pad_rec = fun (* returns (c,l) with c first char of first pada in l *)
     [ [] -> (-1,[])
     | [ chk :: chks ] -> 
@@ -189,4 +189,4 @@ value padapatha read_chunk l = (* l is list of chunks separated by blanks *)
   let (_,padas) = pad_rec l in padas
 ;
 
-    (*i end; i*)
+(*i end; i*)

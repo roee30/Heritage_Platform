@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* This module contains various service utilities for CGI programs *)
@@ -13,7 +13,6 @@
 
 open Html;
 open Web; (* ps etc. *)
-open Multilingual; (* Roma Deva *)
 
 module Out_chan = struct value chan = Web.output_channel; end;
 module Morpho = Morpho.Morpho_out Out_chan;
@@ -80,9 +79,15 @@ value skt_graph_anchor_R cache form =
   let url_function = if cache then url_cache else url in
   anchor_graph Navy_ (url_function form) s 
 ;
-
-value print_stem w = Canon.uniromcode w |> ps (* w in lexicon or not *)
-and print_chunk w = Canon.uniromcode w |> ps
+value printer w = (* do not eta reduce ! *)
+  match sanskrit_display.val with 
+  [ "deva" -> Canon.unidevcode w
+  | "roma" -> Canon.uniromcode w
+  | _ -> failwith "Unknown default display font"
+  ]
+;
+value print_stem w = printer w |> ps (* w in lexicon or not *)
+and print_chunk w = printer w |> ps
 and print_entry w = skt_anchor_R False (Canon.decode w) |> ps (* w in lexicon *)
 and print_ext_entry ps w = skt_anchor_R False (Canon.decode w) |> ps (* idem *)
 and print_cache w = skt_anchor_R True (Canon.decode w) |> ps

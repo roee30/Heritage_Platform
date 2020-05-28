@@ -5934,6 +5934,7 @@ value enter_saat_gati product =  (* assumes gati has lexical entry *)
 and is immediately followed by a form of k.r, as or bhuu (without space).
 The lexicalization is necessary when the construction is used with a different 
 auxiliary, such as yaa (bhasmasaat) or nii (Whitney) or sampad (gr.) *)
+;
 
 (* Tasils are treated as adverbs. Here are the lexicalized ones: Whitney§1098 
    First tasils of pronouns, not needed if lexicalised 
@@ -5959,7 +5960,7 @@ auxiliary, such as yaa (bhasmasaat) or nii (Whitney) or sampad (gr.) *)
   ; enter1 "uttara#1" (Indecl Tas (code "uttaratas")) (* on pn \Pan{5,3,7} ? *)
   ; enter1 "ubhaya" (Indecl Tas (code "ubhayatas")) (* on pn \Pan{5,3,7} ? *)]
 *)
-value tasil_extra () = do (* add non-generative tasils - ad-hoc *) 
+value compute_extra_tasils () = do (* add non-generative tasils - ad-hoc *) 
   { enter1 "aze.sa" (Indecl Tas (code "aze.satas")) (* tasil on privative cpd *)
   ; enter1 "ekaruupa" (Indecl Tas (code "ekaruupatas")) (* tasil on cpd *)  
   ; enter1 "d.r.s.taanta" (Indecl Tas (code "d.r.s.taantatas"))(* tasil on cpd *)
@@ -5970,7 +5971,7 @@ value tasil_extra () = do (* add non-generative tasils - ad-hoc *)
   ; enter1 "bhasad" (Indecl Tas (code "bhasattas")) (* tasil on consonant stem *)
 (*; enter1 "nas#2" (Indecl Tas (code "nastas")) - idem but lexicalized *)
   ; enter1 "yad.rcchaa" (Indecl Tas (code "yad.rcchaatas")) (* tasil on fstem *)
-(* NB bhii.smadro.napramukhatas BhG{1,25} treated in [enter_extra_ifcs] below *)  
+(* NB bhii.smadro.napramukhatas BhG{1,25} treated in [enter_extra_ifcs] below *) 
   } 
 ; 
 (* Supplementary forms - called by [Make_nouns.genders_to_nouns]
@@ -6008,7 +6009,7 @@ value compute_extra iic_only_stems = do
   ; enter1 "giri" (Avyayaf (code "giram")) (* \Pan{5,4,112} upagiram *)
   ; iter enter_gati gatis
   ; iter enter_saat_gati gati_products
-  ; tasil_extra ()
+  ; compute_extra_tasils ()
   ; compute_extra_iic iic_indecl (* antar *) 
   ; compute_extra_iic iic_only_stems (* aajaanu etc. *)
   ; compute_extra_iic iicf_extra (* abalaa etc. *)

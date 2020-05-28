@@ -651,10 +651,10 @@ type platform = [ Simputer | Computer | Station | Server ]
 ;
 (* Current target platform to customize - needs recompiling if changed *)
 value target = match Paths.platform with
-  [ "Simputer" -> Simputer (* Historical - small screen *)
+  [ "Simputer" (* Historical - small screen *)
   | "Smartphone" | "Tablet" -> Simputer (* TODO *)
   | "Computer" -> Computer (* Standard client installation *)
-  | "Station"  -> Station  (* Permits external Analysis mode *) 
+  | "Station"  -> Station  (* Permits external Analysis mode and User-aid *) 
   | "Server"   -> Server   (* Http server for Internet web services *)
   | _ -> failwith "Unknown target platform"
   ]
@@ -686,7 +686,7 @@ value default_language = language_of Paths.default_lexicon
 and default_mode = (* TODO - add as config parameter *)
  match target with
   [ Station | Computer | Server -> "t" (* default Complete mode *) 
-  | _        -> "f" (* default Simplified mode *)
+  | _ -> "f" (* *deprecated* default Simplified mode *)
   ]
 ;
 (* linked lexical resource - initialized at configuration  *)

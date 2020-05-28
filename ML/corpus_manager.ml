@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Idir Lankri                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 open Html;
@@ -110,17 +110,17 @@ value uplinks dir permission =
    file.  *)
 value sentence_links dir permission sentences =
   let to_anchor_ref sentence =
-    let font = Multilingual.font_of_string Paths.default_display_font in
+    let font = font_of_string Paths.default_display_font in
     let encoding =
         match font with
-        [ Multilingual.Deva -> Corpus.Encoding.Devanagari
-        | Multilingual.Roma -> Corpus.Encoding.IAST
+        [ Deva -> Corpus.Encoding.Devanagari
+        | Roma -> Corpus.Encoding.IAST
         ] in
     let text = Corpus.Sentence.text encoding sentence in
     let display =
       match font with
-      [ Multilingual.Deva -> deva16_blue
-      | Multilingual.Roma -> span Trans16
+      [ Deva -> deva16_blue
+      | Roma -> span Trans16
       ] in 
     text
     |> anchor_ref (sentence |> Web_corpus.url dir permission |> escape)

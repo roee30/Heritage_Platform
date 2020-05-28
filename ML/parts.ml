@@ -681,7 +681,7 @@ value build_part = fun
   | Pfutm_ c stem root -> build_part_a (c,Pfutm) stem root
   ]
 ;
-(* Called by [Verbs.compute_conjugs], in order to create [Install.parts_file] 
+(* Called by [Verbs.compute_conjugs], in order to create [Data.parts_file] 
    globally for all roots by [Make_roots.make_roots]. It is also invoked
    by [Conjugation.look_up_and_display] through [Verbs.fake_compute_conjugs]. *)
 value compute_participles () = do

@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Sanskrit Reader summarizing interface. User aid with unrecognized segs. *)
@@ -89,76 +89,77 @@ value user_cgi_begin cgi =
     [ ("action",cgi); ("method","get") ] (* input conversion script *)
   ^ xml_begin "div"
 ;
-value arguments trs lex cache st us cp input topic abs corpus sent_id link_num =
+value arguments trans lex font cache st us cp input topic abs corpus sent_id 
+                link_num =
   let corpus_link = match corpus with
       [ "" -> ""
       | _ -> ";corpus=" ^ corpus ^ ";sentenceNumber=" ^ sent_id ^ 
              ";linkNumber=" ^ link_num
       ] in
-  "t=" ^ trs ^ ";lex=" ^ lex ^ ";cache=" ^ cache ^ ";st=" ^ st ^ 
-  ";us=" ^ us ^ ";cp=" ^ cp ^ ";text=" ^ input ^ ";topic=" ^ topic ^ 
-  ";abs=" ^ abs ^ corpus_link
+  "t=" ^ trans ^ ";lex=" ^ lex ^ ";font=" ^ font ^ ";cache=" ^ cache ^ 
+  ";st=" ^ st ^ ";us=" ^ us ^ ";cp=" ^ cp ^ ";text=" ^ input ^ 
+  ";topic=" ^ topic ^ ";abs=" ^ abs ^ corpus_link
 ;
-value print_hidden topic st cp us lex cache abs translit corpus sent_id 
+value print_hidden topic st cp us lex font cache abs translit corpus sent_id 
                    link_num = do
-  { pl (hidden_input "topic" topic)
-  ; pl (hidden_input "st" st)
-  ; pl (hidden_input "cp" cp)
-  ; pl (hidden_input "us" us)
-  ; pl (hidden_input "t" translit)
-  ; pl (hidden_input "lex" lex)
-  ; pl (hidden_input "cache" cache)
-  ; pl (hidden_input "abs" abs)
+  { hidden_input "topic" topic |> pl
+  ; hidden_input "st" st |> pl
+  ; hidden_input "cp" cp |> pl
+  ; hidden_input "us" us |> pl
+  ; hidden_input "t" translit |> pl
+  ; hidden_input "lex" lex |> pl
+  ; hidden_input "font" font |> pl
+  ; hidden_input "cache" cache |> pl
+  ; hidden_input "abs" abs |> pl
   ; match corpus with
     [ "" -> ()
     | corpus_val -> do
-    { pl (hidden_input "corpus" corpus_val)
-    ; pl (hidden_input "sentenceNumber" sent_id)
-    ; pl (hidden_input "linkNumber" link_num)
-    }
+       { hidden_input "corpus" corpus_val |> pl
+       ; hidden_input "sentenceNumber" sent_id |> pl
+       ; hidden_input "linkNumber" link_num |> pl
+       }
     ]
   }
 ;
-value read_guess_index () = 
+value read_guess_index () = (* structure to guess stems from padas *)
   (Gen.gobble Data.public_guess_auto : Deco.deco (string * string)) 
 ;
-value read_mw_index () = 
+value read_mw_index () = (* indexing nominal stems in MW *)
   (Gen.gobble Data.public_mw_index_file: Deco.deco (string * string * string))
 ;
 
 value rec mw_sol cur_sol word = fun
- [ [] -> cur_sol
- | [ (entry,lex,page) :: rest ] -> let updated_sol = 
-    match lex with
-    [ "Noun" | "Ind." -> cur_sol ^ Morpho_html.skt_anchor_M word entry page False
-    | _ -> cur_sol
-    ] in mw_sol updated_sol word rest
+  [ [] -> cur_sol
+  | [ (entry,lex,page) :: rest ] -> 
+      let updated_sol = cur_sol ^ match lex with
+          [ "Noun" | "Ind" -> Morpho_html.skt_anchor_M word entry page False
+          | _ -> ""
+          ] in 
+      mw_sol updated_sol word rest
  ]
 ;
 
 (* function to find only the gender *)
 value find_gen morph = String.sub morph (String.length morph -2) 2 
 ;
-
 value print_word word (entry,morph) = 
-   let final_ent = word ^ entry in
-   let mw_index = read_mw_index () in 
-   let words = List.rev (Deco.assoc (Encode.code_string final_ent) mw_index) in 
-   let header = td_begin ^ (table_begin Deep_sky_back) ^ 
-                tr_begin ^ th_begin
-   and (sol, is_checked) = match words with
-         [ [] -> (" [" ^ Html.anchor_begin ^ Morpho_html.skt_roma final_ent ^ 
-                         xml_end "a" ^ "]", False)
-         | _ -> let mw_solution = mw_sol "" final_ent words in
+  let final_ent = word ^ entry in
+  let mw_index = read_mw_index () in 
+  let words = List.rev (Deco.assoc (Encode.code_string final_ent) mw_index) in 
+  let header = td_begin ^ (table_begin Deep_sky_back) ^ tr_begin ^ th_begin
+  and (sol,is_checked) = match words with
+       [ [] -> (" [" ^ Html.anchor_begin ^ Morpho_html.skt_roma final_ent ^ 
+                xml_end "a" ^ "]", False)
+       | _ -> let mw_solution = mw_sol "" final_ent words in
                   if (String.length mw_solution) > 0 then 
                        (" [" ^ mw_solution ^ "]", True)
                   else (" [" ^ Html.anchor_begin ^ Morpho_html.skt_roma final_ent
                              ^ xml_end "a" ^ "]", False)
-         ]
-    and footer = th_end ^ tr_end ^ table_end ^ td_end in
-    let radio =  (Html.radio_input_dft "guess" ("{" ^ final_ent ^ "},{" ^ 
-                     find_gen morph ^ "}") "" is_checked) ^ morph in
-    header ^ radio ^ sol ^ footer
+       ]
+  and footer = th_end ^ tr_end ^ table_end ^ td_end in
+  let radio =  (Html.radio_input_dft "guess" ("{" ^ final_ent ^ "},{" ^ 
+                find_gen morph ^ "}") "" is_checked) ^ morph in
+  header ^ radio ^ sol ^ footer 
 ;
 
 value rec string_word sol_st word = fun
@@ -181,53 +182,57 @@ value normalize_end = fun
   ]
 ;
 
-value aid_using translit checkpts sentence topic st cp us lex cache abs 
+value aid_using translit checkpts sentence topic st cp us lex font cache abs 
                 corpus sent_id link_num =
   let encode = Encode.switch_code translit 
   and decode = Canon.switch_decode translit in
   let chunks = Sanskrit.read_sanskrit encode sentence in
   let devachunks = List.map Canon.unidevcode chunks in
   let devainput = String.concat " " devachunks in do
-  { pl html_break
-  ; pl (html_latin16 "Sentence: ")
-  ; ps (deva16_blue devainput) (* devanagari *)
-  ; pl html_break
-  ; pl html_break
-  ; pl center_begin
-  ; pl (user_cgi_begin graph_cgi)
-  ; print_hidden topic st cp us lex cache abs translit corpus sent_id link_num
-  ; pl (xml_begin_with_att "textarea" 
-      [ ("name","text"); ("rows","1"); ("cols","100") ] ^
-      sentence ^ xml_end "textarea")
-  ; pl html_break 
-  ; pl (submit_input "Submit Revised Sentence")
-  ; pl cgi_end
-  ; pl html_break
-  ; pl html_break
-  ; pl (user_cgi_begin graph_cgi)
-  ; print_hidden topic st cp us lex cache abs translit corpus sent_id link_num
-  ; pl (hidden_input "text" sentence)
+  { html_break |> pl 
+  ; html_latin16 "Sentence: " |> pl
+  ; deva16_blue devainput |> pl (* devanagari *)
+  ; html_break |> pl
+  ; html_break |> pl
+  ; center_begin |> pl
+  ; user_cgi_begin graph_cgi |> pl
+  ; print_hidden topic st cp us lex font cache abs translit 
+                 corpus sent_id link_num
+  ; let args = [ ("name","text"); ("rows","1"); ("cols","100") ] in
+    let textarea = xml_begin_with_att "textarea" args ^ sentence 
+                   ^ xml_end "textarea" in
+    textarea |> pl
+  ; html_break |> pl
+  ; submit_input "Submit Revised Sentence" |> pl
+  ; cgi_end |> pl
+  ; html_break |> pl
+  ; html_break |> pl
+  ; user_cgi_begin graph_cgi |> pl
+  ; print_hidden topic st cp us lex font cache abs translit corpus sent_id 
+                 link_num
+  ; hidden_input "text" sentence |> pl
   ; let (offset, chunk_rev) = match checkpts with
         [ [ (k,(_,word),_) :: _ ] -> (k, Word.mirror word)
         | _ -> (0,[])
         ] in
     let len_chunk = Word.length chunk_rev
     and chunk_ind = find_chunk chunks 1 offset in do
-  { pl (xml_begin_with_att "textarea" 
-         [ ("name","revised"); ("rows","1"); ("cols","30") ] ^
-         (decode chunk_rev) ^ xml_end "textarea")
-  ; pl (hidden_input "rev_off" (string_of_int offset))
-  ; pl (hidden_input "rev_ind" (string_of_int chunk_ind))
-  ; pl (hidden_input "cpts" (cpt_partial checkpts))
-  ; pl html_break 
-  ; pl (submit_input "Submit Revised Chunk")
-  ; pl cgi_end
-  ; pl html_break
-  ; pl html_break
+  { let args = [ ("name","revised"); ("rows","1"); ("cols","30") ] in
+    let textarea = xml_begin_with_att "textarea" args ^ (decode chunk_rev) 
+                   ^ xml_end "textarea" in
+    textarea |> pl
+  ; hidden_input "rev_off" (string_of_int offset) |> pl
+  ; hidden_input "rev_ind" (string_of_int chunk_ind) |> pl
+  ; hidden_input "cpts" (cpt_partial checkpts) |> pl
+  ; html_break |> pl 
+  ; submit_input "Submit Revised Chunk" |> pl
+  ; cgi_end |> pl
+  ; html_break |> pl
+  ; html_break |> pl
   ; if List.length chunks > 1 then do
-     { ps (div_begin Latin12)
-     ; pl (table_begin Spacing20)
-     ; pl tr_begin
+     { div_begin Latin12 |> ps
+     ; table_begin Spacing20 |> pl
+     ; tr_begin |> pl
      ; let rec decoded init cur_ind = fun
            [ [] -> String.sub init 0 ((String.length init)-1)
            | [ a :: rest ] -> 
@@ -235,28 +240,30 @@ value aid_using translit checkpts sentence topic st cp us lex cache abs
                else decoded (init ^ (decode a) ^ "+") (cur_ind+1) rest
            ] in
        let updated_text = decoded "" 1 chunks in
-       let arg_string = arguments translit lex cache st us cp updated_text topic
-                                  abs corpus sent_id link_num in
-       ps (td_wrap (call_partial arg_string (offset,len_chunk) checkpts
-                    ^ "Show partial solution without this chunk"))
-     ; pl tr_end
-     ; pl table_end
-     ; ps div_end (* Latin12 *)
+       let arg_string = arguments translit lex font cache st us cp updated_text 
+                                  topic abs corpus sent_id link_num in
+       let call = call_partial arg_string (offset,len_chunk) checkpts
+                    ^ "Show partial solution without this chunk" in
+       td_wrap call |> ps 
+     ; tr_end |> pl
+     ; table_end |> pl
+     ; div_end |> pl (* Latin12 *)
      }
    else ()
-  (* adding new module to show the possibilities *)
+  (* We now suggest possible acquisition of stem in MW that declines as needed *)
   ; if Paths.platform = "Station" then do
-  { ps html_paragraph 
-  ; ps (div_begin Latin16)
-  ; ps "Possible lemmatizations for the chunk:"
-  ; ps div_end
-  ; pl par_end
-  ; ps (div_begin Latin12)
-  ; pl (user_cgi_begin graph_cgi)
-  ; print_hidden topic st cp us lex cache abs translit corpus sent_id link_num
-  ; pl (hidden_input "cpts" (cpt_partial checkpts))
-  ; pl (hidden_input "text" sentence)
-  ; pl html_break
+  { html_paragraph |> ps 
+  ; div_begin Latin16 |> ps 
+  ; "Possible lemmatizations for the chunk:" |> ps 
+  ; div_end |> ps 
+  ; par_end |> pl
+  ; div_begin Latin12 |> ps 
+  ; user_cgi_begin graph_cgi |> pl
+  ; print_hidden topic st cp us lex font cache abs translit corpus sent_id 
+                 link_num
+  ; hidden_input "cpts" (cpt_partial checkpts) |> pl
+  ; hidden_input "text" sentence |> pl
+  ; html_break |> pl
   ; let guess_auto = read_guess_index () in 
     let rec match_decl sol_string init = (* init is the last *) fun
     [ [] -> sol_string
@@ -264,48 +271,49 @@ value aid_using translit checkpts sentence topic st cp us lex cache abs
       let updated_init = [ a :: init ] in 
       let words = List.rev (Deco.assoc (Word.mirror updated_init) guess_auto) in
       let new_sol = match words with
-          [ [] -> sol_string
-          | _ -> let str_rest = Canon.decode (Word.mirror rest) in
-                 let lemma = string_word "" str_rest words in
-                 let this_string = tr_begin ^ lemma ^ tr_end in
-                 [ this_string :: sol_string ]
-          ] in
+                    [ [] -> sol_string
+                    | _ -> let str_rest = Canon.rdecode rest in
+                           let lemma = string_word "" str_rest words in
+                           let this_string = tr_begin ^ lemma ^ tr_end in
+                           [ this_string :: sol_string ]
+                    ] in
       match_decl new_sol updated_init rest
     ] in do
-  { pl (table_begin_style Blue_  [ noborder; ("align","center"); spacing20 ]) 
-  ; List.iter pl (match_decl [] [] (normalize_end (List.rev chunk_rev))) 
-    (* [[]=sol_string, []=last] *)
-  ; pl table_end
-  }
-  ; pl html_break
-  ; pl (submit_input "Submit Morphology")
-  ; pl cgi_end (* [graph_cgi] *)
-  ; ps div_end (* Latin12 *)
-  ; ps (par_begin Latin16)
-  ; ps "Enter your own lemmatization:"
-  ; pl par_end
-  ; pl (user_cgi_begin graph_cgi)
-  ; print_hidden topic st cp us lex cache abs translit corpus sent_id link_num
-  ; pl (hidden_input "cpts" (cpt_partial checkpts))
-  ; pl (hidden_input "text" sentence)
-  ; pl html_break
-  ; ps (text_area "guess" 1 20 "")
-  ; pl html_break
-  ; ps (option_select [ ("nom.","Nominative"); ("acc.","Accusative"); 
-                        ("ins.","Instrumental"); ("dat.","Dative");
-                        ("abl.","Ablative"); ("gen.","Genitive"); 
-                        ("loc.","Locative"); ("voc.","Vocative") ])
-  ; ps (option_select_label "gender" 
-          [ ("m.","Masculine"); ("f.","Feminine"); ("n.","Neuter") ])
-  ; ps (option_select [ ("sg.","Singular"); ("du.","Dual"); ("pl.","Plural") ])
-  ; pl html_break
-  ; pl (submit_input "Submit Choices")
-  ; pl cgi_end
-  } (* Paths.platform = "Station" *) else ()
-  ; pl center_end
-  ; pl html_break 
-  }
-}
+    { table_begin_style Blue_ [ noborder; ("align","center"); spacing20 ] |> pl
+    ; List.iter pl (match_decl [] [] (normalize_end (List.rev chunk_rev))) 
+                   (* [[]=sol_string, []=last] *)
+    ; table_end |> pl
+    }
+  ; html_break |> pl
+  ; submit_input "Submit Morphology" |> pl
+  ; cgi_end |> pl (* [graph_cgi] *)
+  ; div_end |> ps (* Latin12 *)
+  ; par_begin Latin16 |> ps
+  ; "Enter your own lemmatization:" |> ps
+  ; par_end |> pl
+  ; user_cgi_begin graph_cgi |> pl
+  ; print_hidden topic st cp us lex font cache abs translit corpus sent_id 
+                 link_num
+  ; hidden_input "cpts" (cpt_partial checkpts) |> pl
+  ; hidden_input "text" sentence |> pl
+  ; html_break |> pl
+  ; text_area "guess" 1 20 "" |> pl
+  ; html_break |> pl
+  ; option_select [ ("nom.","Nominative"); ("acc.","Accusative"); 
+                    ("ins.","Instrumental"); ("dat.","Dative");
+                    ("abl.","Ablative"); ("gen.","Genitive"); 
+                    ("loc.","Locative"); ("voc.","Vocative") ] |> ps
+  ; option_select_label "gender" 
+       [ ("m.","Masculine"); ("f.","Feminine"); ("n.","Neuter") ] |> ps
+  ; option_select [ ("sg.","Singular"); ("du.","Dual"); ("pl.","Plural") ] |> ps
+  ; html_break |> pl
+  ; submit_input "Submit Choices" |> pl
+  ; cgi_end |> pl
+  } (* Paths.platform = "Station" *) else () 
+  ; center_end |> pl
+  ; html_break |> pl
+  } 
+}  
 ;
 value user_aid_engine () = do
   { Prel.prelude_user ()
@@ -318,6 +326,7 @@ value user_aid_engine () = do
     and us = get "us" env "f"
     and translit = get "t" env "SL" (* default SLP1 *) 
     and lex = get "lex" env "SH" (* default Heritage *)
+    and font = get "font" env Paths.default_display_font (* deva vs roma print *)
     and cache = get "cache" env "f" in
     let () = cache_active.val := cache in
     let corpus = get "corpus" env ""
@@ -331,8 +340,8 @@ value user_aid_engine () = do
            parse_cpts (decode_url url_encoded_cpts)
        with [ Not_found -> [] ] in
     try do
-     { aid_using translit checkpts input url_encoded_topic st cp us lex cache
-                 abs corpus sent_id link_num
+     { aid_using translit checkpts input url_encoded_topic st cp us lex font 
+                 cache abs corpus sent_id link_num
      ; close_page_with_margin ()
      ; page_end lang True
      }

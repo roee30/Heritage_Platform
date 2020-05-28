@@ -7,22 +7,21 @@
 (* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-(* CGI-bin declension for computing declensions.                          *)
+(* CGI-bin declension for computing nominal forms.                        *)
 (* This CGI is triggered by page [grammar_page] in [dico_dir].            *)
 (* Reads its input in shell variable [QUERY_STRING] URI-encoded.          *)
 (* Prints an html document of substantive declinations on [stdout].       *)
 (*i Test with (csh): setenv QUERY_STRING "q=yoga&g=Mas"; declension      i*)
 (*i Web invocation: http://skt_server_url/cgi-bin/sktdeclin?q=e&g=g      i*)
 
-(*i module Declension = struct i*)
+(*i executable module Declension = struct i*)
 
 open Skt_morph;
 open Morphology; (* [Noun_form] etc. *)
 open Html; (* [narrow_screen html_red]  etc. *)
-open Web; (* ps pl etc. *)
+open Web; (* ps pl font Deva Roma pr_font etc. *)
 open Cgi; (* [create_env] etc.  *)
-open Multilingual; 
-     (* [font Deva Roma declension_title compound_name avyaya_name] *)
+open Multilingual; (* [declension_title compound_name avyaya_name] *)
 
 value dtitle font = h1_title (declension_title narrow_screen font)
 and meta_title = title "Sanskrit Grammarian Declension Engine"
@@ -31,37 +30,13 @@ and hyperlink_title font link =
   if narrow_screen then link
   else declension_caption font ^ " " ^ link
 ;
-
-value pr code =
-  html_red (Canon.uniromcode code) |> ps (* roman with diacritics *)
-and pr_deva code =
-  html_devared (Canon.unidevcode code) |> ps (* devanagari *)
-;
-value pr_f font word = 
-  let code = Morpho_html.final word (* visarga correction *) in do
-  { match font with
-    [ Deva -> pr_deva code
-    | Roma -> pr code
-    ]
-  ; ps " "
-  }
-and pr_i font word = do (* special for iic *)
-  { match font with
-    [ Deva -> do { pr_deva word; pr_deva [ 0 ] }
-    | Roma -> do { pr word; pr [ 0 ] }
-    ]
-  ; ps " "
-  }
+value pr_font_vis font word = (* visarga correction *)
+  pr_font font (Morpho_html.final word)
 ;
 value prlist_font font = 
-  let pr = pr_f font 
-  and bar = html_green " | " in
-  prlistrec 
-     where rec prlistrec = fun
-       [ [] -> ()
-       | [ x ] -> pr x
-       | [ x :: l ] -> do { pr x; ps bar; prlistrec l }
-       ]
+  let pr = pr_font_vis font 
+  and bar () = html_green " | " in 
+  List2.process_list_sep pr bar
 ;
 value display_subtitle title = do
   { html_paragraph |> pl
@@ -171,7 +146,7 @@ value display_avy font = fun
     ; h3_begin C3 |> ps
     ; avyaya_name font |> ps; ps " "
     ; let ifc_form w = [ 0 ] (* - *) @ w in
-      let print_iic w = pr_f font (ifc_form w) in
+      let print_iic w = pr_font font (ifc_form w) in
       List.iter print_iic l
     ; h3_end |> ps
     }

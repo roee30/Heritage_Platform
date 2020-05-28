@@ -14,19 +14,8 @@
 
 open Skt_morph;
 open Html;
+open Web; 
 
-type font = [ Deva | Roma ]
-;
-value font_of_string = fun
-  [ "deva" -> Deva
-  | "roma" -> Roma
-  | f -> failwith ("Unknown font " ^ f)
-  ] 
-and string_of_font = fun
-  [ Deva -> "deva" 
-  | Roma -> "roma"
-  ] 
-;
 value gender_caption gender = fun 
   [ Roma -> span3_center (match gender with 
       [ Mas -> "Masculine"

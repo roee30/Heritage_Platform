@@ -186,9 +186,10 @@ value sort_check cpts =
 ;
 
 (* Standard format of cgi arguments *)
-value arguments translit lex cache st us cp input topic abs cpts =
+value arguments translit lex font cache st us cp input topic abs cpts =
      "t="     ^ translit
   ^ ";lex="   ^ lex 
+  ^ ";font="  ^ font
   ^ ";cache=" ^ cache 
   ^ ";st="    ^ st 
   ^ ";us="    ^ us 
@@ -213,6 +214,7 @@ value reader_engine () = do
     and us = get "us" env "f" (* default input sandhied *)
     and translit = get "t" env Paths.default_transliteration 
     and lex = get "lex" env Paths.default_lexicon
+    and font = get "font" env Paths.default_display_font (* deva vs roma print *)
     and cache = get "cache" env "f" in
     let () = cache_active.val := cache
     and abs = get "abs" env "f" (* default local paths *) in
@@ -247,7 +249,7 @@ value reader_engine () = do
            Checkpoints.parse_cpts (decode_url url_encoded_cpts)
        with [ Not_found -> [] ] in     
     let cpts = sort_check checkpoints in 
-    try let text = arguments translit lex cache st us cp url_encoded_input
+    try let text = arguments translit lex font cache st us cp url_encoded_input
                              url_encoded_topic abs checkpoints in do
         { (* Now we call the lexer *)
            process_input text uns mode topic input encode cpts 

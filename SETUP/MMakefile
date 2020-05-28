@@ -410,7 +410,7 @@ all:
 || cp SETUP/dummy_SCLpaths.ml ML/SCLpaths.ml
 	cd ML && $(MAKE) test_version 
 	ML/test_stamp
-	mkdir -p DATA # local storage for transducers
+	mkdir -p DATA # local storage for transducers and MW links
 	cd ML && $(MAKE) make_transducers
 	$(MAKE) transducers
 	cd ML && $(MAKE) # make engine (testing the data stamp)
@@ -559,7 +559,7 @@ sed '1,$$s|!CGIDECL|$(CGIBINURL)$(CGIDECL)|g' < $$i > temp; \
 sed '1,$$s|!CGICONJ|$(CGIBINURL)$(CGICONJ)|g' < temp > $$i; \
 rm temp); done # NB: no citation in MW
 	cp -p $(AUTOMATA) $(SERVERPUBLICDIR)DATA # Sanskrit Engine data
-	cp $(DATAMW) $(SERVERPUBLICDIR)DATA # MW links
+	cp -p $(DATAMW) $(SERVERPUBLICDIR)DATA # MW links
 	cp -p $(SCRIPTS) $(SERVERPUBLICDIR)DICO # Javascript in DICO dir
 #	cp $(DOC_IMAGES) $(SERVERPUBLICDIR)IMAGES
 

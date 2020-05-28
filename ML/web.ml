@@ -11,7 +11,7 @@
 
 (* Module Web reads localisation parameters from paths.ml, 
    created by "make configure" in main directory, called by configure script.
-   Describes all installation parameters and resources other than Install. *)
+   Describes all installation parameters and resources other than Data. *)
 
 (*  Dynamic html rendering, used by cgis *)
 
@@ -129,6 +129,40 @@ value line () = pc '\n'
 and sp () = ps " " 
 and pl s = ps (s ^ "\n")
 ; 
+
+type font = [ Deva | Roma ]
+;
+value font_of_string = fun
+  [ "deva" -> Deva
+  | "roma" -> Roma
+  | f -> failwith ("Unknown font " ^ f)
+  ] 
+and string_of_font = fun
+  [ Deva -> "deva" 
+  | Roma -> "roma"
+  ] 
+;
+value pr_roma code = (* roman with diacritics *)
+  ps (html_red (Canon.uniromcode code) ^ " ") 
+and pr_deva code = (* devanagari *)
+  ps (html_devared (Canon.unidevcode code) ^ " ") 
+;
+value pr_font font word =
+  match font with
+  [ Deva -> pr_deva word
+  | Roma -> pr_roma word
+  ]
+and pr_i font word = do (* special for iic *)
+  { match font with
+    [ Deva -> do { pr_deva word; pr_deva [ 0 ] }
+    | Roma -> do { pr_roma word; pr_roma [ 0 ] }
+    ]
+  ; print_string " "
+  }
+;
+(* Global communicating the Sanskrit display font to [Morpho_html] *)
+value sanskrit_display = ref Paths.default_display_font
+;
 value meta_program l = List.iter pl (List.map meta_prefix l)
 ;
 value javascript ref =

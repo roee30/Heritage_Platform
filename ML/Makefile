@@ -5,7 +5,7 @@
 #                        Gérard Huet & Pawan Goyal                         #
 #                                                                          #
 ############################################################################
-# Makefile of Sanskrit Heritage Software  20-05-2020  Copyright INRIA 2020 #
+# Makefile of Sanskrit Heritage Software  28-05-2020  Copyright INRIA 2020 #
 ############################################################################
 # Prerequisites: Ocaml 4.07 and Camlp4 preprocessor
 
@@ -103,8 +103,9 @@ make_preverb_automaton.cmx
 automata.cmx make_automaton.cmx make_preverb_automaton.cmx \
 make_transducers.cmx -o make_transducers
 
-make_xml_data: $(CORENATIVES) date.cmx html.cmx deco.cmx make_xml_data.cmx 
-	$(LINK) $(CORENATIVES) date.cmx str.cmxa html.cmx deco.cmx \
+make_xml_data: $(CORENATIVES) date.cmx html.cmx deco.cmx \
+make_xml_data.cmx 
+	$(LINK) $(CORENATIVES) str.cmxa date.cmx html.cmx deco.cmx \
 make_xml_data.cmx -o make_xml_data
 
 # testing consistency of Heritage_resources and Heritage_platform
@@ -117,7 +118,7 @@ static_pages: css mk_index_page mk_grammar_page mk_sandhi_page mk_reader_page \
 
 # legacy in need of re-design
 regression: rank.cmx regression.cmx
-	$(LINK) $(CORENATIVES) str.cmxa unix.cmxa date.cmx control.cmx deco.cmx \
+	$(LINK) $(CORENATIVES) unix.cmxa date.cmx control.cmx deco.cmx \
 lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx web.cmx naming.cmx \
 morpho_string.cmx morpho.cmx load_transducers.cmx pada.cmx phases.cmx \
 dispatcher.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx \
@@ -137,8 +138,10 @@ reset_caches: reset_caches.cmx
 date.cmx SCLpaths.cmx web.cmx reset_caches.cmx -o reset_caches
 
 restore_caches: restore_caches.cmx
-	$(LINK) $(CORENATIVES) trie.cmx deco.cmx share.cmx mini.cmx str.cmxa \
-html.cmx SCLpaths.cmx date.cmx web.cmx control.cmx lexmap.cmx inflected.cmx bank_lexer.cmx int_sandhi.cmx nouns.cmx automaton.cmx restore_caches.cmx -o restore_caches
+	$(LINK) $(CORENATIVES) str.cmxa trie.cmx deco.cmx share.cmx mini.cmx \
+html.cmx SCLpaths.cmx date.cmx web.cmx control.cmx lexmap.cmx inflected.cmx \
+bank_lexer.cmx int_sandhi.cmx nouns.cmx automaton.cmx restore_caches.cmx \
+-o restore_caches
 
 # clears the cached lexicon (irreversible operation)
 clear_cache: reset_caches
@@ -321,31 +324,30 @@ mk_corpus: mk_corpus.cmx
 		mkdir_corpus_params.cmx $< -o $@
 
 css: css.cmx
-	$(LINK) str.cmxa gen.cmx paths.cmx version.cmx date.cmx html.cmx \
-SCLpaths.cmx data.cmx web.cmx css.cmx -o css
+	$(LINK) $(CORENATIVES) str.cmxa date.cmx html.cmx SCLpaths.cmx web.cmx \
+css.cmx -o css
 
 mk_index_page: mk_index_page.cmx 
-	$(LINK) str.cmxa gen.cmx paths.cmx version.cmx date.cmx html.cmx \
-SCLpaths.cmx data.cmx web.cmx mk_index_page.cmx -o mk_index_page
+	$(LINK) $(CORENATIVES) str.cmxa date.cmx html.cmx SCLpaths.cmx \
+web.cmx mk_index_page.cmx -o mk_index_page
 
 mk_grammar_page: mk_grammar_page.cmx 
-	$(LINK) str.cmxa gen.cmx paths.cmx version.cmx date.cmx html.cmx \
-SCLpaths.cmx data.cmx web.cmx mk_grammar_page.cmx -o mk_grammar_page
+	$(LINK) $(CORENATIVES) str.cmxa date.cmx html.cmx SCLpaths.cmx \
+web.cmx mk_grammar_page.cmx -o mk_grammar_page
 
 mk_reader_page: mk_reader_page.cmx
-	$(LINK) $(CORENATIVES) str.cmxa unix.cmxa control.cmx cgi.cmx date.cmx SCLpaths.cmx html.cmx web.cmx params.cmx dir.cmx corpus.cmx web_corpus.cmx mk_reader_page.cmx -o mk_reader_page
-
-mk_nyaaya_page: mk_nyaaya_page.cmx
-	$(LINK) gen.cmx paths.cmx version.cmx date.cmx \
-html.cmx SCLpaths.cmx web.cmx cgi.cmx mk_nyaaya_page.cmx -o mk_nyaaya_page
+	$(LINK) $(CORENATIVES) str.cmxa unix.cmxa control.cmx cgi.cmx date.cmx \
+SCLpaths.cmx html.cmx web.cmx params.cmx dir.cmx corpus.cmx web_corpus.cmx \
+mk_reader_page.cmx -o mk_reader_page
 
 mk_sandhi_page: mk_sandhi_page.cmx
-	$(LINK) str.cmxa gen.cmx paths.cmx version.cmx date.cmx html.cmx \
-SCLpaths.cmx data.cmx web.cmx mk_sandhi_page.cmx -o mk_sandhi_page
+	$(LINK) $(CORENATIVES) str.cmxa date.cmx html.cmx SCLpaths.cmx \
+web.cmx mk_sandhi_page.cmx -o mk_sandhi_page
 
 mk_corpus_page: mk_corpus_page.cmx
-	$(LINK) $(CORENATIVES) str.cmxa unix.cmxa date.cmx	\
-		html.cmx SCLpaths.cmx web.cmx params.cmx dir.cmx cgi.cmx corpus.cmx web_corpus.cmx $< -o $@
+	$(LINK) $(CORENATIVES) str.cmxa unix.cmxa date.cmx html.cmx \
+SCLpaths.cmx web.cmx params.cmx dir.cmx cgi.cmx corpus.cmx web_corpus.cmx \
+$< -o $@
 
 # site_pages must be recomputed after configuration and creation of DICO dir
 # the style sheet must be recomputed, since it contains absolute URLs as well
@@ -357,8 +359,6 @@ site_pages: mk_index_page mk_grammar_page mk_reader_page mk_sandhi_page	\
 	cd ../DICO; ln -f grammar.fr.html grammar.html # id
 	./mk_reader_page -en
 	./mk_reader_page -fr
-#	./mk_nyaaya_page -en
-#	./mk_nyaaya_page -fr
 	cd ../DICO; ln -f reader.fr.html reader.html # id
 	./mk_sandhi_page
 	cd ../DICO; ln -f sandhi.fr.html sandhi.html # id

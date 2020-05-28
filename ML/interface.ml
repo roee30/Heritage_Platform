@@ -272,7 +272,7 @@ value make_visual n = vrec 0
 ;
 value rec print_extra = fun 
   [ 0 -> ()
-  | l -> do { ps (td_wrap ""); print_extra (l-1) }
+  | l -> do { td_wrap "" |> ps; print_extra (l-1) }
   ]
 and fixed_space = td_wrap "&nbsp;"
 ;
@@ -280,9 +280,9 @@ value rec print_first_server chunk =
   match Word.length chunk with
   [ 0 -> ps fixed_space
   | l -> match chunk with 
-         [ [] -> ps fixed_space
+         [ [] -> fixed_space |> ps
          | [ st :: rest ] -> let to_print = Canon.uniromcode [ st ] in do
-             { ps (td_wrap to_print)
+             { td_wrap to_print |> ps
              ; print_first_server rest
              }
          ]
@@ -301,10 +301,10 @@ value rec print_first text cpts chunk_orig chunk chunk_ind =
   match Word.length chunk with
   [ 0 -> ps fixed_space
   | l -> match chunk with 
-         [ [] -> ps fixed_space
+         [ [] -> fixed_space |> ps
          | [ st :: rest ] -> let to_print = Canon.uniromcode [ st ] in do
              { let unknown_chunk = (chunk_ind,un_analyzable chunk_orig,True) in
-               ps (td_wrap (call_back_pseudo text cpts to_print unknown_chunk))
+               td_wrap (call_back_pseudo text cpts to_print unknown_chunk) |> ps
              ; print_first text cpts chunk_orig rest chunk_ind
              }
          ]
@@ -439,11 +439,11 @@ value check_sentence translit us text_orig checkpoints sentence
   ; html_break |> pl
   }
 ;
-value arguments trans lex cache st us cp input topic abs sol_num corpus id ln
-                corpus_permission corpus_dir sentence_no =
-  "t=" ^ trans ^ ";lex=" ^ lex ^ ";cache=" ^ cache ^ ";st=" ^ st ^ ";us=" ^ us ^
-  ";cp=" ^ cp ^ ";text=" ^ input ^ ";topic=" ^ topic ^ ";abs=" ^ abs ^ 
-  match sol_num with
+value arguments trans lex font cache st us cp input topic abs sol_num corpus 
+                id ln corpus_permission corpus_dir sentence_no =
+  "t=" ^ trans ^ ";lex=" ^ lex ^ ";font=" ^ font ^ ";cache=" ^ cache ^ 
+  ";st=" ^ st ^ ";us=" ^ us ^ ";cp=" ^ cp ^ ";text=" ^ input ^ 
+  ";topic=" ^ topic ^ ";abs=" ^ abs ^ match sol_num with
     [ "0" -> ""
     | n -> ";allSol=" ^ n
     ] ^
@@ -487,11 +487,10 @@ value save_button query nb_sols =
   center_end
 ;
 value quit_button corpmode corpdir sentno =
-  let submit_button_label = Web_corpus.(
-    match corpmode with
-    [ Annotator -> "Abort"
-    | Reader | Manager -> "Continue reading"
-    ])
+  let submit_button_label = Web_corpus.(match corpmode with
+                                        [ Annotator -> "Abort"
+                                        | Reader | Manager -> "Continue reading"
+                                        ])
   and permission = Web_corpus.string_of_permission corpmode in
   center_begin ^
       cgi_begin (url corpus_manager_cgi ~fragment:sentno) "" ^
@@ -507,7 +506,7 @@ value graph_engine () = do
   ; let query = Sys.getenv "QUERY_STRING" in
     let env = create_env query in
     (* Multiple environment variables according to modes of use are: 
-       text topic st cp us t lex cache abs cpts (standard mode) 
+       text topic st cp us t lex font cache abs cpts (standard mode) 
        allSol (deprecated Validate mode)
        corpus sentenceNumber linkNumber (Corpus mode)
        corpdir sentno corpmode (defined in Params) 
@@ -519,14 +518,16 @@ value graph_engine () = do
     and us = get "us" env "f" (* sandhied text default *)
     and translit = get "t" env Paths.default_transliteration (* translit input *)
     and lex = get "lex" env Paths.default_lexicon (* lexicon choice *)
+    and font = get "font" env Paths.default_display_font (* deva vs roma print *)
     and cache = get "cache" env "f" (* no cache default *) in
-    let () = cache_active.val := cache 
+    let () = sanskrit_display.val := font 
+    and () = cache_active.val := cache 
     and abs = get "abs" env "f" (* default local paths *) in 
     let lang = language_of lex (* language default *)
     and input = decode_url url_encoded_input (* unnormalized string *)
     and uns = us="t" (* unsandhied vs sandhied corpus *) 
     and () = if st="f" then iterate.val:=False else () (* word stemmer? *)
-    and () = let full = (cp="t") in do 
+    and () = let full = (cp="t") in do (* TODO: only full *)
           { Lexer_control.full.val:=full
           ; Lexer_control.transducers_ref.val:=Transducers.mk_transducers full
           }
@@ -543,7 +544,7 @@ value graph_engine () = do
       |> Web_corpus.permission_of_string in
     let corpus_dir = get Params.corpus_dir env "" in
     let sentence_no = get Params.sentence_no env "" in
-    let text = arguments translit lex cache st us cp url_encoded_input
+    let text = arguments translit lex font cache st us cp url_encoded_input
                          url_encoded_topic abs sol_num corpus sent_id link_num
                          url_enc_corpus_permission corpus_dir sentence_no
     and checkpoints = 
@@ -594,12 +595,12 @@ value graph_engine () = do
        let revised_check = 
          let revise (k,sec,sel) = (if k<word_off then k else k+diff,sec,sel) in
          List.map revise checkpoints
-       and updated_text = arguments translit lex cache st us cp updated_input
+       and new_text = arguments translit lex font cache st us cp updated_input
                             url_encoded_topic abs sol_num corpus sent_id link_num
                             url_enc_corpus_permission corpus_dir sentence_no
        and new_input = decode_url updated_input in
-       check_sentence translit uns updated_text revised_check 
-                      new_input sol_num corpus sent_id link_num
+       check_sentence translit uns new_text revised_check new_input 
+                      sol_num corpus sent_id link_num
      ]
      (* Rest of the code concerns Corpus mode *)
      (* automatically refreshing the page only if guess parameter *)

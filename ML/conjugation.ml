@@ -15,50 +15,33 @@
 (*i Test: (csh): setenv QUERY_STRING "q=i;c=2"; ./conjugation            i*)
 (*i Web: http://skt_server_url/cgi-bin/sktconjug?q=i;c=2                 i*)
 
-(*i module Conjugation = struct i*)
+(*i executable module Conjugation = struct i*)
 
 open Skt_morph;
 open Morphology; (* inflected [Verb_form] etc. *)
 open Conj_infos; (* [vmorph Causa Inten Desid root_infos] *)
 open Inflected; (* roots.val indecls.val etc. *)
 open Html;
-open Web; (* ps pl etc. *)
+open Web; (* ps pl font Deva Roma pr_font etc. *)
 open Cgi;
-open Multilingual; (* font gentense [tense_name] Deva Roma captions *)
+open Multilingual; (* [gentense tense_name captions] *)
 
 value ctitle font = h1_title (conjugation_title narrow_screen font)
 and meta_title = title "Sanskrit Grammarian Conjugation Engine"
 and back_ground = background Chamois
-(* obs [if Install.narrow_screen then background Mauve else Pict_gan] *)
 and hyperlink_title font link = 
   if narrow_screen then link
   else conjugation_caption font ^ " " ^ link
 ;
 exception Wrong of string
 ;
-
-(* For non-unicode compliant browsers replace Canon.uniromcode by Canon.decode *)
-value pr code =
-  ps (html_red (Canon.uniromcode code) ^ " ") (* roman with diacritics *)
-and pr_deva code =
-  ps (html_devared (Canon.unidevcode code) ^ " ") (* devanagari *)
-;
-value pr_font font word =
-  let code = Morpho_html.final word in (* visarga correction *)
-  match font with
-  [ Deva -> pr_deva code
-  | Roma -> pr code
-  ]
+value pr_font_vis font word = (* visarga correction *)
+  pr_font font (Morpho_html.final word)
 ;
 value prlist_font font = 
-  let pr = pr_font font 
-  and bar = html_green " | " in
-  prlistrec 
-     where rec prlistrec = fun
-       [ [] -> ()
-       | [ x ] -> pr x
-       | [ x :: l ] -> do { pr x; ps bar; prlistrec l }
-       ]
+  let pr = pr_font_vis font 
+  and bar () = html_green " | " in 
+  List2.process_list_sep pr bar
 ;
 value persons_of decls =
   let reorg (one,two,three) (p,form) = match p with

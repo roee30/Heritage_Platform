@@ -129,7 +129,7 @@ print_string "done";
 (* #load "morpho_debug.cmo"; open Morpho_debug; *)
 
 (* Debug de Roots
-value vl = (Gen.gobble Install.verblinks_file : list Roots.preverbs_tree);
+value vl = (Gen.gobble Data.verblinks_file : list Roots.preverbs_tree);
 List.assoc (string_to_skt "h.r#1") vl;
 List.assoc "vih.r" vl;
 List.assoc "pravih.r" vl;
@@ -137,7 +137,7 @@ List.assoc "sa.mpravih.r" vl;
 *)
 
 (* Test de déclinaisons 
-value test_decls () = (Gen.gobble Install.nouns_file : inflected_map);
+value test_decls () = (Gen.gobble Data.nouns_file : inflected_map);
 
 value d = test_decls (); 
 (* value c = contents_map d; (* Stack overflow *) *)

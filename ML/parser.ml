@@ -392,16 +392,17 @@ value parser_engine () = do
 (* Replays Reader until given solution - dumb but reliable *)
   { Prel.prelude ()
   ; let query = Sys.getenv "QUERY_STRING" in 
-    let alist = create_env query in 
-    let url_encoded_input = get "text" alist "" 
-    and url_encoded_sol_index = get "n" alist "1"
-    and url_encoded_topic = get "topic" alist "" 
-    and st = get "st" alist "t" 
-    and cp = get "cp" alist "t"
-    and us = get "us" alist "f"
-    and translit = get "t" alist Paths.default_transliteration 
-    and lex = get "lex" alist Paths.default_lexicon
-    and abs = get "abs" alist "f" (* default local paths *) in
+    let env = create_env query in 
+    let url_encoded_input = get "text" env "" 
+    and url_encoded_sol_index = get "n" env "1"
+    and url_encoded_topic = get "topic" env "" 
+    and st = get "st" env "t" 
+    and cp = get "cp" env "t"
+    and us = get "us" env "f"
+    and translit = get "t" env Paths.default_transliteration 
+    and lex = get "lex" env Paths.default_lexicon
+    and font = get "font" env Paths.default_display_font (* deva vs roma print *)
+    and abs = get "abs" env "f" (* default local paths *) in
     let lang = language_of lex
     and input = decode_url url_encoded_input (* unnormalized string *)
     and uns = us="t" (* unsandhied vs sandhied corpus *)
@@ -416,9 +417,9 @@ value parser_engine () = do
           }
     and sol_index = int_of_string (decode_url url_encoded_sol_index) 
     (* For Validate mode, register number of solutions *)
-    and sol_num = int_of_string (get "allSol" alist "0")
+    and sol_num = int_of_string (get "allSol" env "0")
     (* Only register this solution if validate is true *)
-    and do_validate = get "validate" alist "f" 
+    and do_validate = get "validate" env "f" 
     (* Contextual information from past discourse *)
     and topic_mark = decode_url url_encoded_topic in
     let topic = match topic_mark with
@@ -430,7 +431,7 @@ value parser_engine () = do
  (* Corpus interaction disabled 
    (* File where to store locally the taggings - only for [Station] platform *)
    [let corpus_file = (* optionally transmitted by argument "out_file" *)
-        try let file_name = List.assoc "out_file" alist (* do not use get *) in 
+        try let file_name = List.assoc "out_file" env (* do not use get *) in 
             Some file_name  
         with [ Not_found -> Some regression_file_name ] in] *)
 (* Regression disabled
@@ -444,7 +445,7 @@ value parser_engine () = do
                 ]
              else () in] *) 
     let proj = (* checks for parsing mode or final unique tags listing *)
-        try let url_encoded_proj = List.assoc "p" alist in (* do not use get *) 
+        try let url_encoded_proj = List.assoc "p" env in (* do not use get *) 
             Some (parse_proj (decode_url url_encoded_proj))
         with [ Not_found -> do 
                  { set_query query (* query regurgitated - horror *)
@@ -452,7 +453,7 @@ value parser_engine () = do
                  } 
              ] 
     and checkpoints = (* checkpoints for graph *)
-       try let url_encoded_cpts = List.assoc "cpts" alist in (* do not use get *)
+       try let url_encoded_cpts = List.assoc "cpts" env in (* do not use get *)
            parse_cpts (decode_url url_encoded_cpts)
        with [ Not_found -> [] ] in     
     let cpts = sort_check checkpoints in 

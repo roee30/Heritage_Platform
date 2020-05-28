@@ -69,38 +69,38 @@ and load_preverbs file =
   with [ _ -> give_up "preverbs" ]
 ;
 value load_morphs () = 
-  { nouns = load_morpho Install.public_nouns_file
-  ; nouns2 = load_morpho Install.public_nouns2_file
-  ; prons = load_morpho Install.public_pronouns_file
+  { nouns = load_morpho Data.public_nouns_file
+  ; nouns2 = load_morpho Data.public_nouns2_file
+  ; prons = load_morpho Data.public_pronouns_file
   ; roots = Transducers.roots_morpho (* OBS *)
-  ; krids = load_morpho Install.public_parts_file
-  ; voks  = load_morpho Install.public_partvocs_file
-  ; lopas = load_morpho Install.public_lopas_file
-  ; lopaks = load_morpho Install.public_lopaks_file
-  ; undes = load_morpho Install.public_adverbs_file
+  ; krids = load_morpho Data.public_parts_file
+  ; voks  = load_morpho Data.public_partvocs_file
+  ; lopas = load_morpho Data.public_lopas_file
+  ; lopaks = load_morpho Data.public_lopaks_file
+  ; undes = load_morpho Data.public_adverbs_file
   ; preps = Deco.empty (* TO DO *)
-  ; absos = load_morpho Install.public_absols_file
-  ; iics  = load_morpho Install.public_iics_file
-  ; iics2 = load_morpho Install.public_iics2_file
-  ; iifs  = load_morpho Install.public_iifcs_file
-  ; iiks  = load_morpho Install.public_piics_file
-  ; iivs  = load_morpho Install.public_iivs_file
-  ; iiys  = load_morpho Install.public_avyayais_file
-  ; avys  = load_morpho Install.public_avyayafs_file
-  ; peris = load_morpho Install.public_peris_file
-  ; auxis = load_morpho Install.public_auxis_file
-  ; auxiinvs = load_morpho Install.public_auxiinvs_file
-  ; auxiks = load_morpho Install.public_auxiks_file
-  ; auxiicks = load_morpho Install.public_auxiicks_file
-  ; vocas = load_morpho Install.public_vocas_file
-  ; invs  = load_morpho Install.public_invs_file
-  ; ifcs  = load_morpho Install.public_ifcs_file
-  ; ifcs2 = load_morpho Install.public_ifcs2_file
-  ; sfxs  = load_morpho Install.public_sfxs_file
-  ; isfxs = load_morpho Install.public_isfxs_file
-  ; caches = load_morpho Install.public_cache_file
-  ; cacheis = load_morpho Install.public_cachei_file
-  ; prevs = load_preverbs Install.public_preverbs_file
+  ; absos = load_morpho Data.public_absols_file
+  ; iics  = load_morpho Data.public_iics_file
+  ; iics2 = load_morpho Data.public_iics2_file
+  ; iifs  = load_morpho Data.public_iifcs_file
+  ; iiks  = load_morpho Data.public_piics_file
+  ; iivs  = load_morpho Data.public_iivs_file
+  ; iiys  = load_morpho Data.public_avyayais_file
+  ; avys  = load_morpho Data.public_avyayafs_file
+  ; peris = load_morpho Data.public_peris_file
+  ; auxis = load_morpho Data.public_auxis_file
+  ; auxiinvs = load_morpho Data.public_auxiinvs_file
+  ; auxiks = load_morpho Data.public_auxiks_file
+  ; auxiicks = load_morpho Data.public_auxiicks_file
+  ; vocas = load_morpho Data.public_vocas_file
+  ; invs  = load_morpho Data.public_invs_file
+  ; ifcs  = load_morpho Data.public_ifcs_file
+  ; ifcs2 = load_morpho Data.public_ifcs2_file
+  ; sfxs  = load_morpho Data.public_sfxs_file
+  ; isfxs = load_morpho Data.public_isfxs_file
+  ; caches = load_morpho Data.public_cache_file
+  ; cacheis = load_morpho Data.public_cachei_file
+  ; prevs = load_preverbs Data.public_preverbs_file
   } 
 ;
 value morph = load_morphs () (* loading morphology databases *)
@@ -169,7 +169,8 @@ value warn0 sort word =
   output_string stdout message
 
 and warn2 sort word =
-  let message = "No unit " ^ label sort ^ " solution for " ^ Canon.decode word ^ "\n" in
+  let message = "No unit " ^ label sort ^ " solution for " 
+                ^ Canon.decode word ^ "\n" in
   output_string stdout message
 
 ;

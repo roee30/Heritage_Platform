@@ -38,14 +38,14 @@ encode.cmo : ../ZEN/word.cmo transduction.cmo phonetics.cmo canon.cmo
 encode.cmx : ../ZEN/word.cmx transduction.cmx phonetics.cmx canon.cmx
 order.cmo :
 order.cmx :
-padapatha.cmo : ../ZEN/word.cmo phonetics.cmo encode.cmo
-padapatha.cmx : ../ZEN/word.cmx phonetics.cmx encode.cmx
+chunker.cmo : ../ZEN/word.cmo phonetics.cmo encode.cmo
+chunker.cmx : ../ZEN/word.cmx phonetics.cmx encode.cmx
 skt_lexer.cmo : encode.cmo
 skt_lexer.cmx : encode.cmx
 sanskrit.cmi : ../ZEN/word.cmo
-sanskrit.cmo : transduction.cmo skt_lexer.cmo padapatha.cmo encode.cmo \
+sanskrit.cmo : transduction.cmo skt_lexer.cmo encode.cmo chunker.cmo \
     canon.cmo sanskrit.cmi
-sanskrit.cmx : transduction.cmx skt_lexer.cmx padapatha.cmx encode.cmx \
+sanskrit.cmx : transduction.cmx skt_lexer.cmx encode.cmx chunker.cmx \
     canon.cmx sanskrit.cmi
 test_stamp.cmo : version.cmo paths.cmo ../ZEN/gen.cmo control.cmo
 test_stamp.cmx : version.cmx paths.cmx ../ZEN/gen.cmx control.cmx
@@ -246,8 +246,8 @@ constraints.cmo : ../ZEN/word.cmo skt_morph.cmi morphology.cmi \
     ../ZEN/list2.cmo html.cmo canon.cmo constraints.cmi
 constraints.cmx : ../ZEN/word.cmx skt_morph.cmi morphology.cmi \
     ../ZEN/list2.cmx html.cmx canon.cmx constraints.cmi
-multilingual.cmo : skt_morph.cmi html.cmo encode.cmo
-multilingual.cmx : skt_morph.cmi html.cmx encode.cmx
+multilingual.cmo : web.cmo skt_morph.cmi html.cmo encode.cmo
+multilingual.cmx : web.cmx skt_morph.cmi html.cmx encode.cmx
 paraphrase.cmi : morphology.cmi constraints.cmi
 paraphrase.cmo : web.cmo skt_morph.cmi morphology.cmi html.cmo \
     constraints.cmi paraphrase.cmi
@@ -293,16 +293,16 @@ params.cmo : params.cmi
 params.cmx : params.cmi
 html.cmo : paths.cmo ../ZEN/gen.cmo
 html.cmx : paths.cmx ../ZEN/gen.cmx
-web.cmo : SCLpaths.cmo paths.cmo html.cmo date.cmo data.cmo
-web.cmx : SCLpaths.cmx paths.cmx html.cmx date.cmx data.cmx
+web.cmo : SCLpaths.cmo paths.cmo html.cmo date.cmo data.cmo canon.cmo
+web.cmx : SCLpaths.cmx paths.cmx html.cmx date.cmx data.cmx canon.cmx
 css.cmo : web.cmo html.cmo
 css.cmx : web.cmx html.cmx
 cgi.cmo :
 cgi.cmx :
-morpho_html.cmo : ../ZEN/word.cmo web.cmo transduction.cmo multilingual.cmo \
+morpho_html.cmo : ../ZEN/word.cmo web.cmo transduction.cmo paths.cmo \
     morpho.cmo html.cmo ../ZEN/gen.cmo encode.cmo ../ZEN/deco.cmo data.cmo \
     chapters.cmo canon.cmo
-morpho_html.cmx : ../ZEN/word.cmx web.cmx transduction.cmx multilingual.cmx \
+morpho_html.cmx : ../ZEN/word.cmx web.cmx transduction.cmx paths.cmx \
     morpho.cmx html.cmx ../ZEN/gen.cmx encode.cmx ../ZEN/deco.cmx data.cmx \
     chapters.cmx canon.cmx
 chapters.cmo : ../ZEN/word.cmo order.cmo encode.cmo ../ZEN/deco.cmo
@@ -333,11 +333,11 @@ web_corpus.cmo : paths.cmo corpus.cmi web_corpus.cmi
 web_corpus.cmx : paths.cmx corpus.cmx web_corpus.cmi
 corpus_manager.cmi : web_corpus.cmi
 corpus_manager.cmo : web_corpus.cmi web.cmo paths.cmo params.cmi \
-    multilingual.cmo mkdir_corpus_params.cmi ../ZEN/list2.cmo html.cmo \
-    dir.cmi corpus.cmi cgi.cmo corpus_manager.cmi
+    mkdir_corpus_params.cmi ../ZEN/list2.cmo html.cmo dir.cmi corpus.cmi \
+    cgi.cmo corpus_manager.cmi
 corpus_manager.cmx : web_corpus.cmx web.cmx paths.cmx params.cmx \
-    multilingual.cmx mkdir_corpus_params.cmx ../ZEN/list2.cmx html.cmx \
-    dir.cmx corpus.cmx cgi.cmx corpus_manager.cmi
+    mkdir_corpus_params.cmx ../ZEN/list2.cmx html.cmx dir.cmx corpus.cmx \
+    cgi.cmx corpus_manager.cmi
 corpus_manager_cgi.cmo : web_corpus.cmi web.cmo params.cmi html.cmo \
     corpus_manager.cmi control.cmo cgi.cmo
 corpus_manager_cgi.cmx : web_corpus.cmx web.cmx params.cmx html.cmx \

@@ -142,7 +142,7 @@ value read_raw_skt_stream encode strm =
   ]
 ;
 value read_processed_skt_stream encode strm = 
-  let process = padapatha (avagraha_expand encode) in
+  let process = chunker (avagraha_expand encode) in
   match sanskrit_sentence strm with 
   [ [ l ] -> process l
   | lines -> List.fold_right concat lines []

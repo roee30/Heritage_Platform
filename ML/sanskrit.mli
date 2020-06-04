@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Sanskrit : sig i*)
@@ -29,10 +29,10 @@ value trad_skt_list : string -> list skt;
 value maha_epic : skt;
 value rama_epic : skt;
 value skt_to_tex : skt -> string;
-value skt_to_dev : skt -> string;
+value skt_to_devnag : skt -> string;
 value skt_to_html : skt -> string;
 value skt_raw_to_deva : skt -> string;
-value skt_raw_strip_to_deva : skt -> string;
+value skt_strip_to_deva : skt -> string;
 value skt_to_anchor : skt -> string;
 value raw_sanskrit_word : skt -> Word.word;
 value sanskrit_word : skt -> Word.word;

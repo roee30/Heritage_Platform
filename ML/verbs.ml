@@ -361,6 +361,7 @@ value weak_stem entry rstem = (* rstem = revstem entry *)
     | "vaz"    -> revcode "uz" (* but not vac ! *)
     | "zaas"   -> revcode "zi.s" 
     | "myak.s" -> revcode "mik.s" 
+(*  | "sad#1"  -> revcode "siid" - incorrect for perfect ! *)
     | _ -> rstem
     ]
 ;
@@ -5967,6 +5968,8 @@ and compute_extra_zaas () =
 and compute_extra_zru () = 
   enter1 "zru" (* ved écoute *) 
          (Conju (impera 5) [ (Singular,[ (Second, code "zrudhi") ]) ])
+and compute_extra_sad () = (* WR E. Mah(1.214.027c) (Gretil) sa.mni.siidatu.h *)
+  enter1 "sad#1" (Conju (Primary,Conjug Perfect Active) [ (Dual,[ (Third, code "siidatus") ]) ])
 and compute_extra_sanj () = (* WR Oberlies p LI but maybe prm of variant sajj *)
   let root = "sa~nj" 
   and conj = Primary
@@ -6037,6 +6040,7 @@ value compute_extra () = do
   ; compute_extra_zaas () 
   ; compute_extra_zru () 
   ; compute_extra_sanj ()
+  ; compute_extra_sad ()
   ; compute_extra_skand () 
   ; compute_extra_syand ()
   ; compute_extra_hims ()
@@ -6088,7 +6092,8 @@ value fake_compute_conjugs (gana : int) (entry : string) = do
       | "zaas"   -> compute_extra_zaas ()
       | "zru"    -> compute_extra_zru () 
       | "sa~nj"  -> compute_extra_sanj () 
-      | "skand"  -> compute_extra_skand ()
+      | "sa~nj"  -> compute_extra_sanj () 
+      | "sad#1"  -> compute_extra_sad ()
       | "spaz#1" -> record_part_ppp (revcode "spa.s.ta") entry
       | "syand"  -> compute_extra_syand ()
       | "hi.ms"  -> compute_extra_hims ()

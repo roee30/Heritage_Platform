@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* CGI-bin indexerd for indexing in sanskrit dico without diacritics.     *)
@@ -47,12 +47,14 @@ value postlude () = do
   ; page_end Html.French True 
   }
 ;
-value print_word c = pl (Morpho_html.skt_anchor_R False (Canon.decode_ref c))
+value print_word c = pl (Morpho_html.skt_anchor False (Canon.decode_ref c))
 ;
 (* Each dummy is mapped to a list of words - all the words which
    give back the dummy by normalisation such as removing diacritics *)
 value read_dummies () =
   (Gen.gobble Data.public_dummies_file : Deco.deco Word.word)
+;
+value skt_red s = html_red (Morpho_html.skt_roma s)
 ;
 value index_engine () = 
   let abor = abort Html.French (* may not preserve the current lang *) in
@@ -69,7 +71,7 @@ value index_engine () =
            ; ps (div_begin Latin12)
            ; let words = Deco.assoc dummy dummies_deco in
              match words with
-               [ [] -> do { ps (Morpho_html.skt_red str)
+               [ [] -> do { ps (skt_red str)
                           ; ps " not found in Heritage dictionary"
                           ; ps html_break; pl html_break
                           }

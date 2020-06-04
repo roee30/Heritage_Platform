@@ -327,7 +327,7 @@ value print_inverse_map_xml trans form (delta,morphs) =
   }
 ;
 (* Outputs an XML stream on stdout *)
-value print_header trans = do
+value print_xml_header trans = do
   { "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" |> pl
   ; "<!DOCTYPE forms SYSTEM \"" ^ trans ^ "_morph.dtd\">" |> pl
   ; "<!-- Header" |> pl
@@ -339,7 +339,7 @@ value print_header trans = do
   }
 ;
 value print_xml trans inflected_map = do
-  { print_header trans
+  { print_xml_header trans
   ; "<forms>" |> pl
   ; Deco.iter (print_inverse_map_xml trans) inflected_map
   ; "</forms>" |> pl
@@ -352,7 +352,7 @@ value print_xml_word trans (w,_) = do
   }
 ;
 value print_xml_list trans banks prevs = do
-  { print_header trans
+  { print_xml_header trans
   ; "<forms>" |> pl
   ; let print_bank inflected_map = 
         Deco.iter (print_inverse_map_xml trans) inflected_map in

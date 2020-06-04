@@ -214,9 +214,11 @@ value reader_engine () = do
     and us = get "us" env "f" (* default input sandhied *)
     and translit = get "t" env Paths.default_transliteration 
     and lex = get "lex" env Paths.default_lexicon
-    and font = get "font" env Paths.default_display_font (* deva vs roma print *)
+    and font = get "font" env Paths.default_display_font in 
+    let ft = font_of_string font (* Deva vs Roma print *)
     and cache = get "cache" env "f" in
-    let () = cache_active.val := cache
+    let () = sanskrit_font.val := ft 
+    and () = cache_active.val := cache 
     and abs = get "abs" env "f" (* default local paths *) in
     let lang = Html.language_of lex 
     and input = decode_url url_encoded_input (* unnormalized string *)

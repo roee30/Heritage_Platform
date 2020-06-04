@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Encode = struct i*)
@@ -18,7 +18,7 @@ exception In_error of string (* Error in user or corpus input *)
 value is_vowel c = vowel c || c>100 && c<114 (* accounts for upper case *)
 ;
 (* anusvara substituted by nasal or normalized to 14 when original *)
-(* anunaasika before vowels treated as anusvaara *)
+(* anunaasika after vowels treated as anusvaara *)
 value rec normalize = normal_rec False
   where rec normal_rec after_vow = fun
   [ [] -> []
@@ -50,8 +50,8 @@ value code_string    str = normalize (code_raw str) (* standard VH *)
 and   code_string_WX str = normalize (code_raw_WX str)
 and   code_string_KH str = normalize (code_raw_KH str) 
 and   code_string_SL str = normalize (code_raw_SL str)
-and   code_skt_ref   str = normalize (code_rawu str)
-and   code_skt_ref_d str = normalize (code_rawd str)
+and   code_skt_ref   str = normalize (code_rawu str) (* with upper letters *)
+and   code_skt_ref_d str = normalize (code_rawd str) (* no diacritics *)
 ;
 (* Switching code function according to transliteration convention *)
 value switch_code = fun (* normalizes anusvaara in its input *)
@@ -113,11 +113,11 @@ value code_strip_raw s =  rev_strip (code_raw s)
 (* A cleaner solution would be to have type lexeme = (word * int) 
    and "x#5" represented as (x,5) (0 if no homophone) *)
 ;
-value skt_to_deva         str = try Canon.unidevcode (code_string str) with
+value skt_to_deva     str = try Canon.unidevcode (code_string str) with
                                 [ Failure _ -> raise (In_error str) ]
-and skt_raw_to_deva       str = try Canon.unidevcode (code_raw str) with
+and skt_raw_to_deva   str = try Canon.unidevcode (code_raw str) with
                                 [ Failure _ -> raise (In_error str) ]
-and skt_raw_strip_to_deva str = try Canon.unidevcode (code_strip_raw str) with
+and skt_strip_to_deva str = try Canon.unidevcode (code_strip_raw str) with
                                 [ Failure _ -> raise (In_error str) ]
 ;
 (* Following not needed since [Transduction.skt_to_html] is more direct 

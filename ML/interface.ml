@@ -518,9 +518,10 @@ value graph_engine () = do
     and us = get "us" env "f" (* sandhied text default *)
     and translit = get "t" env Paths.default_transliteration (* translit input *)
     and lex = get "lex" env Paths.default_lexicon (* lexicon choice *)
-    and font = get "font" env Paths.default_display_font (* deva vs roma print *)
+    and font = get "font" env Paths.default_display_font in 
+    let ft = font_of_string font (* Deva vs Roma print *)
     and cache = get "cache" env "f" (* no cache default *) in
-    let () = sanskrit_display.val := font 
+    let () = sanskrit_font.val := ft 
     and () = cache_active.val := cache 
     and abs = get "abs" env "f" (* default local paths *) in 
     let lang = language_of lex (* language default *)
@@ -537,13 +538,13 @@ value graph_engine () = do
     and link_num = get "linkNumber" env "0" (* is there a better default? *)
     and sol_num = get "allSol" env "0" in (* Needed for Validate mode *)
     let url_enc_corpus_permission = (* Corpus mode *)
-        get Params.corpus_permission env "true" in
+        get Params.corpus_permission env "true" in 
     let corpus_permission = 
       url_enc_corpus_permission
       |> decode_url
       |> Web_corpus.permission_of_string in
-    let corpus_dir = get Params.corpus_dir env "" in
-    let sentence_no = get Params.sentence_no env "" in
+    let corpus_dir = get Params.corpus_dir env "" 
+    and sentence_no = get Params.sentence_no env "" in
     let text = arguments translit lex font cache st us cp url_encoded_input
                          url_encoded_topic abs sol_num corpus sent_id link_num
                          url_enc_corpus_permission corpus_dir sentence_no
@@ -568,7 +569,7 @@ value graph_engine () = do
     let revised = decode_url (get "revised" env "") (* User-aid revision *)
     and rev_off = int_of_string (get "rev_off" env "-1") 
     and rev_ind = int_of_string (get "rev_ind" env "-1") in 
-   try do
+   try do 
    { match (revised,rev_off,rev_ind) with
      [ ("",-1,-1) -> (* Standard input processing *** Main call *** *)
        check_sentence translit uns text checkpoints input sol_num
@@ -624,7 +625,7 @@ value graph_engine () = do
      else ()
    ; close_page_with_margin ()
    ; page_end lang True
-   }
+   } 
    with 
  [ Sys_error s         -> abort lang Control.sys_err_mess s (* file pb *)
  | Stream.Error s      -> abort lang Control.stream_err_mess s (* file pb *)

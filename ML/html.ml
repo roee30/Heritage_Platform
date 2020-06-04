@@ -220,7 +220,7 @@ value rgb = fun (* a few selected HTML colors in rgb data *)
   | Blue        -> "#0000FF" (* Canard = "#0000C0" ou "#0080FF" *)
   | Green       -> "#008000" (* Teal = "#008080" Olive = "#808000" *)
   | Aquamarine  -> "#6FFFC3" (* actually Light Aquamarine *)
-  | Lawngreen   -> "#7CFC00" 
+  | Lawngreen   -> "#66ff99" (* was "#7CFC00" *)
   | Yellow      -> "#FFFF00" 
   | Orange      -> "#FFA000"  
   | Cyan        -> "#00FFFF" (* Aqua = Cyan, Turquoise = "#40E0D0" *)

@@ -37,24 +37,39 @@ value url_cache s =
   mw_dico_url ^ mw_defining_page s ^ "#" ^ Encode.anchor s
 ;
 (* Romanisation of Sanskrit *)
-value skt_roma s = italics (Transduction.skt_to_html s)
+value skt_roma s = Transduction.skt_to_html s
 (* Function [skt_roma] differs from [Encode.skt_to_roma] 
    because it does not go through encoding [s] as a word,
    and the complications of dealing with possible hiatus. *)
 ;
-value skt_red s = html_red (skt_roma s)
+value skt_roma_it s = skt_roma s |> italics
 ;
-value skt_anchor cached font form = (* for Declension Conjugation *)
+(* ignores possible homo index *)
+value skt_deva s = Encode.skt_strip_to_deva s
+;
+value skt_html_font font s = match font with
+  [ Roma -> skt_roma s | Deva -> skt_deva s ]
+;
+value skt_html s = (* ubiquitous for font *)
+  let font = sanskrit_font.val in
+  skt_html_font font s
+;
+value skt_italics form = 
+  skt_html form |> italics
+;
+value skt_anchor_font font is_cache form = (* for Declension Conjugation *)
   let s = match font with
-          [ Deva -> deva20_blue_center (Encode.skt_raw_strip_to_deva form)
-          | Roma -> skt_roma form (* no stripping in Roma *)
+          [ Deva -> deva20_blue_center (Encode.skt_strip_to_deva form) 
+                    (* NB This removes the possible homo index *)
+          | Roma -> skt_roma_it form (* no stripping in Roma *)
           ]
-  and url_function = if cached then url_cache else url in
+  and url_function = if is_cache then url_cache else url in
   anchor Navy_ (url_function form) s 
 ;
-value skt_anchor_R cached = skt_anchor cached Roma (* for Declension, Indexer *)
-(*i [and skt_anchor_D = skt_anchor Deva] unused i*) 
-and skt_anchor_R2 s s' = anchor Navy_ (url s) (skt_roma s') (* for Indexer *)
+value skt_anchor is_cache = 
+  let font = sanskrit_font.val in
+  skt_anchor_font font is_cache (* for Declension, Indexer *)
+and skt_anchor_R s s' = anchor Navy_ (url s) (skt_roma_it s') (* for Indexer *)
 ;
 value no_hom entry = (* low-level string hacking *)
   match (String.sub entry ((String.length entry)-1) 1) with
@@ -72,27 +87,25 @@ value skt_anchor_M word entry page cache =
   let vocable = if no_hom entry then word 
                 else let pos = (String.length entry)-1 in 
                      word ^ "#" ^ (String.sub entry pos 1) in
-  anchor_mw (skt_roma vocable)
+  anchor_mw (skt_roma_it vocable)
 ;
-value skt_graph_anchor_R cache form =
-  let s = skt_roma form in
-  let url_function = if cache then url_cache else url in
-  anchor_graph Navy_ (url_function form) s 
+value skt_graph_anchor is_cache form =
+  let url_function = if is_cache then url_cache else url in
+  anchor_graph Navy_ (url_function form) (skt_italics form)
 ;
-value printer w = (* do not eta reduce ! *)
-  match sanskrit_display.val with 
-  [ "deva" -> Canon.unidevcode w
-  | "roma" -> Canon.uniromcode w
-  | _ -> failwith "Unknown default display font"
+(* This is an alternative to [skt_html] above - some cleaning-up is needed *)
+value skt_utf w = (* do not eta reduce ! *)
+  match sanskrit_font.val with 
+  [ Deva -> Canon.unidevcode (Encode.strip w)
+  | Roma -> Canon.uniromcode w
   ]
 ;
-value print_stem w = printer w |> ps (* w in lexicon or not *)
-and print_chunk w = printer w |> ps
-and print_entry w = skt_anchor_R False (Canon.decode w) |> ps (* w in lexicon *)
-and print_ext_entry ps w = skt_anchor_R False (Canon.decode w) |> ps (* idem *)
-and print_cache w = skt_anchor_R True (Canon.decode w) |> ps
-and print_graph_entry w = skt_graph_anchor_R False (Canon.decode w) |> ps
-and print_graph_cache w = skt_graph_anchor_R True (Canon.decode w) |> ps
+value print_stem w = skt_utf w |> ps (* w in lexicon or not *)
+and print_chunk w = skt_utf w |> ps
+and print_entry w = skt_anchor False (Canon.decode w) |> ps (* w in lexicon *)
+and print_cache w = skt_anchor True (Canon.decode w) |> ps
+and print_graph_entry w = skt_graph_anchor False (Canon.decode w) |> ps
+and print_graph_cache w = skt_graph_anchor True (Canon.decode w) |> ps
 ;
 
 (* Used in [Indexer] and [Lemmatizer] *)
@@ -128,8 +141,12 @@ value final w = visargify (Word.mirror w) (* Declension, Conjugation *)
 ; 
 value print_final rw = print_chunk (visargify rw) (* Interface *)
 ;
-value hdecode word = Transduction.skt_to_html (Canon.decode word)
+value hdecode word = 
+  (* [Transduction.skt_to_html (Canon.decode word)] assumes Roma style (IAST) *)
+  Canon.decode word |> skt_html 
 ;
+(* NB This assumes printing skt in Roma style (IAST). 
+   In order to print in Deva style, one should use [skt_utf] above - TODO *)
 value html_blue_off offset text = 
   (* Temporary use of title attribute for XHTML 1.0 Strict offset recording, *)
   (* should be replaced by data-offset for future HTML 5 compliance. *)
@@ -139,7 +156,7 @@ value html_blue_off offset text =
   (elt_begin_attrs [ offset_attr offset ] "span" Blue_)  ^ text ^ span_end 
 ;
 (* indicates offset of segment in attribute "title" of [Blue_] span *)
-value blue_word_off word offset = (* deprecated *)
+value blue_word_off word offset = 
   html_blue_off offset (emph (hdecode word))
 ;
 value print_sandhi u v w = do 

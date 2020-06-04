@@ -19,8 +19,8 @@
 open Skt_morph;
 open Morphology; (* [Noun_form] etc. *)
 open Html; (* [narrow_screen html_red]  etc. *)
-open Web; (* ps pl font Deva Roma pr_font etc. *)
-open Cgi; (* [create_env] etc.  *)
+open Web;  (* [ps pl font Deva Roma pr_font] etc. *)
+open Cgi;  (* [create_env] etc. *)
 open Multilingual; (* [declension_title compound_name avyaya_name] *)
 
 value dtitle font = h1_title (declension_title narrow_screen font)
@@ -46,7 +46,7 @@ value display_subtitle title = do
   ; title |> ps
   ; th_end |> ps 
   ; tr_end |> ps 
-  ; table_end |> pl (* Centered *)
+  ; table_end |> pl (* centered *)
   ; html_paragraph |> pl
   }
 ;
@@ -132,19 +132,19 @@ value display_iic font = fun
   | l -> do 
     { html_paragraph |> pl
     ; h3_begin C3 |> ps
-    ; compound_name font |> ps; ps " "
+    ; compound_name font |> ps; " " |> ps
     ; let print_iic w = pr_i font w in
       List.iter print_iic l
     ; h3_end |> ps
     }
   ]
 ;
-value display_avy font = fun
+value display_avya font = fun
   [ [] -> ()
   | l -> do 
     { html_paragraph |> pl
     ; h3_begin C3 |> ps
-    ; avyaya_name font |> ps; ps " "
+    ; avyaya_name font |> ps; " " |> ps
     ; let ifc_form w = [ 0 ] (* - *) @ w in
       let print_iic w = pr_font font (ifc_form w) in
       List.iter print_iic l
@@ -154,16 +154,16 @@ value display_avy font = fun
 ;
 value sort_out accu form = fun
      [ [ (_,morphs) ] -> List.fold_left (reorg form) accu morphs
-      where reorg f (mas,fem,neu,any,iic,avy) = fun
+      where reorg f (mas,fem,neu,any,iic,avya) = fun
         [ Noun_form g n c -> let t = (n,c,f) in 
             match g with 
-              [ Mas -> ([ t :: mas ],fem,neu,any,iic,avy)
-              | Fem -> (mas,[ t :: fem ],neu,any,iic,avy)
-              | Neu -> (mas,fem,[ t :: neu ],any,iic,avy)
-              | Deictic _ -> (mas,fem,neu,[ t :: any ],iic,avy)
+              [ Mas -> ([ t :: mas ],fem,neu,any,iic,avya)
+              | Fem -> (mas,[ t :: fem ],neu,any,iic,avya)
+              | Neu -> (mas,fem,[ t :: neu ],any,iic,avya)
+              | Deictic _ -> (mas,fem,neu,[ t :: any ],iic,avya)
               ]
-        | Bare_stem | Gati -> (mas,fem,neu,any,[ f :: iic ],avy)
-        | Avyayaf_form -> (mas,fem,neu,any,iic,[ f :: avy ])
+        | Bare_stem | Gati -> (mas,fem,neu,any,[ f :: iic ],avya)
+        | Avyayaf_form -> (mas,fem,neu,any,iic,[ f :: avya ])
         | Ind_form _ | Verb_form _ _ _  | Ind_verb _ | Abs_root _ 
         | Avyayai_form | Unanalysed | PV _ 
         | Part_form _ _ _ _ ->
@@ -173,19 +173,19 @@ value sort_out accu form = fun
      ]
 and init = ([],[],[],[],[],[])
 ;
-value display_inflected font (gen_deco,pn_deco,voca_deco,iic_deco,avy_deco) = 
+value display_inflected font (gen_deco,pn_deco,voca_deco,iic_deco,avya_deco) = 
   let nouns = Deco.fold sort_out init gen_deco in 
   let non_vocas = Deco.fold sort_out nouns pn_deco in 
   let (mas,fem,neu,any,_,_) = Deco.fold sort_out non_vocas voca_deco 
   and iic = List.map fst (Deco.contents iic_deco) 
-  and avy = List.map fst (Deco.contents avy_deco) in do
+  and avya = List.map fst (Deco.contents avya_deco) in do
   { center_begin |> pl
   ; display_gender font Mas mas 
   ; display_gender font Fem fem 
   ; display_gender font Neu neu
   ; display_gender font (Deictic Numeral) any (* arbitrary *)
   ; display_iic font iic 
-  ; display_avy font avy 
+  ; display_avya font avya 
   ; center_end |> pl 
   ; html_paragraph |> pl
   }
@@ -241,7 +241,8 @@ value decls_engine () = do
     and url_encoded_participle = get "p" env ""
     and url_encoded_source = get "r" env ""
         (* optional root origin - used by participles in conjugation tables *)
-    and font = font_of_string (get "font" env Paths.default_display_font)
+    and font = let s = get "font" env Paths.default_display_font in
+               font_of_string s (* deva vs roma print *)
     and translit = get "t" env "VH" (* DICO created in VH trans *)
     and lex = get "lex" env "SH" (* default Heritage *) in 
     let entry_tr = decode_url url_encoded_entry (* : string in translit *)
@@ -257,14 +258,17 @@ value decls_engine () = do
                        (* will be avoided by unique name lookup *) 
         let entry = resolve_homonym entry_VH in (* compute homonymy index *)
         let link =
-          if in_lexicon entry then Morpho_html.skt_anchor False font entry
+          if in_lexicon entry then Morpho_html.skt_anchor False entry
              (* We should check it is indeed a substantive entry 
                 and that Any is used for deictics/numbers (TODO) *)
-          else let root = if source = "" then "?" (* unknown in lexicon *)
-                          else " from " ^ 
-               if in_lexicon source then Morpho_html.skt_anchor False font source
-               else doubt (Morpho_html.skt_roma source) in
-               Morpho_html.skt_roma entry ^ root in
+             (* Also it should use unique naming for possible homo index *)
+          else Morpho_html.skt_html_font font entry |> italics in
+(* OBSOLETE indication of root for kridanta
+        [let root = if source = "" then "?" (* unknown in lexicon *)
+                    else " from " ^ (* should test font *) in
+         if in_lexicon source then Morpho_html.skt_anchor False font source
+         else doubt (Morpho_html.skt_roma source) in (* should test font *)
+               Morpho_html.skt_utf font entry ^ root in] *)
         let subtitle = hyperlink_title font link in do
         { display_subtitle (h1_center subtitle)
         ; try look_up font entry (Nouns.Gender gender) part
@@ -273,7 +277,7 @@ value decls_engine () = do
       ; page_end lang True
       }
     with [ Stream.Error _ -> 
-             abort lang ("Illegal " ^ translit ^ " transliteration ") entry_tr ]
+           abort lang ("Illegal " ^ translit ^ " input ") entry_tr ]
   }
 ;
 value safe_engine () =

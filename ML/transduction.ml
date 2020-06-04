@@ -255,8 +255,8 @@ EXTEND Gram (* skt to devnag *)
     [ [ w = LIST0 dev; `EOI -> String.concat "" w ] ];
 END
 ;
-value skt_to_dev = transducer dev_word
-;
+value skt_to_devnag = transducer dev_word
+; 
 (****************************************)
 (* Greek and math symbols, TeX encoding *)
 (****************************************)

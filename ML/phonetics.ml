@@ -12,12 +12,20 @@
 (* Notation Pr{X} gives X as the pratyaahaara notation of a set of phonemes *)
 
 (* Sanskrit phonology *)
+(* Phoneme (var.na) is implemented as integer from 1 to 49, thus consistent with 
+   ZEN toolkit, with Word.letter = int. Thus the Paninian structure of 
+   pratyahaaras is replaced by simple arithmetic computation. *)
 
-value vowel c = c>0 && c<14 (* a aa i ii u uu .r .rr .l e ai o au *)(* Pr{hac} *)
+(* This representation is not sufficient to represent accent, and a more 
+   sophisticated phonology scheme should be used for that purpose, taking 
+   into account phonetic features, such as SLP1 of the Sanskrit Library. 
+   See Lies of Scharf and Higman. *)
+
+value vowel c = c>0 && c<14 (* a aa i ii u uu .r .rr .l e ai o au *)(* Pr(hac) *)
 and anusvar c = c=14 (* .m : anusvara standing for nasal *)
            (*  || c=15  candrabindu *)
 and visarga c = c=16 (* .h *)
-and consonant c = c>16 (* Pr{hal} *)
+and consonant c = c>16 (* Pr(hal) *)
 and phantom c = c<(-1) (* -2 -3=*a -4=*i -5=*u -6=*r *)
 ;
 (* final s assimilated to visarga *)
@@ -114,15 +122,15 @@ and palatal   c = c > 21 && c < 27 (* palatals     : c ch j jh ~n      *)
 and lingual   c = c > 26 && c < 32 (* cerebrals    : .t .th .d .dh .n  *)
 and dental    c = c > 31 && c < 37 (* dentals      : t th d dh n       *)
 and labial    c = c > 36 && c < 42 (* labials      : p ph b bh m       *)
-and semivowel c = c > 41 && c < 46 (* semi vowels  : y r l v  Pr{ya.n} *)
-and sibilant  c = c > 45 && c < 49 (* sibilants    : z .s s   Pr{zar}  *)
+and semivowel c = c > 41 && c < 46 (* semi vowels  : y r l v  Pr(ya.n) *)
+and sibilant  c = c > 45 && c < 49 (* sibilants    : z .s s   Pr(zar)  *)
 and aspirate  c = c = 49 (* h *)
 ;
 value stop c = c > 16 && c < 42
 ;
 value nasal c = 
      c = 21 (* f *) || c =  26 (* ~n *) || c = 31 (* .n *) 
-  || c = 36 (* n *) || c = 41  (*  m *) || anusvar c (* Pr{~nam} *)
+  || c = 36 (* n *) || c = 41  (*  m *) || anusvar c (* Pr(~nam) *)
 ;
 value n_or_f c =  c = 21 (* f *) || c = 36 (* n *) 
 ;
@@ -164,10 +172,10 @@ value voiced = fun (* voices previous phoneme with homophone *)
   | c  -> c
   ]
 ;
-value voiced_consonant c = (* Pr{jhaz} *)
+value voiced_consonant c = (* Pr(jhaz) *)
   List.mem c [ 19; 20; 24; 25; 29; 30; 34; 35; 39; 40 ]
 
-and mute_consonant c =(* Pr{khay} *)
+and mute_consonant c =(* Pr(khay) *)
   List.mem c [ 17; 27; 32; 37; 18; 22; 23; 28; 33; 38 ]
 ;
 value is_voiced c = (* voiced phonemes *)
@@ -185,17 +193,19 @@ value elides_visarg_aa c =
 ;
 value turns_visarg_to_o c = elides_visarg_aa c || avagraha c
 ;
-value guna = fun
+
+(* Now for the phonetic grades *)
+value guna = fun (* normal grade *)
   [ 1     -> [ 1 ]     (* a is its own guna *)
   | 2     -> [ 2 ]     (* aa is its own guna and vriddhi *)
-  | 3 | 4 -> [ 10 ]    (* e *)
-  | 5 | 6 -> [ 12 ]    (* o *)
-  | 7 | 8 -> [ 1; 43 ] (* ar *)
-  | 9     -> [ 1; 44 ] (* al *)
+  | 3 | 4 -> [ 10 ]    (* e is guna of i and ii *)
+  | 5 | 6 -> [ 12 ]    (* o is guna of u and uu *)
+  | 7 | 8 -> [ 1; 43 ] (* ar is guna of .r and .rr *)
+  | 9     -> [ 1; 44 ] (* al is guna of .l *)
   | c     -> [ c ]
   ]
 ;
-value vriddhi = fun
+value vriddhi = fun (* strong grade *)
   [ 1 | 2           -> [ 2 ]     (* aa *)
   | 3 | 4 | 10 | 11 -> [ 11 ]    (* ai *)
   | 5 | 6 | 12 | 13 -> [ 13 ]    (* au *)
@@ -204,24 +214,28 @@ value vriddhi = fun
   | c               -> [ c ]
   ]
 ;
+(* NB. guna : int -> list int. In Panini, guna : varna -> varna, with
+   guna(.r) = a and vriddhi(.r) = aa, with suutra I.1.51 that affixes "r":
+     Pan(I.1.51): ura.n rapara.h || after a,i,u put r *)
+(* NB. u in ura.n above explained in Kaazikaa for counterex. kheyam and geyam *)
 
 (* Macdonnel §125 - condition for root of gana 1 to take guna of its stem *)
 value gunify = fun (* arg word is reversed stem *)
-  [ [ v :: _ ] when vowel v -> True
-  | [ _ :: [ v :: _ ] ] when short_vowel v -> True 
+  [ [ v :: _ ] when vowel v -> True (* guna is used if root is vowel final *)
+  | [ _ :: [ v :: _ ] ] when short_vowel v -> True (* or penultimate is short *)
   | _ -> False
   ]
 ;
 (* Augment computation *)
-value augment x = (* arg is first letter of root *)
-  if vowel x then vriddhi x
-  else if x = 23 (* ch *) then [ 1; 22; 23 ] (* cch *)
-  else if x>16 && x<50 then [ 1; x ]     (* a prefix of consonant *)
+value augment i = (* i is initial letter of root *)
+  if vowel i then vriddhi i
+  else if i = 23 (* ch *) then [ 1; 22; 23 ] (* cch *)
+  else if consonant i then [ 1; i ]     (* a prefix of consonant *)
   else failwith "Phonetics.augment"
 ;
 value aug = fun (* augment last phoneme of word *)
   [ [ c :: word ] -> augment c @ word
-  | [] -> failwith "Empty stem (aug)"   
+  | [] -> failwith "Empty stem in aug"   
   ]
 ;
 value light = fun (* light roots end in short vowel Pan{6,1,69} *)
@@ -362,7 +376,7 @@ value asp = fun
   | _ -> failwith "Penultimate not vowel"
   ]
 ;
-(* final form of a pada *)
+(* Final form of a pada *)
 (* Warning - finalize does NOT replace s or r by visarga, and fails on visarga *)
 value finalize rstem = match rstem with
   [ [] -> []

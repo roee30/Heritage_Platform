@@ -62,7 +62,7 @@ value reader_page () = do
     and url_encoded_mode  = get "mode" env "g"
     and url_encoded_topic = get "topic" env ""
     and st = get "st" env "t" (* default vaakya rather than isolated pada *)
-(*  and cp = get "cp" env default_mode TODO: dead code *)
+(* [and cp = get "cp" env default_mode TODO: dead code ] *)
     and us = get "us" env "f" (* default input sandhied *)
     and cache_active = get "cache" env cache_active.val
     and translit = get "t" env Paths.default_transliteration 
@@ -76,7 +76,7 @@ value reader_page () = do
     let corpus_dir = Cgi.decoded_get Params.corpus_dir "" env in
     let sentence_no = Cgi.decoded_get Params.sentence_no "" env in do
 
-  { pl (body_begin back_ground) 
+  { body_begin back_ground |> pl 
   ; print_title (Some lang) reader_title
   ; h3_begin C3 |> pl
   ; if Web_corpus.(permission_of_string corpus_permission = Annotator) then
@@ -98,12 +98,12 @@ value reader_page () = do
         [ (" Unsandhied ","t",us="t") 
         ; ("  Sandhied  ","f",us="f") 
         ] |> pl
-(* Mode Simple deprecated 
-  ; pl " Parser strength "
+(* option Simple deprecated TODO
+ [; pl " Parser strength "
   ; pl (option_select_default "cp"
         [ ("  Full  ","t",cp="t") 
         ; (" Simple ","f",cp="f")
-        ]) *)
+        ])] *)
 (* Sanskrit printer deva/roma *)
   ; " Sanskrit display font" |> pl
   ; sanskrit_font_switch_default font "font" |> ps

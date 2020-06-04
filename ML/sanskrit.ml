@@ -94,15 +94,15 @@ value trad_skt = trad_string skt1
 value maha_epic = "Mahaabhaarata" (* for [Print_html] *)
   and rama_epic = "Raamaaya.na"
 ;
-value skt_to_tex = Transduction.skt_to_tex;   (* romanisation Tex diacritics *)
-value skt_to_dev = Transduction.skt_to_dev;   (* devanagari devnag *)
-value skt_to_html = Transduction.skt_to_html; (* romanisation *)
+value skt_to_tex = Transduction.skt_to_tex;    (* romanisation Tex diacritics *)
+value skt_to_devnag = Transduction.skt_to_devnag; (* for Tex with devnag *)
+value skt_to_html = Transduction.skt_to_html;  (* romanisation *)
 
 (* Encoding functions skt -> word *)
 value raw_sanskrit_word = Transduction.code_raw; (* no normalisation no accent*) 
 value sanskrit_word = Encode.code_string; (* normalisation *)
 value skt_raw_to_deva = Encode.skt_raw_to_deva; (* devanagari unicode *)
-value skt_raw_strip_to_deva = Encode.skt_raw_strip_to_deva; (* idem *)
+value skt_strip_to_deva = Encode.skt_strip_to_deva; (* id for [Print_html] *)
 value skt_to_anchor = Encode.anchor; (* hypertext anchor encoding *)
 value rev_stem_skt = Encode.rev_stem; (* normalised revword *)
 value normal_stem = Encode.normal_stem; (* normalised stem as word *)

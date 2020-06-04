@@ -18,11 +18,11 @@
 (*i executable module Conjugation = struct i*)
 
 open Skt_morph;
-open Morphology; (* inflected [Verb_form] etc. *)
+open Morphology; (* [inflected Verb_form] etc. *)
 open Conj_infos; (* [vmorph Causa Inten Desid root_infos] *)
-open Inflected; (* roots.val indecls.val etc. *)
+open Inflected; (* [roots.val indecls.val] etc. *)
 open Html;
-open Web; (* ps pl font Deva Roma pr_font etc. *)
+open Web; (* [ps pl font Deva Roma pr_font] etc. *)
 open Cgi;
 open Multilingual; (* [gentense tense_name captions] *)
 
@@ -843,7 +843,8 @@ value conjs_engine () = do
    try
     let url_encoded_entry = List.assoc "q" env
     and url_encoded_class = List.assoc "c" env 
-    and font = font_of_string (get "font" env Paths.default_display_font)
+    and font = let s = get "font" env Paths.default_display_font in
+               font_of_string s (* deva vs roma print *)
     (* OBS and stamp = get "v" env "" *)
     and translit = get "t" env "VH" (* DICO created in VH trans *)
     and lex = get "lex" env "SH" (* default Heritage *) in 
@@ -872,7 +873,7 @@ value conjs_engine () = do
         let entry = resolve_homonym entry_VH gana in (* VH string with homo *)
         let known = in_lexicon entry (* in lexicon? *) 
           (* we should check it is indeed a root or denominative *) in do 
-        { let link = if known then Morpho_html.skt_anchor False font entry 
+        { let link = if known then Morpho_html.skt_anchor False entry 
                      else doubt (Morpho_html.skt_roma entry) in 
           let subtitle = hyperlink_title font link in
           display_subtitle (h1_center subtitle)

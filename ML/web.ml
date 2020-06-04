@@ -142,6 +142,9 @@ and string_of_font = fun
   | Roma -> "roma"
   ] 
 ;
+(* Global communicating the Sanskrit display font to [Morpho_html] *)
+value sanskrit_font = ref (Paths.default_display_font |> font_of_string)
+;
 value pr_roma code = (* roman with diacritics *)
   ps (html_red (Canon.uniromcode code) ^ " ") 
 and pr_deva code = (* devanagari *)
@@ -159,9 +162,6 @@ and pr_i font word = do (* special for iic *)
     ]
   ; print_string " "
   }
-;
-(* Global communicating the Sanskrit display font to [Morpho_html] *)
-value sanskrit_display = ref Paths.default_display_font
 ;
 value meta_program l = List.iter pl (List.map meta_prefix l)
 ;

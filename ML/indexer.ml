@@ -32,8 +32,8 @@ value answer_end () = do
   ; pl html_paragraph
   }
 ;
-value ok (mess,s) = do { ps mess; pl (Morpho_html.skt_anchor_R False s) }
- and ok2 (mess,s1,s2) = do { ps mess; pl (Morpho_html.skt_anchor_R2 s1 s2) }
+value ok (mess,s) = do { ps mess; pl (Morpho_html.skt_anchor False s) }
+ and ok2 (mess,s1,s2) = do { ps mess; pl (Morpho_html.skt_anchor_R s1 s2) }
      (* ok2 prints the entry under the spelling given by the user, i.e. without 
         normalisation, thus e.g. sandhi is not written sa.mdhi, and possibly 
         suffixed by homonymy index 1, e.g. b.rh. *)
@@ -59,7 +59,7 @@ and report_failure s = do
   { ps " not found in dictionary"
   ; pl html_break
   ; ps "Closest entry in lexical order: " 
-  ; ps (Morpho_html.skt_anchor_R False s)
+  ; ps (Morpho_html.skt_anchor False s)
   ; pl html_break
   }
 ;
@@ -101,6 +101,8 @@ value print_word word (entry,lex,page) = match lex with
 value read_mw_index () = 
   (Gen.gobble Data.public_mw_index_file : Deco.deco (string * string * string)) 
 ;
+value skt_red s = html_red (Morpho_html.skt_roma s)
+;
 value index_engine () = do
   { pl http_header
   ; page_begin heritage_dictionary_title
@@ -124,7 +126,7 @@ value index_engine () = do
             let mw_index = read_mw_index () in 
             let words = Deco.assoc word mw_index in
             match words with
-              [ [] -> do { ps (Morpho_html.skt_red str_VH)
+              [ [] -> do { ps (skt_red str_VH)
                          ; ps " not found in MW dictionary"
                          ; pl html_break
                          }
@@ -143,7 +145,7 @@ value index_engine () = do
                     (* even though str may exist as inflected form  *)
               with (* Matching entry not found - we try declensions *)
                   [ Index.Last last -> do
-                      { ps (Morpho_html.skt_red str_VH)
+                      { ps (skt_red str_VH)
                       ; try_declensions word last
                       }
                   ]

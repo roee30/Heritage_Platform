@@ -6,8 +6,8 @@
 (*                                                                        *)
 (* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
-(* Chunking mechanism for guessing partial padapatha form from list of chunks *)
-(* Essential for maximum parallelism in segmentation *)
+(* Chunking mechanism for guessing partial padapatha from list of chunks. *)
+(* Essential for maximum parallelism in segmentation                      *)
 
 (*i module Chunker = struct i*)
 
@@ -17,9 +17,9 @@ value avagraha_expand encode s =
   | x -> x
   ]
 ;
-(* Preprocessing of corpus to prepare partial padapatha from list of chunks   *)
-(* This is extremely important from the segmenter complexity point of view *)
-(* Since it takes hints at parallel treatment from non-ambiguous blanks. *)
+(* Preprocessing of corpus to prepare partial padapatha from list of chunks. *)
+(* This is extremely important from the segmenter complexity point of view   *)
+(* Since it takes hints at parallel treatment from non-ambiguous blanks.     *)
 
 exception Hiatus 
 ;
@@ -39,60 +39,70 @@ value adjust c w = match Word.mirror w with
              (* note: .m coming from sandhi of n is followed by sibilant 
                 and chunking is allowed only after this sibilant *)
         | 11 (* ai *) when c = 43  (* r *) -> raise Hiatus 
-             (* For ai.h+r -> ai r Whitney§179 en fait, toute voyelle longue *)
-     (* | 10 | 13 No Hyatus: te rasasaarasafgrahavidhim but es-r -> er missed *)
+             (* For ai.h+r -> ai r Whitney§179 never 2 consecutive r *)
+             (* Thus "i.s.tai ruupavaan" or "i.s.tai\_ruupavaan"
+                But "tasmai raajaa" must be written "tasmairaajaa" *)
+             (* NB for 10 (* e *) or 13 (* au *) we do not do the same treatment
+                in view of the rare padas ending in es or aus, 
+                thus "te rasasaarasafgrahavidhim" is allowed, and 
+                gacche.h+raajaa may be written gacche\_raajaa or gaccheraajaa*)
         | 12 (* o *) -> if rest = [ 40 ] (* bh from bhos -> bho *) then 
                            Encode.code_string "bhos" (* "bho raama" "bho bhos" *)
                         else if rest = [ 49; 1 ] (* aho *) then 
                            Encode.code_string "aho" (* "aho raama" *)
+                        else if c = 43 (* r *) then raise Glue
+                             (* "mahaarhaasanayo raajaa" "devo raajaa" *)
                         else if Phonetics.turns_visarg_to_o c || c=1 
                              (* zivoham must be entered as zivo'ham (avagraha) *)
                              then Word.mirror [ 16 :: [ 1 :: rest ] ] 
                              (* restore visarga, assuming original a.h form *)
-                             (* This may miss hiatus os + rx -> o rx *) 
                         else w 
         | 1 (* a *) -> if c=1 then w else
                        if Phonetics.vowel c then raise Hiatus else w
         | 2 (* aa *) -> if Phonetics.vowel c then raise Hiatus else 
                         if Phonetics.elides_visarg_aa c then raise Hiatus else 
-                        w (* Hiatus except c surd unaspirate ? *)
+                        w (* Hiatus except c surd unaspirate ? *) 
+                        (* NB "punaaramate" but not "punaa ramate" *)
         | 4 (* ii *) (* possible visarga vanishes *)
+                        (* NB "n.rpatiiraajati" or "n.rpatii_raajati" 
+                           but "jyotiiratha.h" not chunkable*) 
         | 6 (* uu *) -> if c=43 (* r *) then raise Hiatus else w
+                        (* NB "maatuuraajaa" not chunkable *)
         (* next 4 rules attempt to revert [last] to 'd' in view of [c] *)
         | 34 (* d *) -> if c=35 (* dh *) then raise Glue else 
                         if Phonetics.is_voiced c 
                            then Word.mirror [ 32 :: rest ] (* d -> t *)
-                           else w
+                        else w
         | 24 (* j *) -> if Phonetics.turns_t_to_j c (* tat+jara -> tajjara *)
                            then Word.mirror [ 32 :: rest ] (* j -> t *)
-                           else w
+                        else w
         | 26 (* ~n *) -> match rest with
              [ [ 26 (* ~n *) :: ante ] -> match ante with
                  (* optional doubling of ~n in front of vowel *)
                  [ [ v :: _ ] -> if Phonetics.short_vowel v && Phonetics.vowel c
                                     then Word.mirror rest 
-                                    else failwith "padapatha"
+                                 else failwith "padapatha"
                  | _ -> failwith "padapatha"
                  ]
              | _ -> if c=23 (* ch could come from ch or z *)
                        then raise Glue 
                     else if Phonetics.turns_n_to_palatal c 
                             (* taan+zaastravimukhaan -> taa~nzaastravimukhaan *)
-                         then Word.mirror [ 36 (* n *) :: rest ] (* n -> ~n *)
+                            then Word.mirror [ 36 (* n *) :: rest ] (* n -> ~n *)
                          else w 
              ]
         | 29 (* .d *) -> if c=30 (* .dh *) then raise Glue else 
                          if Phonetics.is_voiced c 
-                           then Word.mirror [ 27 :: rest ] (* .d -> .t *)
-                           else w
+                            then Word.mirror [ 27 :: rest ] (* .d -> .t *)
+                         else w
         | 39 (* b *) -> if c=40 (* bh *) then raise Glue else 
                         if Phonetics.is_voiced c 
                            then Word.mirror [ 37 :: rest ] (* b -> p *)
-                           else w
+                        else w
         | 19 (* g *) -> if c=20 (* gh *) then raise Glue else 
                         if Phonetics.is_voiced c (* vaak+vazya *)
                            then Word.mirror [ 17 :: rest ] (* g -> k *)
-                           else w
+                        else w
         | 36 (* n *) -> match rest with
              [ [ 36 (* n *) :: ante ] -> match ante with
                    (* optional doubling of n in front of vowel *)
@@ -112,7 +122,7 @@ value adjust c w = match Word.mirror w with
                              then raise Glue else w
         | 44 (* l *) -> if c=last 
                            then Word.mirror [ 32 :: rest ] (* l -> t *)
-                           else w
+                        else w
         | 21 (* f *) -> match rest with
              [ [ 21 (* f *) :: ante ] -> match ante with
                    (* optional doubling of f in front of vowel *)
@@ -122,8 +132,8 @@ value adjust c w = match Word.mirror w with
                  | _ -> failwith "padapatha"
                  ]
              | _ -> if c=41 (* m *) (* vaak+mayi *)
-                            then Word.mirror [ 17 :: rest ] (* f -> k *)
-                            else w
+                       then Word.mirror [ 17 :: rest ] (* f -> k *)
+                    else w
              ]
         (* NB if last is y, r or v and c is vowel, then it may come from resp. 
            {i,ii}, {.r,.rr}, {u,uu} and this choice means that we cannot make 
@@ -146,15 +156,15 @@ value adjust c w = match Word.mirror w with
               ]
         | 47 (* .s *) -> match rest with
               [ [ 14 (* .m *) :: b ] -> if c=27 || c=28 (* .t .th *) then
-                                        Word.mirror [ 36 (* n *) :: b ] else w 
+                                           Word.mirror [ 36 (* n *) :: b ]
+                                        else w 
               | _ -> w
               ]
         | 48 (* s *) -> match rest with
               [ [ 14 (* .m *) :: b ] -> if c=32 || c=33 (* t th *) then
-                                        Word.mirror [ 36 (* n *) :: b ] else w 
-
-              | _ -> if c=32 || c=33 (* t th *) then
-                     raise Glue else w 
+                                           Word.mirror [ 36 (* n *) :: b ] 
+                                        else w 
+              | _ -> if c=32 || c=33 (* t th *) then raise Glue else w 
               ]
         | _ -> w
         ]
@@ -162,8 +172,8 @@ value adjust c w = match Word.mirror w with
 ;
 (* Called from [Sanskrit.read_processed_skt_stream] for use in [read_sanskrit]
    with argument [read_chunk=sanskrit_chunk encode] *)
-value chunker read_chunk l = (* l is list of chunks separated by blanks *)
-                               (* returns list of chunks in terminal sandhi *)
+value chunker read_chunk l = (* l is list of chunks separated by blanks   *)
+                             (* returns list of chunks in terminal sandhi *)
   let rec pad_rec = fun (* returns (c,l) with c first char of first pada in l *)
     [ [] -> (-1,[])
     | [ chk :: chks ] -> 

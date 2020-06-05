@@ -18,8 +18,7 @@
 
 (* Dispatch, instantiated by Transducers, is used as parameter of the 
    Segment functor from Segmenter or Interface. 
-   It defines the phase automaton transitions. 
-   There are two versions: 1 for Complete, 2 for Simple.  *)
+   It defines the phase automaton transitions. *)
 
 open Auto.Auto; 
 open Load_transducers; (* [transducer_vect Trans mk_transducers roots_usage] *)
@@ -43,7 +42,6 @@ value transducer phase =
   let transducers = Segment_control.transducers_ref.val in match phase with 
   [ Nouv -> transducers.nouv (* vowel-initial noun *)
   | Nouc -> transducers.nouc (* consonant-initial noun *)
-  | Noun2 -> transducers.noun2 (* idem in mode non gen *) 
   | Pron -> transducers.pron (* declined pronouns *) 
   | Root -> transducers.root (* conjugated root forms *) 
   | Vokv -> transducers.vokv (* vowel-initial vocative k.rdaantas *)  
@@ -52,7 +50,6 @@ value transducer phase =
   | Absv -> transducers.absv (* vowel-initial absolutives in -tvaa *) 
   | Absc -> transducers.absc (* consonant-initial absolutives in -tvaa *) 
   | Abso -> transducers.abso (* absolutives in -ya *) 
-  | Iic2 -> transducers.iic2 (* idem in mode non gen *) 
   | Iiif -> transducers.iifc (* fake iic of ifc stems *) 
   | Iiv  -> transducers.iiv  (* in initio verbi nominal stems, perpft *) 
   | Inv  -> transducers.inv  (* invocations *)   
@@ -65,7 +62,6 @@ value transducer phase =
   | Lopak -> transducers.lopak (* e/o kridanta forms *)
   | Ifcv  -> transducers.ifcv  (* vowel-initial ifc forms *)
   | Ifcc  -> transducers.ifcc  (* consonant-initial ifc forms *)
-  | Ifc2 -> transducers.ifc2 (* idem in mode non gen *)
   | Pv   -> transducers.prev (* preverbs *) 
   | Pvkc | Pvc -> transducers.pvc  (* preverbs starting with consonant *) 
   | Pvkv | Pvv -> transducers.pvv  (* preverbs starting with vowel *) 
@@ -121,21 +117,17 @@ derivatives like in Berry-Sethi's translator. *)
 value cached = (* potentially cached lexicon acquisitions *) 
   if Web.cache_active.val="t" then [ Cache; Cachei ] else []
 ;
-(* initial1, initial2: phases *)
-value initial1 =
+(* initial: phases *)
+value initial =
    (* All phases but Ifc, Abso, Auxi, Auxiinv, Auxik, Auxiick, Lopa, Lopak. *)
    [ Inde; Iicv; Iicc; Nouv; Nouc; Pron; A; An; Root; Kriv; Kric; Iikv; Iikc
    ; Peri; Pv; Pvkv; Pvkc; Iiv; Iivv; Iivc; Iiy; Inv; Ai; Ani 
    ; Absv; Absc; Inftu; Vocv; Vocc; Vokv; Vokc ] @ cached
-and initial2 =  (* simplified segmenter with less phases, no generation *)
-   [ Inde; Iic2; Noun2; Pron; Root; Pv; Iiv; Absv; Absc ] 
 ;
-value initial full = if full then initial1 else initial2
-;
-(* dispatch1: Word.word -> phase -> phases *)
-value dispatch1 w = fun (* w is the current input word *) 
+(* dispatch: Word.word -> phase -> phases *)
+value dispatch w = fun (* w is the current input word *) 
   [ Nouv | Nouc | Pron | Inde | Abso | Auxi | Auxiinv | Auxik | Kama | Ifcv | Ifcc 
-  | Kriv | Kric | Absv | Absc | Avy | Lopak | Root | Lopa | Cache -> initial1
+  | Kriv | Kric | Absv | Absc | Avy | Lopak | Root | Lopa | Cache -> initial
   | A -> if phantomatic w then [] else
          [ Iicc; Nouc; Iikc; Kric; Pvkc; Iivc; Vocc; Vokc ]
   | An -> if phantomatic w then [] else
@@ -162,35 +154,21 @@ value dispatch1 w = fun (* w is the current input word *)
       (* only chunk-final vocatives so no Iic overlap *) 
   | Inv -> [ Vocv; Vocc; Vokv; Vokc ] (* invocations before vocatives *) 
 (* Privative prefixes A and An are not allowed to prefix Ifc like a-dhii *)
-  | Noun | Iic | Iik | Voca | Krid | Noun2 | Iic2 | Ifc2 | Vok
+  | Noun | Iic | Iik | Voca | Krid | Vok
   | Unknown -> failwith "Dispatcher anomaly"
   | ph -> failwith ("Dispatcher fake phase: " ^ string_of_phase ph) 
   ]
-and dispatch2 w = fun (* simplified segmenter *)
-  [ Noun2 | Pron | Inde | Abso | Absv | Absc | Auxi | Auxiinv | Ifc2 -> 
-      if phantomatic w then [ Root; Abso ] else initial2
-  | Root | Lopa -> 
-      if phantomatic w then [] (* no consecutive verbs in chunk *)
-      else [ Inde; Iic2; Noun2; Pron ]
-  | Iic2 -> [ Iic2; Noun2; Ifc2 ]  
-  | Pv -> if phantomatic w then [] else 
-          if amuitic w then [ Lopa ] else [ Root; Abso ]
-  | Iiv -> [ Auxi; Auxiinv ] 
-  | _ -> failwith "Dispatcher anomaly"
-  ]
-;
-(* dispatch: bool -> Word.word -> phase -> phases *)
-value dispatch full = if full then dispatch1 else dispatch2
+
 ;
 value terminal = (* Accepting phases *)
-   [ Nouv; Nouc; Noun2
+   [ Nouv; Nouc 
    ; Pron
    ; Root 
    ; Kriv 
    ; Kric 
    ; Inde
    ; Abso; Absv; Absc
-   ; Ifcv; Ifcc; Ifc2
+   ; Ifcv; Ifcc
    ; Auxi; Auxiinv; Auxik
    ; Vocc; Vocv; Vokv; Vokc; Inv 
    ; Lopa; Lopak
@@ -434,7 +412,7 @@ value apply_sandhi rleft right = fun
   }
 ;] i*)
 
-(* [validate : bool -> output -> output] dynamic consistency check in Segmenter.
+(* [validate : output -> output] dynamic consistency check in Segmenter.
    It refines the regular language of dispatch by contextual conditions
    expressing that preverbs are consistent with the following verbal form. 
    The forms are then compounded, otherwise rejected. 

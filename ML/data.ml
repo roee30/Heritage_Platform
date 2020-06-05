@@ -60,7 +60,6 @@ value nouns_file = data "nouns.rem"
     (* created by [make_nouns], read by [Print_inflected.read_nouns],
        used by [Make_transducers.make_transducers] to generate the transducers,
        copied in [public_nouns_file] by make releasecgi for use by cgis *)
-and nouns2_file = data "nouns2.rem"  (* same in mode Simple *) 
 and pronouns_file = data "pronouns.rem" 
     (* created by [make_nouns], read by [Print_inflected.read_pronouns] *)
 and roots_infos_file = data "roots_infos.rem" 
@@ -89,13 +88,11 @@ and preverbs_textfile trans = data (trans ^ "_preverbs.txt")
 and iics_file     = data "iics.rem" 
     (* created by [make_nouns], copied in [public_iics_file] by make install,
        read by [make_automaton] invoked from DATA/Makefile *)
-and iics2_file    = data "iics2.rem" (* same in mode Simple *)
 and iifcs_file    = data "iifcs.rem" (* iic stems of ifc nouns *)
 and vocas_file    = data "voca.rem"  (* created by [make_nouns] etc. *)
 and invs_file     = data "invs.rem"  (* created by [make_nouns] etc. *)
 and piics_file    = data "piics.rem" (* created by [make_roots] etc. *)
 and ifcs_file     = data "ifcs.rem"  (* created by [make_nouns] etc. *)
-and ifcs2_file    = data "ifcs2.rem" (* same in mode Simple *)
 and avyayais_file = data "avyayais.rem" (* iic stems of avyayiibhava cpds *)
 and avyayafs_file = data "avyayafs.rem" (* ifc stems of avyayiibhava cpds *)
 and iivs_file     = data "iivs.rem"  (* created by [make_roots] etc. *)
@@ -109,9 +106,8 @@ and abstvaa_file  = data "abstvaa.rem" (* created by [make_roots] etc. *)
 and inftu_file    = data "inftu.rem"   (* created by [make_roots] etc. *)
 and kama_file     = data "kama.rem"    (* created by [make_nouns] etc. *)
 
-(* The transducers files, made by [make_transducers] *)
-and transducers_file   = local_data "transducers.rem"  (* transducers Complete *)
-and transducers_file2  = local_data "transducers2.rem" (* transducers Simple *)
+(* The transducers file, made by [make_transducers] *)
+and transducers_file   = local_data "transducers.rem"  (* transducers *)
 
 and mw_exc_file       = data "mw_exceptions.rem" (* for MW indexing *)
 and mw_index_file     = data "mw_index.rem"
@@ -119,7 +115,6 @@ and guess_auto        = data "guess_index.rem"
 ;
 (* Next are the inflected forms banks, read at cgi time by [Lexer.load_morphs] *)
 value public_nouns_file     = public_data "nouns.rem" 
-and public_nouns2_file      = public_data "nouns2.rem" 
 and public_pronouns_file    = public_data "pronouns.rem" 
 and public_preverbs_file    = public_data "preverbs.rem" 
 and public_roots_file       = public_data "roots.rem" 
@@ -129,10 +124,8 @@ and public_lopaks_file      = public_data "lopaks.rem"
 and public_parts_file       = public_data "parts.rem" 
 and public_partvocs_file    = public_data "partvocs.rem" 
 and public_iics_file        = public_data "iics.rem" 
-and public_iics2_file       = public_data "iics2.rem" 
 and public_piics_file       = public_data "piics.rem" 
 and public_ifcs_file        = public_data "ifcs.rem" 
-and public_ifcs2_file       = public_data "ifcs2.rem" 
 and public_iivs_file        = public_data "iivs.rem" 
 and public_avyayais_file    = public_data "avyayais.rem" (* iic avyayiibhavas *)
 and public_avyayafs_file    = public_data "avyayafs.rem" (* ifc avyayiibhavas *)
@@ -158,8 +151,7 @@ and public_mw_exc_file = public_data "mw_exceptions.rem"
 and public_mw_index_file = public_data "mw_index.rem"
 and public_guess_auto = public_data "guess_index.rem"
 (* The segmenting transducers, read at cgi time by [Load_transducers] *)
-and public_transducers_file  = public_data "transducers.rem"  (* Complete *)
-and public_transducers_file2 = public_data "transducers2.rem" (* Simple *)
+and public_transducers_file  = public_data "transducers.rem" 
 (* The cached supplementary nouns dictionary *)
 and public_cache_file      = public_data "cache.rem" (* cache genders *)
 and public_cachei_file     = public_data "cachei.rem" (* cache iics *)

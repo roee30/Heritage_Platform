@@ -347,9 +347,8 @@ $(DATA)/lopas.rem $(DATA)/pronouns.rem $(DATA)/parts.rem $(DATA)/peris.rem \
 $(DATA)/lopaks.rem $(DATA)/indecls.rem $(DATA)/abstvaa.rem $(DATA)/absya.rem \
 $(DATA)/iics.rem $(DATA)/piics.rem $(DATA)/ifcs.rem $(DATA)/iivs.rem \
 $(DATA)/iifcs.rem $(DATA)/auxi.rem $(DATA)/voca.rem $(DATA)/invs.rem \
-$(DATA)/inftu.rem $(DATA)/kama.rem $(DATA)/nouns2.rem $(DATA)/iics2.rem \
-$(DATA)/avyayais.rem $(DATA)/avyayafs.rem $(DATA)/ifcs2.rem $(DATA)/auxiinv.rem \
-$(DATA)/auxik.rem $(DATA)/auxiick.rem $(DATA)/partvocs.rem 
+$(DATA)/inftu.rem $(DATA)/kama.rem $(DATA)/avyayais.rem $(DATA)/avyayafs.rem \
+$(DATA)/auxiinv.rem $(DATA)/auxik.rem $(DATA)/auxiick.rem $(DATA)/partvocs.rem 
 
 SANDHIS=$(DATA)/sandhis.rem $(DATA)/sandhis_pv.rem $(DATA)/sandhis_ph.rem \
 $(DATA)/sandhis_id.rem 
@@ -358,7 +357,7 @@ DHATUS=$(DATA)/roots_infos.rem $(DATA)/roots_usage.rem
 KRIDS=$(DATA)/unique_kridantas.rem $(DATA)/lexical_kridantas.rem
 
 # Synthesized at make time:
-TRANSDUCERS=DATA/transducers.rem DATA/transducers2.rem # Z local DATA
+TRANSDUCERS=DATA/transducers.rem # DATA/transducers2.rem # Z local DATA
 # All are installed in the server area at make install
 AUTOMATA=$(INFLECTED) $(SANDHIS) $(DHATUS) $(KRIDS) $(TRANSDUCERS) 
 

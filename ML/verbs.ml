@@ -5968,13 +5968,13 @@ and compute_extra_zaas () =
 and compute_extra_zru () = 
   enter1 "zru" (* ved écoute *) 
          (Conju (impera 5) [ (Singular,[ (Second, code "zrudhi") ]) ])
-and compute_extra_sad () = (* WR E. Mah(1.214.027c) (Gretil) sa.mni.siidatu.h *)
-  enter1 "sad#1" (Conju (Primary,Conjug Perfect Active) [ (Dual,[ (Third, code "siidatus") ]) ])
 and compute_extra_sanj () = (* WR Oberlies p LI but maybe prm of variant sajj *)
   let root = "sa~nj" 
   and conj = Primary
   and pastem = revcode "sajj" (* "y" replaced by j in passive *) in 
   compute_passive_system conj root pastem 
+and compute_extra_sad () = (* WR E. Mah(1.214.027c) (Gretil) sa.mni.siidatu.h *)
+  enter1 "sad#1" (Conju (Primary,Conjug Perfect Active) [ (Dual,[ (Third, code "siidatus") ]) ])
 and compute_extra_skand () = do (* WR *)  
   { enter1 "skand" (Invar (Primary,Infi) (code "skanditum")) 
   ; record_abso_ya (code "skadya") "skand"
@@ -6091,7 +6091,6 @@ value fake_compute_conjugs (gana : int) (entry : string) = do
       | "zaa"    -> record_part_ppp (revcode "zaata") entry
       | "zaas"   -> compute_extra_zaas ()
       | "zru"    -> compute_extra_zru () 
-      | "sa~nj"  -> compute_extra_sanj () 
       | "sa~nj"  -> compute_extra_sanj () 
       | "sad#1"  -> compute_extra_sad ()
       | "spaz#1" -> record_part_ppp (revcode "spa.s.ta") entry

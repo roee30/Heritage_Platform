@@ -44,7 +44,6 @@ and multitag = list unitag
 ;
 type morphology = 
   { nouns    : inflected_map 
-  ; nouns2   : inflected_map
   ; prons    : inflected_map  
   ; roots    : inflected_map
   ; krids    : inflected_map  
@@ -54,7 +53,6 @@ type morphology =
   ; indes    : inflected_map 
   ; absya    : inflected_map 
   ; abstvaa  : inflected_map 
-  ; iics2    : inflected_map
   ; iics     : inflected_map 
   ; iifs     : inflected_map
   ; iiks     : inflected_map 
@@ -67,7 +65,6 @@ type morphology =
   ; vocas    : inflected_map
   ; invs     : inflected_map 
   ; ifcs     : inflected_map
-  ; ifcs2    : inflected_map 
   ; inftu    : inflected_map
   ; kama     : inflected_map
   ; iiys     : inflected_map

@@ -75,10 +75,10 @@ value print_labels tags seg_num = do
     }
 ;
 value rec color_of_role = fun (* Semantic role of lexical category *)
-  [ Pv | Pvkc | Pvkv | Iic | Iic2 | Iik | Voca | Inv | Iicv | Iicc 
+  [ Pv | Pvkc | Pvkv | Iic | Iik | Voca | Inv | Iicv | Iicc 
   | Iikv | Iikc | Iiif | A | An | Vok | Vokv | Vokc | Vocv | Vocc | Iiy 
   | Iiv | Iivv | Iivc | Peri | Auxiick | Pvv | Pvc -> Grey 
-  | Noun | Noun2 | Nouv | Nouc | Krid | Kriv | Kric | Ifc | Ifcv | Ifcc | Ifc2
+  | Noun | Nouv | Nouc | Krid | Kriv | Kric | Ifc | Ifcv | Ifcc 
   | Pron | Kama | Lopak | Auxik -> Cyan (* Actor or Predicate *)
   | Root | Lopa |  Auxi -> Pink (* abs-tvaa in Inde *) (* Process *) 
   | Abso | Absv | Absc | Inde | Avy | Ai | Ani | Inftu | Auxiinv (* Circumstance *)
@@ -397,7 +397,6 @@ value parser_engine () = do
     and url_encoded_sol_index = get "n" env "1"
     and url_encoded_topic = get "topic" env "" 
     and st = get "st" env "t" 
-    and cp = get "cp" env "t"
     and us = get "us" env "f"
     and translit = get "t" env Paths.default_transliteration 
     and lex = get "lex" env Paths.default_lexicon
@@ -413,10 +412,7 @@ value parser_engine () = do
     and () = toggle_lexicon lex
     and () = if abs="t" then remote.val:=True else () (* Web service mode *)
     and () = if st="f" then iterate.val:=False else () (* word stemmer *)
-    and () = let full = (cp="t") in do 
-          { Lexer_control.full.val:=full
-          ; Lexer_control.transducers_ref.val:=Transducers.mk_transducers full
-          }
+    and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
     and sol_index = int_of_string (decode_url url_encoded_sol_index) 
     (* For Validate mode, register number of solutions *)
     and sol_num = int_of_string (get "allSol" env "0")

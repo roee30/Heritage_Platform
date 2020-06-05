@@ -13,6 +13,8 @@
    Prints warnings on stdout.
    Used by [Tag_tree] (Experimental). *)
 
+(* 2020: This needs adaptation to current morphology *)
+
 (*i module Stemmer = struct i*)
 open Transduction;
 open Canon;
@@ -51,7 +53,6 @@ open Disp
 ;
 module Control = struct
   value star = ref False; (* chunk = word (pada) *)
-  value full = ref True;
 end;
 
 module Viccheda = Segmenter.Segment Phases Disp Control
@@ -70,18 +71,15 @@ and load_preverbs file =
 ;
 value load_morphs () = 
   { nouns = load_morpho Data.public_nouns_file
-  ; nouns2 = load_morpho Data.public_nouns2_file
   ; prons = load_morpho Data.public_pronouns_file
-  ; roots = Transducers.roots_morpho (* OBS *)
+  ; roots = load_morpho Data.public_roots_file
   ; krids = load_morpho Data.public_parts_file
   ; voks  = load_morpho Data.public_partvocs_file
   ; lopas = load_morpho Data.public_lopas_file
   ; lopaks = load_morpho Data.public_lopaks_file
   ; undes = load_morpho Data.public_adverbs_file
-  ; preps = Deco.empty (* TO DO *)
   ; absos = load_morpho Data.public_absols_file
   ; iics  = load_morpho Data.public_iics_file
-  ; iics2 = load_morpho Data.public_iics2_file
   ; iifs  = load_morpho Data.public_iifcs_file
   ; iiks  = load_morpho Data.public_piics_file
   ; iivs  = load_morpho Data.public_iivs_file
@@ -95,7 +93,6 @@ value load_morphs () =
   ; vocas = load_morpho Data.public_vocas_file
   ; invs  = load_morpho Data.public_invs_file
   ; ifcs  = load_morpho Data.public_ifcs_file
-  ; ifcs2 = load_morpho Data.public_ifcs2_file
   ; sfxs  = load_morpho Data.public_sfxs_file
   ; isfxs = load_morpho Data.public_isfxs_file
   ; caches = load_morpho Data.public_cache_file

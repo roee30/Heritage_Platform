@@ -34,8 +34,8 @@ module Segment
          end)
   (Eilenberg: sig 
          value transducer : Phases.phase -> Auto.auto;
-         value initial : bool -> Phases.phases;
-         value dispatch : bool -> Word.word -> Phases.phase -> Phases.phases;
+         value initial : Phases.phases;
+         value dispatch : Word.word -> Phases.phase -> Phases.phases;
          value accepting : Phases.phase -> bool;
          type input = Word.word (* input sentence represented as a word *)
          and transition = (* junction relation *)
@@ -48,7 +48,6 @@ module Segment
          value sanitize_sa : bool -> output -> output;
          end)
   (Control: sig value star : ref bool; (* chunk= if star then word+ else word *) 
-                value full : ref bool; (* all kridantas and nan cpds if full *)
             end) 
   = struct
 open Phases;
@@ -303,7 +302,7 @@ value schedule phase input output w cont =
   let add phase cont = [ Advance phase input output w :: cont ] in
   let transitions = 
     if accepting phase && not star.val then [] (* Word = Sanskrit pada *) 
-    else dispatch full.val w phase (* iterate Word+ = Sanskrit vaakya *) in
+    else dispatch w phase (* iterate Word+ = Sanskrit vaakya *) in
   List.fold_right add transitions cont 
   (* respects dispatch order within a fair top-down search *)
 ; 
@@ -398,10 +397,9 @@ value init_segment_initial initial_phases sentence =
 value segment1_initial initial_phases sentence =  
   continue (init_segment_initial initial_phases sentence)
 ;
-(* Switch according to Complete/Simplify mode, governed by global ref [full] *)
 value init_segment seg = (* do not eta reduce! *) 
-  init_segment_initial (initial full.val) seg 
+  init_segment_initial initial seg 
 and segment1 seg = 
-  segment1_initial (initial full.val) seg 
+  segment1_initial initial seg 
 ;
 end; 

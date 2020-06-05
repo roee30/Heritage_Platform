@@ -250,7 +250,7 @@ value decls_engine () = do
     and part = decode_url url_encoded_participle
     and code = Encode.switch_code translit
     and lang = language_of lex 
-    and source = decode_url url_encoded_source (* cascading from conjug *)
+    and (*source*) _ = decode_url url_encoded_source (* cascading from conjug *)
     and () = toggle_lexicon lex in
     try do 
       { let word = code entry_tr in
@@ -263,7 +263,7 @@ value decls_engine () = do
                 and that Any is used for deictics/numbers (TODO) *)
              (* Also it should use unique naming for possible homo index *)
           else Morpho_html.skt_html_font font entry |> italics in
-(* OBSOLETE indication of root for kridanta
+(* DEPRECATED indication of root for kridanta
         [let root = if source = "" then "?" (* unknown in lexicon *)
                     else " from " ^ (* should test font *) in
          if in_lexicon source then Morpho_html.skt_anchor False font source

@@ -31,9 +31,9 @@ module Dispatch : functor
 
 value transducer : phase -> auto  
 ; 
-value initial: bool -> phases 
+value initial: phases 
 ;
-value dispatch: bool -> Word.word -> phase -> phases 
+value dispatch: Word.word -> phase -> phases 
 ;
 value accepting: phase -> bool 
 ;

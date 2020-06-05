@@ -28,8 +28,8 @@ module Segment
          end)
   (Eilenberg: sig (* To be instanciated by Dispatcher *)
          value transducer : Phases.phase -> auto; 
-         value initial : bool -> Phases.phases;
-         value dispatch : bool -> Word.word -> Phases.phase -> Phases.phases;
+         value initial : Phases.phases;
+         value dispatch : Word.word -> Phases.phase -> Phases.phases;
          value accepting : Phases.phase -> bool;
          type input = Word.word (* input sentence represented as a word *)
          and transition = (* junction relation *)
@@ -42,13 +42,12 @@ module Segment
          value sanitize_sa : bool -> output -> output;
          end)
   (Control: sig value star : ref bool; (* chunk= if star then word+ else word *)
-                value full : ref bool; (* all kridantas and nan cpds if full *)
             end) 
   = struct
 
 open Phases;
 open Eilenberg;
-open Control; (* star full *)
+open Control; (* star *)
 
 (* The summarizing structure sharing sub-solutions *)
 (* It represents the union of all solutions *)
@@ -399,7 +398,7 @@ value schedule phase input output w cont =
   let add phase cont = [ Advance phase input output w :: cont ] in
   let transitions = 
     if accepting phase && not star.val then [] (* Word = Sanskrit padas *) 
-    else dispatch full.val w phase (* iterate Word+ *) in
+    else dispatch (* full.val *) w phase (* iterate Word+ *) in
   List.fold_right add transitions cont 
   (* respects dispatch order within a fair top-down search *)
 ; 
@@ -496,7 +495,7 @@ value init_segment_initial entries sentence =
   List.map (fun phase -> Advance phase sentence [] []) entries
 ; 
 (* Works for Complete as well as Simplified mode *)
-value segment1 chunk = continue (init_segment_initial (initial full.val) chunk) 
+value segment1 chunk = continue (init_segment_initial initial chunk) 
 ;
 value segment chunk = do
   { segment1 chunk (* does not assume Complete mode *)

@@ -17,18 +17,18 @@ open Morphology; (* lemmas *)
 module Morphs 
   (Prel: sig value prelude : unit -> unit; end) 
   (Phases: sig type phase = (* Phases.phase *)
-  [ Noun | Noun2
+  [ Noun 
   | Pron 
   | Root  
   | Inde 
   | Absv | Absc | Abso 
   | Voca 
   | Inv 
-  | Iic | Iic2 
+  | Iic 
   | Iiif 
   | Iiv | Iivv | Iivc
   | Auxi | Auxiinv | Auxik | Auxiick
-  | Ifc | Ifc2
+  | Ifc 
   | Peri (* periphrastic perfect *)
   | Lopa (* e/o conjugated root forms with lopa *) 
   | Lopak (* e/o kridantas forms with lopa *)
@@ -86,10 +86,8 @@ and  load_morpho_cache file =
   with [ _ -> Deco.empty ] (* dummy empty morpho lexmap *)
 ;
 (* Loads all morphological databases; Used in Reader, Parser. *)
-(* NB both Noun and Noun2 are loaded whether full or not - TODO improve *)
 value load_morphs () = 
   { nouns = load_morpho Data.public_nouns_file
-  ; nouns2 = load_morpho Data.public_nouns2_file
   ; prons = load_morpho Data.public_pronouns_file
   ; roots = load_morpho Data.public_roots_file
   ; krids = load_morpho Data.public_parts_file
@@ -101,7 +99,6 @@ value load_morphs () =
   ; absya = load_morpho Data.public_absya_file
   ; abstvaa = load_morpho Data.public_abstvaa_file
   ; iics  = load_morpho Data.public_iics_file
-  ; iics2 = load_morpho Data.public_iics2_file
   ; iifs  = load_morpho Data.public_iifcs_file
   ; iiks  = load_morpho Data.public_piics_file
   ; iivs  = load_morpho Data.public_iivs_file
@@ -114,7 +111,6 @@ value load_morphs () =
   ; vocas = load_morpho Data.public_vocas_file
   ; invs  = load_morpho Data.public_invs_file
   ; ifcs  = load_morpho Data.public_ifcs_file
-  ; ifcs2 = load_morpho Data.public_ifcs2_file
   ; inftu = load_morpho Data.public_inftu_file
   ; kama = load_morpho Data.public_kama_file
   ; caches = load_morpho_cache Data.public_cache_file
@@ -148,9 +144,6 @@ value morpho_tags = fun
     | Krid | Kriv | Kric -> morpho.krids 
     | Vok  | Vokv | Vokc -> morpho.voks
     | Iik  | Iikv | Iikc -> morpho.iiks
-    | Noun2              -> morpho.nouns2
-    | Iic2               -> morpho.iics2
-    | Ifc2               -> morpho.ifcs2
     | Inftu              -> morpho.inftu
     | Kama               -> morpho.kama
     | Cache              -> morpho.caches 

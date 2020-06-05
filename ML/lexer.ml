@@ -26,7 +26,6 @@ module Lexer (* takes its prelude and control arguments as module parameters *)
   (Prel: sig value prelude : unit -> unit; end) 
   (Lexer_control: sig 
         value star : ref bool; (* chunk = if star then word+ else word *)
-        value full : ref bool; (* all kridantas and nan cpds if full *)
         value out_chan : ref out_channel; (* output channel *)
         value transducers_ref : ref Load_transducers.transducer_vect;
         end) = struct 
@@ -80,11 +79,11 @@ value print_tags pvs seg_num phase form tags =
 ;
 value rec scl_phase = fun
   [ Pv | Pvc | Pvv | Pvkc | Pvkv -> "pv"
-  | Noun | Noun2 | Nouc | Nouv | Krid | Kriv | Kric | Lopak | Pron | Auxik 
+  | Noun | Nouc | Nouv | Krid | Kriv | Kric | Lopak | Pron | Auxik 
          | Cache -> "noun"
   | Root | Lopa | Auxi -> "root"
   | Inde | Abso | Absv | Absc | Avy | Auxiinv -> "inde"
-  | Iic | Iic2 | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif | Auxiick
+  | Iic | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif | Auxiick
         | Ai | Ani | Cachei -> "iic"
   | Iiv | Iivv | Iivc -> "iiv" 
   | Iiy -> "iiy" 
@@ -92,7 +91,7 @@ value rec scl_phase = fun
   | Inftu -> "inftu" 
   | Kama -> "kama" 
   | Voca | Vocv | Vocc | Inv | Vok | Vokv | Vokc -> "voca"
-  | Ifc | Ifcv | Ifcc | Ifc2 -> "ifc"
+  | Ifc | Ifcv | Ifcc -> "ifc"
   | Unknown -> "unknown"
   | Comp (_,ph) _ _ -> "preverbed " ^ scl_phase ph
   ]

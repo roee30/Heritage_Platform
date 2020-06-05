@@ -186,14 +186,13 @@ value sort_check cpts =
 ;
 
 (* Standard format of cgi arguments *)
-value arguments translit lex font cache st us cp input topic abs cpts =
+value arguments translit lex font cache st us input topic abs cpts =
      "t="     ^ translit
   ^ ";lex="   ^ lex 
   ^ ";font="  ^ font
   ^ ";cache=" ^ cache 
   ^ ";st="    ^ st 
   ^ ";us="    ^ us 
-  ^ ";cp="    ^ cp 
   ^ ";text="  ^ input 
   ^ ";topic=" ^ topic 
   ^ ";abs="   ^ abs 
@@ -210,7 +209,6 @@ value reader_engine () = do
     and url_encoded_mode  = get "mode" env "p"
     and url_encoded_topic = get "topic" env ""
     and st = get "st" env "t" (* default vaakya rather than isolated pada *)
-    and cp = get "cp" env "t" (* default Complete mode *)
     and us = get "us" env "f" (* default input sandhied *)
     and translit = get "t" env Paths.default_transliteration 
     and lex = get "lex" env Paths.default_lexicon
@@ -227,10 +225,7 @@ value reader_engine () = do
     and () = Html.toggle_lexicon lex
     and () = if abs="t" then remote.val:=True else () (* Web service mode *)
     and () = if st="f" then iterate.val:=False else () (* word stemmer *)
-    and () = let full = (cp="t") in do 
-          { Lexer_control.full.val:=full
-          ; Lexer_control.transducers_ref.val:=Transducers.mk_transducers full
-          }
+    and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
     and mode = match decode_url url_encoded_mode with
         [ "t" -> Tag
         | "p" -> Parse
@@ -251,7 +246,7 @@ value reader_engine () = do
            Checkpoints.parse_cpts (decode_url url_encoded_cpts)
        with [ Not_found -> [] ] in     
     let cpts = sort_check checkpoints in 
-    try let text = arguments translit lex font cache st us cp url_encoded_input
+    try let text = arguments translit lex font cache st us url_encoded_input
                              url_encoded_topic abs checkpoints in do
         { (* Now we call the lexer *)
            process_input text uns mode topic input encode cpts 

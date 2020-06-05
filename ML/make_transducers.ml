@@ -82,7 +82,6 @@ and empty_trans = State (False,[],[]) (* dummy empty transducer *)
 value make_transducers = 
   (* Remark. We could interleave with calls of [Mini.reset ()] for minimize speedup *)
   let nouns    = transducer_of_lemmas Data.nouns_file 
-  and nouns2   = transducer_of_lemmas Data.nouns2_file 
   and kama     = transducer_of_lemmas Data.kama_file 
   and pronouns = transducer_of_lemmas Data.pronouns_file 
   and roots    = transducer_of_lemmas Data.roots_file 
@@ -91,7 +90,6 @@ value make_transducers =
   and lopaks   = transducer_of_lemmas Data.lopaks_file 
   and partvocs = transducer_of_lemmas Data.partvocs_file 
   and iics     = transducer_of_lemmas Data.iics_file 
-  and iics2    = transducer_of_lemmas Data.iics2_file 
   and iifcs    = transducer_of_lemmas Data.iifcs_file 
   and avyayais = transducer_of_lemmas Data.avyayais_file 
   and avyayafs = transducer_of_lemmas Data.avyayafs_file 
@@ -99,7 +97,6 @@ value make_transducers =
   and invs     = transducer_of_lemmas Data.invs_file 
   and piics    = transducer_of_lemmas Data.piics_file 
   and ifcs     = transducer_of_lemmas Data.ifcs_file 
-  and ifcs2    = transducer_of_lemmas Data.ifcs2_file 
   and indecls  = transducer_of_lemmas Data.indecls_file 
   and inftu    = transducer_of_lemmas Data.inftu_file 
   and absya    = transducer_of_lemmas Data.absya_file 
@@ -113,7 +110,6 @@ value make_transducers =
   and preverbs = transducer_of_preverbs in
   let (transducers_data : transducers_datatype) =
   { nouns    = nouns 
-  ; nouns2   = empty_trans 
   ; kama     = kama 
   ; pronouns = pronouns 
   ; roots    = roots 
@@ -122,7 +118,6 @@ value make_transducers =
   ; lopaks   = lopaks 
   ; partvocs = partvocs 
   ; iics     = iics 
-  ; iics2    = empty_trans
   ; iifcs    = iifcs 
   ; avyayais = avyayais 
   ; avyayafs = avyayafs 
@@ -130,7 +125,6 @@ value make_transducers =
   ; invs     = invs 
   ; piics    = piics 
   ; ifcs     = ifcs 
-  ; ifcs2    = empty_trans
   ; indecls  = indecls 
   ; inftu    = inftu 
   ; absya    = absya 
@@ -143,41 +137,7 @@ value make_transducers =
   ; auxiicks = auxiicks 
   ; preverbs = preverbs 
   } 
-  and transducers_data2 =
-  { nouns    = empty_trans
-  ; nouns2   = nouns2 
-  ; kama     = empty_trans
-  ; pronouns = pronouns 
-  ; roots    = roots 
-  ; lopas    = lopas 
-  ; parts    = empty_trans
-  ; lopaks   = empty_trans
-  ; partvocs = empty_trans
-  ; iics     = empty_trans
-  ; iics2    = iics2 
-  ; iifcs    = empty_trans
-  ; avyayais = empty_trans
-  ; avyayafs = empty_trans
-  ; vocas    = empty_trans
-  ; invs     = invs 
-  ; piics    = empty_trans
-  ; ifcs     = empty_trans
-  ; ifcs2    = ifcs2 
-  ; indecls  = indecls 
-  ; inftu    = empty_trans
-  ; absya    = absya 
-  ; abstvaa  = abstvaa 
-  ; iivs     = iivs 
-  ; peris    = empty_trans
-  ; auxis    = auxis 
-  ; auxiinvs = auxiinvs 
-  ; auxiks   = empty_trans
-  ; auxiicks = empty_trans
-  ; preverbs = preverbs 
-  } in do
-  { Gen.dump transducers_data  Data.transducers_file  (* Complete mode *)
-  ; Gen.dump transducers_data2 Data.transducers_file2 (* Simple mode *)
-  }
+ in Gen.dump transducers_data Data.transducers_file 
 ;
 
 (*i end; i*)

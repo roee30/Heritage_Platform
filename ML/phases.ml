@@ -10,7 +10,7 @@
 module Phases = struct 
 (* Lexical sorts as phases, i.e. states of the modular transducer *)
 type phase = 
-  [ Noun | Noun2
+  [ Noun 
   | Pron 
   | Root 
   | Inde (* indeclinable forms *)
@@ -19,11 +19,11 @@ type phase =
   | Abso (* abs in -ya *)
   | Voca (* vocatives *)
   | Inv (* invocations *)
-  | Iic | Iic2 (* first part of compounds *)
+  | Iic (* first part of compounds *)
   | Iiif (* iic of ifc, atteinable from previous iic eg -vartin iic -varti- *) 
   | Iiv | Iivv | Iivc (* inchoatives - cvi verbal compounds *)
   | Auxi | Auxiinv | Auxik | Auxiick (* forms of auxiliary verbs as bhuu k.r *)
-  | Ifc | Ifc2 (* second part of compounds *)
+  | Ifc  (* second part of compounds *)
   | Peri (* periphrastic perfect *)
   | Lopa (* e/o conjugated root forms with lopa *) 
   | Lopak (* e/o kridantas forms with lopa *) 
@@ -49,13 +49,10 @@ type phase =
 and tag = (phase * phase) (* preverb phase and root/taddhita phase *)
 (* NB. It is essential to keep both phases to identify transition checkpoints *)
 and phases = list phase
-(* NB. In Simplified mode, we use only 10 phases:
-   [[ Noun2; Pron; Iic2; Ifc2; Root; Inde; Pv; Iiv; Abso; Lopa ]] *)
 ;
 (* Marshalling for cgi invocations *)
 value rec string_of_phase = fun 
   [ Noun  -> "Noun"
-  | Noun2 -> "Noun2" 
   | Pron  -> "Pron"
   | Root  -> "Root" 
   | Inde  -> "Inde"
@@ -65,7 +62,6 @@ value rec string_of_phase = fun
   | Voca  -> "Voca"
   | Inv   -> "Inv" 
   | Iic   -> "Iic"
-  | Iic2  -> "Iic2" 
   | Iiif  -> "Iiif"
   | Iiv   -> "Iiv"
   | Iivv  -> "Iivv"
@@ -75,7 +71,6 @@ value rec string_of_phase = fun
   | Auxik -> "Auxik" 
   | Auxiick -> "Auxiick" 
   | Ifc   -> "Ifc"
-  | Ifc2  -> "Ifc2" 
   | Lopa  -> "Lopa"
   | Lopak -> "Lopak"
   | Pv    -> "Pv" 
@@ -116,7 +111,6 @@ value rec string_of_phase = fun
   ] 
 and phase_of_string = fun (* unsafe *)  
   [ "Noun"  -> Noun
-  | "Noun2" -> Noun2 
   | "Pron"  -> Pron
   | "Root"  -> Root
   | "Inde"  -> Inde
@@ -126,7 +120,6 @@ and phase_of_string = fun (* unsafe *)
   | "Voca"  -> Voca
   | "Inv"   -> Inv
   | "Iic"   -> Iic
-  | "Iic2"  -> Iic2
   | "Iiif"  -> Iiif
   | "Iiv"   -> Iiv
   | "Iivv"  -> Iivv
@@ -136,7 +129,6 @@ and phase_of_string = fun (* unsafe *)
   | "Auxik" -> Auxik 
   | "Auxiick" -> Auxiick
   | "Ifc"   -> Ifc
-  | "Ifc2"  -> Ifc2
   | "Lopa"  -> Lopa
   | "Lopak" -> Lopak
   | "Pv"    -> Pv
@@ -198,7 +190,7 @@ value rec generative = fun
 
 open Html;
 value rec color_of_phase = fun
-  [ Noun | Noun2 | Lopak | Nouc | Nouv | Kriv | Kric | Krid | Auxik | Kama
+  [ Noun | Lopak | Nouc | Nouv | Kriv | Kric | Krid | Auxik | Kama
          | Cache -> Deep_sky 
   | Pron -> Light_blue
   | Root | Auxi | Lopa -> Carmin  
@@ -206,11 +198,11 @@ value rec color_of_phase = fun
   | Iiy -> Lavender
   | Avy -> Magenta
   | Inftu -> Orange
-  | Iic | Iic2 | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif 
+  | Iic | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif 
         | Auxiick | Cachei -> Yellow
   | Peri | Iiv | Iivv | Iivc -> Orange
   | Voca | Vocv | Vocc | Inv | Vok | Vokv | Vokc -> Lawngreen
-  | Ifc | Ifcv | Ifcc | Ifc2 -> Cyan
+  | Ifc | Ifcv | Ifcc -> Cyan
   | Unknown -> Grey
   | Comp (_,ph) _ _ -> color_of_phase ph 
   | Pv | Pvv | Pvc | Pvkc | Pvkv -> failwith "Illegal preverb segment" 

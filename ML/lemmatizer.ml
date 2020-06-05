@@ -46,16 +46,16 @@ value give_up phase =
 ;
 value load_inflected phase = 
   let file = match phase with 
-      [ "Noun"    -> Data.public_nouns2_file (* bigger than nouns *)
+      [ "Noun"    -> Data.public_nouns_file 
       | "Pron"    -> Data.public_pronouns_file
       | "Verb"    -> Data.public_roots_file
       | "Part"    -> Data.public_parts_file
       | "Inde"    -> Data.public_inde_file
       | "Absya"   -> Data.public_absya_file
       | "Abstvaa" -> Data.public_abstvaa_file
-      | "Iic"     -> Data.public_iics2_file (* bigger than iics *)
+      | "Iic"     -> Data.public_iics_file
       | "Iiv"     -> Data.public_iivs_file
-      | "Ifc"     -> Data.public_ifcs2_file (* bigger than ifcs *)
+      | "Ifc"     -> Data.public_ifcs_file 
       | "Piic"    -> Data.public_piics_file
       | "Voca"    -> Data.public_vocas_file
       | _ -> raise (Control.Fatal "Unexpected phase") (* Pv Auxi Eort *)

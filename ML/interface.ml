@@ -56,7 +56,6 @@ open Load_transducers (* [Trans mk_transducers dummy_transducer_vect] *)
 ;
 module Lexer_control = struct
  value star = iterate;  (* vaakya vs pada *)
- value full = complete; (* complete vs simplified *)
  value out_chan = output_channel;
  value transducers_ref = ref (dummy_transducer_vect : transducer_vect);
  end (* [Lexer_control] *)
@@ -439,10 +438,10 @@ value check_sentence translit us text_orig checkpoints sentence
   ; html_break |> pl
   }
 ;
-value arguments trans lex font cache st us cp input topic abs sol_num corpus 
+value arguments trans lex font cache st us input topic abs sol_num corpus 
                 id ln corpus_permission corpus_dir sentence_no =
   "t=" ^ trans ^ ";lex=" ^ lex ^ ";font=" ^ font ^ ";cache=" ^ cache ^ 
-  ";st=" ^ st ^ ";us=" ^ us ^ ";cp=" ^ cp ^ ";text=" ^ input ^ 
+  ";st=" ^ st ^ ";us=" ^ us ^ ";text=" ^ input ^ 
   ";topic=" ^ topic ^ ";abs=" ^ abs ^ match sol_num with
     [ "0" -> ""
     | n -> ";allSol=" ^ n
@@ -506,7 +505,7 @@ value graph_engine () = do
   ; let query = Sys.getenv "QUERY_STRING" in
     let env = create_env query in
     (* Multiple environment variables according to modes of use are: 
-       text topic st cp us t lex font cache abs cpts (standard mode) 
+       text topic st us t lex font cache abs cpts (standard mode) 
        allSol (deprecated Validate mode)
        corpus sentenceNumber linkNumber (Corpus mode)
        corpdir sentno corpmode (defined in Params) 
@@ -514,7 +513,6 @@ value graph_engine () = do
     let url_encoded_input = get "text" env "" 
     and url_encoded_topic = get "topic" env "" (* topic carry-over *)
     and st = get "st" env "t" (* sentence parse default *)
-    and cp = get "cp" env "t" (* complete mode default *)
     and us = get "us" env "f" (* sandhied text default *)
     and translit = get "t" env Paths.default_transliteration (* translit input *)
     and lex = get "lex" env Paths.default_lexicon (* lexicon choice *)
@@ -528,10 +526,7 @@ value graph_engine () = do
     and input = decode_url url_encoded_input (* unnormalized string *)
     and uns = us="t" (* unsandhied vs sandhied corpus *) 
     and () = if st="f" then iterate.val:=False else () (* word stemmer? *)
-    and () = let full = (cp="t") in do (* TODO: only full *)
-          { Lexer_control.full.val:=full
-          ; Lexer_control.transducers_ref.val:=Transducers.mk_transducers full
-          }
+    and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
     and () = toggle_lexicon lex (* sticky lexicon switch *)
     and corpus = get "corpus" env "" 
     and sent_id = get "sentenceNumber" env "0" 
@@ -545,7 +540,7 @@ value graph_engine () = do
       |> Web_corpus.permission_of_string in
     let corpus_dir = get Params.corpus_dir env "" 
     and sentence_no = get Params.sentence_no env "" in
-    let text = arguments translit lex font cache st us cp url_encoded_input
+    let text = arguments translit lex font cache st us url_encoded_input
                          url_encoded_topic abs sol_num corpus sent_id link_num
                          url_enc_corpus_permission corpus_dir sentence_no
     and checkpoints = 
@@ -596,7 +591,7 @@ value graph_engine () = do
        let revised_check = 
          let revise (k,sec,sel) = (if k<word_off then k else k+diff,sec,sel) in
          List.map revise checkpoints
-       and new_text = arguments translit lex font cache st us cp updated_input
+       and new_text = arguments translit lex font cache st us updated_input
                             url_encoded_topic abs sol_num corpus sent_id link_num
                             url_enc_corpus_permission corpus_dir sentence_no
        and new_input = decode_url updated_input in

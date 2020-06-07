@@ -497,7 +497,7 @@ sandhi.html: mk_sandhi_page
 corpus.html: mk_corpus_page
 	ML/mk_corpus_page
 
-style.css: css
+style.css: ML/css
 	ML/css
 
 Makefile: SETUP/MMakefile

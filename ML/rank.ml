@@ -32,7 +32,6 @@ open Load_transducers; (* [transducer_vect dummy_transducer_vect Trans] *)
 
 module Lexer_control = struct
  value star = iterate;
- value full = complete;
  value out_chan = output_channel;
  value transducers_ref = 
  ref (dummy_transducer_vect : transducer_vect);

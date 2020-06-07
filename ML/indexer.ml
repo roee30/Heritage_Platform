@@ -33,7 +33,7 @@ value answer_end () = do
   }
 ;
 value ok (mess,s) = do { ps mess; pl (Morpho_html.skt_anchor False s) }
- and ok2 (mess,s1,s2) = do { ps mess; pl (Morpho_html.skt_anchor_R s1 s2) }
+ and ok2 (mess,s1,s2) = do { ps mess; pl (Morpho_html.skt_anchor2 s1 s2) }
      (* ok2 prints the entry under the spelling given by the user, i.e. without 
         normalisation, thus e.g. sandhi is not written sa.mdhi, and possibly 
         suffixed by homonymy index 1, e.g. b.rh. *)

@@ -5748,6 +5748,7 @@ value iic_indecl = (* should be lexicalized *)
   ; "saha#2"    (* problematic -- overgenerates  *)
   ; "saak.saat"
   ; "saaci"
+  ; "saamaanyatas" (* saamaanyatod.r.s.ta - tasil *)
   ; "svayam"
   ]
 ;

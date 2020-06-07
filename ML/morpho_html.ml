@@ -58,18 +58,14 @@ value skt_italics form =
   skt_html form |> italics
 ;
 value skt_anchor_font font is_cache form = (* for Declension Conjugation *)
-  let s = match font with
-          [ Deva -> deva20_blue_center (Encode.skt_strip_to_deva form) 
-                    (* NB This removes the possible homo index *)
-          | Roma -> skt_roma_it form (* no stripping in Roma *)
-          ]
+  let s =  skt_italics form 
   and url_function = if is_cache then url_cache else url in
   anchor Navy_ (url_function form) s 
 ;
 value skt_anchor is_cache = 
   let font = sanskrit_font.val in
   skt_anchor_font font is_cache (* for Declension, Indexer *)
-and skt_anchor_R s s' = anchor Navy_ (url s) (skt_roma_it s') (* for Indexer *)
+and skt_anchor2 s s' = anchor Navy_ (url s) (skt_roma_it s') (* for Indexer *)
 ;
 value no_hom entry = (* low-level string hacking *)
   match (String.sub entry ((String.length entry)-1) 1) with
@@ -87,7 +83,7 @@ value skt_anchor_M word entry page cache =
   let vocable = if no_hom entry then word 
                 else let pos = (String.length entry)-1 in 
                      word ^ "#" ^ (String.sub entry pos 1) in
-  anchor_mw (skt_roma_it vocable)
+  anchor_mw (skt_italics vocable)
 ;
 value skt_graph_anchor is_cache form =
   let url_function = if is_cache then url_cache else url in

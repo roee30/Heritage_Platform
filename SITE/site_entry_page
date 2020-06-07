@@ -60,7 +60,7 @@ allows compatibility of the grammatical tools.
 <p>
 The choice of the dictionary is set to Heritage by default by accessing
 the standard entry page "sanskrit.inria.fr", but is set to Monier-Williams
-if you invoke rather  <a href="https://sanskrit.inria.fr/index.en.html">
+if you rather invoke <a href="https://sanskrit.inria.fr/index.en.html">
 "https://sanskrit.inria.fr/index.en.html"</a>
 Each dictionary is accessible separately by its search page,
 respectively <a href="DICO/index.fr.html">

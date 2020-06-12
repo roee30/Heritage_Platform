@@ -249,7 +249,7 @@ value decls_engine () = do
     and gender = gender_of (decode_url url_encoded_gender)
     and part = decode_url url_encoded_participle
     and code = Encode.switch_code translit
-    and lang = language_of lex 
+    and lang = language_of_string lex 
     and (*source*) _ = decode_url url_encoded_source (* cascading from conjug *)
     and () = toggle_lexicon lex in
     try do 
@@ -263,12 +263,12 @@ value decls_engine () = do
                 and that Any is used for deictics/numbers (TODO) *)
              (* Also it should use unique naming for possible homo index *)
           else Morpho_html.skt_html_font font entry |> italics in
-(* DEPRECATED indication of root for kridanta
+(*i DEPRECATED indication of root for kridanta
         [let root = if source = "" then "?" (* unknown in lexicon *)
                     else " from " ^ (* should test font *) in
          if in_lexicon source then Morpho_html.skt_anchor False font source
          else doubt (Morpho_html.skt_roma source) in (* should test font *)
-               Morpho_html.skt_utf font entry ^ root in] *)
+               Morpho_html.skt_utf font entry ^ root in] i*)
         let subtitle = hyperlink_title font link in do
         { display_subtitle (h1_center subtitle)
         ; try look_up font entry (Nouns.Gender gender) part

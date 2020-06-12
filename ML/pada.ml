@@ -46,7 +46,7 @@ value voices_of = fun
   | "tak.s" | "ta~nc" | "tam" | "tarj" | "tup" | "tu.s" | "t.rp#1" | "t.r.s#1"
   | "t.rh" | "t.rr" | "tyaj#1" | "tras" | "tru.t" | "tvak.s" | "tsar" | "da.mz"
   | "dagh" | "dabh" | "dam#1" | "dal" | "das" | "dah#1" | "daa#2" | "daa#3" 
-  | "diiv#1" | "du" | "du.s" | "d.rp" | "d.rbh" | "d.rz#1" | "d.rh" | "d.rr" 
+  | "du" | "du.s" | "d.rp" | "d.rbh" | "d.rz#1" | "d.rh" | "d.rr" 
   | "dhyaa" | "draa#1" | "dru#1" | "druh#1" | "dham" | "dhaa#2" | "dhru"
   | "dhvan" | "dhv.r" | "na.t" | "nad" | "nand" | "nam" | "nard" | "naz#1" 
   | "nind" | "nu#1" | "n.rt" | "pa.t" | "pat#1" | "path" | "paa#1" | "paa#2" 
@@ -79,6 +79,7 @@ value voices_of = fun
 (*| "jyaa1"  Atma needed for jiiyate *)
 (*| "kan"    Atma needed for kaayamaana *)
 (*| "gam"    Atma needed for sa.mgacchate *)
+(*| "diiv#1" Atma needed for diivyate *)
 (*| "van"    Atma needed for vanute *)
 (*| "mah"    Atma needed for pft. maamahe *)
 (*| "cit#1"  Atma needed for pft. cikite *)

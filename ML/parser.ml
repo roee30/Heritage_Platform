@@ -404,7 +404,7 @@ value parser_engine () = do
     let ft = font_of_string font (* Deva vs Roma print *) in
     let () = sanskrit_font.val := ft 
     and abs = get "abs" env "f" (* default local paths *) in
-    let lang = language_of lex
+    let lang = language_of_string lex
     and input = decode_url url_encoded_input (* unnormalized string *)
     and uns = us="t" (* unsandhied vs sandhied corpus *)
     and mode_sent = st="t" (* default sentence mode *)

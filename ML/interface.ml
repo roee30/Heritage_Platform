@@ -522,7 +522,7 @@ value graph_engine () = do
     let () = sanskrit_font.val := ft 
     and () = cache_active.val := cache 
     and abs = get "abs" env "f" (* default local paths *) in 
-    let lang = language_of lex (* language default *)
+    let lang = language_of_string lex (* lexicon indexing choice *)
     and input = decode_url url_encoded_input (* unnormalized string *)
     and uns = us="t" (* unsandhied vs sandhied corpus *) 
     and () = if st="f" then iterate.val:=False else () (* word stemmer? *)

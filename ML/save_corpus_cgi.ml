@@ -52,7 +52,7 @@ value analysis_of_env env =
   let lang =
     env
     |> Cgi.decoded_get "lex" Paths.default_lexicon
-    |> Html.language_of
+    |> Html.language_of_string
   in
   let cpts =
     env

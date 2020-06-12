@@ -849,7 +849,7 @@ value conjs_engine () = do
     and translit = get "t" env "VH" (* DICO created in VH trans *)
     and lex = get "lex" env "SH" (* default Heritage *) in 
     let entry_tr = decode_url url_encoded_entry (* : string in translit *)
-    and lang = language_of lex 
+    and lang = language_of_string lex 
     and gana = match decode_url url_encoded_class with
       [ "1" -> 1 
       | "2" -> 2
@@ -862,7 +862,6 @@ value conjs_engine () = do
       | "9" -> 9
       | "10" -> 10
       | "11" -> 11 (* denominative verbs *)
-(*    | "0" -> 0 (* secondary conjugations *) -- obsolete *)
       | s -> raise (Control.Fatal ("Weird present class: " ^ s)) 
       ] 
     and encoding_function = Encode.switch_code translit 

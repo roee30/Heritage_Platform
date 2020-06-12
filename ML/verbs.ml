@@ -345,7 +345,6 @@ value strong_stem entry rstem = (* rstem = revstem entry *)
     | "bh.rjj" -> mrijify (strong (truncate rstem)) (* bh.rsj Pan{8,2,29} *)
     | "nij"    -> revcode "ni~nj" (* nasalisation for gana 2 *) 
     | "zrath"  -> revcode "zranth"
-    | "diiv#1" -> revcode "dev"
     | _ -> strong rstem
     ]
 ;
@@ -359,7 +358,6 @@ value weak_stem entry rstem = (* rstem = revstem entry *)
     | "bh.rjj" -> mrijify (truncate rstem)
     | "nij"    -> revcode "ni~nj" (* nasalisation *)
     | "vaz"    -> revcode "uz" (* but not vac ! *)
-    | "zaas"   -> revcode "zi.s" 
     | "myak.s" -> revcode "mik.s" 
 (*  | "sad#1"  -> revcode "siid" - incorrect for perfect ! *)
     | _ -> rstem
@@ -3055,13 +3053,13 @@ value redup_perf root =
       | "han#1"  -> stems "ghan"  (* velar h -> gh *)
       | "hi#2"   -> stems "ghi"      (* idem *)
       | "guh"    -> stems "guuh"  (* \Pan{6,4,89} *)
-      | "diiv#1" -> stems "dev" 
       | "dham"   -> stems "dhmaa"
       | "praz" -> let w = revcode "pracch" in (w,w,w) (* Whitney§794c *)
       | "zaas" -> let w = revcode root in (w,w,w) (* redup voy a, not i *)
       | _ -> stems root (* NB: keep penultimate nasal "ta~nc" *)
       ] in
   match Word.mirror revw with (* ugly double reversal to get the stem *)
+  (* then we do not use revs and revl but recompute them with strong *)
   [ [] -> error_empty 14
   | [ 3 ] (* "i" *) -> let wk = [ 4; 42 ] (* iiy \Pan{7,4,69} *) 
                        and st = [ 3; 42; 10 ] (* iye *) (* iyaya *) 
@@ -3119,7 +3117,7 @@ value redup_perf root =
               else c1 in
       let rv = (* rv is reduplicating vowel *)
         if v>6 (* .r .rr .l dipht *) then match root with
-          [ "ce.s.t" | "diiv#1" | "dev" |"sev" | "mlecch" | "vye" 
+          [ "ce.s.t" | "dev" |"sev" | "mlecch" | "vye" 
               -> 3 (* i *) (* vye for vyaa *)
           | _ -> 1 (* a *) (* also bhuu elsewhere *)
           (* but Vedic k.lp etc have long aa Whitney§786a *)
@@ -3138,13 +3136,14 @@ value redup_perf root =
         | 23 | 25 | 28 | 30 | 33 | 35 | 38 | 40 -> c-1 (* xh -> x *)
         | _ -> c (* c by default *)
         ] in 
+      (* TODO: share code of sampra with [passive_stem] *)
       let (affix,sampra) = match root with (* ya -> ii va -> uu *)
           [ "yaj#1" -> ([ 3 (* i *)],Some (mrijify (revcode "iij")))
           | "vac" ->   ([ 5 (* u *)],Some (revcode "uuc"))
           | "vad" ->   ([ 5 (* u *)],Some (revcode "uud"))
           | "vap" | "vap#1" | "vap#2" -> ([ 5 (* u *) ],Some (revcode "uup"))
           | "vaz" ->   ([ 5 (* u *)],Some (revcode "uuz"))
-          | "vas#1" | "vas#4" -> ([ 5 (* u *)],Some (revcode "uus"))
+          | "vas#1" | "vas#4" -> ([ 5 (* u *)],Some (revcode "uu.s"))
           | "vah#1" -> ([ 5 (* u *)],Some (revcode "uuh"))
           | "vaa#3" -> ([ 5 (* u *)],Some (revcode "uuv"))
           | _ ->       ([ rv; rc ],None)
@@ -3264,7 +3263,6 @@ value compute_perfect_c strong weak olengthened eweak iopt entry =
            ; compute_perfectm Primary (revcode "cikitr") entry (* WR *)
            }
         | "vac" -> compute_perfectm Primary weak entry
-(* [record_part_m_ath ppftm weak entry] (* anuucaana *) *)
         | _ -> () 
         ]
       }
@@ -3344,7 +3342,7 @@ value fix_dup weak suff mc = (* Gonda §18.I §6 *)
   [ [ c :: _ ] -> match weak with
       [ [ 5 (* u *) :: l ] | [ 6 (* uu *) :: l ] (* eg stu *) ->
         let sf = if vowel c then [ 45 (* v *) :: s ] else s in
-        sandhi [ 5 :: l ] sf
+        sandhi [ 5 (* u *) :: l ] sf
       | [ 3 (* i *) :: l ] | [ 4 (* ii *) :: l ] (* eg nii *) ->
         let sf = [ 42 (* y *) :: if vowel c then s
                                  else [ 3 (* i *) :: s ] ] in
@@ -3357,15 +3355,20 @@ value fix_dup weak suff mc = (* Gonda §18.I §6 *)
   | _ -> error_suffix 12
   ]
 ;
-value multi_consonant root = match revcode root with
+(* TODO: merge with Phonetics.mult *)
+value multi_consonant root = match revstem root with
   [ [ v :: r ] -> vowel v && length r > 1
   | [] -> error_empty 15
   ]
 ;
+(* Roots not admitting intercalating i Whitney§797c MacDonell§136a *)
+(* In later language, often i was added before consonantal suffixes, except: *)
+value no_inter_i root = 
+  List.mem root [ "k.r#1"; "bh.r"; "v.r#2"; "s.r"; "dru#1"; "zru"; "stu"; "sru" ]
+;
 value compute_perfecta_v strong weak entry = 
   let lengthened = lengthened weak 
-  and iforb = List.mem entry (* option intercalating i forbidden Whitney§797c *)
-               [ "k.r#1"; "bh.r"; "v.r#2"; "s.r"; "dru#1"; "zru"; "stu"; "sru" ]
+  and iforb = no_inter_i entry
   and mc = multi_consonant entry in
   let conjugw person suff = (person,fix_dup weak suff mc) 
   and conjugs person suff = (person,fix strong suff)
@@ -3377,16 +3380,16 @@ value compute_perfecta_v strong weak entry =
         ; conjugs Second "tha"
         ; conjugl Third  "a" 
         ] in if iforb then l else [ conjugs Second "itha" :: l ])
-   ; (Dual,
-        [ conjugw First  "va"
+   ; (Dual, let l =
+        [ conjugw First  "va" 
         ; conjugw Second "athur"
         ; conjugw Third  "atur"
-        ])
-   ; (Plural,
-        [ conjugw First  "ma"
+        ] in if iforb then l else [ conjugs First "iva" :: l ])
+   ; (Plural, let l =
+        [ conjugw First  "ma" 
         ; conjugw Second "a"
         ; conjugw Third  "ur"
-        ])
+        ] in if iforb then l else [ conjugs First "ima" :: l ])
    ])
   ; record_part (Ppfta_ Primary weak entry)
   }
@@ -3425,24 +3428,26 @@ value compute_perfect_ril stem entry = (* -.rr or multiconsonant -.r *)
         ]
 ;
 value compute_perfectm_v weak mc entry = 
-  let conjugw person suff = (person,fix_dup weak suff mc) in do 
+  let iforb = no_inter_i entry
+  and conjugw person suff = (person,fix_dup weak suff mc) in do 
   { enter1 entry (Conju perfm
-   [ (Singular, 
+   [ (Singular, let l =
         [ conjugw First  "e" 
         ; conjugw Second "se"
         ; if entry = "m.r" then (Third, code "mamre")
           else conjugw Third "e" 
-        ])
-   ; (Dual,
+        ] in if iforb then l else [ conjugw Second "ise" :: l ])
+   ; (Dual, let l =
         [ conjugw First  "vahe"
         ; conjugw Second "aathe"
         ; conjugw Third  "aate"
-        ])
-   ; (Plural,
+        ] in if iforb then l else [ conjugw First "ivahe" :: l ])
+   ; (Plural, let l =
         [ conjugw First  "mahe"
         ; conjugw Second "dhve"
         ; conjugw Third  "ire"
-        ])
+        ] in if iforb then l else 
+        [ conjugw First "imahe" :: [conjugw Second "idhve" :: l ]])
    ])
   ; record_part_m_ath ppftm weak entry (* weak-aana *)
     (* middle part rare - eg cakraa.na pecaana anuucaana zepaana *)
@@ -3568,6 +3573,11 @@ value compute_perfect entry =
     | "indh" -> compute_perfectm Primary (revcode "iidh") entry
     | "mah" -> let (strong, weak, _, _, _) = redup_perf entry in
                compute_perfectm Primary strong entry (* ZZ Atma for Para root *)
+    | "diiv#1" -> let (strong, weak, olong, eweak, iopt) = redup_perf "div" in 
+                  compute_perfect_c strong weak olong eweak iopt entry
+    | "jaag.r" -> let (_, weak,_,_,_) = redup_perf "jaag.r" in 
+                  let strong = strong weak in (* bug [redup_perf] *)
+                  compute_perfect_ril strong entry (* OK Deshpande *) 
     | _ -> let (strong, weak, olong, eweak, iopt) = redup_perf entry in 
            match weak with 
            [ [ c :: rest ] -> 
@@ -4214,7 +4224,7 @@ value compute_aorist entry =
            then compute_ath_s_aorista strong entry else ()
         (* ayok.siit and acchetsiit besides ayauk.siit and acchaitsiit *)
       ; match entry with
-        [ "gup" | "gh.r" | "d.rz#1" | "s.rj#1" -> ()  (* active only *)
+        [ "gup" | "gh.r" | "t.rr" | "d.rz#1" | "s.rj#1" -> ()  (* active only *)
         | _ -> let stemm = match weak with
             [ [ c :: r ] -> match c with 
                 [ 3 | 4 | 5 | 6 (* i ii u uu *) -> strong
@@ -4262,7 +4272,10 @@ value compute_aorist entry =
             | [] -> error_empty 23
             ] in
         compute_ath_is_aorista stem entry 
-      ; compute_ath_is_aoristm strong entry 
+      ; match entry with       
+        [ "t.rr" -> ()  (* active only *)
+        | _ -> compute_ath_is_aoristm strong entry 
+        ]
       } 
     | "khan" | "pa.th" -> do (* Deshpande *)
       { compute_ath_is_aorista strong entry (* apa.thiit *)
@@ -4392,7 +4405,10 @@ value compute_injunctive entry =
             | [] -> error_empty 25
             ] in
         compute_ath_is_injuncta stem entry 
-      ; compute_ath_is_injunctm strong entry 
+      ; match entry with 
+        [ "t.rr" -> () (* active only *)
+        | _ -> compute_ath_is_injunctm strong entry 
+        ]
       } 
     | "gup" | "vrazc" | "zcut#1" | "sphu.t" -> (* active only *)
       compute_ath_is_injuncta strong entry 
@@ -5922,9 +5938,17 @@ and compute_extra_jnaa () =
   ; record_part (Pppa_ Causative ppstem entry) (* pp-vat *)
   ; perif Causative cstem entry 
   }
-and compute_extra_tri () = do 
+and compute_extra_trr () = do 
       { build_infinitive Primary (revcode "tarii") "t.rr" (* id. *)
       ; build_infinitive Primary (revcode "tar") "t.rr" (* Whitney roots *)
+      ; enter1 "t.rr" (Conju perfa (* archaic forms Whitney§794k *)
+             [ (Plural,[ (Third, code "terus") ])
+             ; (Plural,[ (Second, code "tera") ])
+             ; (Plural,[ (First, code "terima") ])
+             ; (Dual,[ (Third, code "teratus") ])
+             ; (Dual,[ (Second, code "terathus") ])
+             ; (Dual,[ (First, code "teriva") ])
+             ])
       }
 and compute_extra_dhaa () = (* Gaayatrii dhiimahi precative m. Whitney§837b *)
     enter1 "dhaa#1" (Conju benem [ (Plural,[ (First, code "dhiimahi") ]) ])
@@ -6027,7 +6051,7 @@ value compute_extra () = do
   ; compute_extra_khan ()
   ; compute_extra_car () 
   ; compute_extra_jnaa () 
-  ; compute_extra_tri () 
+  ; compute_extra_trr () 
   ; compute_extra_dhaa () 
   ; compute_extra_nind () 
   ; compute_extra_prr () 
@@ -6078,7 +6102,7 @@ value fake_compute_conjugs (gana : int) (entry : string) = do
       | "gup"    -> record_part_ppp (revcode "gupta") entry 
       | "car"    -> compute_extra_car ()
       | "j~naa#1"-> compute_extra_jnaa () 
-      | "t.rr"   -> compute_extra_tri () 
+      | "t.rr"   -> compute_extra_trr () 
       | "dhaa#1" -> compute_extra_dhaa () 
       | "nind"   -> compute_extra_nind ()
       | "p.rr"   -> compute_extra_prr ()

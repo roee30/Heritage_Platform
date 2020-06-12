@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2018 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Sandhi Engine cgi *)
@@ -41,7 +41,7 @@ value sandhi_engine () = do
     and lex = get "lex" env Paths.default_lexicon in 
     let left_str = decode_url url_encoded_left 
     and right_str = decode_url url_encoded_right 
-    and lang = language_of lex 
+    and lang = language_of_string lex 
     and encode = Encode.switch_code translit in
     let left_word = encode left_str
     and right_word = encode right_str in

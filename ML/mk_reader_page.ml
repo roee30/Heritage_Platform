@@ -62,7 +62,6 @@ value reader_page () = do
     and url_encoded_mode  = get "mode" env "g"
     and url_encoded_topic = get "topic" env ""
     and st = get "st" env "t" (* default vaakya rather than isolated pada *)
-(* [and cp = get "cp" env default_mode TODO: dead code ] *)
     and us = get "us" env "f" (* default input sandhied *)
     and cache_active = get "cache" env cache_active.val
     and translit = get "t" env Paths.default_transliteration 

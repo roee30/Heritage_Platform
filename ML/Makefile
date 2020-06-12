@@ -389,8 +389,9 @@ morpho.cmx segmenter1.cmx tagger1.cmx -o tagger1
 debug: gen.cmo version.cmo date.cmo word.cmo min_lexer.cmo order.cmo \
 canon.cmo phonetics.cmo min_lexer.cmo transduction.cmo chunker.cmo \
 sanskrit.cmo sandhi.cmo int_sandhi.cmo share.cmo trie.cmo deco.cmo \
-skt_lexer.cmo encode.cmo order.cmo lexmap.cmo inflected.cmo parts.cmo \
-verbs.cmo morpho_html.cmo cgi.cmo html.cmo web.cmo indexer.cmo declension.cmo 
+skt_lexer.cmo encode.cmo order.cmo lexmap.cmo inflected.cmo parts.cmo pada.cmo \
+verbs.cmo morpho_html.cmo cgi.cmo html.cmo web.cmo indexer.cmo declension.cmo \
+zen_lexer.cmo
 	(cat debug.ml ; cat -) | ocaml -I +camlp4 -I . -I $(ZEN)
 
 morpho_debug: list2.cmo word.cmo deco.cmo morpho_string.cmo paths.cmo \

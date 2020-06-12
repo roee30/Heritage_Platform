@@ -49,7 +49,7 @@ open Encode;
 open Sandhi;
 
 
-#load "padapatha.cmo"; 
+#load "chunker.cmo"; 
 #load "skt_lexer.cmo";  
 #load "sanskrit.cmo"; 
 open Sanskrit;  

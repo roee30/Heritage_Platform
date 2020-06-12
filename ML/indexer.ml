@@ -112,7 +112,7 @@ value index_engine () = do
   let translit = get "t" env Paths.default_transliteration 
   and lex = get "lex" env Paths.default_lexicon (* default by config *)
   and url_encoded_entry = get "q" env "" in
-  let lang = language_of lex in do
+  let lang = language_of_string lex in do
   { print_title_solid Mauve (Some lang) (dico_title lang)
   ; let str = decode_url url_encoded_entry (* in translit *) 
     and encode = Encode.switch_code translit  

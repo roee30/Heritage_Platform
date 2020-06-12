@@ -676,18 +676,13 @@ value lexicon_of = fun
   [ French  -> "SH" (* Sanskrit Heritage *) 
   | English -> "MW" (* Monier-Williams   *) 
   ] 
-and language_of = fun 
+and language_of_string = fun 
   [ "SH" -> French  
   | "MW" -> English  
   | _ -> failwith "Unknown lexicon" 
   ]
 ; 
-value default_language = language_of Paths.default_lexicon 
-and default_mode = (* TODO - add as config parameter *)
- match target with
-  [ Station | Computer | Server -> "t" (* default Complete mode *) 
-  | _ -> "f" (* *deprecated* default Simplified mode *)
-  ]
+value default_language = Paths.default_lexicon |> language_of_string
 ;
 (* linked lexical resource - initialized at configuration  *)
 value lexicon_toggle = ref Paths.default_lexicon (* mutable for lexicon access *)
@@ -696,10 +691,10 @@ value toggle_lexicon lex = lexicon_toggle.val := lex
 ; 
 value page_extension lang = 
   let lang_sfx = fun  
-      [ French  -> "fr" 
-      | English -> "en" 
+      [ French  -> ".fr" 
+      | English -> ".en" 
       ] in 
-  "." ^ lang_sfx lang ^ ".html"
+  lang_sfx lang ^ ".html"
 ;
 value wrap_ext page lang = page ^ page_extension lang 
 ;

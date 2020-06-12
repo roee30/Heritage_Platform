@@ -101,7 +101,7 @@ value lemmatizer_engine () =
   and url_encoded_cat = get "c" env "Noun" in
   let str = decode_url url_encoded_entry (* in translit *)
   and cat = decode_url url_encoded_cat 
-  and lang = language_of lex 
+  and lang = language_of_string lex 
   and encode = Encode.switch_code translit (* normalized input *) in do
   { prelude lang
   ; try let word = unvisarg (encode str) in 

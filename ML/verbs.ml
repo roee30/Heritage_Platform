@@ -2454,10 +2454,10 @@ value intercalates root =
             | "k.r.s" -> [ 3 :: vet ] (* ar -> ra optionally *)
             | "bh.rjj" | "sp.rz#1" -> [ 3 :: anit ] (* idem *)
             | "ad#1" | "aap" | "krudh#1" | "kruz" | "k.sip" | "k.sud" 
-            | "k.sudh#1" | "khid" | "chid#1" | "tud#1" | "tu.s" | "t.rp#1"
-            | "tvi.s#1" | "diz#1" | "dih" | "du.s" | "duh#1" | "d.rz#1" 
-            | "dvi.s#1" | "nah" | "nij" | "nud" | "pac" | "pad#1" | "pi.s" 
-            | "pu.s#1" | "praz" | "bha~nj" | "bha.s" | "bhid#1"
+            | "k.sudh#1" | "khid" | "ghas" | "chid#1" | "tud#1" | "tu.s" 
+            | "t.rp#1" | "tvi.s#1" | "diz#1" | "dih" | "du.s" | "duh#1" 
+            | "d.rz#1" | "dvi.s#1" | "nah" | "nij" | "nud" | "pac" | "pad#1" 
+            | "pi.s" | "pu.s#1" | "praz" | "bha~nj" | "bha.s" | "bhid#1"
             | "bhuj#1" | "bhuj#2" | "mih" | "muc#1" | "m.rz" | "yaj#1" | "yabh" 
             | "yuj#1" | "yudh#1" | "ra~nj" | "rabh" | "ram" | "raadh" | "ric"
             | "ruj#1" | "rudh#1" | "rudh#2" | "ruh#1" | "lip" | "liz" | "lih#1"
@@ -3093,10 +3093,8 @@ value redup_perf root =
                          
          | _ (* aa ii uu *) -> (revs, revw)
          ] in (s, w, None, False, False)
-      else 
-      let (v,p,a) = lookvoy r (* p = prosodically long, a = vriddhi augment *)
-         (* lookvoy computes the vowel v, and the two booleans p and a *)
-         where rec lookvoy = fun
+      else (* c1 not vowel *)
+      let rec lookvoy = fun (* suspicious if more than one vowel eg jaag.r *)
            [ [] -> error_vowel 1
            | [ c2 ] -> if vowel c2 then (c2,False,True)
                        else error_vowel 2
@@ -3107,7 +3105,9 @@ value redup_perf root =
                           and a = c2=1 (* a *) && l=1 in 
                           (c2,p,a)
                        else lookvoy r2
-           ] in (* c is reduplicating consonant candidate *)
+           ] in
+      let (v,p,a) = lookvoy r in (* p = prosodically long, a = vriddhi augment *)
+         (* lookvoy computes the vowel v, and the two booleans p and a *)
       let c = if sibilant c1 then match r with
                  [ [] -> error_vowel 3
                  | [ c2 :: _ ] -> if vowel c2 || nasal c2 then c1
@@ -3119,8 +3119,8 @@ value redup_perf root =
         if v>6 (* .r .rr .l dipht *) then match root with
           [ "ce.s.t" | "dev" |"sev" | "mlecch" | "vye" 
               -> 3 (* i *) (* vye for vyaa *)
+          | "g.r" -> 2 (* Vedic - also k.lp etc have long aa Whitney§786a *)
           | _ -> 1 (* a *) (* also bhuu elsewhere *)
-          (* but Vedic k.lp etc have long aa Whitney§786a *)
           ]
         else match root with
           [ "maa#3" -> 3 (* i *) (* analogy with present *)
@@ -3181,7 +3181,11 @@ value redup_perf root =
                 | _       -> (revw,False) 
                 ] in (glue short,False,iopt) 
           ] 
-       and strong = glue (if p then revw else revs) 
+       and strong = glue (if p then match root with 
+                             [ "jaag.r" -> revs (* verrue but Deshpande OK *)
+                             | _        -> revw
+                             ]
+                          else revs) 
        and longifvr = if vriddhi then revl else revs in 
        let olong = if p then None else Some (glue longifvr) in
        (strong, weak, olong, eweak, iopt)
@@ -3575,9 +3579,6 @@ value compute_perfect entry =
                compute_perfectm Primary strong entry (* ZZ Atma for Para root *)
     | "diiv#1" -> let (strong, weak, olong, eweak, iopt) = redup_perf "div" in 
                   compute_perfect_c strong weak olong eweak iopt entry
-    | "jaag.r" -> let (_, weak,_,_,_) = redup_perf "jaag.r" in 
-                  let strong = strong weak in (* bug [redup_perf] *)
-                  compute_perfect_ril strong entry (* OK Deshpande *) 
     | _ -> let (strong, weak, olong, eweak, iopt) = redup_perf entry in 
            match weak with 
            [ [ c :: rest ] -> 
@@ -3596,6 +3597,7 @@ value compute_perfect entry =
 value compute_perfect_desida st entry =
 (* [entry:string] is the root, [st] is the desiderative (reverse word) stem. *)
 (* We create a fake root from [st] to reuse [redup_perf] which uses a string.*)
+(* This gives often weird results eg ghas - should be seriously revised *) 
   let (strong, weak, olong, eweak, iopt) = redup_perf (Canon.rdecode st) in 
   compute_perfecta Desiderative strong weak olong eweak iopt entry
 and compute_perfect_desidm st entry =
@@ -4343,7 +4345,7 @@ value compute_injunctive entry =
     | _ -> () 
     ]
   ; match entry with (* 2. thematic injunct *)
-    [ "gam" | "g.rdh" | "zuc#1" -> do
+    [ "gam" | "g.rdh" | "ghas" | "zuc#1" -> do
       { compute_thematic_injuncta weak entry
       ; compute_thematic_injunctm weak entry (* middle is very rare *)
       }
@@ -6041,6 +6043,7 @@ value compute_extra () = do
   ; compute_aorist "kan" 
   ; compute_perfect "kam" 
   ; compute_perfect "ghas" 
+  ; compute_aorist "ghas" 
   ; compute_perfect "ta.d" 
   ; compute_perfect "spaz#1" 
   ; compute_aorist "spaz#1" 

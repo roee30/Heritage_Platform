@@ -664,7 +664,7 @@ value (narrow_screen,screen_char_length,css) =
  match target with
   [ Simputer -> (True,40,False) (* Historical for Simputer platform *)
   | Station  (* Privileged client mode *)
-  | Computer 
+  | Computer (* Shared frame *)
   | Server   -> (False,80,True) (* Server mode *)
   ]
 ;

@@ -1265,7 +1265,7 @@ value build_as gen stem entry =
    [ (Singular, let l =
         [ decline Voc "as"
         ; decline Nom (match gen with
-           [ Mas -> match entry with (* gram Muller p 72,  Whitney §416 *)
+           [ Mas -> match entry with (* gram Muller p72,  Whitney §416 *)
                     [ "anehas" | "uzanas" | "da.mzas" (* Puruda.mzas *) -> "aa" 
                     | _ -> "aas" (* Kane§108 candramas vedhas su/dur/unmanas *)
                     ]  

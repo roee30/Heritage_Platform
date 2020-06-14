@@ -592,10 +592,10 @@ releasedoc:
 	cp $(FAQPAGES) $(SERVERPUBLICDIR) # faq pages made by configure
 	cp $(FAQPAGE_FR) $(SERVERPUBLICDIR)faq.html # compatibility default fr
 	cp $(MANUAL) $(SERVERPUBLICDIR) # user's manual
-	cp $(XMLPAGE) $(SERVERPUBLICDIR) # user's manual
+	cp $(XMLPAGE) $(SERVERPUBLICDIR) # XML resources page
 #	cp $(ROBOTS) $(SERVERPUBLICDIR) # robots permissions
 #	cp $(GOLD) $(SERVERPUBLICDIR) # Heritage's Hall of Fame
-	cp $(DOC_ML) $(SERVERPUBLICDIR)DOC
+#	cp $(DOC_ML) $(SERVERPUBLICDIR)DOC # Not distributed anymore - useless
 	cp -p DOC/transliterations.pdf $(SERVERPUBLICDIR)DOC
 
 grammar: ML/declension ML/conjugation

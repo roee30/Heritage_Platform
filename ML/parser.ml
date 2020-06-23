@@ -223,7 +223,11 @@ value analyse query output =
   ; pl (xml_empty "p") 
   ; if scl_toggle then (* Call SCL parser *)
        let segments = List.map (fun (ph,w,_) -> (ph,w)) output in
-       Scl_parser.print_scl [ List.rev segments ] 
+       let scl_font = match sanskrit_font.val with
+           [ Deva -> "DEV"
+           | Roma -> "IAST"
+           ] in 
+       Scl_parser.print_scl scl_font [ List.rev segments ] 
        else () 
   (*i DEBUG ; Sys.command "ls -l > /tmp/SKT_TEMP/junk" i*)
   ; List.iter print_bucket top_groups  

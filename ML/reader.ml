@@ -134,7 +134,11 @@ value display limit mode text saved = fun
          let forget_transitions (phase,word,_) = (phase,word) in
          let forget_index (_,segments) = List.map forget_transitions segments in
          let segmentations = List.map forget_index solutions in
-         Scl_parser.print_scl segmentations
+         let scl_font = match sanskrit_font.val with
+             [ Deva -> "DEV"
+             | Roma -> "IAST"
+             ] in 
+         Scl_parser.print_scl scl_font segmentations
       | _ -> ()
       ]
     }

@@ -43,7 +43,7 @@ value print_scl_solutions s =
   let _ = print_scl_output s in ()
 ;
 (* Invocation of UoH's CSL parser for dependency graph display *)
-value print_scl1 (solutions : list (Phases.phase * Word.word)) =
+value print_scl1 scl_font (solutions : list (Phases.phase * Word.word)) =
   let svg_interface_url = scl_cgi ^ "SHMT/" in do
   { ps ("<script type=\"text/javascript\" src=\"" ^ scl_url ^ "js_files/dragtable.js\"></script>")
   ; ps ("<form name=\"word-order\" method=\"POST\" action = \""
@@ -51,16 +51,16 @@ value print_scl1 (solutions : list (Phases.phase * Word.word)) =
   ; ps ("<table class=\"draggable\">")
   ; ps tr_begin
   ; print_scl_solutions solutions
-  ; ps ("<td><input type=\"hidden\" name=\"DISPLAY\" value=\"" ^ default_output_font ^"\"/></td>")
+  ; ps ("<td><input type=\"hidden\" name=\"DISPLAY\" value=\"" ^ scl_font ^"\"/></td>")
   ; ps tr_end
   ; ps table_end 
   ; ps (submit_input "Submit")
   } 
 ;
 (* We restrict to the first solution - TEMPORARY *)
-value print_scl sols = match sols with 
+value print_scl scl_font sols = match sols with 
   [ [] -> failwith "No sol"
-  | [ s :: _ ] -> print_scl1 s
+  | [ s :: _ ] -> print_scl1 scl_font s
   ]
 ;
 (* end; *)

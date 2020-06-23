@@ -379,13 +379,14 @@ value call_undo text cpts  =
   anchor Green_ (invoke cgi) check_sign
 ;
 (* The main procedure for computing the graph segmentation structure *)
-value check_sentence translit us text_orig checkpoints sentence 
+value check_sentence translit us text_orig checkpoints input 
              (* finally SL corpus links: *) sol_num corpus sent_id link_num = 
   let encode = Encode.switch_code translit in
   let chunker = if us (* sandhi undone *) then Sanskrit.read_raw_sanskrit 
                 else (* blanks non-significant *) Sanskrit.read_sanskrit in
-  let chunks = chunker encode sentence in 
-  let devachunks = List.map Canon.unidevcode chunks in
+  let raw_chunks = Sanskrit.read_raw_sanskrit encode input in (* NEW *)
+  let chunks = chunker encode input in 
+  let devachunks = List.map Canon.unidevcode raw_chunks in (* NEW *)
   let devainput = String.concat " " devachunks  
   and cpts = sort_check checkpoints in 
   let _ = chkpts.all_checks := cpts

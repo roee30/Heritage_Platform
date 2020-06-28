@@ -33,8 +33,9 @@ BOOK=$(SKTRESOURCES)BOOK# Heritage.pdf abrevs.pdf
 MW=$(SKTRESOURCES)MW# hypertext Monier-Williams
 GOLD=$(SKTRESOURCES)GOLD# Heritage in Goldendict format databases
 XMLDOC=$(SKTRESOURCES)XML# Heritage Sanskrit morphology in XML databases
-# contains initially the dtds and the LICENCES, filled by make xml_data,
-# 
+# contains initially the dtds and the LICENCES, later filled by make xml_data
+# This avoids burdening the git archive with huge compressed files.
+
 
 # Path to global Sanskrit corpus downloaded from Git.
 SKTCORPUS=$(SKTRESOURCES)CORPUS
@@ -475,10 +476,6 @@ full: $(ZEN)
 	$(MAKE) supplements
 
 supplements:
-#OBS	cd $(DATA) && $(MAKE) statistics 
-#OBS	cd $(DATA) && $(MAKE) pdf
-	cd ML && $(MAKE) make_xml_data # morphology data banks
-	$(MAKE) xml_data
 	cd ML && $(MAKE) doc # requires installing ocamlweb
 
 index.html: mk_index_page
@@ -513,8 +510,7 @@ web_services: # Will write localized site pages in DICO and export cgis
 	cp -p SITE/xml.html DICO
 
 release: $(DICO) web_services releasecgi releaseMW releasedata releasedoc \
-releasebook releasecorpus #releasexml
-
+releasebook releasecorpus releasexml
 # releasepdf disabled at present as bulky and un-finished
 	echo "Version $(VERSION) of Sanskrit site released on $(SERVERHOST)"
 
@@ -573,7 +569,7 @@ BOOKPRINTS=$(BOOK)/Heritage.pdf $(BOOK)/abrevs.pdf
 releasebook:
 	cp $(BOOKPRINTS) $(SERVERPUBLICDIR)
 
-releasexml: # Sanskrit morphology in XML copied from Data to Server
+releasexml: xml_data # Sanskrit morphology in XML copied from Data to Server
 	mkdir -p $(SERVERPUBLICDIR)DATA/XML
 	cp $(XML_MORPHOLOGY) $(SERVERPUBLICDIR)DATA/XML
 # Following is disguising the dtds as txt file for display by the browser - ugly

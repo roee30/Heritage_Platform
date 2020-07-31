@@ -511,6 +511,7 @@ value build_mas_red stem entry =
         ; decline Acc "tam"
         ; decline Ins "taa"
         ; decline Dat "te"
+        ; decline Abl "tas"
         ; decline Gen "tas"
         ; decline Loc "ti"
         ])
@@ -5019,7 +5020,7 @@ value compute_nouns_stem_form e stem d p =
           | _ -> build_mas_i stem r1 e (* agni, etc (ghi) *) 
           ]
       | [ 4 :: r1 ] (* -ii - rare *) -> 
-          if bi_consonant r1 then build_bicons_ii Mas r1 e (* yavakrii *) 
+          if bi_consonantal r1 then build_bicons_ii Mas r1 e (* yavakrii *) 
           else if monosyl r1 || compound_monosyl_ii r1 
                then build_mono_ii Mas r1 e 
                else build_poly_ii Mas r1 e (* rathii sudhii *)

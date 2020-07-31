@@ -219,7 +219,7 @@ value vriddhi = fun (* strong grade *)
      Pan(I.1.51): ura.n rapara.h || after a,i,u put r *)
 (* NB. u in ura.n above explained in Kaazikaa for counterex. kheyam and geyam *)
 
-(* Macdonnel §125 - condition for root of gana 1 to take guna of its stem *)
+(* Macdonnel§125 - condition for root of gana 1 to take guna of its stem *)
 value gunify = fun (* arg word is reversed stem *)
   [ [ v :: _ ] when vowel v -> True (* guna is used if root is vowel final *)
   | [ _ :: [ v :: _ ] ] when short_vowel v -> True (* or penultimate is short *)
@@ -262,6 +262,10 @@ value trunc_a = fun
 and trunc_aa = fun
   [ [ 2 :: w ] -> w
   | _ -> failwith "trunc_aa"
+  ]
+and trunc_ii = fun
+  [ [ 4 :: w ] -> w
+  | _ -> failwith "trunc_ii"
   ]
 and trunc_u = fun
   [ [ 5 :: w ] -> w
@@ -469,8 +473,14 @@ value finalize_r stem = match stem with
        ]
   ] 
 ;
+(* Used in Verbs *)
+value consonantal rstem = match rstem with
+  [ [ c :: _ ] -> consonant c
+  | _ -> False
+  ]
+;
 (* Used in Nouns *)
-value bi_consonant rstem = match rstem with
+value bi_consonantal rstem = match rstem with
   [ [ c1 :: [ c2 :: _ ] ] -> consonant c1 && consonant c2 
   | _ -> False
   ]

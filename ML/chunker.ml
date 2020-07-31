@@ -81,8 +81,8 @@ value adjust c w = match Word.mirror w with
                  (* optional doubling of ~n in front of vowel *)
                  [ [ v :: _ ] -> if Phonetics.short_vowel v && Phonetics.vowel c
                                     then Word.mirror rest 
-                                 else failwith "padapatha"
-                 | _ -> failwith "padapatha"
+                                 else failwith "adjust"
+                 | _ -> failwith "adjust"
                  ]
              | _ -> if c=23 (* ch could come from ch or z *)
                        then raise Glue 
@@ -109,7 +109,7 @@ value adjust c w = match Word.mirror w with
                  [ [ v :: _ ] -> if Phonetics.short_vowel v && Phonetics.vowel c
                                     then Word.mirror rest (* gacchann eva *)
                                  else w
-                 | _ -> failwith "padapatha"
+                 | _ -> failwith "adjust"
                  ]
              | _ -> if c=36 (* n *) || c=41 (* m *)
                        then raise Glue (* since d|m->nn and n|m -> nm *)
@@ -128,8 +128,8 @@ value adjust c w = match Word.mirror w with
                    (* optional doubling of f in front of vowel *)
                  [ [ v :: _ ] -> if Phonetics.short_vowel v && Phonetics.vowel c
                                     then Word.mirror rest 
-                                 else failwith "padapatha"
-                 | _ -> failwith "padapatha"
+                                 else failwith "adjust"
+                 | _ -> failwith "adjust"
                  ]
              | _ -> if c=41 (* m *) (* vaak+mayi *)
                        then Word.mirror [ 17 :: rest ] (* f -> k *)
@@ -164,7 +164,7 @@ value adjust c w = match Word.mirror w with
               [ [ 14 (* .m *) :: b ] -> if c=32 || c=33 (* t th *) then
                                            Word.mirror [ 36 (* n *) :: b ] 
                                         else w 
-              | _ -> if c=32 || c=33 (* t th *) then raise Glue else w 
+              | _ -> w
               ]
         | _ -> w
         ]
@@ -185,12 +185,12 @@ value chunker read_chunk l = (* l is list of chunks separated by blanks   *)
            [ pada :: padas ]
        with 
         [ Hiatus -> match padas with 
-          [ [] -> failwith "padapatha"
+          [ [] -> failwith "chunker"
           | [ p :: lp ] -> let conc = w @ [ 50 :: p ] in (* [w_p] *)
                            [ conc :: lp ] (* hiatus indicates a word boundary *)
           ]
         | Glue -> match padas with 
-          [ [] -> failwith "padapatha"
+          [ [] -> failwith "chunker"
           | [ p :: lp ] -> let conc = w @ p in
                            [ conc :: lp ] (* we lose the boundary indication *)
           ]

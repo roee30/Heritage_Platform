@@ -101,7 +101,7 @@ value voices_of = fun
   | "d.r#1" | "dhii#1" | "dhuk.s" | "pa.n" | "pad#1" | "pi~nj" 
   | "pyaa" | "prath" | "pru" | "plu" | "ba.mh" | "baadh" | "bha.n.d" | "bhand" 
   | "bhaa.s" | "bhraaj" | "ma.mh" | "man" | "mand#1" | "yat#1" 
-  | "rabh" | "ruc#1" | "lajj" | "lamb" | "lii" | "loc" | "vand" 
+  | "rabh" | "ruc#1" | "lajj" | "labh" | "lamb" | "lii" | "loc" | "vand" 
   | "vas#2" | "vaaz" | "vip" | "v.rdh#1" | "ve.s.t" | "vrii.d" | "zafk" | "zad"
   | "zi~nj" | "zii#1" | "zrambh" | "zlaagh" | "zvit#1" | "sac" | "sev"
   | "styaa" | "spand" | "spardh" | "spaz#1" | "sphaa" | "sra.ms"
@@ -113,6 +113,7 @@ value voices_of = fun
 (*| "k.sam" Ubha needed for k.samati epics *)
 (*| "yudh1" Ubha needed for yudhya BhG *)
 (*| "diip" Ubha needed for epics *)
+(*| "labh" labhati occurs in epics *)
    (* DRP restriction: "dyut1" *) 
       -> Atma (* "deponent" verbs: middle only *)
   | _ -> Ubha (* default *) 
@@ -134,7 +135,7 @@ value voices_of = fun
   | "mii" | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.r.s" | "yaj#1" 
   | "yam" | "yaac" | "yu#1" | "yuj#1" | "yudh#1" | "rac" | "ra~nj" | "ram"
   | "rah" | "raaj#1" | "ri" | "ric" | "rud#1" | "rudh#2" | "lafgh" | "lak.s"
-  | "labh" | "la.s" | "lip" | "lih#1" | "lup" | "luu#1" | "vad" | "van" | "vap#1"
+  | "la.s" | "lip" | "lih#1" | "lup" | "luu#1" | "vad" | "van" | "vap#1"
   | "vap#2" | "val" | "vah#1" | "vaa#3" | "vic" | "vij" "viz#1" | "viij" 
   | "v.r#2" | "v.rt#1" | "vyath" | "vyaa" | "vrii" | "zap" | "zaa" | "zu.s"
   | "zubh#1" | "zyaa" | "zram" | "zri" | "zru" | "sru" | "san#1" | "sa~nj" 
@@ -144,7 +145,7 @@ value voices_of = fun
   ] *)
   (* + corr. "pa.th" | "sthaa1" | "praz" | "k.rr" | "p.rc" | "bandh" *)
   (* NB. "ah" "rip" "vadh" have no pr, "mand2" is fictitious *) 
-  (* "iiz1", "lii" and "knuu" allowed Para in future *)
+  (* "iiz1", "lii" and "knuu" Para allowed in future *)
   ]
 ;
 (* List of roots that admit different padas for distinct ganas:

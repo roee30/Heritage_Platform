@@ -19,7 +19,7 @@ are updated. But the Reader/Parser needs a full pass of generation, with
 
 open List; (* map, length, rev *)
 open Phonetics; (* [vowel, homonasal, duhify, mrijify, nahify, light, nasal, 
-                    gana, mult, aug, trunc_a, trunc_u, trunc_aa] *)
+                    gana, mult, aug, trunc_a, trunc_aa, trunc_ii, trunc_u] *)
 open Skt_morph;
 open Inflected; (* [Conju, Invar, Inftu, roots, enter1, morpho_gen, admits_aa] *)
 open Parts; (* [memo_part, record_part, cau_gana, fix, fix_augment, rfix,
@@ -1247,14 +1247,9 @@ and compute_middle_present2 sstem wstem set entry third = do
 
 (*** Gana 3  ***)
 
-value strip_ii = fun 
-  [ [ 4 :: w ] -> w (* ii disappears before vowels in special roots *)
-  | _ -> failwith "Wrong weak stem of special 3rd class root"
-  ] 
-;
 value fix3w wstem iiflag dadh suff = 
   let codesf = code suff in 
-  let short = if iiflag then strip_ii wstem else wstem in
+  let short = if iiflag then trunc_ii wstem else wstem in
   let stem = match codesf with 
      [ [] -> error_suffix 8
      | [ 5; 43 ] (* ur *) -> if iiflag then short else strong wstem (* guna *)
@@ -1302,7 +1297,7 @@ value compute_athematic_present3a strong weak iiflag entry third =
                 ]    
              else l)
    ])
-  ; let wstem = if iiflag then strip_ii weak else 
+  ; let wstem = if iiflag then trunc_ii weak else 
                 if entry="bhas" then revcode "baps" (* Whitney§678 *) 
                 else weak in (* 3rd pl weak stem *)
     record_part (Pprared_ Primary wstem entry) 
@@ -1527,7 +1522,7 @@ and compute_middle_present3 sstem wstem iiflag entry third = do
   ; compute_athematic_impft3m wstem iiflag entry 
   ; compute_athematic_optative3m wstem iiflag entry 
   ; compute_athematic_imperative3m sstem wstem iiflag entry 
-  ; let short = if iiflag then strip_ii wstem else wstem in 
+  ; let short = if iiflag then trunc_ii wstem else wstem in 
     record_part_m_ath (pprm 3) short entry
   }
 ;
@@ -2476,7 +2471,7 @@ value intercalates root =
 | "j.rmbh" | "tak" | "tan#1" | "tan#2" | "tark" | "tvar" | "dagh" | "dabh" 
 | "dham" | "dhva.ms" | "dhvan" | "nand" | "nind" | "pa.th" | "pat#1" | "pi~nj"
 | "piz" | "ba.mh" | "bhand" | "bhaa.s" | "bhraaj" | "ma.mh" | "ma.n.d" | "mad#1"
-| "mand#1" | "mlecch" | "yat#1" | "yaac" | "ra.mh" | "rak.s" | "raaj#1" 
+| "mand#1" | "mlecch" | "yat#1" | "yas" | "yaac" | "ra.mh" | "rak.s" | "raaj#1" 
 | "ruc#1" | "rud#1" | "lag" | "lafg" | "lafgh" | "lap" | "lamb" | "laa~nch" 
 | "la.s" | "lu.n.th" | "lok" | "loc" | "vad" | "vand" | "vam" | "vaz" | "vas#2"
 | "vaa~nch" | "vaaz" | "vip" | "ven" | "vyath" | "vraj" | "vrii.d" | "za.ms" 
@@ -2541,11 +2536,12 @@ value intercalate_pp root rstem =
            | "miil" | "mud#1" | "mu.s#1" | "m.rg" | "yaac" | "rac" | "ra.n"
            | "ras" | "rah" | "raaj#1" | "ruc#1" | "rud#1" | "lag" | "lap" | "lal"
            | "la.s" | "las" | "lu.th" | "lul" | "lok" | "loc" | "vad" | "val" 
-           | "vas#2" | "vaaz"| "vaas#3" | "vid#1" | "vip"| "ven" | "vyath" 
-           | "vraj" | "vra.n" | "vrii.d" | "zubh#1" | "zcut#1" | "zrath" 
-           | "zlath" | "zlaagh" | "zvas#1" | ".s.thiiv" | "suuc"| "suud" | "sev"
-           | "skhal" | "stan" | "stim" | "sthag" | "sphu.t" | "sphur" | "svad"
-           | "svan" | "svar#1" | "has" | "hras" | "hraad" | "hlaad" | "hval" 
+           | "vaz" | "vas#2" | "vaaz"| "vaas#3" | "vid#1" | "vip"| "ven" 
+           | "vyath" | "vraj" | "vra.n" | "vrii.d" | "zubh#1" | "zcut#1" 
+           | "zrath" | "zlath" | "zlaagh" | "zvas#1" | ".s.thiiv" | "suuc"
+           | "suud" | "sev" | "skhal" | "stan" | "stim" | "sthag" | "sphu.t"
+           | "sphur" | "svad" | "svan" | "svar#1" | "has" | "hras" | "hraad" 
+           | "hlaad" | "hval" 
                -> set
            | "palaay" -> set (* very special item *)
            | "grah" -> set (* but will get ii *)
@@ -2727,12 +2723,11 @@ value compute_ppp_stems entry rstem =
             (* vérifier forme passive pour racines ci-dessus *)
            | _ -> passive_stem entry rstem (* possibly duhified and mirjified *)
            ] in [ Ta ppstem :: match entry with  
-                    [ ".rc#1" | ".rj" | "k.svi.d" | "ba.mh" | "ma.mh" | "manth" 
-                    | "m.rg" | "yaj#1" | "vyadh" | "grah" | "vrazc" | "praz" 
-                    | "zrath" | "svap" | "stambh" ->
-                           [ Tia ppstem ] (* avoids *ma.mhita *) 
-                    | "vaz" | "vac" | "vap" | "vap#1" | "vap#2" | "vad" 
-                    | "vas#1" | "vas#4" ->
+                    [ ".rc#1" | ".rj" | "k.svi.d" | "grah" | "praz" | "ba.mh"
+                    | "ma.mh" | "manth" | "m.rg" | "yaj#1" | "vyadh" | "vrazc"
+                    | "vaz" | "vas#1" | "vas#4" | "zrath" | "stambh"| "svap"  ->
+                           [ Tia ppstem ] 
+                    | "vap" | "vap#1" | "vap#2" | "vad" ->
                            [ Tia rstem; Tia ppstem ]
                     | "guh" -> [ Tia (revstem "guuh") ] (* \Pan{6,4,89} *)
                     | _ -> [ Tia rstem ] (* standard Paninian way *)
@@ -2907,7 +2902,7 @@ value admits_ppp_abs = fun
   | "bruu" (* vac *) 
   | "paz"  (* d.rz *) 
   | "as#1" | "kan" | "k.si" | "gaa#1" | "paa#2" | "praa#1" (* omit ved. praata *)
-  | "bal" | "ma.mh" | "vaz" | "vyac" | "zaz" | "zam#2" | "zvit#1" | "sac" 
+  | "bal" | "ma.mh" (*| "vaz" *)| "vyac" | "zaz" | "zam#2" | "zvit#1" | "sac" 
   | "sap#1" | "h.r#2" (* | "spaz#1" *) -> False
   | _ -> True
   ]
@@ -4990,15 +4985,19 @@ value compute_intensive_presenta strong weak iiflag entry =
         ; conjugw Third  "ati"
         ])
    ])
-  ; let wstem = if iiflag then match weak with 
-         [ [ 4 :: w ] -> w (* ii disappears before vowels in special roots *)
-         | _ -> failwith "Wrong weak stem of special intensive"
-         ]         
-                else weak in (* 3rd pl weak stem *)
-    record_part (Pprared_ Intensive wstem entry) 
-  ; if entry = "draa#1" then let ppstem = revcode "daridrita" in
-                             record_part (Ppp_ Intensive ppstem entry) 
-    else ((* TODO *))
+  ; (* Tentative for ppr - temporary *)
+    let wk = if iiflag then Some (trunc_ii weak) 
+                (* ii disappears before vowels in special roots *)
+             else if consonantal weak then Some weak (* 3rd pl weak stem *)
+             else None (* problematic. Concerns 
+                          daridraa for draa#1
+                          naanada for nad
+                          bobho for bhuu#1
+                          yaayajyaa for yaj#1
+                          jafgha for han#1 *) in 
+     match wk with [ Some weak -> record_part (Pprared_ Intensive weak entry) 
+                   | _ -> ()
+                   ]
   }
 ;
 value compute_intensive_impfta strong weak iiflag entry =
@@ -5070,8 +5069,13 @@ value compute_intensivea wstem sstem entry third =
   ; compute_intensive_optativea wstem iiflag entry 
   ; compute_intensive_imperativea sstem wstem iiflag entry 
   ; if entry="bhuu#1" (* bobhoti *) then
-       let stem = revcode "bobhav" in build_perpft Intensive stem entry
+       let stem = revcode "bobhav" in 
+       build_perpft Intensive stem entry
     else () (* EXPERIMENTAL *)
+  ; if entry = "draa#1" then
+       let ppstem = revcode "daridrita" in
+       record_part (Ppp_ Intensive ppstem entry) 
+    else ((* TODO *))
   }
 ;
 (* Takes reduplicated stem from lexicon. A generative version would use 
@@ -5174,7 +5178,7 @@ value compute_present_system entry rstem gana pada third =
               | "m.rj"  -> mrijify (revcode "maarj") (* vriddhi *)
               | "yaj#1" | "vraj" | "raaj#1" | "bhraaj" -> mrijify rstem
               | "kliiba" | "puula" -> (* kliibate etc *) (* denominative verbs *)
-                  Phonetics.trunc_a rstem (* since thematic a added *)
+                  trunc_a rstem (* since thematic a added *)
               | "k.rp" -> rstem 
               | _ -> strong rstem (* default *)
               ] in compute_thematic_present stem  
@@ -5573,7 +5577,7 @@ value den_stem_m entry = (* in general intransitive or reflexive Whitney§1059c 
    | "romantha" (* practice \Pan{3,1,15} *)
    | "dhuuma" | "baa.spa" | "phena" (* emit \Pan{3,1,16} *)
    | "kurafga" | "pu.skara" | "yuga" | "vi.sa" | "zizu"  | "samudra#1" 
-   | "gomaya" | "sa.mdhyaa"  (* resemble *)
+   | "gomaya" | "bh.rtya" | "sa.mdhyaa"  (* resemble *)
    | "puru.sa" (* imitate *)
    | "k.r.s.na" | "manda" | "bhuusvarga" (* to become *)
        -> lengthen rstem (* reflexive causative middle to become \Pan{3,1,13} *)

@@ -252,6 +252,7 @@ value log_chunk revsol =
 
 (* Checking for legitimate Id sandhi *)
 (* Uses [sandhis_id] computed by [Compile_sandhi] *)
+(* Side-effect : [Data.public_sandhis_id_file] loaded at load time. *)
 value allowed_trans =
   (Gen.gobble Data.public_sandhis_id_file:Deco.deco Word.word)
 ;

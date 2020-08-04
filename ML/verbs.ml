@@ -4669,6 +4669,7 @@ value pfp_ya rstem entry =
                                        (* but caarya obtainable as ca -.nyat *) 
     (* NB car gad mad yam also take -yat \Pan{3,1,100}: [record_extra_pfp_ya] *) 
     | [ 24; 1 ] (* aj *) -> rstem (* ajya *)
+    | [ 31; 1; 43 ] (* ra.n *) -> rstem (* ra.nya *)
     | [ c :: [ 1 :: _ ] ] when labial c -> rstem  (* \Pan{3,1,98} -yat *) 
     | [ c :: [ 1 :: r ] ] -> [ c :: [ 2 :: r ] ] 
                       (* a lengthened if last non labial *)

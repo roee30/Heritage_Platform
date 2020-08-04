@@ -18,9 +18,10 @@
    listing all identity sandhi rules such as [con|voy -> con.voy]. 
    Such rules are nonetheless checked as legitimate. *)
 (* NB. This segmenter is used by Reader and Parser, but not by Interface, that
-uses [Graph_segmenter] instead. *)
+   uses [Graph_segmenter] instead. *)
 
-open Auto; (* Auto *)
+open List2; (* unstack ass subtract *)
+open Auto.Auto; (* auto rule choices State *)
 
 module Segment 
   (Phases: sig
@@ -33,13 +34,13 @@ module Segment
          value un_lopa : phase -> phase;
          end)
   (Eilenberg: sig 
-         value transducer : Phases.phase -> Auto.auto;
+         value transducer : Phases.phase -> auto;
          value initial : Phases.phases;
          value dispatch : Word.word -> Phases.phase -> Phases.phases;
          value accepting : Phases.phase -> bool;
          type input = Word.word (* input sentence represented as a word *)
          and transition = (* junction relation *)
-            [ Euphony of Auto.rule (* [(w,rev u,v)] such that [u|v -> w] *)
+            [ Euphony of rule (* [(w,rev u,v)] such that [u|v -> w] *)
             | Id                   (* identity or no sandhi *)
             ]
          and segment = (Phases.phase * Word.word * transition)
@@ -142,7 +143,7 @@ value check_chunk solution =
 
 (* Checking for legitimate Id sandhi *)
 (* Uses [sandhis_id] computed by [Compile_sandhi] *)
-(* This is used to check legitimate Id sandhi. *)
+(* Side-effect : [Data.public_sandhis_id_file] loaded at load time. *)
 value allowed_trans =
   (Gen.gobble Data.public_sandhis_id_file : Deco.deco Word.word)
 ;
@@ -194,8 +195,7 @@ value sandhi_aa = fun
 (* phase [(aa_phase ph)] of "aa" is Pv for verbal ph, Pvkv for nominal ones *)
 value accrue ((ph,revword,rule) as segment) previous_segments =
   match Word.mirror revword with 
-  [ (* First Lopa *)
-    [ -2 (* [-] *) :: r ] -> match previous_segments with 
+  [ [ -2 (* [-] *) :: r ] -> match previous_segments with 
       [ [ (phase,pv,Euphony ([],u,[-2])) :: rest ] -> (* phase=Pv,Pvkv,Pvkc *)
           let v = match r with [ [ 10 (* e *) :: _ ] -> [ 10 ] 
                                | [ 12 (* o *) :: _ ] -> [ 12 ]
@@ -271,18 +271,17 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
            where new_segment = (ph,Word.mirror [ 23 :: r ],rule)
        | _ -> failwith "accrue anomaly"
        ]
- | _ -> [ segment :: previous_segments ]
+  | _ -> [ segment :: previous_segments ]
   ]
 ;
 (* Now for the segmenter proper *)
 type backtrack =
-  [ Choose of phase and input and output and Word.word and Auto.choices 
+  [ Choose of phase and input and output and Word.word and choices 
   | Advance of phase and input and output and Word.word
   ]
 and resumption = list backtrack (* coroutine resumptions *)
 ;
-value finished = ([]:resumption)
-;
+
 (* Service routines *)
 
 (* [access : phase -> word -> option (auto * word)] *)
@@ -290,7 +289,7 @@ value access phase = acc (transducer phase) []
    where rec acc state w = fun
       [ [] -> Some (state,w)  (* w is reverse of access input word *)
       | [ c :: rest ] -> match state with
-           [ Auto.State (_,deter,_) -> match List2.ass c deter with 
+           [ State (_,deter,_) -> match ass c deter with 
                 [ Some next_state -> acc next_state [ c :: w ] rest
                 | None -> None 
                 ] 
@@ -314,11 +313,11 @@ value schedule phase input output w cont =
    [occ] is the current reverse access path in the deterministic part
    the last argument is the current state of type [auto]. *)
 value rec react phase input output back occ = fun 
-  [ Auto.State (accept,det,choices) -> 
+  [ State (accept,det,choices) -> 
     (* we try the deterministic space before the non deterministic one *)
     let deter cont = match input with
       [ [] -> continue cont
-      | [ letter :: rest ] -> match List2.ass letter det with 
+      | [ letter :: rest ] -> match ass letter det with 
            [ Some state -> react phase rest output cont [ letter :: occ ] state  
            | None -> continue cont
            ] 
@@ -356,7 +355,7 @@ and choose phase input output back occ = fun
   | [ ((w,u,v) as rule) :: others ] -> 
        let cont = if others=[] then back
                   else [ Choose phase input output occ others :: back ] in
-       match List2.subtract input w with (* try to read [w] on [input] *)
+       match subtract input w with (* try to read [w] on [input] *)
          [ Some rest -> 
            let segment = (phase,u @ occ,Euphony rule) in 
            let out = accrue segment output in

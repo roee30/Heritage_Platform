@@ -18,7 +18,6 @@ module Lexer : functor (* takes its prelude and iterator control as parameters *
   (Prel: sig value prelude : unit -> unit; end) -> functor
     (Lexer_control: sig 
         value star : ref bool; (* chunk = if star then word+ else word *)
-        value out_chan : ref out_channel; (* output channel *)
         value transducers_ref : ref Load_transducers.transducer_vect;
         end) -> sig
   
@@ -36,7 +35,6 @@ module Lexer : functor (* takes its prelude and iterator control as parameters *
       type resumption;
       value continue : resumption -> option (Disp.output * resumption);
       value init_segment : Disp.input -> resumption;
-      value finished : resumption;
       type check = (int * (Phases.phase * Word.word) * bool);
       value all_checks : ref (list check);
       value set_offset : (int * list check) -> unit;

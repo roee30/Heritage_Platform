@@ -39,18 +39,11 @@ value prelude () = do
 ;
 end (* Prel *)
 ;
-value iterate = ref True (* by default we read a sentence (list of words) *)
-and  complete = ref True (* by default we call the fuller segmenter *)
-and output_channel = ref stdout (* by default cgi output *)
-;
 open Load_transducers; (* [transducer_vect dummy_transducer_vect Trans] *)
 
 module Lexer_control = struct
- value star = iterate;
- value full = complete;
- value out_chan = output_channel;
- value transducers_ref = 
- ref (dummy_transducer_vect : transducer_vect);
+ value star = ref True;
+ value transducers_ref = ref (dummy_transducer_vect : transducer_vect);
 end (* [Lexer_control] *)
 ;
 module Transducers = Trans Prel 
@@ -415,7 +408,7 @@ value parser_engine () = do
     and encode = Encode.switch_code translit (* encoding as a normalized word *)
     and () = toggle_lexicon lex
     and () = if abs="t" then remote.val:=True else () (* Web service mode *)
-    and () = if st="f" then iterate.val:=False else () (* word stemmer *)
+    and () = if st="f" then Lexer_control.star.val:=False else () (* word stemmer *)
     and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
     and sol_index = int_of_string (decode_url url_encoded_sol_index) 
     (* For Validate mode, register number of solutions *)
@@ -430,22 +423,6 @@ value parser_engine () = do
         | "n" -> Some "tat"
         | _ -> None
         ] in
- (* Corpus interaction disabled 
-   (* File where to store locally the taggings - only for [Station] platform *)
-   [let corpus_file = (* optionally transmitted by argument "out_file" *)
-        try let file_name = List.assoc "out_file" env (* do not use get *) in 
-            Some file_name  
-        with [ Not_found -> Some regression_file_name ] in] *)
-(* Regression disabled
-   [let () = if Paths.platform = "Station" then match corpus_file with 
-                [ Some file_name -> 
-                   let regression_file = var_dir ^ file_name ^ ".txt" in 
-                   output_channel.val := open_out_gen 
-                     [ Open_wronly; Open_append; Open_creat; Open_text ] 
-                     0o777 regression_file
-                | None -> ()
-                ]
-             else () in] *) 
     let proj = (* checks for parsing mode or final unique tags listing *)
         try let url_encoded_proj = List.assoc "p" env in (* do not use get *) 
             Some (parse_proj (decode_url url_encoded_proj))

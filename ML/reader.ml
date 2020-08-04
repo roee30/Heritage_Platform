@@ -30,12 +30,12 @@ open Html;
 open Web; (* ps pl abort etc. [remote_server_host] *)
 open Cgi; (* [get decode_url] *)
 open Phases; (* [Phases] *)
-open Rank; (* [Prel Lex Lexer_control Transducers segment_all iterate Solutions] *) 
+open Rank; (* [Prel Lex Lexer_control Transducers segment_all Solutions] *) 
 
 (* Reader interface *)
 (* Mode parameter of the reader. Controled by service Reader for respectively
    tagging, shallow parsing, or dependency analysis with the UoH parser.  *)
-(* Note that Summary/Interface is not a Reader/Parser mode. *)
+(* Note that Interface is not a Reader/Parser mode. *)
 type mode = [ Tag | Parse | Analyse ]
 ;
 value rpc = remote_server_host  
@@ -228,7 +228,7 @@ value reader_engine () = do
     and encode = switch_code translit (* encoding as a normalized word *)
     and () = Html.toggle_lexicon lex
     and () = if abs="t" then remote.val:=True else () (* Web service mode *)
-    and () = if st="f" then iterate.val:=False else () (* word stemmer *)
+    and () = if st="f" then Lexer_control.star.val:=False else () (* word stemmer *)
     and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
     and mode = match decode_url url_encoded_mode with
         [ "t" -> Tag

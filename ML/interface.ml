@@ -41,11 +41,7 @@ module Prel = struct (* Interface's lexer prelude *)
 ;
  end (* Prel *)
 ;
-(* Global parameters of the lexer *)
-value iterate = ref True (* by default a chunk is a list of words *)
-and complete  = ref True (* by default we call the complete segmenter *)
-and output_channel = ref stdout (* by default cgi output on standard output *)
-;
+
 (* Service routines for morphological query, loading the morphology banks *)
 
 module Lemmas = Load_morphs.Morphs Prel Phases  
@@ -54,10 +50,11 @@ open Lemmas (* [tags_of morpho] *)
 ;
 open Load_transducers (* [Trans mk_transducers dummy_transducer_vect] *)
 ;
+(* Global parameters of the Lexer *)
 module Lexer_control = struct
- value star = iterate;  (* vaakya vs pada *)
- value out_chan = output_channel;
- value transducers_ref = ref (dummy_transducer_vect : transducer_vect);
+ value star = ref True; (* vaakya vs pada for Segment *)
+ (* next is a reference holding the huge vector of all transducers *)
+ value transducers_ref = ref (dummy_transducer_vect : transducer_vect); 
  end (* [Lexer_control] *)
 ;
 module Transducers = Trans Prel 
@@ -520,13 +517,15 @@ value graph_engine () = do
     and font = get "font" env Paths.default_display_font in 
     let ft = font_of_string font (* Deva vs Roma print *)
     and cache = get "cache" env "f" (* no cache default *) in
+    (* ft and cache are persistent in the session *)
     let () = sanskrit_font.val := ft 
     and () = cache_active.val := cache 
     and abs = get "abs" env "f" (* default local paths *) in 
     let lang = language_of_string lex (* lexicon indexing choice *)
     and input = decode_url url_encoded_input (* unnormalized string *)
     and uns = us="t" (* unsandhied vs sandhied corpus *) 
-    and () = if st="f" then iterate.val:=False else () (* word stemmer? *)
+    and () = if st="f" then Lexer_control.star.val:=False 
+             else () (* word vs sentence stemmer *)
     and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
     and () = toggle_lexicon lex (* sticky lexicon switch *)
     and corpus = get "corpus" env "" 

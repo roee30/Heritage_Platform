@@ -25,10 +25,9 @@ open Word; (* word length mirror patch *)
 module Lexer (* takes its prelude and control arguments as module parameters *)
   (Prel: sig value prelude : unit -> unit; end) 
   (Lexer_control: sig 
-        value star : ref bool; (* chunk = if star then word+ else word *)
-        value out_chan : ref out_channel; (* output channel *)
-        value transducers_ref : ref Load_transducers.transducer_vect;
-        end) = struct 
+    value star : ref bool; (* chunk = if star then word+ else word *)
+    value transducers_ref : ref Load_transducers.transducer_vect;
+    end) = struct 
 
 open Html;
 open Web; (* ps pl abort etc. *)
@@ -47,14 +46,14 @@ module Disp = Dispatch Transducers Lemmas Lexer_control;
 open Disp; (* [color_of_phase transition trim_tags] *) 
 
 module Viccheda = Segment Phases Disp Lexer_control;
-                  (* [init_segment continue set_offset] *)
+                  (* [all_checks init_segment continue set_offset] *)
 
 value all_checks = Viccheda.all_checks
 and   set_offset = Viccheda.set_offset
 and   set_sa_control = Viccheda.set_sa_control
 ;
 value un_analyzable (chunk : word) = 
-  ([ (Unknown,mirror chunk,Disp.Id) ],Viccheda.finished)
+  ([ (Unknown,mirror chunk,Disp.Id) ],([]:Viccheda.resumption))
 ;
 
 (* Printing *)

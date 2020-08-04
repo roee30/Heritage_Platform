@@ -23,18 +23,12 @@ module Prel = struct
  value prelude () = Web.reader_prelude Web.reader_title;
  end (* Prel *)
 ;
-(* Global parameters of the lexer *)
-value iterate = ref True (* by default a chunk is a list of words *)
-and complete  = ref True (* by default we call the fuller segmenter *)
-and output_channel = ref stdout (* by default cgi output on standard output *)
-;
+
 open Load_transducers; (* [transducer_vect dummy_transducer_vect Trans] *)
 
 module Lexer_control = struct
- value star = iterate;
- value out_chan = output_channel;
- value transducers_ref = 
- ref (dummy_transducer_vect : transducer_vect);
+ value star = ref True;
+ value transducers_ref = ref (dummy_transducer_vect : transducer_vect);
 end (* [Lexer_control] *)
 ;
 module Transducers = Trans Prel 
@@ -70,11 +64,12 @@ value minimum_penalty output =
 ;
 (* Compound minimum path penalty with solution length *)
 value process_output filter_mode ((_,output) as sol) = 
-  let length_penalty = if filter_mode then List.length output else 0 in
+  let length_penalty = if filter_mode then List.length output else 0 in 
   (pen,sol) where pen = 
-            let min = if filter_mode && iterate.val then minimum_penalty output  
-                      else 0 (* keep all *) in
-            (min+length_penalty,min)
+      let min = if filter_mode && Lexer_control.star.val 
+                then minimum_penalty output  
+      else 0 (* keep all *) in
+  (min+length_penalty,min)
 ;
 type tagging = (Phases.Phases.phase * Word.word * Lex.Disp.transition) 
 and solution = list tagging

@@ -21,15 +21,8 @@ module Prel = struct
  value prelude () = Web.reader_prelude Web.reader_title;
  end (* Prel *)
 ;
-(* Global parameters of the lexer *)
-value iterate = ref True (* by default a chunk is a list of words *)
-and complete  = ref True (* by default we call the fuller segmenter *)
-and output_channel = ref stdout (* by default cgi output on standard output *)
-;
 module Lexer_control = struct
- value star = iterate;
- value full = complete;
- value out_chan = output_channel;
+ value star = ref True;
  value transducers_ref = ref Load_transducers.dummy_transducer_vect;
 end (* [Lexer_control] *)
 ;

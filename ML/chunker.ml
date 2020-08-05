@@ -118,7 +118,7 @@ value adjust c w = match Word.mirror w with
                     else w
              ]
         | 22 (* c *) -> if c=22 then Word.mirror [ 32 :: rest ] (* c -> t *)
-                        else if c=23 (* ch could come from ch or z *)
+                        else if c=23 || c=46 (* ch could come from ch or z *)
                              then raise Glue else w
         | 44 (* l *) -> if c=last 
                            then Word.mirror [ 32 :: rest ] (* l -> t *)

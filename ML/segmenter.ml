@@ -177,6 +177,7 @@ value check_id_sandhi revl first =
     check_id_sandhi st1 st2 = True]
 *)
 
+(* For treatment of phantom phonemes *)
 value sandhi_aa = fun
   [ [ 48; 1 ] -> [ 1; 2 ] (* [a.h | aa -> a_aa] *) 
   | [ 43; 1 ] -> Encode.code_string "araa" (* [ar | aa -> araa] *)

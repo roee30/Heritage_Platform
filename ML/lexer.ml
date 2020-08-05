@@ -7,7 +7,7 @@
 (* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-(* Sanskrit Phrase Lexer - Used by Parser, and Rank for Reader/Regression. 
+(* Sanskrit Phrase Lexer - Used by Parser, and Rank for Reader. 
    Uses Phases from Dispatcher to define phase.
    Loads the transducers, calls Dispatch to create module Disp. 
    Calls Segment to build Viccheda, the Sanskrit lexer that undoes sandhi 

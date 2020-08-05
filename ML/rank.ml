@@ -7,7 +7,7 @@
 (* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-(* This library is used by Reader and Regression. It constructs a lexer Lex, 
+(* This library is used by Reader. It constructs a lexer Lex, 
    indexed on parameters [iterate] and [complete]. Using the module 
    [Constraints] for ranking, it computes a penalty for each solution, 
    and returns all solutions with minimal penalties, with a further preference 

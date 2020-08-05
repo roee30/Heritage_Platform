@@ -15,7 +15,7 @@
 
 (*  Dynamic html rendering, used by cgis *)
 
-open Html;
+open Html; (* French English target Computer etc. *)
 
 (* truncation is the maximum number of solutions computed by the lexer.
    Too small a truncation limit will miss solutions, too large a truncation 
@@ -226,8 +226,8 @@ value page_begin = page_begin_dyn True (* for cgi output page *)
 value version lang = 
   let lang_str = 
      match lang with 
-     [ Some Html.French  -> " (French)"
-     | Some Html.English -> " (English)"
+     [ Some French  -> " (French)"
+     | Some English -> " (English)"
      | None -> ""
      ] in
   h3_begin B3 ^ Date.version ^ lang_str ^ h3_end 
@@ -409,7 +409,7 @@ value print_bandeau_entete color =
   ; interval 10
   ; tr_begin |> ps
   ; xml_begin_with_att "td" [ fullwidth; ("align","center") ] |> pl
-  ; print_site_map True Html.English
+  ; print_site_map True English
   ; td_end |> ps
   ; tr_end |> ps
   ; interval 10
@@ -417,9 +417,9 @@ value print_bandeau_entete color =
   }
 ;
 value page_end_dyn dyn lang bandeau = do 
-  { match Html.target with
-    [ Html.Simputer -> ()
-    | Html.Computer | Html.Station  | Html.Server
+  { match target with
+    [ Simputer -> ()
+    | Computer | Station  | Server
       -> if bandeau then print_bandeau_enpied_dyn dyn lang Cyan else ()
     ] 
   ; body_end |> pl
@@ -431,7 +431,7 @@ value page_end = page_end_dyn True
 value close_html_file lang b = do
   { page_end_dyn False lang b; close_out output_channel.val }
 ;
-value close_html_dico () = close_html_file Html.French True 
+value close_html_dico () = close_html_file French True 
 ;
 value http_header = "Content-Type: text/html\n"
 ;
@@ -452,12 +452,6 @@ value remote_server_host = "http://sanskrit.inria.fr/"
 value scl_toggle =
   not (SCLpaths.scl_url="") (* True if SCL tools are installed *)
 ;
-value corpus_read_only =
-  match target with
-  [ Station -> False
-  | Computer | Server | Simputer -> True
-  ]
-;
 value interaction_modes_default mode =  
   [ (" Summary ","g",mode="g") 
   ; (" Tagging ","t",mode="t") 
@@ -466,9 +460,14 @@ value interaction_modes_default mode =
   [ (" Analysis ","o",mode="o") ] else []
 ;
 value interaction_modes = 
-  interaction_modes_default "g" (* default summary mode *)
+  interaction_modes_default "g" (* default graph interface mode *)
 ;
-
+value corpus_read_only =
+  match target with
+  [ Station -> False
+  | Computer | Server | Simputer -> True
+  ]
+;
 (* NB Interface and Parser have their own prelude. *)
 (* [reader_prelude] is invoked by Parser through Rank and by [Mk_reader_page] *)
 value reader_prelude title = do 
@@ -511,8 +510,7 @@ value abort lang s1 s2 = do
   }
 ;
 (* Build an HTML page to report error.  *)
-value error_page title_str msg submsg =
-  do
+value error_page title_str msg submsg = do
   { maybe_http_header ()
   ; page_begin (title title_str)
   ; body_begin Chamois_back |> pl

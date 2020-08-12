@@ -158,7 +158,7 @@ value blue_word_off word offset =
 value print_sandhi u v w = do 
   { html_magenta (hdecode (visargify u)) |> ps (* visarga form *)
   ; html_green "|" |> ps
-  ; html_magenta (hdecode v) |> ps
+  ; html_magenta (hdecode v) |> ps (* Beware: v may be empty *)
   ; html_blue " &rarr; " |> ps (* -> *)
   ; html_red (hdecode w) |> ps
   }

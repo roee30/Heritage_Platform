@@ -79,7 +79,7 @@ value anchor t =
 value strip w = match w with 
   [ [ last :: rest ] -> if last>50 then rest (* remove homonymy index *)
                         else w 
-  | [] -> failwith "Empty stem to strip"
+  | [] -> [] (* used to fail but needed for [print_sandhi] with empty v *)
   ]
 ;
 value rstem w = strip (Word.mirror w)
@@ -114,11 +114,11 @@ value code_strip_raw s =  rev_strip (code_raw s)
    and "x#5" represented as (x,5) (0 if no homophone) *)
 ;
 value skt_to_deva     str = try Canon.unidevcode (code_string str) with
-                                [ Failure _ -> raise (In_error str) ]
+                                [ Failure _ -> raise (In_error ("1" ^ str)) ]
 and skt_raw_to_deva   str = try Canon.unidevcode (code_raw str) with
-                                [ Failure _ -> raise (In_error str) ]
+                                [ Failure _ -> raise (In_error ("2" ^ str)) ]
 and skt_strip_to_deva str = try Canon.unidevcode (code_strip_raw str) with
-                                [ Failure _ -> raise (In_error str) ]
+                                [ Failure _ -> raise (In_error ("3" ^ str)) ]
 ;
 (* Following not needed since [Transduction.skt_to_html] is more direct 
 [value skt_to_roma         str = Canon.uniromcode (code_string str) 

@@ -99,7 +99,7 @@ value lemmatizer_engine () =
   and lex = get "lex" env Paths.default_lexicon
   and font = get "font" env Paths.default_display_font in 
   let ft = font_of_string font in (* Deva vs Roma print *)
-  let () = sanskrit_font.val := ft 
+  let () = toggle_sanskrit_font ft 
   and url_encoded_entry = get "q" env ""
   and url_encoded_cat = get "c" env "Noun" in
   let str = decode_url url_encoded_entry (* in translit *)

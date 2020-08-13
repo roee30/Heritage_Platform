@@ -487,7 +487,7 @@ EXTEND Gram (* skt to nat *)
       | LETTER "w" -> 45 (* alternate v rather than raising Stream error *)
       | LETTER "s" -> 48 
       | LETTER "h" -> 49
-      | "#"; i = INT -> 50+int_of_string i (* 0 *) 
+      | "#"; i = INT -> 50+int_of_string i (* homo *) 
       | "["; "-"; "]" -> -2 (* amuissement *)
 (*   Special codes 
      code 50 hiatus Canon.decode [50] = "_" 
@@ -562,7 +562,7 @@ EXTEND Gram (* skt to nat *)
       | "+" -> 100 (* notation for compounding *)
       | "_" -> 50 (* sentential hiatus *) 
       | LETTER "Z" -> -1 (* avagraha *)
-      | "#"; i = INT -> 50+int_of_string i (* 0 *) 
+      | "#"; i = INT -> 50+int_of_string i (* homo *) 
     ] ];
   wordwx:
     [ [ w = LIST0 wx; `EOI -> w ] ];
@@ -621,7 +621,7 @@ EXTEND Gram (* skt to nat *)
       | "+" -> 100 (* notation for compounding *)
       | "_" -> 50 (* sentential hiatus *) 
       (* avagraha missing *)
-      | "#"; i = INT -> 50+int_of_string i (* 0 *) 
+      | "#"; i = INT -> 50+int_of_string i (* homo *) 
     ] ];
   wordkh:
     [ [ w = LIST0 kh; `EOI -> w ] ];
@@ -679,7 +679,7 @@ EXTEND Gram (* skt to nat *)
       | "-" -> 0  (* notation for affixing *)
       | "+" -> 100 (* notation for compounding *)
       | "_" -> 50 (* sentential hiatus *) 
-      | "#"; i = INT -> 50+int_of_string i (* 0 *) 
+      | "#"; i = INT -> 50+int_of_string i (* homo *) 
     ] ];
   wordsl:
     [ [ w = LIST0 sl; OPT "."; `EOI -> w ] ];
@@ -830,13 +830,13 @@ EXTEND Gram (* skt to nat *)
       | LETTER "v" -> 45
       | LETTER "s" -> 48
       | LETTER "h" -> 49
-      | "#"; i = INT -> 50+int_of_string i
+      | "#"; i = INT -> 50+int_of_string i (* homo *)
     ] ];
   wordu:
     [ [ w = LIST0 upper_lower; `EOI -> w ] ];
 END
 ;
-(* Similar to [code_raw] but accepts upper letters. *)
+(* Similar to [code_raw] but accepts upper initials. *)
 value code_rawu s = 
   try Gram.parse_string wordu Loc.ghost s with
   [ Loc.Exc_located loc e -> do

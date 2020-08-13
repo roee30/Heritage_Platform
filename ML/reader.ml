@@ -219,7 +219,7 @@ value reader_engine () = do
     and font = get "font" env Paths.default_display_font in 
     let ft = font_of_string font (* Deva vs Roma print *)
     and cache = get "cache" env "f" in
-    let () = sanskrit_font.val := ft 
+    let () = toggle_sanskrit_font ft 
     and () = cache_active.val := cache 
     and abs = get "abs" env "f" (* default local paths *) in
     let lang = Html.language_of_string lex 

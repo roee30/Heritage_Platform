@@ -241,8 +241,8 @@ value decls_engine () = do
     and url_encoded_participle = get "p" env ""
     and url_encoded_source = get "r" env ""
         (* optional root origin - used by participles in conjugation tables *)
-    and font = let s = get "font" env Paths.default_display_font in
-               font_of_string s (* deva vs roma print *)
+    and font = get "font" env Paths.default_display_font in 
+    let ft = font_of_string font (* Deva vs Roma print *) 
     and translit = get "t" env "VH" (* DICO created in VH trans *)
     and lex = get "lex" env "SH" (* default Heritage *) in 
     let entry_tr = decode_url url_encoded_entry (* : string in translit *)
@@ -251,7 +251,8 @@ value decls_engine () = do
     and code = Encode.switch_code translit
     and lang = language_of_string lex 
     and (*source*) _ = decode_url url_encoded_source (* cascading from conjug *)
-    and () = toggle_lexicon lex in
+    and () = toggle_lexicon lex (* reference dictionary SH or MW *) 
+    and () = toggle_sanskrit_font ft in
     try do 
       { let word = code entry_tr in
         let entry_VH = Canon.decode word in (* ugly detour via VH string *) 
@@ -262,16 +263,16 @@ value decls_engine () = do
              (* We should check it is indeed a substantive entry 
                 and that Any is used for deictics/numbers (TODO) *)
              (* Also it should use unique naming for possible homo index *)
-          else Morpho_html.skt_html_font font entry |> italics in
+          else Morpho_html.skt_html_font ft entry |> italics in
 (*i DEPRECATED indication of root for kridanta
         [let root = if source = "" then "?" (* unknown in lexicon *)
                     else " from " ^ (* should test font *) in
          if in_lexicon source then Morpho_html.skt_anchor False font source
          else doubt (Morpho_html.skt_roma source) in (* should test font *)
                Morpho_html.skt_utf font entry ^ root in] i*)
-        let subtitle = hyperlink_title font link in do
+        let subtitle = hyperlink_title ft link in do
         { display_subtitle (h1_center subtitle)
-        ; try look_up font entry (Nouns.Gender gender) part
+        ; try look_up ft entry (Nouns.Gender gender) part
           with [ Stream.Error s -> failwith s ] 
         }
       ; page_end lang True

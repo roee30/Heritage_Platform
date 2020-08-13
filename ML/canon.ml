@@ -659,7 +659,7 @@ value stem_to_string html =
 exception Hiatus
 ;
 value indic_unicode_point = fun
-  [ 0  | 100 -> (* - *)  "70"
+  [ 0  | 100 -> (* - + *)  "70"
   | 1  -> (* a *)  "05"
   | 2  -> (* aa *) "06"
   | 3  -> (* i *)  "07"
@@ -716,9 +716,18 @@ value indic_unicode_point = fun
   | -4 -> "0F" (* "aa|i" sandhi of aa and (i,ii) *)
   | -5 -> "13" (* "aa|u" sandhi of aa and (u,uu) *)
   | -6 -> "06" (* sandhi of aa and .r *)
+  | 51 (* 1 *) -> "67" (* homo 1 *)
+  | 52 (* 2 *) -> "68" 
+  | 53 (* 3 *) -> "69" 
+  | 54 (* 4 *) -> "6A" 
+  | 55 (* 5 *) -> "6B" 
+  | 56 (* 6 *) -> "6C" 
+  | 57 (* 7 *) -> "6D" 
+  | 58 (* 8 *) -> "6E" 
+  | 59 (* 9 *) -> "6F" 
   | c -> if c<0 || c>59 
             then failwith ("Illegal code to dev_unicode: " ^ string_of_int c)
-         else "" (* homo index dropped *)
+         else "" 
   ]
 and matra_indic_unicode_point = fun
   [ 100   (* + *) (* necessary for word form ending in consonant *)
@@ -752,16 +761,15 @@ and matra_unicode c =
 ;
 (* Gives the Unicode representation of devanagari form of word;          *)
 (* ligature construction is left to the font manager handling of halant. *)
-(* Beware : word should not carry homophony index - use [code_strip].    *)
 (* [unidevcode : word -> string] *)
 value unidevcode word = 
   let ligature (s,b) c = (* b memorizes whether last char is consonant *)
      try let code = deva_unicode c in
-         if c>16 (* Phonetics.consonant c *) then 
+         if c>16 && c<50 (* Phonetics.consonant c *) then 
             if b (* add glyph *) then (s ^ halant ^ code,True)
             else (s ^ code,True) 
          else if b then 
-              if c=0 (* - *) then (s ^ halant ^ code,False)
+              if c=0 (* - *) || c>50 (* homo *) then (s ^ halant ^ code,False)
               else (* add matra *) let m = matra_unicode c in (s ^ m,False)
          else (s ^ code,False) 
      with (* hiatus represented by space in devanagarii output *)

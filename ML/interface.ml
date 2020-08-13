@@ -518,7 +518,8 @@ value graph_engine () = do
     let ft = font_of_string font (* Deva vs Roma print *)
     and cache = get "cache" env "f" (* no cache default *) in
     (* ft and cache are persistent in the session *)
-    let () = sanskrit_font.val := ft 
+    let () = toggle_lexicon lex (* sticky lexicon switch *)
+    and () = toggle_sanskrit_font ft 
     and () = cache_active.val := cache 
     and abs = get "abs" env "f" (* default local paths *) in 
     let lang = language_of_string lex (* lexicon indexing choice *)
@@ -527,7 +528,6 @@ value graph_engine () = do
     and () = if st="f" then Lexer_control.star.val:=False 
              else () (* word vs sentence stemmer *)
     and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
-    and () = toggle_lexicon lex (* sticky lexicon switch *)
     and corpus = get "corpus" env "" 
     and sent_id = get "sentenceNumber" env "0" 
     and link_num = get "linkNumber" env "0" (* is there a better default? *)

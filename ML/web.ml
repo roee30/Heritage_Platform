@@ -147,6 +147,9 @@ value default_skt_font = Paths.default_display_font |> font_of_string
 (* Global communicating the Sanskrit display font to [Morpho_html] *)
 value sanskrit_font = ref default_skt_font
 ;
+value toggle_sanskrit_font ft =
+  sanskrit_font.val := ft
+;
 value pr_roma code = (* roman with diacritics *)
   ps (html_red (Canon.uniromcode code) ^ " ") 
 and pr_deva code = (* devanagari *)

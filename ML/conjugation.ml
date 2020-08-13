@@ -545,9 +545,9 @@ value look_up_and_display font gana entry =
   and init_u = ([],[],[],[])
   and buckets = Deco.fold sort_out_v init_v roots.val in do 
   (* Main [print_conjug] *)
-      { display_conjug font conj
-      ; display_inflected_v font buckets (* Display finite root forms *)
-      ; pl html_paragraph
+      { ps "1";display_conjug font conj
+      ; ps "2";display_inflected_v font buckets (* Display finite root forms *)
+      ; ps "3";pl html_paragraph
       ; pl center_begin (* Now display participial root forms *)
       ; pl (table_begin_style (centered Gris) [])
       ; ps tr_begin 
@@ -843,13 +843,12 @@ value conjs_engine () = do
    try
     let url_encoded_entry = List.assoc "q" env
     and url_encoded_class = List.assoc "c" env 
-    and font = let s = get "font" env Paths.default_display_font in
-               font_of_string s (* deva vs roma print *)
-    (* OBS and stamp = get "v" env "" *)
+    and font = get "font" env Paths.default_display_font in 
+    let ft = font_of_string font (* Deva vs Roma print *) 
     and translit = get "t" env "VH" (* DICO created in VH trans *)
     and lex = get "lex" env "SH" (* default Heritage *) in 
     let entry_tr = decode_url url_encoded_entry (* : string in translit *)
-    and lang = language_of_string lex 
+    and lang = language_of_string lex (* reference dictionary SH or MW *)
     and gana = match decode_url url_encoded_class with
       [ "1" -> 1 
       | "2" -> 2
@@ -865,7 +864,8 @@ value conjs_engine () = do
       | s -> raise (Control.Fatal ("Weird present class: " ^ s)) 
       ] 
     and encoding_function = Encode.switch_code translit 
-    and () = toggle_lexicon lex in
+    and () = toggle_lexicon lex 
+    and () = toggle_sanskrit_font ft in
     try let word = encoding_function entry_tr in
         let entry_VH = Canon.decode word in (* ugly detour via VH string *)  
         (* Beware - 46 decodes as "z" and 21 as "f" *)
@@ -873,10 +873,10 @@ value conjs_engine () = do
         let known = in_lexicon entry (* in lexicon? *) 
           (* we should check it is indeed a root or denominative *) in do 
         { let link = if known then Morpho_html.skt_anchor False entry 
-                     else doubt (Morpho_html.skt_roma entry) in 
-          let subtitle = hyperlink_title font link in
+                     else doubt (Morpho_html.skt_html entry) in 
+          let subtitle = hyperlink_title ft link in
           display_subtitle (h1_center subtitle)
-        ; try look_up_and_display font gana entry 
+        ; try look_up_and_display ft gana entry
           with [ Stream.Error s -> raise (Wrong s) ]
         ; page_end lang True
         } 

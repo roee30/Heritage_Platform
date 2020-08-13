@@ -399,7 +399,7 @@ value parser_engine () = do
     and lex = get "lex" env Paths.default_lexicon
     and font = get "font" env Paths.default_display_font in 
     let ft = font_of_string font (* Deva vs Roma print *) in
-    let () = sanskrit_font.val := ft 
+    let () = toggle_sanskrit_font ft 
     and abs = get "abs" env "f" (* default local paths *) in
     let lang = language_of_string lex
     and input = decode_url url_encoded_input (* unnormalized string *)

@@ -32,7 +32,6 @@ value skt_to_tex : skt -> string;
 value skt_to_devnag : skt -> string;
 value skt_to_html : skt -> string;
 value skt_raw_to_deva : skt -> string;
-value skt_strip_to_deva : skt -> string;
 value skt_to_anchor : skt -> string;
 value raw_sanskrit_word : skt -> Word.word;
 value sanskrit_word : skt -> Word.word;

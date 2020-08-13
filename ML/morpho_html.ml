@@ -44,27 +44,26 @@ value skt_roma s = Transduction.skt_to_html s
 ;
 value skt_roma_it s = skt_roma s |> italics
 ;
-(* ignores possible homo index *)
-value skt_deva s = Encode.skt_strip_to_deva s
+(* ignores possible homo index and no normalization *)
+value skt_deva s = Encode.skt_raw_to_deva s
 ;
-value skt_html_font font s = match font with
+value skt_html_font font s = (* ubiquitous for font *)
+  match font with
   [ Roma -> skt_roma s | Deva -> skt_deva s ]
 ;
 value skt_html s = (* ubiquitous for font *)
-  let font = sanskrit_font.val in
-  skt_html_font font s
+  skt_html_font sanskrit_font.val s
 ;
 value skt_italics form = 
   skt_html form |> italics
 ;
-value skt_anchor_font font is_cache form = (* for Declension Conjugation *)
+value skt_anchor1 is_cache form = (* for Declension Conjugation *)
   let s =  skt_italics form 
   and url_function = if is_cache then url_cache else url in
   anchor Navy_ (url_function form) s 
 ;
 value skt_anchor is_cache = 
-  let font = sanskrit_font.val in
-  skt_anchor_font font is_cache (* for Declension, Indexer *)
+  skt_anchor1 is_cache (* for Declension, Indexer *)
 and skt_anchor2 s s' = anchor Navy_ (url s) (skt_roma_it s') (* for Indexer *)
 ;
 value no_hom entry = (* low-level string hacking *)
@@ -92,7 +91,7 @@ value skt_graph_anchor is_cache form =
 (* This is an alternative to [skt_html] above - some cleaning-up is needed *)
 value skt_utf w = (* do not eta reduce ! *)
   match sanskrit_font.val with 
-  [ Deva -> Canon.unidevcode (Encode.strip w)
+  [ Deva -> Canon.unidevcode w
   | Roma -> Canon.uniromcode w
   ]
 ;

@@ -163,8 +163,8 @@ value tags_of phase word =
   | Comp ((_,ph) as sort) pv form -> 
       let tag = Deco.assoc form (morpho_tags ph) in
       Preverbed sort pv form tag
-(* NB [Preverbed] comprises tin verbal forms of verbs with preverbs as well 
-   as sup kridanta forms with preverbs. The preverbs are packed in pv. *)
+    (* NB [Preverbed] comprises tin verbal forms of verbs with preverbs as well 
+      as sup kridanta forms with preverbs. The preverbs are packed in pv. *)
   | _ -> Atomic (Deco.assoc word (morpho_tags phase))  
     (* NB Atomic comprises tin verbal forms of roots as well as sup atomic forms
        and all the pure stems collections Iic Iiv etc. *)

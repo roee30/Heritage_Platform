@@ -42,18 +42,18 @@ open Load_transducers; (* [transducer_vect Trans] *)
 
 module Transducers = Trans Prel;
 
-module Disp = Dispatch Transducers Lemmas Lexer_control;
-open Disp; (* [color_of_phase transition trim_tags] *) 
+module Machine = Dispatch Transducers Lemmas Lexer_control;
+open Machine; (* [color_of_phase transition trim_tags] *) 
 
-module Viccheda = Segment Phases Disp Lexer_control;
-                  (* [all_checks init_segment continue set_offset] *)
+module Viccheda = Segment Phases Machine Lexer_control;
+     (* [all_checks init_segment continue set_offset set_sa_contro resumption] *)
 
 value all_checks = Viccheda.all_checks
 and   set_offset = Viccheda.set_offset
 and   set_sa_control = Viccheda.set_sa_control
 ;
 value un_analyzable (chunk : word) = 
-  ([ (Unknown,mirror chunk,Disp.Id) ],([]:Viccheda.resumption))
+  ([ (Unknown,mirror chunk,Machine.Id) ],([]:Viccheda.resumption))
 ;
 
 (* Printing *)
@@ -113,7 +113,7 @@ value print_scl_tags pvs phase form tags =
    They betray a difficuly in the modular organisation, since Parser sees
    Lexer, but not [Load_morphs] or Dispatcher. Modules ought to be revised. *)
 value tags_of = Lemmas.tags_of 
-and trim_tags = Disp.trim_tags
+and trim_tags = Machine.trim_tags
 ;
 (* Keeps only relevant tags with [trim_tags] *)(*i Cochonnerie i*)
 value extract_lemma phase word = 
@@ -144,20 +144,20 @@ value process_kridanta pvs seg_num phase form tags = do
   ; let ok_tags = 
         if pvs = [] then tags 
         else trim_tags (generative phase) form (Canon.decode pvs) tags in do
-        (* NB Existence of the segment guarantees that [ok_tags] is not empty *)
+        (* NB Existence of the segment warrants that [ok_tags] is not empty *)
   { print_tags pvs seg_num phase form ok_tags 
   ; table_end |> ps                     (* table end *) 
   ; th_end |> ps
-  ; (phase, form, ok_tags)
+  ; (phase, form, ok_tags) (* value used by [Parser.print_segment_roles] *)
   }}
 ; 
-(* Same structure as [Interface.print_morpho] *)
+(* Same recursive structure as [Interface.print_morpho] *)
 value print_morpho phase word = do  
   { table_morph_of phase |> pl          (* table begin *)  
   ; tr_begin |> ps
   ; th_begin |> ps
   ; span_begin Latin12 |> ps 
-  ; let _ =
+  ; let _ = 
        match tags_of phase word with 
        [ Atomic tags ->  
           process_kridanta [] 0 phase word tags

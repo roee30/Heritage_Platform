@@ -73,6 +73,8 @@ open Viccheda (* [segment_iter visual_width] etc. *)
 ;
 (* At this point we have the sandhi inverser segmenting engine *)
 
+(* Display routines *)
+
 (* Separates tags of homophonous segments vertically *)
 value fold_vert f = fold 1 where rec fold n = fun
   [ [] -> () 
@@ -100,6 +102,7 @@ value print_morpho phase word =
         | Preverbed (_,phase) pvs form tags -> print_tags pvs 0 phase form tags
         ]
 ;
+(* End of display routines *) 
 
 (* Parsing mandatory checkpoints *)
 open Checkpoints; (* [string_points] *) 
@@ -188,12 +191,12 @@ value build_visual k segments =
       match seg with
       [ [] -> ()
       | [ (phase,(w1,tr)) :: rest ] -> 
-            if preverb_phase phase then failwith "Preverb in build_visual"
-            else do
-             { visual.(start_ind) := visual.(start_ind) @ [ (w1,tr,phase,k) ]
-             ; visual_width.(start_ind) := (seg_length w1) + k
-             ; ass_rec rest
-             }
+            if preverb_phase phase then raise (Control.Anomaly "Phantom preverb")
+            else (* preverbs have been filtered out by Dispatch *) do
+              { visual.(start_ind) := visual.(start_ind) @ [ (w1,tr,phase,k) ]
+              ; visual_width.(start_ind) := (seg_length w1) + k
+              ; ass_rec rest
+              }
       ]
 ;
 (* We check whether the current segment [(w,tr,phase,k)] is conflicting with 

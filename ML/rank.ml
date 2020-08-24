@@ -34,7 +34,7 @@ end (* [Lexer_control] *)
 module Transducers = Trans Prel 
 ;
 (* Multi-phase lexer *)
-module Lex = Lexer.Lexer Prel Lexer_control (* [un_analyzable Disp Viccheda] *)
+module Lex = Lexer.Lexer Prel Lexer_control (* [un_analyzable Machine Viccheda] *)
 ;
 (* Builds the penalty stack, grouping together equi-penalty items. *)
 (* Beware, [make_groups] reverses the list of tags. *)
@@ -71,7 +71,7 @@ value process_output filter_mode ((_,output) as sol) =
       else 0 (* keep all *) in
   (min+length_penalty,min)
 ;
-type tagging = (Phases.Phases.phase * Word.word * Lex.Disp.transition) 
+type tagging = (Phases.Phases.phase * Word.word * Lex.Machine.transition) 
 and solution = list tagging
 and ranked_solution = (int (* rank *) * solution)
 and bucket = (int (* length *) * list ranked_solution)

@@ -23,7 +23,7 @@ module Lexer : functor (* takes its prelude and iterator control as parameters *
   
   module Transducers : sig value mk_transducers : unit -> transducer_vect; end;
 
-  module Disp : sig
+  module Machine : sig
       value accepting : Phases.phase -> bool;
       type input = Word.word
       and transition
@@ -33,8 +33,8 @@ module Lexer : functor (* takes its prelude and iterator control as parameters *
 
   module Viccheda : sig 
       type resumption;
-      value continue : resumption -> option (Disp.output * resumption);
-      value init_segment : Disp.input -> resumption;
+      value continue : resumption -> option (Machine.output * resumption);
+      value init_segment : Machine.input -> resumption;
       type check = (int * (Phases.phase * Word.word) * bool);
       value all_checks : ref (list check);
       value set_offset : (int * list check) -> unit;
@@ -42,7 +42,7 @@ module Lexer : functor (* takes its prelude and iterator control as parameters *
       end;
 
   value extract_lemma : Phases.phase -> Word.word -> list lemma;
-  value print_segment : int -> Disp.segment -> int;
+  value print_segment : int -> Machine.segment -> int;
 (* Exported for Parser *)
   value process_kridanta: Word.word -> int -> Phases.phase -> Word.word ->
         Morphology.multitag -> (Phases.phase * Word.word * Morphology.multitag);
@@ -53,7 +53,7 @@ module Lexer : functor (* takes its prelude and iterator control as parameters *
         Word.word -> string -> Morphology.multitag -> Morphology.multitag;
 (* END Exported for Parser *)
   value all_checks : ref (list Viccheda.check); 
-  value un_analyzable : Word.word -> (list Disp.segment * Viccheda.resumption); 
+  value un_analyzable : Word.word -> (list Machine.segment * Viccheda.resumption); 
   value set_offset : (int * list Viccheda.check) -> unit;
   value print_scl_segment : int -> (Phases.phase * Word.word) -> int;
   value tags_of : Phases.phase -> Word.word -> 

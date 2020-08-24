@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Pada defines the allowed padas (Para, Atma or Ubha) for
@@ -28,7 +28,7 @@ type voices = (* permitted padas in present system *)
 exception Unattested (* when a root/pada is attested only for some pvs *)
 ;
 value voices_of = fun 
-  (* Simplification: invariant when prefixing by preverbs *)
+  (* Default: invariant when prefixing by preverbs *)
   [ "ak.s" | "afg" | "aj" | "a.t" | "at" | "ad#1" | "an#2" | "am"| "argh" 
   | "ard" | "av" | "az#2" | "as#1" | "as#2" | "aap" | "ifg" | "in" | "ind" 
   | "inv" | "il" | "i.s#2" | "iifkh" | "iir.s" | "uk.s" | "ujjh" | "u~nch"
@@ -100,9 +100,9 @@ value voices_of = fun
   | "tij" | "trap" | "trai" | "tvar" | "dak.s" | "day" | "diik.s" 
   | "d.r#1" | "dhii#1" | "dhuk.s" | "pa.n" | "pad#1" | "pi~nj" 
   | "pyaa" | "prath" | "pru" | "plu" | "ba.mh" | "baadh" | "bha.n.d" | "bhand" 
-  | "bhaa.s" | "bhraaj" | "ma.mh" | "man" | "mand#1" | "yat#1" 
+  | "bhaam" | "bhaa.s" | "bhraaj" | "ma.mh" | "man" | "mand#1" | "yat#1" 
   | "rabh" | "ruc#1" | "lajj" | "labh" | "lamb" | "lii" | "loc" | "vand" 
-  | "vas#2" | "vaaz" | "vip" | "v.rdh#1" | "ve.s.t" | "vrii.d" | "zafk" | "zad"
+  | "vas#2" | "vaaz" | "vip" | "ve.s.t" | "vrii.d" | "zafk" | "zad"
   | "zi~nj" | "zii#1" | "zrambh" | "zlaagh" | "zvit#1" | "sac" | "sev"
   | "styaa" | "spand" | "spardh" | "spaz#1" | "sphaa" | "sra.ms"
   | "sva~nj" | "haa#2" | "hu.n.d" | "h.r#2" | "hnu" | "hraad" | "hlaad" 
@@ -114,6 +114,7 @@ value voices_of = fun
 (*| "yudh1" Ubha needed for yudhya BhG *)
 (*| "diip" Ubha needed for epics *)
 (*| "labh" labhati occurs in epics *)
+(*| "v.rdh#1" v.rdhati needed for Vedic *)
    (* DRP restriction: "dyut1" *) 
       -> Atma (* "deponent" verbs: middle only *)
   | _ -> Ubha (* default *) 
@@ -137,11 +138,11 @@ value voices_of = fun
   | "rah" | "raaj#1" | "ri" | "ric" | "rud#1" | "rudh#2" | "lafgh" | "lak.s"
   | "la.s" | "lip" | "lih#1" | "lup" | "luu#1" | "vad" | "van" | "vap#1"
   | "vap#2" | "val" | "vah#1" | "vaa#3" | "vic" | "vij" "viz#1" | "viij" 
-  | "v.r#2" | "v.rt#1" | "vyath" | "vyaa" | "vrii" | "zap" | "zaa" | "zu.s"
-  | "zubh#1" | "zyaa" | "zram" | "zri" | "zru" | "sru" | "san#1" | "sa~nj" 
-  | "sah#1" | "sic" | "su#2" | "suud" | "stambh" | "stu" | "st.rr" | "sthaa#1"
-  | "sp.rz#1" | "sp.rh" | "smi" | "syand" | "svad" | "had" | "hikk" | "hu" 
-  | "huu" | "h.r#1"
+  | "v.r#2" | "v.rt#1" | "v.rdh#1" | "vyath" | "vyaa" | "vrii" | "zap" 
+  | "zaa" | "zu.s" | "zubh#1" | "zyaa" | "zram" | "zri" | "zru" | "sru" 
+  | "san#1" | "sa~nj" | "sah#1" | "sic" | "su#2" | "suud" | "stambh" | "stu"
+  | "st.rr" | "sthaa#1" | "sp.rz#1" | "sp.rh" | "smi" | "syand" | "svad"
+  | "had" | "hikk" | "hu" | "huu" | "h.r#1"
   ] *)
   (* + corr. "pa.th" | "sthaa1" | "praz" | "k.rr" | "p.rc" | "bandh" *)
   (* NB. "ah" "rip" "vadh" have no pr, "mand2" is fictitious *) 

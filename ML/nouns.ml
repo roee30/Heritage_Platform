@@ -247,7 +247,6 @@ value build_mas_i stem trunc entry = (* declension of "ghi" class *)
    ]
    ; Bare Noun (mirror stem)
    ; Avyayaf (mirror stem)
-   ; Avyayaf (mirror stem)
    ; Indecl Tas (fix stem "tas")
    ; Cvi (wrap trunc 4) (* "aadhi1" "pratinidhi" *)
    ])
@@ -2365,8 +2364,8 @@ value build_aatman entry =
         ; decline Loc "ani"
         ])
    ]             
-   ; Bare Pron (code "aatma") 
-   ; Avyayaf  (code "aatmam") (* aatmaanam Acc ? *)
+   ; Bare Noun (code "aatma") 
+   ; Avyayaf (code "aatmam") (* aatmaanam Acc ? *)
    ; Cvi (code "aatmii") 
    ]
 ;
@@ -3888,6 +3887,57 @@ value build_root g stem entry =
    ; Avyayaf bare
    ]
 ;
+(* special case for iid.rz and kiid.rz considered as pronouns *)
+value build_root_pn g stem entry =
+  let decline case suff = (case,fix stem suff)
+  and decline_nasalise case suff = 
+      let nstem = match stem with
+        [ [ c :: r ] -> if nasal c then stem else 
+                           try [ c :: [ (homonasal c) :: r ]]
+                           with [ Failure _ -> stem ]
+        | _ -> failwith "build_root"
+        ] in (case,fix nstem suff)
+  and declfin case suff = 
+      (* [finalize_r] for doubling of vowel in r roots Whitney §245b *)
+      (case,fix (finalize_r stem) suff) 
+  and bare = mirror (finalize_r stem) in 
+  enter entry 
+   [ Declined Pron g
+   [ (Singular,
+        [ declfin Nom ""
+        ; if g=Neu then declfin Acc "" else decline Acc "am"
+        ; decline Ins "aa"
+        ; decline Dat "e"
+        ; decline Abl "as"
+        ; decline Gen "as"
+        ; decline Loc "i"
+        ])
+   ; (Dual,
+        [ decline Nom (if g=Neu then "ii" else "au")
+        ; decline Acc (if g=Neu then "ii" else "au")
+        ; declfin Ins "bhyaam"
+        ; declfin Dat "bhyaam"
+        ; declfin Abl "bhyaam"
+        ; decline Gen "os"
+        ; decline Loc "os"
+        ])
+   ; (Plural, 
+        [ if g=Neu then decline_nasalise Nom "i" else decline Nom "as"
+        ; if g=Neu then decline_nasalise Acc "i" else decline Acc "as"
+   (* Voc Nom Acc Neu ought to have nasal : v.rnti Whitney§389c p. 145 *)
+   (* Acc. vaacas with accent on aa or on a        Whitney§391  p. 147 *)
+        ; declfin Ins "bhis"
+        ; declfin Dat "bhyas"
+        ; declfin Abl "bhyas"
+        ; decline Gen "aam"
+        ; declfin Loc "su" 
+         (* viz2 -> vi.tsu but also véd. vik.su Whitney§218a [compute_extra] *)
+        ])
+   ]             
+   ; Bare Noun bare
+(* ; Avyayaf bare -- attested ? *)
+   ]
+;
 value build_root_m g trunc stem entry = (* Kale§107 prazaam *)
   let decline case suff = (case,fix stem suff)
   and declcon case suff = (case,fix [ 36 (* n *) :: trunc ] suff) in
@@ -4728,6 +4778,7 @@ value build_tvad () =
    ; Bare Pron (code "yu.smat") (* \Pan{7,2,98} when meaning is plural *)
    ]
 ;
+
 (* Numerals *)
 
 value build_dvi entry = 
@@ -5164,6 +5215,8 @@ value compute_nouns_stem_form e stem d p =
            | [ 4; 34 ] (* diiv *) -> () (* avoids reporting bahu *) 
            | _ -> report stem g
            ]
+      | [ 46 :: [ 7 :: [ 34 :: [ 4 :: _ ] ] ] ] (* -(k)iid.rz *) -> 
+           build_root_pn Mas stem e
       | [ 47 :: r1 ] (* .s *) -> match r1 with
             [ [ 3 :: r2 ] -> match r2 with
                 [ [ 45; 1; 19 ] (* gavi.s *)
@@ -5367,7 +5420,9 @@ value compute_nouns_stem_form e stem d p =
            | [ 4; 34 ] (* diiv *) -> () (* avoids reporting bahu *) 
            | _ -> report stem g
            ]
-      | [ 47 :: r1 ] (* .s *) -> match r1 with
+     | [ 46 :: [ 7 :: [ 34 :: [ 4 :: _ ] ] ] ] (* -(k)iid.rz *) -> 
+           build_root_pn Neu stem e
+     | [ 47 :: r1 ] (* .s *) -> match r1 with
             [ [ 3 :: r2 ] -> match r2 with
                 [ [ 45; 1; 19 ] (* gavi.s *)
                 | [ 45; 34; 1; 32; 1; 49 ] (* hatadvi.s *)
@@ -5580,6 +5635,8 @@ value compute_nouns_stem_form e stem d p =
             | _ -> report stem g
             ]
       | [ 46; 3; 36 ] (* niz *) -> build_root_weak Fem stem "nizaa"
+      | [ 46 :: [ 7 :: [ 34 :: [ 4 :: _ ] ] ] ] (* -(k)iid.rz *) -> 
+           build_root_pn Fem stem e
       | [ 47 :: r1 ] (* -.s *) -> match r1 with
             [ [ 3 :: r2 ] -> match r2 with
                 [ [ 28 :: [ 1 :: [ 37 :: [ 3 :: [ 37 ] ] ] ] ] (* pipa.thi.s *)
@@ -5866,9 +5923,9 @@ value enter_iiv entry =
 value compute_extra_iiv = iter enter_iiv 
 ;
 
-(* Gati forms used with auxiliary verbs, like Iiv -- form Absya *)
+(* Gati forms used as prefixes of auxiliary verbs, like Iiv -- form Absya *)
 value gatis = (* G{saak.sat} Wh§1092 *)
-  [ "saak.saat" (* Pan{1,4,74} in the sense of cvi - becoming Wh§1078a *)
+  [ "saak.saat" (*c in the sense of cvi - becoming Wh§1078a *)
   ; "mithyaa" (* G{saak.saat} *)
   ; "cintaa"
   ; "bhadraa"
@@ -5899,7 +5956,7 @@ value gatis = (* G{saak.sat} Wh§1092 *)
   ; "svayam"
   ; "uurii" (* Pan{1,4,61} G{uurii} uuriik.rtya but Wh§1094b says uriik.r *)
   (* other G{uurii}: yadurii,urarii,yadurarii,paapii,laalii,aattaalii,vetaalii,
-     dhuurii,zakalii,sa.mzaklii,phaluu,phalii,viklii, etc. ignored *)
+     dhuurii,zakalii,sa.mzaklii,phaluu,phalii,viklii, etc. ignored or Cvi *)
   (* vinaa Wh§1078a ignored *) 
 (* The following gatis are treated as preverbs, since they apply to roots
    other than the 3 auxiliaries: 
@@ -5913,7 +5970,7 @@ value gatis = (* G{saak.sat} Wh§1092 *)
    sat/asat satk.rtya Pan{1,4,63} 
    antar antarhatya Pan{1,4,65} 
    ka.ne/manas ka.nehatya Pan{1,4,66} 
-   accha acchagatya acchodya Pan{1,4,69} Wh§1078 
+   accha acchaa acchagatya acchodya Pan{1,4,69} Wh§1078 
    adas ada.hk.rtya Pan{1,4,70} 
    also ignored onomatopeae pa.tapa.taakaroti etc. .daac Pan{5,4,57-67} *)
   ]
@@ -5925,7 +5982,7 @@ value enter_gati gati = (* assumes gati has lexical entry *)
 (* Now for the construction "reduced to" with auxiliaries *)
 
 value gati_products = (* on demand for gati in -saat *)
-  [ "bhuumi"; "agni"; "bhasma"; "dasyu"; "braahma.na"; "aatma"; "cuur.na" ]
+  [ "agni"; "aatma"; "cuur.na"; "dasyu"; "bhasma"; "bhuumi"; "braahma.na" ]
 ;
 (* Whitney§1108 -saat s does not go to retroflex .s *)
 value enter_saat_gati product =  (* assumes gati has lexical entry *)

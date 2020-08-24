@@ -421,7 +421,7 @@ value finalize rstem = match rstem with
        | 35 (* dh *) -> [ 32 (* t *) :: asp rest ] (* e.g. budh, v{\d r}dh *)
        | 39 (* b *) -> [ 37 (* p *) :: rest ]
        | 40 (* bh *) -> [ 37 (* p *) :: asp rest ] (* e.g. kakubh *)
-       | 46 (* \'s *) -> match rest with 
+       | 46 (* z *) -> match rest with 
           (* .t is default and k exception (Henry, Whitney§145,218) *)
           [ [ 3 :: [ 34 :: _ ] ] (* -di\'s {\R} -dik *) 
           | [ 7 :: [ 34 :: _ ] ] (* -d{\d r}\'s {\R} -d{\d r}k *) 

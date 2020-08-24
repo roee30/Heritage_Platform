@@ -31,7 +31,6 @@ HERITAGE=$(SKTRESOURCES)DICO# hypertext Heritage read-only
 DICO=DICO# hypertext Heritage
 BOOK=$(SKTRESOURCES)BOOK# Heritage.pdf abrevs.pdf
 MW=$(SKTRESOURCES)MW# hypertext Monier-Williams
-GOLD=$(SKTRESOURCES)GOLD# Heritage in Goldendict format databases
 XMLDOC=$(SKTRESOURCES)XML# Heritage Sanskrit morphology in XML databases
 # contains initially the dtds and the LICENCES, later filled by make xml_data
 # This avoids burdening the git archive with huge compressed files.
@@ -316,7 +315,7 @@ MANUAL=SITE/manual.html
 XMLPAGE=SITE/xml.html
 FAQ=SITE/faq.html
 PORTAL=SITE/portal.html
-# deprecated GOLD=SITE/gold.html
+GOLD=SITE/gold.html
 GOLDEN=SITE/goldendict.html
 ABREVS=SITE/abrevs.pdf
 ROBOTS=SITE/robots.txt # currently disabled to allow Google access
@@ -590,7 +589,7 @@ releasedoc:
 	cp $(MANUAL) $(SERVERPUBLICDIR) # user's manual
 	cp $(XMLPAGE) $(SERVERPUBLICDIR) # XML resources page
 #	cp $(ROBOTS) $(SERVERPUBLICDIR) # robots permissions
-#	cp $(GOLD) $(SERVERPUBLICDIR) # Heritage's Hall of Fame
+	cp $(GOLD) $(SERVERPUBLICDIR) # Heritage's Hall of Fame
 #	cp $(DOC_ML) $(SERVERPUBLICDIR)DOC # Not distributed anymore - useless
 	cp -p DOC/transliterations.pdf $(SERVERPUBLICDIR)DOC
 
@@ -692,6 +691,6 @@ commit-corpus:
 	cp -Rp $(SERVERCORPUS) $(SKTRESOURCES)
 # TODO: git add des nouvelles citations, git commit, git push
 
-SAVED_VERSION=320d
+SAVED_VERSION=325a
 save: # saving sources of Heritage_Platform (after make clean in ML)
 	tar cvf ../ARCHIVE/Heritage_Platform_$(SAVED_VERSION).tar ML SITE JAVASCRIPT SETUP configure INSTALLATION DOC IMAGES README 

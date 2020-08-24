@@ -99,6 +99,7 @@ value decompose w = match w with
   ]
 ;
 (* Temporary - encoding of homo as last character of word *)
+(* This induces ugly code. Should be replaced by pairs (int,skt/word) *)
 value decompose_str str = 
   decompose (rev_code_string str) (* ugly multiple reversals *)
 ;
@@ -106,17 +107,21 @@ value normal_stem str = Word.mirror (rev_stem str)
 ;
 value normal_stem_str str = Canon.decode (normal_stem str) (* horror *)
 ;
-(* strips homonymy index of raw input - similar awful double reversal 
-value code_strip_raw s =  rev_strip (code_raw s); -- unused
--- Same function, with skt input, is [Subst.stripped_code_skt] *)
-
-(* A cleaner solution would be to have type lexeme = (word * int) 
+(* strips homonymy index of raw input - similar awful double reversal *)
+(* Same function, with skt input, is [Subst.stripped_code_skt] *)
+(* This is only called at compile lexicon time by Dictionary/Print_html 
+   through below skt_strip_to_deva *)
+value code_strip_raw s =  rev_strip (code_raw s)
+;
+(* A cleaner solution to name spaces would be to have type lexeme = (word * int) 
    and "x#5" represented as (x,5) (0 if no homophone) *)
 
 value skt_to_deva     str = try Canon.unidevcode (code_string str) with
-                                [ Failure _ -> raise (In_error str) ]
+                                [ Failure _ -> failwith str ]
 and skt_raw_to_deva   str = try Canon.unidevcode (code_raw str) with
-                                [ Failure _ -> raise (In_error str) ]
+                                [ Failure _ -> failwith ("raw " ^ str) ]
+and skt_strip_to_deva str = try Canon.unidevcode (code_strip_raw str) with
+                                [ Failure _ -> failwith ("raw stripped " ^ str) ]
 ;
 (* Following not needed since [Transduction.skt_to_html] is more direct 
 [value skt_to_roma         str = Canon.uniromcode (code_string str) 

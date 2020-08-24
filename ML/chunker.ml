@@ -50,8 +50,6 @@ value adjust c w = match Word.mirror w with
                            Encode.code_string "bhos" (* "bho raama" "bho bhos" *)
                         else if rest = [ 49; 1 ] (* aho *) then 
                            Encode.code_string "aho" (* "aho raama" *)
-                        else if c = 43 (* r *) then raise Glue
-                             (* "mahaarhaasanayo raajaa" "devo raajaa" *)
                         else if Phonetics.turns_visarg_to_o c || c=1 
                              (* zivoham must be entered as zivo'ham (avagraha) *)
                              then Word.mirror [ 16 :: [ 1 :: rest ] ] 

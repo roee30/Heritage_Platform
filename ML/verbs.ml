@@ -2369,12 +2369,12 @@ value compute_future stem entry =
          ; match entry with (* conditional or atma on demand *)
            [ "grah" | "jiiv" | "bhuu#1" | "zaas" | "stu" | "sm.r" | "haa#1" 
                      -> compute_conda Primary stem entry
-           | "khaad" -> compute_futurem Primary stem entry 
+           | "khaad" | "gad" -> compute_futurem Primary stem entry 
            | _ -> ()
            ]
          }
        | Atma -> (* middle only *) 
-         compute_futurem Primary stem entry 
+           compute_futurem Primary stem entry 
        | (* both *) _ -> do
          { compute_futurea Primary stem entry 
          ; compute_futurem Primary stem entry 
@@ -2531,17 +2531,17 @@ value intercalate_pp root rstem =
            | "t.r.s#1" | "tru.t" | "tvi.s#1" | "day" | "dal" | "dol" | "dhaav#1" 
            | "dhiir" | "dhvan" | "na.t" | "nad" | "pa.th" | "pa.n" | "pat#1"
            | "piz" | "pii.d" | "pulak" | "puuj" | "prath" | "pru.s#1" | "phal"
-           | "baadh" | "bha.n" | "bhas" | "bhaa.s" | "bhaas#1" | "bhuu.s" 
-           | "bhraaj" | "ma.mh" | "manth" | "mah" | "likh" | "mil" | "mi.s" 
-           | "miil" | "mud#1" | "mu.s#1" | "m.rg" | "yaac" | "rac" | "ra.n"
-           | "ras" | "rah" | "raaj#1" | "ruc#1" | "rud#1" | "lag" | "lap" | "lal"
-           | "la.s" | "las" | "lu.th" | "lul" | "lok" | "loc" | "vad" | "val" 
-           | "vaz" | "vas#2" | "vaaz"| "vaas#3" | "vid#1" | "vip"| "ven" 
-           | "vyath" | "vraj" | "vra.n" | "vrii.d" | "zubh#1" | "zcut#1" 
-           | "zrath" | "zlath" | "zlaagh" | "zvas#1" | ".s.thiiv" | "suuc"
-           | "suud" | "sev" | "skhal" | "stan" | "stim" | "sthag" | "sphu.t"
-           | "sphur" | "svad" | "svan" | "svar#1" | "has" | "hras" | "hraad" 
-           | "hlaad" | "hval" 
+           | "baadh" | "bha.n" | "bhas" | "bhaam" | "bhaa.s" | "bhaas#1" 
+           | "bhuu.s" | "bhraaj" | "ma.mh" | "manth" | "mah" | "likh" | "mil" 
+           | "mi.s" | "miil" | "mud#1" | "mu.s#1" | "m.rg" | "yaac" | "rac" 
+           | "ra.n" | "ras" | "rah" | "raaj#1" | "ruc#1" | "rud#1" | "lag"
+           | "lap" | "lal" | "la.s" | "las" | "lu.th" | "lul" | "lok" | "loc" 
+           | "vad" | "val" | "vaz" | "vas#2" | "vaaz"| "vaas#3" | "vid#1" 
+           | "vip"| "ven" | "vyath" | "vraj" | "vra.n" | "vrii.d" | "zubh#1" 
+           | "zcut#1" | "zrath" | "zlath" | "zlaagh" | "zvas#1" | ".s.thiiv"
+           | "suuc" | "suud" | "sev" | "skhal" | "stan" | "stim" | "sthag"
+           | "sphu.t" | "sphur" | "svad" | "svan" | "svar#1" | "has" | "hras" 
+           | "hraad" | "hlaad" | "hval" 
                -> set
            | "palaay" -> set (* very special item *)
            | "grah" -> set (* but will get ii *)
@@ -4132,7 +4132,7 @@ value compute_aorist entry =
   ; match entry with (* 2. thematic aorist af *)
     [ "aap" | "krudh" | "gam" | "g.rdh" | "ghas" | "chid#1" | "das" | "dyut#1" 
     | "mad#1" | "muc#1" | "yuj#1" | "ric" | "ruc#1" | "rudh#2" | "ruh"
-    | "vid#2" | "v.rt#1" | "zuc#1" | "zudh" | "sic" | "stan" | "huu" 
+    | "vid#2" | "v.rt#1" | "v.rdh#1" | "zuc#1" | "zudh" | "sic" | "stan" | "huu" 
      -> do
       { compute_thematic_aorista weak entry
       ; compute_thematic_aoristm weak entry (* middle very rare *)
@@ -4159,7 +4159,7 @@ value compute_aorist entry =
     | "gaah" | "car" | "ce.s.t" | "jan" | "ji" | "tvar" | "tvi.s#1" | "dah#1"
     | "diz#1" | "dih" | "diip" | "dru#1" | "dh.r" | "naz" | "pac" | "pa.th"
     | "miil" | "muc#1" | "yaj#1" | "rak.s" | "ric" | "viz#1" | "v.r#1" 
-    | "v.rt#1" | "vyadh" | "zri" | "zru" | "stu" (* | "dhaa#1" *) -> 
+    | "v.rt#1" | "v.rdh#1" | "vyadh" | "zri" | "zru" | "stu" (* | "dhaa#1" *) -> 
       let stem = redup_aor weak entry in do
       { compute_redup_aorista stem entry (* but atu.s.tavam RV (WR) *)  
       ; compute_redup_aoristm stem entry 
@@ -4250,8 +4250,8 @@ value compute_aorist entry =
     | "car" | "ce.s.t" | "jap" | "jalp" | "jaag.r" | "t.rr" | "diip"
     | "puu#1" | "p.rc"| "pru.s#1" | "baadh" | "budh#1" | "mad#1" 
     | "mud#1" | "muurch" | "mlecch" | "yaac" | "rak.s" | "ruc#1" | "lu~nc" 
-    | "luu#1" | "vad" | "vadh" | "vaz" | "vid#1" | "v.r#1" | "vraj" | "z.rr"
-    | "sidh#2" | "skhal" | "stan" | "stu" | "hi.ms" -> do
+    | "luu#1" | "vad" | "vadh" | "vaz" | "vid#1" | "v.r#1" | "v.rdh#1"  
+    | "vraj" | "z.rr" | "sidh#2" | "skhal" | "stan" | "stu" | "hi.ms" -> do
       { let stem = match weak with
             [ [ 7 (* .r *) :: _ ] -> (* complex Paninian see Müller Gram xii *)
               if entry = "jaag.r" then strong (* jaagari.sam RF IC 2 p 88 *)

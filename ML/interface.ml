@@ -405,7 +405,7 @@ value check_sentence translit us text_orig checkpoints input
   ; table_begin Spacing20 |> pl
   ; tr_begin |> pl (* tr begin *)
   ; td_wrap (call_undo text checkpoints ^ "Undo") |> ps
-  ; let call_scl_parser n = (* invocation of scl parser *)
+  ; let call_scl_parser () = (* invocation of scl parser *)
         if scl_toggle then
            td_wrap (call_reader text cpts "o" ^ "UoH Analysis Mode") |> ps
         else () (* [scl_parser] is not visible unless toggle is set *) in
@@ -414,13 +414,13 @@ value check_sentence translit us text_orig checkpoints input
        td_wrap ("(" ^ string_of_int count ^ " Solutions)") |> ps
     else if count=1 (* Unique remaining solution *) then do
             { td_wrap (call_parser text cpts ^ "Unique Solution") |> ps
-            ; call_scl_parser 1
+            ; call_scl_parser ()
             }
          else do
        { td_wrap (call_reader text cpts "p" ^ "Filtered Solutions") |> ps
        ; let info = string_of_int count ^ if full then "" else " Partial" in 
          td_wrap (call_reader text cpts "t" ^ "All " ^ info ^ " Solutions") |> ps
-       ; call_scl_parser count
+       ; call_scl_parser ()
        } 
   ; tr_end |> pl   (* tr end *)
   ; table_end |> pl

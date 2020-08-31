@@ -189,13 +189,14 @@ and transition = (* Reflexive relation *)
 and segment = (phase * Word.word * transition)
 and output = list segment
 ;
+
 (* Now consistency check - we check that preverbs usage is consistent with
    root px declaration in lexicon *)
 
 value assoc_word word deco =
-   let infos = Deco.assoc word deco in
-   if infos = [] then failwith ("Unknown form: " ^ Canon.decode word)
-   else infos
+  let infos = Deco.assoc word deco in
+  if infos = [] then failwith ("Unknown form: " ^ Canon.decode word)
+  else infos
 ;
 value autonomous root = (* root form allowed without preverb *)
   let infos = assoc_word root roots_usage in
@@ -217,7 +218,7 @@ and voice_o v = fun
   ]
 ;
 (* pvs is a list of preverb words *)
-(* upasarga closest to the root form *)
+(* returns the upasarga closest to the root form *)
 value main_preverb pvs = List2.last pvs 
 ;
 value main_preverb_string pv = 

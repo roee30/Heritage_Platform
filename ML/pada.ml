@@ -39,7 +39,7 @@ value voices_of = fun
   | "k.su" | "k.sudh#1" | "k.subh" | "k.svi.d" | "kha~nj#1" | "khaad" | "khid"
   | "khel" | "khyaa" | "gaj" | "gad" | "garj" | "gard" | "gal" | "gaa#1" 
   | "gaa#2" | "gu~nj" | "gu.n.th" | "gup" | "gumph" | "g.rdh" 
-  | "g.rr#2" | "granth" | "grah" | "glai" | "ghas" | "ghu.s" | "gh.r" | "gh.r.s" 
+  | "g.rr#2" | "granth" | "glai" | "ghas" | "ghu.s" | "gh.r" | "gh.r.s" 
   | "ghraa" | "cakaas" | "ca.t" | "cand" | "cam" | "car" | "cal" | "cit#1" 
   | "cumb" | "c.rt" | "chur" | "ch.rd" | "jak.s" | "jap" | "jabh#2" | "jam" 
   | "jalp" | "jas" | "jaag.r" | "jinv" | "jiiv" | "jvar" | "jval" | "tak" 
@@ -79,6 +79,7 @@ value voices_of = fun
 (*| "jyaa1"  Atma needed for jiiyate *)
 (*| "kan"    Atma needed for kaayamaana *)
 (*| "gam"    Atma needed for sa.mgacchate *)
+(*| "grah"    Atma needed for g.rh.niite *)
 (*| "diiv#1" Atma needed for diivyate *)
 (*| "van"    Atma needed for vanute *)
 (*| "mah"    Atma needed for pft. maamahe *)
@@ -123,7 +124,7 @@ value voices_of = fun
   | ".rj" | "ka.n.d" | "kal" | "ka.s" | "ku.t.t" | "ku.n.d" | "k.r#1" | "k.r#2" 
   | "k.r.s" | "kram" | "krii#1" | "krii.d" | "k.san" | "k.sap#1" | "k.sam" 
   | "k.sal" | "k.sip" | "k.sud" | "k.s.nu" | "khan" | "gam" | "garh" 
-  | "gaah" | "guh" | "g.rr#1" | "gras" | "gha.t.t" | "cat" | "carc" 
+  | "gaah" | "guh" | "g.rr#1" | "gras" | "grah" | "gha.t.t" | "cat" | "carc" 
   | "ci" | "cint" | "cud" | "ce.s.t" | "cyu" | "chad#1" | "chand" | "chid#1"
   | "jan" | "juu" | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d" | "tan#1" | "tan#2"
   | "tap" | "tud#1" | "tul" | "t.rd" | "traa" | "daa#1" | "daaz#1" | "diz#1"

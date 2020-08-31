@@ -3604,7 +3604,7 @@ and compute_perfect_desidm st entry =
 (*****************************)
 (* Construction of the periphrastic perfect, used for perfect of secondary 
 conjugations, denominative verbs and a few roots. It builds a form in -aam
-suffixed by a perfect form of the auxiliairies k.r bhuu et as \Pan{3,1,35-40} *)
+suffixed by a perfect form of the auxiliairies k.r bhuu and as \Pan{3,1,35-40} *)
 value peri_perf_stem entry = 
   let stem = match entry with 
   [ "iik.s" | "ii.d" | "iir" | "iih" | "uk.s" | "uc" | "ujjh" | "uuh" | "edh" 
@@ -3613,10 +3613,13 @@ value peri_perf_stem entry =
   | "aas#2"  -> "aas" (* trim *)
   | "u.s"    -> "o.s" (* guna WR *) 
   | "jaag.r" -> "jaagar" (* Macdonell§140a2 *)
-  | "bh.r"   -> "bibhar" 
+  | "bhii#1" -> "bibhay" (* Henry§242 *)
+  | "bh.r"   -> "bibhar" (* Henry§242 *)
   | "nii#1"  -> "nay" 
   | "i"      -> "ay" (* Whitney roots *)
+  | "vid#1"  -> "vid" (* Henry§242 *)
   | "vyaa"   -> "vye" (* Whitney roots *)
+  | "hu"     -> "juhav" (* Henry§242 *)
   | "huu"    -> "hve" (* Macdonell§140a3 *)
   | "hrii#1" -> "jihre" (* Whitney roots *)
   | _ -> raise Not_attested (* no known periphrastic perfect *)

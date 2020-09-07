@@ -106,10 +106,11 @@ value compound_monosyl_ii = fun
 ;
 (* Similarly for -uu roots *)
 value compound_monosyl_uu = fun
-  [ [ 40 :: _ ] (* -bhuu *) -> True (* abhiibhuu (may be too wide) *) 
-  | [ 48 :: _ ] (* -suu *) -> True (* prasuu  (may be too wide) *)
-  | [ 43 :: [ 40 ::  _ ] ] (* -bhruu *) -> True (* subhruu (may be too wide) *)
-  | _ -> False (* eg m. khalapuu to be completed for other stems *)
+  [ [ 37 :: _ ] (* -puu *)  (* khalapuu DespGram p146 *) 
+  | [ 40 :: _ ] (* -bhuu2 *) (* abhiibhuu manobhuu pratibhuu DespGram p146 *) 
+  | [ 48 :: _ ] (* -suu2 *)  (* prasuu  *)
+  | [ 43 :: [ 40 ::  _ ] ]  (* -bhruu *) -> True (* subhruu *)
+  | _ -> False 
   ]
 ;
 
@@ -5081,11 +5082,11 @@ value compute_nouns_stem_form e stem d p =
           ]
       | [ 6; 49; 6; 49 ] (* huuhuu *) -> build_huuhuu e  
       | [ 6 :: r1 ] (* -uu - rare *) -> 
-          if monosyl r1 then build_mono_uu Mas r1 e (* puu2 *)
-          else build_poly_uu Mas r1 e (* sarvatanuu khalapuu pratibhuu *)
-             (* vedic polysyllabic in uu are of utmost rarity - Whitney §355 *)
+          if monosyl r1 || compound_monosyl_uu r1 then build_mono_uu Mas r1 e
+          else build_poly_uu Mas r1 e (* sarvatanuu *)
+               (* vedic polysyllabic in uu are of utmost rarity - Whitney §355 *)
       | [ 7 :: r1 ] (* -.r *) -> match r1 with
-          [ [ 27; 47; 12; 43; 17 ] -> build_krostu r1 e (* kro.s.t.r Muller §236 *)
+          [ [ 27; 47; 12; 43; 17 ] -> build_krostu r1 e (* kro.s.t.r Muller§236 *)
           | [ 32 :: r2 ] (* -t.r *) -> match r2 with
                [ [ 3; 37 ] (* pit.r *) (* relationships McDonell §101 *)
                | [ 2; 41; 2; 24 ] (* jaamaat.r *)
@@ -6018,6 +6019,7 @@ auxiliary, such as yaa (bhasmasaat) or nii (Whitney) or sampad (gr.) *)
   ; enter1 "avara"  (Indecl Tas (code "avaratas"))  (* \Pan{5,3,29} *)  
   ; enter1 "uttara#1" (Indecl Tas (code "uttaratas")) (* on pn \Pan{5,3,7} ? *)
   ; enter1 "ubhaya" (Indecl Tas (code "ubhayatas")) (* on pn \Pan{5,3,7} ? *)]
+  ; enter1 "puras" (Indecl Tas (code "puratas")) (* on indecl puras *)
 *)
 value compute_extra_tasils () = do (* add non-generative tasils - ad-hoc *) 
   { enter1 "aze.sa" (Indecl Tas (code "aze.satas")) (* tasil on privative cpd *)

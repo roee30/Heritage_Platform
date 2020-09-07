@@ -99,7 +99,7 @@ value print_tags pvs seg_num phase form tags =
 value print_morpho phase word = 
      match tags_of phase word with 
         [ Atomic tags -> print_tags [] 0 phase word tags 
-        | Preverbed (_,phase) pvs form tags -> print_tags pvs 0 phase form tags
+        | Preverbed (_,ph) pvs form tags -> print_tags pvs 0 ph form tags
         ]
 ;
 (* End of display routines *) 
@@ -165,9 +165,9 @@ value sort_check cpts =
   List.sort compare_index cpts
 ;
 value seg_length = fun
- [ [ -2 :: rest ] -> Word.length rest (* lopa does not count *)
- | w -> Word.length w 
- ]
+  [ [ -2 :: rest ] -> Word.length rest (* lopa does not count *)
+  | w -> Word.length w 
+  ]
 ;
 value rec merge_rec lpw = fun 
   [ [] -> lpw
@@ -200,9 +200,9 @@ value build_visual k segments =
       ]
 ;
 (* We check whether the current segment [(w,tr,phase,k)] is conflicting with 
-   others at previous offset [n]; if not it is mandatory and marked blue. *)
+   others at previous offset [n]; if not it is mandatory and marked blue.      *)
 (* Returns True for blue mandatory segments, False for green/red optional ones *)
-(* Warning: very hairy code, do not change without understanding the theory.  *)
+(* Warning: very hairy code, do not change without thorough understanding .    *)
 value is_conflicting ((w,tr,ph,k) as segment) =
  let l = seg_length w in is_conflicting_rec 0
  where rec is_conflicting_rec n = (* n is position in input string *)
@@ -236,8 +236,8 @@ value is_conflicting ((w,tr,ph,k) as segment) =
          possible v for w', in which case it is an overlap returning a blue sign.
          If w' has any other possible v's, there is a conflict. *)
       (* This may only occur if w=[1] (a) and w' ends in a or aa *)       
-      (* NB. In naabhaava.h caakiirti.h a should be marked blue 
-         but in mahaajana.h after checking mahaa a should not be marked blue *)
+      (* e.g. In "naabhaava.h caakiirti.h",  "a" should be marked blue, and in
+         "mahaajana.h" after checking "mahaa", "a" should not be marked blue *)
                            where  match_tr' = fun
                              [ [ v ] -> not (v = w) || does_conflict rest
                              | _ -> True

@@ -14,7 +14,7 @@ open Web; (* ps pl etc. *)
 open Morphology; (* inflected lemma morphology *)
 open Phases; (* Phases *)
 open Dispatcher; (* Dispatch *)
-open SCLpaths; (* [scl_url scl_cgi default_output_font] *) 
+open SCLpaths; (* [scl_url scl_cgi] interface with UoH parser *) 
 
 
 module Prel = struct  

@@ -12,5 +12,5 @@ value scl_url = ""
 and scl_cgi = ""
 ;
 
-value default_output_font = "ROMAN" (* could be "DEV" *)
+value default_output_font = "IAST" (* could be "DEV" *)
 ;

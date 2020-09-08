@@ -14,7 +14,7 @@ open Web; (* ps pl etc. *)
 open Morphology; (* inflected lemma morphology *)
 open Phases; (* Phases *)
 open Dispatcher; (* Dispatch *)
-open SCLpaths; (* [scl_url scl_cgi] interface with UoH parser *) 
+open SCLpaths; (* [scl_url scl_cgi] configuration of UoH parser *) 
 
 
 module Prel = struct  
@@ -32,18 +32,18 @@ module Lex = Lexer.Lexer Prel Lexer_control (* [print_scl_segment] *)
 value print_scl_output output = 
   List.fold_left Lex.print_scl_segment 1 (List.rev output) 
 ;
-value print_scl_solutions s =
+value print_scl_solution s =
   let _ = print_scl_output s in ()
 ;
 (* Invocation of UoH's CSL parser for dependency graph display *)
-value print_scl1 scl_font (solutions : list (Phases.phase * Word.word)) =
+value print_scl1 scl_font (solution : list (Phases.phase * Word.word)) =
   let svg_interface_url = scl_cgi ^ "SHMT/" in do
   { ps ("<script type=\"text/javascript\" src=\"" ^ scl_url ^ "js_files/dragtable.js\"></script>")
   ; ps ("<form name=\"word-order\" method=\"POST\" action = \""
        ^ svg_interface_url ^ "prog/Word_order/call_heritage2anu.cgi\">\n")
   ; ps ("<table class=\"draggable\">")
   ; ps tr_begin
-  ; print_scl_solutions solutions
+  ; print_scl_solution solution
   ; ps ("<td><input type=\"hidden\" name=\"DISPLAY\" value=\"" ^ scl_font ^"\"/></td>")
   ; ps tr_end
   ; ps table_end 

@@ -20,7 +20,7 @@ open Graph_segmenter; (* [Segment cur_chunk set_cur_offset graph visual] *)
 open Phases; (* [Phases] *) 
 open Phases; (* [phase is_cache generative] *) 
 open Dispatcher; (* [transducer_vect Dispatch transition trim_tags] *) 
-open Html; (* html constructors *)
+open Html; (* html constructors, escape *)
 open Web; (* [ps pl abort reader_cgi scl_toggle] etc. *) 
 open Cgi; (* [url get decode_url] *)
 
@@ -246,6 +246,7 @@ value is_conflicting ((w,tr,ph,k) as segment) =
                    else does_conflict rest
        ]
   ]
+(* Remaining bug: "mahaabaho" when deleting "a", "ap" goes blue despite "baho" *)
 ; 
 value rec find_conflict_seg acc l = fun 
   [ [] -> List.rev acc
@@ -368,7 +369,6 @@ value print_interf text cpts () = vgrec 0
 ;
 value update_col_length chunk = 
   max_col.val := succ (max_col.val + Word.length chunk)
-and update_text_with_sol text count = text ^ ";allSol=" ^ string_of_int count
 ;
 value call_undo text cpts  = 
   let string_pts = match cpts with 
@@ -379,32 +379,29 @@ value call_undo text cpts  =
   anchor Green_ (invoke cgi) check_sign
 ;
 (* The main procedure for computing the graph segmentation structure *)
-value check_sentence translit us text_orig checkpoints input 
-             (* finally SL corpus links: *) sol_num corpus sent_id link_num = 
+value check_sentence translit uns text checkpoints input undo_enabled =
   let encode = Encode.switch_code translit in
-  let chunker = if us (* sandhi undone *) then Sanskrit.read_raw_sanskrit 
-                else (* blanks non-significant *) Sanskrit.read_sanskrit in
+  let chunker = if uns (* sandhi undone *) then Sanskrit.read_raw_sanskrit 
+                else (* chunking *) Sanskrit.read_sanskrit in
   let raw_chunks = Sanskrit.read_raw_sanskrit encode input in (* NEW *)
   let chunks = chunker encode input in 
-  let devachunks = List.map Canon.unidevcode raw_chunks in (* NEW *)
-  let devainput = String.concat " " devachunks  
+  let deva_chunks = List.map Canon.unidevcode raw_chunks in (* NEW *)
+  let deva_input = String.concat " " deva_chunks 
   and cpts = sort_check checkpoints in 
   let _ = chkpts.all_checks := cpts
-  and (full,count) = segment_iter chunks in (* full iff all chunks segment *)
-  let text = match sol_num with
-             [ "0" -> update_text_with_sol text_orig count
-             | _ -> text_orig
-             ] in do
+  and (full,count) = segment_iter chunks in do (* full iff all chunks segment *)
   { make_visual cur_chunk.offset
   ; find_conflict 0
   ; html_break |> pl
   ; html_latin16 "Sentence: " |> pl
-  ; deva16_blue devainput |> ps (* devanagari *)
+  ; deva16_blue deva_input |> ps (* devanagari *)
   ; html_break |> ps
   ; div_begin Latin16 |> ps
   ; table_begin Spacing20 |> pl
   ; tr_begin |> pl (* tr begin *)
-  ; td_wrap (call_undo text checkpoints ^ "Undo") |> ps
+  ; if undo_enabled then 
+       td_wrap (call_undo text checkpoints ^ "Undo") |> ps
+    else ()
   ; let call_scl_parser () = (* invocation of scl parser *)
         if scl_toggle then
            td_wrap (call_reader text cpts "o" ^ "UoH Analysis Mode") |> ps
@@ -439,18 +436,11 @@ value check_sentence translit us text_orig checkpoints input
   ; html_break |> pl
   }
 ;
-value arguments trans lex font cache st us input topic abs sol_num corpus 
-                id ln corpus_permission corpus_dir sentence_no =
+value arguments trans lex font cache st us input topic abs 
+                corpus_permission corpus_dir sentence_no =
   "t=" ^ trans ^ ";lex=" ^ lex ^ ";font=" ^ font ^ ";cache=" ^ cache ^ 
   ";st=" ^ st ^ ";us=" ^ us ^ ";text=" ^ input ^ 
-  ";topic=" ^ topic ^ ";abs=" ^ abs ^ match sol_num with
-    [ "0" -> ""
-    | n -> ";allSol=" ^ n
-    ] ^
-  match corpus with
-    [ "" -> ""
-    | c -> ";corpus=" ^ c ^ ";sentenceNumber=" ^ id ^ ";linkNumber=" ^ ln
-    ] ^
+  ";topic=" ^ topic ^ ";abs=" ^ abs ^ 
   ";" ^ Params.corpus_permission ^ "=" ^ corpus_permission ^
   ";" ^ Params.corpus_dir ^ "=" ^ corpus_dir ^
   ";" ^ Params.sentence_no ^ "=" ^ sentence_no
@@ -477,6 +467,7 @@ value append_cache entry gender =
   ; close_out cho
   }
 ;
+(* Corpus management : saving an analysed sentence in corpus *)
 value save_button query nb_sols =
   center_begin ^
   cgi_begin save_corpus_cgi "" ^
@@ -493,11 +484,11 @@ value quit_button corpmode corpdir sentno =
                                         ])
   and permission = Web_corpus.string_of_permission corpmode in
   center_begin ^
-      cgi_begin (url corpus_manager_cgi ~fragment:sentno) "" ^
-           hidden_input Params.corpus_dir corpdir ^
-           hidden_input Params.corpus_permission permission ^
-           submit_input submit_button_label ^
-      cgi_end ^
+     cgi_begin (url corpus_manager_cgi ~fragment:sentno) "" ^
+        hidden_input Params.corpus_dir corpdir ^
+        hidden_input Params.corpus_permission permission ^
+        submit_input submit_button_label ^
+     cgi_end ^
   center_end
 ;
 (* Main body of sktgraph cgi *)
@@ -507,8 +498,6 @@ value graph_engine () = do
     let env = create_env query in
     (* Multiple environment variables according to modes of use are: 
        text topic st us t lex font cache abs cpts (standard mode) 
-       allSol (deprecated Validate mode)
-       corpus sentenceNumber linkNumber (Corpus mode)
        corpdir sentno corpmode (defined in Params) 
        guess gender revised [rev_off] [rev_ind] (User-aid) *)
     let url_encoded_input = get "text" env "" 
@@ -531,11 +520,7 @@ value graph_engine () = do
     and () = if st="f" then Lexer_control.star.val:=False 
              else () (* word vs sentence stemmer *)
     and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
-    and corpus = get "corpus" env "" 
-    and sent_id = get "sentenceNumber" env "0" 
-    and link_num = get "linkNumber" env "0" (* is there a better default? *)
-    and sol_num = get "allSol" env "0" in (* Needed for Validate mode *)
-    let url_enc_corpus_permission = (* Corpus mode *)
+    and url_enc_corpus_permission = (* Corpus mode *)
         get Params.corpus_permission env "true" in 
     let corpus_permission = 
       url_enc_corpus_permission
@@ -543,13 +528,16 @@ value graph_engine () = do
       |> Web_corpus.permission_of_string in
     let corpus_dir = get Params.corpus_dir env "" 
     and sentence_no = get Params.sentence_no env "" in
+    let undo_enabled = sentence_no = "" (* no undo in Reader corpus mode *)
+                    || corpus_permission <> Web_corpus.Reader in
     let text = arguments translit lex font cache st us url_encoded_input
-                         url_encoded_topic abs sol_num corpus sent_id link_num
+                         url_encoded_topic abs 
                          url_enc_corpus_permission corpus_dir sentence_no
     and checkpoints = 
       try let url_encoded_cpts = List.assoc "cpts" env in (* do not use get *)
           parse_cpts (decode_url url_encoded_cpts)
       with [ Not_found -> [] ]
+    (* Now we check if cache acquisition is required *)
     and guess_morph = decode_url (get "guess" env "") (* User-aid guessing *)
     and pseudo_gender = decode_url (get "gender" env "") in 
     let _ = if String.length guess_morph > 0 && Paths.platform="Station" then
@@ -570,8 +558,7 @@ value graph_engine () = do
    try do 
    { match (revised,rev_off,rev_ind) with
      [ ("",-1,-1) -> (* Standard input processing *** Main call *** *)
-       check_sentence translit uns text checkpoints input sol_num
-                      corpus sent_id link_num
+       check_sentence translit uns text checkpoints input undo_enabled
      | (new_word,word_off,chunk_ind) (* User-aid revision mode *) -> 
        let chunks = Sanskrit.read_sanskrit (Encode.switch_code translit) input in
        let rec decoded init ind = fun
@@ -595,11 +582,10 @@ value graph_engine () = do
          let revise (k,sec,sel) = (if k<word_off then k else k+diff,sec,sel) in
          List.map revise checkpoints
        and new_text = arguments translit lex font cache st us updated_input
-                            url_encoded_topic abs sol_num corpus sent_id link_num
-                            url_enc_corpus_permission corpus_dir sentence_no
+                                url_encoded_topic abs 
+                                url_enc_corpus_permission corpus_dir sentence_no
        and new_input = decode_url updated_input in
-       check_sentence translit uns new_text revised_check new_input 
-                      sol_num corpus sent_id link_num
+       check_sentence translit uns new_text revised_check new_input undo_enabled
      ]
      (* Rest of the code concerns Corpus mode *)
      (* automatically refreshing the page only if guess parameter *)

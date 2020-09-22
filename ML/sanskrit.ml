@@ -52,6 +52,7 @@ and sanscrit    = Gramskt.Entry.mk "sanscrit"
 and prefix      = Gramskt.Entry.mk "prefix"
 and skt_list    = Gramskt.Entry.mk "skt_list"
 and prefix_list = Gramskt.Entry.mk "prefix_list"
+and sanscrit_corpus = Gramskt.Entry.mk "sanscrit_corpus" (* hack *)
 ;
 
 EXTEND Gramskt
@@ -63,13 +64,22 @@ EXTEND Gramskt
     ] ] ; 
   skt1:
     [ [ s = skt; `EOI -> s ] ] ;
-  pada: (* non-empty list of chunks separated by blanks *)
+  pada: (* non-empty list of pre-chunks separated by blanks *)
     [ [ el = LIST1 skt -> el ] ] ; 
-  sanscrit: 
+  sanscrit: (* pada lines with "|" or "!" forcing terminal sandhi *)
     [ [ p = pada; "|"; "|"  -> [ p ]
       | p = pada; "|"; `EOI -> [ p ] 
       | p = pada; "|"; sl = sanscrit -> [ p :: sl ] 
-      | p = pada; "!"; sl = sanscrit -> [ p :: sl ] (* for voc and interj *)
+      | p = pada; "!"; sl = sanscrit -> [ p :: sl ] (* voc, interj *)
+      | p = pada; `EOI -> [ p ] 
+      | `EOI -> failwith "Empty sanskrit input"
+    ] ] ;
+  sanscrit_corpus: (* pada lines with "|" or "!" encoded with "" *)
+    [ [ p = pada; "|"; "|"  -> [ p ]
+      | p = pada; "|"; `EOI -> [ p ] 
+      | p = pada; "|"; sl = sanscrit_corpus -> [ p :: [ [""] :: sl ] ]
+        (* horrible encoding for corpus mode [restore_danda] *)
+      | p = pada; "!"; sl = sanscrit_corpus -> [ p :: [ [""] :: sl ] ] (* voc, interj *)
       | p = pada; `EOI -> [ p ] 
       | `EOI -> failwith "Empty sanskrit input"
     ] ] ;
@@ -129,6 +139,16 @@ value sanskrit_sentence strm =
   | Loc.Exc_located loc (Failure s) -> raise (Encode.In_error s)
   | Loc.Exc_located loc ex -> raise ex
   ]
+and sanskrit_sentence_corpus strm = 
+  try Gramskt.parse sanscrit_corpus Loc.ghost strm with
+  [ Loc.Exc_located loc Exit -> raise (Encode.In_error "Exit")
+  | Loc.Exc_located loc (Error.E msg) 
+    -> raise (Encode.In_error ("(Lexical) " ^ msg))
+  | Loc.Exc_located loc (Stream.Error msg) 
+    -> raise (Encode.In_error ("(Stream) " ^ msg))
+  | Loc.Exc_located loc (Failure s) -> raise (Encode.In_error s)
+  | Loc.Exc_located loc ex -> raise ex
+  ]
 ;
 (* No chunk processing, each chunk is assumed to be in terminal sandhi 
    already. But normalizes away anusvara, contrarily to its name *)
@@ -138,15 +158,25 @@ value read_raw_skt_stream encode strm =
   match sanskrit_sentence strm with
   [ [ l ] -> process l 
   | lines -> List.fold_right concat lines []
-             where concat line lines = process line @ lines
+             where concat line lines = process line @ lines 
   ]
 ;
+value read_raw_skt_stream_corpus encode strm = 
+  let process = List.map encode in
+  match sanskrit_sentence_corpus strm with
+  [ [ l ] -> process l 
+  | lines -> List.fold_right concat lines []
+             where concat line lines = process line @ lines 
+  ]
+;
+(* Chunk processing, recognizing mandatory hyatus but also allowing blank
+   spacing when the sandhi is identity *) 
 value read_processed_skt_stream encode strm = 
   let process = chunker (avagraha_expand encode) in
   match sanskrit_sentence strm with 
   [ [ l ] -> process l
   | lines -> List.fold_right concat lines []
-             where concat line lines = process line @ lines
+             where concat line lines = process line @ lines 
   ]
 ;
 
@@ -162,6 +192,8 @@ value read_sanskrit encode str = (* [encode : string -> word] *)
 (* Generalizes [read_VH True] to all transliterations *)
 value read_raw_sanskrit encode str = (* [encode : string -> word] *)
   read_raw_skt_stream encode (Stream.of_string str)
+and read_raw_sanskrit_corpus encode str = (* [encode : string -> word] *)
+  read_raw_skt_stream_corpus encode (Stream.of_string str)
 ;
 (*i end; i*)
 

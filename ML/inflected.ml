@@ -444,7 +444,7 @@ value enter1 entry =
    | Declined Pron g lg -> List.iter enterg lg (* pronouns *) 
      where enterg (n,ln) = List.iter entern ln
      where entern (c,w) = let f = Noun_form g n c in 
-                          if c=Voc then add_voca w delta f 
+                          if c=Voc then add_voca w delta f (* ? *)
                                    else add_morphpro w delta f 
    | Conju f lv -> List.iter enterv lv
      where enterv (n,ln) = List.iter entern ln

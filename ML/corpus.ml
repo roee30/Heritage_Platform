@@ -38,6 +38,10 @@ end = struct
   type t = [ Graph ]
   ;
   value path = fun [ Graph -> Paths.(cgi_dir_url ^ cgi_graph) ]
+  (* GH addition: indexing citations in DICO pages with Reader invocation *)
+  (* Ugly hack: the string "!CGIGRAPH" will get inserted at make DICO time in 
+     Heritage Dictionary, and instanciated properly by make releasedata at 
+     make install of Heritage Platform ! *)
   and relocatable_path = fun [ Graph -> "!CGIGRAPH" ]
   ;
 end
@@ -138,7 +142,7 @@ module Sentence : sig
 end = struct
   type t =
     { id : int
-    ; text : list Word.word
+    ; text : list Word.word (* list of padas *)
     ; unsandhied : bool
     ; analysis : Analysis.t
     }
@@ -152,8 +156,16 @@ end = struct
   ;
   value id s = s.id
   ;
-  value text encoding s =
-    s.text |> List.map (Encoding.decode encoding) |> String.concat " "
+  value text encoding s = (* restores input including danda *)
+  (* this is used to display the link to the sentence in [Corpus_manager] *)
+  (* WAS [s.text |> List.map (Encoding.decode encoding) |> String.concat " "] *)
+    s.text |> restore_danda_rec ""
+    where rec restore_danda_rec accu = fun
+       [ [] -> accu 
+       | [ [] :: rest ] -> restore_danda_rec (accu ^ "|") rest (* glitch *)
+       | [ chunk :: rest ] -> let str = Encoding.decode encoding chunk in
+                              restore_danda_rec (accu ^ " " ^ str) rest 
+       ]
   ;
   value unsandhied s = s.unsandhied
   ;
@@ -262,6 +274,7 @@ module Make (Loc : Location) : S = struct
   value save_sentence force dir id text unsandhied analysis =
     let file = sentence_file dir id in
     let sentence = Sentence.make id text unsandhied analysis in
+    (* Here text is saved as a list of words, empty words coding danda *)
     if not force && Sys.file_exists file then raise Sentence_already_exists 
                                          else Gen.dump sentence file
   ;

@@ -90,28 +90,27 @@ value main =
       |> int_of_float
     in
     let text = Cgi.decoded_get "text" "" env in
-    let unsandhied = Cgi.decoded_get "us" "f" env = "t" in
+    let unsandhied = Cgi.decoded_get "us" "f" env = "t" in 
     let permission =
       Web_corpus.permission_of_string (Cgi.decoded_get Params.corpus_permission "" env)
     in
     match permission with
     [ Web_corpus.Annotator ->
-      let read_skt =
-        if unsandhied then Sanskrit.read_raw_sanskrit else
-          Sanskrit.read_sanskrit
+      let read_skt = Sanskrit.read_raw_sanskrit_corpus (* NEW *)
+        (* WAS if unsandhied then Sanskrit.read_raw_sanskrit
+           else Sanskrit.read_sanskrit *)
       in
       let encode =
         Cgi.decoded_get "t" Paths.default_transliteration env
         |> Corpus.Encoding.of_string
         |> Corpus.Encoding.encode
-      in
-      do
+      in do
       { Web_corpus.save_sentence force corpdir sentno
           (read_skt encode text) unsandhied (analysis_of_env env)
-      ; Corpus_manager.mk_page corpdir permission
+      ; Corpus_manager.mk_page corpdir permission 
       }
     | Web_corpus.Reader | Web_corpus.Manager ->
-      let expected_permission = Web_corpus.(string_of_permission Annotator) in
+      let expected_permission = Web_corpus.string_of_permission Annotator in
       let current_permission = Web_corpus.string_of_permission permission in
       invalid_corpus_permission_page expected_permission current_permission
     ]

@@ -54,6 +54,7 @@ open Sandhi;
 #load "sanskrit.cmo"; 
 open Sanskrit;  
 
+(*
 #load "int_sandhi.cmo"; 
 open Int_sandhi; 
 #load "order.cmo"; 
@@ -177,4 +178,5 @@ parse "[S [ADV tat ] [ADV kim ]
 parse "[S [INJ haa ] [ADV katham ] [NP1s [NP6 vi.s.no.h ] 
        (dharma<daaraa.h) ] [VP 0 [NP1 (priya<sakhii) [NP6 me ] 
        lalitaa ] ] ]";
+*)
 *)

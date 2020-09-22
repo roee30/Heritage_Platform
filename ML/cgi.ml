@@ -94,7 +94,7 @@ value decoded_get key default alist = decode_url (get key alist default)
 ;
 value query_string_env_var = "QUERY_STRING"
 ;
-value query_string () =
+value query_string () = (* query is retrieved in system env var |QUERY_STRING| *)
   try Sys.getenv query_string_env_var with [ Not_found -> "" ]
 ;
 value url_encode s =
@@ -103,8 +103,8 @@ value url_encode s =
   (* Reference: RFC 3986 appendix A *)
   let url_encode = fun
     (* Unreserved characters *)
-    [ 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '-' | '.' | '_' | '~' as c ->
-      String.make 1 c
+    [ 'a' .. 'z' | 'A' .. 'Z' | '0' .. '9' | '-' | '.' | '_' | '~' 
+    | '|' | '!' as c -> String.make 1 c (* NEW for corpus *)
     (* Special case of the space character *)
     | ' ' -> "+"
     (* Reserved characters *)

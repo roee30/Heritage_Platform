@@ -45,5 +45,6 @@ value code_skt_ref_d : skt -> Word.word;
 value decode_skt : Word.word -> skt;
 value read_sanskrit : (string -> Word.word) -> string -> list Word.word;
 value read_raw_sanskrit : (string -> Word.word) -> string -> list Word.word;
+value read_raw_sanskrit_corpus : (string -> Word.word) -> string -> list Word.word;
 
 (*i end; i*)

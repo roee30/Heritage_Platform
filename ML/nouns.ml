@@ -3829,7 +3829,7 @@ value build_ap entry =
         ; register Loc "apsu"
         ])
    ]
-   ; Bare Noun (code "ap")
+   ; Bare Noun (code "ap") (* e.g. abja *)
    ; Avyayaf (code "apam") 
    ]
 ;
@@ -5786,15 +5786,19 @@ value iic_indecl = (* should be lexicalized *)
   ; "antar"     (* antarafga *)
   ; "arvaak"    (* arvaakkaalika *)
   ; "alam"      (* (gati) ala.mk.rta *)
+  ; "alpaat"    (* alpaanmukta *)
   ; "iti"       (* ityukta *)  
   ; "upari"     (* uparicara *)  
   ; "ubhayatas" (* ubhayata.hsasya - tasil *)
   ; "evam"      (* eva.mvid *)
+  ; "k.rcchraat" (* k.rcchraadavaapta *)
   ; "tatra"     (* tatrabhavat *)
   ; "divaa"     (* divaanidraa *)
   ; "na~n"      (* na~nvaada *)
   ; "naanaa"    (* naanaaruupa *)
   ; "param"     (* para.mtapa *)
+  ; "pazcaa"    (* pazcaardha *)
+  ; "pazcaat"   (* pazcaadukti *)
   ; "punar"     (* punarukta *)
   ; "puras"     (* (gati) pura.hstha *)
   ; "praayas"   (* praayazcitta *)
@@ -5811,6 +5815,21 @@ value iic_indecl = (* should be lexicalized *)
   ; "svayam"
   ]
 ;
+value declined_indecls =
+(* declined substantive forms used as adverbs *)
+  [ "astam"
+  ; "kam#1"
+  ; "kaamam"
+  ; "naktam"
+  ; "param"
+  ; "raatrim"
+  ]
+;
+value compute_extra_indecls () =
+  iter add_adv declined_indecls 
+  where add_adv entry = enter1 entry (Indecl Adv (normal_stem entry)) 
+;
+
 (* Feminine stems iic for productive adjectives                       *)
 (* This is a generic weakness, to be remedied.                        *)
 (* Generative stems are not inspected for feminine stems              *)
@@ -6070,6 +6089,7 @@ value compute_extra iic_only_stems = do
   ; enter1 "giri" (Avyayaf (code "giram")) (* \Pan{5,4,112} upagiram *)
   ; iter enter_gati gatis
   ; iter enter_saat_gati gati_products
+  ; compute_extra_indecls ()
   ; compute_extra_tasils ()
   ; compute_extra_iic iic_indecl (* antar *) 
   ; compute_extra_iic iic_only_stems (* aajaanu etc. *)

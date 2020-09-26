@@ -73,31 +73,31 @@ and vjp1 =   Conjug (Injunctive 1) Passive (* passive of root injunctive *)
 ;
 (* Finite verbal forms of roots *)
 value fpresa cl conj = (conj,vpa cl)
-and fpresm cl conj =   (conj,vpm cl)
-and fpresp conj =      (conj,vpp)
-and fimpfta cl conj =  (conj,via cl)
-and fimpftm cl conj =  (conj,vim cl)
-and fimpftp conj =     (conj,vip)
-and fopta cl conj =    (conj,voa cl)
-and foptm cl conj =    (conj,vom cl)
-and foptp conj =       (conj,vop)
-and fimpera cl conj =  (conj,vma cl)
-and fimperm cl conj =  (conj,vmm cl)
-and fimperp conj =     (conj,vmp) 
-and ffutura conj =     (conj,vfa)
-and ffuturm conj =     (conj,vfm)
-and fconda conj =      (conj,vca)
-and fcondm conj =      (conj,vcm)
-and fperfa conj =      (conj,vpfa)
-and fperfm conj =      (conj,vpfm)
-and fbenea conj =      (conj,vbena)
-and fbenem conj =      (conj,vbenm)
-and faora cl conj =    (conj,vaa cl)
-and faorm cl conj =    (conj,vam cl)
-and finja cl conj =    (conj,vja cl)
-and finjm cl conj =    (conj,vjm cl)
-and faorp1 conj =      (conj,vap1)
-and finjp1 conj =      (conj,vjp1)
+and fpresm cl conj   = (conj,vpm cl)
+and fpresp conj      = (conj,vpp)
+and fimpfta cl conj  = (conj,via cl)
+and fimpftm cl conj  = (conj,vim cl)
+and fimpftp conj     = (conj,vip)
+and fopta cl conj    = (conj,voa cl)
+and foptm cl conj    = (conj,vom cl)
+and foptp conj       = (conj,vop)
+and fimpera cl conj  = (conj,vma cl)
+and fimperm cl conj  = (conj,vmm cl)
+and fimperp conj     = (conj,vmp) 
+and ffutura conj     = (conj,vfa)
+and ffuturm conj     = (conj,vfm)
+and fconda conj      = (conj,vca)
+and fcondm conj      = (conj,vcm)
+and fperfa conj      = (conj,vpfa)
+and fperfm conj      = (conj,vpfm)
+and fbenea conj      = (conj,vbena)
+and fbenem conj      = (conj,vbenm)
+and faora cl conj    = (conj,vaa cl)
+and faorm cl conj    = (conj,vam cl)
+and finja cl conj    = (conj,vja cl)
+and finjm cl conj    = (conj,vjm cl)
+and faorp1 conj      = (conj,vap1)
+and finjp1 conj      = (conj,vjp1)
 ;
 (* Primary finite verbal forms of roots *)
 value presa cl = fpresa cl Primary
@@ -108,37 +108,37 @@ and opta cl    = fopta cl Primary
 and optm cl    = foptm cl Primary
 and impera cl  = fimpera cl Primary
 and imperm cl  = fimperm cl Primary
-and futura  = ffutura Primary
-and futurm  = ffuturm Primary
-and perfa   = fperfa Primary
-and perfm   = fperfm Primary
-and aora cl = faora cl Primary
-and aorm cl = faorm cl Primary
-and aorp1   = faorp1 Primary
-and benea   = fbenea Primary
-and benem   = fbenem Primary
-and inja cl = finja cl Primary
-and injm cl = finjm cl Primary
-and injp1   = finjp1 Primary
+and futura     = ffutura Primary
+and futurm     = ffuturm Primary
+and perfa      = fperfa Primary
+and perfm      = fperfm Primary
+and aora cl    = faora cl Primary
+and aorm cl    = faorm cl Primary
+and aorp1      = faorp1 Primary
+and benea      = fbenea Primary
+and benem      = fbenem Primary
+and inja cl    = finja cl Primary
+and injm cl    = finjm cl Primary
+and injp1      = finjp1 Primary
 ;
 (* Participial forms *)
 value pra k = Ppra k 
-and prm k = Pprm k 
-and prp   = Pprp
-and pfta  = Ppfta
-and pftm  = Ppftm
-and futa  = Pfuta
-and futm  = Pfutm
+and prm k   = Pprm k 
+and prp     = Pprp
+and pfta    = Ppfta
+and pftm    = Ppftm
+and futa    = Pfuta
+and futm    = Pfutm
 (* Also in Part: Ppp, Pppa, Ger=Pfut Passive, Inf *)
 ;
 (* Verbal forms of roots *)
 value vppra k conj = (conj,pra k)
-and vpprm k conj = (conj,prm k)
-and vppfta conj = (conj,pfta)
-and vppftm conj = (conj,pftm)
-and vpfuta conj = (conj,futa)
-and vpfutm conj = (conj,futm)
-and vpprp  conj = (conj,prp)
+and vpprm k conj   = (conj,prm k)
+and vppfta conj    = (conj,pfta)
+and vppftm conj    = (conj,pftm)
+and vpfuta conj    = (conj,futa)
+and vpfutm conj    = (conj,futm)
+and vpprp  conj    = (conj,prp)
 (* Also in Part: Ppp, Pppa, Ger=Pfut Passive, Inf *)
 ;
 (* Verbal forms of roots *)
@@ -414,6 +414,7 @@ value passive_stem entry rstem = (* Panini yak (k : no guna, samprasaara.na) *)
     | "zaas"  -> revcode "zi.s" (* ambiguous zi.s.ta, zi.syate *)
     | "zii#1" -> revcode "zay" (* \Pan{7,4,22} *) 
     | "pyaa"  -> revcode "pyaay" (* pyaa=pyai *)
+    | ".s.thiiv" -> revcode ".s.thiv" 
     | "indh" | "und" | "umbh" | "gumph" | "granth" | "da.mz" | "dhva.ms"  
     | "bandh" | "bhra.mz" | "za.ms" | "zrambh" | "skambh" | "skand" 
       (* above roots have penultimate nasal and do not have [i_it] marker *)
@@ -961,7 +962,7 @@ value compute_athematic_present2m strong weak set entry third =
    [ (Singular, let l = 
         [ if entry = "as#1" then (First, code "he") else
           conjugw First "e" 
-        ; conjugw Second "se"
+        ; conjugw Second (if entry = "ii.d" then "ise" else "se") (* MW *)
         ; check entry 2 third (conjugw Third "te") 
         ] in if entry = "m.rj" then [ conjugs First "e" :: l ]
              else l (* Whitney§627 *))
@@ -2344,6 +2345,9 @@ value compute_futurem conj stem entry =
   ; record_part_m_th pfutm stem entry
   }
 ;
+(* NB Passive forms of future, conditional, aorist and benedictive maay be formed
+   for certain roots according to Bandharkar II p 103 -- not implemented here *)
+
 (* Conditional - preterit of future, built from imperfect on future stem   *)
 (* where non-performance of the action is implied - pluperfect conditional *)
 (* used in antecedent as well as in consequent clause - Apte§216           *)
@@ -2538,7 +2542,7 @@ value intercalate_pp root rstem =
            | "lap" | "lal" | "la.s" | "las" | "lu.th" | "lul" | "lok" | "loc" 
            | "vad" | "val" | "vaz" | "vas#2" | "vaaz"| "vaas#3" | "vid#1" 
            | "vip"| "ven" | "vyath" | "vraj" | "vra.n" | "vrii.d" | "zubh#1" 
-           | "zcut#1" | "zrath" | "zlath" | "zlaagh" | "zvas#1" | ".s.thiiv"
+           | "zcut#1" | "zrath" | "zlath" | "zlaagh" | "zvas#1" 
            | "suuc" | "suud" | "sev" | "skhal" | "stan" | "stim" | "sthag"
            | "sphu.t" | "sphur" | "svad" | "svan" | "svar#1" | "has" | "hras" 
            | "hraad" | "hlaad" | "hval" 
@@ -2699,8 +2703,9 @@ value compute_ppp_stems entry rstem =
            | "zaa"     -> revcode "zi"
            | "saa#1"   -> revcode "si"
            | "sthaa#1" -> revcode "sthi"
-           | "diiv#1"  -> revcode "dyuu" (* iiv -> yuu *)
-           | "siiv"    -> revcode "syuu"
+           | "diiv#1"   -> revcode "dyuu" (* iiv -> yuu *)
+           | "siiv"     -> revcode "syuu"
+           | ".s.thiiv" -> revcode ".s.thyuu"
            | "daa#1"   -> revcode "dad" (* ad hoc \Pan{7,4,46} *)
            | "dham"    -> revcode "dhmaa"  (* \Pan{7,3,78} *)
            | "dhaav#2" -> revcode "dhau"
@@ -2723,9 +2728,11 @@ value compute_ppp_stems entry rstem =
             (* vérifier forme passive pour racines ci-dessus *)
            | _ -> passive_stem entry rstem (* possibly duhified and mirjified *)
            ] in [ Ta ppstem :: match entry with  
+                  (* pp in -ita built on rstem (default) or on ppstem or both *)
                     [ ".rc#1" | ".rj" | "k.svi.d" | "grah" | "praz" | "ba.mh"
                     | "ma.mh" | "manth" | "m.rg" | "yaj#1" | "vyadh" | "vrazc"
-                    | "vaz" | "vas#1" | "vas#4" | "zrath" | "stambh"| "svap"  ->
+                    | "vaz" | "vas#1" | "vas#4" | "zrath" 
+                    | "stambh"| "svap" ->
                            [ Tia ppstem ] 
                     | "vap" | "vap#1" | "vap#2" | "vad" ->
                            [ Tia rstem; Tia ppstem ]
@@ -2887,8 +2894,8 @@ value admits_passive = fun
     "an#2" | "av" | "as#1" | "ah" | "iiz#1" | "uc" | "kan" | "kuu" 
   | "knuu" | "k.sar" | "k.si" | "kha.n.d" | "daa#2" | "dyut#1" | "dru#1" 
   | "pat#2" | "paz" | "paa#2" | "pii" | "praa#1" | "bruu" | "ruc#1" | "vas#4"
-  | "vidh#1" | "vip" | "vyac" | "zam#1" | "zi~nj" | "zrambh" | "zvit#1" | "sap#1"
-  | "siiv" | "spaz#1" | "spardh" | "h.r#2" | "hrii#1" 
+  | "vidh#1" | "vip" | "vyac" | "zam#1" | "zi~nj" | "zrambh" | "zvit#1" 
+  | "sap#1" | "siiv" | "spaz#1" | "spardh" | "h.r#2" | "hrii#1" 
   | "ma.mh" (* supplied by "mah" *) (* | "arh" | "k.lp" no ps but pfp *)
       -> False
 (* But "iiz#1" "uc" "kuu" "k.sar" "dru#1" "pii" "ruc#1" "vip" "zam#1" 
@@ -3049,6 +3056,7 @@ value redup_perf root =
       | "hi#2"   -> stems "ghi"      (* idem *)
       | "guh"    -> stems "guuh"  (* \Pan{6,4,89} *)
       | "dham"   -> stems "dhmaa"
+      | ".s.thiiv" -> stems ".s.thiv"
       | "praz" -> let w = revcode "pracch" in (w,w,w) (* Whitney§794c *)
       | "zaas" -> let w = revcode root in (w,w,w) (* redup voy a, not i *)
       | _ -> stems root (* NB: keep penultimate nasal "ta~nc" *)
@@ -3128,6 +3136,7 @@ value redup_perf root =
       and rc = (* reduplicating consonant *) match c with
         [ 17 | 18 (* k kh *) -> 22 (* c *)
         | 19 | 20 | 49 (* g gh h *) -> 24 (* j *)
+        | 28 (* .th *) when root=".s.thiiv" -> 32 (* t *) (* preferably *)
         | 23 | 25 | 28 | 30 | 33 | 35 | 38 | 40 -> c-1 (* xh -> x *)
         | _ -> c (* c by default *)
         ] in 
@@ -3223,7 +3232,8 @@ value compute_perfecta conj strong weak olengthened eweak iopt entry =
           else conjugw Third "ur" (* Henry: paptur véd. pat1 *)
         ])
    ]) 
-  ; let pstem = if entry="raaj#1" then (revcode "rej") else weak in 
+  ; let pstem = if entry="raaj#1" then (revcode "rej") else weak in
+    if entry=".s.thiiv" then ((* unattested *)) else 
     record_part (Ppfta_ conj pstem entry)
   }
 ;
@@ -4236,7 +4246,7 @@ value compute_aorist entry =
             ] in compute_ath_s_aoristm stemm entry 
         ]
       }
-    | "k.r.s" -> do 
+    | "k.r.s" -> do (* optional metathesis *)
        { let stem = long in compute_ath_s_aorista stem entry (* akaark.siit *)
        ; let stem = ar_ra long in 
          compute_ath_s_aorista stem entry         (* metathesis akraak.siit *)
@@ -4662,6 +4672,7 @@ value pfp_ya rstem entry =
     | [ 35; 1; 45 ] (* vadh/han *) -> rstem (* vadhya *) 
     | [ 36; 1; 49 ] (* han *) -> revcode "ghaat" (* (h=h') \Pan{7,3,32+54} *)
     | [ 35; 1; 42; 45 ] (* vyadh *) -> revcode "vedh"
+    | [ 45; 4; 28; 47 ] (* .s.thiiv *) -> revcode ".s.thev" (* as .s.thiv *)
     | [ 46; 1; 43; 37 ] (* praz *) -> revcode "p.rcch"
     | [ 46; 1; 37 ] (* paz *) -> raise Not_attested (* pazya WR -Panini *)
     | [ 46; 1; 45 ] (* vaz *) -> rstem (* vazya (?) *)
@@ -5708,6 +5719,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
                      }
      | "vyadh" -> compute_future_gen (revcode "vidh") entry 
      | "zuu" -> compute_future_gen (revcode "zve") entry 
+     | ".s.thiiv" -> compute_future_gen (revcode ".s.thiv") entry 
      | "knuu" -> compute_future_gen (revcode "knuuy") entry 
      | _ -> compute_future_gen rstem entry 
      ]
@@ -5721,6 +5733,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
                      }
      | "vyadh"  -> compute_perif (revcode "vidh") entry 
      | "zuu"    -> compute_perif (revcode "zve") entry 
+     | ".s.thiiv" -> compute_perif (revcode ".s.thiv") entry 
      | "knuu"   -> compute_perif (revcode "knuuy") entry 
      | "stambh" -> compute_perif (revcode "stabh") entry 
      | _ -> compute_perif rstem entry 
@@ -5728,6 +5741,7 @@ value compute_conjugs_stems entry (vmorph,aa) = do (* main *)
    ; (* Precative/Benedictive active rare, middle very rare in classical skt *)
       match entry with 
       [ "as#1" -> () (* uses bhuu *) (* but Zriivara: staat *)
+      | ".s.thiiv" -> () (* unattested - to be added *)
       | _ -> compute_benedictive rstem entry 
       ]
    ; (* Passive *)
@@ -5960,8 +5974,11 @@ and compute_extra_trr () = do
              ; (Dual,[ (First, code "teriva") ])
              ])
       }
-and compute_extra_dhaa () = (* Gaayatrii dhiimahi precative m. Whitney§837b *)
-    enter1 "dhaa#1" (Conju benem [ (Plural,[ (First, code "dhiimahi") ]) ])
+and compute_extra_dhaa () = do 
+    { (* Gaayatrii dhiimahi precative m. Whitney§837b *)
+      enter1 "dhaa#1" (Conju benem [ (Plural,[ (First, code "dhiimahi") ]) ])
+    ; record_part (Ppp_ Primary (revcode "dhita") "dhaa#1") (* alter hita *)
+    }
 (* also "vidmahi" on yantra ? *)
 and compute_extra_nind () = (* WR: RV *)
   enter1 "nand" (Conju perfa [ (Plural,[ (Third, code "ninidus") ])

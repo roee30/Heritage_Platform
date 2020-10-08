@@ -344,7 +344,8 @@ value build_part_a_m verbal stem prati root =
    ; Bare krid prati
    (* what follows needs adapting [Inflected.enter_form]
    ; Avyayaf (fix stem "am") (* yathaav.rddham *)  
-     possible Cvi usage: see [Nouns.iiv_krids] *)
+     possible Cvi usage: see [Nouns.iiv_krids] 
+   ; possible tasils see [Nouns.compute_extra_tasils] *)
    ] 
 ;
 (* Similar to [Nouns.build_neu_a] *)

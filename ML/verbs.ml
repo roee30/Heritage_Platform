@@ -359,6 +359,8 @@ value weak_stem entry rstem = (* rstem = revstem entry *)
     | "nij"    -> revcode "ni~nj" (* nasalisation *)
     | "vaz"    -> revcode "uz" (* but not vac ! *)
     | "myak.s" -> revcode "mik.s" 
+(*  | "grah"   -> revcode "g.rh"
+    | "grabh"  -> revcode "g.rbh" -- implicit from stems *)
 (*  | "sad#1"  -> revcode "siid" - incorrect for perfect ! *)
     | _ -> rstem
     ]
@@ -374,6 +376,7 @@ value stems root =
       (revstem substitute,rstem,lstem) in
   match root with (* This shows what ought to be the root name, its weak form *)
      [ "grah"   -> sampra "g.rh" (* \Pan{6,1,15} *) 
+     | "grabh"  -> sampra "g.rbh" (* archaic variant of grah *) 
      | "vyadh"  -> sampra "vidh" (* \Pan{6,1,15} *) 
      | "spardh" -> sampra "sp.rdh"
      | "svap"   -> sampra "sup" (* \Pan{6,1,15} *) 
@@ -3153,7 +3156,7 @@ value redup_perf root =
           | _ ->       ([ rv; rc ],None)
           ] 
       and vriddhi = match root with
-          [ "vyadh" | "svap" | "grah" -> True 
+          [ "vyadh" | "svap" | "grah" | "grabh" (* fictive *) -> True 
             (* since special weak stem returned by stems *)
           | _ -> a
           ] in
@@ -3286,6 +3289,13 @@ value compute_perfect_c strong weak olengthened eweak iopt entry =
                          | _ -> weak
                          ] in 
               compute_perfectm Primary stem entry
+            ; if entry = "grah" then (* archaic variant grabh *) 
+                 let (s, w, o, e, i) = redup_perf "grabh" in 
+                 do { compute_perfecta Primary s w o e i entry
+                    ; compute_perfectm Primary w entry
+                    }
+              else ()
+    
             }
   ]
 ;
@@ -5277,7 +5287,8 @@ value compute_present_system entry rstem gana pada third =
    | 2 -> (* athematic conjugation: 2nd class (root class) *)
      let set = augment_ii entry 
      and sstem = strong_stem entry rstem 
-     and wstem = if entry="as#1" then [ 48 ] else weak_stem entry rstem in do 
+     and wstem = if entry="as#1" then [ 48 ] (* rare archaic forms *)
+                 else weak_stem entry rstem in do 
      { match voices_of_gana 2 entry with
        [ Para -> (* active only *) if pada then
           compute_active_present2 sstem wstem set entry third
@@ -5342,8 +5353,8 @@ value compute_present_system entry rstem gana pada third =
            ] 
        and nasal = homonasal c in
        let wstem = 
-         if entry = "t.rh" then revcode "t.rfh"
-         else [ c :: rev (sandhi stem [ nasal ]) ] (* stem-n *) 
+         if entry = "t.rh" then revcode "t.rfh" (* guttural nasal f *)
+         else [ c :: rev (sandhi stem [ nasal ]) ] (* nasalized stem *) 
        and sstem = 
          if entry = "t.rh" then [ c :: rev (sandhi stem [ 36; 10 (* -ne *)]) ] 
          else [ c :: rev (sandhi stem [ 36; 1 ]) ] (* stem-na *) in 
@@ -5610,6 +5621,7 @@ value compute_denom stem ystem entry = do (* other than present system - rare *)
         match entry with
         [ "asuuya" -> () (* wrong asya *)
         | "m.rga" -> () (* from m.rg *)
+        | "raajan" -> () (* from raaj2 *)
         | _ -> do (* experimental - rare acc. to Whitney *)
                { compute_passive_11 entry rest
                ; record_pfp_10 entry rest

@@ -6051,6 +6051,7 @@ value compute_extra_tasils () = do (* add non-generative tasils - ad-hoc *)
   ; enter1 "bhasad" (Indecl Tas (code "bhasattas")) (* tasil on consonant stem *)
 (*; enter1 "nas#2" (Indecl Tas (code "nastas")) - idem but lexicalized *)
   ; enter1 "yad.rcchaa" (Indecl Tas (code "yad.rcchaatas")) (* tasil on fstem *)
+  ; enter1 "yata" (Indecl Tas (code "yatatas")) (* only tasil on pp *)
 (* NB bhii.smadro.napramukhatas BhG{1,25} treated in [enter_extra_ifcs] below *) 
   } 
 ; 

@@ -136,12 +136,12 @@ value n_or_f c =  c = 21 (* f *) || c = 36 (* n *)
 ;
 value homonasal c = (* nasal homophonic to given consonant *)
   if consonant c then 
-  if velar c   then 21 (* f  *) else
-  if palatal c then 26 (* ~n *) else
-  if lingual c then 31 (* .n *) else
-  if dental c  then 36 (*  n *) else
-  if labial c  then 41 (*  m *)
-               else 14 (* .m *)
+  if velar c    then 21 (* f  *) else
+  if palatal c  then 26 (* ~n *) else
+  if lingual c  then 31 (* .n *) else
+  if dental c   then 36 (*  n *) else
+  if labial c   then 41 (*  m *)  
+                else 14 (* .m *)
   else failwith "Non consonant arg to homonasal"
 ;
 (* vowel modifiers = anusvaara 14, candrabindu 15 and visarga 16 *)

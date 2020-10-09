@@ -691,6 +691,13 @@ commit-corpus:
 	cp -Rp $(SERVERCORPUS) $(SKTRESOURCES)
 # TODO: git add des nouvelles citations, git commit, git push
 
+# server injection of COURSE, to do with su permission
+course:
+	mkdir -p $(SERVERPUBLICDIR)/COURSE
+	cp -Rp $(SKTRESOURCES)/COURSE $(SERVERPUBLICDIR)
+	cp -p $(SERVERPUBLICDIR)/COURSE/lesson1.fr.html $(SERVERPUBLICDIR)/COURSE/index.html
+
+
 SAVED_VERSION=325b
 save: # saving sources of Heritage_Platform (after make clean in ML)
 	tar cvf ../ARCHIVE/Heritage_Platform_$(SAVED_VERSION).tar ML SITE JAVASCRIPT SETUP configure INSTALLATION DOC IMAGES README 

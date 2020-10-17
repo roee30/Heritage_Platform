@@ -1187,14 +1187,16 @@ value compute_athematic_imperative2m strong weak set entry =
   and conjugw person suff =
       (person,if entry = "han#1" then fix2whan suff 
               else fix2w weak suff set) in
+  let conjugf = if entry = "suu#1" then conjugw (* Bandharkar II p 37 *)
+                else conjugs in
   enter1 entry (Conju (imperm 2)
    [ (Singular, 
-        [ conjugs First  "ai"
+        [ conjugf First  "ai"
         ; conjugw Second "sva"
         ; conjugw Third  "taam"
         ])
    ; (Dual, let l =
-        [ conjugs First  "aavahai"
+        [ conjugf First  "aavahai"
         ; conjugw Second "aathaam"
         ; conjugw Third  "aataam"
         ] in if entry = "m.rj" then 
@@ -1203,7 +1205,7 @@ value compute_athematic_imperative2m strong weak set entry =
                 ] @ l
              else l (* Whitney§627 *))
    ; (Plural, let l =
-        [ conjugs First  "aamahai"
+        [ conjugf First  "aamahai"
         ; if entry = "aas#2" then (Second, code "aadhvam") (* -Whitney§617 *) 
           else conjugw Second "dhvam"
         ; if entry = "zii#1" then conjugw Third "rataam" (* \Pan{7,1,6} *)

@@ -248,10 +248,13 @@ value body dir permission =
     }
   ]
 ;
+value capitalize_ascii str = (* Oct 2020 [String.capitalize_ascii] deprecated *)
+  str |> Bytes.of_string |> Bytes.capitalize_ascii |> Bytes.to_string
+;
 value mk_page dir permission =
   let title_str =
     "Sanskrit Corpus " ^
-    (permission |> Web_corpus.string_of_permission |> String.capitalize_ascii)
+    (permission |> Web_corpus.string_of_permission |> capitalize_ascii)
   in
   let clickable_title =
     let query =

@@ -93,8 +93,8 @@ value voices_of = fun
 (*| Doubt: "bhuu1" could also be Atma bhavate *)
 (*| "zru" could be Atma in Vedic eg z.r.nu.sva *)
       -> Para (* active only *) 
-  | "az#1" | "aas#2" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" 
-  | "ii.s" | "iih"  | "edh" | "katth" | "kam" | "kamp" | "kaaz" | "kaas#1" 
+  | "az#1" | "aas#2" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" | "ii.s" 
+  | "iih"  | "edh" | "ka~nc" | "katth" | "kam" | "kamp" | "kaaz" | "kaas#1"
   | "kuu" | "k.rp" | "k.lp" (* but Henry: {cak.lpur} "ils s'arrangèrent" *)
   | "knuu" | "klav" | "k.sad" | "galbh" | "gur" | "glah" 
   | "gha.t" | "jabh#1" | "ju.s#1" | "j.rmbh" | ".damb" | ".dii" | "tandr"

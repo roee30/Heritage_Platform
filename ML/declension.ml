@@ -229,6 +229,43 @@ value gender_of = fun
   | s -> failwith ("Weird gender" ^ s)
   ] 
 ;
+value adjust_stem gender = fun
+  [ "idam" -> match gender with
+              [ Mas -> "ayam"
+              | Fem -> "iyam"
+              | _   -> "idam"
+              ]
+  | "ayam" -> match gender with
+              [ Neu -> "idam"
+              | Fem -> "iyam"
+              | _   -> "ayam"
+              ]
+  | "iyam" -> match gender with
+              [ Neu -> "idam"
+              | Mas -> "ayam"
+              | _   -> "iyam"
+              ]
+  | "asau" -> match gender with
+              [ Neu -> "adas"
+              | _   -> "asau"
+              ]
+  | "adas" -> match gender with
+              [ Mas | Fem  -> "asau"
+              | _   -> "adas"
+              ]
+  | "tad" -> match gender with
+              [ Mas -> "sa#2"
+              | Fem -> "saa#2"
+              | _   -> "tad"
+              ]
+  | "etad" -> match gender with
+              [ Mas -> "e.sa#1"
+              | Fem -> "e.saa"
+              | _   -> "etad"
+              ]
+  | entry -> entry
+  ]
+;
 value decls_engine () = do
   { pl http_header
   ; page_begin meta_title 
@@ -272,7 +309,8 @@ value decls_engine () = do
                Morpho_html.skt_utf font entry ^ root in] i*)
         let subtitle = hyperlink_title ft link in do
         { display_subtitle (h1_center subtitle)
-        ; try look_up ft entry (Nouns.Gender gender) part
+        ; let stem = adjust_stem gender entry in 
+          try look_up ft stem (Nouns.Gender gender) part
           with [ Stream.Error s -> failwith s ] 
         }
       ; page_end lang True

@@ -51,8 +51,8 @@ value load_inflected phase =
       | "Verb"    -> Data.public_roots_file
       | "Part"    -> Data.public_parts_file
       | "Inde"    -> Data.public_inde_file
-      | "Absya"   -> Data.public_absya_file
-      | "Abstvaa" -> Data.public_abstvaa_file
+      | "Absya"   -> Data.public_absya_file (* absolutives in -ya, infinitives *)
+      | "Abstvaa" -> Data.public_abstvaa_file (* absolutives in -tvaa, infini. *)
       | "Iic"     -> Data.public_iics_file
       | "Iiv"     -> Data.public_iivs_file
       | "Ifc"     -> Data.public_ifcs_file 
@@ -67,26 +67,26 @@ value generative = fun
   [ "Part" | "Piic" -> True | _ -> False ]
 ;
 value answer_begin () = do
-  { pl center_begin 
-  ; pl (table_begin_style (centered Yellow) [ noborder; ("cellspacing","20pt") ])
-  ; ps tr_begin
-  ; ps th_begin  
+  { center_begin |> pl
+  ; table_begin_style (centered Yellow) [ noborder; ("cellspacing","20pt") ]|> pl
+  ; tr_begin |> ps
+  ; th_begin |> ps
   }
 ;
 value answer_end () = do
-  { ps th_end
-  ; ps tr_end
-  ; pl table_end
-  ; pl center_end 
-  ; pl html_break 
+  { th_end |> ps
+  ; tr_end |> ps 
+  ; table_end |> pl
+  ; center_end |> pl
+  ; html_break |> pl
   }
 ;
-value unvisarg_rev = fun (* we revert a final visarga to s *)
+value unvisarg_mirror = fun (* we revert a final visarga to s *)
   [ [ 16 :: w ] -> [ 48 :: w ] 
   | w -> w
   ]
 ;
-value unvisarg word = Word.mirror (unvisarg_rev (Word.mirror word))
+value unvisarg word = Word.mirror (unvisarg_mirror (Word.mirror word))
 (* thus we may input raama.h and search for raamas in the morphological tables
    but we can't input puna.h or anta.h and search for punar or antar or also 
    verbal ninyu.h, stored as ninyur even though it is displayed as ninyu.h *)
@@ -121,7 +121,7 @@ value lemmatizer_engine () =
             | le -> do 
               { ps " lemmatizes as:"
               ; pl html_break
-              ; let pi =  Morpho_html.print_inflected gen word in 
+              ; let pi = Morpho_html.print_inflected gen word in 
                 List.iter pi le
               }
             ]  
@@ -143,7 +143,7 @@ value safe_lemmatizer_engine () =
   | Sys_error s         -> abor Control.sys_err_mess s (* file pb *)
   | Stream.Error s      -> abor Control.stream_err_mess s (* file pb *)
   | Invalid_argument s  -> abor Control.fatal_err_mess s (* sub *)
-  | Failure s           -> abor Control.fatal_err_mess s (* anomaly *)
+  | Failure s 
   | Control.Fatal s     -> abor Control.fatal_err_mess s (* anomaly *)
   | Not_found           -> abor Control.fatal_err_mess "assoc" (* assoc *)
   | End_of_file         -> abor Control.fatal_err_mess "EOF" (* EOF *)

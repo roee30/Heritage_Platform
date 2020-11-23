@@ -4394,11 +4394,10 @@ value build_pron_a g stem entry = (* g=Mas ou g=Neu *)
              [ Bare phase iic ]
           else if g=Mas && stem = [ 42; 36; 1 ] (* anya *) 
                then [ Bare phase (code "anya") ] (* optional anya- *)
-          else if pseudo_nominal && g=Mas then 
-                  [ Avyayaf (fix stem "am"); Avyayaf (fix stem "aat") 
-                  ; Indecl Tas (fix stem "atas") 
-                  ]
-          else [])
+          else if pseudo_nominal && g=Mas then (* needed ? *)
+                  [ Avyayaf (fix stem "am"); Avyayaf (fix stem "aat") ]
+(*                ; Indecl Tas (fix stem "atas") -- not needed *)
+               else [])
        @ (if g=Mas then match entry with
                        [ "eka" -> [ Cvi (code "ekii") ] 
                        | "sva" -> [ Cvi (code "svii") ] 
@@ -5131,11 +5130,14 @@ value compute_nouns_stem_form e stem d p =
                  ]
              | _ -> build_root Mas stem e
             ] 
-      | [ 24 :: r1 ] (* -j *) -> match r1 with (* m.rjify *)
-            [ [ 1 :: [ 43 :: _ ] ] (* -yaj2 upaya.t *) 
+      | [ 24 :: r1 ] (* -j *) -> match r1 with (* mrijify *)
+            [ [ 1 :: [ 42 :: _ ] ] (* -yaj2 upaya.t *) 
+            | [ 1 :: [ 43 :: [ 40 :: _ ] ] ] (* -bhraj *) 
+            | [ 2 :: [ 42 :: _ ] ] (* -yaaj2 *) (* but not -bhaaj *)
             | [ 2 :: [ 43 :: _ ] ] (* -raaj2 viraaj2 *) 
-            | [ 2 :: [ 42 :: _ ] ] (* -yaaj2 *) 
-            | [ 7; 48 ] (* s.rj2 *) -> build_root Mas [ 124 (* j' *) :: r1 ] e
+            | [ 7 :: [ 40 :: _ ] ] (* -bh.rj *) 
+            | [ 7 :: [ 48 :: _ ] ] (* -s.rj2 *)
+                -> build_root Mas [ 124 (* j' *) :: r1 ] e
             | [ 5; 42 ] (* yuj2 *) -> do 
                 { build_root Mas stem e
                 ; build_archaic_yuj [ 24; 26; 5; 42 ] (* yu~nj *) Mas e
@@ -5336,9 +5338,13 @@ value compute_nouns_stem_form e stem d p =
             | [ 2 :: _ ] (* -aac *) -> build_neu_aac r1 e
             | _ -> build_root Neu stem e
             ]
-      | [ 24 :: r1 ] (* -j *) -> match r1 with (* m.rjify *)
-            [ [ 2 :: [ 43 :: _ ] ] (* -raaj2 viraaj2 *) 
-            | [ 2 :: [ 42 :: _ ] ] (* -yaaj2 *) 
+      | [ 24 :: r1 ] (* -j *) -> match r1 with (* mrijify *)
+            [ [ 1 :: [ 42 :: _ ] ] (* -yaj2 upaya.t *) 
+            | [ 1 :: [ 43 :: [ 40 :: _ ] ] ] (* -bhraj *) 
+            | [ 2 :: [ 42 :: _ ] ] (* -yaaj2 *) (* but not -bhaaj *)
+            | [ 2 :: [ 43 :: _ ] ] (* -raaj2 viraaj2 *) 
+            | [ 7 :: [ 40 :: _ ] ] (* -bh.rj *) 
+            | [ 7 :: [ 48 :: _ ] ] (* -s.rj2 *)
                 -> build_root Neu [ 124 (* j' *) :: r1 ] e
             | [ 5; 42 ] (* yuj2 *) -> do  
                 { build_root Neu stem e
@@ -5587,10 +5593,14 @@ value compute_nouns_stem_form e stem d p =
             [ [ 48; 1 ] (* asau *) -> build_asau_f ()
             | _ -> build_au Fem r1 e
             ]
-      | [ 24 :: r1 ] (* -j *) -> match r1 with (* m.rjify *)
-            [ [ 2 :: [ 43 :: _ ] ] (* -raaj2 viraaj2 *) 
-            | [ 2 :: [ 42 :: _ ] ] (* -yaaj2 *) 
-            | [ 7; 48 ] (* s.rj2 *) -> build_root Fem [ 124 (* j' *) :: r1 ] e
+      | [ 24 :: r1 ] (* -j *) -> match r1 with (* mrijify *)
+            [ [ 1 :: [ 42 :: _ ] ] (* -yaj2 upaya.t *) 
+            | [ 1 :: [ 43 :: [ 40 :: _ ] ] ] (* -bhraj *) (* but not sraj! *)
+            | [ 2 :: [ 42 :: _ ] ] (* -yaaj2 *) (* but not -bhaaj *)
+            | [ 2 :: [ 43 :: _ ] ] (* -raaj2 viraaj2 *) 
+            | [ 7 :: [ 40 :: _ ] ] (* -bh.rj *) 
+            | [ 7 :: [ 48 :: _ ] ] (* -s.rj2 *)
+                -> build_root Fem [ 124 (* j' *) :: r1 ] e
             | [ 5; 42 ] (* yuj2 *) -> do 
                 { build_root Fem stem e
                 ; build_archaic_yuj [ 24; 26; 5; 42 ] (* yu~nj *) Fem e
@@ -5837,6 +5847,7 @@ value compute_extra_indecls () =
 (* This concerns privative compounds and participles.                 *)
 value iicf_extra = 
   [ "abalaa" (* a-bala with fem abalaa *)  
+  ; "ukhaa" (*  ukhaasrat *)
   ; "kaantaa" (* kaanta pp *)
   ] 
 ;
@@ -6043,10 +6054,11 @@ auxiliary, such as yaa (bhasmasaat) or nii (Whitney) or sampad (gr.) *)
 value compute_extra_tasils () = do (* add non-generative tasils - ad-hoc *) 
   { enter1 "aze.sa" (Indecl Tas (code "aze.satas")) (* tasil on privative cpd *)
   ; enter1 "ekaruupa" (Indecl Tas (code "ekaruupatas")) (* tasil on cpd *)  
-  ; enter1 "d.r.s.taanta" (Indecl Tas (code "d.r.s.taantatas"))(* tasil on cpd *)
+(*; enter1 "d.r.s.taanta" (Indecl Tas (code "d.r.s.taantatas")) tasil on icpd *)
   ; enter1 "guruvaktra" (Indecl Tas (code "guruvaktratas")) (* id *) 
   ; enter1 "paramaartha" (Indecl Tas (code "paramaarthatas")) (* id *) 
   ; enter1 "praagbhaava" (Indecl Tas (code "praagbhaavatas")) (* id *) 
+  ; enter1 "svabhaava" (Indecl Tas (code "svabhaavatas")) (* id *) 
   ; enter1 "svaravar.na" (Indecl Tas (code "svaravar.natas")) (* id *) 
   ; enter1 "bhasad" (Indecl Tas (code "bhasattas")) (* tasil on consonant stem *)
 (*; enter1 "nas#2" (Indecl Tas (code "nastas")) - idem but lexicalized *)
@@ -6153,8 +6165,12 @@ value enter_extra_ifcs () = do (* archaic retroflexion in cpds \Pan{8,4,13} *)
    (* Now ad-hoc provision for specific adverbs usable as ifcs *)
    ; let entry = "k.rtvas" in
         enter_ind_ifc entry (Indecl Adv (code entry))
-   ; let entry  ="pramukha" in 
+   ; let entry = "pramukha" in 
         enter_ind_ifc entry (Indecl Tas (code "pramukhatas")) (* ifc tasil *)
+   ; let entry = "bhava" in 
+        enter_ind_ifc entry (Indecl Tas (code "bhavatas")) (* ifc tasil *)
+   ; let entry = "utthaa" in (* ad-hoc for compound zayyotthaayam Pan{3,4,52} *)
+        enter_ind_ifc entry (Indecl Abs (code "uttaayam")) (* ifc .namul *)
    }
 ;
 value enter_extra_iifcs () = do
@@ -6199,7 +6215,7 @@ EXTEND Gram
         [ "m." -> Mas
         | "f." -> Fem
         | "n." -> Neu
-        | s -> failwith ("Weird gender" ^ s)
+        | s -> failwith ("Weird gender " ^ s)
         ] in
       Gender (gender_of t) ] ];
 END
@@ -6218,7 +6234,7 @@ value update_index ic =
           let s = input_line ic in do
           { let ((entry,gender) as eg) = parse_entry s in 
             try compute_decls_stem entry eg ""
-            with [ Sys_error m -> print_string ("Sys_error"  ^ m)
+            with [ Sys_error m -> print_string ("Sys_error "  ^ m)
                  | _  -> print_string "Wrong input"
                  ]
           ; read_from_ic ic

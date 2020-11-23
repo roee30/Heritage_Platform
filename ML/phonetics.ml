@@ -330,7 +330,9 @@ and amuitic = fun [ [ -2 :: _ ] -> True | _ -> False ]
 (* Following 4 functions are used in stem computations in Verbs. *)
 (* For m.rj-like verbs (Whitney§219-a) Panini{8,2,36} 
    "bhraaj" "m.rj" "yaj1" "raaj1" "vraj" "s.rj1" "bh.rjj"
-   replace phoneme j=24 by j'=124 with sandhi j'+t = .s.t (j' is j going to z) *)
+   replace phoneme j=24 by j'=124 with sandhi j'+t = .s.t (j' is j going to z) 
+   also in Nouns to ifcs "bhraj" "yaj2" "yaaj2" "raaj2" "s.rj2" "bh.rj" 
+                 but not to sf "sraj" *)
 value mrijify stem = match stem with
   [ [ 24 :: r ] -> [ 124 :: r ]
   | _ -> failwith ("mrijify" ^ Canon.rdecode stem)
@@ -376,7 +378,10 @@ value mk_aspirate w = (* c-cs-vow is the syllable ending in vow *)
   List2.unstack cs [ aspc :: rest ] 
 ;
 value asp = fun 
-  [ [ vow :: rest ] when vowel vow -> [ vow :: mk_aspirate rest ]
+  [ [ vow :: rest ] when vowel vow -> match rest with 
+     [ [] -> [ vow ] (* idh *)
+     | _ -> [ vow :: mk_aspirate rest ]
+     ]
   | _ -> failwith "Penultimate not vowel"
   ]
 ;
@@ -400,13 +405,16 @@ value finalize rstem = match rstem with
        | 44 (* l *) (* l needed for praty\=ah\=ara hal *)
        | 45 (* v *) (* diiv2 *)
        | 43 (* r *) (* no visarga to keep distinction r/s for segmentation *)
-       | 48 (* s *) -> rstem (* but sras -> srat ? *)
+       | 48 (* s *) -> rstem
        | 19 (* g *) 
        | 22 (* c *) 
        | 23 (* ch *)
        | 24 (* j *) (* e.g. bhi{\d s}aj; bhuj; as{\d r}j -yuj *)
        | 25 (* jh *) -> match rest with 
-           [ [ 26 (* \~n *) :: ante ] -> [ 21 (* \.n *) :: ante ] 
+           [ [ 26 (* \~n *) :: ante ] -> let nasal = match ante with
+                  [ [ 1 :: [ 18 :: _ ] ] (* kha~nj *) -> 36 (* n *)
+                  | _ -> 21 (* \.n *)
+                  ] in [ nasal :: ante ] 
            | [ 24 (* j *) :: ante ] | [ 22 (* c *) :: ante ] 
                -> [ 27 (* {\d t} *) :: ante ] (* majj bh.rjj pracch *)
            | [ 21 (* \.n *) :: _ ] -> rest
@@ -464,10 +472,10 @@ value finalize_r stem = match stem with
                           else stem 
           | [] -> failwith "Illegal arg r to finalize_r"
           ]
-       | 48 (* s *) -> match rest with
-          [ [ 1 :: [ 45 :: [ 35 :: _ ] ] ] -> [ 34 (* t *) :: rest ] (* dhvas *)
-          | [ 1 :: [ 45 :: _ ] ] -> stem (* suvas *)
-          | _ -> [ 34 (* t *) :: rest ] (* sras *) 
+       | 48 (* s *) -> match rest with (* Whitney §168 *)
+          [ [ 1 :: [ 43 :: [ 48 :: _ ] ] ] (* sras *) 
+          | [ 1 :: [ 45 :: [ 35 :: _ ] ] ] (* dhvas *) -> [ 34 (* t *) :: rest ] 
+          | _ -> stem (* suvas *)
           ]
        | _ -> finalize stem 
        ]

@@ -109,8 +109,8 @@ value normal_stem_str str = Canon.decode (normal_stem str) (* horror *)
 ;
 (* strips homonymy index of raw input - similar awful double reversal *)
 (* Same function, with skt input, is [Subst.stripped_code_skt] *)
-(* This is only called at compile lexicon time by Dictionary/Print_html 
-   through below skt_strip_to_deva *)
+(* This is only called at compile lexicon time by [Dictionary/Print_html] 
+   through below [skt_strip_to_deva] *)
 value code_strip_raw s =  rev_strip (code_raw s)
 ;
 (* A cleaner solution to name spaces would be to have type lexeme = (word * int) 

@@ -94,7 +94,7 @@ value decoded_get key default alist = decode_url (get key alist default)
 ;
 value query_string_env_var = "QUERY_STRING"
 ;
-value query_string () = (* query is retrieved in system env var |QUERY_STRING| *)
+value query_string () = (* query is retrieved in system env var [QUERY_STRING] *)
   try Sys.getenv query_string_env_var with [ Not_found -> "" ]
 ;
 value url_encode s =

@@ -96,9 +96,9 @@ value main =
     in
     match permission with
     [ Web_corpus.Annotator ->
-      let read_skt = Sanskrit.read_raw_sanskrit_corpus (* NEW *)
-        (* WAS if unsandhied then Sanskrit.read_raw_sanskrit
-           else Sanskrit.read_sanskrit *)
+      let read_skt = Sanskrit.read_raw_sanskrit_corpus (* NEW 2020 *)
+        (* WAS [if unsandhied then Sanskrit.read_raw_sanskrit
+                              else Sanskrit.read_sanskrit] *)
       in
       let encode =
         Cgi.decoded_get "t" Paths.default_transliteration env

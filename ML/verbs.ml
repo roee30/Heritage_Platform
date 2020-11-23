@@ -4648,7 +4648,7 @@ value pfp_ya rstem entry =
         [ "mnaa" | "zaa" | "saa#1" -> rstem (* mnaaya zaaya avasaaya *)
         | _ -> [ 10 :: r ] (* deya *)
         ]
-    | [ 3 :: _ ] | [ 4 :: _ ] -> strong 
+    | [ 3 :: _ ] | [ 4 :: _ ] -> strong (* but zeya for zii1 not in Bucknell ? *)
     | [ 5 (* u *) :: r ] -> match entry with 
         [ "stu" -> [ 45 :: [ 2 :: r ] ] (* u -> aav *)
         | "yu#1" -> [ 6 :: r ] (* u -> uu *)
@@ -4940,6 +4940,7 @@ value record_abso_am root =
   | "s.rp"    -> record "sarpam"
   | "skand"   -> record "skandam"
   | "stambh"  -> record "stambham"
+  | "sthaa#1" -> record "sthaayam" (* Bhate: zayyosthaayam sauté du lit *)
   | "han"     -> record "ghaatam" (* \Pan{3,4,36+37} *)
   | "knuu"    -> record "knopam" (* from causative *)
   | _ -> ()
@@ -4999,7 +5000,7 @@ value compute_intensive_presenta strong weak iiflag entry =
         ; conjugs Second "si"
         ; conjugw Second "iisi"
         ; conjugs Third  "ti" 
-        ; conjugw Third  "iiti" (*i PB: generates *daridreti for [draa#1] i*)
+        ; conjugw Third  "iiti" (*i PB: generates *daridreti for draa1 i*)
         ])
    ; (Dual, 
         [ conjugw First  "vas"
@@ -5017,11 +5018,11 @@ value compute_intensive_presenta strong weak iiflag entry =
                 (* ii disappears before vowels in special roots *)
              else if consonantal weak then Some weak (* 3rd pl weak stem *)
              else None (* problematic. Concerns 
-                          daridraa for draa#1
+                          daridraa for draa1
                           naanada for nad
-                          bobho for bhuu#1
-                          yaayajyaa for yaj#1
-                          jafgha for han#1 *) in 
+                          bobho for bhuu1
+                          yaayajyaa for yaj1
+                          jafgha for han1 *) in 
      match wk with [ Some weak -> record_part (Pprared_ Intensive weak entry) 
                    | _ -> ()
                    ]
@@ -5548,13 +5549,13 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
    | "pavitra" | "paaza" | "pi.n.da" | "pulaka" | "puula" | "pratikuula" 
    | "prati.sedha" | "pradak.si.na" | "prasaada" | "bhi.saj" (* | "mantra" *)
    | "malina" | "mizra" | "mukula" | "mukhara" | "mu.n.da" | "muutra" 
-   | "m.rga" | "yantra" | "rasa" | "ruuk.sa" | "lagha" (* u -> a *) 
+   | "m.rga" | "yantra" | "rasa" | "ruuk.sa" | "lagha" (* u -> a *)
    (*| "var.na"*) | "vaasa#3" | "vizada" | "vra.na" | "zaanta" | "zithila"
    | "zyena" | ".sa.n.dha" | "sapi.n.da" | "saphala" | "sabhaaja" | "saantva" 
    | "saavadhaana" | "suutra" | "stena" (* practice \Pan{3,1,15} *)
    | "u.sas" | "namas" | "varivas" (* do \Pan{3,1,19} *)
    | "utpuccha" (* do \Pan{3,1,20} *)
-   | "zlak.s.na" (* make \Pan{3,1,21} *)
+   | "vrata" | "zlak.s.na" (* make \Pan{3,1,21} *)
    | "lava.na" (* desire Kale§645 \Pan{3,1,21} *)
    | "udan" (* Kale§645 *)
    | "hala" (* take \Pan{3,1,21} *)
@@ -5564,9 +5565,10 @@ value den_stem_a entry = (* in general transitive Whitney§1059c *)
    | "k.r.s.na" (* agir comme *)
    | "viira" | "zabda" | "tira" (* MW *) | "ma~njara" | "sraja" | "manas" 
        -> rstem (* -yati *) (* standard causative meaning *)  
+   | "putras" | "lava.nas" -> rstem (* trick for redundancy *) 
    | "madhu" | "v.r.sa" (* also madhvasyati v.r.siiyati *) 
-   | "k.siira" (* also putra *)
-       -> [ 48 :: rstem ] (* -syati *) (* Kale§643 *)
+   | "k.siira" 
+       -> [ 48 :: rstem ] (* -syati *) (* wish for \Pan{7,1,51} Kale§643 *)
    | _ -> failwith ("Unknown denominative " ^ entry)
    ] 
 ;

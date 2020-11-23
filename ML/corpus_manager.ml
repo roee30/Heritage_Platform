@@ -181,15 +181,14 @@ value group_sentences dir sentences =
   List.map (fun (x, y) -> (List.map (fun x -> List.assoc x dict) x, y)) groups
 ;
 value new_section_form dir permission =
+  let perm = Web_corpus.string_of_permission permission in
   cgi_begin mkdir_corpus_cgi "" ^
   "New section: " ^ uplinks dir permission ^
   hidden_input Mkdir_corpus_params.parent_dir dir ^
-  hidden_input Mkdir_corpus_params.permission (Web_corpus.string_of_permission permission) ^
+  hidden_input Mkdir_corpus_params.permission perm ^
   text_input "new_section" Mkdir_corpus_params.dirname ^ " " ^
-  submit_input "Create"
-  ^
-  cgi_end
-  ;
+  submit_input "Create" ^ cgi_end
+;
 value section_selection_form dir permission sections =
   let selection_prompt =
     let submit_button_label = Web_corpus.(
@@ -197,9 +196,7 @@ value section_selection_form dir permission sections =
       [ Reader -> "Read"
       | Annotator -> "Annotate"
       | Manager -> "Manage"
-      ]
-    )
-    in
+      ]) in
     uplinks dir permission ^
     section_selection dir (List.map Corpus.Section.label sections)  ^ " " ^
     submit_input submit_button_label

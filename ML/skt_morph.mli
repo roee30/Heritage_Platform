@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Sanskrit morphology interface *)
@@ -176,7 +176,7 @@ and krit = (* coarser than Paninian krit suffixes *)
 type ind_kind = 
   [ Adv       (* adverb *)
   | Avya      (* turned into an adverb by avyayiibhaava compounding *)
-  | Abs       (* root absolutive in -tvaa *)
+  | Abs       (* absolutive *)
   | Tas       (* tasil taddhita *)
   | Part      (* particule *)
   | Prep      (* preposition *) 

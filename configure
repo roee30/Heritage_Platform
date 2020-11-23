@@ -7,6 +7,7 @@ config_link_path="SETUP/config"
 config_version_path="SETUP/version.txt"
 meta_makefile_path="SETUP/MMakefile"
 site_entry_page_path="SITE/site_entry_page"
+site_entry_page_fr_path="SITE/site_entry_page_fr"
 sitepage_en_path="SITE/index.en.html"
 sitepage_fr_path="SITE/index.fr.html"
 faq_page_path="SITE/faq.html"
@@ -76,10 +77,17 @@ def generate(config_path):
     site_entry_page = open(site_entry_page_path,'r')
     site_entry_page_content = site_entry_page.read()
     site_entry_page.close()
+    site_entry_page_fr = open(site_entry_page_path,'r') # site_entry_page_fr_path
+    site_entry_page_fr_content = site_entry_page_fr.read()
+    site_entry_page_fr.close()
     for key in counter_keys:
         site_entry_page_content = site_entry_page_content.replace('#'+key,items[key])
     for key in version_keys:
         site_entry_page_content = site_entry_page_content.replace('#'+key,items[key])
+    for key in counter_keys:
+        site_entry_page_fr_content = site_entry_page_fr_content.replace('#'+key,items[key])
+    for key in version_keys:
+        site_entry_page_fr_content = site_entry_page_fr_content.replace('#'+key,items[key])
 
     # ENGLISH INDEX PAGE
     sitepage_en = open(sitepage_en_path,'w')
@@ -90,8 +98,8 @@ def generate(config_path):
     
     # FRENCH INDEX PAGE
     sitepage_fr = open(sitepage_fr_path,'w')
-    sitepage_fr_content =  site_entry_page_content.replace('#LANG','fr')   
-    sitepage_fr.write(sitepage_fr_content)
+    sitepage_fr_content = site_entry_page_fr_content.replace('#LANG','fr')   
+    sitepage_fr.write(sitepage_fr_content) 
     sitepage_fr.close()
     print sitepage_fr_path, "(fr) generated"
     

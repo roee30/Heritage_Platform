@@ -2297,6 +2297,8 @@ value compute_benedictive rstem entry =
         conjug_benedictivem Primary sibstem entry (* m.r.sii.s.ta \Pan{1,3,61} *)
     | "luu#1" -> let sibstem = revcode "lavi.s" in
         conjug_benedictivem Primary sibstem entry (* lavi.sii.s.ta \Pan{3,4,116} *)
+    | "suu#1" -> let sibstem = revcode "savi.s" in
+        conjug_benedictivem Primary sibstem entry (* \Pan{3,4,116} BhG{3,10} *)
     | _ -> ()
     ]
   }
@@ -2378,7 +2380,7 @@ value compute_future stem entry =
          ; match entry with (* conditional or atma on demand *)
            [ "grah" | "jiiv" | "bhuu#1" | "zaas" | "stu" | "sm.r" | "haa#1" 
                      -> compute_conda Primary stem entry
-           | "khaad" | "gad" -> compute_futurem Primary stem entry 
+           | "khaad" | "gad" | "vac" -> compute_futurem Primary stem entry 
            | _ -> ()
            ]
          }
@@ -2809,7 +2811,7 @@ value perstems rstem entry =
               | "dham" -> code "dhmaa"
               | "nij" -> code "nej" (* for gana 3 *)
               | "vah#1" -> code "voh" (* vo.dhaa \Pan{6,3,112} *)
-              | "sah" -> code "soh" (* so.dhum \Pan{6,3,112} *)
+              | "sah#1" -> code "soh" (* so.dhum \Pan{6,3,112} *)
               | "likh" | "vij" -> rev [ 3 :: rstem ] (* i with weak stem *)
               | "vrazc" -> code "vraz" (* ought to be truncated by int sandhi *)
               | "za.ms" -> code "zas"
@@ -4276,7 +4278,8 @@ value compute_aorist entry =
     | "puu#1" | "p.rc"| "pru.s#1" | "baadh" | "budh#1" | "mad#1" 
     | "mud#1" | "muurch" | "mlecch" | "yaac" | "rak.s" | "ruc#1" | "lu~nc" 
     | "luu#1" | "vad" | "vadh" | "vaz" | "vid#1" | "v.r#1" | "v.rdh#1"  
-    | "vraj" | "z.rr" | "sidh#2" | "skhal" | "stan" | "stu" | "hi.ms" -> do
+    | "vyath" | "vraj" | "z.rr" | "sidh#2" | "skhal" | "stan" | "stu" | "hi.ms"
+      -> do
       { let stem = match weak with
             [ [ 7 (* .r *) :: _ ] -> (* complex Paninian see Müller Gram xii *)
               if entry = "jaag.r" then strong (* jaagari.sam RF IC 2 p 88 *)
@@ -4409,7 +4412,7 @@ value compute_injunctive entry =
     | "ce.s.t" | "jalp" | "jaag.r" | "t.rr" | "diip" | "pa.th" 
     | "puu#1" | "p.rc" | "baadh" | "budh#1" | "mad#1" | "mud#1" | "muurch" 
     | "mlecch" | "yaac" | "ruc#1" | "lu~nc" | "luu#1" | "vad" | "vadh" | "vaz" 
-    | "vid#1" | "v.r#1" | "vraj" | "z.rr" | "sidh#2" | "skhal" | "stan"
+    | "vid#1" | "v.r#1" | "vyath" | "vraj" | "z.rr" | "sidh#2" | "skhal" | "stan"
     | "stu" | "hi.ms" -> do
       { let stem = match weak with
             [ [ 7 (* .r *) :: _ ] -> 
@@ -6042,6 +6045,8 @@ and compute_extra_sanj () = (* WR Oberlies p LI but maybe prm of variant sajj *)
   compute_passive_system conj root pastem 
 and compute_extra_sad () = (* WR E. Mah(1.214.027c) (Gretil) sa.mni.siidatu.h *)
   enter1 "sad#1" (Conju (Primary,Conjug Perfect Active) [ (Dual,[ (Third, code "siidatus") ]) ])
+and compute_extra_suu () = (* BhG{3,10} *)
+  enter1 "suu#1" (Conju benem [ (Plural,[ (Second, code "savi.syadhvam") ]) ])
 and compute_extra_skand () = do (* WR *)  
   { enter1 "skand" (Invar (Primary,Infi) (code "skanditum")) 
   ; record_abso_ya (code "skadya") "skand"
@@ -6109,6 +6114,7 @@ value compute_extra () = do
   ; compute_extra_zru () 
   ; compute_extra_sanj ()
   ; compute_extra_sad ()
+  ; compute_extra_suu ()
   ; compute_extra_skand () 
   ; compute_extra_syand ()
   ; compute_extra_hims ()
@@ -6161,6 +6167,7 @@ value fake_compute_conjugs (gana : int) (entry : string) = do
       | "zru"    -> compute_extra_zru () 
       | "sa~nj"  -> compute_extra_sanj () 
       | "sad#1"  -> compute_extra_sad ()
+      | "suu#1"  -> compute_extra_suu ()
       | "spaz#1" -> record_part_ppp (revcode "spa.s.ta") entry
       | "syand"  -> compute_extra_syand ()
       | "hi.ms"  -> compute_extra_hims ()

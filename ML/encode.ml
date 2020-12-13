@@ -15,7 +15,8 @@ open Transduction; (* [code_raw] and similar *)
 open Phonetics; (* homonasal vowel *)
 exception In_error of string (* Error in user or corpus input *)
 ;
-value is_vowel c = vowel c || c>100 && c<114 (* accounts for upper case *)
+value is_vowel c = vowel c || avagraha c 
+                   || c>100 && c<114 (* Deprecated accounts for upper case *)
 ;
 (* anusvara substituted by nasal or normalized to 14 when original *)
 (* anunaasika after vowels treated as anusvaara *)
@@ -35,13 +36,14 @@ value rec normalize = normal_rec False
     if after_vow then [ 16 ]
     else raise (In_error "Visarga should follow vowel")
 (* No change to visarga since eg praata.hsvasu.h comes from praatar|svasu.h
-   and praatassvasu.h is not recognized. This is contrary to Henry§43 note 1. 
-   corresponding to the following code: [
+   This is contrary to Henry§43 note 1, corresponding to the following code: [
   | [ 16 (* .h *) :: [ c :: l ] ] -> 
     if after_vow then 
        let c' = if sibilant c then c else 16 (* du.hkha *) in
        [ c' :: [ c :: normal_rec (is_vowel c) l ] ]
-    else raise (In_error "Visarga should follow vowel") ] *)
+    else raise (In_error "Visarga should follow vowel")] 
+   Consequently, dukuula is listed after du.hstha, like in MW, but not Renou.
+   Apte avoids the problem by putting all dus-X under dus.  *)
   | [ 50 :: l ] -> [ 50 :: normal_rec False l ]  (* hiatus *)
   | [ c :: l ] -> [ c :: normal_rec (is_vowel c) l ] 
   ]

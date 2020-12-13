@@ -5812,6 +5812,7 @@ value iic_indecl = (* should be lexicalized *)
   ; "punar"     (* punarukta *)
   ; "puras"     (* (gati) pura.hstha *)
   ; "praayas"   (* praayazcitta *)
+  ; "pr.rthak"  (* p.rthagjana *)
   ; "mithyaa"   (* mithyaak.rta *)
   ; "tathaa"    (* tathaagata *)
   ; "yathaa"    (* yathaanirdi.s.ta *)
@@ -5840,17 +5841,7 @@ value compute_extra_indecls () =
   where add_adv entry = enter1 entry (Indecl Adv (normal_stem entry)) 
 ;
 
-(* Feminine stems iic for productive adjectives                       *)
-(* This is a generic weakness, to be remedied.                        *)
-(* Generative stems are not inspected for feminine stems              *)
-(* attested as substantives, and thus incurring a feminine iic stem.  *)
-(* This concerns privative compounds and participles.                 *)
-value iicf_extra = 
-  [ "abalaa" (* a-bala with fem abalaa *)  
-  ; "ukhaa" (*  ukhaasrat *)
-  ; "kaantaa" (* kaanta pp *)
-  ] 
-;
+(* Avyayiibhaava compounds *)
 value iic_avyas = 
 (* indeclinable stems used as iic of avyayiibhaava cpd *)
   [ "ati" (* atikambalam atinidram atyaasam *)
@@ -5883,6 +5874,7 @@ value iic_avyas =
    those should not be marked as avya (and thus skipped) in the lexicon 
 1. missing iic:
    iic aa-: aakar.namuulam aacandram aadvaadazam aamuulam aasa.msaaram aasamudram
+            aabrahmabhuvanaat
    iic. a-yathaa-:  ayathaamaatram 
    iic. ubhayatas-: ubhayata.hkaalam
    iic. dvyaha-: dvyahatar.sam dvyahaatyaasam
@@ -5929,6 +5921,17 @@ value enter_iic entry =
   (* NB This assumes the iic to be the entry stem - unsafe *)
 ;
 value compute_extra_iic = iter enter_iic  
+;
+(* Feminine stems iic for productive adjectives                       *)
+(* This is a generic weakness, to be remedied.                        *)
+(* Generative stems are not inspected for feminine stems              *)
+(* attested as substantives, and thus incurring a feminine iic stem.  *)
+(* This concerns privative compounds and participles.                 *)
+value iicf_extra = 
+  [ "abalaa" (* a-bala with fem abalaa *)  
+  ; "ukhaa" (*  ukhaasrat *)
+  ; "kaantaa" (* kaanta pp *)
+  ] 
 ;
 (* Glitch to allow Cvi construction to kridanta entries, even though
    [Inflected.enter_form] called from [Parts] does not allow it. *)
@@ -6060,10 +6063,10 @@ value compute_extra_tasils () = do (* add non-generative tasils - ad-hoc *)
   ; enter1 "praagbhaava" (Indecl Tas (code "praagbhaavatas")) (* id *) 
   ; enter1 "svabhaava" (Indecl Tas (code "svabhaavatas")) (* id *) 
   ; enter1 "svaravar.na" (Indecl Tas (code "svaravar.natas")) (* id *) 
+  ; enter1 "gu.nabheda" (Indecl Tas (code "gu.nabhedatas")) (* id *) 
   ; enter1 "bhasad" (Indecl Tas (code "bhasattas")) (* tasil on consonant stem *)
 (*; enter1 "nas#2" (Indecl Tas (code "nastas")) - idem but lexicalized *)
   ; enter1 "yad.rcchaa" (Indecl Tas (code "yad.rcchaatas")) (* tasil on fstem *)
-  ; enter1 "yata" (Indecl Tas (code "yatatas")) (* only tasil on pp *)
 (* NB bhii.smadro.napramukhatas BhG{1,25} treated in [enter_extra_ifcs] below *) 
   } 
 ; 

@@ -24,6 +24,7 @@ type phase =
   | Iiv | Iivv | Iivc (* inchoatives - cvi verbal compounds *)
   | Auxi | Auxiinv | Auxik | Auxiick (* forms of auxiliary verbs as bhuu k.r *)
   | Ifc  (* second part of compounds *)
+  | Indifc (* indeclinable forms usable as ifcs *)
   | Peri (* periphrastic perfect *)
   | Lopa (* e/o conjugated root forms with lopa *) 
   | Lopak (* e/o kridantas forms with lopa *) 
@@ -71,6 +72,7 @@ value rec string_of_phase = fun
   | Auxik -> "Auxik" 
   | Auxiick -> "Auxiick" 
   | Ifc   -> "Ifc"
+  | Indifc -> "Indifc"
   | Lopa  -> "Lopa"
   | Lopak -> "Lopak"
   | Pv    -> "Pv" 
@@ -129,6 +131,7 @@ and phase_of_string = fun (* unsafe *)
   | "Auxik" -> Auxik 
   | "Auxiick" -> Auxiick
   | "Ifc"   -> Ifc
+  | "Indifc" -> Indifc
   | "Lopa"  -> Lopa
   | "Lopak" -> Lopak
   | "Pv"    -> Pv
@@ -194,7 +197,7 @@ value rec color_of_phase = fun
          | Cache -> Deep_sky 
   | Pron -> Light_blue
   | Root | Auxi | Lopa -> Carmin  
-  | Inde | Abso | Absv | Absc | Auxiinv | Ai | Ani -> Mauve
+  | Inde | Indifc | Abso | Absv | Absc | Auxiinv | Ai | Ani -> Mauve
   | Iiy -> Lavender
   | Avy -> Magenta
   | Inftu -> Orange

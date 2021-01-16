@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Make_xml_data = struct  i*)
@@ -38,7 +38,7 @@ and read_pronouns () =
   try read_inflected Data.pronouns_file with 
   [ Sys_error s -> 
     let mess = s ^ "\n\n *** First call make_nouns ***\n"
-                 ^ " to create " ^ Data.nouns_file ^ "\n" in 
+                 ^ " to create " ^ Data.pronouns_file ^ "\n" in 
     abort mess
   ]
 and read_roots () = 
@@ -55,10 +55,17 @@ and read_parts () =
                  ^ " to create " ^ Data.parts_file ^ "\n" in 
     abort mess
   ]
+and read_indifcs () = 
+  try read_inflected Data.indifcs_file with 
+  [ Sys_error s ->
+    let mess = s ^ "\n\n *** First call make_nouns ***\n"
+                 ^ " to create " ^ Data.indifcs_file ^ "\n" in 
+    abort mess
+  ]
 and read_indecls () = 
   try read_inflected Data.indecls_file with 
   [ Sys_error s ->
-    let mess = s ^ "\n\n *** First call make_parts ***\n"
+    let mess = s ^ "\n\n *** First call make_nouns ***\n"
                  ^ " to create " ^ Data.indecls_file ^ "\n" in 
     abort mess
   ]
@@ -374,11 +381,12 @@ value print_xml_morphology trans =
   and iics = read_iics () 
   and voca = read_voca () 
   and ifcs = read_ifcs () 
+  and indifcs = read_indifcs () 
   and avya = read_avyayafs ()
   and iivs = read_iivs () 
   and prevs = read_prevs () in
   print_xml_list trans [ nouns; pronouns; verbs; parts; indecls; abstva; absya;
-                         iics; ifcs; avya; voca; iivs ] prevs
+                         iics; ifcs; indifcs; avya; voca; iivs ] prevs
 ;
 
 (* Analyse the transliteration argument to command [make_xml_data] *)

@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* [Load_transducers] *)
@@ -36,6 +36,7 @@ type transducer_vect =
   ; lopa : auto (* e/o conjugated root forms with lopa *)
   ; lopak : auto (* e/o kridantas forms with lopa *) 
   ; inde : auto (* indeclinables + infinitives *)
+  ; indifc : auto (* indeclinables ifc *)
   ; abso : auto (* abso-ya *)
   ; absv : auto (* vowel-initial abso-tvaa *)
   ; absc : auto (* consonant-initial abso-tvaa *)
@@ -86,6 +87,7 @@ value dummy_transducer_vect = (* needed for initialisation of [transducers_ref]*
   ; lopa    = empty_trans
   ; lopak   = empty_trans
   ; inde    = empty_trans
+  ; indifc  = empty_trans
   ; abso    = empty_trans
   ; iifc    = empty_trans
   ; iiv     = empty_trans
@@ -206,6 +208,7 @@ value mk_transducers () = (* : [transducter_vect] *)
   ; lopa = transducers_data.lopas 
   ; lopak = transducers_data.lopaks
   ; inde = transducers_data.indecls
+  ; indifc = transducers_data.indifcs
   ; abso = transducers_data.absya
   ; iifc = transducers_data.iifcs
   ; iiv = iiv 

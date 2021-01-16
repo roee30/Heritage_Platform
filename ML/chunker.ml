@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 (* Chunking mechanism for guessing partial padapatha from list of chunks. *)
 (* Essential for maximum parallelism in segmentation                      *)
@@ -61,11 +61,8 @@ value adjust c w = match Word.mirror w with
                         if Phonetics.elides_visarg_aa c then raise Hiatus else 
                         w (* Hiatus except c surd unaspirate ? *) 
                         (* NB "punaaramate" but not "punaa ramate" *)
-        | 4 (* ii *) (* possible visarga vanishes *)
-                        (* NB "n.rpatiiraajati" or "n.rpatii_raajati" 
-                           but "jyotiiratha.h" not chunkable*) 
+        | 4 (* ii *) (* possible visarga vanishes - but "n.rpatiiraajati" *) 
         | 6 (* uu *) -> if c=43 (* r *) then raise Hiatus else w
-                        (* NB "maatuuraajaa" not chunkable *)
         (* next 4 rules attempt to revert [last] to 'd' in view of [c] *)
         | 34 (* d *) -> if c=35 (* dh *) then raise Glue else 
                         if Phonetics.is_voiced c 

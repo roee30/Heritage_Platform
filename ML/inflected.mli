@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Inflected : sig i*)
@@ -33,6 +33,7 @@ value auxiinv  : ref inflected_map;
 value auxik    : ref inflected_map;
 value auxiick  : ref inflected_map;
 value indecls  : ref inflected_map;
+value indifcs  : ref inflected_map;
 value invs     : ref inflected_map;
 value absya    : ref inflected_map;
 value abstvaa  : ref inflected_map;
@@ -59,6 +60,7 @@ type flexion =
   [ Declined of nominal and gender and list (number * list (case * Word.word))
   | Conju of finite and list (number * list (person * Word.word))
   | Indecl of ind_kind and Word.word
+  | Indifc of ind_kind and Word.word
   | Bare of nominal and Word.word
   | Avyayai of Word.word (* Iic of avyayiibhaava cpd *)
   | Avyayaf of Word.word (* Ifc of avyayiibhaava cpd *)
@@ -70,8 +72,6 @@ type flexion =
   ]
 ;
 value enter1 : string -> flexion -> unit
-;
-value enter_ind_ifc : string -> flexion -> unit
 ;
 value enter : string -> list flexion -> unit
 ;

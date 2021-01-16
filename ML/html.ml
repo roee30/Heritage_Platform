@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Html = struct i*)
@@ -630,7 +630,7 @@ value anchor_pseudo url link =
 (***************************)
 
 value start_year = " 1994-"
-and current_year = "2020"
+and current_year = "2021"
 and author_name = "Gérard Huet"
 ;
 value copyright = "© " ^ author_name ^ start_year ^ current_year

@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Make_transducers = struct  i*)
@@ -98,6 +98,7 @@ value make_transducers =
   and piics    = transducer_of_lemmas Data.piics_file 
   and ifcs     = transducer_of_lemmas Data.ifcs_file 
   and indecls  = transducer_of_lemmas Data.indecls_file 
+  and indifcs  = transducer_of_lemmas Data.indifcs_file 
   and inftu    = transducer_of_lemmas Data.inftu_file 
   and absya    = transducer_of_lemmas Data.absya_file 
   and abstvaa  = transducer_of_lemmas Data.abstvaa_file 
@@ -126,6 +127,7 @@ value make_transducers =
   ; piics    = piics 
   ; ifcs     = ifcs 
   ; indecls  = indecls 
+  ; indifcs  = indifcs
   ; inftu    = inftu 
   ; absya    = absya 
   ; abstvaa  = abstvaa 

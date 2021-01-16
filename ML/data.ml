@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* module Data html = struct *)
@@ -100,7 +100,8 @@ and auxis_file    = data "auxi.rem"  (* created by [make_roots] etc. *)
 and auxiinvs_file = data "auxiinv.rem" (* created by [make_roots] etc. *)
 and auxiks_file   = data "auxik.rem"   (* created by [make_roots] etc. *)
 and auxiicks_file = data "auxiick.rem" (* created by [make_roots] etc. *)
-and indecls_file  = data "indecls.rem" (* created by  [make_roots] etc. *)
+and indecls_file  = data "indecls.rem" (* created by [make_roots] etc. *)
+and indifcs_file  = data "indifcs.rem" (* created by [make_roots] etc. *)
 and absya_file    = data "absya.rem"   (* created by [make_roots] etc. *)
 and abstvaa_file  = data "abstvaa.rem" (* created by [make_roots] etc. *)
 and inftu_file    = data "inftu.rem"   (* created by [make_roots] etc. *)
@@ -137,6 +138,7 @@ and public_iifcs_file       = public_data "iifcs.rem"
 and public_vocas_file       = public_data "voca.rem" 
 and public_invs_file        = public_data "invs.rem"
 and public_inde_file        = public_data "indecls.rem" 
+and public_indifcs_file     = public_data "indifcs.rem" 
 and public_absya_file       = public_data "absya.rem"  
 and public_abstvaa_file     = public_data "abstvaa.rem"  
 and public_inftu_file       = public_data "inftu.rem"

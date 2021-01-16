@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Pada defines the allowed padas (Para, Atma or Ubha) for
@@ -30,7 +30,7 @@ exception Unattested (* when a root/pada is attested only for some pvs *)
 value voices_of = fun 
   (* Default: invariant when prefixing by preverbs *)
   [ "ak.s" | "afg" | "aj" | "a.t" | "at" | "ad#1" | "an#2" | "am"| "argh" 
-  | "ard" | "av" | "az#2" | "as#1" | "as#2" | "aap" | "ifg" | "in" | "ind" 
+  | "ard" | "av" | "az#2" | "as#1" | "as#2" | "ifg" | "in" | "ind" 
   | "inv" | "il" | "i.s#2" | "iifkh" | "iir.s" | "uk.s" | "ujjh" | "u~nch"
   | "und" | "umbh" | "u.s" | ".rc#1" | ".rdh" | ".r.s" | "ej" | "kas" | "kiirt"
   | "kiil" | "ku.t" | "ku.n.th" | "kunth" | "kup" | "kul" | "ku.s" | "kuuj" 
@@ -70,7 +70,6 @@ value voices_of = fun
   | "sthag" | "snaa" | "snih#1" | "snu" | "snuh#1" | "sp.r" | "sphal" | "sphu.t"
   | "sphur" | "sm.r" | "svan" | "svap"  | "svar#1" | "svar#2" | "ha.th" 
   | "haa#1" | "hi#2" | "hi.ms" | "h.r.s" | "hras" | "hrii#1" | "hval"
-  | "maarg" (* root rather than nominal verb *)
 (*| "k.subh" needed for k.subhyate *)
 (*| "k.s.nu" Atma needed for sa.mk.s.ute \Pan{1,3,65} *)
 (*| "krii.d" Atma needed for aakrii.date \Pan{1,3,21} *)
@@ -91,6 +90,7 @@ value voices_of = fun
 (*| "uc"   Atma needed for uuce *)
 (*| "zu.s" Atma for zu.syate WR epic *)
 (*| "nam" Atma namate WR epic *)
+(*| "aap" Atma aapnute epic *)
 (*| "a~nj" also Atma afkte | "naath" "praz" "sp.rz#1" idem *)
 (*| Doubts: "bhuu1" could also be Atma bhavate *)
 (*| "zru" could be Atma in Vedic eg z.r.nu.sva *)
@@ -122,30 +122,30 @@ value voices_of = fun
       -> Atma (* "deponent" verbs: middle only *)
   | _ -> Ubha (* default *) 
   (* Attested Ubha (over all ga.nas) : 
-  [ "a~nc" | "arth" | "arh" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" | ".r" 
-  | ".rj" | "ka.n.d" | "kal" | "ka.s" | "ku.t.t" | "ku.n.d" | "k.r#1" | "k.r#2" 
-  | "k.r.s" | "kram" | "krii#1" | "krii.d" | "k.san" | "k.sap#1" | "k.sam" 
-  | "k.sal" | "k.sip" | "k.sud" | "k.subh" | "k.s.nu" | "khan" | "gam" | "garh" 
-  | "gaah" | "guh" | "g.rr#1" | "gras" | "grah" | "gha.t.t" | "cat" | "carc" 
-  | "ci" | "cint" | "cud" | "ce.s.t" | "cyu" | "chad#1" | "chand" | "chid#1"
-  | "jan" | "juu" | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d" | "tan#1" | "tan#2"
-  | "tap" | "tud#1" | "tul" | "t.rd" | "traa" | "daa#1" | "daaz#1" | "diz#1"
-  | "dih" | "diip" | "duh#1" | "dev#1" | "draa#2" | "dvi.s#1" | "dhaa#1" 
-  | "dhaav#1" | "dhaav#2" | "dhuu#1" | "dh.r" | "dhva.ms" | "nam" | "nah" 
-  | "naath" | "nij" | "nii#1" | "nud" | "pac" | "paz" | "pa.th" | "pii.d" 
-  | "pu.s#1" | "puu#1" | "puuj" | "puuy" | "p.rth" | "prii" | "pru.s#1" 
+  [ "a~nc" | "arth" | "arh" | "aap" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" 
+  | ".r" | ".rj" | "ka.n.d" | "kal" | "ka.s" | "ku.t.t" | "ku.n.d" | "k.r#1"
+  | "k.r#2" | "k.r.s" | "kram" | "krii#1" | "krii.d" | "k.san" | "k.sap#1" 
+  | "k.sam" | "k.sal" | "k.sip" | "k.sud" | "k.subh" | "k.s.nu" | "khan" 
+  | "gam" | "garh" | "gaah" | "guh" | "g.rr#1" | "gras" | "grah" | "gha.t.t" 
+  | "cat" | "carc" | "ci" | "cint" | "cud" | "ce.s.t" | "cyu" | "chad#1" 
+  | "chand" | "chid#1" | "jan" | "juu" | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d" 
+  | "tan#1" | "tan#2" | "tap" | "tud#1" | "tul" | "t.rd" | "traa" | "daa#1"
+  | "daaz#1" | "diz#1" | "dih" | "diip" | "duh#1" | "dev#1" | "draa#2" 
+  | "dvi.s#1" | "dhaa#1" | "dhaav#1" | "dhaav#2" | "dhuu#1" | "dh.r" | "dhva.ms"
+  | "nam" | "nah" | "naath" | "nij" | "nii#1" | "nud" | "pac" | "paz" | "pa.th" 
+  | "pii.d" | "pu.s#1" | "puu#1" | "puuj" | "puuy" | "p.rth" | "prii" | "pru.s#1"
   | "budh#1" | "bruu" | "bhak.s" | "bhaj" | "bharts" | "bhaas#1" | "bhid#1"
-  | "bhuj#2" | "bh.r" | "bh.rjj" | "mantr" | "maa#4" | "mi" | "mith" | "mil" 
-  | "mii" | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.r.s" | "yaj#1" 
-  | "yam" | "yaac" | "yu#1" | "yuj#1" | "yudh#1" | "rac" | "ra~nj" | "ram"
-  | "rah" | "raaj#1" | "ri" | "ric" | "rud#1" | "rudh#2" | "lafgh" | "lak.s"
-  | "labh" | "la.s" | "lip" | "lih#1" | "lup" | "luu#1" | "vad" | "van" | "vap#1"
-  | "vap#2" | "val" | "vah#1" | "vaa#3" | "vic" | "vij" "viz#1" | "viij" 
-  | "v.r#2" | "v.rt#1" | "v.rdh#1" | "vyath" | "vyaa" | "vrii" | "zap" 
-  | "zaa" | "zu.s" | "zubh#1" | "zyaa" | "zram" | "zri" | "zru" | "sru" 
-  | "san#1" | "sa~nj" | "sah#1" | "sic" | "su#2" | "suud" | "stambh" | "stu"
-  | "st.rr" | "sthaa#1" | "sp.rz#1" | "sp.rh" | "smi" | "syand" | "svad"
-  | "had" | "hikk" | "hu" | "huu" | "h.r#1"
+  | "bhuj#2" | "bh.r" | "bh.rjj" | "mantr" | "maa#4" | "maarg" | "mi" | "mith" 
+  | "mil" | "mii" | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.r.s" 
+  | "yaj#1" | "yam" | "yaac" | "yu#1" | "yuj#1" | "yudh#1" | "rac" | "ra~nj" 
+  | "ram" | "rah" | "raaj#1" | "ri" | "ric" | "rud#1" | "rudh#2" | "lafgh" 
+  | "lak.s" | "labh" | "la.s" | "lip" | "lih#1" | "lup" | "luu#1" | "vad" 
+  | "van" | "vap#1" | "vap#2" | "val" | "vah#1" | "vaa#3" | "vic" | "vij" 
+  | "viz#1" | "viij" | "v.r#2" | "v.rt#1" | "v.rdh#1" | "vyath" | "vyaa" 
+  | "vrii" | "zap" | "zaa" | "zu.s" | "zubh#1" | "zyaa" | "zram" | "zri" 
+  | "zru" | "sru" | "san#1" | "sa~nj" | "sah#1" | "sic" | "su#2" | "suud"
+  | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" | "sp.rh" | "smi"
+  | "syand" | "svad" | "had" | "hikk" | "hu" | "huu" | "h.r#1"
   ] *)
   (* + corr. "praz" | "k.rr" | "p.rc" | "bandh" *)
   (* NB. "ah" "rip" "vadh" have no pr, "mand2" is fictitious *) 
@@ -346,7 +346,7 @@ value voices_of_pv upasarga gana = fun
    [ "vi" -> Ubha
    | _ -> raise Unattested
    ]  
-(* Usage, MW *)
+(* Usage, MW, WR *)
 | "gha.t.t" -> if gana = 1 then 
                   if upasarga = "" then raise Unattested
                   else Atma (* only "vi" | "sam", NOT "" *)
@@ -371,6 +371,11 @@ value voices_of_pv upasarga gana = fun
    [ (* "ava" | "pra" | *) "vi" | "sam" -> Atma (* \Pan{1,3,22} *)
    | _ -> Ubha (* "" | "adhi" | "anu" | "abhi" | "ava" | "aa" | "ut" | "upa" 
                 | "ni" | "prati" *)
+   ]  
+| "vac" -> match upasarga with 
+   [ "" | "pra" -> Ubha (* BhG{8,11} pravak.sye *)
+   | "adhi" | "anu" | "nis" | "prati" | "vi" -> Para
+   | _ -> raise Unattested
    ]  
 | root -> voices_of_gana gana root
 ]

@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* CGI-bin callback for shallow syntax analysis *)
@@ -74,8 +74,8 @@ value rec color_of_role = fun (* Semantic role of lexical category *)
   | Noun | Nouv | Nouc | Krid | Kriv | Kric | Ifc | Ifcv | Ifcc 
   | Pron | Kama | Lopak | Auxik -> Cyan (* Actor or Predicate *)
   | Root | Lopa |  Auxi -> Pink (* abs-tvaa in Inde *) (* Process *) 
-  | Abso | Absv | Absc | Inde | Avy | Ai | Ani | Inftu | Auxiinv (* Circumstance *)
-    -> Lavender 
+  | Abso | Absv | Absc | Inde | Avy | Ai | Ani | Inftu | Auxiinv (* Adverb *)
+  | Indifc  -> Lavender 
   | Unknown | Cache | Cachei -> Grey 
   | Comp (_,ph) _ _ -> color_of_role ph
   ] 

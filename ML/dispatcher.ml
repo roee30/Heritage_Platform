@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Dispatcher: Sanskrit Engine in 53 phases automaton (plus 2 fake ones) *)
@@ -46,7 +46,8 @@ value transducer phase =
   | Root -> transducers.root (* conjugated root forms *) 
   | Vokv -> transducers.vokv (* vowel-initial vocative k.rdaantas *)  
   | Vokc -> transducers.vokc (* consonant-initial vocative k.rdaantas *)  
-  | Inde -> transducers.inde (* indeclinables, particles  *) 
+  | Inde -> transducers.inde (* indeclinables, particles *) 
+  | Indifc -> transducers.indifc (* indeclinables ifc *) 
   | Absv -> transducers.absv (* vowel-initial absolutives in -tvaa *) 
   | Absc -> transducers.absc (* consonant-initial absolutives in -tvaa *) 
   | Abso -> transducers.abso (* absolutives in -ya *) 
@@ -126,8 +127,9 @@ value initial =
 ;
 (* dispatch: Word.word -> phase -> phases *)
 value dispatch w = fun (* w is the current input word *) 
-  [ Nouv | Nouc | Pron | Inde | Abso | Auxi | Auxiinv | Auxik | Kama | Ifcv | Ifcc 
-  | Kriv | Kric | Absv | Absc | Avy | Lopak | Root | Lopa | Cache -> initial
+  [ Nouv | Nouc | Pron | Inde | Abso | Auxi | Auxiinv | Auxik | Kama | Ifcv
+  | Ifcc | Indifc | Kriv | Kric | Absv | Absc | Avy | Lopak | Root | Lopa
+  | Cache -> initial
   | A -> if phantomatic w then [] else
          [ Iicc; Nouc; Iikc; Kric; Pvkc; Iivc; Vocc; Vokc ]
   | An -> if phantomatic w then [] else
@@ -139,7 +141,7 @@ value dispatch w = fun (* w is the current input word *)
        justified by \Pan{2,2,6} a-x only if x is a subanta. *)
   | Iicv | Iicc | Iikv | Iikc | Iiif | Auxiick | Cachei -> (* Compounding *)
        [ Iicv; Iicc; Nouv; Nouc; A; An; Ifcv; Ifcc; Iikv; Iikc; Kriv; Kric
-       ; Pvkv; Pvkc; Iiif; Iivv; Iivc; Vocv; Vocc; Vokv; Vokc ] @ cached
+       ; Indifc; Pvkv; Pvkc; Iiif; Iivv; Iivc; Vocv; Vocc; Vokv; Vokc ] @ cached
   | Pv -> if phantomatic w then [] else
           if amuitic w then [ Lopa ] else [ Root; Abso; Peri; Inftu ]
   | Pvc | Pvv -> if phantomatic w then [] else [ Abso ]
@@ -168,7 +170,7 @@ value terminal = (* Accepting phases *)
    ; Kric 
    ; Inde
    ; Abso; Absv; Absc
-   ; Ifcv; Ifcc
+   ; Ifcv; Ifcc; Indifc
    ; Auxi; Auxiinv; Auxik
    ; Vocc; Vocv; Vokv; Vokc; Inv 
    ; Lopa; Lopak

@@ -5,7 +5,7 @@
 #                         Gérard Huet & Pawan Goyal                        #
 #                                                                          #
 ############################################################################
-#TEMPLATE Makefile of SKT Platform      #DATE      Copyright Gérard Huet 2020 #
+#TEMPLATE Makefile of SKT Platform      #DATE      Copyright Gérard Huet 2021 #
 ############################################################################
 #WARN
 
@@ -348,7 +348,8 @@ $(DATA)/lopaks.rem $(DATA)/indecls.rem $(DATA)/abstvaa.rem $(DATA)/absya.rem \
 $(DATA)/iics.rem $(DATA)/piics.rem $(DATA)/ifcs.rem $(DATA)/iivs.rem \
 $(DATA)/iifcs.rem $(DATA)/auxi.rem $(DATA)/voca.rem $(DATA)/invs.rem \
 $(DATA)/inftu.rem $(DATA)/kama.rem $(DATA)/avyayais.rem $(DATA)/avyayafs.rem \
-$(DATA)/auxiinv.rem $(DATA)/auxik.rem $(DATA)/auxiick.rem $(DATA)/partvocs.rem 
+$(DATA)/auxiinv.rem $(DATA)/auxik.rem $(DATA)/auxiick.rem $(DATA)/partvocs.rem \
+$(DATA)/indifcs.rem
 
 SANDHIS=$(DATA)/sandhis.rem $(DATA)/sandhis_pv.rem $(DATA)/sandhis_ph.rem \
 $(DATA)/sandhis_id.rem 

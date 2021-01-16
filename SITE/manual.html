@@ -5,7 +5,7 @@
 
 <title>The Sanskrit Heritage Engine Reference Manual</title>
 <meta name="author" content="G&#233;rard Huet">
-<meta property="dc:datecopyrighted" content="2020">
+<meta property="dc:datecopyrighted" content="2021">
 <meta property="dc:rightsholder" content="G&#233;rard Huet">
 <meta name ="keywords" content="india,dictionary,indology,sanskrit,lexicography,linguistics,indo-european,dictionnaire,sanscrit,panini,indology,linguistics">
 <meta name="description" content="This is an online manual to the Sanskrit
@@ -50,7 +50,7 @@ published recently as
 <a href="http://jlm.ipipan.waw.pl/index.php/JLM/article/view/108/140">Design and
 analysis of a lean interface for Sanskrit corpus annotation</a>.
 <p>
-Written on November 11th 2020, for Sanskrit Engine Version 3.27.
+Written on January 16th 2022, for Sanskrit Engine Version 3.28.
 
 <h2 class="b2" id="tour">First approach to using the Sanskrit Heritage engine</h2>
 
@@ -67,7 +67,7 @@ Engine software. This is explained below in the section
 What you are seeing on the entry page is a somewhat ancient-looking Web document
 in the HTML style of the 90's. Don't be put off by the look-and-feel,
 but rather thank Inria for supporting this effort without throwing advertisements
-at you.
+at you or storing your connection data.
 <p>
 
 The page has a green bar at the bottom, which is the navigation control panel.
@@ -265,7 +265,7 @@ The Sanskrit Heritage Dictionary is the latest edition of a Sanskrit
 to French Dictionary
 "Dictionnaire Français de l'Héritage Sanskrit" compiled by
 Gérard Huet since 1994. This dictionary is freely available
-as a 1009 pages <a href="Heritage.pdf">book</a> under the pdf format,
+as a 1039 pages <a href="Heritage.pdf">book</a> under the pdf format,
 easily readable with Acrobat Reader, a free Adobe product.  
 This dictionary is still under development, and is
 automatically updated along with the site,
@@ -521,9 +521,9 @@ Let us illustrate this shallow parsing facility on a much-discussed
 ambiguous sentence going back to Patañjali. 
 Go back to the Reader interface, and enter
 <i>zvetodhaavati</i>, using Summary Mode. You see a display of the
-26 segmentation solutions. You are also offered a green check sign labeled
+22 segmentation solutions. You are also offered a green check sign labeled
 Filtered Solutions. Click on it.
-You see one particular solution, labeled 14, formed with blue <i>śvetaḥ</i>
+You see one particular solution, labeled 11, formed with blue <i>śvetaḥ</i>
 in the nominative, followed by red <i>dhāvati</i>, a verbal form in the present.
 Actually form <i>dhāvati</i> is marked as ambiguous, since it may result from
 root <i>dhāv_1</i> (running) or from root <i>dhāv_2</i> (cleaning).
@@ -542,9 +542,9 @@ marking the absence of the object or goal to a transitive verb.
 In this example, the machine has succeeded in focusing on a correct solution
 automatically, among many interpretations.
 If we come back to the initial selection, it indeed tells
-"1 solution kept among 26",
-but actually lists also 5 other plausible additional solutions. Indeed, among
-them, Solution 23 gives another correct decomposition <i>śvā+itaḥ+dhāvati</i>
+"1 solution kept among 22",
+but actually lists also 4 other plausible additional solutions. Indeed, among
+them, Solution 19 gives another correct decomposition <i>śvā+itaḥ+dhāvati</i>
 "The dog is running towards here". Here too, the tool analyses <i>dhāv_1</i>
 as fitting the grammatical constraints. It has penalty 0 as well, but
 was just disfavored over the first interpretation because it has 3 segments
@@ -558,7 +558,7 @@ segmentation candidates is below a threshold set by default to 100.
 This is in contrast with the situation with the graphical interface, which
 is fast and robust. Thus entering the following verse from Kālidāsa, we obtain
 very quicky a display factorizing an astronomical number
-(40926376750694400) of solutions:
+(94385606366822400) of solutions:
 <i>yaa tapovize.saparizafkitasya sukumaaramprahara.nam mahendrasyapratyaadeza.h ruupagarvitaayaa.h zriya.h ala.mkaara.h svargasyasaana.h priyasakhyurvazii kuberabhavanaat pratinivartamaanaasamaapattid.r.s.tena kezinaadaanavenacitralekhaadvitiiyaa bandigraaha.mg.rhiitaa</i>.
 
 <h3 class="b3" id="parser3">Lexical categories</h3>
@@ -576,7 +576,7 @@ yellow segments denoting stems, followed by a blue nominal inflected form.
 For instance, enter in the Reader the following input (Velthuis)
 <i>pravaran.rpamuku.tama.nimariicima~njariicayacarcitacara.nayugala.h</i>
 or प्रवरनृपमुकुटमणिमरीचिमञ्जरीचयचर्चितचरणयुगलः (Devanagari). The returned display
-exhibits 32 solutions in Sentence mode. But if you select Word rather than
+exhibits 96 solutions in Sentence mode. But if you select Word rather than
 Sentence as Text mode parameter, you get only 6 solutions, which denote various
 nominal compounds with many components. Actually, there are remaining
 ambiguities concerning the bracketing of their constituents. Let us examine
@@ -892,20 +892,6 @@ first verse should not be glued by sandhi to the second one.
   preserving the current mode, you can click on the title of any page of
   the corpus browser.
 
-<!-- Deprecated 
-<h2 class="b2" id="regression">Regression analysis</h2>
-
-If you install
-the Sanskrit Heritage Engine on your own server in Station mode, you will
-benefit of another facility, which allows you to do some regression analysis
-of the tool across versions.
-<p>
-The regression suite tool is installed by executing "make install_regression",
-which is executed at install time.
-<p>
-We do not further document this facility, which
-is useful mostly for the developers of the system. -->
-
 <h2 class="b2" id="software">Software and its documentation</h2>
 
 A short documentation giving a general survey of the software components
@@ -968,7 +954,7 @@ button on the site control bar.
 <a href="faq.en.html"><b>Help</b></a> | 
 <a href="portal.en.html"><b>Portal</b></a>
 </td></tr><tr><td>
-&#169; G&#233;rard Huet 1994-2020</td></tr></table></td><td>
+&#169; G&#233;rard Huet 1994-2021</td></tr></table></td><td>
 <a href="http://www.inria.fr/">
 <img src="IMAGES/logo_inria.png" alt="Logo Inria" height="50"></a>
 <br></td></tr></table></div>

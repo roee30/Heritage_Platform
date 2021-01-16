@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Morphology interface *)
@@ -51,6 +51,7 @@ type morphology =
   ; lopas    : inflected_map 
   ; lopaks   : inflected_map 
   ; indes    : inflected_map 
+  ; indifcs  : inflected_map 
   ; absya    : inflected_map 
   ; abstvaa  : inflected_map 
   ; iics     : inflected_map 

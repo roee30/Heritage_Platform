@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Sanskrit Phrase Lexer - Used by Parser, and Rank for Reader. 
@@ -90,7 +90,7 @@ value rec scl_phase = fun
   | Inftu -> "inftu" 
   | Kama -> "kama" 
   | Voca | Vocv | Vocc | Inv | Vok | Vokv | Vokc -> "voca"
-  | Ifc | Ifcv | Ifcc -> "ifc"
+  | Ifc | Ifcv | Ifcc | Indifc -> "ifc"
   | Unknown -> "unknown"
   | Comp (_,ph) _ _ -> "preverbed " ^ scl_phase ph
   ]

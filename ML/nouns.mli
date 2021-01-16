@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Nouns : sig i*)
@@ -24,6 +24,7 @@ value compute_decls : Word.word -> list nmorph -> unit;
 value compute_extra_iic : list string -> unit;
 value compute_extra : list string -> unit;
 value enter_extra_ifcs : unit -> unit; 
+value enter_indecl_ifcs : unit -> unit; 
 value enter_extra_iifcs : unit -> unit; 
 value fake_compute_decls : 
      nmorph -> string -> ( inflected_map (* nouns *)

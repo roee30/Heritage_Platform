@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* The vector of automata constructed by [Make_transducers] at make time
@@ -30,6 +30,7 @@ type transducers_datatype =
   ; piics : auto
   ; ifcs : auto
   ; indecls : auto
+  ; indifcs : auto
   ; inftu : auto
   ; absya : auto
   ; abstvaa : auto

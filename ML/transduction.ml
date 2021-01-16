@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Transduction = struct i*)
@@ -60,6 +60,7 @@ EXTEND Gram (* skt to tex *)
       | LETTER "U"; LETTER "U" -> "\\=U"
       | LETTER "U" -> "U"
       | "~"; LETTER "n" -> "\\~n"
+      | "~"; "~"; LETTER "l"; LETTER "l" -> "\\~ll" (* glitch prefix candrabindu *)
       | LETTER "l"; "~"; "~"  -> "\\~l" (* candrabindu *)
       | LETTER "y"; "~"; "~"  -> "\\~y" (* candrabindu *)
       | LETTER "v"; "~"; "~"  -> "\\~v" (* candrabindu *)
@@ -128,6 +129,7 @@ EXTEND Gram (* skt to HTML string *)
       | LETTER "U"; LETTER "U" -> "&#362;"
       | LETTER "U" -> "U"
       | "~"; LETTER "n" -> "&#241;"
+      | "~"; "~"; LETTER "l"; LETTER "l" -> "l&#7745;l" (* glitch prefix candrabindu *)
       | "~"; "~" -> "&#7745;" (* candrabindu  *)
       | "+" -> "" (* "\&#173;" = \&shy; cesure prints - *)
       | "$" -> "_" (* pra-uga *)
@@ -234,6 +236,7 @@ EXTEND Gram (* skt to devnag *)
       | LETTER "u"; LETTER "u" -> "uu"
       | LETTER "u" -> "u"
       | "~"; LETTER "n" -> "~n"
+      | "~"; "~"; LETTER "l"; LETTER "l" -> "\\~ll" (* glitch prefix candrabindu *)
       | "~"; "~" -> "/" (* candrabindu *)
       | "+" -> ""
       | "$" -> "$$" (* hiatus *) (* "{}" in devnag 1.6 *)
@@ -399,6 +402,14 @@ and wordkh = Gram.Entry.mk "word KH"
 and sl = Gram.Entry.mk "letter SL"
 and wordsl = Gram.Entry.mk "word SL"
 ;
+(* glitch for allowing prefix candrabindu *)
+value candrabindu_fix w = candrec [] w
+  where rec candrec acc = fun
+     [ [] -> List.rev acc 
+     | [ 150 :: r ] -> candrec [ 44 :: [ 15 :: [ 44 :: acc ] ] ] r 
+     | [ n :: r ] -> candrec [ n :: acc ] r 
+     ]
+;
 EXTEND Gram (* skt to nat *)
   lower: (* removes accents, keeps initial quote as avagraha *)
     [ [ LETTER "f" -> 21 
@@ -411,6 +422,7 @@ EXTEND Gram (* skt to nat *)
       | LETTER "R" -> 7
       | LETTER "S" -> 47
       | "\""; LETTER "m" -> 15 (* compat Velthuis *)
+      | "~"; "~"; LETTER "l"; LETTER "l" -> 150 (* glitch prefix candrabindu *)
       | "~"; "~" -> 15 (* candrabindu *)
       | "~"; LETTER "n" -> 26
 (* OBS | "+"; c=lower -> c (* prevent hyphenation in TeX *) *)
@@ -507,7 +519,7 @@ EXTEND Gram (* skt to nat *)
            in [Int_sandhi]  *)
     ] ];
   word:
-    [ [ w = LIST0 lower; `EOI -> w ] ]; 
+    [ [ w = LIST0 lower; `EOI -> candrabindu_fix w ] ]; 
   wx:
     [ [ LETTER "a" -> 1
       | LETTER "A" -> 2 
@@ -833,7 +845,7 @@ EXTEND Gram (* skt to nat *)
       | "#"; i = INT -> 50+int_of_string i (* homo *)
     ] ];
   wordu:
-    [ [ w = LIST0 upper_lower; `EOI -> w ] ];
+    [ [ w = LIST0 upper_lower; `EOI -> candrabindu_fix w ] ];
 END
 ;
 (* Similar to [code_raw] but accepts upper initials. *)
@@ -905,6 +917,7 @@ EXTEND Gram (* skt to nat *)
       | "\""; LETTER "s" -> 48
       | LETTER "z" -> 48
       | "~"; LETTER "n" -> 36
+      | "~"; "~"; LETTER "l"; LETTER "l" -> 150 (* glitch prefix candrabindu *)
       | "~"; "~" -> 15
       | "+"; c=upper_lower -> c
       | "-" -> 0
@@ -965,7 +978,7 @@ EXTEND Gram (* skt to nat *)
       | LETTER "h" -> 49
     ] ];
   wordd:
-    [ [ w = LIST0 simplified; `EOI -> w 
+    [ [ w = LIST0 simplified; `EOI -> candrabindu_fix w 
       | w = LIST0 simplified; "#"; INT; `EOI -> w (* homo index ignored *)
     ] ];
 END

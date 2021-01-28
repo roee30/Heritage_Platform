@@ -4603,7 +4603,7 @@ value build_infinitive c inf_stem root = do
   { enter1 root (Invar (c,Infi) (fix inf_stem "tum"))
   ; enter1 root (Inftu c (fix inf_stem "tu")) (* Xtu-kaama compounds *)
 (* NB. bahuv cpds in -kaama and -manas constructed with infinitives in -tu 
-   See Renou HLS p72 from Patanjali; Renou grammaire §107 dagdhukaama
+   See Renou HLS p72 from Pata~njali; Renou grammaire §107 dagdhukaama
    also Assimil p194 eg tyaktukaama
    anu.s.thaatukaama "desirious to proceed" vaktukaama "who wants to speak"
    dra.s.tumanas "inclined to see" 

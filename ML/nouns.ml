@@ -3052,12 +3052,15 @@ value build_fem_ii trunc entry =
         ])
    ]             
    ; Bare Noun (mirror steml) 
-   ; Bare Noun (mirror stems) (* Pan{6,3,61} *)
    ; Avyayaf (mirror stems) 
    ] @ match entry with 
        [ "nadii" | "paur.namasii" | "aagrahaaya.nii" 
          -> [ Avyayaf (fix trunc "am") ]
        | _ -> []
+       ]
+     @ match entry with 
+       [ "abhii#2" -> [] (* avoids overgeneration abhi- *)
+       | _ -> [ Bare Noun (mirror stems) ] (* Pan{6,3,61} *)
        ])
 ;
 (* g = Fem, rarely Mas *)
@@ -5316,6 +5319,7 @@ value compute_nouns_stem_form e stem d p =
             | _ -> build_neu_a r1 e
             ]
       | [ 2 :: _ ] -> report stem Neu (* (missing) ahigopaa raa vibhaa sthaa *)
+      | [ 4; 40; 1 ] (* abhii2 *) -> () (* overgenerates *)
       | [ 3 :: r1 ] (* -i *) 
       | [ 4 :: r1 ] (* -ii - rare *) -> build_neu_i r1 e
       | [ 5 :: r1 ] (* -u *) 
@@ -5832,6 +5836,7 @@ value iic_indecl = (* should be lexicalized *)
   ; "saaci"
   ; "saamaanyatas" (* saamaanyatod.r.s.ta - tasil *)
   ; "svayam"
+  ; "svar#3"    (* svargatim *)
   ]
 ;
 value declined_indecls =

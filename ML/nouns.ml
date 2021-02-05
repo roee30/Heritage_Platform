@@ -41,7 +41,7 @@ value print_report s =
 
 (* Word encodings of strings *)
 value  code = Encode.code_string (* normalized *)
-and revcode = Encode.rev_code_string (* reversed (mirror o code) *)
+and revcode = Encode.rev_code_string (* reversed (mirror of code) *)
 and revstem = Encode.rev_stem (* stripped of homo counter *)
 and normal_stem = Encode.normal_stem 
 ;
@@ -52,7 +52,7 @@ type declension_class =
   ]
 and nmorph = (string * declension_class)
 ;
-(* Affix a suffix string to a stem word using internal sandhi *)
+(* Affix a suffix string to a rstem word using internal sandhi *)
 (* [fix: Word.word -> string -> Word.word] *)
 value fix rstem suff = 
   Int_sandhi.int_sandhi rstem (code suff) 
@@ -4118,7 +4118,7 @@ value build_sap g st entry = (* MW saap in strong cases *)
    ]
    ]
 ;
-value build_dam entry = (* vedic *)
+value build_dam entry = (* vedic - unused *)
   let decline case form = (case,code form) in 
   enter entry 
    [ Declined Noun Mas (* arbitrary *)
@@ -4276,7 +4276,7 @@ value build_sa_tad g stem entry =
    ] ] @ (if g=Neu && stem = [ 10 ] then [ Bare Pron (code "etat") ]
           else []))
 ;
-value build_sya_tyad g entry = (* Vedic Whitney §499a *)
+value build_sya_tyad g entry = (* Vedic Whitney §499a actually skipped *)
   let decline case form = (case,code form) in 
   enter entry  
    [ Declined Pron g
@@ -4339,6 +4339,59 @@ value pseudo_nominal_basis = fun
   | [ 45; 48 ] (* sva *) -> True
   | _ -> False
   ] 
+;
+(* builds existentials with -cit and -cana from inflected forms of kim *)
+value existential part =
+  let entry = "ki~n" ^ part (* ad-hoc hand made e-sandhi *)
+  and glue case form = (case,code (form ^ part)) in
+  enter entry (
+    [ Declined Noun Mas  
+    [ (Singular, 
+         [ glue Nom "kaz" (* kazcit *)
+         ; glue Acc "ka~n" (* ? *)
+         ; glue Ins "kena"
+         ; glue Dat "kasmai"
+         ; glue Abl "kasmaac"
+         ; glue Gen "kasya"
+         ; glue Loc "kasmi.mz"
+         ])
+    ; (Plural,
+         [ glue Nom "ke" (* kecit *)
+         ; glue Acc "kaa.mz" (* ? *)
+         ])
+    ]
+    ; Declined Noun Neu 
+    [ (Singular, 
+         [ glue Nom "ki~n" (* ki.mcit *)
+         ; glue Acc "ki~n"
+         ; glue Ins "kena"
+         ; glue Dat "kasmai"
+         ; glue Abl "kasmaac"
+         ; glue Gen "kasya"
+         ; glue Loc "kasmi.mz"
+         ])
+    ; (Plural,
+         [ glue Nom "kaani" (* kanicit *)
+         ; glue Acc "kaani" 
+         ])
+    ]
+    ; Declined Noun Fem
+    [ (Singular, 
+         [ glue Nom "kaa" (* ? *)
+         ; glue Acc "kaa~n"
+         ; glue Ins "kayaa"
+         ; glue Dat "kasyai"
+         ; glue Abl "kasyaa.mz"
+         ; glue Gen "kasyaa.mz"
+         ; glue Loc "kasyaa~n" (* kasyaa~ncid attested *)
+         ])
+    ; (Plural,
+         [ glue Nom "kaaz" (* ? *)
+         ; glue Acc "kaaz" 
+         ])
+    ]
+    ; Bare Noun (code entry)
+    ])
 ;
 value build_pron_a g stem entry = (* g=Mas ou g=Neu *)
   let pseudo_nominal = pseudo_nominal_basis stem 
@@ -4977,7 +5030,7 @@ value build_kati entry =
   enter1 entry
    ( Declined Noun (Deictic Numeral)
    [ (Plural,
-        [ decline Voc "i"
+        [ decline Voc "i" (* attested ? *)
         ; decline Nom "i"
         ; decline Acc "i"
         ; decline Ins "ibhis"
@@ -5810,6 +5863,7 @@ value iic_indecl = (* should be lexicalized *)
   ; "upari"     (* uparicara *)  
   ; "ubhayatas" (* ubhayata.hsasya - tasil *)
   ; "evam"      (* eva.mvid *)
+  ; "ki.mcid"   (* ki.mciccalana *)
   ; "k.rcchraat" (* k.rcchraadavaapta *)
   ; "tatra"     (* tatrabhavat *)
   ; "divaa"     (* divaanidraa *)
@@ -6109,7 +6163,7 @@ value compute_extra iic_only_stems = do
   ; enter1 "viz#2" (* Vedic Whitney§218a *) decl
     where decl = Declined Noun Fem [ (Plural,[ (Loc,code "vik.su") ]) ]
   ; iter enter_iic_avya iic_avyas
-  ; enter1 "tva" (* skipped in dico *) decl
+  ; enter1 "tva" (* but skipped in dico *) decl
     where decl = Declined Noun Mas [ (Singular,[ (Nom,code "tvas") ]) ]
   ; enter1 "tva" decl
     where decl = Declined Noun Mas [ (Dual,[ (Nom,code "tvau") ]) ]
@@ -6126,6 +6180,8 @@ value compute_extra iic_only_stems = do
   ; compute_extra_iiv iiv_krids (* zuddhii *) 
   ; enter1 "u" (* Vedic *) decl 
     where decl = Indecl Interj [ 5 ] (* u *)
+  ; existential "cit" (* cid1 *)
+  ; existential "cana"
     (* Unplugged presently because of overgeneration
   ; [compute_extra_iic gen_prefixes] 
   ; [compute_extra_ifc bahu_suffixes] eg Fem -padaa for meter formation *) 

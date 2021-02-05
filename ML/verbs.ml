@@ -4953,6 +4953,10 @@ value record_ppp_abs_den ystem root =
     | _ -> record_abso_tvaa (fix ystem "itvaa") root 
     ]
   (* no general [record_abso_ya] since usually no preverb to denominatives *)
+  ; match root with
+    [ "dhiira#1" -> record_abso_ya (code "dhiirya") root (* avadhiirya *)
+    | _ -> () (* to be completed *)
+    ]
   }
 ;
 (* Absolutive in -am - Macdonell§166 Stenzler§288 \Pan{3,4,22} .namul          *)

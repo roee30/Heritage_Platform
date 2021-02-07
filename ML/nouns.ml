@@ -4247,7 +4247,6 @@ value build_sa_tad g stem entry =
         ; decline Ins "tena"
         ; decline Dat "tasmai"
         ; decline Abl "tasmaat"
-        ; decline Abl "tatas"
         ; decline Gen "tasya"
         ; decline Loc "tasmin"
         ] in if g=Mas then 
@@ -4259,7 +4258,6 @@ value build_sa_tad g stem entry =
         ; decline Ins "taabhyaam"
         ; decline Dat "taabhyaam"
         ; decline Abl "taabhyaam"
-        ; decline Abl "tatas"
         ; decline Gen "tayos"
         ; decline Loc "tayos"
         ])
@@ -4269,11 +4267,12 @@ value build_sa_tad g stem entry =
         ; decline Ins "tais"
         ; decline Dat "tebhyas"
         ; decline Abl "tebhyas"
-        ; decline Abl "tatas"
         ; decline Gen "te.saam"
         ; decline Loc "te.su"
         ])
-   ] ] @ (if g=Neu && stem = [ 10 ] then [ Bare Pron (code "etat") ]
+   ] 
+   ; Indecl Tas (fix stem "tatas") 
+   ] @ (if g=Neu && stem = [ 10 ] then [ Bare Pron (code "etat") ]
           else []))
 ;
 value build_sya_tyad g entry = (* Vedic Whitney §499a actually skipped *)
@@ -4286,7 +4285,6 @@ value build_sya_tyad g entry = (* Vedic Whitney §499a actually skipped *)
         ; decline Ins "tyena"
         ; decline Dat "tyasmai"
         ; decline Abl "tyasmaat"
-        ; decline Abl "tyatas"
         ; decline Gen "tyasya"
         ; decline Loc "tyasmin"
         ] in if g=Mas then 
@@ -4298,7 +4296,6 @@ value build_sya_tyad g entry = (* Vedic Whitney §499a actually skipped *)
         ; decline Ins "tyaabhyaam"
         ; decline Dat "tyaabhyaam"
         ; decline Abl "tyaabhyaam"
-        ; decline Abl "tyatas"
         ; decline Gen "tyayos"
         ; decline Loc "tyayos"
         ])
@@ -4308,11 +4305,12 @@ value build_sya_tyad g entry = (* Vedic Whitney §499a actually skipped *)
         ; decline Ins "tyais"
         ; decline Dat "tyebhyas"
         ; decline Abl "tyebhyas"
-        ; decline Abl "tyatas"
         ; decline Gen "tye.saam"
         ; decline Loc "tye.su"
         ])
-   ] ]
+   ] 
+   ; Indecl Tas (code "tyatas")
+   ]
 ;
 (* Pronominal stems (mirror+lopa) of pronouns usable as nominals. 
    When used as pronouns, they denote the relative position. *)
@@ -4475,7 +4473,6 @@ value build_saa stem entry =
         ; decline Ins "tayaa"
         ; decline Dat "tasyai"
         ; decline Abl "tasyaas"
-        ; decline Abl "tatas"
         ; decline Gen "tasyaas"
         ; decline Loc "tasyaam"
         ])
@@ -4485,7 +4482,6 @@ value build_saa stem entry =
         ; decline Ins "taabhyaam"
         ; decline Dat "taabhyaam"
         ; decline Abl "taabhyaam"
-        ; decline Abl "tatas"
         ; decline Gen "tayos"
         ; decline Loc "tayos"
         ])
@@ -4495,7 +4491,6 @@ value build_saa stem entry =
         ; decline Ins "taabhis"
         ; decline Dat "taabhyas"
         ; decline Abl "taabhyas"
-        ; decline Abl "tatas"
         ; decline Gen "taasaam"
         ; decline Loc "taasu"
         ])
@@ -4511,7 +4506,6 @@ value build_syaa stem entry =
         ; decline Ins "tyayaa"
         ; decline Dat "tyasyai"
         ; decline Abl "tyasyaas"
-        ; decline Abl "tyatyas"
         ; decline Gen "tyasyaas"
         ; decline Loc "tyasyaam"
         ])
@@ -4521,7 +4515,6 @@ value build_syaa stem entry =
         ; decline Ins "tyaabhyaam"
         ; decline Dat "tyaabhyaam"
         ; decline Abl "tyaabhyaam"
-        ; decline Abl "tyatyas"
         ; decline Gen "tyayos"
         ; decline Loc "tyayos"
         ])
@@ -4531,7 +4524,6 @@ value build_syaa stem entry =
         ; decline Ins "tyaabhis"
         ; decline Dat "tyaabhyas"
         ; decline Abl "tyaabhyas"
-        ; decline Abl "tyatas"
         ; decline Gen "tyaasaam"
         ; decline Loc "tyaasu"
         ])
@@ -4755,7 +4747,7 @@ value build_aham () =
         ; decline Dat "mahyam"
         ; decline Dat "me" (* encl *)
         ; decline Abl "mat"
-        ; decline Abl "mattas"
+        ; decline Abl "mattas" 
         ; decline Gen "mama"
         ; decline Gen "me" (* encl *)
         ; decline Loc "mayi"

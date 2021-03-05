@@ -2287,7 +2287,7 @@ value build_neu_at stem entry =
         ])
    ; (Dual, 
         [ decline Voc "tii"
-        ; decline Voc "ntii"
+        ; decline Voc "ntii" 
         ; decline Nom "tii"
         ; decline Nom "ntii"
         ; decline Acc "tii"
@@ -4189,6 +4189,7 @@ value is_redup = fun (* reduplicating roots, possibly with preverb *)
     | [ 49 :: [ 1 :: [ 24 :: _ ] ] ]           (* haa\#1 -> jahat *) 
 (*  | [ 49 :: [ 3 :: [ 24 :: _ ] ] ]           (* haa\#? -> jihat *) ? *) 
     | [ 49 :: [ 12 :: [ 24 :: _ ] ] ]          (* hu int. -> johvat *)
+(*  | [ 19 :: [ 1 :: [ 24 :: _ ] ] ]           (* gam -> jagat *) ? *)
     | [ 41 :: [ 1 :: [ 43 :: [ 17 :: [ 21 :: [ 1 :: [ 22 :: _ ] ] ] ] ] ] ]  
           (* kram int. -> cafkramat *)
     | [ 34 :: [ 1 :: [ 45 :: [ 2 :: [ 45 :: _ ] ] ] ] ](* vad int. -> vaavadat *)
@@ -5016,20 +5017,36 @@ value build_num stem entry =
            [ Bare Noun (wrap stem 2) (* a.s.taa *) ] 
         else []))
 ;
-value build_kati entry = 
+value build_kati entry = (* MW Gram§227a *)
   let decline case suff = 
      (case,fix (revcode "kat") suff) in 
   enter1 entry
    ( Declined Noun (Deictic Numeral)
    [ (Plural,
-        [ decline Voc "i" (* attested ? *)
-        ; decline Nom "i"
+        [ decline Nom "i"
         ; decline Acc "i"
         ; decline Ins "ibhis"
         ; decline Dat "ibhyas"
         ; decline Abl "ibhyas"
         ; decline Gen "iinaam"
         ; decline Loc "i.su"
+        ])
+   ]
+   )
+;
+value build_katicit entry = (* MW Gram§230 *)
+  let decline case suff = 
+     (case,fix (revcode "kat") suff) in 
+  enter1 entry
+   ( Declined Noun (Deictic Numeral)
+   [ (Plural,
+        [ decline Nom "icit"
+        ; decline Acc "icit"
+        ; decline Ins "ibhizcit"
+        ; decline Dat "ibhyazcit"
+        ; decline Abl "ibhyazcit"
+        ; decline Gen "iinaa~ncit"
+        ; decline Loc "i.sucit"
         ])
    ]
    )
@@ -5775,6 +5792,8 @@ value compute_nouns_stem_form e stem d p =
              | _ -> report stem g
              ]
       | (* kati *) [ 3; 32; 1; 17 ] -> build_kati e
+      | (* kazcit *) [ 32; 3; 22; 46; 1; 17 ] -> existential "cit" 
+      | (* katicit *) [ 32; 3; 22; 3; 32; 1; 17 ] -> build_katicit e
       | (* vi.mzati *) [ 3; 32; 1; 46; 14; 3; 45 ] 
       | (* .sa.s.ti *) [ 3; 27; 47; 1; 47 ] 
       | (* saptati *) [ 3; 32; 1; 32; 37; 1; 48 ]
@@ -5843,7 +5862,7 @@ value compute_decls word genders =
     ]
   }
 ;
-value iic_indecl = (* should be lexicalized *)
+value iic_indecl = (* should be lexicalized or completed *)
 (* indeclinable stems used as iic of non-avyayiibhaava cpd *)
   [ "atra"      (* atrabhavat *)
   ; "adhas"     (* adha.hzaakha adhazcara.nam *)
@@ -5859,6 +5878,7 @@ value iic_indecl = (* should be lexicalized *)
   ; "k.rcchraat" (* k.rcchraadavaapta *)
   ; "tatra"     (* tatrabhavat *)
   ; "divaa"     (* divaanidraa *)
+  ; "dhik"      (* dhikkaara *)
   ; "na~n"      (* na~nvaada *)
   ; "naanaa"    (* naanaaruupa *)
   ; "param"     (* para.mtapa *)
@@ -6116,6 +6136,7 @@ auxiliary, such as yaa (bhasmasaat) or nii (Whitney) or sampad (gr.) *)
 value compute_extra_tasils () = do (* add non-generative tasils - ad-hoc *) 
   { enter1 "aze.sa" (Indecl Tas (code "aze.satas")) (* tasil on privative cpd *)
   ; enter1 "ekaruupa" (Indecl Tas (code "ekaruupatas")) (* tasil on cpd *)  
+  ; enter1 "kaamacaara" (Indecl Tas (code "kaamacaaratas")) (* id *)  
 (*; enter1 "d.r.s.taanta" (Indecl Tas (code "d.r.s.taantatas")) tasil on icpd *)
   ; enter1 "guruvaktra" (Indecl Tas (code "guruvaktratas")) (* id *) 
   ; enter1 "paramaartha" (Indecl Tas (code "paramaarthatas")) (* id *) 

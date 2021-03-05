@@ -108,8 +108,8 @@ value print_inv_morpho_link pvs pe pne pu form =
    [anusandhiiyate] should show [dhaa#1], not [dhaa#2], [dhii#1] or [dhyaa] *)
 ;
 
-(* Used in [Lexer.record_tagging] for regression analysis *)
-value report_morph gen form (delta,morphs) =
+(* Used in [Lexer.record_tagging] for regression analysis - Legacy 
+[value report_morph gen form (delta,morphs) =
   let stem = Word.patch delta form in do (* stem may have homo index *)
     { "{ " |> ps
     ; print_morphs (0,0) morphs 
@@ -127,7 +127,7 @@ value report_morph gen form (delta,morphs) =
       else pr_word stem
     ; "]" |> ps
     } 
-;
+; ]*)
 
 end;
 

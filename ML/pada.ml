@@ -94,6 +94,7 @@ value voices_of = fun
 (*| "a~nj" also Atma afkte | "naath" "praz" "sp.rz#1" idem *)
 (*| Doubts: "bhuu1" could also be Atma bhavate *)
 (*| "zru" could be Atma in Vedic eg z.r.nu.sva *)
+(*| "yu#2" could be Atma in Maitreya S. yuyudhvam *)
       -> Para (* active only *) 
   | "az#1" | "aas#2" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" | "ii.s" 
   | "iih"  | "edh" | "ka~nc" | "katth" | "kam" | "kamp" | "kaaz" | "kaas#1"
@@ -142,8 +143,8 @@ value voices_of = fun
   | "lak.s" | "labh" | "la.s" | "lip" | "lih#1" | "lup" | "luu#1" | "vad" 
   | "van" | "vap#1" | "vap#2" | "val" | "vah#1" | "vaa#3" | "vic" | "vij" 
   | "viz#1" | "viij" | "v.r#2" | "v.rt#1" | "v.rdh#1" | "vyath" | "vyaa" 
-  | "vrii" | "zap" | "zaa" | "zu.s" | "zubh#1" | "zyaa" | "zram" | "zri" 
-  | "zru" | "sru" | "san#1" | "sa~nj" | "sah#1" | "sic" | "su#2" | "suud"
+  | "vrii" | "zap" | "zaa" | "zu.s" | "zubh#1" | "zyaa" | "zram" | "zri" | "zru"
+  | "sru" | "san#1" | "sa~nj" | "sah#1" | "sic" | "su#2" | "suu#1" | "suud"
   | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" | "sp.rh" | "smi"
   | "syand" | "svad" | "had" | "hikk" | "hu" | "huu" | "h.r#1"
   ] *)
@@ -185,7 +186,6 @@ van 1P 8U
 vid2 2A 6U 7A
 v.r1 1P 5U
 zaa 3U 4P
-su2 1P 2P 5U 
 suu1 1P 6P 2A
 stambh 1U 5P 9P
 svid2 1A 4P
@@ -197,8 +197,7 @@ svid2 1A 4P
    Incorrect associations will be captured at Reader time by Dispatcher. *)
 value voices_of_gana g root = match g with 
  [ 1 -> match root with
-        [ "cur" | "budh#1" | "van" | "v.r#1" | "su#2"
-        | "suu#1" 
+        [ "cur" | "budh#1" | "van" | "v.r#1" | "suu#1" 
             -> Para 
         | "gave.s" | "gha.t.t" | "ghuur.n" | ".damb" | "bhra.mz" | "mid"
         | "mok.s" | "lok" | "svid#2" 
@@ -211,9 +210,9 @@ value voices_of_gana g root = match g with
         | _ -> voices_of root (* man U (epic P) *)
         ] 
  | 2 -> match root with
-       [ "daa#1" | "dyaa" | "draa#2" | "maa#1" | "m.rj" | "rud#1" | "su#2"
+       [ "daa#1" | "dyaa" | "draa#2" | "maa#1" | "m.rj" | "rud#1" 
             -> Para
-        | "nij" | "vid#2" | "suu#1" -> Atma
+        | "nij" | "vid#2" -> Atma
         | _ -> voices_of root 
         ]
  | 3 -> match root with
@@ -254,8 +253,24 @@ value voices_of_gana g root = match g with
         | _ -> voices_of root
         ]
  | 10 -> match root with
-        [ "gha.t.t" | ".damb" | "mid" | "mok.s" | "lak.s" | "lok" 
+        [ "gha.t.t" | ".damb" | "mid" | "mok.s" | "lok" 
             -> Para
+        | _ -> voices_of root 
+        ]
+ | 11 -> match root with
+        [ "afka" | "agada" | "agha" | "afka" | "afkha" | "adhvara" | "andha" 
+        | "aparok.sa" | "apahasta" | "amitra" | "arth" | "azana#2" | "azva"
+        | "aakar.na" | "aakula" | "aakhyaana" | "aandola" | "aavila" | "iras"
+        | "i.sudhi" | "ukta" | "udaka" | "udan" | "udazru" | "unmuula" 
+        | "upahasta" | "uras" | "u.sas" | "ka.thora" | "kadartha" | "kar.na"
+        | "kart.r" | "kalafka" | "kavala" | "kavi" | "ku.t.ta" | "kusuma"
+        | "kelaa" | "k.siira" | "kha.da" | "khela" | "gadgada" | "go" | "gocara"
+        | "gopaa" | "dhiira#1" 
+            -> Para
+        | "ajira" | "apsaras" | "abhra" | "unmanas" | "upanimantra" | "uu.sman"
+        | "ka.nva" | "karu.na" | "kalaha" | "ka.s.ta" | "kuha" | "k.rcchra"
+        | "k.rpa.na" | "kliiba" | "k.sepa" | "gomaya" | "citra" | "priya" 
+            -> Atma
         | _ -> voices_of root (* other denominatives will take Ubha as default *)
         ]
  | _ -> voices_of root (* in particular, for non-present forms, without gana *)

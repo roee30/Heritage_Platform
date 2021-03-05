@@ -584,6 +584,14 @@ value validate out = match out with
                    [ (Comp (Pv,Peri) pv peri_form,cpd_form,s) :: r ]
                 else []
       ]
+(*i | [ (Auxi, rev_auxi_form,s) :: [ (Peri,rev_peri_form,s') :: r ] ] ->
+      let auxi_form = Word.mirror tag rev_auxi_form in
+      let auxi_tags = Deco.assoc auxi_form morpho.auxis in 
+      let perfect_tags = filter_perfect auxi_tags in match perfect_tags with
+      [ [] -> []
+      | tags -> let form = apply_sandhi rev_peri_form auxi_form s' in 
+                [ (Peri_perf (rev_peri_form,tags),Word.mirror form,s) :: r ]
+      ] - TODO with new Peri_perf compounder - PB - accommoder les préverbes i*)
   | [ (Abso,rev_abso_form,s) :: [ (ph,prev,sv) :: r ] ] 
            when preverb_phase ph ->
       (* Takes care of absolutives in -ya *)

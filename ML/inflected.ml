@@ -86,7 +86,7 @@ and add_morphpro w d i = (* pronouns not usable as ifc *)
 and add_voca w d i = 
   vocas.val := Lexmap.addl vocas.val w (d w,i)
 ;
-(* auxiliary verbs used in the inchoative cvi construction *)
+(* auxiliary verbs used in inchoative cvi construct and periphrastic perfect *)
 value auxiliary = fun
   [ "bhuu#1" | "k.r#1" | "as#1" -> True  | _ -> False ]
 ;

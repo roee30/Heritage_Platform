@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* CGI-bin indexer for indexing in sanskrit dictionary.                   *)
@@ -144,6 +144,7 @@ value index_engine () = do
                     (* remark that s may be str with some suffix,   *)
                     (* even though str may exist as inflected form  *)
               with (* Matching entry not found - we try declensions *)
+                   (* This occurs rarely. Example: "vi.s.no" *)
                   [ Index.Last last -> do
                       { ps (skt_red str_VH)
                       ; try_declensions word last

@@ -2379,7 +2379,8 @@ value compute_future stem root =
        [ Para -> do (* active only *) 
          { compute_futurea Primary stem root 
          ; match root with (* conditional or atma on demand *)
-           [ "grah" | "jiiv" | "bhuu#1" | "zaas" | "stu" | "sm.r" | "haa#1" 
+           [ "jiiv" | "bha.n" | "bhuu#1" | "zaas" | "stu" | "sm.r"
+           | "haa#1" 
                      -> compute_conda Primary stem root
            | "khaad" | "gad" | "vac" (* BhG pravak.sye *)
                      -> compute_futurem Primary stem root 
@@ -2392,8 +2393,9 @@ value compute_future stem root =
          { compute_futurea Primary stem root 
          ; compute_futurem Primary stem root 
          ; match root with (* rare conditional *)
-           [ "i" | "k.r#1" | "gam" | "ji" | "j~naa#1" | "tap" | "daa#1" 
-           | "nii#1" | "bandh" | "budh#1" | "m.r" | "yaj#1" | "sthaa#1" -> do
+           [ "i" | "k.r#1" | "gam" | "grah" | "ji" | "j~naa#1" | "tap" | "daa#1" 
+           | "nii#1" | "bandh" | "budh#1" | "m.r" | "yaj#1" | "vad"
+           | "sthaa#1" -> do
               { compute_conda Primary stem root 
               ; compute_condm Primary stem root 
               }
@@ -3668,7 +3670,8 @@ value peri_perf_stem root =
   [ "iik.s" | "ii.d" | "iir" | "iih" | "uk.s" | "uc" | "ujjh" | "uuh" | "edh" 
     (* Macdonell§140a1 Whitney§1071c Filliozat§66 edhaa.mcakre *)
   | "ind" | "indh" | "inv" | "ii.s" | "umbh" | "cakaas" -> root
-  | "aas#2"  -> "aas" (* trim *)
+  | "aas#2"  -> "aas" (* trim homo *)
+  | "iiz#1"  -> "iiz" (* id MWG§385 *) 
   | "u.s"    -> "o.s" (* guna WR *) 
   | "jaag.r" -> "jaagar" (* Macdonell§140a2 *)
   | "bhii#1" -> "bibhay" (* Henry§242 *)
@@ -4946,7 +4949,10 @@ value record_ppp_abs_stems root rstem ppstems =
 ;
 (* Simple version for denominatives - tentative *)
 value record_ppp_abs_den ystem root = 
- let ppstem = trunc (revstem root) in do  
+ let ppstem =  match root with 
+    [ "cira" | "bhi.saj" | "vaira" -> ystem (* to be completed *)
+    | _ -> trunc (revstem root) 
+    ] in do  
   { record_part_ppp (rfix ppstem "ita") root 
   ; match root with
     [ "aakar.na" -> record_abso_tvaa (fix ppstem "ya") root (* fake abso-ya! *)
@@ -5581,7 +5587,7 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
    | "agha" | "azana#2" | "azva" | "ka.n.du" | "khela" | "jihma" | "pramada" 
    | "lohita" | "mantu" | "manda" | "valgu" | "sakhi" | "samudra#1" 
      (* to become \Pan{3,1,13} kya.s *)
-   | "asu" (* lexicalized under "asuuya" *)
+   | "asu" (* lexicalized under "asuuya" *) | "cira" 
        -> lengthen rstem (* lengthening -aayati *) 
    | "asuuya" (* "asu" lengthened *) | "gomaya" | "vyaya" (* euphony *)
        -> trunc (trunc rstem) 
@@ -5831,7 +5837,7 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
      if admits_ppp_abs root then do 
         { let ppstems = compute_ppp_stems root rstem in 
           record_ppp_abs_stems root rstem ppstems
-        ; record_abso_am root (* rare *)
+        ; record_abso_am root (* rare .namul *)
         }
      else ()
    ; (* Perfect *) 
@@ -5842,7 +5848,7 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
      | "uuh" -> () (* periphrastic *)
      | _ -> compute_perfect root
      ] (* NB perfect forms may have a passive meaning *)
-   ; (* Periphrastic Perfect *) (* .namul on demand - except gana 10 above *)
+   ; (* Periphrastic Perfect *) (* on demand - except gana 10 above *)
      try let stem = peri_perf_stem root in
          build_perpft Primary stem root
      with [ Not_attested -> () ]
@@ -6076,6 +6082,8 @@ and compute_extra_muc () =  do
     enter1 "muc#1" (Conju benem [ (Singular,[ (First, code "muk.siiya") ]) ])
   ; build_infinitive Causative (revcode "moci") "muc#1"    (* Whitney§1051c *)
   }
+and compute_extra_yu2 () = (* Maitreya Sa.mhita MS{1,1.11} *)
+  enter1 "yu#2" (Conju (imperm 3) [ (Plural,[ (Second, code "yuyudhvam") ]) ])
 and compute_extra_vadh () = (* no present - use "han#1" *)
   let root = "vadh"
   and rstem = revcode "vadh" in do 
@@ -6129,6 +6137,7 @@ value record_extra_participles () = do
   ; record_part_ppp (revstem "k.sita") "k.sii" 
   ; record_part_ppp (revstem "diipita") "diip" 
   ; record_part_ppp (revstem "spa.s.ta") "spaz#1"
+  ; record_part_ppp (revstem "cintaaratnaayita") "cintaaratna"
   ; record_part (Ppra_ 1 Intensive (revstem "jaajam") (revstem "jaajamat") "jam")
   ; record_pfp "d.r#1" (revcode "d.r")
   ; record_pfp "vadh" (revcode "vadh")
@@ -6164,6 +6173,7 @@ value compute_extra () = do
   ; compute_extra_bhr ()
   ; compute_extra_bhram ()
   ; compute_extra_muc () 
+  ; compute_extra_yu2 ()
   ; compute_extra_vadh ()
   ; compute_extra_zaas () 
   ; compute_extra_zru () 
@@ -6216,6 +6226,7 @@ value fake_compute_conjugs (gana : int) (root : string) = do
       | "bh.r"   -> compute_extra_bhr ()
       | "bhram"  -> compute_extra_bhram ()
       | "muc#1"  -> compute_extra_muc ()
+      | "yu#2"   -> compute_extra_yu2 ()
       | "vadh"   -> compute_extra_vadh ()
       | "zaa"    -> record_part_ppp (revcode "zaata") root
       | "zaas"   -> compute_extra_zaas ()

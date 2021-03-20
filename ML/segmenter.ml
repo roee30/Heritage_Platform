@@ -398,7 +398,7 @@ value segment1_initial initial_phases sentence =
   continue (init_segment_initial initial_phases sentence)
 ;
 value init_segment seg = (* do not eta reduce! *) 
-  init_segment_initial initial seg 
+  init_segment_initial initial seg
 and segment1 seg = 
   segment1_initial initial seg 
 ;

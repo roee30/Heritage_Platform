@@ -50,7 +50,7 @@ published recently as
 <a href="http://jlm.ipipan.waw.pl/index.php/JLM/article/view/108/140">Design and
 analysis of a lean interface for Sanskrit corpus annotation</a>.
 <p>
-Written on January 16th 2022, for Sanskrit Engine Version 3.28.
+Written on March 21st 2021, for Sanskrit Engine Version 3.29.
 
 <h2 class="b2" id="tour">First approach to using the Sanskrit Heritage engine</h2>
 
@@ -58,7 +58,10 @@ The following scenario may be played remotely, if you are connected to
 Internet with a Web browser.
 Visit URL
 <a href="http://sanskrit.inria.fr" target="_blank">sanskrit.inria.fr</a> to
-go to the standard Inria Sanskrit Heritage server.
+go to the standard Inria Sanskrit Heritage server. Or, if you prefer linking
+to the Monier-Williams Sanskrit-English dictionary, go to URL
+<a href="http://sanskrit.inria.fr/index.en.html" target="_blank">sanskrit.inria.fr/index.en.html</a>.
+
 The same scenario may be played locally, if your workstation
 is equipped with its own HTTP server, and if you install the Sanskrit Heritage
 Engine software. This is explained below in the section
@@ -149,7 +152,7 @@ In two clicks on the green upper signs you get the intended segmentation.
 
 Now let us return to the reader window, and remove all the blanks in your input:
 "praaptavyamartha.mlabhatemanu.syodevo'pita.mlafghayitu.mnazakta.h".
-The segmenter now returns more solutions, 48 instead of 6, and you see
+The segmenter now returns more solutions, 54 instead of 6, and you see
 unexpected new forms appear, such as <i>prāptavyamartham</i>,
 whose stem happens to be lexicalized as the name <i>Prāptavyamartha</i> of
 the young boy from Pañcatantra, blamed by his father for having bought
@@ -162,7 +165,7 @@ correct solution is easily attained. Note how clicking on blue segment
 <p>
 If you click on a selection by mistake, it is easy to backtrack by clicking
 on the Undo button of the page. Other command links on the same
-line (Filtered Solutions, All 48 Solutions) should be ignored at this stage,
+line (Filtered Solutions, All 54 Solutions) should be ignored at this stage,
 and will be explained in section <a href=#parser2>Shallow parsing</a> below.
 <p>
 Please note that the default Velthuis transliteration is just an option.
@@ -265,7 +268,7 @@ The Sanskrit Heritage Dictionary is the latest edition of a Sanskrit
 to French Dictionary
 "Dictionnaire Français de l'Héritage Sanskrit" compiled by
 Gérard Huet since 1994. This dictionary is freely available
-as a 1039 pages <a href="Heritage.pdf">book</a> under the pdf format,
+as a 1047 pages <a href="Heritage.pdf">book</a> under the pdf format,
 easily readable with Acrobat Reader, a free Adobe product.  
 This dictionary is still under development, and is
 automatically updated along with the site,
@@ -558,7 +561,7 @@ segmentation candidates is below a threshold set by default to 100.
 This is in contrast with the situation with the graphical interface, which
 is fast and robust. Thus entering the following verse from Kālidāsa, we obtain
 very quicky a display factorizing an astronomical number
-(94385606366822400) of solutions:
+(54035120176128000) of solutions:
 <i>yaa tapovize.saparizafkitasya sukumaaramprahara.nam mahendrasyapratyaadeza.h ruupagarvitaayaa.h zriya.h ala.mkaara.h svargasyasaana.h priyasakhyurvazii kuberabhavanaat pratinivartamaanaasamaapattid.r.s.tena kezinaadaanavenacitralekhaadvitiiyaa bandigraaha.mg.rhiitaa</i>.
 
 <h3 class="b3" id="parser3">Lexical categories</h3>

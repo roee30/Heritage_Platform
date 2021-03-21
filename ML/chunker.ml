@@ -62,7 +62,7 @@ value adjust c w = match Word.mirror w with
                         w (* Hiatus except c surd unaspirate ? *) 
                         (* NB "punaaramate" but not "punaa ramate" *)
         | 4 (* ii *) (* possible visarga vanishes - but "n.rpatiiraajati" *) 
-        | 6 (* uu *) -> if c=43 (* r *) then raise Hiatus else w
+        | 6 (* uu *) -> (* if c=43 (* r *) then raise Hiatus else *) w
         (* next 4 rules attempt to revert [last] to 'd' in view of [c] *)
         | 34 (* d *) -> if c=35 (* dh *) then raise Glue else 
                         if Phonetics.is_voiced c 

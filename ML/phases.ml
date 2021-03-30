@@ -197,20 +197,19 @@ value rec color_of_phase = fun
          | Cache -> Deep_sky 
   | Pron -> Light_blue
   | Root | Auxi | Lopa -> Carmin  
-  | Inde | Indifc | Abso | Absv | Absc | Auxiinv | Ai | Ani -> Mauve
-  | Iiy -> Lavender
-  | Avy -> Magenta
-  | Inftu -> Orange
+  | Inde | Indifc | Abso | Absv | Absc | Auxiinv | Ai | Ani | Avy -> Mauve
+  | Iiy -> Pink (* Lavender formerly *)
+(*| Avy -> Magenta formerly *)
   | Iic | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif 
         | Auxiick | Cachei -> Yellow
-  | Peri | Iiv | Iivv | Iivc -> Orange
+  | Peri | Iiv | Iivv | Iivc | Inftu -> Orange
   | Voca | Vocv | Vocc | Inv | Vok | Vokv | Vokc -> Lawngreen
   | Ifc | Ifcv | Ifcc -> Cyan
   | Unknown -> Grey
   | Comp (_,ph) _ _ -> color_of_phase ph 
   | Pv | Pvv | Pvc | Pvkc | Pvkv -> failwith "Illegal preverb segment" 
 (*[| _ -> raise (Control.Anomaly "Unexpected color")] *)
-(*i NB: unused background colors: Pink Green Aquamarine Chamois i*)
+(*i NB: unused background colors: Lavender Magenta Green Aquamarine Chamois i*)
   ]
 ; 
 

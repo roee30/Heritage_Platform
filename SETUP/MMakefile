@@ -510,9 +510,12 @@ web_services: # Will write localized site pages in DICO and export cgis
 	cp -p SITE/xml.html DICO
 
 release: $(DICO) web_services releasecgi releaseMW releasedata releasedoc \
-releasebook releasecorpus releasexml
+releasebook releasecorpus releasexml releasecourse 
 # releasepdf disabled at present as bulky and un-finished
 	echo "Version $(VERSION) of Sanskrit site released on $(SERVERHOST)"
+
+releasecourse:
+	make course
 
 # if one does not rebuild morphologic resources with make scratch, this will
 # just release the new software on the old data - convenient for debug/test.
@@ -695,8 +698,10 @@ commit-corpus:
 # server injection of COURSE, to do with su permission
 course:
 	mkdir -p $(SERVERPUBLICDIR)COURSE
-	cp -Rp $(SKTRESOURCES)COURSE $(SERVERPUBLICDIR)
-	cp -p $(SERVERPUBLICDIR)COURSE/Lessons/lesson1.fr.html $(SERVERPUBLICDIR)COURSE/Lessons/index.html
+#	cp -Rp $(SKTRESOURCES)COURSE $(SERVERPUBLICDIR)
+	cp -p $(SKTRESOURCES)COURSE/Lessons/lesson1.fr.html $(SERVERPUBLICDIR)COURSE/Lessons/lesson1.fr.html
+	cp -p $(SKTRESOURCES)COURSE/Lessons/lesson1.fr.html $(SERVERPUBLICDIR)COURSE/Lessons/index.html
+	cp -p $(SKTRESOURCES)COURSE/Lessons/style.css $(SERVERPUBLICDIR)COURSE/Lessons/style.css
 
 
 SAVED_VERSION=329a

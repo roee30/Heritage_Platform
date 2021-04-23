@@ -1002,7 +1002,7 @@ value compute_athematic_impft2a strong weak set root =
         ; if set then conjugs Second "as"
           else if root = "as#1" then conjugs Second "iis" (* Whitney§621c *)
           else if root = "ad#1" then conjugs Second "as"  (* Whitney§621c *)
-          else conjugs Second "s" 
+          else conjugs Second "s" (* PB for "i": "ais" clashes with i. pl. *)
         ; if set then conjugs Third "at"
           else if root = "as#1" then conjugs Third "iit" (* idem aasiit *)
           else if root = "ad#1" then conjugs Third "at"  (* idem aadat *)
@@ -4159,9 +4159,10 @@ value redup_aor weak root =
 value compute_aorist root =
   let (weak,strong,long) = stems root in do (* 7 formations *)
   { match root with (* 1. root aorist - Panini sic-luk *)
-    [ "k.r#1" | "kram" | "gam" | "gaa#1" | "ci" | "jan" | "j~naa#1" 
-    | "daa#1" | "daa#2" | "dhaa#1" | "dhaa#2" | "paa#1" | "bhuu#1" | "muc#1" 
-    | "v.r#1" | "zaa" | "saa#1" | "sthaa#1" | "svap" | "has" | "haa#1" -> do
+    [ "k.r#1" | "kram" | "gam" | "gaa#1" | "ci" | "chid#1" | "jan" | "j~naa#1" 
+    | "daa#1" | "daa#2" | "dhaa#1" | "dhaa#2" | "paa#1" | "bhid#1" | "bhuu#1" 
+    | "muc#1" | "v.r#1" | "zaa" | "saa#1" | "sthaa#1" | "svap" | "has" | "haa#1"
+      -> do
       { compute_root_aorista weak strong root 
       ; match root with (* Atma rare *) 
         [ "k.r#1" | "gam" | "jan" | "v.r#1" -> 
@@ -4204,7 +4205,7 @@ value compute_aorist root =
     ]
   ; match root with (* 2. thematic aorist af *)
     [ "aap" | "krudh" | "gam" | "g.rdh" | "ghas" | "chid#1" | "das" | "dyut#1" 
-    | "mad#1" | "muc#1" | "yuj#1" | "ric" | "ruc#1" | "rudh#2" | "ruh"
+    | "bhid#1" | "mad#1" | "muc#1" | "yuj#1" | "ric" | "ruc#1" | "rudh#2" | "ruh"
     | "vid#2" | "v.rt#1" | "v.rdh#1" | "zuc#1" | "zudh" | "sic" 
     | "stan" | "huu" 
      -> do
@@ -4273,11 +4274,11 @@ value compute_aorist root =
   ; match root with (* 4. sigma aorist sic *)
     [ "aap" | "k.r#1" | "khan" | "gup" | "gh.r" | "ci" | "chid#1" | "ji" 
     | "tud#1" | "t.rr" | "tyaj#1" | "dah#1" | "daa#1" | "d.rz#1" | "draa#2" 
-    | "dhaa#1" | "dhyaa" | "dhyai" | "dhv.r" | "nak.s" | "nii#1" | "pac"
-    | "m.r" (* Deshpande gives am.rta [1] am.r.saataam [4] am.r.sata [4] *)
-    | "yaj#1" | "yuj#1" 
-    | "ram" | "rudh#2" | "labh" | "v.r#2" | "vyadh" | "zru" | "sidh#1"
-    | "s.rj#1" | "stu" | "sp.rz#1" | "svap" | "haa#1" | "hu" -> do
+    | "dhaa#1" | "dhyaa" | "dhyai" | "dhv.r" | "nak.s" | "nii#1" | "pac" 
+    | "bhid#1" | "m.r" (* Deshpande: am.rta [1] am.r.saataam [4] am.r.sata [4] *)
+    | "yaj#1" | "yuj#1" | "ram" | "rudh#2" | "labh" | "v.r#2" | "vyadh" | "zru"
+    | "sidh#1" | "s.rj#1" | "stu" | "sp.rz#1" | "svap" | "haa#1" | "hu" 
+     -> do
       { let stem = match root with
             [ "d.rz#1" | "s.rj#1" | "sp.rz#1" -> long_metathesis weak
             | "ram" -> weak 
@@ -4294,7 +4295,7 @@ value compute_aorist root =
                  enter1 root (Conju (aora 4) [ (Singular,[ (Third, lopa) ]) ])
             | _ -> ()
             ]
-      ; if root = "yuj#1" || root = "chid#1" 
+      ; if root = "yuj#1" || root = "chid#1" || root = "bhid#1" 
            then compute_ath_s_aorista strong root else ()
         (* ayok.siit and acchetsiit besides ayauk.siit and acchaitsiit *)
       ; match root with
@@ -4406,7 +4407,7 @@ value compute_aorist root =
 value compute_injunctive root =
   let (weak,strong,long) = stems root in do (* 7 families *)
   { match root with (* 1. root injunct *)
-    [ "gam" | "gaa#1" | "bhuu#1" | "svap" -> do
+    [ "gam" | "gaa#1" | "bhid#1" | "bhuu#1" | "svap" -> do
       { compute_root_injuncta weak strong root 
       ; if root = "gam" then compute_root_injunctm weak root (* rare *) else ()
       ; let stem = match long with
@@ -5060,12 +5061,13 @@ value compute_intensive_presenta strong weak iiflag root =
   and conjugw person suff = (person,fix3w weak iiflag False suff) in do
   { enter1 root (Conju intensa 
    [ (Singular, 
+(* intercalate ii Wh§1006 dubious *daridreti (draa1) *jafgheti (han1) *)
         [ conjugs First  "mi"
         ; conjugw First  "iimi"
         ; conjugs Second "si"
         ; conjugw Second "iisi"
         ; conjugs Third  "ti" 
-        ; conjugw Third  "iiti" (*i PB: generates *daridreti for draa1 i*)
+        ; conjugw Third  "iiti" 
         ])
    ; (Dual, 
         [ conjugw First  "vas"
@@ -5075,10 +5077,11 @@ value compute_intensive_presenta strong weak iiflag root =
    ; (Plural,
         [ conjugw First  "mas"
         ; conjugw Second "tha"
-        ; conjugw Third  "ati"
+        ; conjugw Third (if root="han#1" then "anti" (* jafghanti *)
+                         else "ati")
         ])
    ])
-  ; (* Tentative for ppr - temporary *)
+  ; (* Tentative for ppr - needs iiflag setting *)
     let wk = if iiflag then Some (trunc_ii weak) 
                 (* ii disappears before vowels in special roots *)
              else if consonantal weak then Some weak (* 3rd pl weak stem *)
@@ -6020,8 +6023,8 @@ value compute_auxi_kridantas () =
   }
 ;
 (* Called by [Make_roots.roots_to_conjugs] *)
-value compute_conjugs root (infos : Conj_infos.root_infos) = 
-  let root_root = Canon.decode root in compute_conjugs_stems root_root infos
+value compute_conjugs root_word (infos : Conj_infos.root_infos) = 
+  let root = Canon.decode root_word in compute_conjugs_stems root infos
 ;
 (* Supplementary forms *)
 value compute_extra_rc () = (* vedic - \Pan{7,1,38} *)

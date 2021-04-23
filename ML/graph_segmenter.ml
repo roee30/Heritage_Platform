@@ -264,6 +264,8 @@ value check_id_sandhi revl first =
           (Phonetics.n_or_f last && Phonetics.vowel first) ||
           (* we allow an-s transition with s vowel-initial, ignoring nn rules *)
           (* this is necessary not to block transitions from the An phase *)
+          (Phonetics.vowel last && Phonetics.consonant first) || (* 8-04-21 *)
+          (* above line necessary for last=ii or uu and first=r (deviiraajyam) *)
           let allowed1 = Deco.assoc [ last ] allowed_trans in
           match before with
              [ [] -> match_right allowed1 

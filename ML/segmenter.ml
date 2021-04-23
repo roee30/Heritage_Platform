@@ -154,7 +154,8 @@ value check_id_sandhi revl first =
       | [ last :: before ] -> 
           (Phonetics.n_or_f last && Phonetics.vowel first) ||
           (* we allow an-s transition with s vowel-initial, ignoring nn rules *)
-          (* this is necessary not to block transitions from the An phase *)
+          (* this is necessary not to block transitions from the An phase *) 
+          (Phonetics.vowel last && Phonetics.consonant first) || (* 8-04-21 *)
           let allowed1 = Deco.assoc [ last ] allowed_trans in
           match before with
              [ [] -> match_right allowed1 
@@ -337,7 +338,7 @@ value rec react phase input output back occ = fun
        let segment = (phase,occ,Id) in 
        let out = accrue segment output in 
        match validate out with 
-       [ [] -> if cut then continue cont else deter cont (* ZZZ was deter cont *)
+       [ [] -> if cut then continue cont else deter cont 
        | contracted -> match input' with
            [ [] -> if accepting phase then (* potential solution found *)
                       emit contracted cont

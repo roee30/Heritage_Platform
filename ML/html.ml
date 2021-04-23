@@ -214,13 +214,14 @@ type basic_style =
   ] (* font-weight not supported *)
 ; 
 value rgb = fun (* a few selected HTML colors in rgb data *)  
+(* The colors of phases are defined in [Phases.color_of_phase] *)
   [ Black       -> "#000000" 
   | White       -> "#FFFFFF" (* Wheat = "#F0E0B0" ou "#F5DEB3" *) 
   | Red         -> "#FF0000" (* Firebrick = "#B02020" *)
   | Blue        -> "#0000FF" (* Canard = "#0000C0" ou "#0080FF" *)
   | Green       -> "#008000" (* Teal = "#008080" Olive = "#808000" *)
   | Aquamarine  -> "#6FFFC3" (* actually Light Aquamarine *)
-  | Lawngreen   -> "#66ff99" (* was "#7CFC00" *)
+  | Lawngreen   -> "#66FF99" (* was "#7CFC00" *)
   | Yellow      -> "#FFFF00" 
   | Orange      -> "#FFA000"  
   | Cyan        -> "#00FFFF" (* Aqua = Cyan, Turquoise = "#40E0D0" *)
@@ -235,9 +236,9 @@ value rgb = fun (* a few selected HTML colors in rgb data *)
   | Broon       -> "#852B1D" (* good with gold *)
   | Gold        -> "#A58959" (* Silver = "#C0C0C0" *)
   | Magenta     -> "#FF00FF" (* Violet = "#F080F0" Blueviolet = "#8028E0" *)
-  | Mauve       -> "#FF99FF" (* Orchid = "#D070D0" *)
+  | Mauve       -> "#FF99FF" (* 70% Magenta *)(* Orchid = "#D070D0" *)
   | Pink        -> "#FFC0C0" (* Hotpink = "#FF68B0" Thisle = "#D0C0D0" *)
-  | Deep_pink   -> "#FF1493" 
+  | Deep_pink   -> "#FF1493" (* Fuchsya = FF0090 *)
   | Gris        -> "#E2E6E9" (* Salmon = "#F08070" *)
   | Beige       -> "#FFCCA0" 
   | Lime        -> "#00FF00" (* Chartreuse = "#80FF00" *)

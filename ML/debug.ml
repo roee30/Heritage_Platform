@@ -39,6 +39,13 @@ open Canon;
 open Phonetics;   
 
 open List;
+
+#load "data.cmo";
+
+#load "automaton.cmo"; 
+open Automaton;
+
+(* 
 #load "min_lexer.cmo"; 
 #load "transduction.cmo"; 
 open Transduction;
@@ -178,5 +185,6 @@ parse "[S [ADV tat ] [ADV kim ]
 parse "[S [INJ haa ] [ADV katham ] [NP1s [NP6 vi.s.no.h ] 
        (dharma<daaraa.h) ] [VP 0 [NP1 (priya<sakhii) [NP6 me ] 
        lalitaa ] ] ]";
+*)
 *)
 *)

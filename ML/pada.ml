@@ -258,7 +258,7 @@ value voices_of_gana g root = match g with
         | _ -> voices_of root 
         ]
  | 11 -> match root with
-        [ "afka" | "agada" | "agha" | "afka" | "afkha" | "adhvara" | "andha" 
+        [ "agada" | "agha" | "afka" | "afkha" | "adhvara" | "andha" 
         | "aparok.sa" | "apahasta" | "amitra" | "arth" | "azana#2" | "azva"
         | "aakar.na" | "aakula" | "aakhyaana" | "aandola" | "aavila" | "iras"
         | "i.sudhi" | "ukta" | "udaka" | "udan" | "udazru" | "unmuula" 

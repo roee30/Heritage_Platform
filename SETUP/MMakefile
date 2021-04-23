@@ -699,6 +699,6 @@ course:
 	cp -p $(SERVERPUBLICDIR)COURSE/Lessons/lesson1.fr.html $(SERVERPUBLICDIR)COURSE/Lessons/index.html
 
 
-SAVED_VERSION=326b
+SAVED_VERSION=329a
 save: # saving sources of Heritage_Platform (after make clean in ML)
 	tar cvf ../ARCHIVE/Heritage_Platform_$(SAVED_VERSION).tar ML SITE JAVASCRIPT SETUP configure INSTALLATION DOC IMAGES README 

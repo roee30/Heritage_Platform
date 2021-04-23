@@ -5963,7 +5963,7 @@ value iic_avyas =
    iic. mithyaa-: mithyaaj~naanam 
 2. missing ifc:
    ifc. -prati: sukhaprati zaakaprati
-   ifc. kridanta yathaav.rddham yathe.s.tam yaavacchakyam atyucchritam (TODO)
+   ifc. krid yathaav.rddham yathe.s.tam yaavacchakyam atyucchritam ziitam (TODO)
    ifc. also pv-kridanta (-aagata) yathaagatam 
    ifc. yatham: yathaayatham
 3. misc: ti.s.thadgu anu.svadham var.sabhogye.na (retroflexion) *)
@@ -6191,8 +6191,7 @@ value compute_extra iic_only_stems = do
   ; compute_extra_iic iic_only_stems (* aajaanu etc. *)
   ; compute_extra_iic iicf_extra (* abalaa etc. *)
   ; compute_extra_iiv iiv_krids (* zuddhii *) 
-  ; enter1 "u" (* Vedic *) decl 
-    where decl = Indecl Interj [ 5 ] (* u *)
+  ; enter1 "u" (* Vedic *) (Indecl Interj [ 5 ] (* u *))
   ; existential "cit" (* cid1 *)
   ; existential "cana"
     (* Unplugged presently because of overgeneration

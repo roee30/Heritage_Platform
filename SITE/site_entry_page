@@ -76,7 +76,13 @@ Various phonological and morphological tools are also provided.
 <p>
 Please visit the <a href="manual.html">Reference manual</a> for learning how
 to use the various facilities.
+</p>
 <p>
+<strong><span class="red">*** NEW ***</span></strong>
+A l'attention des utilisateurs de langue française. Un cours élémentaire
+de sanskrit pour débutants, utilisant les ressources du site, est en cours
+de développement. Il est accessible <a href="COURSE/Lessons">ici</a>
+</p>
 
 <h2 class="b2"> Sanskrit Heritage dictionary in book form </h2>
 
@@ -101,9 +107,10 @@ Please visit the <a href="goldendict.html">Golden Sanskrit Heritage</a> page.
 <p>
 The dictionary may be accessed through an indexing engine:
  <a href="DICO/index.fr.html">
-<strong><span class="red">Sanskrit Heritage</span></strong></a> or
-through its mirror <a href="DICO/index.en.html">
-<strong><span class="red">Monier-Williams</span></strong></a> subset.
+<strong><span class="red">Héritage du sanskrit</span></strong></a> for the
+French dictionary, or <a href="DICO/index.en.html">
+<strong><span class="red">Monier-Williams</span></strong></a> for the
+English one.
 </p>
 <p>
 Your browser must be HTML5 compliant, and for proper viewing
@@ -113,11 +120,11 @@ A Unicode-compliant font for devan&#257;gar&#299; with proper ligatures
 is Apple's Devanagari MT for Macintosh OS X stations. For Windows users,
 installation of font 'Arial MS Unicode' is advised for proper rendering.
 </p>
-<p>
+<!-- OBSOLETE <p>
 You may have to fiddle with the controls of your browser, so that the font
 declarations from the dictionary pages get precedence over the standard
 selection, and thus encoding is specified as Unicode compliant (UTF-8 encoding).
-</p>
+</p> -->
 <p>
 Note that many words are given with their etymology as hypertext links. You
 may thus navigate from a word to its morphological components, down to its roots.

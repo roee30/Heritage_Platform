@@ -59,12 +59,12 @@ value voices_of = fun
   | "yu#2" | "ra.mh" | "rak.s" | "ra.n" | "rad" | "radh" | "raa#1" | "raadh"
   | "ri.s" | "ru" | "ruj#1" | "rudh#1" | "ru.s#1" | "ruh#1" | "lag" | "lafg" 
   | "lap" | "lal" | "las" | "laa" | "laa~nch" | "likh" | "liz" | "lu.n.th" 
-  | "lubh" | "lul" | "vak.s" | "vac" | "vaj" | "va~nc" | "van" | "vam" | "var.n"
+  | "lubh" | "lul" | "vak.s" | "vac" | "vaj" | "va~nc" | "vam" | "var.n"
   | "valg" | "vaz" | "vas#1" | "vaa#2" | "vas#4" | "vaa~nch" | "vid#1" | "vidh#1"
   | "vi.s#1" | "vii#1" | "v.rj" | "v.r.s" | "v.rh" | "ven" | "vyac"| "vyadh"
   | "vraj" | "vrazc" | "za.ms" | "zak" | "zam#1" | "zam#2" | "zal" | "zaz" 
   | "zas" | "zaas" | "zi.s" | "ziil" | "zuc#1" | "zudh" | "zumbh" | "zu.s"
-  | "zuu" | "z.rr" | "zcut#1" | "zraa" | "zli.s" | "zvas#1" | ".s.thiiv" 
+  | "zuu" | "z.rr" | "zcut#1" | "zraa" | "zli.s" | ".s.thiiv" 
   | "sad#1" | "sap#1" | "saa#1" | "sidh#1" | "sidh#2" | "siiv" 
   | "sur" | "s.r" | "s.rj#1" | "s.rp" | "skand" | "skhal" | "stan" | "stubh"
   | "sthag" | "snaa" | "snih#1" | "snu" | "snuh#1" | "sp.r" | "sphal" | "sphu.t"
@@ -88,7 +88,9 @@ value voices_of = fun
 (*| "kaafk.s" | "han1" occur also in Atma in BhG: kaafk.se hani.sye *)
 (*| "has"  Atma needed for hasate *)
 (*| "uc"   Atma needed for uuce *)
+(*| "van"  Atma needed for vanute *)
 (*| "zu.s" Atma for zu.syate WR epic *)
+(*| "zvas#1" Atma for zvasate WR *)
 (*| "nam" Atma namate WR epic *)
 (*| "aap" Atma aapnute epic *)
 (*| "a~nj" also Atma afkte | "naath" "praz" "sp.rz#1" idem *)
@@ -144,8 +146,8 @@ value voices_of = fun
   | "van" | "vap#1" | "vap#2" | "val" | "vah#1" | "vaa#3" | "vic" | "vij" 
   | "viz#1" | "viij" | "v.r#2" | "v.rt#1" | "v.rdh#1" | "vyath" | "vyaa" 
   | "vrii" | "zap" | "zaa" | "zu.s" | "zubh#1" | "zyaa" | "zram" | "zri" | "zru"
-  | "sru" | "san#1" | "sa~nj" | "sah#1" | "sic" | "su#2" | "suu#1" | "suud"
-  | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" | "sp.rh" | "smi"
+  | "zvas#1" | "sru" | "san#1" | "sa~nj" | "sah#1" | "sic" | "su#2" | "suu#1"
+  | "suud" | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" | "sp.rh" | "smi"
   | "syand" | "svad" | "had" | "hikk" | "hu" | "huu" | "h.r#1"
   ] *)
   (* + corr. "praz" | "k.rr" | "p.rc" | "bandh" *)
@@ -202,7 +204,7 @@ value voices_of_gana g root = match g with
         | "gave.s" | "gha.t.t" | "ghuur.n" | ".damb" | "bhra.mz" | "mid"
         | "mok.s" | "lok" | "svid#2" 
             -> Atma
-        | "i" | "i.s#1" | ".r" (* ".r" Atma for pv sam \Pan{1,3,29} also "tap" *)  
+        | "i" | "i.s#1" | ".r" (* ".r" Atma for pv sam \Pan{1,3,29} also "tap" *)
         | "j.rr" | "tap" | "daa#1" | "dh.r.s" | "as#2" | "kuc" | "k.r.s" 
         | "m.rj" | "m.rd#1" | "rud#1" | "stambh" 
             -> Ubha
@@ -210,7 +212,7 @@ value voices_of_gana g root = match g with
         | _ -> voices_of root (* man U (epic P) *)
         ] 
  | 2 -> match root with
-       [ "daa#1" | "dyaa" | "draa#2" | "maa#1" | "m.rj" | "rud#1" 
+       [ "daa#1" | "dyaa" | "draa#2" | "maa#1" | "m.rj" | "rud#1" | "zvas#1"
             -> Para
         | "nij" | "vid#2" -> Atma
         | _ -> voices_of root 

@@ -41,7 +41,7 @@ module Morphs
   | Krid (* K.ridaantaas - used to be called Parts *) 
   | Vok (* K.ridaanta vocatives *) 
   | Iik (* K.ridaantaas as left component - used to be called Piic *) 
-  | Iikv | Iikc | Kriv | Kric | Vocv | Vocc | Vokv | Vokc
+  | Iikv | Iikc | Kriv | Kric | Vocv | Vocc | Vokv | Vokc | Vocf
   | Iiy | Avy | Inftu | Kama
   | Cache (* Cached lexicon acquisitions *) 
   | Cachei (* Cached iic lexicon acquisitions *) 
@@ -115,6 +115,7 @@ value load_morphs () =
   ; ifcs  = load_morpho Data.public_ifcs_file
   ; inftu = load_morpho Data.public_inftu_file
   ; kama = load_morpho Data.public_kama_file
+  ; vocaf = load_morpho Data.public_vocaf_file
   ; caches = load_morpho_cache Data.public_cache_file
   ; cacheis = load_morpho_cache Data.public_cachei_file
   } 
@@ -137,6 +138,7 @@ value morpho_tags = fun
     | Auxik              -> morpho.auxiks
     | Auxiick            -> morpho.auxiicks
     | Voca | Vocv | Vocc -> morpho.vocas
+    | Vocf               -> morpho.vocaf
     | Inv                -> morpho.invs
     | Ifc | Ifcv | Ifcc  -> morpho.ifcs
     | Iic | Iicv | Iicc  -> morpho.iics

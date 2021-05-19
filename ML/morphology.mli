@@ -68,6 +68,7 @@ type morphology =
   ; ifcs     : inflected_map
   ; inftu    : inflected_map
   ; kama     : inflected_map
+  ; vocaf    : inflected_map
   ; iiys     : inflected_map
   ; avys     : inflected_map 
   ; caches   : inflected_map

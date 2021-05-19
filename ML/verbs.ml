@@ -2551,7 +2551,7 @@ value intercalate_pp root rstem =
            | "mi.s" | "miil" | "mud#1" | "mu.s#1" | "m.rg" | "yaac" | "rac" 
            | "ra.n" | "ras" | "rah" | "raaj#1" | "ruc#1" | "rud#1" | "lag"
            | "lap" | "lal" | "la.s" | "las" | "lu.th" | "lul" | "lok" | "loc" 
-           | "vad" | "val" | "vaz" | "vas#2" | "vaaz"| "vaas#3" | "vid#1" 
+           | "vad" | "van" | "val" | "vaz" | "vas#2" | "vaaz"| "vaas#3" | "vid#1" 
            | "vip"| "ven" | "vyath" | "vraj" | "vra.n" | "vrii.d" | "zubh#1" 
            | "zcut#1" | "zrath" | "zlath" | "zlaagh" | "zvas#1" 
            | "suuc" | "suud" | "sev" | "skhal" | "stan" | "stim" | "sthag"
@@ -4442,7 +4442,7 @@ value compute_injunctive root =
     ]
   ; match root with (* 4. sigma injunct *)
     [ "k.r#1" | "chid#1" | "tyaj#1" | "daa#1" | "dhaa#1" | "pac" | "praz" 
-    | "bhii#1" | "sidh#1" | "svap" -> do
+    | "bhii#1" | "labh" | "sidh#1" | "svap" -> do
       { let stema = long in
         compute_ath_s_injuncta stema root 
       ; if root = "chid#1" then compute_ath_s_injuncta strong root else ()
@@ -4989,6 +4989,7 @@ value record_abso_am root =
   | "j~naa#1" -> record "j~naayam"
   | "t.r.s#1" -> record "tar.sam"
   | "daa#1"   -> record "daayam"
+  | "d.rz"    -> record "darzam" (* \Pan{3,4,29} Apte§166 totalité *)
   | "naz#1"   -> record "naazam"
   | "paa#1"   -> record "paayam"
   | "pi.s"    -> record "pe.sam" (* \Pan{3,4,35+38} *)
@@ -4999,6 +5000,7 @@ value record_abso_am root =
   | "bhuj#1"  -> record "bhojam"
   | "bhuu#1"  -> record "bhaavam"
   | "vad"     -> record "vaadam"
+  | "vid#1"   -> record "vedam" (* \Pan{3,4,29} Apte§166 totalité *)
   | "v.rt#1"  -> record "vartam" (* \Pan{3,4,39} *)
   | "zru"     -> record "zraavam"
   | "sa~nj"   -> record "sa~ngam"

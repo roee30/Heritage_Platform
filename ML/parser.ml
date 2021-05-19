@@ -69,7 +69,7 @@ value print_labels tags seg_num = do
 ;
 value rec color_of_role = fun (* Semantic role of lexical category *)
   [ Pv | Pvkc | Pvkv | Iic | Iik | Voca | Inv | Iicv | Iicc 
-  | Iikv | Iikc | Iiif | A | An | Vok | Vokv | Vokc | Vocv | Vocc | Iiy 
+  | Iikv | Iikc | Iiif | A | An | Vok | Vokv | Vokc | Vocv | Vocc | Vocf | Iiy 
   | Iiv | Iivv | Iivc | Peri | Auxiick | Pvv | Pvc -> Grey 
   | Noun | Nouv | Nouc | Krid | Kriv | Kric | Ifc | Ifcv | Ifcc 
   | Pron | Kama | Lopak | Auxik -> Cyan (* Actor or Predicate *)

@@ -90,6 +90,7 @@ and iics_file     = data "iics.rem"
        read by [make_automaton] invoked from DATA/Makefile *)
 and iifcs_file    = data "iifcs.rem" (* iic stems of ifc nouns *)
 and vocas_file    = data "voca.rem"  (* created by [make_nouns] etc. *)
+and vocaf_file    = data "vocaf.rem"  (* created by [make_nouns] etc. *)
 and invs_file     = data "invs.rem"  (* created by [make_nouns] etc. *)
 and piics_file    = data "piics.rem" (* created by [make_roots] etc. *)
 and ifcs_file     = data "ifcs.rem"  (* created by [make_nouns] etc. *)
@@ -143,6 +144,7 @@ and public_absya_file       = public_data "absya.rem"
 and public_abstvaa_file     = public_data "abstvaa.rem"  
 and public_inftu_file       = public_data "inftu.rem"
 and public_kama_file        = public_data "kama.rem" 
+and public_vocaf_file       = public_data "vocaf.rem" 
 and public_stems_file       = public_data "stems.rem"  
 and public_roots_infos_file = public_data "roots_infos.rem" 
 and public_roots_usage_file = public_data "roots_usage.rem" 

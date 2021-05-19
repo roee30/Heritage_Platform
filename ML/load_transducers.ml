@@ -59,6 +59,7 @@ type transducer_vect =
   ; avya : auto (* ifc avyayiibhava *)
   ; inftu : auto (* infinitives in -tu *)
   ; kama : auto (* forms of kaama *)
+  ; vocf : auto (* ifc vocatives *)
   ; prev : auto (* preverb sequences *)
   ; pvc  : auto (* preverb sequences starting with consonant *)
   ; pvv  : auto (* preverb sequences starting with vowel *)
@@ -100,6 +101,7 @@ value dummy_transducer_vect = (* needed for initialisation of [transducers_ref]*
   ; avya    = empty_trans
   ; inftu   = empty_trans
   ; kama    = empty_trans
+  ; vocf    = empty_trans
   ; prev    = empty_trans
   ; pvc     = empty_trans
   ; pvv     = empty_trans
@@ -221,6 +223,7 @@ value mk_transducers () = (* : [transducter_vect] *)
   ; avya = transducers_data.avyayafs
   ; inftu = transducers_data.inftu
   ; kama = transducers_data.kama
+  ; vocf = transducers_data.vocaf
   ; prev = pv
   ; pvc = pvkc
   ; pvv = pvkv

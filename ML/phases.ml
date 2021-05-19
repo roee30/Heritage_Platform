@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 module Phases = struct 
@@ -39,7 +39,7 @@ type phase =
   | Krid (* Kridantas eg participles *) 
   | Vok (* Kridanta vocatives *)  
   | Iik (* Kridanta iics *)
-  | Iikv | Iikc | Kriv | Kric | Vocv | Vocc | Vokv | Vokc
+  | Iikv | Iikc | Kriv | Kric | Vocv | Vocc | Vokv | Vokc | Vocf
   | Iiy | Avy (* Avyayiibhaavas *)
   | Inftu | Kama (* vaktukaama cpds *) 
   | Cache | Cachei (* Lexicon acquisition *) 
@@ -103,6 +103,7 @@ value rec string_of_phase = fun
   | Kric  -> "Kric" 
   | Vocv  -> "Vocv" 
   | Vocc  -> "Vocc"
+  | Vocf  -> "Vocf"
   | Peri  -> "Peri"
   | Inftu -> "Inftu"
   | Kama  -> "Kama" 
@@ -161,6 +162,7 @@ and phase_of_string = fun (* unsafe *)
   | "Kric"  -> Kric
   | "Vocv"  -> Vocv
   | "Vocc"  -> Vocc
+  | "Vocf"  -> Vocf
   | "Peri"  -> Peri 
   | "Inftu" -> Inftu
   | "Kama"  -> Kama
@@ -181,7 +183,7 @@ and krid_phase = fun [ Krid | Kric | Kriv -> True | _ -> False ]
 and ikrid_phase = fun [ Iik | Iikc | Iikv -> True | _ -> False ]
 and vkrid_phase = fun [ Vokc | Vokv -> True | _ -> False ]
 and ii_phase = fun [ Iicv | Iicc | Iikv | Iikc | A | An -> True | _ -> False ]
-and is_cache phase = (phase = Cache) || (phase = Cachei)
+and is_cache = fun [ Cache | Cachei -> True | _ -> False ]
 ;
 (* Needed as argument of [Morpho.print_inv_morpho] *)
 value rec generative = fun
@@ -198,17 +200,15 @@ value rec color_of_phase = fun
   | Pron -> Light_blue
   | Root | Auxi | Lopa -> Carmin  
   | Inde | Indifc | Abso | Absv | Absc | Auxiinv | Ai | Ani | Avy -> Mauve
-  | Iiy -> Pink (* Lavender formerly *)
-(*| Avy -> Magenta formerly *)
   | Iic | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif 
         | Auxiick | Cachei -> Yellow
   | Peri | Iiv | Iivv | Iivc | Inftu -> Orange
-  | Voca | Vocv | Vocc | Inv | Vok | Vokv | Vokc -> Lawngreen
+  | Iiy -> Pink 
+  | Voca | Vocv | Vocc | Inv | Vok | Vokv | Vokc | Vocf -> Lawngreen
   | Ifc | Ifcv | Ifcc -> Cyan
   | Unknown -> Grey
   | Comp (_,ph) _ _ -> color_of_phase ph 
   | Pv | Pvv | Pvc | Pvkc | Pvkv -> failwith "Illegal preverb segment" 
-(*[| _ -> raise (Control.Anomaly "Unexpected color")] *)
 (*i NB: unused background colors: Lavender Magenta Green Aquamarine Chamois i*)
   ]
 ; 

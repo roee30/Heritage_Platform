@@ -78,6 +78,7 @@ value transducer phase =
   | Kric -> transducers.kric (* consonant-initial krid *) 
   | Vocv -> transducers.vocv (* vowel-initial vocatives *)
   | Vocc -> transducers.vocc (* consonant-initial vocatives *)
+  | Vocf -> transducers.vocf (* ifc vocatives *)
   | Iiy  -> transducers.iiy  (* iic avyayiibhava *)
   | Avy  -> transducers.avya (* ifc avyayiibhava *)
   | Inftu -> transducers.inftu (* infinitives in -tu iic. Renou HLS 72 *)
@@ -128,7 +129,7 @@ value initial =
 (* dispatch: Word.word -> phase -> phases *)
 value dispatch w = fun (* w is the current input word *) 
   [ Nouv | Nouc | Pron | Inde | Abso | Auxi | Auxiinv | Auxik | Kama | Ifcv
-  | Ifcc | Indifc | Kriv | Kric | Absv | Absc | Avy | Lopak | Root | Lopa
+  | Ifcc | Indifc | Kriv | Kric | Absv | Absc | Avy | Lopak | Root | Lopa 
   | Cache -> initial
   | A -> if phantomatic w then [] else
          [ Iicc; Nouc; Iikc; Kric; Pvkc; Iivc; Vocc; Vokc ]
@@ -141,7 +142,8 @@ value dispatch w = fun (* w is the current input word *)
        justified by \Pan{2,2,6} a-x only if x is a subanta. *)
   | Iicv | Iicc | Iikv | Iikc | Iiif | Auxiick | Cachei -> (* Compounding *)
        [ Iicv; Iicc; Nouv; Nouc; A; An; Ifcv; Ifcc; Iikv; Iikc; Kriv; Kric
-       ; Indifc; Pvkv; Pvkc; Iiif; Iivv; Iivc; Vocv; Vocc; Vokv; Vokc ] @ cached
+       ; Indifc; Pvkv; Pvkc; Iiif; Iivv; Iivc; Vocv; Vocc; Vokv; Vokc; Vocf ]
+       @ cached
   | Pv -> if phantomatic w then [] else
           if amuitic w then [ Lopa ] else [ Root; Abso; Peri; Inftu ]
   | Pvc | Pvv -> if phantomatic w then [] else [ Abso ]
@@ -152,7 +154,7 @@ value dispatch w = fun (* w is the current input word *)
   | Iiy -> [ Avy ]
   | Peri -> [ Auxi ] (* overgenerates, should be only perfect forms *) 
   | Inftu -> [ Kama ] 
-  | Vocc | Vocv | Vokv | Vokc -> [] 
+  | Vocc | Vocv | Vokv | Vokc | Vocf -> [] 
       (* only chunk-final vocatives so no Iic overlap *) 
   | Inv -> [ Vocv; Vocc; Vokv; Vokc ] (* invocations before vocatives *) 
 (* Privative prefixes A and An are not allowed to prefix Ifc like a-dhii *)
@@ -172,7 +174,7 @@ value terminal = (* Accepting phases *)
    ; Abso; Absv; Absc
    ; Ifcv; Ifcc; Indifc
    ; Auxi; Auxiinv; Auxik
-   ; Vocc; Vocv; Vokv; Vokc; Inv 
+   ; Vocc; Vocv; Vokv; Vokc; Vocf; Inv 
    ; Lopa; Lopak
    ; Avy; Kama
    ; Cache 
@@ -485,7 +487,7 @@ value validate out = match out with
       else []
       ]
   | [ (Kriv,rev_krid_form,s) :: next ] ->
-    let krid_form = Word.mirror rev_krid_form in
+     let krid_form = Word.mirror rev_krid_form in
      match Deco.assoc krid_form morpho.krids with 
      [ [] -> failwith ("Unknown krid_form: " ^ Canon.decode krid_form) 
      | tags -> if List.exists (autonomous_form_k krid_form) tags 

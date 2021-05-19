@@ -89,7 +89,7 @@ value rec scl_phase = fun
   | Peri -> "peri" 
   | Inftu -> "inftu" 
   | Kama -> "kama" 
-  | Voca | Vocv | Vocc | Inv | Vok | Vokv | Vokc -> "voca"
+  | Voca | Vocv | Vocc | Inv | Vok | Vokv | Vokc | Vocf -> "voca"
   | Ifc | Ifcv | Ifcc | Indifc -> "ifc"
   | Unknown -> "unknown"
   | Comp (_,ph) _ _ -> "preverbed " ^ scl_phase ph

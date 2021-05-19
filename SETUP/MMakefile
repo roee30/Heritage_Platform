@@ -349,7 +349,7 @@ $(DATA)/iics.rem $(DATA)/piics.rem $(DATA)/ifcs.rem $(DATA)/iivs.rem \
 $(DATA)/iifcs.rem $(DATA)/auxi.rem $(DATA)/voca.rem $(DATA)/invs.rem \
 $(DATA)/inftu.rem $(DATA)/kama.rem $(DATA)/avyayais.rem $(DATA)/avyayafs.rem \
 $(DATA)/auxiinv.rem $(DATA)/auxik.rem $(DATA)/auxiick.rem $(DATA)/partvocs.rem \
-$(DATA)/indifcs.rem
+$(DATA)/indifcs.rem $(DATA)/vocaf.rem
 
 SANDHIS=$(DATA)/sandhis.rem $(DATA)/sandhis_pv.rem $(DATA)/sandhis_ph.rem \
 $(DATA)/sandhis_id.rem 

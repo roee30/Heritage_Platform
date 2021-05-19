@@ -26,6 +26,7 @@ type transducers_datatype =
   ; avyayais : auto
   ; avyayafs : auto
   ; vocas : auto
+  ; vocaf : auto
   ; invs : auto
   ; piics : auto
   ; ifcs : auto

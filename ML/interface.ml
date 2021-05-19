@@ -136,7 +136,7 @@ value call_back text cpts (k,seg) conflict =
        anchor color (invoke cgi_select) sign ^ 
           if unanalysed seg then "" else anchor Red_ (invoke cgi_reject) x_sign
 ;
-value call_reader text cpts mode = (* mode = "o", "p", "n" or "t" *)
+value call_reader text cpts mode = (* mode = "o", "p", "g" or "t" *)
   let cgi = reader_cgi ^ "?" ^ text ^ ";mode=" ^ mode ^ 
             ";cpts=" ^ string_points cpts in 
   anchor Green_ (invoke cgi) check_sign

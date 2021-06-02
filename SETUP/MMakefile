@@ -698,9 +698,13 @@ commit-corpus:
 # server injection of COURSE, to do with su permission
 course:
 	mkdir -p $(SERVERPUBLICDIR)COURSE
+	mkdir -p $(SERVERPUBLICDIR)COURSE/Lessons
+	mkdir -p $(SERVERPUBLICDIR)COURSE/Images 
+	mkdir -p $(SERVERPUBLICDIR)COURSE
 #	cp -Rp $(SKTRESOURCES)COURSE $(SERVERPUBLICDIR)
-	cp -p $(SKTRESOURCES)COURSE/Lessons/lesson1.fr.html $(SERVERPUBLICDIR)COURSE/Lessons/lesson1.fr.html
+	cp -p $(SKTRESOURCES)COURSE/Lessons/lesson1.fr.html $(SERVERPUBLICDIR)COURSE/Lessons/
 	cp -p $(SKTRESOURCES)COURSE/Lessons/lesson1.fr.html $(SERVERPUBLICDIR)COURSE/Lessons/index.html
+	cp -p $(SKTRESOURCES)COURSE/Images/* $(SERVERPUBLICDIR)COURSE/Images
 	cp -p $(SKTRESOURCES)COURSE/Lessons/style.css $(SERVERPUBLICDIR)COURSE/Lessons/style.css
 
 

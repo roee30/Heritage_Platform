@@ -24,6 +24,7 @@ ML/declension
 ML/indexer
 ML/indexerd
 ML/interface
+ML/interface2
 ML/lemmatizer
 ML/mk_corpus
 ML/mk_corpus_page

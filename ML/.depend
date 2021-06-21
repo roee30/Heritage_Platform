@@ -259,21 +259,38 @@ checkpoints.cmo : phases.cmo encode.cmo control.cmo canon.cmo bank_lexer.cmo
 checkpoints.cmx : phases.cmx encode.cmx control.cmx canon.cmx bank_lexer.cmx
 graph_segmenter.cmo : ../ZEN/word.cmo phonetics.cmo ../ZEN/list2.cmo \
     ../ZEN/gen.cmo encode.cmo ../ZEN/deco.cmo data.cmo auto.cmi
+graph_segmenter2.cmo : ../ZEN/word.cmo phonetics.cmo ../ZEN/list2.cmo \
+    ../ZEN/gen.cmo encode.cmo ../ZEN/deco.cmo data.cmo auto.cmi
 graph_segmenter.cmx : ../ZEN/word.cmx phonetics.cmx ../ZEN/list2.cmx \
+    ../ZEN/gen.cmx encode.cmx ../ZEN/deco.cmx data.cmx auto.cmi
+graph_segmenter2.cmx : ../ZEN/word.cmx phonetics.cmx ../ZEN/list2.cmx \
     ../ZEN/gen.cmx encode.cmx ../ZEN/deco.cmx data.cmx auto.cmi
 interface.cmi :
 interface.cmo : ../ZEN/word.cmo web_corpus.cmi web.cmo \
     save_corpus_params.cmi sanskrit.cmi phases.cmo paths.cmo params.cmi \
     nouns.cmi morpho_html.cmo ../ZEN/mini.cmo load_transducers.cmo \
-    load_morphs.cmo html.cmo graph_segmenter.cmo ../ZEN/gen.cmo encode.cmo \
+    load_morphs.cmo html.cmo graph_segmenter.cmo graph_segmenter2.cmo ../ZEN/gen.cmo encode.cmo \
     dispatcher.cmi ../ZEN/deco.cmo data.cmo control.cmo checkpoints.cmo \
     cgi.cmo canon.cmo automaton.cmo interface.cmi
 interface.cmx : ../ZEN/word.cmx web_corpus.cmx web.cmx \
     save_corpus_params.cmx sanskrit.cmx phases.cmx paths.cmx params.cmx \
     nouns.cmx morpho_html.cmx ../ZEN/mini.cmx load_transducers.cmx \
-    load_morphs.cmx html.cmx graph_segmenter.cmx ../ZEN/gen.cmx encode.cmx \
+    load_morphs.cmx html.cmx graph_segmenter.cmx graph_segmenter2.cmx ../ZEN/gen.cmx encode.cmx \
     dispatcher.cmx ../ZEN/deco.cmx data.cmx control.cmx checkpoints.cmx \
     cgi.cmx canon.cmx automaton.cmx interface.cmi
+interface2.cmi :
+interface2.cmo : ../ZEN/word.cmo web_corpus.cmi web.cmo \
+    save_corpus_params.cmi sanskrit.cmi phases.cmo paths.cmo params.cmi \
+    nouns.cmi morpho_html.cmo ../ZEN/mini.cmo load_transducers.cmo \
+    load_morphs.cmo html.cmo graph_segmenter.cmo graph_segmenter2.cmo ../ZEN/gen.cmo encode.cmo \
+    dispatcher.cmi ../ZEN/deco.cmo data.cmo control.cmo checkpoints.cmo \
+    cgi.cmo canon.cmo automaton.cmo interface2.cmi
+interface2.cmx : ../ZEN/word.cmx web_corpus.cmx web.cmx \
+    save_corpus_params.cmx sanskrit.cmx phases.cmx paths.cmx params.cmx \
+    nouns.cmx morpho_html.cmx ../ZEN/mini.cmx load_transducers.cmx \
+    load_morphs.cmx html.cmx graph_segmenter.cmx graph_segmenter2.cmx ../ZEN/gen.cmx encode.cmx \
+    dispatcher.cmx ../ZEN/deco.cmx data.cmx control.cmx checkpoints.cmx \
+    cgi.cmx canon.cmx automaton.cmx interface2.cmi
 user_aid.cmo : ../ZEN/word.cmo web.cmo sanskrit.cmi phases.cmo paths.cmo \
     morpho_html.cmo html.cmo ../ZEN/gen.cmo encode.cmo ../ZEN/deco.cmo \
     data.cmo control.cmo checkpoints.cmo cgi.cmo canon.cmo

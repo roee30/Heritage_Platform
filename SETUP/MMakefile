@@ -103,6 +103,9 @@ DOC_IMAGES=IMAGES/lexer10.jpg IMAGES/lexer17.jpg IMAGES/lexer40.jpg # Copy GH
 # Scripts
 SCRIPTS=JAVASCRIPT/utf82VH.js JAVASCRIPT/dragtable.js JAVASCRIPT/util.js
 
+#Frequency files
+FREQS=$(DATA)/comp_freq.rem $(DATA)/pada_freq.rem $(DATA)/word_freq.rem $(DATA)/comp_trans_freq.rem $(DATA)/pada_trans_freq.rem
+
 # Next are copyright specific images
 SITE_IMAGES=IMAGES/yinyang.gif IMAGES/panini.jpg IMAGES/spin-new.gif \
 IMAGES/arrw01_06a.gif IMAGES/arrw01_16a.gif
@@ -197,6 +200,8 @@ CGITAGGER=skttagger$(CGIEXT)
 CGISANDHI=sktsandhier$(CGIEXT)
 # cgi name under which the sanskrit tagging summarizer is installed on the server
 CGIGRAPH=sktgraph$(CGIEXT)
+# cgi name under which the sanskrit tagging summarizer is installed on the server
+CGIGRAPH2=sktgraph2$(CGIEXT)
 # cgi name under which the user aid for unknown chunks is installed on the server
 CGIUSER=sktuser$(CGIEXT)
 # CGI name under which the corpus manager is installed on the server.
@@ -260,9 +265,9 @@ ML/auto.mli ML/load_transducers.ml ML/dispatcher.mli ML/dispatcher.ml \
 ML/segmenter.ml ML/load_morphs.ml ML/lexer.mli ML/lexer.ml \
 ML/rank.ml ML/scl_parser.ml ML/reader.ml ML/parser.ml ML/constraints.mli \
 ML/constraints.ml ML/multilingual.ml ML/paraphrase.mli ML/paraphrase.ml \
-ML/bank_lexer.ml ML/checkpoints.ml ML/graph_segmenter.ml ML/interface.mli \
-ML/interface.ml ML/user_aid.ml ML/reset_caches.ml ML/restore_caches.ml \
-ML/params.mli ML/params.ml ML/make_xml_data.ml ML/segmenter_auxi.ml 
+ML/bank_lexer.ml ML/checkpoints.ml ML/graph_segmenter.ml ML/graph_segmenter2.ml ML/interface.mli ML/interface2.mli \
+ML/interface.ml ML/interface2.ml ML/user_aid.ml ML/reset_caches.ml ML/restore_caches.ml \
+ML/params.mli ML/params.ml ML/make_xml_data.ml ML/segmenter_auxi.ml ML/make_word_freq.ml ML/make_trans_freq.ml 
 
 # WEB package - HTML, HTTP, CGI ad-hoc utilities for Web interface
 WEB=ML/html.ml ML/web.ml ML/css.ml ML/cgi.ml ML/morpho_html.ml ML/chapters.ml \
@@ -415,6 +420,10 @@ all:
 	$(MAKE) transducers
 	cd ML && $(MAKE) # make engine (testing the data stamp)
 	$(MAKE) web_services # then all Web services
+#	cd ML && $(MAKE) make_word_freq
+	$(MAKE) word_freq
+#	cd ML && $(MAKE) make_trans_freq
+	$(MAKE) trans_freq
 
 # When master Makefile SETUP/MMakefile has been changed, do manually:
 new:
@@ -448,6 +457,7 @@ echo 'and cgi_decl = "$(CGIDECL)"'; \
 echo 'and cgi_conj = "$(CGICONJ)"'; \
 echo 'and cgi_sandhier = "$(CGISANDHI)"'; \
 echo 'and cgi_graph = "$(CGIGRAPH)"'; \
+echo 'and cgi_graph2 = "$(CGIGRAPH2)"'; \
 echo 'and cgi_user_aid = "$(CGIUSER)"'; \
 echo 'and cgi_corpus_manager = "$(CGIMANAGER)"'; \
 echo 'and cgi_save_corpus = "$(CGISAVECORPUS)"'; \
@@ -462,6 +472,25 @@ echo "value version=\"$(VERSION)\" and version_date=\"$(DATE)\";") > ML/version.
 
 transducers: 
 	ML/make_transducers 
+	
+word_freq:
+	#ML/make_word_freq
+	cd ML && $(MAKE) make_word_freq
+	ML/make_word_freq $(DATA)/comp_freq.txt > $(DATA)/comp_freq_max.rem
+	ML/make_word_freq $(DATA)/pada_freq.txt > $(DATA)/pada_freq_max.rem
+	ML/make_word_freq $(DATA)/word_freq.txt > $(DATA)/word_freq_max.rem
+	$(ZEN)/ML/dagify < $(DATA)/comp_freq_max.rem > $(DATA)/comp_freq.rem
+	$(ZEN)/ML/dagify < $(DATA)/pada_freq_max.rem > $(DATA)/pada_freq.rem
+	$(ZEN)/ML/dagify < $(DATA)/word_freq_max.rem > $(DATA)/word_freq.rem
+	rm $(DATA)/comp_freq_max.rem
+	rm $(DATA)/pada_freq_max.rem
+	rm $(DATA)/word_freq_max.rem
+	
+trans_freq:
+	#ML/make_trans_freq
+	cd ML && $(MAKE) make_trans_freq
+	ML/make_trans_freq $(DATA)/comp_trans_freq.txt $(DATA)/comp_trans_freq.rem
+	ML/make_trans_freq $(DATA)/pada_trans_freq.txt $(DATA)/pada_trans_freq.rem
 
 xml_data: 
 	cd ML && $(MAKE) make_xml_data
@@ -559,6 +588,7 @@ rm temp); done # NB: no citation in MW
 	cp -p $(AUTOMATA) $(SERVERPUBLICDIR)DATA # Sanskrit Engine data
 	cp -p $(DATAMW) $(SERVERPUBLICDIR)DATA # MW links
 	cp -p $(SCRIPTS) $(SERVERPUBLICDIR)DICO # Javascript in DICO dir
+	cp -p $(FREQS) $(SERVERPUBLICDIR)DATA # Frequency files in DATA dir
 #	cp $(DOC_IMAGES) $(SERVERPUBLICDIR)IMAGES
 
 releasecorpus:
@@ -607,11 +637,12 @@ stemmer: ML/lemmatizer
 sandhi: ML/sandhier
 	cp ML/sandhier $(CGIDIR)$(CGISANDHI)
 
-analyser: ML/reader ML/parser ML/interface ML/user_aid
+analyser: ML/reader ML/parser ML/interface ML/interface2 ML/user_aid
 #	cp ML/reader1cgi $(CGIDIR)$(CGIREADER)
 	cp ML/reader $(CGIDIR)$(CGIREADER)
 	cp ML/parser $(CGIDIR)$(CGIPARSER)
 	cp ML/interface $(CGIDIR)$(CGIGRAPH)
+	cp ML/interface2 $(CGIDIR)$(CGIGRAPH2)
 	cp ML/user_aid $(CGIDIR)$(CGIUSER)
 # following is special interface for Sanskrit Library invocation
 	cp ML/mk_reader_page $(CGIDIR)skt_heritage # $(CGIINTERFACE)

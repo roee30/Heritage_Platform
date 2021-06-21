@@ -2,9 +2,9 @@
 (*                                                                        *)
 (*                     The Sanskrit Heritage Platform                     *)
 (*                                                                        *)
-(*                      Gérard Huet & Amba Kulkarni                       *)
+(*             Gérard Huet & Amba Kulkarni & Sriram Krishnan              *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Module [Scl_parser] used as interface with UoH dependency parser *)
@@ -55,5 +55,21 @@ value print_scl scl_font sols = match sols with
   [ [] -> failwith "No sol"
   | [ s :: _ ] -> print_scl1 scl_font s
   ]
+;
+(* This is an additional method to directly call scl's SHMT interface *)
+value invoke_scl_parser text sol_num  =
+  let sol_num_string = (string_of_int sol_num) in
+  let svg_interface_url = "/cgi-bin/scl/SHMT/" in do
+  { ps ("<form name=\"parse " ^ sol_num_string ^ "\" form style='display: inline;' method=\"GET\" action = \""
+       ^ svg_interface_url ^ "test_xml.cgi\">\n")
+  ; ps ("<input type=\"hidden\" name=\"encoding\" value=\"WX\"/>")
+  ; ps ("<input type=\"hidden\" name=\"text\" value=\"" ^ (String.trim text) ^ "\"/>")
+  ; ps ("<input type=\"hidden\" name=\"splitter\" value=\"None\"/>")
+  ; ps ("<input type=\"hidden\" name=\"out_encoding\" value=\"IAST\"/>")
+  ; ps ("<input type=\"hidden\" name=\"parse\" value=\"Full\"/>")
+  ; ps ("<input type=\"hidden\" name=\"text_type\" value=\"Sloka\"/>")
+  ; ps (submit_input (sol_num_string))
+  ; ps (xml_end "form")
+  } 
 ;
 (* end; *)

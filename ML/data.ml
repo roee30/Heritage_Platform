@@ -114,6 +114,19 @@ and transducers_file   = local_data "transducers.rem"  (* transducers *)
 and mw_exc_file       = data "mw_exceptions.rem" (* for MW indexing *)
 and mw_index_file     = data "mw_index.rem"
 and guess_auto        = data "guess_index.rem"
+and comp_freq_txt_file    = data "comp_freq.txt"
+and pada_freq_txt_file    = data "pada_freq.txt"
+and word_freq_txt_file    = data "word_freq.txt"
+and comp_trans_freq_txt_file    = data "comp_trans_freq.txt"
+and pada_trans_freq_txt_file    = data "pada_trans_freq.txt"
+and comp_freq_max_file    = data "comp_freq_max.rem"
+and pada_freq_max_file    = data "pada_freq_max.rem"
+and word_freq_max_file    = data "word_freq_max.rem"
+and comp_freq_file    = data "comp_freq.rem"
+and pada_freq_file    = data "pada_freq.rem"
+and word_freq_file    = data "word_freq.rem"
+and comp_trans_freq_file    = data "comp_trans_freq.rem"
+and pada_trans_freq_file    = data "pada_trans_freq.rem"
 ;
 (* Next are the inflected forms banks, read at cgi time by [Lexer.load_morphs] *)
 value public_nouns_file     = public_data "nouns.rem" 

@@ -2,9 +2,9 @@
 (*                                                                        *)
 (*                     The Sanskrit Heritage Platform                     *)
 (*                                                                        *)
-(*                       Gérard Huet & Pawan Goyal                        *)
+(*              Gérard Huet & Pawan Goyal & Sriram Krishnan               *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* CGI-bin sktreader alias Reader for segmentation, tagging and parsing. 
@@ -31,12 +31,13 @@ open Web; (* ps pl abort etc. [remote_server_host] *)
 open Cgi; (* [get decode_url] *)
 open Phases; (* [Phases] *)
 open Rank; (* [Prel Lex Lexer_control Transducers segment_all Solutions] *) 
+open Word; 
 
 (* Reader interface *)
 (* Mode parameter of the reader. Controled by service Reader for respectively
    tagging, shallow parsing, or dependency analysis with the UoH parser.  *)
 (* Note that Interface is not a Reader/Parser mode. *)
-type mode = [ Tag | Parse | Analyse ]
+type mode = [ Tag | Parse | Analyse | Best_list ]
 ;
 value rpc = remote_server_host  
 and remote = ref False (* local invocation of cgi by default *)
@@ -47,12 +48,42 @@ value call_parser text sol =
   let invocation = if remote.val then rpc ^ cgi else cgi in
   anchor Green_ invocation check_sign
 ;
-value call_graph text = 
-  let cgi = graph_cgi ^ "?" ^ text ^ "g" in
+value call_graph text mode = 
+  let cur_cgi = 
+    if mode = Best_list
+    then graph_cgi2
+    else graph_cgi in
+  let cgi = cur_cgi ^ "?" ^ text ^ "g" in
   let invocation = if remote.val then rpc ^ cgi else cgi in
   anchor Green_ invocation check_sign
 ;
-    
+value print_segment ind output = 
+loop (List.rev output)
+  where rec loop = fun
+  [ [] -> ()
+  | [item] -> let _ = Lex.print_segment_words 0 item in ()
+  | [l::r] -> let _ = (Lex.print_segment_words 0 l) in loop r
+  ]
+;
+value get_segment output = 
+  loop [] output
+  where rec loop acc = fun
+  [ [] -> acc
+  | [(((ph: Phases.phase),(w: Word.word),_) as hd) :: tl] -> loop (acc @ [(ph,w)]) tl
+  ]
+;
+value call_scl sentence sol_num = 
+  (* If possible, call the get method directly *)
+  Scl_parser.invoke_scl_parser sentence sol_num
+;
+value get_sentence output = 
+  loop "" output
+  where rec loop acc = fun
+  [ [] -> acc
+  | [((phase, rword, transition) as hd) :: tl] -> loop ((Lex.get_sandhi_word (phase, rword, transition)) ^ acc) tl
+  ]
+;
+
 (* Prints n-th solution *)
 (* ind is relative index within kept, n is absolute index within max *)
 value print_solution text ind (n,output) = do
@@ -68,6 +99,20 @@ value print_solution text ind (n,output) = do
   }
 ;
 
+(* Updated print solution  *)
+(* ind is relative index within kept, n is absolute index within max *)
+value print_solution2 text ind (n,cl,output,sentence) = do
+  { pl html_break
+  ; pl hr
+  ; ps (span_begin Blue_)
+  ; ps span_end
+  ; pl html_break
+  ; let _ = List.fold_left Lex.print_segment_words 0 (List.rev output) in
+    let _ = call_scl (get_sentence output) n (* check why the existing call_parser function is not used here *) in
+    ind+1
+  }
+;
+
 (**************************************************************)
 (*     General display of solutions, in the various modes     *)
 (**************************************************************)
@@ -75,6 +120,13 @@ value print_solution text ind (n,output) = do
 value print_sols text revsols = (* stats = (kept,max) *)
   let process_sol = print_solution text in
   let _ = List.fold_left process_sol 1 revsols in ()
+;
+
+value print_sols2 text revsols = (* stats = (kept,max) *) 
+  let p_sols = Lex.prioritize revsols in
+  let process_sol = print_solution2 text in
+  let _ = List.fold_left process_sol 1 p_sols in
+  ()
 ;
 
 value display limit mode text saved = fun
@@ -88,7 +140,8 @@ value display limit mode text saved = fun
               [ Some n -> n | None -> truncation ] in do
     { if mode = Analyse then () 
       else do
-         { print_sols text (*kept,max*) best_sols
+         { if mode = Best_list then print_sols2 text (*kept,max*) best_sols
+           else print_sols text (*kept,max*) best_sols
          ; pl html_break
          ; pl hr 
          ; if limit = None then do
@@ -161,7 +214,7 @@ value process_input text us mode topic (input:string) encode cpts =
   let deva_input = String.concat " " deva_chunks in do
   { pl (xml_begin_with_att "p" [ ("align","center") ])
   ; ps (div_begin Latin16)
-  ; pl (call_graph text ^ " Show Summary of Solutions")
+  ; pl (call_graph text mode ^ " Show Summary of Solutions")
   ; pl (xml_end "p")
   ; pl "Input:" 
   ; ps (roma16_red_sl romainput) (* romanisation *)
@@ -234,6 +287,7 @@ value reader_engine () = do
         [ "t" -> Tag
         | "p" -> Parse
         | "o" -> Analyse (* Analyse mode of UoH parser *) 
+        | "l" -> Best_list
         | s -> raise (Failure ("Unknown mode " ^ s))  
         ] 
     (* Contextual information from past discourse *)

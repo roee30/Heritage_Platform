@@ -192,10 +192,16 @@ function convert() {
 	if((elt1!=null)&&(elt1.length>0)){
 		var mode_val=elt1.value;
 		var output1=document.getElementById('this_form').action;
-		if(mode_val=='g'){
+		if(mode_val=="g"){
 			output1=output1.replace("sktreader","sktgraph");
-		}
-		else{
+			output1=output1.replace("sktgraph2","sktgraph");
+		}else if(mode_val=="b"){
+			if((output1.includes("sktgraph2"))==false){
+				output1=output1.replace("sktgraph","sktgraph2");
+				output1=output1.replace("sktreader","sktgraph2");
+			}
+		}else{
+			output1=output1.replace("sktgraph2","sktreader");
 			output1=output1.replace("sktgraph","sktreader");
 		}
 		document.getElementById('this_form').action=output1;

@@ -352,7 +352,7 @@ value autonomous_form_k krid_form (delta,_) =
   let ((conj,krit),root) = look_up_homo homo krid_infos in 
   try let gana_pada = extract_gana_pada_k krit in  
       if conj=Primary then if filter_out_krit krit root then False
-                           else autonomous_root gana_pada root 
+                           else autonomous root 
       else True
   with [ Unvoiced -> autonomous root ]
 ;

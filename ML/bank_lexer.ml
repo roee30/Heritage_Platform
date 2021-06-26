@@ -19,14 +19,10 @@ open Format;
 module Loc = Loc (* Using the PreCast Loc *)
 ;
 module Error = struct
-  type t = string
-  ;
-  exception E of t
-  ;
-  value to_string x = x
-  ;
-  value print = Format.pp_print_string
-  ;
+  type t = string;
+  exception E of t;
+  value to_string x = x;
+  value print = Format.pp_print_string;
   end
 ;
 module Token = struct
@@ -44,26 +40,19 @@ module Token = struct
   module Error = Error
   ;
   module Filter = struct
-    type token_filter = Camlp4.Sig.stream_filter t Loc.t
-    ;
-    type t = string -> bool
-    ;
-    value mk is_kwd = is_kwd
-    ;
+    type token_filter = Camlp4.Sig.stream_filter t Loc.t;
+    type t = string -> bool;
+    value mk is_kwd = is_kwd;
     value rec filter is_kwd = parser
         [ [: `((KEYWORD s, loc) as p); strm :] -> [: `p; filter is_kwd strm :]
 (* PB        [if is_kwd s then [: `p; filter is_kwd strm :]
               else failwith ("Undefined token: " ^ s)]      *)
         | [: `x; s :] -> [: `x; filter is_kwd s :]
         | [: :] -> [: :] 
-        ]
-    ;
-    value define_filter _ _ = ()
-    ;
-    value keyword_added _ _ _ = ()
-    ;
-    value keyword_removed _ _ = ()
-    ;
+        ];
+    value define_filter _ _ = ();
+    value keyword_added _ _ _ = ();
+    value keyword_removed _ _ = ();
     end
   ;
   value to_string = fun

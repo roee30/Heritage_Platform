@@ -33,8 +33,10 @@ SERVERPUBLICDIR='/var/www/html/Heritage_Platform/'
 # Access URL
 SKTDIRURL='/Heritage_Platform/'
 
-# Path of executables. For instance, on Linux (need su privilege)
-CGIDIR='/var/www/cgi-bin/Heritage_Platform/'
+# Path of executables. For instance, on Linux Ubutu:
+CGIDIR='/usr/lib/cgi-bin/Heritage_Platform/'
+# Beware: this is the directory path for the cgi executables, which is referred to by the
+# CGIBINURL url on your server, consistently with your Apache configuration
 
 # URL of cgi executables on server
 CGIBINURL='/cgi-bin/Heritage_Platform/'

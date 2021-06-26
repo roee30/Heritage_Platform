@@ -6131,12 +6131,13 @@ auxiliary, such as yaa (bhasmasaat) or nii (Whitney) or sampad (gr.) *)
   ; enter1 "dak.si.na" (Indecl Tas (code "dak.si.natas"))  (* id *) 
   ; enter1 "avara"  (Indecl Tas (code "avaratas"))  (* \Pan{5,3,29} *)  
   ; enter1 "uttara#1" (Indecl Tas (code "uttaratas")) (* on pn \Pan{5,3,7} ? *)
-  ; enter1 "ubhaya" (Indecl Tas (code "ubhayatas")) (* on pn \Pan{5,3,7} ? *)]
-  ; enter1 "puras" (Indecl Tas (code "puratas")) (* on indecl puras *)
+  ; enter1 "ubhaya" (Indecl Tas (code "ubhayatas")) (* on pn \Pan{5,3,7} ? *)
+  ; enter1 "puras" (Indecl Tas (code "puratas")) (* on indecl puras *)]
 *)
 value compute_extra_tasils () = do (* add non-generative tasils - ad-hoc *) 
   { enter1 "aze.sa" (Indecl Tas (code "aze.satas")) (* tasil on privative cpd *)
   ; enter1 "ekaruupa" (Indecl Tas (code "ekaruupatas")) (* tasil on cpd *)  
+  ; enter1 "ekaanta" (Indecl Tas (code "ekaantatas")) (* tasil on cpd *)  
   ; enter1 "kaamacaara" (Indecl Tas (code "kaamacaaratas")) (* id *)  
 (*; enter1 "d.r.s.taanta" (Indecl Tas (code "d.r.s.taantatas")) tasil on icpd *)
   ; enter1 "guruvaktra" (Indecl Tas (code "guruvaktratas")) (* id *) 
@@ -6272,6 +6273,8 @@ value enter_extra_iifcs () = do
     enter1 entry (Bare Noun (code "aakhya"))
   ; let entry = "senaa" in (* for zuklasenadeva.h *)
     enter1 entry (Bare Noun (code "sena"))
+  ; let entry = "aali" in (* for khadyotaaliivilasitanibhaa.m MD{78} *)
+    enter1 entry (Bare Noun (code "aalii"))
     (* more entries are potentially concerned - for bahus of X-Y with Y fstem *)
   } 
 ;

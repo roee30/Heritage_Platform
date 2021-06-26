@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Parts = struct i*)
@@ -12,7 +12,7 @@
 (* Computes the declensions of participles from stored stems.*)
 
 open Skt_morph;
-open Encode; (* [rev_code_string], [code_string] *)
+open Encode; (* [rev_code_string code_string] *)
 open Phonetics; (* monosyllabic aug *)
 open Inflected; (* [enter enter1 enter_form enter_forms access_krid register_krid] *)
 
@@ -42,7 +42,13 @@ and   des_gana = 13
 and   int_gana = 14
 ;
 (* This is to avoid redundant generation of present system participles
-   when stems may come from a distinct gana. *)
+   when stems may come from a distinct gana. This is a problem of present
+   participles, which have the ga.na as a parameter. This is debatable.
+   The advantage of having this parameter is that it is a certificate: 
+   we may generate the stem from its parameters. Also, it may suggest a 
+   more precise sense if two ganas of the same root generate the same stem.
+   But then at analysis this creates overgeneration, whence this patch
+   to avoid homonyms. *)
 value redundant_gana k = fun 
   [ "svap"  -> k=1
   | "rud#1" -> k=6
@@ -129,7 +135,7 @@ value build_part_at_m vat verbal stem stem_at root = (* invoked by [Ppra_] *)
         ; decline Loc "atsu"
         ])
    ]
-   ; Bare krid stem_at (* e.g. b.rhadazva *)
+   ; Bare krid stem_at (* e.g. b.rhadazva zi~njadvalaya *)
    ] 
 ;
 (* Similar to [Nouns.build_mas_red] *)

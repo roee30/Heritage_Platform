@@ -70,6 +70,7 @@ value voices_of = fun
   | "sthag" | "snaa" | "snih#1" | "snu" | "snuh#1" | "sp.r" | "sphal" | "sphu.t"
   | "sphur" | "sm.r" | "svan" | "svap"  | "svar#1" | "svar#2" | "ha.th" 
   | "haa#1" | "hi#2" | "hi.ms" | "h.r.s" | "hras" | "hrii#1" | "hval"
+  | "karakaasaara" (* denominative of cpd resembling gana 1 - tentative *)
 (*| "k.subh" needed for k.subhyate *)
 (*| "k.s.nu" Atma needed for sa.mk.s.ute \Pan{1,3,65} *)
 (*| "krii.d" Atma needed for aakrii.date \Pan{1,3,21} *)

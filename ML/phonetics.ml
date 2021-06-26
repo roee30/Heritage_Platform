@@ -126,7 +126,8 @@ and semivowel c = c > 41 && c < 46 (* semi vowels  : y r l v  Pr(ya.n) *)
 and sibilant  c = c > 45 && c < 49 (* sibilants    : z .s s   Pr(zar)  *)
 and aspirate  c = c = 49 (* h *)
 ;
-value stop c = c > 16 && c < 42
+value stop c = c > 16 && c < 42 (* sparza occlusive Whitney surd *)
+(* stop c = velar c || palatal c || lingual c || dental c || labial c *)
 ;
 value nasal c = 
      c = 21 (* f *) || c =  26 (* ~n *) || c = 31 (* .n *) 
@@ -175,7 +176,7 @@ value voiced = fun (* voices previous phoneme with homophone *)
 value voiced_consonant c = (* Pr(jhaz) *)
   List.mem c [ 19; 20; 24; 25; 29; 30; 34; 35; 39; 40 ]
 
-and mute_consonant c =(* Pr(khay) *)
+and mute_consonant c = (* Pr(khay) *)
   List.mem c [ 17; 27; 32; 37; 18; 22; 23; 28; 33; 38 ]
 ;
 value is_voiced c = (* voiced phonemes *)

@@ -32,16 +32,17 @@ DICO=DICO# hypertext Heritage
 BOOK=$(SKTRESOURCES)BOOK# Heritage.pdf abrevs.pdf
 MW=$(SKTRESOURCES)MW# hypertext Monier-Williams
 XMLDOC=$(SKTRESOURCES)XML# Heritage Sanskrit morphology in XML databases
-# contains initially the dtds and the LICENCES, later filled by make xml_data
+# contains initially the dtds and the LICENCES, later filled in by make xml_data
 # This avoids burdening the git archive with huge compressed files.
-
 
 # Path to global Sanskrit corpus downloaded from Git.
 SKTCORPUS=$(SKTRESOURCES)CORPUS
 # Path to the corpus in the server area.
 SERVERCORPUS=$(SERVERPUBLICDIR)CORPUS
 # Corpus is loaded in SERVERCORPUS at install time, by make releasecorpus
-# Conversely, Corpus is exported in Resources at demand by make commit-corpus
+# Conversely, Corpus is exported to Resources at demand by make commit-corpus
+# Warning: this applies only for users having commit corpus rights, and
+# ust be effected manually before a release of such corpus dissemination.
 
 # Macro to extract information from the Apache configuration.
 apache_config_extract = $(shell apachectl -S | grep $(1) |		\
@@ -292,9 +293,6 @@ ML=$(UTIL) $(CORE) $(GRAM) $(WEB) $(TREE) $(LEGAL) $(CORPUS) $(DEBUG)
 # Directory STAT contains a few log and regression files like regression_template
 # Also files mw_exc.txt and mw_index_txt_file.txt for Monier-Williams alignment
 STAT=STAT
-
-# dynamic statistics such as current regression file
-VAR=VAR
 
 # System documentation
 DOC=DOC/doc.ps DOC/doc.html DOC/doc.pdf
@@ -708,6 +706,6 @@ course:
 	cp -p $(SKTRESOURCES)COURSE/Lessons/style.css $(SERVERPUBLICDIR)COURSE/Lessons/style.css
 
 
-SAVED_VERSION=329a
+SAVED_VERSION=332
 save: # saving sources of Heritage_Platform (after make clean in ML)
 	tar cvf ../ARCHIVE/Heritage_Platform_$(SAVED_VERSION).tar ML SITE JAVASCRIPT SETUP configure INSTALLATION DOC IMAGES README 

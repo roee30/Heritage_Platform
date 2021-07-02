@@ -644,7 +644,7 @@ value record_part memo = (* called from Verbs *)
 ;
 (* Called by [compute_participles] *)
 value build_part = fun
-  [ Ppp_ c stem root -> match stem with 
+  [ Ppp_ c stem root -> match stem with (* kta *)
     [ [ 1 :: r ] -> build_part_a (c,Ppp) r root 
     | _ -> failwith ("Weird Ppp: " ^ Canon.rdecode stem)
     ]
@@ -660,18 +660,18 @@ value build_part = fun
       build_part_a (c,Pfutp k) r root           
     | _ -> failwith ("Weird Pfp: " ^ Canon.rdecode stem)
     ]    
-  | Pppa_ c ppstem root -> 
+  | Pppa_ c ppstem root -> (* ktavatu *)
       let m_stem = [ 45 :: ppstem ] (* pp-v *) in
       let f_stem =  rfix m_stem "at" (* vatii *) in  
       build_part_vat (c,Pppa) m_stem f_stem root 
-  | Ppra_ k c m_stem f_stem root -> 
+  | Ppra_ k c m_stem f_stem root -> (* zat.r *)
       if redundant_gana k root then ()
       else build_part_at (c,Ppra k) m_stem f_stem root 
   | Pprared_ c stem root -> 
       let k = if c = Intensive then int_gana else 3 in
       let f_stem = rfix stem "at" (* atii *) in 
       build_part_at_red (c,Ppra k) stem f_stem root
-  | Pprm_ k c stem root -> build_part_a (c,Pprm k) stem root
+  | Pprm_ k c stem root -> build_part_a (c,Pprm k) stem root (* zaanac *)
   | Pprp_ c stem root -> build_part_a (c,Pprp) stem root
   | Ppfta_ c stem root -> 
       let inter = if monosyllabic stem then (* intercalating i *)

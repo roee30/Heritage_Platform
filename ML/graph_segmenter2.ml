@@ -303,10 +303,11 @@ value get_rule_freq (phase,rword,transition) =
     if (ii_component phase) then (decode_word ^ "-")
     else (decode_word) in
   if transition_prob = 1.0 then (1.0, word)
-  else let cur_prob = (word_prob *. transition_prob) in
+  else
   (word_prob, word) (* considers confidence value for a segment as word_probability alone *)
   (*(transition_prob, word)*) (* considers confidence value for a segment as transition_probability alone *)
-  (*(cur_prob, word)*) (* considers confidence value for a segment as <word_probability * transition_probability> *)
+  (*let cur_prob = (word_prob *. transition_prob) in
+  (cur_prob, word)*) (* considers confidence value for a segment as <word_probability * transition_probability> *)
 ;
 
 value register_pada index (phase,pada,sandhi) = 
@@ -463,7 +464,7 @@ value log_chunk revsol =
         ; bump_counter ()
         ; (chunk_conf, chunk_text, no_of_segments, chunk_triplets)
         }
-    else let text_from_chunk = get_text cur_chunk.chunk in (* NOTE: Check if this text should be sent to the result *)
+    else (*let text_from_chunk = get_text cur_chunk.chunk in (* NOTE: Check if this text should be sent to the result *)*)
     (0.0, "", 0, []) (* Temporarily given hard coded values to check for cases falling here *)
 ;
 
@@ -642,7 +643,6 @@ value add_chunk splits ((cur_conf, cur_text,_,_,cur_no_of_seg,cur_triplets) as c
 value get_second_comp item = 
   match item with
   [ (_,second,_,_,_,_) -> second
-  | _ -> "<Not found"
   ]
 ;
 (* Adding new segmentation into list of possible segmentations for current chunk *)

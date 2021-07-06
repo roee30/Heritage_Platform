@@ -69,7 +69,7 @@ value get_segment output =
   loop [] output
   where rec loop acc = fun
   [ [] -> acc
-  | [(((ph: Phases.phase),(w: Word.word),_) as hd) :: tl] -> loop (acc @ [(ph,w)]) tl
+  | [(((ph: Phases.phase),(w: Word.word),_)) :: tl] -> loop (acc @ [(ph,w)]) tl
   ]
 ;
 value call_scl sentence sol_num = 
@@ -80,7 +80,7 @@ value get_sentence output =
   loop "" output
   where rec loop acc = fun
   [ [] -> acc
-  | [((phase, rword, transition) as hd) :: tl] -> loop ((Lex.get_sandhi_word (phase, rword, transition)) ^ acc) tl
+  | [((phase, rword, transition)) :: tl] -> loop ((Lex.get_sandhi_word (phase, rword, transition)) ^ acc) tl
   ]
 ;
 

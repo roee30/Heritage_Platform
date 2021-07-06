@@ -46,7 +46,6 @@ value deco_of_word_freq m =
     let word = Transduction.code_raw_WX (frm) 
     and delta = diff_str frm in
     add_word_freq word delta freq
-  | _ -> ()
   ]
 ;
 (* To make the decorated trie structure which stores all the words and their frequencies, minimize the trie *)

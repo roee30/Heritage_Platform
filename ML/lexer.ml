@@ -257,10 +257,11 @@ value get_rule_freq1 (phase,rword,transition) =
     if (ii_component phase) then (decode_word ^ "-")
     else (decode_word ^ " ") in
   if transition_prob = 1.0 then (1.0, word) (* Sriram: Check if this condition is necessary *)
-  else let cur_prob = (word_prob *. transition_prob) in
+  else
   (word_prob, word) (* considers confidence value for a segment as word_probability alone *)
   (*(transition_prob, word)*) (* considers confidence value for a segment as transition_probability alone *)
-  (*(cur_prob, word)*) (* considers confidence value for a segment as <word_probability * transition_probability> *)
+  (*let cur_prob = (word_prob *. transition_prob) in
+  (cur_prob, word)*) (* considers confidence value for a segment as <word_probability * transition_probability> *)
 ;
 (* base function defined to return the confidence level for each segmentation as a product of the probablities of each rule *)
 (* Note: the confidence level and the complete string are added to the output *)
@@ -330,7 +331,7 @@ value prioritize revsols =
           (*give_sol_numbers*) final_sol
           (* give_sol_numbers acc1 (* For checking the performance of the original Reader, uncomment this line and comment the previous 4 lines *) *)
   |[l :: r] -> let (n,cl,sol,sentence) = add_conf_level1 l in (* if the confidence value is <word_probability * transition_probability> *)
-               let (n,cl,sol,sentence) = add_conf_level2 l in (* if the confidence value is <word1_probability * transition_probability * word2_probability> *)
+               (*let (n,cl,sol,sentence) = add_conf_level2 l in (* if the confidence value is <word1_probability * transition_probability * word2_probability> *)*)
                let acc = acc1 @ [(n,cl,sol,sentence)] in
                loop1 acc r 
   ]

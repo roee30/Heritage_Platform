@@ -208,7 +208,6 @@ value get_string_of_phase phase =
   match phase with
   [ Comp (_,ph) _ _ -> string_of_phase ph
   | phase -> string_of_phase phase
-  | _ -> "No String Found"
   ]
 ;
 (* Needed as argument of [Morpho.print_inv_morpho] *)

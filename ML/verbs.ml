@@ -150,6 +150,9 @@ and pfuta  = vpfuta Primary
 and pfutm  = vpfutm Primary
 and pprp   = vpprp Primary
 ;
+value primary_pprm (c,v) = 
+  c=Primary && match v with [ Pprm _ -> True | _ -> False ]
+;
 (* Derived verbal forms *)
 value causa = fpresa cau_gana Causative
 and pcausa  = vppra cau_gana Causative
@@ -419,7 +422,7 @@ value passive_stem root rstem = (* Panini yak (k : no guna, samprasaara.na) *)
     | "pyaa"  -> revcode "pyaay" (* pyaa=pyai *)
     | ".s.thiiv" -> revcode ".s.thiv" 
     | "indh" | "und" | "umbh" | "gumph" | "granth" | "da.mz" | "dhva.ms"  
-    | "bandh" | "bhra.mz" | "za.ms" | "zrambh" | "skambh" | "skand" 
+    | "bandh" | "bhra.mz" | "za.ms" | "zrambh" | "skambh" | "skand" | "sra.ms" 
       (* above roots have penultimate nasal and do not have [i_it] marker *)
     | "ba.mh" | "ma.mh" | "manth" | "stambh" 
       (* these four roots are listed in dhatupathas as bahi, mahi, mathi, stabhi
@@ -595,7 +598,7 @@ and o_it = fun (* these roots have ppp in -na \Pan{8,2,45} - unused here *)
     | "nud" | "pad#1" | "pii" | "p.rr" | "pyaa" | "bhid#1" | "majj" | "man"
     | "mid" | "mlaa" | "ri" | "lii" | "luu#1" | "vid#2" | "vlii" | "zad" | "z.rr"
     | "sad#1" | "skand" | "st.rr" | "styaa" | "syand" | "svid#2" | "had" *)
- (* also "suu#2" suuna and "vrii" vrii.na and "k.saa" k.saa.na *)
+ (* should include "suu#2" suuna, "vrii" vrii.na and "k.saa" k.saa.na *)
       -> True 
   | _ -> False
   ]
@@ -790,13 +793,23 @@ value record_part_m (conj,part_kind) stem root = match part_kind with
   | _ -> failwith "Unexpected participle"
   ]
 ;
+(* First an abbreviated pprm in -aana rather than -maana *)
+value record_pprm_aana verbal stem root = 
+  (* [trunc_a] needed because possible retroflexion in aa.na *)
+  let mid_stem = trunc_a (rfix stem "aana") in 
+  record_part_m verbal mid_stem root 
+;
 value record_part_m_th verbal stem root =  
   match root with
-  [ "cint" -> let pprm = Pprm_ 10 Primary (revcode "cintayaan") root in
-              record_part pprm (* irregular *)
-  | "muc#1" | "sp.rz#1" -> 
-         let mid_stem = rfix stem "aana" in (* Whitney§752 *)
-         record_part_m verbal mid_stem root 
+  [ "cint" when primary_pprm verbal -> 
+         let mid_stem = revcode "cintayaan" in
+         record_part_m verbal mid_stem root (* irregular *)
+  | "nam" | "pac" | "majj" | "sva~nj" | "huu" (* ga.na 1 -aana Whitney§741 *)
+  | "muc#1" | "sp.rz#1" (* ga.na 6 -aana Whitney§752.5e *)
+    when primary_pprm verbal -> 
+         record_pprm_aana verbal stem root
+  | "zak" when verbal = (Desiderative,Pprm des_gana) -> 
+         record_pprm_aana verbal stem root (* zik.saa.na Whitney§741 *)
   | _ -> let mid_stem = trunc_a (rfix stem "amaana") (* -maana *) in
          (* [trunc_a] needed because possible retroflexion in amaa.na *)
          record_part_m verbal mid_stem root 
@@ -1234,8 +1247,8 @@ value compute_active_present2 sstem wstem set root third = do
            record_part (Ppra_ 2 Primary m_pstem f_pstem root)
     ]
   ; if root = "m.rj" then let m_pstem = revstem "maarj" in
-                           let f_pstem = revstem "maarjat" in
-                           record_part (Ppra_ 2 Primary m_pstem f_pstem root)
+                          let f_pstem = revstem "maarjat" in
+                          record_part (Ppra_ 2 Primary m_pstem f_pstem root)
     else ()
   }
 and compute_middle_present2 sstem wstem set root third = do
@@ -1244,7 +1257,7 @@ and compute_middle_present2 sstem wstem set root third = do
   ; compute_athematic_optative2m wstem set root 
   ; compute_athematic_imperative2m sstem wstem set root 
   ; match root with
-    [ "maa#1" -> () (* no pprm *)
+    [ "iiz#1" | "maa#1" -> () (* no pprm *)
     | "i" -> record_part_m_ath (pprm 2) [ 42; 3 ] root (* iyaana *)
     | _ -> record_part_m_ath (pprm 2) (correct2 wstem) root
     ]
@@ -2551,12 +2564,12 @@ value intercalate_pp root rstem =
            | "mi.s" | "miil" | "mud#1" | "mu.s#1" | "m.rg" | "yaac" | "rac" 
            | "ra.n" | "ras" | "rah" | "raaj#1" | "ruc#1" | "rud#1" | "lag"
            | "lap" | "lal" | "la.s" | "las" | "lu.th" | "lul" | "lok" | "loc" 
-           | "vad" | "van" | "val" | "vaz" | "vas#2" | "vaaz"| "vaas#3" | "vid#1" 
+           | "vad" | "van" | "val" | "vaz" | "vas#2" | "vaaz"| "vaas#3" | "vid#1"
            | "vip"| "ven" | "vyath" | "vraj" | "vra.n" | "vrii.d" | "zubh#1" 
            | "zcut#1" | "zrath" | "zlath" | "zlaagh" | "zvas#1" 
            | "suuc" | "suud" | "sev" | "skhal" | "stan" | "stim" | "sthag"
            | "sphu.t" | "sphur" | "svad" | "svan" | "svar#1" | "has" | "hras" 
-           | "hraad" | "hlaad" | "hval" 
+           | "hraad" | "hlaad" | "hval" | ".dhauk" 
                -> set
            | "palaay" -> set (* very special item *)
            | "grah" -> set (* but will get ii *)
@@ -2583,7 +2596,7 @@ value intercalate_tvaa root rstem =
   match root with
   [ "zam#2"    (* unused without preverb *)
   | "av" -> [] (* WR no absol *)
-  | "ka.s" | "dh.r.s" | "am" | "tvar" | ".r.s" -> set 
+  | "ka.s" | "dh.r.s" | "am" | "tvar" | ".r.s" | "v.rj" -> set 
   | "nud" -> anit
   | _ -> if uu_it root || u_it root then vet
          else intercalate_pp root rstem 
@@ -2619,7 +2632,7 @@ value compute_ppp_stems root rstem =
     | "khid" | "g.rr#1" | "glai" | "chad#1" | "chid#1" | "ch.rd" | "j.rr" 
     | ".dii" | "tud#1" | "t.rd" | "t.rr" | "dagh" | "d.rr" | "dev" | "draa#1"
     | "draa#2" | "nud" | "pad#1" | "pii" | "p.rr" | "pyaa" | "bha~nj" 
-    | "bhid#1" | "bhuj#1" | "majj" | "man" | "mid" | "mlaa" | "ri" | "ruj#1"
+    | "bhid#1" | "bhuj#1" | "majj" | "mid" | "mlaa" | "ri" | "ruj#1"
     | "lii" | "luu#1" | "vij" | "vid#2" | "vrii" | "vlii" | "zad" | "zuu" 
     | "z.rr" | "sad#1" | "skand" | "st.rr" | "styaa" | "syand" | "svid#2" | "had"
     | "haa#2" -> 
@@ -2666,8 +2679,8 @@ value compute_ppp_stems root rstem =
         | "nud" -> [ Ta rstem :: [ Tia rstem :: ppn ] ] (* 3 forms *)
         | _ -> ppn
         ]
-      | [ 36 :: ([ 1 :: r ] as w) ] (* -an *) -> 
-             [ Ta w :: ppna [ 2 :: r ] ] (* mata+maana *) 
+ (*     | [ 36 :: ([ 1 :: r ] as w) ] (* -an *) -> 
+             [ Ta w :: ppna [ 2 :: r ] ] (* mata+maana *) *)
       | [ 43 (* r *) :: r ] -> ppna rstem (* iir.na *)
       | [ 45 (* v *) :: [ 10 (* e *) :: r ] ] -> (* dev *)
              ppna [ 6 (* uu *) :: [ 42 (* y *) :: r ] ] (* dyuuna *)
@@ -2694,13 +2707,15 @@ value compute_ppp_stems root rstem =
            | "yam"    -> revcode "ya"
            | "ram"    -> revcode "ra"
            | "van"    -> revcode "va"
-           | "han#1"  -> revcode "ha" (* also "man" mata given with maana *)
+           | "han#1"  -> revcode "ha" 
+           | "man"    -> revcode "ma"
            | "khan"   -> revcode "khaa" (* \Pan{6,4,42} lengthening of vowel *)
            | "jan"    -> revcode "jaa"  (* id *)
            | "san#1"  -> revcode "saa"  (* id *)
            | "am"     -> revcode "aan" (* -am -> -aan \Pan{6,4,15} Wh§955a *)
            | "kam"    -> revcode "kaan" 
            | "kram"   -> revcode "kraan"
+           | "klam"   -> revcode "klaan"
            | "cam"    -> revcode "caan"
            | "k.sam"  -> revcode "k.saan"
            | "dam#1"  -> revcode "daan"
@@ -2740,9 +2755,9 @@ value compute_ppp_stems root rstem =
            | _ -> passive_stem root rstem (* possibly duhified and mirjified *)
            ] in [ Ta ppstem :: match root with  
                   (* pp in -ita built on rstem (default) or on ppstem or both *)
-                    [ ".rc#1" | ".rj" | "k.svi.d" | "grah" | "praz" | "ba.mh"
-                    | "ma.mh" | "manth" | "m.rg" | "yaj#1" | "vyadh" | "vrazc"
-                    | "vaz" | "vas#1" | "vas#4" | "zrath" 
+                    [ ".rc#1" | ".rj" | "k.svi.d" | "granth" | "grah" | "praz"
+                    | "ba.mh" | "ma.mh" | "manth" | "m.rg" | "yaj#1" | "vyadh"
+                    | "vrazc" | "vaz" | "vas#1" | "vas#4" | "zrath" 
                     | "stambh"| "svap" ->
                            [ Tia ppstem ] 
                     | "vap" | "vap#1" | "vap#2" | "vad" ->
@@ -3138,6 +3153,7 @@ value redup_perf root =
           [ "ce.s.t" | "dev" |"sev" | "mlecch" | "vye" 
               -> 3 (* i *) (* vye for vyaa *)
           | "g.r" -> 2 (* Vedic - also k.lp etc have long aa Whitney§786a *)
+          | ".dhauk" -> 5 (* .du.dhauke \Pan{7,4,59} *)
           | _ -> 1 (* a *) (* also bhuu elsewhere *)
           ]
         else match root with
@@ -4236,7 +4252,7 @@ value compute_aorist root =
     | "gaah" | "car" | "ce.s.t" | "jan" | "ji" | "tvar" | "tvi.s#1" | "dah#1"
     | "diz#1" | "dih" | "diip" | "dru#1" | "dh.r" | "naz#1" | "pac" | "pa.th"
     | "miil" | "muc#1" | "yaj#1" | "rak.s" | "ric" | "viz#1" | "v.r#1" 
-    | "v.rt#1" | "v.rdh#1" | "vyadh" | "zri" | "zru" | "stu" | "svap" 
+    | "v.rt#1" | "v.rdh#1" | "vyadh" | "zri" | "zru" | "stu" | "svap" | "bh.r"
       (* | "dhaa#1" *) -> 
       let stem = redup_aor weak root in do
       { compute_redup_aorista stem root (* but atu.s.tavam RV (WR) *)  
@@ -4735,7 +4751,7 @@ value pfp_ya rstem root =
             if root = "as#1" then raise Not_attested (* use bhuu *) 
                               else rstem (* asya - may overgenerate *)   
     | [ 48; 1; 46 ] (* zas *) -> rstem 
-    | [ 48; 2; 46 ] (* zaas *) -> revcode "zaa.s" (* zaa.sya + zi.sya extra *)
+    | [ 48; 2; 46 ] (* zaas *) -> rstem (* zaasya + zi.sya extra *)
     | [ 33; 36; 1; 43; 19 ] (* granth *) -> revcode "grath"  
     | [ 35; 1; 45 ] (* vadh/han *) -> rstem (* vadhya *) 
     | [ 36; 1; 49 ] (* han *) -> revcode "ghaat" (* (h=h') \Pan{7,3,32+54} *)
@@ -4828,6 +4844,7 @@ value record_abs_ya root rstem w = do
         record_abso_ya (fix w "tya") root
     | "dhaa#1" -> record_abso_tvaa (code "dhitvaa") root 
     | "plu"    -> record_abso_ya (code "pluuya") root
+    | "vad"    -> record_abso_ya (code "vadya") root (* anuvadya *)
     | "b.rh#1" -> record_part_ppp (revcode "b.r.mhita") root (* MW -WR *) 
     | "v.r#2" -> do { record_abso_tvaa (code "varitvaa") root
                     ; record_abso_tvaa (code "variitvaa") root 
@@ -4911,6 +4928,7 @@ value record_ppp_abs_stems root rstem ppstems =
          ; (* abs -ya computed whether set or anit *) 
            match root with 
            [ "av" -> record_abs_ya root rstem (revcode "aav") (* -aavya *)
+           | "v.rj" -> record_abs_ya root rstem (revcode "varj") (* -aavya *)
            | _    -> record_abs_ya root rstem w
            ]
          }
@@ -4936,6 +4954,7 @@ value record_ppp_abs_stems root rstem ppstems =
                     | "vaz" | "vac" | "vap" | "vap#1" | "vap#2" | "vad" 
                     | "vas#1" | "vas#4" -> w
                     | "siiv" -> revcode "sev" (* gu.na *)
+                    | "v.rj" -> revcode "varj" (* gu.na *)
                     | "stambh" -> rstem (* stabhita but stambhitvaa! *)
                     | _ -> strong w 
                     ] in
@@ -4983,7 +5002,7 @@ value record_abso_am root =
   | "k.r#1"   -> record "kaaram" (* \Pan{3,4,26-28} *)
   | "khan"    -> record "khaanam"
   | "gaa#2"   -> record "gaayam"
-  | "grah"    -> record "graaham"
+  | "grah"    -> record "graaham"(* \Pan{3,4,39} *)
   | "c.rt"    -> record "c.rtam"
   | "jiiv"    -> record "jiivam" (* \Pan{3,4,30} *)
   | "j~naa#1" -> record "j~naayam"
@@ -5001,7 +5020,7 @@ value record_abso_am root =
   | "bhuu#1"  -> record "bhaavam"
   | "vad"     -> record "vaadam"
   | "vid#1"   -> record "vedam" (* \Pan{3,4,29} Apte§166 totalité *)
-  | "v.rt#1"  -> record "vartam" (* \Pan{3,4,39} *)
+  | "v.rt#1"  -> record "vartam" (* \Pan{3,4,39} hastavartam *)
   | "zru"     -> record "zraavam"
   | "sa~nj"   -> record "sa~ngam"
   | "s.r"     -> record "saaram"
@@ -5368,8 +5387,8 @@ value compute_present_system root rstem gana pada third =
           compute_active_present2 sstem wstem set root third
           else emit_warning ("Unexpected middle form: " ^ root)
        | Atma (* middle only *) -> 
-          if padam then emit_warning ("Unexpected active form: " ^ root)
-          else compute_middle_present2 sstem wstem set root third
+          if padam then emit_warning ("Unexpected active form: " ^ root) else 
+             compute_middle_present2 sstem wstem set root third
        | Ubha ->
           let thirda = if pada then third else []
           and thirdm = if pada then [] else third in do
@@ -5582,6 +5601,7 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
    match root with
    [ "putrakaama" | "rathakaama" (* \Pan{3,1,9} *)
    | "sukha" | "du.hkha" (* also "adhvara" "m.rga" below *)
+   (* but "sukha" forms also sukhayati *)
    | "i.sudhi" | "gadgada" (* \Pan{3,1,27} *)
    | "agada" (* Kale§660 *) | "iras" (* | "pu.spa" replaced by root pu.sp *)
        -> trunc rstem (* -()yati *) (* lopa *) 
@@ -6098,7 +6118,7 @@ and compute_extra_vadh () = (* no present - use "han#1" *)
   ; compute_injunctive root
   ; compute_future_gen rstem root 
   ; compute_passive_raw root
-  (* [record_pfp root rstem] is computed by [compute_extra_participles] *)
+  (* [record_pfp root rstem] is computed by [record_extra_participles] *)
   }
 and compute_extra_zaas () = 
    let e = "zaas" in do (* epics zaasyate + Renou gram §29 *) 
@@ -6132,11 +6152,14 @@ and compute_extra_hims () = do
     (Conju (presa 7) [ (Singular,[ (Second, code "hi.msi") ]) ])
   }
 and compute_extra_huu () = do (* WR *)
-   { compute_futurem Primary (revstem "hvaasy") "huu" 
-   ; enter1 "huu" (Invar (Primary,Infi) (code "hvayitum")) 
-   }
+  { compute_futurem Primary (revstem "hvaasy") "huu" 
+  ; enter1 "huu" (Invar (Primary,Infi) (code "hvayitum")) 
+  }
 ;
 (* Extra participial forms - intensive, desiderative, no present, etc *)
+(* Para part of Atma root *)
+value zinjat = Ppra_ 2 Primary (revstem "zi~nj") (revstem "zi~njat") "zi~nj"
+;
 value record_extra_participles () = do
   { record_part_ppp (revstem "gupta") "gup" (* gup gana 10 *)
   ; record_part_ppp (revstem "zaata") "zaa" 
@@ -6151,6 +6174,7 @@ value record_extra_participles () = do
   ; record_part (Pprm_ 1 Primary (revcode "gacchamaana") "gam")
   ; record_part (Pprm_ 4 Primary (revcode "kaayamaana") "kan")
   ; record_part (Ppra_ 1 Primary (revstem ".dam") (revstem ".damat") ".dam")
+  ; record_part zinjat
   }
 ;
 (* For verbs without present forms and variants, *)
@@ -6237,6 +6261,7 @@ value fake_compute_conjugs (gana : int) (root : string) = do
       | "vadh"   -> compute_extra_vadh ()
       | "zaa"    -> record_part_ppp (revcode "zaata") root
       | "zaas"   -> compute_extra_zaas ()
+      | "zi~nj"  -> record_part zinjat
       | "zru"    -> compute_extra_zru () 
       | "sa~nj"  -> compute_extra_sanj () 
       | "sad#1"  -> compute_extra_sad ()

@@ -70,6 +70,7 @@ value voices_of = fun
   | "sthag" | "snaa" | "snih#1" | "snu" | "snuh#1" | "sp.r" | "sphal" | "sphu.t"
   | "sphur" | "sm.r" | "svan" | "svap"  | "svar#1" | "svar#2" | "ha.th" 
   | "haa#1" | "hi#2" | "hi.ms" | "h.r.s" | "hras" | "hrii#1" | "hval"
+  | "karakaasaara" (* denominative of cpd resembling gana 1 - tentative *)
 (*| "k.subh" needed for k.subhyate *)
 (*| "k.s.nu" Atma needed for sa.mk.s.ute \Pan{1,3,65} *)
 (*| "krii.d" Atma needed for aakrii.date \Pan{1,3,21} *)
@@ -102,8 +103,8 @@ value voices_of = fun
   | "iih"  | "edh" | "ka~nc" | "katth" | "kam" | "kamp" | "kaaz" | "kaas#1"
   | "kuu" | "k.rp" | "k.lp" (* but Henry: {cak.lpur} "ils s'arrangèrent" *)
   | "knuu" | "klav" | "k.sad" | "galbh" | "gur" | "glah" 
-  | "gha.t" | "jabh#1" | "ju.s#1" | "j.rmbh" | ".damb" | ".dii" | "tandr"
-  | "tij" | "trap" | "trai" | "tvar" | "dak.s" | "day" | "diik.s" 
+  | "gha.t" | "jabh#1" | "ju.s#1" | "j.rmbh" | ".damb" | ".dii" | ".dhauk" 
+  | "tandr" | "tij" | "trap" | "trai" | "tvar" | "dak.s" | "day" | "diik.s" 
   | "d.r#1" | "dhii#1" | "dhuk.s" | "pa.n" | "pad#1" | "pi~nj" 
   | "pyaa" | "prath" | "pru" | "plu" | "ba.mh" | "baadh" | "bha.n.d" | "bhand" 
   | "bhaam" | "bhaa.s" | "bhraaj" | "ma.mh" | "man" | "mand#1" | "yat#1" 

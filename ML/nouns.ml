@@ -5881,6 +5881,7 @@ value iic_indecl = (* should be lexicalized or completed *)
   ; "divaa"     (* divaanidraa *)
   ; "dhik"      (* dhikkaara *)
   ; "na~n"      (* na~nvaada *)
+  ; "naktam"    (* nakta.mcara *)
   ; "naanaa"    (* naanaaruupa *)
   ; "param"     (* para.mtapa *)
   ; "pazcaa"    (* pazcaardha *)
@@ -5903,8 +5904,10 @@ value iic_indecl = (* should be lexicalized or completed *)
   ; "saak.saat"
   ; "saaci"
   ; "saamaanyatas" (* saamaanyatod.r.s.ta - tasil *)
-  ; "svayam"
+  ; "su.s.thu"  (* su.s.thuprayoga *)
+  ; "svayam"    (* svaya.mvara *)
   ; "svar#3"    (* svargatim *)
+  ; "hyas"      (* hyask.rta *)
   ]
 ;
 value declined_indecls =

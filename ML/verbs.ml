@@ -5126,7 +5126,7 @@ value compute_intensive_impfta strong weak iiflag root =
         ; conjugs Second "s" 
         ; conjugw Second "iis"
         ; conjugs Third  "t"
-        ; conjugw Second "iit"
+        ; conjugw Third "iit"
         ])
    ; (Dual, 
         [ conjugw First  "va"
@@ -5146,18 +5146,17 @@ value compute_intensive_optativea weak iiflag root =
 ;
 value compute_intensive_imperativea strong weak iiflag root =
   let conjugs person suff = (person,fix strong suff)
-  and conjugw person suff = (person,fix3w weak iiflag False suff) in
+  and conjugw person suff = (person,fix3w weak iiflag False suff) 
+  and vowel = match weak with 
+              [ [ c :: _  ] when vowel c -> True
+              | _ -> False
+              ] in
   enter1 root (Conju intimpera
    [ (Singular, 
         [ conjugs First "aani"
-        ; (Second, match weak with 
-            [ [ c :: _  ] -> fix3w weak iiflag False suff 
-              where suff = if vowel c then "hi" (* "dhi" or "hi" after vowel *)
-                            else "dhi"
-            | _ -> error_empty 28
-            ] ) 
+        ; conjugw Second (if vowel then "hi" else "dhi")
         ; conjugs Third  "tu"
-        ; conjugs Third  "iitu"
+        ; conjugw Third  "iitu"
         ])
    ; (Dual, 
         [ conjugs First  "aava"
@@ -5167,7 +5166,7 @@ value compute_intensive_imperativea strong weak iiflag root =
    ; (Plural,
         [ conjugs First  "aama"
         ; conjugw Second "ta"
-        ; conjugw Third  "atu"
+        ; conjugw Third  (if vowel then "tu" else "atu") 
         ])
    ])
 ;

@@ -389,8 +389,9 @@ value call_undo text cpts  =
 value get_sandhi_word font (phase,rword,transition) = 
   let visargified_word = (Morpho_html.visargify rword) in
   let decode_word = 
-    if font = "rom" then Canon.uniromcode visargified_word
+    if font = "roma" then Canon.uniromcode visargified_word
     else if font  = "wx" then Canon.decode_WX visargified_word
+    else if font  = "deva" then Canon.unidevcode visargified_word
     else Canon.decode_WX visargified_word in (* Temporarily returning in WX notation for all other cases *)
   if (ii_component phase) then (decode_word ^ "-")
   else (decode_word ^ " ")
@@ -414,19 +415,19 @@ value print_scl_segments output =
   Scl_parser.print_scl scl_font [ segmentations ]
 ;
 (* The following prints the solution on the web page *)
-value print_solution text (id, (conf, sentence, output)) = do
+value print_solution font text (id, (conf, sentence, output)) = do
   { pl html_break
   ; pl hr
   ; ps (span_begin Blue_)
-  ; ps ((get_sentence "rom" output) ^ " ")
+  ; ps ((get_sentence font output) ^ " ")
   ; let _ = Scl_parser.invoke_scl_parser (get_sentence "wx" output) id
   ; ps span_end
   ; pl html_break
   ; ()
   }
 ;
-value print_sols text sols = (* stats = (kept,max) *) 
-  let _ = List.iter (print_solution text) sols in
+value print_sols text sols font = (* stats = (kept,max) *) 
+  let _ = List.iter (print_solution font text) sols in
   ()
 ;
 value best_mode_operations cpts chunks = 
@@ -443,7 +444,7 @@ value best_mode_operations cpts chunks =
   (full, count, solution_list)
 ;
 (* The main procedure for computing the graph segmentation structure *)
-value check_sentence translit uns text checkpoints input undo_enabled =
+value check_sentence translit uns text checkpoints input undo_enabled font =
   let encode = Encode.switch_code translit in
   let chunker = if uns (* sandhi undone *) then Sanskrit.read_raw_sanskrit 
                 else (* chunking *) Sanskrit.read_sanskrit in
@@ -506,7 +507,7 @@ value check_sentence translit uns text checkpoints input undo_enabled =
     [ [] -> acc
     | [hd :: tl] -> loop (id + 1) (acc @ [(id + 1, hd)]) tl
     ] in
-    print_sols input numbered_sol_list
+    print_sols input numbered_sol_list font
   }
 ;
 value arguments trans lex font cache st us input topic abs
@@ -632,7 +633,7 @@ value graph_engine () = do
    try do 
    { match (revised,rev_off,rev_ind) with
      [ ("",-1,-1) -> (* Standard input processing *** Main call *** *)
-       check_sentence translit uns text checkpoints input undo_enabled
+       check_sentence translit uns text checkpoints input undo_enabled font
      | (new_word,word_off,chunk_ind) (* User-aid revision mode *) -> 
        let chunks = Sanskrit.read_sanskrit (Encode.switch_code translit) input in
        let rec decoded init ind = fun
@@ -659,7 +660,7 @@ value graph_engine () = do
                                 url_encoded_topic abs 
                                 url_enc_corpus_permission corpus_dir sentence_no
        and new_input = decode_url updated_input in
-       check_sentence translit uns new_text revised_check new_input undo_enabled
+       check_sentence translit uns new_text revised_check new_input undo_enabled font
      ]
      (* Rest of the code concerns Corpus mode *)
      (* automatically refreshing the page only if guess parameter *)

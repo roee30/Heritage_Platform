@@ -2485,8 +2485,10 @@ value intercalates root =
             | "tap" | "tyaj#1" | "dah#1" | "d.rp" | "nam" | "naz#1" 
             | "bandh" | "budh#1" | "bhaj" | "majj" | "man" | "m.rj"
             | "yam" | "ruh" | "labh" | "likh" | "vap#2" | "vas#1" | "vah#1" 
-            | "vij" | "vid#1" | "v.rj" | "v.rt#1" | "vrazc" | "sad#1" | "sah#1"
-            | "sidh#2" | "svap" | "han#1" | "syand" (* WR: set atma, anit para *)
+            | "vij" | "vid#1" | "v.rj" | "v.rt#1" | "v.rdh#1" | "vrazc" | "z.rdh"
+            | "sad#1" | "sah#1" | "sidh#2" | "svap" | "han#1" | "syand" 
+            (* Pan{7,2,59} set A anit P "v.rt#1" "v.rdh#1" "z.rdh" "syand" 
+               for these 4 roots, we generate both forms in Atma and in Para *)
                 -> vet 
             | "grah" -> setl (* \Pan{7,2,37} g.rhiita g.rhiitvaa *)
             | "s.rj#1" -> [ 3 ] (* sra.s.taa *)
@@ -2527,7 +2529,7 @@ value intercalates root =
 (* Whitney§631-§640 Bandharkar II p44 augment ii in present system 2nd class *)
 value augment_ii = fun (*  *)
   [ "an#2" | "rud#1" | "zvas#1" | "svap" | "jak.s" -> True 
-    (* and thus  "praa.n#1" too gives praa.niit *) 
+    (* and thus "praa.n#1" too gives praa.niit *) 
   | _ -> False 
   ]
 ;
@@ -2829,7 +2831,7 @@ value perstems rstem root =
       | _ -> match root with
              [ "gam" | "dham" | "praz" | "vaa#3" | "za.ms" | "han#1" | "huu"
                -> [ 0 ]
-             | "v.rj" -> [ 1 ]
+             | "v.rj" | "v.rt#1" | "v.rdh#1" | "z.rdh" -> [ 1 ] (* WR syanttaa *)
              | "zuc#1" -> [ 0; 1 ] (* zoktum *)
              | "d.rz#1" | "sp.rz#1" -> [ 3 ] (* ar -> ra dra.s.tum *)
              | "k.r.s" | "bh.rjj" -> [ 0; 3 ] (* berk *)
@@ -2888,14 +2890,14 @@ value compute_future_gen rstem root =
      where insert_sfx = fun 
        [ 0 -> let w = match root with
              [ "naz#1"    -> revcode "nafk" (* Whitney§936a *)
-             | "majj"     -> revcode "mafk"  (* Whitney§936a *)
+             | "majj"     -> revcode "mafk" (* Whitney§936a *)
              | "d.rz#1"   -> revcode "drak" (* drak.sya *)
              | "gai"      -> revcode "gaa"
              | "jan"      -> revcode "jaa"
              | "nij"      -> revcode "nej" (* consistent with gana 3 *)
              | "bharts"   -> revcode "bhart"
              | "likh" | "vij" -> [ 3 :: rstem ] (* i with weak stem (hack) *)
-             | "vas#1"    -> revcode "vat" (* vatsyati Whitney§167 \Pan{7,4,49} *)
+             | "vas#1"    -> revcode "vat" (* vatsyati Whitney§167 Pan{7,4,49} *)
              | "vrazc"    -> revcode "vrak" (* vrak.sya *)
              | "saa#1"    -> rstem (* saa si *)
              | "dhru"     -> rstem (* no_guna *)
@@ -2946,7 +2948,7 @@ value admits_passive = fun
     "an#2" | "av" | "as#1" | "ah" | "iiz#1" | "uc" | "kan" | "kuu" 
   | "knuu" | "k.sar" | "k.si" | "kha.n.d" | "daa#2" | "dyut#1" | "dru#1" 
   | "pat#2" | "paz" | "paa#2" | "pii" | "praa#1" | "bruu" | "ruc#1" | "vas#4"
-  | "vidh#1" | "vip" | "vyac" | "zam#1" | "zi~nj" | "zrambh" | "zvit#1" 
+  | "vidh#1" | "vip" | "vyac" | "zam#1" | "zi~nj" | "z.rdh" | "zrambh" | "zvit#1"
   | "sap#1" | "siiv" | "spaz#1" | "spardh" | "h.r#2" | "hrii#1" 
   | "ma.mh" (* supplied by "mah" *) (* | "arh" | "k.lp" no ps but pfp *)
       -> False
@@ -2961,8 +2963,8 @@ value admits_ppp_abs = fun
   | "bruu" (* vac *) 
   | "paz"  (* d.rz *) 
   | "as#1" | "kan" | "k.si" | "gaa#1" | "paa#2" | "praa#1" (* omit ved. praata *)
-  | "bal" | "ma.mh" (*| "vaz" *)| "vip" | "vyac" | "zaz" | "zam#2" | "zvit#1" 
-  | "sac" | "sap#1" | "h.r#2" (* | "spaz#1" *) -> False
+  | "bal" | "ma.mh" (*| "vaz" *)| "vip" | "vyac" | "zaz" | "zam#2" | "z.rdh" 
+  | "zvit#1" | "sac" | "sap#1" | "h.r#2" (* | "spaz#1" *) -> False
   | _ -> True
   ]
 ;
@@ -4264,7 +4266,7 @@ value compute_aorist root =
       { compute_thematic_aorista stem root
       ; compute_thematic_aoristm stem root 
       }
-    | "zak" | "zuu" | "zcut#1" | "zram" 
+    | "zak" | "zuu" | "z.rdh" | "zcut#1" | "zram" 
         -> compute_thematic_aorista weak root
     | "zru"   -> compute_thematic_aorista (revcode "zrav") root
     | "khyaa" -> compute_thematic_aorista (revcode "khy") root
@@ -4287,7 +4289,7 @@ value compute_aorist root =
       ; compute_redup_aoristm stem root 
       }
     | "iik.s" | "kamp" | "klid" | "gup" | "cur" | "m.r" | "d.rz#1" | "dyut#1" 
-    | "vrazc" | "zaas" | "siiv" | "sru" -> (* active only *)
+    | "vrazc" | "zaas" | "z.rdh"| "siiv" | "sru" -> (* active only *)
       let stem = redup_aor weak root in 
       compute_redup_aorista stem root
     | "grah" -> do 

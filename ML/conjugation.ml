@@ -665,9 +665,10 @@ value resolve_homonym entry =
     | "rudh" 
     | "vas"
     | "vah"
-    | "v.r"
-    | "v.rdh"
     | "vi.s"
+    | "v.r"
+    | "v.rt"
+    | "v.rdh"
     | "zii" 
     | "zuc" 
     | "zubh" 
@@ -727,6 +728,7 @@ value resolve_homonym entry =
     | "bhii"
     | "maa" (* ambiguous with ["maa#3"] *)
     | "vi.s"
+    | "v.rt"
     | "haa" -> first entry (* ambiguous with ["haa#2"] used in middle *)
     | "yu" -> second entry
     | _ -> entry

@@ -57,7 +57,7 @@ value print_scl scl_font sols = match sols with
   ]
 ;
 (* This is an additional method to directly call scl's SHMT interface *)
-value invoke_scl_parser text sol_num  =
+value invoke_scl_parser text sol_num font  =
   let sol_num_string = (string_of_int sol_num) in
   let svg_interface_url = "/cgi-bin/scl/SHMT/" in do
   { ps ("<form name=\"parse " ^ sol_num_string ^ "\" form style='display: inline;' method=\"GET\" action = \""
@@ -65,7 +65,7 @@ value invoke_scl_parser text sol_num  =
   ; ps ("<input type=\"hidden\" name=\"encoding\" value=\"WX\"/>")
   ; ps ("<input type=\"hidden\" name=\"text\" value=\"" ^ (String.trim text) ^ "\"/>")
   ; ps ("<input type=\"hidden\" name=\"splitter\" value=\"None\"/>")
-  ; ps ("<input type=\"hidden\" name=\"out_encoding\" value=\"IAST\"/>")
+  ; ps ("<input type=\"hidden\" name=\"out_encoding\" value=\"" ^ font ^ "\"/>")
   ; ps ("<input type=\"hidden\" name=\"parse\" value=\"Full\"/>")
   ; ps ("<input type=\"hidden\" name=\"text_type\" value=\"Sloka\"/>")
   ; ps (submit_input (sol_num_string))

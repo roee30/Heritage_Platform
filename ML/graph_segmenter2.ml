@@ -464,8 +464,8 @@ value log_chunk revsol =
         ; bump_counter ()
         ; (chunk_conf, chunk_text, no_of_segments, chunk_triplets)
         }
-    else (*let text_from_chunk = get_text cur_chunk.chunk in (* NOTE: Check if this text should be sent to the result *)*)
-    (0.0, "", 0, []) (* Temporarily given hard coded values to check for cases falling here *)
+    else let text_from_chunk = get_text cur_chunk.chunk in (* NOTE: Check if this text should be sent to the result *)
+    (1.0, text_from_chunk, 1, [(unknown,cur_chunk.chunk,Id)]) (* Temporarily given hard coded values to check for cases falling here *)
 ;
 
 (* Rest duplicated from Segmenter *)
@@ -647,8 +647,8 @@ value get_second_comp item =
 ;
 (* Adding new segmentation into list of possible segmentations for current chunk *)
 value add_to_chunk_splits (conf, text, no_of_seg, triplets) = 
-  if text = "" then () (* To not add those texts which are not segmentable. Check this for cases where the words are not recognized *) (* NOTE: Check if this is right, to compare the text *)
-  else do
+  (*if text = "" then () (* To not add those texts which are not segmentable. Check this for cases where the words are not recognized *) (* NOTE: Check if this is right, to compare the text -> Commented this to allow adding the unrecognized words to the segmentations *)
+  else*) do
   { let temp_list = chunk_solutions.possible_splits
   ; let sol_list = List.map get_second_comp temp_list
   ; if List.mem text sol_list then chunk_solutions.possible_splits := chunk_solutions.possible_splits
@@ -795,8 +795,8 @@ value segment_chunk (full,count) chunk sa_check =
               chunks being independent, the total number of solutions multiply *)
            }
         else do { (* If segmentation is not possible give the original chunk as the possible segment
-                ;*) chunk_solutions.possible_splits := [(1.0,((get_text chunk) ^ " "),1,1,0,[])]
-                ; (False,count) (* unsegmentable chunk *)
+                ;*) chunk_solutions.possible_splits := [(1.0,((get_text chunk) ^ " "),1,1,0,[(unknown,(Word.mirror cur_chunk.chunk),Id)])]
+                ; (full,count) (* unsegmentable chunk *)
              }
       }
     }

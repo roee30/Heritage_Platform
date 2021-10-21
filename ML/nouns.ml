@@ -15,7 +15,7 @@
 
 open List; (* exists, iter *)
 open Word; (* mirror *)
-open Skt_morph (* morphology datatypes *);
+open Skt_morph (* morphology, datatypes *);
 open Phonetics; (* [finalize, finalize_r] *) 
 open Inflected; (* [Declined, Bare, Cvi, enter, enter1, morpho_gen,
 reset_nominal_databases, nominal_databases] *)
@@ -40,7 +40,7 @@ value print_report s =
 ;
 
 (* Word encodings of strings *)
-value  code = Encode.code_string (* normalized *)
+value code = Encode.code_string (* normalized *)
 and revcode = Encode.rev_code_string (* reversed (mirror of code) *)
 and revstem = Encode.rev_stem (* stripped of homo counter *)
 and normal_stem = Encode.normal_stem 
@@ -5343,8 +5343,9 @@ value compute_nouns_stem_form e stem d p =
                 [ "ana.dvah" -> build_anadvah r3 e
                 | _ -> build_mas_vah r3 e
                 ]
-            | [ 1; 34 ] (* dah2 *) (* mandatory duhify *)
-            | [ 5; 34 ] (* duh2 *) -> build_root Mas [ 149 (* h' *) :: r1 ] e 
+            | [ 1 :: [ 34 :: _ ] ] (* dah2 *) (* mandatory duhify *)
+            | [ 5 :: [ 34 :: _ ] ] (* duh2 *) -> 
+                build_root Mas [ 149 (* h' *) :: r1 ] e 
             | [ 3 :: [ 36 :: [ 48 :: _ ] ] ] (* -snih2 *) 
             | [ 5 :: [ 36 :: [ 48 :: _ ] ] ] (* -snuh2 *) 
             | [ 5 :: [ 43 :: [ 34 :: _ ] ] ] (* -druh2 *) -> do
@@ -5545,8 +5546,10 @@ value compute_nouns_stem_form e stem d p =
             | _ -> build_root Neu stem e 
             ]
       | [ 49 :: r1 ] (* -h *) -> match r1 with
-            [ [ 1; 34 ] (* dah2 *) (* duhify *)
-            | [ 5; 43; 34 ] (* druh2 *)  -> do
+            [ [ 1 :: [ 34 :: _ ] ] (* dah2 -dah *)
+            | [ 5 :: [ 34 :: _ ] ] (* duh2 -duh *) ->
+              build_root Neu [ 149 (* h' *) :: r1 ] e (* duhify *)
+            | [ 5 :: [ 43 :: [ 34 :: _ ] ] ] (* -druh2 *) -> do
                 { build_root Neu [ 149 (* h' *) :: r1 ] e (* optionally duhify *)
                 ; build_root Neu stem e 
                 }

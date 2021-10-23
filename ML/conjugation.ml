@@ -545,9 +545,9 @@ value look_up_and_display font gana entry =
   and init_u = ([],[],[],[])
   and buckets = Deco.fold sort_out_v init_v roots.val in do 
   (* Main [print_conjug] *)
-      { ps "1";display_conjug font conj
-      ; ps "2";display_inflected_v font buckets (* Display finite root forms *)
-      ; ps "3";pl html_paragraph
+      { display_conjug font conj
+      ; display_inflected_v font buckets (* Display finite root forms *)
+      ; pl html_paragraph
       ; pl center_begin (* Now display participial root forms *)
       ; pl (table_begin_style (centered Gris) [])
       ; ps tr_begin 

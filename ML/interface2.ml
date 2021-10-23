@@ -409,7 +409,7 @@ value print_scl_segments output =
   let forget_transitions (phase,word,_) = (phase,word) in
   let segmentations = List.map forget_transitions output in
   let scl_font = match sanskrit_font.val with
-                 [ Deva -> "DEV"
+                 [ Deva -> "Devanagari"
                  | Roma -> "IAST"
                  ] in 
   Scl_parser.print_scl scl_font [ segmentations ]
@@ -420,7 +420,11 @@ value print_solution font text (id, (conf, sentence, output)) = do
   ; pl hr
   ; ps (span_begin Blue_)
   ; ps ((get_sentence font output) ^ " ")
-  ; let _ = Scl_parser.invoke_scl_parser (get_sentence "wx" output) id
+  ; let scl_font = match sanskrit_font.val with
+                 [ Deva -> "Devanagari"
+                 | Roma -> "IAST"
+                 ]
+  ; let _ = Scl_parser.invoke_scl_parser (get_sentence "wx" output) id scl_font
   ; ps span_end
   ; pl html_break
   ; ()

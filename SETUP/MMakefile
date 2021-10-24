@@ -733,6 +733,7 @@ course:
 	mkdir -p $(SERVERPUBLICDIR)COURSE/Images 
 	mkdir -p $(SERVERPUBLICDIR)COURSE
 #	cp -Rp $(SKTRESOURCES)COURSE $(SERVERPUBLICDIR)
+# uncomment previous line and delete all following when proper organization 
 	cp -p $(SKTRESOURCES)COURSE/Lessons/lesson1.fr.html $(SERVERPUBLICDIR)COURSE/Lessons/
 	cp -p $(SKTRESOURCES)COURSE/Lessons/HST_1.html $(SERVERPUBLICDIR)COURSE/Lessons/
 	cp -p $(SKTRESOURCES)COURSE/Lessons/lesson1.fr.html $(SERVERPUBLICDIR)COURSE/Lessons/index.html

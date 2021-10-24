@@ -4318,7 +4318,7 @@ value compute_aorist root =
     | _ -> () 
     ]
   ; match root with (* 4. sigma aorist sic *)
-    [ "aap" | "k.r#1" | "khan" | "gup" | "gh.r" | "ci" | "chid#1" | "ji" 
+    [ "aap" | "k.r#1" | "khan" | "gup" | "gh.r" | "ci" | "chid#1" | "ji"
     | "tud#1" | "t.rr" | "tyaj#1" | "dah#1" | "daa#1" | "d.rz#1" | "draa#2" 
     | "dhaa#1" | "dhyaa" | "dhyai" | "dhv.r" | "nak.s" | "nii#1" | "pac" 
     | "bhid#1" | "m.r" (* Deshpande: am.rta [1] am.r.saataam [4] am.r.sata [4] *)
@@ -4327,7 +4327,7 @@ value compute_aorist root =
      -> do
       { let stem = match root with
             [ "d.rz#1" | "s.rj#1" | "sp.rz#1" -> long_metathesis weak
-            | "ram" -> weak 
+            | ".r.s" | "ram" -> weak 
             | _ -> long
             ] in
         compute_ath_s_aorista stem root 
@@ -4345,7 +4345,8 @@ value compute_aorist root =
            then compute_ath_s_aorista strong root else ()
         (* ayok.siit and acchetsiit besides ayauk.siit and acchaitsiit *)
       ; match root with
-        [ "gup" | "gh.r" | "t.rr" | "d.rz#1" | "s.rj#1" -> ()  (* active only *)
+        [ "gup" | "gh.r" | "t.rr" | "d.rz#1" | "s.rj#1"
+            -> ()  (* active only *)
         | _ -> let stemm = match weak with
             [ [ c :: r ] -> match c with 
                 [ 3 | 4 | 5 | 6 (* i ii u uu *) -> strong
@@ -4371,13 +4372,13 @@ value compute_aorist root =
     ]
   ; match root with (* 5. i.s aorist se.t-sic *)
     [ "ak.s" | "aj" | "aas#2" | "i.s#1" | "iik.s" | "uk.s" | "uc" | "u.s" 
-    | "uuh" | ".rc#1" | "k.rt#1" | "krand" | "kram" | "kliz" | "ku.t" | "k.san" 
-    | "car" | "ce.s.t" | "jap" | "jalp" | "jaag.r" | "t.rr" | "tru.t" | "diip"
-    | "pu.t" | "puu#1" | "p.rc"| "pru.s#1" | "baadh" | "budh#1" | "mad#1" 
-    | "mud#1" | "muurch" | "mlecch" | "yaac" | "rak.s" | "ruc#1" | "lu~nc" 
-    | "lu.th" | "luu#1" | "vad" | "vadh" | "vaz" | "vid#1" | "v.r#1" | "v.rdh#1" 
-    | "vyath" | "vraj" | "z.rr" | "sidh#2" | "skhal" | "stan" | "stu" | "sphur"
-    | "hi.ms"
+    | "uuh" | ".rc#1" | ".r.s" | "k.rt#1" | "krand" | "kram" | "kliz" | "ku.t"
+    | "k.san" | "car" | "ce.s.t" | "jap" | "jalp" | "jaag.r" | "t.rr" | "tru.t"
+    | "diip" | "pu.t" | "puu#1" | "p.rc"| "pru.s#1" | "baadh" | "budh#1" 
+    | "mad#1" | "mud#1" | "muurch" | "mlecch" | "yaac" | "rak.s" | "ruc#1"
+    | "lu~nc" | "lu.th" | "luu#1" | "vad" | "vadh" | "vaz" | "vid#1" | "v.r#1"
+    | "v.rdh#1" | "vyath" | "vraj" | "z.rr" | "sidh#2" | "skhal" | "stan" 
+    | "stu" | "sphur" | "hi.ms" 
       -> do
       { let stem = match weak with
             [ [ 7 (* .r *) :: _ ] -> (* complex Paninian see Müller Gram xii *)
@@ -4399,7 +4400,8 @@ value compute_aorist root =
             ] in
         compute_ath_is_aorista stem root 
        ; match root with (* weird logic *)      
-        [ "ku.t" | "t.rr" | "tru.t" | "pu.t" | "sphur" -> ()  (* active only *)
+        [ ".r.s" | "ku.t" | "t.rr" | "tru.t" | "pu.t" | "sphur" 
+            -> ()  (* active only *)
         | _ -> compute_ath_is_aoristm strong root 
         ]
       } 

@@ -109,10 +109,10 @@ and invar =
 (* Varieties of na~n-samaasas *)
 type nan_kind =
   [ Neg  (* logical negation: adj -> adj *)
-  | Not (* sentential negation: adv -> adv *)
-  | Opp (* opposite notion: subst -> subst preserving gender *)
+  | Not  (* sentential negation: adv -> adv *)
+  | Opp  (* opposite notion: subst -> subst preserving gender *)
   | Priv (* bahuvrihi: noun -> adj with gender-raising *)
-  | Abse  (* noun -> noun in n. *) 
+  | Abse (* absence noun -> noun in n. *) 
   ]
 ;
 type sadhana = (* karaka, action or absolutive - coarser than krit *)

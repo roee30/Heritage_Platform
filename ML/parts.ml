@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Parts = struct i*)
@@ -12,7 +12,7 @@
 (* Computes the declensions of participles from stored stems.*)
 
 open Skt_morph;
-open Encode; (* [rev_code_string], [code_string] *)
+open Encode; (* [rev_code_string code_string] *)
 open Phonetics; (* monosyllabic aug *)
 open Inflected; (* [enter enter1 enter_form enter_forms access_krid register_krid] *)
 
@@ -42,7 +42,13 @@ and   des_gana = 13
 and   int_gana = 14
 ;
 (* This is to avoid redundant generation of present system participles
-   when stems may come from a distinct gana. *)
+   when stems may come from a distinct gana. This is a problem of present
+   participles, which have the ga.na as a parameter. This is debatable.
+   The advantage of having this parameter is that it is a certificate: 
+   we may generate the stem from its parameters. Also, it may suggest a 
+   more precise sense if two ganas of the same root generate the same stem.
+   But then at analysis this creates overgeneration, whence this patch
+   to avoid homonyms. *)
 value redundant_gana k = fun 
   [ "svap"  -> k=1
   | "rud#1" -> k=6
@@ -129,7 +135,7 @@ value build_part_at_m vat verbal stem stem_at root = (* invoked by [Ppra_] *)
         ; decline Loc "atsu"
         ])
    ]
-   ; Bare krid stem_at (* e.g. b.rhadazva *)
+   ; Bare krid stem_at (* e.g. b.rhadazva zi~njadvalaya *)
    ] 
 ;
 (* Similar to [Nouns.build_mas_red] *)
@@ -638,7 +644,7 @@ value record_part memo = (* called from Verbs *)
 ;
 (* Called by [compute_participles] *)
 value build_part = fun
-  [ Ppp_ c stem root -> match stem with 
+  [ Ppp_ c stem root -> match stem with (* kta *)
     [ [ 1 :: r ] -> build_part_a (c,Ppp) r root 
     | _ -> failwith ("Weird Ppp: " ^ Canon.rdecode stem)
     ]
@@ -654,18 +660,18 @@ value build_part = fun
       build_part_a (c,Pfutp k) r root           
     | _ -> failwith ("Weird Pfp: " ^ Canon.rdecode stem)
     ]    
-  | Pppa_ c ppstem root -> 
+  | Pppa_ c ppstem root -> (* ktavatu *)
       let m_stem = [ 45 :: ppstem ] (* pp-v *) in
       let f_stem =  rfix m_stem "at" (* vatii *) in  
       build_part_vat (c,Pppa) m_stem f_stem root 
-  | Ppra_ k c m_stem f_stem root -> 
+  | Ppra_ k c m_stem f_stem root -> (* zat.r *)
       if redundant_gana k root then ()
       else build_part_at (c,Ppra k) m_stem f_stem root 
   | Pprared_ c stem root -> 
       let k = if c = Intensive then int_gana else 3 in
       let f_stem = rfix stem "at" (* atii *) in 
       build_part_at_red (c,Ppra k) stem f_stem root
-  | Pprm_ k c stem root -> build_part_a (c,Pprm k) stem root
+  | Pprm_ k c stem root -> build_part_a (c,Pprm k) stem root (* zaanac *)
   | Pprp_ c stem root -> build_part_a (c,Pprp) stem root
   | Ppfta_ c stem root -> 
       let inter = if monosyllabic stem then (* intercalating i *)

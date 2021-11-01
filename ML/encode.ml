@@ -125,6 +125,8 @@ and skt_raw_to_deva   str = try Canon.unidevcode (code_raw str) with
 and skt_strip_to_deva str = try Canon.unidevcode (code_strip_raw str) with
                                 [ Failure _ -> failwith ("raw stripped " ^ str) ]
 ;
+value skt_to_roma str = Canon.uniromcode (code_string str) 
+;
 (* Following not needed since [Transduction.skt_to_html] is more direct 
 [value skt_to_roma         str = Canon.uniromcode (code_string str) 
  and skt_raw_to_roma       str = Canon.uniromcode (code_raw str) 

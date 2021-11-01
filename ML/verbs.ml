@@ -183,6 +183,7 @@ and intimpera   = fimpera int_gana Intensive
 value  code = Encode.code_string (* normalized *)
 and revcode = Encode.rev_code_string (* reversed *)
 and revstem = Encode.rev_stem (* stripped of homo counter *)
+and roman = Encode.skt_to_roma (* IAST *)
 ;
 (* Checking consistency of computed form with witness from lexicon.      *)
 (* Discrepancies are noted on a warnings log, written on stderr.         *)
@@ -5492,7 +5493,7 @@ value compute_present_system root rstem gana pada third =
          if root = "t.rh" then [ c :: rev (sandhi stem [ 36; 10 (* -ne *)]) ] 
          else [ c :: rev (sandhi stem [ 36; 1 ]) ] (* stem-na *) in 
        compute_present7 sstem wstem root third pada padam 
-     | _ -> warning (root ^ " atypic 7\n")
+     | _ -> warning (roman root ^ " atypic 7\n")
      ]
    | 8 -> (* k.r1 k.san tan1 man san1 *)
      match rstem with 
@@ -5505,7 +5506,7 @@ value compute_present_system root rstem gana pada third =
        and short = revcode "kur" (* before suffix -m -y -v Macdonell§134E *)
        and sstem = revcode "karo" in
        compute_presentk sstem wstem short root third
-     | _ -> warning (root ^ " atypic 8\n")
+     | _ -> warning (roman root ^ " atypic 8\n")
      ]
    | 9 -> let (stem,vow) = match root with (* vow = vowel ending root *)
         [ "j~naa#1" -> (revcode "jaa"  ,True) (* \Pan{7,3,79} *)

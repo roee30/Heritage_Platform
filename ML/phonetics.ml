@@ -449,7 +449,7 @@ value finalize rstem = match rstem with
        | 149 (* h' *) -> [ 17 (* k *) :: asp rest ] (* -duh {\R} -dhuk , impft doh adhok, etc. *)
        | 249 (* h'' *) -> [ 32 (* t *) :: asp rest ] 
        | c -> if vowel c then rstem 
-              else let s = Canon.rdecode rstem in
+              else let s = Canon.uniromcode (Word.mirror rstem) in 
                    failwith ("Illegal stem " ^ s ^ " (finalize)")
        ] 
   ]

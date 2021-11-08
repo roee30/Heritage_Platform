@@ -5867,7 +5867,7 @@ value compute_decls word genders =
 ;
 value iic_indecl = (* should be lexicalized or completed *)
 (* indeclinable stems used as iic of non-avyayiibhaava cpd *)
-  [ "atra"      (* atrabhavat *)
+  [ "atra#1"    (* atrabhavat *)
   ; "adhas"     (* adha.hzaakha adhazcara.nam *)
   ; "antar"     (* antarafga *)
   ; "arvaak"    (* arvaakkaalika *)

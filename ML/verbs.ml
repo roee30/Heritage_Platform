@@ -6125,7 +6125,7 @@ and compute_extra_trr () = do
 and compute_extra_dhaa () = do 
     { (* Gaayatrii dhiimahi precative m. Whitney§837b *)
       enter1 "dhaa#1" (Conju benem [ (Plural,[ (First, code "dhiimahi") ]) ])
-    ; record_part (Ppp_ Primary (revcode "dhita") "dhaa#1") (* alter hita *)
+(*  ; record_part (Ppp_ Primary (revcode "dhita") "dhaa#1") (* alter hita *) *)
     }
 (* also "vidmahi" on yantra ? *)
 and compute_extra_nind () = (* WR: RV *)

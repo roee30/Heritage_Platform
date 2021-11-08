@@ -4306,7 +4306,7 @@ value compute_aorist root =
 (*i | "daa#1" -> let stem = (revcode "diidad") (* ad hoc *) in do
         { compute_redup_aorista stem root
         ; compute_redup_aoristm stem root 
-        } suppressed Jan 2021 for lack of justification *)
+        } suppressed Jan 2021 for lack of justification i*)
       (* then exceptions to treatment of aa with intercalaring ii *)
     | "raadh" -> let stem = redup_aor (revcode "radh") (* riiradh *) root in  
                  compute_redup_aorista stem root (* Macdonnel p 126 *)
@@ -4335,7 +4335,7 @@ value compute_aorist root =
       ; match root with (* Whitney§890 *)
             [ "khan" (* akhaan *)
             | "dah#1" (* adhaak *)
-            (* | "d.rz1" adraak wrong *adaar.t below TODO use [ar_ra] *)
+            (*i | "d.rz1" adraak wrong *adaar.t below TODO use [ar_ra] i*)
             | "yaj#1" (* ayaa.t *)
             (* | "s.rj1" asraak wrong *asaar.t below *)
               -> let lopa = sigma True long "" in
@@ -4352,7 +4352,7 @@ value compute_aorist root =
             [ [ c :: r ] -> match c with 
                 [ 3 | 4 | 5 | 6 (* i ii u uu *) -> strong
                 | 2 (* aa *) -> [ 3 :: r ] (* turn aa to i Kale§535 *)
-                    (* but Whitney§884 says only daa1 dhaa1 et sthaa1 *)
+                    (* but Whitney§884 says only daa1 dhaa1 and sthaa1 *)
                 | 7 (* .r *) -> if root = "dhv.r" then revcode "dhuur" else weak
                 | _ -> weak
                 ]

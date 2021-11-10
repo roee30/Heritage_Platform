@@ -735,7 +735,7 @@ course:
 #	cp -Rp $(SKTRESOURCES)COURSE $(SERVERPUBLICDIR)
 # uncomment previous line and delete all following when proper organization 
 	cp -p $(SKTRESOURCES)COURSE/Lessons/lesson1.fr.html $(SERVERPUBLICDIR)COURSE/Lessons/
-	cp -p $(SKTRESOURCES)COURSE/Lessons/HST_1.html $(SERVERPUBLICDIR)COURSE/Lessons/
+	cp -p $(SKTRESOURCES)COURSE/Lessons/HST_*.html $(SERVERPUBLICDIR)COURSE/Lessons/
 	cp -p $(SKTRESOURCES)COURSE/Lessons/lesson1.fr.html $(SERVERPUBLICDIR)COURSE/Lessons/index.html
 	cp -p $(SKTRESOURCES)COURSE/Images/* $(SERVERPUBLICDIR)COURSE/Images
 	cp -p $(SKTRESOURCES)COURSE/Lessons/style.css $(SERVERPUBLICDIR)COURSE/Lessons/style.css

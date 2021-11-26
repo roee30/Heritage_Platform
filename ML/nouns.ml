@@ -6068,7 +6068,7 @@ value gatis = (* G{saak.sat} Wh§1092 *)
   ; "namas" (* namask.rtya Wh§1092a *)
   ; "aavis" (* namask.rtya Wh§1078 *)
   ; "urasi" (* Pan{1,4,75} in the sense of anatyaadhaana cf Sharma *)
-  ; "manasi"
+  ; "manasi" (* id. *)
   ; "anye" (* Pan{1,4,76} id *)
   ; "pade"
   ; "madhye"
@@ -6079,22 +6079,22 @@ value gatis = (* G{saak.sat} Wh§1092 *)
   ; "uurii" (* Pan{1,4,61} G{uurii} uuriik.rtya but Wh§1094b says uriik.r *)
   (* other G{uurii}: yadurii,urarii,yadurarii,paapii,laalii,aattaalii,vetaalii,
      dhuurii,zakalii,sa.mzaklii,phaluu,phalii,viklii, etc. ignored or Cvi *)
-  (* vinaa Wh§1078a ignored *) 
-(* The following gatis are treated as preverbs, since they apply to roots
-   other than the 3 auxiliaries: 
+(* The following gatis are treated as preverbs to specific roots:
   ; "astam" (* gam,i Pan{1,4,68} asta.mgatya Wh§1092b *)
   ; "puras" (* k.r1,dhaa1,i Pan{1,4,67} Wh§1078 *)
   ; "tiras" (* k.r1,dhaa1 Pan{1,4,71-72} Wh§1078 *)
   ; "alam" (* ala.mk.rtya Pan{1,4,64} Wh§1078a *)
   ; "bahis" (* k.r1 bhuu1 Wh§1078a *)
-  ; "zrat" (* dhaa1 Wh§1079 *) *)
-(* Not taken into account at present: 
-   sat/asat satk.rtya Pan{1,4,63} 
-   antar antarhatya Pan{1,4,65} 
+  ; "zrat" (* dhaa1 Wh§1079 *) 
+  ; "sat" (* satk.rtya Pan{1,4,63}, but "asat" ignored *) *)
+(* antarhatya Pan{1,4,65} lexicalized *)
+(* Ignored at present
    ka.ne/manas ka.nehatya Pan{1,4,66} 
    accha acchaa acchagatya acchodya Pan{1,4,69} Wh§1078 
    adas ada.hk.rtya Pan{1,4,70} 
-   also ignored onomatopeae pa.tapa.taakaroti etc. .daac Pan{5,4,57-67} *)
+   vinaa Wh§1078a 
+   also ignored onomatopeae pa.tapa.taakaroti etc. .daac Pan{5,4,57-67} 
+   also interjections like va.sa.t va.sa.tkaroti but va.sa.tkaara lexicalized *)
   ]
 ;
 value enter_gati gati = (* assumes gati has lexical entry *)

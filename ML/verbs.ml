@@ -2795,7 +2795,8 @@ value compute_ppp_stems root rstem =
            | "grah"   -> [ sTa "g.rbh" :: [ sTia "g.rbh" ] ] (* "g.rbhiita" *)
            | "car"    -> [ sNa "ciir" ] (* irreg. na ppp "ciir.na" *)
            | "gur"    -> [ sNa "guur" ] (* Kale na ppp "guur.na" *)
-           | "tvar"   -> [ sNa "tuur" ] (* irreg. na ppp "tuur.na" *)
+           | "tvar"   -> [ sNa "tuur" ] (* irr. na ppp "tuur.na" \Pan{6,4,20} *)
+           | "jvar"   -> [ sNa "juur" ] (* idem na ppp "juur.na" \Pan{6,4,20} *)
            | "du"     -> [ sNa "duu" ] (* "duuna" *)
            | "lag"    -> [ sNa "lag" ] (* irreg. na ppp "lagna" \Pan{7,2,18} *)
            | "druh#1" -> [ sTa "druh" ] (* opt. duhify "druu.dha" *)
@@ -5682,7 +5683,7 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
    | "prati.sedha" | "pradak.si.na" | "prasaada" | "bhi.saj" (* | "mantra" *)
    | "malina" | "mizra" | "mukula" | "mukhara" | "mu.n.da" | "muutra" 
    | "m.rga" | "yantra" | "rasa" | "ruuk.sa" | "lagha" (* u -> a *)
-   (*| "var.na"*) | "vaasa#3" | "vizada" | "vra.na" | "zaanta" | "zithila"
+   (*| "var.na"*) | "vizada" | "vra.na" | "zaanta" | "zithila"
    | "zyena" | ".sa.n.dha" | "sapi.n.da" | "saphala" | "sabhaaja" | "saantva" 
    | "saavadhaana" | "suutra" | "stena" (* practice \Pan{3,1,15} *)
    | "u.sas" | "namas" | "varivas" (* do \Pan{3,1,19} *)

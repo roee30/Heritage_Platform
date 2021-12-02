@@ -327,8 +327,8 @@ value external_sandhi left right =
   if left = "sas" || left = "sa.h" then
      match code right with 
         [ [] -> "sa.h"
-        | [ first :: after ] ->
-            e_sandhi (if vowel first then "sa.h" else "sa") right
+        | [ first :: _ ] ->
+          if vowel first then e_sandhi "sa.h" right else "sa " ^ right
         ]  
   else e_sandhi left right
 ;
@@ -338,7 +338,7 @@ value ext_sandhi rvlword rword =
       [ [ 48 :: [ 1; 48 ] ] | [ 16 :: [ 1; 48 ] ] -> match rword with 
               [ [] -> [ 16 :: [ 1; 48 ] ]
               | [ first :: after ] ->
-                  if vowel first then [ 16 :: [ 1; 48 ] ] else [ 1; 48 ]
+                  if vowel first then [ 16 :: [ 1; 48 ] ] else [ 50; 1; 48 ]
               ]
       | l -> l
       ] in ext_sandhi0 left rword (* does not finalize r or s into .h *)
@@ -353,7 +353,7 @@ value after_dual_sandhi left right =
        ]
 ;
 (* tests *)
-assert (external_sandhi "sas" "gaja.h" = "sagaja.h");
+assert (external_sandhi "sas" "gaja.h" = "sa gaja.h");
 assert (external_sandhi "sas" "aacaarya.h" = "sa_aacaarya.h");
 assert (external_sandhi "sas" "azva.h" = "so'zva.h");
 assert (external_sandhi "sas" "" = "sa.h");

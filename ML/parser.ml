@@ -203,7 +203,10 @@ value analyse query output =
   let groups = make_groups tagger output in
   let sorted_groups = sort_flatten groups in 
   let (top_groups, threshold) = truncate_groups sorted_groups in do
-  { pl (xml_empty "p")
+  { xml_empty "p" |> pl
+  ; span_begin Latin12 |> ps
+  ; "Final analysis: " |> pl
+  ; span_end |> ps
   ; let find_len = fun
       [ [ (_,[ a :: _ ]) :: _ ] -> List.length a
       | _ -> 0
@@ -221,8 +224,9 @@ value analyse query output =
            | Roma -> "IAST"
            ] in 
        Scl_parser.print_scl scl_font [ List.rev segments ] 
-       else () 
+    else () 
   (*i DEBUG ; Sys.command "ls -l > /tmp/SKT_TEMP/junk" i*)
+  (* Uncomment following for debugging parser
   ; List.iter print_bucket top_groups  
   ; match threshold with      
     [ None -> ()
@@ -231,7 +235,7 @@ value analyse query output =
        ; html_red ("Truncated penalty " ^ string_of_int p ^ " or more") |> ps
        ; html_break |> ps
        }
-    ]
+    ] *)
   }
 ;
 value print_sems word morphs = do  

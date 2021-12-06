@@ -47,6 +47,7 @@ value print_scl1 scl_font (solution : list (Phases.phase * Word.word)) =
   ; ps ("<td><input type=\"hidden\" name=\"DISPLAY\" value=\"" ^ scl_font ^"\"/></td>")
   ; ps tr_end
   ; ps table_end 
+  ; (Encode.skt_to_deva "sa.msaadhanii" ^ " : ") |> pl
   ; ps (submit_input "Submit")
   } 
 ;

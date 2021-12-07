@@ -530,6 +530,9 @@ value graph_engine () = do
     and sentence_no = get Params.sentence_no env "" in
     let undo_enabled = sentence_no = "" (* no undo in Reader corpus mode *)
                     || corpus_permission <> Web_corpus.Reader in
+    (* TEMPORARY for course: Corpus Reader set to MW lexicon and Deva printing *)
+    let () = if corpus_permission <> Web_corpus.Reader then ()
+             else do { toggle_lexicon "MW"; toggle_sanskrit_font Deva } in
     let text = arguments translit lex font cache st us url_encoded_input
                          url_encoded_topic abs 
                          url_enc_corpus_permission corpus_dir sentence_no

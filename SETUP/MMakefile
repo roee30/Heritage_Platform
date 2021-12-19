@@ -644,7 +644,7 @@ analyser: ML/reader ML/parser ML/interface ML/interface2 ML/user_aid
 	cp ML/interface $(CGIDIR)$(CGIGRAPH)
 	cp ML/interface2 $(CGIDIR)$(CGIGRAPH2)
 	cp ML/user_aid $(CGIDIR)$(CGIUSER)
-# following is special interface for Sanskrit Library invocation
+# following for corpus acquisition, invoked in Corpus_manager.add_sentence_form
 	cp ML/mk_reader_page $(CGIDIR)skt_heritage # $(CGIINTERFACE)
 # following is deprecated 
 #	cp ML/tagger $(CGIDIR)$(CGITAGGER)

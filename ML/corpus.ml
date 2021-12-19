@@ -216,7 +216,7 @@ module type S = sig
   ;
   value permission_of_string : string -> permission
   ;
-  value url : string -> permission -> Sentence.t -> string
+  value url : string -> permission -> Sentence.t -> string -> string -> string
   ;
   value relocatable_url : string -> permission -> Sentence.t -> string
   ;
@@ -309,7 +309,7 @@ module Make (Loc : Location) : S = struct
       | _ -> Reader
       ]
   ;
-  value url dir permission sentence =
+  value url dir permission sentence font lex =
     let analysis = Sentence.analysis sentence in
     let encoding = Encoding.of_string Paths.default_transliteration in
     let env =
@@ -318,6 +318,8 @@ module Make (Loc : Location) : S = struct
       ; ("cpts", Analysis.checkpoints analysis)
       ; (Params.corpus_dir, dir)
       ; (Params.sentence_no, sentence |> Sentence.id |> string_of_int)
+      ; (Params.corpus_font, font)
+      ; (Params.corpus_lex, lex)
       ]
     in
     let path =
@@ -327,7 +329,9 @@ module Make (Loc : Location) : S = struct
     in
     Cgi.url path ~query:(Cgi.query_of_env env)
   ;
-  value relocatable_url dir permission sentence =
+
+ (* GH : Manufacturing citations for Heritage dictionary *)
+ value relocatable_url dir permission sentence =
     let analysis = Sentence.analysis sentence in
     let env =
       [ (Params.corpus_permission, string_of_permission permission)
@@ -336,6 +340,8 @@ module Make (Loc : Location) : S = struct
       ; ("cpts", Analysis.checkpoints analysis)
       ; (Params.corpus_dir, dir)
       ; (Params.sentence_no, sentence |> Sentence.id |> string_of_int)
+      ; (Params.corpus_font, "roma") (* Sanskrit is printed in Roma *)
+      ; (Params.corpus_lex, "SH") (* Heritage dictionary for lexicon access *)
       ]
     in
     let path =

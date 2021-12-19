@@ -34,7 +34,7 @@ value voices_of = fun
   | "inv" | "il" | "i.s#2" | "iifkh" | "iir.s" | "uk.s" | "ujjh" | "u~nch"
   | "und" | "umbh" | "u.s" | ".rc#1" | ".rdh" | ".r.s" | "ej" | "kas" | "kiirt"
   | "kiil" | "ku.t" | "ku.n.th" | "kunth" | "kup" | "kul" | "ku.s" | "kuuj" 
-  | "k.rt#1" | "k.rz" | "krand" | "kru~nc#1" | "krudh#1" | "kruz" | "klam" 
+  | "k.rt#1" | "k.rz" | "krand" | "kru~nc#1" | "kruz" | "klam" 
   | "klid" | "kliz" | "kvath" | "k.sar" | "k.sal" | "k.saa" | "k.si" | "k.sii"
   | "k.su" | "k.sudh#1" | "k.svi.d" | "kha~nj#1" | "khaad" | "khid"
   | "khel" | "khyaa" | "gaj" | "gad" | "garj" | "gard" | "gal" | "gaa#1" 
@@ -98,6 +98,7 @@ value voices_of = fun
 (*| Doubts: "bhuu1" could also be Atma bhavate *)
 (*| "zru" could be Atma in Vedic eg z.r.nu.sva *)
 (*| "yu#2" could be Atma in Maitreya S. yuyudhvam *)
+(*| "krudh#1" krudhyate pm or ps or both ? *)
       -> Para (* active only *) 
   | "az#1" | "aas#2" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" | "ii.s" 
   | "iih"  | "edh" | "ka~nc" | "katth" | "kam" | "kamp" | "kaaz" | "kaas#1"
@@ -128,17 +129,18 @@ value voices_of = fun
   (* Attested Ubha (over all ga.nas) : 
   [ "a~nc" | "arth" | "arh" | "aap" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" 
   | ".r" | ".rj" | "ka.n.d" | "kal" | "ka.s" | "ku.t.t" | "ku.n.d" | "k.r#1"
-  | "k.r#2" | "k.r.s" | "kram" | "krii#1" | "krii.d" | "k.san" | "k.sap#1" 
-  | "k.sam" | "k.sal" | "k.sip" | "k.sud" | "k.subh" | "k.s.nu" | "khan" 
-  | "gam" | "garh" | "gaah" | "guh" | "g.rr#1" | "gras" | "grah" | "gha.t.t" 
-  | "cat" | "carc" | "ci" | "cint" | "cud" | "ce.s.t" | "cyu" | "chad#1" 
-  | "chand" | "chid#1" | "jan" | "juu" | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d" 
-  | "tan#1" | "tan#2" | "tap" | "tud#1" | "tul" | "t.rd" | "traa" | "daa#1"
-  | "daaz#1" | "diz#1" | "dih" | "diip" | "duh#1" | "dev#1" | "draa#2" 
-  | "dvi.s#1" | "dhaa#1" | "dhaav#1" | "dhaav#2" | "dhuu#1" | "dh.r" | "dhva.ms"
-  | "nam" | "nah" | "naath" | "nij" | "nii#1" | "nud" | "pac" | "paz" | "pa.th" 
-  | "pii.d" | "pu.s#1" | "puu#1" | "puuj" | "puuy" | "p.rth" | "prii" | "pru.s#1"
-  | "budh#1" | "bruu" | "bhak.s" | "bhaj" | "bharts" | "bhaas#1" | "bhid#1"
+  | "k.r#2" | "k.r.s" | "kram" | "krii#1" | "krii.d" | "krudh#1" | "k.san" 
+  | "k.sap#1" | "k.sam" | "k.sal" | "k.sip" | "k.sud" | "k.subh" | "k.s.nu"
+  | "khan" | "gam" | "garh" | "gaah" | "guh" | "g.rr#1" | "gras" | "grah" 
+  | "gha.t.t" | "cat" | "carc" | "ci" | "cint" | "cud" | "ce.s.t" | "cyu" 
+  | "chad#1" | "chand" | "chid#1" | "jan" | "juu" | "j~naa#1" | "jyaa#1" 
+  | "jyut" | "ta.d" | "tan#1" | "tan#2" | "tap" | "tud#1" | "tul" | "t.rd" 
+  | "traa" | "daa#1" | "daaz#1" | "diz#1" | "dih" | "diip" | "duh#1" | "dev#1"
+  | "draa#2" | "dvi.s#1" | "dhaa#1" | "dhaav#1" | "dhaav#2" | "dhuu#1" | "dh.r"
+  | "dhva.ms" | "nam" | "nah" | "naath" | "nij" | "nii#1" | "nud" | "pac" 
+  | "paz" | "pa.th" | "pii.d" | "pu.s#1" | "puu#1" | "puuj" | "puuy" | "p.rth" 
+  | "prii" | "pru.s#1" | "budh#1" | "bruu" | "bhak.s" | "bhaj" 
+  | "bharts" | "bhaas#1" | "bhid#1"
   | "bhuj#2" | "bh.r" | "bh.rjj" | "mantr" | "maa#4" | "maarg" | "mi" | "mith" 
   | "mil" | "mii" | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.r.s" 
   | "yaj#1" | "yam" | "yaac" | "yu#1" | "yuj#1" | "yudh#1" | "rac" | "ra~nj" 
@@ -262,7 +264,7 @@ value voices_of_gana g root = match g with
         ]
  | 11 -> match root with
         [ "agada" | "agha" | "afka" | "afkha" | "adhvara" | "andha" 
-        | "aparok.sa" | "apahasta" | "amitra" | "arth" | "azana#2" | "azva"
+        | "aparok.sa" | "apahasta" | "amitra" | "azana#2" | "azva"
         | "aakar.na" | "aakula" | "aakhyaana" | "aandola" | "aavila" | "iras"
         | "i.sudhi" | "ukta" | "udaka" | "udan" | "udazru" | "unmuula" 
         | "upahasta" | "uras" | "u.sas" | "ka.thora" | "kadartha" | "kar.na"
@@ -380,9 +382,9 @@ value voices_of_pv upasarga gana = fun
    | _ -> raise Unattested
    ]  
 | "arth" -> match upasarga with 
-   [ "" | "pra" | "sam" -> Ubha
-   | "abhi" | "aa" | "ni" -> Atma
-   | "anu" | "prati" -> Para
+   [ "pra" (* Para epics *) | "sam" (* Para rare *) -> Ubha
+   | "" | "abhi" | "aa" | "ni" -> Atma
+   | (* "anu" ? | *) "prati" -> Para
    | _ -> raise Unattested
    ]  
 | "sthaa#1" -> match upasarga with 

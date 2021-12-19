@@ -5056,7 +5056,7 @@ value record_abso_am root =
   | "paa#1"   -> record "paayam"
   | "pi.s"    -> record "pe.sam" (* \Pan{3,4,35+38} *)
   | "pu.s#1"  -> record "po.sam" (* \Pan{3,4,40} *)
-  | "puur#1"  -> record "puuram" (* \Pan{3,4,31} *)
+  | "p.rr"    -> record "puuram" (* \Pan{3,4,31} *)
   | "praz"    -> record "p.rccham"
   | "bandh"   -> record "bandham" 
   | "bhuj#1"  -> record "bhojam"

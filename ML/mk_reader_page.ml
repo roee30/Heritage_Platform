@@ -38,12 +38,6 @@ value print_cache_policy cache_active = do
     option_select_default "cache" options |> pl
   }
 ;
-value sanskrit_font_switch_default dft id =
-  option_select_default_id id "font" 
-       [ ("Devanagari","deva",dft="deva")  (* Devanagari UTF-8 *)
-       ; ("   IAST   ","roma",dft="roma")  (* Indological romanisation in UTF-8 *)
-       ]
-;
 value reader_input_area_default =
   text_area "text" 1 screen_char_length 
 ;
@@ -97,15 +91,8 @@ value reader_page () = do
         [ (" Unsandhied ","t",us="t") 
         ; ("  Sandhied  ","f",us="f") 
         ] |> pl
-(* option Simple deprecated TODO
- [; pl " Parser strength "
-  ; pl (option_select_default "cp"
-        [ ("  Full  ","t",cp="t") 
-        ; (" Simple ","f",cp="f")
-        ])] *)
-(* Sanskrit printer deva/roma *)
-  ; " Sanskrit display font" |> pl
-  ; sanskrit_font_switch_default font "font" |> ps
+  (* Sanskrit printer Deva/Roma *)
+  ; print_sanskrit_font_select font
   ; html_break |> pl  
   ; reader_input_area_default text |> ps
   ; html_break |> pl 

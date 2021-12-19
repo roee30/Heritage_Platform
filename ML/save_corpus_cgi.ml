@@ -82,7 +82,10 @@ value main =
       |> bool_of_string
     in
     let env = Cgi.create_env query in
-    let corpdir = Cgi.decoded_get Params.corpus_dir "" env in
+    let corpdir = Cgi.decoded_get Params.corpus_dir "" env 
+    and font = Cgi.decoded_get Params.corpus_font Paths.default_display_font env 
+    and lex  = Cgi.decoded_get Params.corpus_lex Paths.default_lexicon env 
+in
     let sentno =
       env
       |> Cgi.decoded_get Params.sentence_no ""
@@ -107,7 +110,7 @@ value main =
       in do
       { Web_corpus.save_sentence force corpdir sentno
           (read_skt encode text) unsandhied (analysis_of_env env)
-      ; Corpus_manager.mk_page corpdir permission 
+      ; Corpus_manager.mk_page corpdir permission font lex 
       }
     | Web_corpus.Reader | Web_corpus.Manager ->
       let expected_permission = Web_corpus.string_of_permission Annotator in

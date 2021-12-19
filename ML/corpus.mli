@@ -117,7 +117,7 @@ module type S = sig
   ;
   value permission_of_string : string -> permission
   ;
-  value url : string -> permission -> Sentence.t -> string
+  value url : string -> permission -> Sentence.t -> string -> string -> string
   ;
   value relocatable_url : string -> permission -> Sentence.t -> string
   ;

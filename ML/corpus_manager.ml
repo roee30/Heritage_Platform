@@ -80,23 +80,17 @@ value link permission dir =
       Cgi.query_of_env
         [ (Params.corpus_dir, dir)
         ; (Params.corpus_permission, Web_corpus.string_of_permission permission)
-        ]
-    in
-    Cgi.url corpus_manager_cgi ~query |> escape
-  in
+        ] in
+    Cgi.url corpus_manager_cgi ~query |> escape in
   let label = Filename.basename dir in
   anchor_ref url label
 ;
 value uplinks dir permission =
   let aux dir =
    let updirs = Dir.split dir in
-   let updirs =
-     List.mapi (fun i x ->
-         String.concat Filename.dir_sep (List2.take_prefix (i + 1) updirs)
-       ) updirs
-   in
-   List.map (link permission) updirs
-  in
+   let process i x = 
+     String.concat Filename.dir_sep (List2.take_prefix (i + 1) updirs) in
+   List.map (link permission) (List.mapi process updirs) in
   let uplinks_str =
     dir
     |> aux
@@ -104,26 +98,26 @@ value uplinks dir permission =
   in
   let final_sep = if uplinks_str <> "" then " / " else "" in
   uplinks_str ^ final_sep
-
 ;
 (* Display sentences with format "sentence || sentno" like in citations
    file.  *)
-value sentence_links dir permission sentences =
+value sentence_links dir permission skt_font lex sentences =
   let to_anchor_ref sentence =
-    let font = font_of_string Paths.default_display_font in
+    let font = font_of_string skt_font in
     let encoding =
         match font with
         [ Deva -> Corpus.Encoding.Devanagari
         | Roma -> Corpus.Encoding.IAST
         ] in
-    let text = Corpus.Sentence.text encoding sentence in
+    let text = Corpus.Sentence.text encoding sentence 
+    and url = Web_corpus.url dir permission sentence skt_font lex in
     let display =
       match font with
       [ Deva -> deva16_blue
       | Roma -> span Trans16
       ] in 
     text
-    |> anchor_ref (sentence |> Web_corpus.url dir permission |> escape)
+    |> anchor_ref (url |> escape)
     |> display in
   List.map to_anchor_ref sentences
 ;
@@ -135,7 +129,7 @@ value section_selection dir sections =
   option_select_label Params.corpus_dir options
 ;
 value add_sentence_form dir permission gap =
-  cgi_begin (cgi_bin "skt_heritage") "" ^
+  cgi_begin (cgi_bin "skt_heritage") "" ^ (* fakes mk_reader_page *)
   "Add sentence: " ^ uplinks dir permission ^
   hidden_input Params.corpus_dir dir ^
   hidden_input Params.corpus_permission (Web_corpus.string_of_permission permission) ^
@@ -149,17 +143,16 @@ value add_sentence_form dir permission gap =
   ^
   cgi_end
   ;
-value htmlify_group dir permission (group, gap) =
+value htmlify_group dir permission font lex (group, gap) =
   let (ol, group_id) =
     match group with
     [ [] -> ("", "")
     | [ h :: _ ] ->
       let id = Corpus.Sentence.id h in
       let group_id = string_of_int id in
-      (ol ~li_id_prefix:"" ~start:id (sentence_links dir permission group),
+      (ol ~li_id_prefix:"" ~start:id (sentence_links dir permission font lex group),
        group_id)
-    ]
-  in
+    ] in
   let div_id = "group" ^ group_id in
   let add_sentence_form =
     button
@@ -169,8 +162,7 @@ value htmlify_group dir permission (group, gap) =
     elt_begin_attrs [ ("id", div_id) ] "div" Hidden_ ^
     html_paragraph ^
     add_sentence_form dir permission gap ^
-    div_end
-  in
+    div_end in
   ol ^ if permission = Web_corpus.Annotator then add_sentence_form else ""
 
 ;
@@ -189,7 +181,7 @@ value new_section_form dir permission =
   text_input "new_section" Mkdir_corpus_params.dirname ^ " " ^
   submit_input "Create" ^ cgi_end
 ;
-value section_selection_form dir permission sections =
+value section_selection_form dir permission sections font lex =
   let selection_prompt =
     let submit_button_label = Web_corpus.(
       match permission with
@@ -200,63 +192,67 @@ value section_selection_form dir permission sections =
     uplinks dir permission ^
     section_selection dir (List.map Corpus.Section.label sections)  ^ " " ^
     submit_input submit_button_label
-  in
+  and corpus_permission = Web_corpus.string_of_permission permission in
   cgi_begin corpus_manager_cgi "" ^
   big (
     selection_prompt ^
-    hidden_input Params.corpus_permission (Web_corpus.string_of_permission permission)
-  ) ^
+    hidden_input Params.corpus_permission corpus_permission ^
+    hidden_input Params.corpus_font font ^
+    hidden_input Params.corpus_lex lex 
+      ) ^
   cgi_end
 ;
-value body dir permission =
-  match Web_corpus.contents dir with
-  [ Web_corpus.Empty ->
+value body dir permission font lex = Web_corpus.(
+  match contents dir with
+  [ Empty ->
     do
     { uplinks dir permission |> big |> pl
     ; open_page_with_margin 30
     ; match permission with
-        [ Web_corpus.Reader -> "Empty corpus"
-        | Web_corpus.Annotator -> add_sentence_form dir permission max_gap
-        | Web_corpus.Manager -> new_section_form dir permission
+        [ Reader -> "Empty corpus"
+        | Annotator -> add_sentence_form dir permission max_gap
+        | Manager -> new_section_form dir permission
         ]
       |> pl
     ; close_page_with_margin ()
     }
-  | Web_corpus.Sentences sentences ->
+  | Sentences sentences ->
     let groups = group_sentences dir sentences in
     do
     { uplinks dir permission |> big |> pl
     ; open_page_with_margin 30
-    ; if permission = Web_corpus.Manager then
+    ; if permission = Manager then
         "No action available." |> pl
       else
-        groups |> List.map (htmlify_group dir permission) |> List.iter pl
+        groups |> List.map (htmlify_group dir permission font lex) |> List.iter pl
     ; close_page_with_margin ()
     }
-  | Web_corpus.Sections sections ->
+  | Sections sections ->
     do
     { center_begin |> pl
-    ; section_selection_form dir permission sections |> pl
+    ; section_selection_form dir permission sections font lex |> pl
     ; html_break |> pl
     ; if permission = Web_corpus.Manager then
         new_section_form dir permission |> pl
       else ()
     ; center_end |> pl
     }
-  ]
+  ])
 ;
 value capitalize_ascii str = (* Oct 2020 [String.capitalize_ascii] deprecated *)
   str |> Bytes.of_string |> Bytes.capitalize_ascii |> Bytes.to_string
 ;
-value mk_page dir permission =
+value mk_page dir permission font lex =
+  let str_permission = Web_corpus.string_of_permission permission in
   let title_str =
-    "Sanskrit Corpus " ^
-    (permission |> Web_corpus.string_of_permission |> capitalize_ascii)
-  in
+    "Sanskrit Corpus " ^ (str_permission |> capitalize_ascii)
+  and env = 
+    [ (Params.corpus_permission, str_permission) 
+    ; (Params.corpus_lex, lex)
+    ; (Params.corpus_font, font)
+    ] in
   let clickable_title =
-    let query =
-      Cgi.query_of_env [ (Params.corpus_permission, Web_corpus.string_of_permission permission) ]
-    in
+    let query = Cgi.query_of_env env in
     title_str
     |> anchor_ref (Cgi.url corpus_manager_cgi ~query)
     |> h1_title
@@ -267,7 +263,7 @@ value mk_page dir permission =
   ; body_begin Chamois_back |> pl
   ; open_page_with_margin 15
   ; clickable_title |> print_title (Some default_language)
-  ; body dir permission
+  ; body dir permission font lex
   ; close_page_with_margin ()
   ; page_end default_language True
   }

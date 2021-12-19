@@ -2,9 +2,9 @@
 (*                                                                        *)
 (*                     The Sanskrit Heritage Platform                     *)
 (*                                                                        *)
-(*                              Idir Lankri                               *)
+(*                        Gérard Huet & Idir Lankri                       *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* This program produces the pages corpus.html (Corpus interface).  *)
@@ -31,11 +31,14 @@ value make lang =
   ; open_page_with_margin 15
   ; h1_title title_str |> print_title (Some lang)
   ; center_begin |> pl
-  ; cgi_begin corpus_manager_cgi "" ^
-    "Capacity: " ^
+  ; cgi_begin corpus_manager_cgi "" ^ "Capacity: " ^
     option_select_default Params.corpus_permission permission_selection ^ " " ^
-    submit_input "OK" ^
-    cgi_end |> pl
+    submit_input "Enter" |> pl
+  ; html_break |> pl 
+    (* Dec 2021: now we may select Sanskrit font and lexicon access *)
+  ; print_sanskrit_font_select Paths.default_display_font 
+  ; print_lexicon_select (lexicon_of lang) (* could be [Paths.default_lexicon] *)
+  ; cgi_end |> pl
   ; center_end |> pl
   ; close_page_with_margin ()
   ; close_html_file lang True

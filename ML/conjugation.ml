@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2020 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* CGI-bin conjugation for computing root conjugations.                   *)
@@ -183,9 +183,9 @@ value sort_out_v accu form = fun
           | Conjug (Aorist _) Active -> 
      (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,[ t :: aa ],am,ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Conjug (Aorist _) Middle ->
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,[ t :: am],ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,[ t :: am ],ap,ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Conjug (Aorist _) Passive -> 
-     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,[ t :: ap],ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
+     (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,[ t :: ap ],ja,jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Conjug (Injunctive _) Active -> 
      (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,[ t :: ja ],jm,jp,ba,bm,fpa,ps,ip,op,ep,ca,cm)
           | Conjug (Injunctive _) Middle ->

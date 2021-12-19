@@ -21,3 +21,9 @@ value sentence_no : string
    ["reader"], ["annotator"] or ["manager"].  *)
 value corpus_permission : string
 ;
+(* Parameter for specifying the font for printing sentences and lemmas *)
+value corpus_font : string
+;
+(* Parameter for specifying the lexicon for stem look-up in lemmas *)
+value corpus_lex : string
+;

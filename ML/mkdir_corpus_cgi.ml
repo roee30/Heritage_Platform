@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Idir Lankri                               *)
 (*                                                                        *)
-(* ©2017 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* CGI script [mkdir_corpus] for creating a new corpus subdirectory.  *)
@@ -15,7 +15,9 @@ value main =
   let query = Cgi.query_string () in
   let env = Cgi.create_env query in
   let dirname = Cgi.decoded_get Mkdir_corpus_params.dirname "" env in
-  let parent_dir = Cgi.decoded_get Mkdir_corpus_params.parent_dir "" env in
+  let parent_dir = Cgi.decoded_get Mkdir_corpus_params.parent_dir "" env 
+  and font = Cgi.decoded_get Params.corpus_font Paths.default_display_font env 
+  and lex  = Cgi.decoded_get Params.corpus_lex Paths.default_lexicon env in
   let permission =
     Cgi.decoded_get Mkdir_corpus_params.permission "" env
     |> Web_corpus.permission_of_string
@@ -26,7 +28,7 @@ value main =
     try
       do
       { Web_corpus.mkdir (Filename.concat parent_dir dirname)
-      ; Corpus_manager.mk_page parent_dir permission
+      ; Corpus_manager.mk_page parent_dir permission font lex
       }
     with
     [ Web_corpus.Section_already_exists abbrev ->

@@ -277,7 +277,7 @@ value print_transliteration_switch id =
   transliteration_switch_default Paths.default_transliteration id |> pl
 ;
 value print_lexicon_select lexicon = do 
-  { "Lexicon Access " |> ps
+  { "Lexicon access " |> ps
   ; option_select_default "lex" 
       [ ("    Heritage     ","SH","SH"=lexicon)  (* Sanskrit Heritage *)
       ; (" Monier-Williams ","MW","MW"=lexicon)  (* Monier-Williams *)
@@ -285,10 +285,10 @@ value print_lexicon_select lexicon = do
   }
 ;
 value print_sanskrit_font_select dft = do
-  { " Sanskrit display font" |> ps
+  { " Sanskrit display font " |> ps
   ; option_select_default "font"
-      [ ("Devanagari","deva",dft="deva")  (* Devanagari UTF-8 *)
-      ; ("   IAST   ","roma",dft="roma")  (* Indological romanisation in UTF-8 *)
+      [ ("   IAST   ","roma",dft="roma")  (* Indological romanisation in UTF-8 *)
+      ; ("Devanagari","deva",dft="deva")  (* Devanagari UTF-8 *)
       ] |> pl
   }
 ;

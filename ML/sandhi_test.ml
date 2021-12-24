@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2015 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Functional tests for sandhi. *)
@@ -39,7 +39,7 @@ assert (e_sandhi ".sa.t" "naam" = ".sa.nnaam"); (* and not ".sa.n.naam" *)
 assert (e_sandhi "tat" "namas" = "tannamas"); (* but "tadnamas" also correct *)
 assert (e_sandhi "tat" "mitram" = "tanmitram");
 assert (e_sandhi "devaan" "z.r.noti" = "devaa~nch.r.noti");
-assert (external_sandhi "sas" "gaja.h" = "sagaja.h");
+assert (external_sandhi "sas" "gaja.h" = "sa gaja.h");
 assert (external_sandhi "sas" "aacaarya.h" = "sa_aacaarya.h");
 assert (external_sandhi "sas" "azva.h" = "so'zva.h");
 assert (external_sandhi "sas" "" = "sa.h");

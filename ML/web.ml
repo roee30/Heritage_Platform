@@ -408,7 +408,7 @@ value print_bandeau_enpied_dyn dyn lang color = do
   ; xml_end "div" |> pl (* end Enpied *)
   }
 ;
-(* Simputer - legacy code - could be reused for smartphones *)
+(* Simputer - legacy code - could be reused for smartphones ?
 value print_bandeau_entete color = 
   let margin_bottom height = "margin-bottom:" ^ points height in
   let interval height = do 
@@ -427,7 +427,7 @@ value print_bandeau_entete color =
   ; interval 10
   ; table_end |> pl
   }
-;
+; *)
 value page_end_dyn dyn lang bandeau = do 
   { match target with
     [ Simputer -> ()

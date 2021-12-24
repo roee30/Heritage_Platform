@@ -477,7 +477,7 @@ value save_button query nb_sols =
   cgi_end ^
   center_end
 ;
-value quit_button corpmode corpdir sentno =
+value quit_button corpmode lex font corpdir sentno =
   let submit_button_label = Web_corpus.(match corpmode with
                                         [ Annotator -> "Abort"
                                         | Reader | Manager -> "Continue reading"
@@ -487,7 +487,9 @@ value quit_button corpmode corpdir sentno =
      cgi_begin (url corpus_manager_cgi ~fragment:sentno) "" ^
         hidden_input Params.corpus_dir corpdir ^
         hidden_input Params.corpus_permission permission ^
-        submit_input submit_button_label ^
+        hidden_input Params.corpus_font font ^
+        hidden_input Params.corpus_lex lex ^
+       submit_input submit_button_label ^
      cgi_end ^
   center_end
 ;
@@ -608,7 +610,7 @@ value graph_engine () = do
      (* Quit button: continue reading (reader mode) 
                   or quit without saving (annotator mode) *)
    ; if sentence_no <> "" then
-        quit_button corpus_permission
+        quit_button corpus_permission lex font
                     (decode_url corpus_dir) (decode_url sentence_no) |> pl
      else ()
    ; close_page_with_margin ()

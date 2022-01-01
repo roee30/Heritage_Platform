@@ -9,7 +9,7 @@
 
 (* This program creates the page [reader_page] (Sanskrit Reader Interface) 
    invoking the CGI sktreader alias reader. Invoked without language argument,
-   it is itself the CGI [skt_heritage] invokable separately. *)
+   it is itself the CGI [skt_heritage] which may be invoked separately. *)
 
 (*i module Mk_reader_page = struct i*)
 
@@ -32,7 +32,7 @@ value set_cho () = Arg.parse
 value print_cache_policy cache_active = do
   { " Cache " |> ps 
   ; let options = 
-      [ (" On ","t",cache_active="t")  (* Cache active *)
+      [ (" On " ,"t",cache_active="t") (* Cache active *)
       ; (" Off ","f",cache_active="f") (* Ignore cache *)
       ] in
     option_select_default "cache" options |> pl

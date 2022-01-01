@@ -5918,9 +5918,11 @@ value iic_indecl = (* should be lexicalized or completed *)
 value declined_indecls =
 (* declined substantival forms used as adverbs - many could be added *)
   [ "astam"
+  ; "uccais" 
   ; "kam#1"
   ; "kaamam"
   ; "naktam"
+  ; "niicais" 
   ; "param"
   ; "raatrim"
   ]
@@ -6113,10 +6115,11 @@ value enter_saat_gati product =  (* assumes gati has lexical entry *)
   let gati = product ^ "saat" in (* bhasmasaat = reducing to cinders *)
   let stem = normal_stem gati in 
   enter1 product (Cvi stem) 
-(* NB There is possible redundancy when the adverb in -saat is lexicalized,
+(* NB There is a possible redundancy when the adverb in -saat is lexicalized,
 and is immediately followed by a form of k.r, as or bhuu (without space).
 The lexicalization is necessary when the construction is used with a different 
-auxiliary, such as yaa (bhasmasaat) or nii (Whitney) or sampad (gr.) *)
+auxiliary, such as yaa (bhasmasaat) or nii (Whitney) or sampad (gr.).
+Also necessary when non contiguous see cite{796} *)
 ;
 
 (* Tasils are treated as adverbs. Here are the lexicalized ones: Whitney§1098 

@@ -1208,6 +1208,8 @@ value compute_athematic_imperative2m strong weak set root =
       (person,if root = "han#1" then fix2whan suff 
               else fix2w weak suff set) in
   let conjugf = if root = "suu#1" then conjugw (* Bandharkar II p 37 *)
+                else if root = "dvi.s#1" then conjugw (* DRP I p 664 *)
+                  (* consistent with KU{2,3,19} vidvi.saavahai but not Wh§617b *)
                 else conjugs in
   enter1 root (Conju (imperm 2)
    [ (Singular, 
@@ -4443,8 +4445,8 @@ value compute_aorist root =
     | _ -> ()
     ]
 ; match root with (* 7. sa aorist ksa *)
-      [ "k.r.s" | "kruz" | "kliz" | "guh" | "diz#1" | "dih" | "duh#1" | "lih#1" 
-      | "viz#1" | "v.rj" | "sp.rz#1" -> do (* \Pan{7,3,72-73} *)
+      [ "k.r.s" | "kruz" | "kliz" | "guh" | "diz#1" | "dih" | "duh#1" | "dvi.s#1"
+      | "lih#1" | "viz#1" | "v.rj" | "sp.rz#1" -> do (* \Pan{7,3,72-73} *)
       { compute_ath_sa_aorista weak root   
       ; if root = "kruz" || root = "kliz" then ((* Para *)) 
         else compute_ath_sa_aoristm weak root 
@@ -4663,6 +4665,7 @@ value build_infinitive c inf_stem root = do
   ; enter1 root (Inftu c (fix inf_stem "tu")) (* Xtu-kaama compounds *)
 (* NB. bahuv cpds in -kaama and -manas constructed with infinitives in -tu 
    See Renou HLS p72 from Pata~njali; Renou grammaire §107 dagdhukaama
+   Vt to Pan{6,1,144} bhoktukaama.h 
    also Assimil p194 eg tyaktukaama and Kale§917 noted "tufkaamamanasorapi" 
    anu.s.thaatukaama "desirious to proceed" vaktukaama "who wants to speak"
    pratiyaatukaamam "désireux de retourner" Rag{5,18} 

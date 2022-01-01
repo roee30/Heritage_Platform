@@ -780,6 +780,7 @@ value resolve_homonym entry =
     | "tud"
     | "diz"
     | "d.r"
+    | "dvi.s"
     | "pi"
     | "bhuj"
     | "muc"

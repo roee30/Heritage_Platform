@@ -371,6 +371,10 @@ value voices_of_pv upasarga gana = fun
                   if upasarga = "" then raise Unattested
                   else Atma (* only "vi" | "sam", NOT "" *)
                else (* gana = 10 *) Para 
+| "bruu" -> if gana = 6 then match upasarga with
+          [ "" -> Ubha (* Epics see Oberlies *)
+          | _ -> raise Unattested
+          ] else Ubha (* regular gana = 2 *)
 | "i.s#1" when gana = 1 -> match upasarga with
           [ "" -> raise Unattested
           | _ -> Ubha

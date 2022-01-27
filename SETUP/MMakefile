@@ -737,10 +737,11 @@ course:
 	cp -p $(SKTRESOURCES)COURSE/Lessons/lesson1.fr.html $(SERVERPUBLICDIR)COURSE/Lessons/
 	cp -p $(SKTRESOURCES)COURSE/Lessons/HST_*.html $(SERVERPUBLICDIR)COURSE/Lessons/
 	cp -p $(SKTRESOURCES)COURSE/Lessons/lesson1.fr.html $(SERVERPUBLICDIR)COURSE/Lessons/index.html
+	cp -p $(SKTRESOURCES)COURSE/Lessons/lesson1.en.html $(SERVERPUBLICDIR)COURSE/Lessons/
 	cp -p $(SKTRESOURCES)COURSE/Images/* $(SERVERPUBLICDIR)COURSE/Images
 	cp -p $(SKTRESOURCES)COURSE/Lessons/style.css $(SERVERPUBLICDIR)COURSE/Lessons/style.css
 
 
-SAVED_VERSION=329a
+SAVED_VERSION=336a
 save: # saving sources of Heritage_Platform (after make clean in ML)
 	tar cvf ../ARCHIVE/Heritage_Platform_$(SAVED_VERSION).tar ML SITE JAVASCRIPT SETUP configure INSTALLATION DOC IMAGES README 

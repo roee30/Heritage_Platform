@@ -4532,9 +4532,10 @@ value build_syaa stem entry =
 ;
 value build_pron_aa stem entry = 
   let pseudo_nominal = pseudo_nominal_basis stem in
-  let decline case suff = (case,fix stem suff) in 
+  let decline case suff = (case,fix stem suff)  
+  and phase = if pseudo_nominal then Noun else Pron in 
   enter entry 
-   [ Declined Pron Fem
+   [ Declined phase Fem
    [ (Singular, let l = 
         [ decline Nom "aa"
         ; decline Acc "aam"

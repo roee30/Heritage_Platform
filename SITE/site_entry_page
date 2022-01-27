@@ -79,9 +79,10 @@ to use the various facilities.
 </p>
 <p>
 <strong><span class="red">*** NEW ***</span></strong>
-A l'attention des utilisateurs de langue française. Un cours élémentaire
-de sanskrit pour débutants, utilisant les ressources du site, est en cours
-de développement. Il est accessible <a href="COURSE/Lessons">ici</a>
+An elementary Sanskrit course for beginners, using the site resources,
+is under developement. It may be found in its French version
+ <a href="COURSE/Lessons/lesson1.fr.html">ici</a> and in its English version
+ <a href="COURSE/Lessons/lesson1.en.html">here</a>
 </p>
 
 <h2 class="b2"> Sanskrit Heritage dictionary in book form </h2>
@@ -497,7 +498,7 @@ Artwork credits</h2>
 <a href="DICO/index.#LANG.html"><strong>Index</strong></a> |
 <!-- <a href="DICO/index.#LANG.html#stemmer"><strong>Stemmer</strong></a> | -->
 <a href="DICO/grammar.#LANG.html"><strong>Grammar</strong></a> |
-<!-- <a href="DICO/sandhi.#LANG.html"><strong>Sandhi</strong></a> | -->
+<a href="DICO/sandhi.#LANG.html"><strong>Sandhi</strong></a> |
 <a href="DICO/reader.#LANG.html"><strong>Reader</strong></a> |
 <a href="DICO/corpus.#LANG.html"><b>Corpus</b></a> <!-- |
 <a href="faq.#LANG.html"><strong>Help</strong></a> |

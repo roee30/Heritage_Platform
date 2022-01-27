@@ -264,7 +264,7 @@ value roman_fonts = [ "IndUni-T"; "Arial Unicode MS" ] (* "Times_CSX" *)
 and greek_fonts = [ "Arial Unicode MS"; "Symbol" ] (* "Latin Extended-B" Greek *)
 and diacr_fonts = [ "IndUni-T"; "Arial Unicode MS" ]
    (* Sanskrit transliteration in romanised script with diacritics *)
-and deva_fonts = [ "Arial Unicode MS" ] (* Devanagari fonts *)
+and deva_fonts = [ "IndUni-T"; "Arial Unicode MS" ] (* Devanagari fonts *)
 (* NB: "Devanagari MT" deprecated because wrong rendering of tacchrutvaa *)
 ; 
 value roman_font = Font_family roman_fonts

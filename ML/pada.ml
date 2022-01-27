@@ -33,8 +33,8 @@ value voices_of = fun
   | "ard" | "av" | "az#2" | "as#1" | "as#2" | "ifg" | "in" | "ind" 
   | "inv" | "il" | "i.s#2" | "iifkh" | "iir.s" | "uk.s" | "ujjh" | "u~nch"
   | "und" | "umbh" | "u.s" | ".rc#1" | ".rdh" | ".r.s" | "ej" | "kas" | "kiirt"
-  | "kiil" | "ku.t" | "ku.n.th" | "kunth" | "kup" | "kul" | "ku.s" | "kuuj" 
-  | "k.rt#1" | "k.rz" | "krand" | "kru~nc#1" | "kruz" | "klam" 
+  | "kiil" | "ku.t" | "ku.t.t" | "ku.n.th" | "kunth" | "kup" | "kul" | "ku.s"
+  | "kuuj" | "k.rt#1" | "k.rz" | "krand" | "kru~nc#1" | "kruz" | "klam" 
   | "klid" | "kliz" | "kvath" | "k.sar" | "k.sal" | "k.saa" | "k.si" | "k.sii"
   | "k.su" | "k.sudh#1" | "k.svi.d" | "kha~nj#1" | "khaad" | "khid"
   | "khel" | "khyaa" | "gaj" | "gad" | "garj" | "gard" | "gal" | "gaa#1" 
@@ -54,7 +54,7 @@ value voices_of = fun
   | "praa#1" | "phal" | "bal" | "b.rh#1" | "b.rh#2" | "bha~nj" | "bha.n" 
   | "bha.s" | "bhas" | "bhaa#1" | "bhii#1" | "bhuj#1" | "bhuu#1" | "bhuu.s" 
   | "bhram" | "majj" | "ma.n.d" | "mad#1" | "manth" | "mah" | "maa#3" | "mi.s" 
-  | "mih" | "miil" | "mu.s#1" | "muh" | "muurch" | "m.r.d" | "m.rz" | "mnaa"
+  | "mih" | "miil" | "mu.s#1" | "muh" | "muurch" | "m.r.d" | "mnaa"
   | "mre.d" | "mlaa" | "mluc" | "mlecch" | "yabh" | "yam" | "yas" | "yaa#1" 
   | "yu#2" | "ra.mh" | "rak.s" | "ra.n" | "rad" | "radh" | "raa#1" | "raadh"
   | "ri.s" | "ru" | "ruj#1" | "rudh#1" | "ru.s#1" | "ruh#1" | "lag" | "lafg" 
@@ -82,7 +82,8 @@ value voices_of = fun
 (*| "grah"   Atma needed for g.rh.niite *)
 (*| "diiv#1" Atma needed for diivyate *)
 (*| "van"    Atma needed for vanute *)
-(*| "mah"    Atma needed for pft. maamahe *)
+(*| "mah"    Atma needed for pft. maamahe *) 
+(*| "m.rz"   Atma needed for pft vivam.rze Mah{18,2,42} *)
 (*| "cit#1"  Atma needed for pft. cikite *)
 (*| "viz1"   Atma needed for nivizate \Pan{1,3,17} *)
 (*| "zram"   Atma needed for vizramate *)
@@ -96,7 +97,7 @@ value voices_of = fun
 (*| "aap" Atma aapnute epic *)
 (*| "a~nj" also Atma afkte | "naath" "praz" "sp.rz#1" idem *)
 (*| Doubts: "bhuu1" could also be Atma bhavate *)
-(*| "zru" could be Atma in Vedic eg z.r.nu.sva *)
+(*| "zru" also Atma in Vedic eg z.r.nu.sva & SP. r.r.nudhvam *)
 (*| "yu#2" could be Atma in Maitreya S. yuyudhvam *)
 (*| "krudh#1" krudhyate pm or ps or both ? *)
       -> Para (* active only *) 
@@ -128,7 +129,7 @@ value voices_of = fun
   | _ -> Ubha (* default *) 
   (* Attested Ubha (over all ga.nas) : 
   [ "a~nc" | "arth" | "arh" | "aap" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" 
-  | ".r" | ".rj" | "ka.n.d" | "kal" | "ka.s" | "ku.t.t" | "ku.n.d" | "k.r#1"
+  | ".r" | ".rj" | "ka.n.d" | "kal" | "ka.s" | "ku.n.d" | "k.r#1"
   | "k.r#2" | "k.r.s" | "kram" | "krii#1" | "krii.d" | "krudh#1" | "k.san" 
   | "k.sap#1" | "k.sam" | "k.sal" | "k.sip" | "k.sud" | "k.subh" | "k.s.nu"
   | "khan" | "gam" | "garh" | "gaah" | "guh" | "g.rr#1" | "gras" | "grah" 
@@ -140,9 +141,9 @@ value voices_of = fun
   | "dhva.ms" | "nam" | "nah" | "naath" | "nij" | "nii#1" | "nud" | "pac" 
   | "paz" | "pa.th" | "pii.d" | "pu.s#1" | "puu#1" | "puuj" | "puuy" | "p.rth" 
   | "prii" | "pru.s#1" | "budh#1" | "bruu" | "bhak.s" | "bhaj" 
-  | "bharts" | "bhaas#1" | "bhid#1"
-  | "bhuj#2" | "bh.r" | "bh.rjj" | "mantr" | "maa#4" | "maarg" | "mi" | "mith" 
-  | "mil" | "mii" | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.r.s" 
+  | "bharts" | "bhaas#1" | "bhid#1" | "bhuj#2" | "bh.r" | "bh.rjj" 
+  | "mantr" | "maa#4" | "maarg" | "mi" | "mith" | "mil" | "mii" 
+  | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.rz" | "m.r.s" 
   | "yaj#1" | "yam" | "yaac" | "yu#1" | "yuj#1" | "yudh#1" | "rac" | "ra~nj" 
   | "ram" | "rah" | "raaj#1" | "ri" | "ric" | "rud#1" | "rudh#2" | "lafgh" 
   | "lak.s" | "labh" | "la.s" | "lip" | "lih#1" | "lup" | "luu#1" | "vad" 
@@ -268,7 +269,7 @@ value voices_of_gana g root = match g with
         | "aakar.na" | "aakula" | "aakhyaana" | "aandola" | "aavila" | "iras"
         | "i.sudhi" | "ukta" | "udaka" | "udan" | "udazru" | "unmuula" 
         | "upahasta" | "uras" | "u.sas" | "ka.thora" | "kadartha" | "kar.na"
-        | "kart.r" | "kalafka" | "kavala" | "kavi" | "ku.t.ta" | "kusuma"
+        | "kart.r" | "kalafka" | "kavala" | "kavi" | "kusuma"
         | "kelaa" | "k.siira" | "kha.da" | "khela" | "gadgada" | "go" | "gocara"
         | "gopaa" | "dhiira#1" 
             -> Para
@@ -287,9 +288,10 @@ value voices_of_pv upasarga gana = fun
    (* Beware: gana only used for "tap" "i" ".r" 
       but gana=0 for non-present forms *)
 (* Paninian requirements *)
-[ "zru" | "gam" | "svar" | "vid#1" (* | "praz" *) -> 
-             if upasarga = "sam" then Atma else Para (* \Pan{1,3,29} *)
+[ "gam" | "svar" | "vid#1" (* "zru" | "praz" *) -> 
+             if upasarga = "sam" then Ubha else Para (* \Pan{1,3,29} *)
 (* "praz" used in Atma with aa- but also without pv in epics (MW) *)
+(* "zru" also Atma in Vedic eg z.r.nu.sva & SP. z.r.nudhvam *)
 | ".r" | "car" ->   if upasarga = "sam" then Ubha else Para (* \Pan{1,3,54} *)
 | "viz#1" -> if upasarga = "ni"  then Atma else Para (* \Pan{1,3,17} *)
 | "k.s.nu" -> if upasarga = "sam"  then Atma else Para (* \Pan{1,3,65} *)

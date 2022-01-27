@@ -5221,6 +5221,7 @@ value compute_intensive_imperativea strong weak iiflag root =
 For the moment, the reduplicated stem is read from the lexicon. 
 It is not clear whether there are enough intensive forms to warrant a paradigm
 rather than a table. *)
+(* missing paradigm: Pprp e.g. jalgalyamaana for gal *)
 
 (* Similar to [compute_active_present3] with Intensive, plus optional ii forms *)
 value compute_intensivea wstem sstem root third = 
@@ -5678,7 +5679,7 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
    | "a.mza" | "afka" | "afkha" | "andha" | "aparok.sa" | "apahasta" | "amitra"
    | "aakar.na" | "aakula" | "aavila" | "i.sa" | "unmuula" | "upahasta" 
    | "ka.thora" | "kadartha" | "kar.na" | "kalafka" | "kalu.sa" | "kavala"
-   | "ku.t.ta" | "kusuma" | "kha.da" | "garva" | "gocara" | "gopaa" | "carca"
+   | "kusuma" | "kha.da" | "garva" | "gocara" | "gopaa" | "carca"
    | "cuur.na" | "chala" | "chidra" | "tantra" | "tapas" | "tarafga" | "taru.na"
    | "tuhina" | "da.n.da" | "deva" | "dola" | "dravat" | "dhiira#1"
    | "nirmuula" | "nuutana" | "pa.tapa.taa" | "pallava"
@@ -6137,8 +6138,11 @@ and compute_extra_nind () = (* WR: RV *)
                              ; (Plural,[ (First, code "nindimas") ]) ])
 and compute_extra_prr () = (* paaryate as well as puuryate above *) 
     let stem = revcode "paar" in compute_passive Primary "p.rr" stem
-and compute_extra_bhaas () = 
-    enter1 "bhaa.s" (Invar (Primary,Infi) (code "bhaa.s.tum")) (* WR epic *)
+and compute_extra_bhaas () = do 
+    { enter1 "bhaa.s" (Invar (Primary,Infi) (code "bhaa.s.tum")) (* WR epic *)
+    ; enter1 "bhaa.s" (Conju perfm [ (Plural,[ (Third, code "bhaa.sire") ]) ]) 
+      (* Mah{18,2,40} ava-bhaa.sire haplology *)
+    }
 and compute_extra_bhuj2 () = 
     enter1 "hhuj#2" (Conju (Primary,voa 7) (* epics Wh{688a} *) 
                            [ (Singular,[ (First, code "bhu~njiiyaam") ])

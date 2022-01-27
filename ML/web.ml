@@ -350,7 +350,7 @@ value print_site_map dyn lang = (* the various Web services of the site *)
   ; anchor_ref (indexer_page_url lang) (emph "Index") |> ps; " | " |> pl 
 (*; anchor_ref (indexer_page_url lang ^ "#stemmer") (emph "Stemmer") |> ps; " | " |> pl *)
   ; anchor_ref (grammar_page_url lang) (emph "Grammar") |> ps; " | " |> pl
-(*; anchor_ref (sandhi_page_url lang) (emph "Sandhi") |> ps; " | " |> pl *)
+  ; anchor_ref (sandhi_page_url lang) (emph "Sandhi") |> ps; " | " |> pl 
   ; anchor_ref (reader_page_url lang) (emph "Reader") |> ps; " | " |> pl
   ; anchor_ref (corpus_page_url lang) (emph "Corpus") |> (* ps; " | " |> *) pl
 (*; anchor_ref (faq_page_url lang) (emph "Help") |> ps; " | " |> pl 

@@ -361,7 +361,7 @@ value print_site_map dyn lang = (* the various Web services of the site *)
   ; anchor_ref (dico_index_page lang) (emph "Index") |> ps; " | " |> pl
 (*; anchor_ref (dico_index_page lang ^ "#stemmer") (emph "Stemmer") |> ps; " | " |> pl *)
   ; anchor_ref (dico_grammar_page lang) (emph "Grammar") |> ps; " | " |> pl
-(*; anchor_ref (dico_sandhi_page lang) (emph "Sandhi") |> ps; " | " |> pl *)
+  ; anchor_ref (dico_sandhi_page lang) (emph "Sandhi") |> ps; " | " |> pl 
   ; anchor_ref (dico_reader_page lang) (emph "Reader") |> ps; " | " |> pl
   ; anchor_ref (dico_corpus_page lang) (emph "Corpus") |> (* ps; " | " |> *) pl
 (*; anchor_ref (rel_faq_page_url lang) (emph "Help") |> ps; " | " |> pl 

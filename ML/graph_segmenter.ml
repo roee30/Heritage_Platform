@@ -498,11 +498,10 @@ and register solution cont = (* Last check for sa/e.sa inter-chunk consistency *
 value init_segment_initial entries sentence = 
   List.map (fun phase -> Advance phase sentence [] []) entries
 ; 
-(* Works for Complete as well as Simplified mode *)
 value segment1 chunk = continue (init_segment_initial initial chunk) 
 ;
 value segment chunk = do
-  { segment1 chunk (* does not assume Complete mode *)
+  { segment1 chunk
   ; cur_chunk.segmentable || do 
     { graph.(cur_chunk.offset) := [ (unknown,[ (Word.mirror chunk,[]) ]) ]
     ; False 

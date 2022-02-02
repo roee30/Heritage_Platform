@@ -242,26 +242,27 @@ and display_tense2 font tense la lm =
         ]
 ;
 value display_conjug font conj = do
-  { pl html_paragraph
-  ; pl (table_begin (centered Cyan))
-  ; ps tr_begin
-  ; ps th_begin 
-  ; ps (conjugation_name conj font)
-  ; ps th_end 
-  ; ps tr_end 
-  ; pl table_end (* Cyan *)
-  ; pl html_paragraph
+  { html_paragraph |> pl
+  ; table_begin (centered Cyan) |> pl
+  ; tr_begin |> ps
+  ; th_begin |> ps
+  ; conjugation_name conj font |> ps
+  ; th_end |> pl
+  ; tr_end |> pl 
+  ; table_end |> pl (* centered *)
+  ; html_paragraph |> pl
   }
-and display_subtitle title = do
-  { pl html_paragraph
-  ; pl (table_begin (centered Deep_sky))
-  ; ps tr_begin
-  ; ps th_begin
-  ; ps title
-  ; ps th_end 
-  ; ps tr_end 
-  ; pl table_end (* Centered *)
-  ; pl html_paragraph
+and display_subtitle title call_back = do
+  { html_paragraph |> pl
+  ; table_begin (centered Deep_sky) |> pl
+  ; tr_begin |> ps
+  ; th_begin |> ps
+  ; title |> ps
+  ; call_back |> ps
+  ; th_end |> ps 
+  ; tr_end |> ps 
+  ; table_end |> pl (* centered *)
+  ; html_paragraph |> pl
   }
 ;
 value display_inflected_v font 
@@ -849,7 +850,7 @@ value conjs_engine () = do
     and font = get "font" env Paths.default_display_font in 
     let ft = font_of_string font (* Deva vs Roma print *) 
     and translit = get "t" env "VH" (* DICO created in VH trans *)
-    and lex = get "lex" env "SH" (* default Heritage *) in 
+    and lex = get "lex" env Paths.default_lexicon in 
     let entry_tr = decode_url url_encoded_entry (* : string in translit *)
     and lang = language_of_string lex (* reference dictionary SH or MW *)
     and gana = match decode_url url_encoded_class with
@@ -867,6 +868,12 @@ value conjs_engine () = do
       | s -> raise (Control.Fatal ("Weird present class: " ^ s)) 
       ] 
     and encoding_function = Encode.switch_code translit 
+    (* Now we prepare a call-back for switching the font *)
+    and conj_url = Paths.cgi_dir_url ^ Paths.cgi_decl in
+    let invoke = conj_url ^ "?q=" ^ entry_tr ^ ";c=" ^ url_encoded_class 
+               ^ ";lex=" ^ lex ^ ";font=" ^ (if ft=Deva then "roma" else "deva")
+    and switch = if ft=Deva then "Roma" else "Deva" in
+    let call_back = anchor Blue_ invoke switch
     and () = toggle_lexicon lex 
     and () = toggle_sanskrit_font ft in
     try let word = encoding_function entry_tr in
@@ -878,7 +885,7 @@ value conjs_engine () = do
         { let link = if known then Morpho_html.skt_anchor False entry 
                      else doubt (Morpho_html.skt_html entry) in 
           let subtitle = hyperlink_title ft link in
-          display_subtitle (h1_center subtitle)
+          display_subtitle (h1_center subtitle) call_back
         ; try look_up_and_display ft gana entry
           with [ Stream.Error s -> raise (Wrong s) ]
         ; page_end lang True

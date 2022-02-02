@@ -869,7 +869,7 @@ value conjs_engine () = do
       ] 
     and encoding_function = Encode.switch_code translit 
     (* Now we prepare a call-back for switching the font *)
-    and conj_url = Paths.cgi_dir_url ^ Paths.cgi_decl in
+    and conj_url = Paths.cgi_dir_url ^ Paths.cgi_conj in
     let invoke = conj_url ^ "?q=" ^ entry_tr ^ ";c=" ^ url_encoded_class 
                ^ ";lex=" ^ lex ^ ";font=" ^ (if ft=Deva then "roma" else "deva")
     and switch = if ft=Deva then "Roma" else "Deva" in

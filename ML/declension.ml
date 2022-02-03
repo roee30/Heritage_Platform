@@ -290,7 +290,8 @@ value decls_engine () = do
     and lang = language_of_string lex 
     (* Now we prepare a call-back for switching the font *)
     and decl_url = Paths.cgi_dir_url ^ Paths.cgi_decl in
-    let invoke = decl_url ^ "?q=" ^ entry_tr ^ ";g=" ^ url_encoded_gender ^ ";lex=" ^ lex
+    let invoke = decl_url ^ "?q=" ^ url_encoded_entry ^ ";g=" ^ url_encoded_gender 
+               ^ ";lex=" ^ lex
                ^ ";font=" ^ (if ft=Deva then "roma" else "deva") ^ ";r=" ^ url_encoded_source
                ^ ";p=" ^ url_encoded_participle ^ ";t=" ^ translit
     and switch = if ft=Deva then "Roma" else "Deva" in

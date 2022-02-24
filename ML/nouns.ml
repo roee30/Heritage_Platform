@@ -1956,7 +1956,7 @@ value build_neu_a stem entry =
         ; decline Gen "asya"
         ; decline Loc "e"
         ])
-   ; (Dual, 
+   ; (Dual, if entry = "eka" (* singular only *) then [] else 
         [ decline Voc "e"
         ; decline Nom "e"
         ; decline Acc "e"
@@ -1966,7 +1966,8 @@ value build_neu_a stem entry =
         ; decline Gen "ayos"
         ; decline Loc "ayos"
         ])
-   ; (Plural, if entry = "ubha"  (* dual only *) then [] else let l =
+   ; (Plural, if entry = "ubha"  (* dual only *) 
+              || entry = "eka"   (* singular only *) then [] else let l =
         [ decline Voc "aani"
         ; decline Nom "aani"
         ; decline Acc "aani"
@@ -2816,7 +2817,7 @@ value build_fem_aa stem entry =
              else if entry = "guha" then (* guhaa fde guha *)
         [ decline Loc "aa" :: l ] (* Vedic *)
              else l)
-   ; (Dual, 
+   ; (Dual, if entry = "eka" then [] else 
         [ decline Voc "e"
         ; decline Nom "e"
         ; decline Acc "e"
@@ -2826,7 +2827,7 @@ value build_fem_aa stem entry =
         ; decline Gen "ayos"
         ; decline Loc "ayos"
         ])
-   ; (Plural, if entry = "ubha" then [] else 
+   ; (Plural, if entry = "ubha" || entry = "eka" then [] else 
         [ decline Voc "aas"
         ; decline Nom "aas"
         ; decline Acc "aas"
@@ -4420,7 +4421,8 @@ value build_pron_a g stem entry = (* g=Mas ou g=Neu *)
         ] in if pseudo_nominal then 
         [ decline Abl "aat" :: [ decline Loc "e" :: 
         [ decline Voc "a" :: l ] ] ] else l)
-   ; (Dual, if entry = "ubhaya"  (* no dual - dubious *) then [] 
+   ; (Dual, if entry = "eka" (* singular only *) 
+            || entry = "ubhaya"  (* no dual - dubious *) then [] 
             else let l = 
         [ decline Nom (if g=Mas then "au" else "e")
         ; decline Acc (if g=Mas then "au" else "e")
@@ -4431,7 +4433,8 @@ value build_pron_a g stem entry = (* g=Mas ou g=Neu *)
         ; decline Loc "ayos"
         ] in if pseudo_nominal then 
         [ decline Voc (if g=Mas then "au" else "e") :: l ] else l)
-   ; (Plural, let l = 
+   ; (Plural, if entry = "eka" (* singular only *) then [] 
+              else let l = 
         [ decline Nom (if g=Mas then "e" else "aani")
         ; decline Acc (if g=Mas then "aan" else "aani")
         ; decline Ins "ais"
@@ -4546,7 +4549,7 @@ value build_pron_aa stem entry =
         ; decline Loc "asyaam"
         ] in if pseudo_nominal then 
         [ decline Voc "e" :: l ] else l)
-   ; (Dual, let l =
+   ; (Dual, if entry = "ekaa" then (* singular only *) [] else let l =
         [ decline Nom "e"
         ; decline Acc "e"
         ; decline Ins "aabhyaam"
@@ -4556,7 +4559,7 @@ value build_pron_aa stem entry =
         ; decline Loc "ayos"
         ] in if pseudo_nominal then 
         [ decline Voc "e" :: l ] else l)
-   ; (Plural, let l =
+   ; (Plural, if entry = "ekaa" then (* singular only *) [] else let l =
         [ decline Nom "aas"
         ; decline Acc "aas"
         ; decline Ins "aabhis"
@@ -6220,7 +6223,7 @@ value enter_extra_ifcs () = do (* archaic retroflexion in cpds \Pan{8,4,13} *)
   { let entry = "bhogya" in (* var.sabhogye.na Meghaduuta 1b *)
         let ins_sg = [ (Singular,[ (Ins,code "bhogye.na") ]) ]
         and gen_pl = [ (Plural,  [ (Gen,code "bhogyaa.naam") ]) ] in do
-        { enter1 entry (Declined Noun Mas ins_sg)
+        { enter1 entry (Declined Noun Mas ins_sg) (* Meghaduuta{1} *)
         ; enter1 entry (Declined Noun Mas gen_pl)
         ; enter1 entry (Declined Noun Neu ins_sg)
         ; enter1 entry (Declined Noun Neu gen_pl)

@@ -243,15 +243,6 @@ value light = fun (* light roots end in short vowel Pan{6,1,69} *)
    | [ c :: _ ] -> short_vowel c 
    ]
 ;
-(* For absolutives of roots gana 10 *) 
-value light_10 = fun (* light roots end in short vowel Pan{1,4,11} *) 
-   [ [] -> failwith "light_10"
-   | [ c :: r ] -> if vowel c then False (* ? *) else match r with
-       [ [] -> failwith "light_10_1"
-       | [ v :: _ ] -> short_vowel v 
-       ]
-   ]
-;
 (* Needed by [Verbs.record_part_m_th] for proper retroflexion of
    aatmanepada participles in -maana - eg kriyamaa.na *)
 (* all erase last phoneme - used in denominative verbs *)

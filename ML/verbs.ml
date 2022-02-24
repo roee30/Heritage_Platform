@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2022 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Verbs defines the conjugation paradigms, and computes conjugated forms *)
@@ -66,9 +66,9 @@ and vbena =  Conjug Benedictive Active
 and vbenm =  Conjug Benedictive Middle
 and vaa cl = Conjug (Aorist cl) Active
 and vam cl = Conjug (Aorist cl) Middle
+and vap1 =   Conjug (Aorist 1) Passive     (* passive of root aorist *)
 and vja cl = Conjug (Injunctive cl) Active
 and vjm cl = Conjug (Injunctive cl) Middle
-and vap1 =   Conjug (Aorist 1) Passive     (* passive of root aorist *)
 and vjp1 =   Conjug (Injunctive 1) Passive (* passive of root injunctive *)
 ;
 (* Finite verbal forms of roots *)
@@ -143,12 +143,12 @@ and vpprp  conj    = (conj,prp)
 ;
 (* Verbal forms of roots *)
 value ppra k = vppra k Primary
-and pprm k = vpprm k Primary
-and ppfta  = vppfta Primary
-and ppftm  = vppftm Primary
-and pfuta  = vpfuta Primary
-and pfutm  = vpfutm Primary
-and pprp   = vpprp Primary
+and pprm k   = vpprm k Primary
+and ppfta    = vppfta Primary
+and ppftm    = vppftm Primary
+and pfuta    = vpfuta Primary
+and pfutm    = vpfutm Primary
+and pprp     = vpprp Primary
 ;
 value primary_pprm (c,v) = 
   c=Primary && match v with [ Pprm _ -> True | _ -> False ]
@@ -321,7 +321,7 @@ value lengthened = fun
 ;
 value strengthen_10 rstem = fun
   [ "m.r.d" | "sp.rh" -> rstem (* exceptions with weak stem *)
-  | "k.sal" -> lengthened rstem (* v.rddhi *)     
+(*| "k.sal" -> lengthened rstem (* v.rddhi *) - irrelevant for k.sal as ca *)
   | _ -> strong rstem  (* guna *) 
   ] 
 ;
@@ -2822,7 +2822,7 @@ value compute_ppp_stems root rstem =
 value ar_ra = fun  
   [ [ c :: [ 43 :: [ 1 :: r ] ] ] -> [ c :: [ 1 :: [ 43 :: r ] ] ] 
   | [ c :: [ 43 :: [ 2 :: r ] ] ] -> [ c :: [ 2 :: [ 43 :: r ] ] ] 
-  | w -> failwith ("metathesis failure " ^ Canon.rdecode w)
+  | w -> failwith ("Metathesis " ^ Canon.rdecode w)
   ]
 ;
 (* Stems used for periphrastic futur, infinitive, and gerundive in -tavya *)
@@ -4858,10 +4858,12 @@ value record_part_ppp ppstem root = do
   ; record_part (Pppa_ Primary ppstem root) (* pp-vat (krit tavat) *)
   }
 ;
-value record_abso_ya form root   = enter1 root (Invar (Primary,Absoya) form) 
-  and record_abso_tvaa form root = enter1 root (Absotvaa Primary form)
+value record_abso_ya form root = 
+  enter1 root (Invar (Primary,Absoya) form) (* ktvaa \Pan{3,4,18+} *)
+and record_abso_tvaa form root = 
+  enter1 root (Absotvaa Primary form) (* lyap \Pan{7,1,37} *)
 ;
-(* First absolutives in -ya *)
+(* First absolutives in -ya \Pan{7,1,37} lyap *)
 value record_abs_ya root rstem w = do
   (* intercalate t for light roots Kiparsky[159] Macdonell§165 *)
   { let absya = 
@@ -4870,14 +4872,16 @@ value record_abs_ya root rstem w = do
             [ (* roots in -m and -n in gana 8 \Pan{6,4,37} *)
                 "van" | "man" | "tan#1" (* man also in gana 4 *)
             | "gam" | "nam" | "yam" | "han#1" (* anudatta ? *)
-            | "kram" | "klam" | "zam#2" | "zram" (* \Pan{6,4,15} *)
+              (* next 2 needed to avoid aa like pp according to \Pan{6,4,15} *)
+            | "kram" | "klam" | "cam" | "dam#1" | "dhvan" | "bhram" | "vam"
+            | "zam#1" | "zam#2" | "zram"
             | "daa#2" | "saa#1" | "sthaa#1" | "maa#1" (* \Pan{7,4,40} *)
             | "daa#1" (* \Pan{7,4,46} *)
             | "dhaa#1" (* \Pan{7,4,42} *)
                    -> rstem 
             | "zii#1" -> revcode "zay" (* \Pan{7,4,22} *)
             | "arh" -> revcode "argh" (* arghya (h=h') *)
-            | _ -> w
+            | _ -> w (* follows pp *)
             ] in match root with
                  [ "hi.ms" -> code "hi.msya" (* no retroflex s Whitney§183 *)
                  | _ -> fix rst "ya" 
@@ -4896,6 +4900,7 @@ value record_abs_ya root rstem w = do
                     ; record_abso_tvaa (code "variitvaa") root 
                     }
     | "kram" -> record_abso_tvaa (code "krantvaa") root (* \Pan{6,4,18} *)
+    | "bhram" -> record_abso_ya (code "bhraamya") root (* WR *)
     | "zaas" -> (* passive stem zi.s *)
         let w = revcode "zi.s" in do (* as if ipad=0 *)
         { record_part_ppp (rfix w "ta") root 
@@ -4905,6 +4910,15 @@ value record_abs_ya root rstem w = do
     | _ -> ()
     ]  
   }
+;
+(* For absolutives of roots gana 10 - Macdonell§164a Whitney§1051d *) 
+value light_10 = fun 
+   [ [] -> failwith "light_10"
+   | [ c :: r ] -> if vowel c then False (* ? *) else match r with
+       [ [] -> failwith "light_10"
+       | [ v :: _ ] -> short_vowel v (* opp guru Pan{1,4,11} *)
+       ]
+   ]
 ;
 value alternate_pp = fun
   [ "m.r.s" | "svid#2" | "dh.r.s" | "puu#1" (*i \Pan{?} i*)
@@ -4933,7 +4947,7 @@ value alternate_tvaa root rstem =
   ]
 ;
 (* Records the (reversed) ppp stem (computed by [compute_ppp_stems])
-   and builds absolutives in -tvaa and -ya ( should be separated some day). *)
+   and builds absolutives in -tvaa and -ya *)
 value record_ppp_abs_stems root rstem ppstems =
   let process_ppstem = fun
      [ Na w -> do 
@@ -4949,17 +4963,17 @@ value record_ppp_abs_stems root rstem ppstems =
             | "und" | "skand" | "syand" -> [ 34 (* d *) :: w ]
             | _ -> w 
             ] in match root with 
-            [ "mid" -> 
-                    let abs_mid st = record_abso_tvaa (fix st "itvaa") root in
-                    do { abs_mid stem; abs_mid (revcode "med") (* guna *)}
-            | _  -> do { record_abso_tvaa (fix stem "tvaa") root
-                       ; record_abso_ya (fix stem "ya") root 
-                       }
+            [ "mid" -> let abs_mid st = record_abso_tvaa (fix st "itvaa") root in
+                       do { abs_mid stem; abs_mid (revcode "med") (* guna *)}
+            | _  -> do 
+                 { record_abso_tvaa (fix stem "tvaa") root (* ktvaa \Pan{3,4,18+} *)
+                 ; record_abso_ya (fix stem "ya") root (* lyap \Pan{7,1,37} *)
+                 }
             ]
         }
-     | Ka w -> do 
+     | Ka w -> do (* zu.s *)
          { record_part_ppp (rfix w "ka") root (* zu.ska \Pan{8,2,51} *)
-         ; record_abso_ya  (fix w "ya")  root
+         ; record_abso_ya  (fix w "ya")  root (* -zu.sya *)
          }
      | Va w -> do 
          { record_part_ppp  (rfix w "va")  root 
@@ -4971,7 +4985,7 @@ value record_ppp_abs_stems root rstem ppstems =
            else ((* taken care of as Tia *))
          ; if is_anit_tvaa root rstem then record_abso_tvaa (fix w "tvaa") root
            else ((* taken care of as Tia *))
-         ; (* abs -ya computed whether set or anit *) 
+         ; (* abs -ya lyap computed whether set or anit *) 
            match root with 
            [ "av" -> record_abs_ya root rstem (revcode "aav") (* -aavya *)
            | "v.rj" -> record_abs_ya root rstem (revcode "varj") (* -aavya *)
@@ -5099,7 +5113,7 @@ value record_pppca cpstem cstem root =
         [ "aap" | ".r" | ".rc#1" | ".rdh" | "kal" | "k.lp" | "kram" | "gam" 
         | "jan" | "jval" | "dh.r" | "rac" | "zam#1" | "p.rr" | "bhak.s" | "v.rj" 
             -> cstem  (* retains ay: -gamayya to distinguish from -gamya *)
-        | _ -> cpstem (* eg -vaadya -vezya *)
+        | _ -> cpstem (* eg -vaadya -vezya -k.saalya *)
         ] 
     and abs_stem_tvaa = cstem (* retains ay: gamayitvaa *) in
     record_absolutive Causative abs_stem_tvaa abs_stem_ya True root 
@@ -5823,9 +5837,11 @@ value compute_denominative root pada third =
 value compute_conjugs_stems root (vmorph,aa) = do (* main *)
   { admits_aa.val := aa (* sets the flag for phantom forms for aa- preverb *)
   ; match vmorph with
- [ Conj_infos.Prim 11 pada third -> 
+ [ (* 1. Denominatives *)
+   Conj_infos.Prim 11 pada third -> 
       (* note: pada of denominative verbs is lexicalized *)
       compute_denominative root pada third
+   (* 2. Roots of gana 10 *)
  | Conj_infos.Prim 10 pada third -> 
    (* root in gana 10, pada is True for Para, False for Atma of third form *)
    let rstem = revstem root in (* root stem reversed *)  
@@ -5845,11 +5861,14 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
      { record_part_ppp ppstem root 
      ; record_abso_tvaa (fix ystem "itvaa") root
      ; let ya_stem = if light_10 rstem then ystem else rstem in
-       record_abso_ya (fix ya_stem "ya") root 
+       record_abso_ya (fix ya_stem "ya") root (* lyap should follow [record_pppca] *)
      }
      (* No Perfect -- periphrastic perfect generated by process10 above *)
+   ; (* Aorist *) compute_aorist root
+   ; (* Injunctive *) compute_injunctive root
    }
    with [ Control.Warning s -> output_string stdout (s ^ "\n") ]
+   (* 3. Roots of gana#10 *)
  | Conj_infos.Prim gana pada third -> 
    (* gana is root class, pada is True for Para, False for Atma of third form *)
    (* Primary conjugation *)
@@ -5881,11 +5900,9 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
      [ "ifg" | "paz" (* for d.rz *) | "bruu" (* for vac *) 
      | "k.saa" | "cud" | "dhii#1" | "pat#2" | "praa#1" | "vidh#1"
      | "haa#2" -> () (* no perif *)
-     | "saa#1" -> do { compute_perif (revcode "si") root 
-                     ; compute_perif rstem root
-                     }
-     | "vyadh"  -> compute_perif (revcode "vidh") root 
-     | "zuu"    -> compute_perif (revcode "zve") root 
+     | "saa#1" -> do { compute_perif (revcode "si") root ; compute_perif rstem root }
+     | "vyadh" -> compute_perif (revcode "vidh") root 
+     | "zuu"   -> compute_perif (revcode "zve") root 
      | ".s.thiiv" -> compute_perif (revcode ".s.thiv") root 
      | "knuu"   -> compute_perif (revcode "knuuy") root 
      | "stambh" -> compute_perif (revcode "stabh") root 
@@ -5930,6 +5947,7 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
    }
    with [ Control.Warning s -> output_string stdout (s ^ "\n") ]
    (* end of Primary conjugation (including passive) *) 
+   (* 4. Causatives  *)
  | Conj_infos.Causa third -> 
      (* Here we extract the causative stem from the third given in Dico *)
      (* rather than implementing all special cases of Whitney§1042.     *)
@@ -5981,6 +5999,7 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
        (* Periphrastic perfect Whitney§1045 *)
      ; build_perpft Causative cstem root (* gamayaa.mcakaara *)
      } 
+   (* 5. Intensives  *)
  | Conj_infos.Inten third -> (* TODO passive, perfect, future, aorist, parts *) 
      match Word.mirror third with (* active or middle are generated on demand *)
      (* paras. in -ati, -iiti, -arti (k.r2), -aati (draa1, yaj1), -etti (vid1) *)
@@ -6002,6 +6021,7 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
          compute_intensivem2 st root third
      | _ -> failwith ("Weird intensive " ^ Canon.decode third)
      ] 
+   (* 6. Desideratives  *)
  | Conj_infos.Desid third -> (* TODO passive, future, aorist, more parts *)
      let compute_krid st = do (* ppp pfp inf *)
          { record_pppdes st root

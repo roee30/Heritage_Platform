@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2022 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Parts = struct i*)
@@ -82,19 +82,18 @@ value gen_stem (v,root) stem = (* stem is a bare stem with no homo index *)
      let alist = access_krid stem in 
      try gensym stem (List.assoc etym alist) with
        [ Not_found -> match alist with 
-          [ [] -> (* no current homonym of stem *) do 
-            { register_krid stem (etym,0)
-            ; stem
-            }
+          [ [] -> (* no current homonym of stem *) 
+            do { register_krid stem (etym,0); stem }
           | [ (_,n) :: _ ] -> (* last homonym entered [stem_n] *)
             let p=n+1 in 
             if p>9 then failwith "Gensym exceeds homo index" 
-            else do { register_krid stem (etym,p); gensym stem p}
+            else do { register_krid stem (etym,p); gensym stem p }
           ]
        ]
   else stem
 ;
 (* Now for participle forming paradigms *)
+(* 12-02-2022 Removal of vocatives of participles *)
 
 (* Similar to [Nouns.build_mas_at [1 :: stem]] if vat=False
    and to [Nouns.build_mas_mat stem] if vat=True *)
@@ -105,8 +104,8 @@ value build_part_at_m vat verbal stem stem_at root = (* invoked by [Ppra_] *)
   enter_forms gen_entry 
    [ Declined krid Mas
    [ (Singular,
-        [ decline Voc "an"
-        ; decline Nom (if vat then "aan" else "an")
+        [ (* decline Voc "an" *)
+          decline Nom (if vat then "aan" else "an")
         ; decline Acc "antam"
         ; decline Ins "ataa"
         ; decline Dat "ate"
@@ -115,8 +114,8 @@ value build_part_at_m vat verbal stem stem_at root = (* invoked by [Ppra_] *)
         ; decline Loc "ati"
         ])
    ; (Dual, 
-        [ decline Voc "antau"
-        ; decline Nom "antau"
+        [ (* decline Voc "antau" *)
+          decline Nom "antau"
         ; decline Acc "antau"
         ; decline Ins "adbhyaam"
         ; decline Dat "adbhyaam"
@@ -125,8 +124,8 @@ value build_part_at_m vat verbal stem stem_at root = (* invoked by [Ppra_] *)
         ; decline Loc "atos"
         ])
    ; (Plural,
-        [ decline Voc "antas"
-        ; decline Nom "antas"
+        [ (* decline Voc "antas" *)
+          decline Nom "antas"
         ; decline Acc "atas"
         ; decline Ins "adbhis"
         ; decline Dat "adbhyas"
@@ -146,8 +145,8 @@ value build_part_at_m_red verbal stem stem_at root =
   enter_forms gen_entry 
    [ Declined krid Mas
    [ (Singular,
-        [ decline Voc "at"
-        ; decline Nom "at"
+        [ (* decline Voc "at" *)
+          decline Nom "at"
         ; decline Acc "atam"
         ; decline Ins "ataa"
         ; decline Dat "ate"
@@ -156,8 +155,8 @@ value build_part_at_m_red verbal stem stem_at root =
         ; decline Loc "ati"
         ])
    ; (Dual, 
-        [ decline Voc "atau"
-        ; decline Nom "atau"
+        [ (* decline Voc "atau" *)
+         decline Nom "atau"
         ; decline Acc "atau"
         ; decline Ins "adbhyaam"
         ; decline Dat "adbhyaam"
@@ -166,8 +165,8 @@ value build_part_at_m_red verbal stem stem_at root =
         ; decline Loc "atos"
         ])
    ; (Plural,
-        [ decline Voc "atas"
-        ; decline Nom "atas"
+        [ (* decline Voc "atas" *)
+          decline Nom "atas"
         ; decline Acc "atas"
         ; decline Ins "adbhis"
         ; decline Dat "adbhyas"
@@ -187,8 +186,8 @@ value build_part_at_n verbal stem stem_at root =
   enter_forms gen_entry 
    [ Declined krid Neu
    [ (Singular,
-        [ decline Voc "at"
-        ; decline Nom "at"
+        [ (* decline Voc "at" *)
+          decline Nom "at"
         ; decline Acc "at"
         ; decline Ins "ataa"
         ; decline Dat "ate"
@@ -197,8 +196,8 @@ value build_part_at_n verbal stem stem_at root =
         ; decline Loc "ati"
         ])
    ; (Dual, 
-        [ decline Voc "atii"
-        ; decline Voc "antii"
+        [ (* decline Voc "atii" *)
+          decline Voc "antii"
         ; decline Nom "atii"
         ; decline Nom "antii"
         ; decline Acc "atii"
@@ -210,8 +209,8 @@ value build_part_at_n verbal stem stem_at root =
         ; decline Loc "atos"
         ])
    ; (Plural,
-        [ decline Voc "anti"
-        ; decline Nom "anti"
+        [ (* decline Voc "anti" *)
+          decline Nom "anti"
         ; decline Acc "anti"
         ; decline Ins "adbhis"
         ; decline Dat "adbhyas"
@@ -231,8 +230,8 @@ value build_part_at_n_red verbal stem stem_at root =
   enter_forms gen_entry 
    [ Declined krid Neu
    [ (Singular,
-        [ decline Voc "at"
-        ; decline Nom "at"
+        [ (* decline Voc "at" *)
+          decline Nom "at"
         ; decline Acc "atam"
         ; decline Ins "ataa"
         ; decline Dat "ate"
@@ -241,8 +240,8 @@ value build_part_at_n_red verbal stem stem_at root =
         ; decline Loc "ati"
         ])
    ; (Dual, 
-        [ decline Voc "atii"
-        ; decline Nom "atii"
+        [ (* decline Voc "atii" *)
+          decline Nom "atii"
         ; decline Acc "atii"
         ; decline Ins "adbhyaam"
         ; decline Dat "adbhyaam"
@@ -251,9 +250,9 @@ value build_part_at_n_red verbal stem stem_at root =
         ; decline Loc "atos"
         ])
    ; (Plural, 
-        [ decline Voc "ati"
-        ; decline Voc "anti"
-        ; decline Nom "ati"
+        [ (* decline Voc "ati" 
+             decline Voc "anti" *)
+          decline Nom "ati"
         ; decline Nom "anti"
         ; decline Acc "ati"
         ; decline Acc "anti"
@@ -276,8 +275,8 @@ value build_part_ii verbal stem prati root =
   enter_forms gen_entry 
    [ Declined krid Fem
    [ (Singular,
-        [ decline Voc "i"
-        ; decline Nom "ii"
+        [ (* decline Voc "i" *)
+          decline Nom "ii"
         ; decline Acc "iim"
         ; decline Ins "yaa"
         ; decline Dat "yai"
@@ -286,8 +285,8 @@ value build_part_ii verbal stem prati root =
         ; decline Loc "yaam"
         ])
    ; (Dual, 
-        [ decline Voc "yau"
-        ; decline Nom "yau"
+        [ (* decline Voc "yau" *)
+          decline Nom "yau"
         ; decline Acc "yau"
         ; decline Ins "iibhyaam"
         ; decline Dat "iibhyaam"
@@ -296,8 +295,8 @@ value build_part_ii verbal stem prati root =
         ; decline Loc "yos"
         ])
    ; (Plural, 
-        [ decline Voc "yas"
-        ; decline Nom "yas"
+        [ (* decline Voc "yas" *)
+          decline Nom "yas"
         ; decline Acc "iis"
         ; decline Ins "iibhis"
         ; decline Dat "iibhyas"
@@ -317,8 +316,8 @@ value build_part_a_m verbal stem prati root =
   enter_forms gen_entry 
    [ Declined krid Mas
    [ (Singular,
-        [ decline Voc "a"
-        ; decline Nom "as"
+        [ (* decline Voc "a" *)
+          decline Nom "as"
         ; decline Acc "am"
         ; decline Ins "ena"
         ; decline Dat "aaya"
@@ -327,8 +326,8 @@ value build_part_a_m verbal stem prati root =
         ; decline Loc "e"
         ])
    ; (Dual, 
-        [ decline Voc "au"
-        ; decline Nom "au"
+        [ (* decline Voc "au" *)
+          decline Nom "au"
         ; decline Acc "au"
         ; decline Ins "aabhyaam"
         ; decline Dat "aabhyaam"
@@ -337,8 +336,8 @@ value build_part_a_m verbal stem prati root =
         ; decline Loc "ayos"
         ])
    ; (Plural, 
-        [ decline Voc "aas"
-        ; decline Nom "aas"
+        [ (* decline Voc "aas" *)
+          decline Nom "aas"
         ; decline Acc "aan"
         ; decline Ins "ais"
         ; decline Dat "ebhyas"
@@ -362,9 +361,9 @@ value build_part_a_n verbal stem prati root =
   enter_forms gen_entry 
    [ Declined krid Neu
    [ (Singular,
-        [ decline Voc "a"
+        [ (* decline Voc "a" *)
        (* decline Voc "am" - rare - disconnected for avoiding overgeneration *)
-        ; decline Nom "am"
+          decline Nom "am"
         ; decline Acc "am"
         ; decline Ins "ena"
         ; decline Dat "aaya"
@@ -373,8 +372,8 @@ value build_part_a_n verbal stem prati root =
         ; decline Loc "e"
         ])
    ; (Dual, 
-        [ decline Voc "e"
-        ; decline Nom "e"
+        [ (* decline Voc "e" *)
+          decline Nom "e"
         ; decline Acc "e"
         ; decline Ins "aabhyaam"
         ; decline Dat "aabhyaam"
@@ -383,8 +382,8 @@ value build_part_a_n verbal stem prati root =
         ; decline Loc "ayos"
         ])
    ; (Plural, 
-        [ decline Voc "aani"
-        ; decline Nom "aani"
+        [ (* decline Voc "aani" *)
+          decline Nom "aani"
         ; decline Acc "aani"
         ; decline Ins "ais"
         ; decline Dat "ebhyas"
@@ -404,8 +403,8 @@ value build_part_aa verbal stem prati root =
   enter_forms gen_entry 
    [ Declined krid Fem
    [ (Singular,
-        [ decline Voc "e"
-        ; decline Nom "aa"
+        [ (* decline Voc "e" *)
+          decline Nom "aa"
         ; decline Acc "aam"
         ; decline Ins "ayaa"
         ; decline Dat "aayai"
@@ -414,8 +413,8 @@ value build_part_aa verbal stem prati root =
         ; decline Loc "aayaam"
         ])
    ; (Dual, 
-        [ decline Voc "e"
-        ; decline Nom "e"
+        [ (* decline Voc "e" *)
+          decline Nom "e"
         ; decline Acc "e"
         ; decline Ins "aabhyaam"
         ; decline Dat "aabhyaam"
@@ -424,8 +423,8 @@ value build_part_aa verbal stem prati root =
         ; decline Loc "ayos"
         ])
    ; (Plural, 
-        [ decline Voc "aas"
-        ; decline Nom "aas"
+        [ (* decline Voc "aas" *)
+          decline Nom "aas"
         ; decline Acc "aas"
         ; decline Ins "aabhis"
         ; decline Dat "aabhyas"
@@ -446,8 +445,8 @@ value build_mas_ppfa verbal stem inter stem_vas root =
   enter_forms gen_entry 
    [ Declined krid Mas
    [ (Singular,
-        [ declinev Voc "van"
-        ; declinev Nom "vaan"
+        [ (* declinev Voc "van" *)
+          declinev Nom "vaan"
         ; declinev Acc "vaa.msam"
         ; decline  Ins "u.saa"
         ; decline  Dat "u.se"
@@ -456,8 +455,8 @@ value build_mas_ppfa verbal stem inter stem_vas root =
         ; decline  Loc "u.si"
         ])
    ; (Dual, 
-        [ declinev Voc "vaa.msau"
-        ; declinev Nom "vaa.msau"
+        [ (* declinev Voc "vaa.msau" *)
+          declinev Nom "vaa.msau"
         ; declinev Acc "vaa.msau"
         ; declinev Ins "vadbhyaam"
         ; declinev Dat "vadbhyaam"
@@ -466,8 +465,8 @@ value build_mas_ppfa verbal stem inter stem_vas root =
         ; decline  Loc "u.sos"
         ])
    ; (Plural,
-        [ declinev Voc "vaa.msas"
-        ; declinev Nom "vaa.msas"
+        [ (* declinev Voc "vaa.msas" *)
+          declinev Nom "vaa.msas"
         ; decline  Acc "u.sas"
         ; declinev Ins "vadbhis"
         ; declinev Dat "vadbhyas"
@@ -490,8 +489,8 @@ value build_neu_ppfa verbal stem inter stem_vas root =
   enter_forms gen_entry 
    [ Declined krid Neu
    [ (Singular,
-        [ declinev Voc "vat"
-        ; declinev Nom "vat"
+        [ (* declinev Voc "vat" *)
+          declinev Nom "vat"
         ; declinev Acc "vat"
         ; decline  Ins "u.saa"
         ; decline  Dat "u.se"
@@ -500,8 +499,8 @@ value build_neu_ppfa verbal stem inter stem_vas root =
         ; decline  Loc "u.si"
         ])
    ; (Dual, 
-        [ decline  Voc "u.sii"
-        ; decline  Nom "u.sii"
+        [ (* decline  Voc "u.sii" *)
+          decline  Nom "u.sii"
         ; decline  Acc "u.sii"
         ; declinev Ins "vadbhyaam"
         ; declinev Dat "vadbhyaam"
@@ -510,8 +509,8 @@ value build_neu_ppfa verbal stem inter stem_vas root =
         ; decline  Loc "u.sos"
         ])
    ; (Plural, 
-        [ declinev Voc "vaa.msi"
-        ; declinev Nom "vaa.msi"
+        [ (* declinev Voc "vaa.msi" *)
+          declinev Nom "vaa.msi"
         ; declinev Acc "vaa.msi"
         ; declinev Ins "vadbhis"
         ; declinev Dat "vadbhyas"
@@ -532,21 +531,21 @@ value build_late_ppfa verbal stem stem_vas root =
    { enter_forms gen_entry 
    [ Declined krid Mas
    [ (Singular,
-        [ declinev Voc "van"
-        ; declinev Nom "vaan"
+        [ (* declinev Voc "van" *)
+          declinev Nom "vaan"
         ; declinev Acc "vaa.msam"
         ])
    ; (Dual, 
-        [ declinev Voc "vaa.msau"
-        ; declinev Nom "vaa.msau"
+        [ (* declinev Voc "vaa.msau" *)
+          declinev Nom "vaa.msau"
         ; declinev Acc "vaa.msau"
         ; declinev Ins "vadbhyaam"
         ; declinev Dat "vadbhyaam"
         ; declinev Abl "vadbhyaam"
         ])
    ; (Plural,
-        [ declinev Voc "vaa.msas"
-        ; declinev Nom "vaa.msas"
+        [ (* declinev Voc "vaa.msas" *)
+          declinev Nom "vaa.msas"
         ; declinev Ins "vadbhis"
         ; declinev Dat "vadbhyas"
         ; declinev Abl "vadbhyas"
@@ -555,8 +554,8 @@ value build_late_ppfa verbal stem stem_vas root =
    ] 
    ; Declined krid Neu
    [ (Singular,
-        [ declinev Voc "vat"
-        ; declinev Nom "vat"
+        [ (* declinev Voc "vat" *)
+          declinev Nom "vat"
         ; declinev Acc "vat"
         ])
    ; (Dual, 
@@ -565,8 +564,8 @@ value build_late_ppfa verbal stem stem_vas root =
         ; declinev Abl "vadbhyaam"
         ])
    ; (Plural, 
-        [ declinev Voc "vaa.msi"
-        ; declinev Nom "vaa.msi"
+        [ (* declinev Voc "vaa.msi" *)
+          declinev Nom "vaa.msi"
         ; declinev Acc "vaa.msi"
         ; declinev Ins "vadbhis"
         ; declinev Dat "vadbhyas"

@@ -697,7 +697,7 @@ value resolve_homonym entry =
     | "duh"
     | "draa" (* ambiguous with ["draa#2"] *)
     | "dvi.s" 
-    | "praa"
+    | "praa" (* but praa#1 missing *)
     | "praa.n"
     | "bhaa"
     | "maa"

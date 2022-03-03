@@ -4913,11 +4913,11 @@ value record_abs_ya root rstem w = do
 ;
 (* For absolutives of roots gana 10 - Macdonell§164a Whitney§1051d *) 
 value light_10 = fun 
-   [ [] -> failwith "light_10"
-   | [ c :: r ] -> if vowel c then False (* ? *) else match r with
-       [ [] -> failwith "light_10"
-       | [ v :: _ ] -> short_vowel v (* opp guru Pan{1,4,11} *)
-       ]
+   [ [] -> False
+   | [ c :: r ] -> if vowel c then False else match r with
+          [ [] -> False
+          | [ v :: _ ] -> short_vowel v (* opp guru Pan{1,4,11} *)
+          ]
    ]
 ;
 value alternate_pp = fun

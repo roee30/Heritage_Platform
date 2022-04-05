@@ -153,8 +153,8 @@ and aa_iiv = fun
   [ "kathaa" -> True  
   | _ -> False   
   ]
-(* NB [aa_iic] obsolete, now use separate entry femcf marked fstem and 
-[extract_fem_stems] will generate its iic. *)
+(*i NB [aa_iic] obsolete, now use separate entry femcf marked fstem and 
+[extract_fem_stems] will generate its iic. i*)
 ;
 (*************************************)
 (************* Paradigms *************)
@@ -689,12 +689,9 @@ value build_man g stem entry =
           @ (if vedic_drop then [ decline Ins "naa" ] else [])
           @ (if avoc then [] else [ decline Loc "mni" ]))
    ; (Dual, (if g=Neu then 
-        [ decline Voc "manii"
-        ; decline Voc "mnii"
-        ; decline Nom "manii"
-        ; decline Nom "mnii"
-        ; decline Acc "manii"
-        ; decline Acc "mnii"
+        [ decline Voc (if avoc then "manii" else "mnii")
+        ; decline Nom (if avoc then "manii" else "mnii")
+        ; decline Acc (if avoc then "manii" else "mnii")
         ] 
              else 
         [ decline Voc "maanau"
@@ -1021,7 +1018,7 @@ value build_han stem entry = (* stem = ...-han Whitney§402 *)
    ; Avyayaf (fix stem "hanam")
    ]
 ;
-value build_mas_zvan stem entry =  (* \Pan{6,4,133} *)
+value build_mas_zvan stem entry =  (* \Pan{6,4,133} Whitney§427 *)
   let decline case suff = (case,fix stem suff) in
   enter entry 
    [ Declined Noun Mas
@@ -5255,11 +5252,11 @@ value compute_nouns_stem_form e stem d p =
                          -> build_man_god r3 e (* Whitney §426a *)
                      | _ -> build_man Mas r3 e
                      ]
-               | [ 45 :: ([ 46 :: _ ] as r3) ] (* -zvan *) -> build_mas_zvan r3 e
-                                               (* takes care of eg dharmazvan *)
+               | [ 45 :: ([ 46 :: _ ] as r3) ] (* -zvan Whitney§427 *) 
+                         -> build_mas_zvan r3 e (* takes care of eg dharmazvan *)
                | [ 45 :: r3 ] (* -van *) -> match e with
-                  [ "yuvan" -> build_mas_yuvan e
-                  | "maghavan" -> build_mas_maghavan e 
+                  [ "yuvan" -> build_mas_yuvan e (* Whitney§427 *)
+                  | "maghavan" -> build_mas_maghavan e (* Whitney§428 *)
                     (* NB: entry is maghavat but interface allows maghavan *)
                   | _ -> build_van Mas r3 e
                   ]
@@ -5473,12 +5470,9 @@ value compute_nouns_stem_form e stem d p =
                | [ 48; 1 ] (* asan *)
                | [ 48; 2 ] (* aasan *) -> build_sp_an r2 e (* Whitney§432 *)
                | [ 35; 6 ] (* uudhan *) -> build_uudhan r2 e
-               | [ 41 :: r3 ] (* -man *) -> match e with
-                  [ "brahman" -> build_neu_brahman e
-                  | _ -> build_man Neu r3 e
-                  ]
+               | [ 41 :: r3 ] (* -man *) -> build_man Neu r3 e
                | [ 45 :: r3 ] (* -van *) -> match e with
-                  [ "yuvan" -> build_neu_yuvan e
+                  [ "yuvan" -> build_neu_yuvan e (* Whitney§427 *)
                   | _ -> build_van Neu r3 e
                   ]
                | [ 49 :: r3 ] (* -han *) -> match r3 with
@@ -5874,24 +5868,29 @@ value iic_indecl = (* should be lexicalized or completed *)
   [ "atra#1"    (* atrabhavat *)
   ; "adhas"     (* adha.hzaakha adhazcara.nam *)
   ; "antar"     (* antarafga *)
+  ; "antaraa"   (* antarafga *)
   ; "arvaak"    (* arvaakkaalika *)
   ; "alam"      (* (gati) ala.mk.rta *)
   ; "alpaat"    (* alpaanmukta *)
   ; "aajanma"   (* aajanmazuddha *)
   ; "iti"       (* ityukta *)  
 (*; "ittham"    (* ittambhuuta *) ? *)
+  ; "uccais"    (* uccaisziras *)  
   ; "upari"     (* uparicara *)  
+  ; "upaa.mzu"  (* upaa.mzuda.n.da *)
   ; "ubhayatas" (* ubhayata.hsasya - tasil *)
   ; "evam"      (* eva.mvid *)
 (*; "katham"    (* katha.mbhuuta *) ? *)
   ; "ki.mcid"   (* ki.mciccalana *)
   ; "k.rcchraat" (* k.rcchraadavaapta *)
+  ; "ciram"     (* cira.mjiiva *)
   ; "tatra"     (* tatrabhavat *)
   ; "divaa"     (* divaanidraa *)
   ; "dhik"      (* dhikkaara *)
   ; "na~n"      (* na~nvaada *)
   ; "naktam"    (* nakta.mcara *)
   ; "naanaa"    (* naanaaruupa *)
+  ; "niicais"   (* ? *)  
   ; "param"     (* para.mtapa *)
   ; "pazcaa"    (* pazcaardha *)
   ; "pazcaat"   (* pazcaadukti *)
@@ -5907,12 +5906,14 @@ value iic_indecl = (* should be lexicalized or completed *)
   ; "satraa"    (* satraajit *)
   ; "sadaa"     (* sadaananda *)
   ; "sadyas"    (* sadya.hkaala *)
+  ; "sanat"     (* sanatkumaara *)
   ; "sarvatra"  (* sarvatraga *)
   ; "sarvathaa" (* sarvathaavi.saya *)
   ; "saha#2"    (* problematic -- overgenerates  *)
   ; "saak.saat"
   ; "saaci"
   ; "saamaanyatas" (* saamaanyatod.r.s.ta - tasil *)
+  ; "saami"     (* saamipiita *)
   ; "su.s.thu"  (* su.s.thuprayoga *)
   ; "svayam"    (* svaya.mvara *)
   ; "svar#3"    (* svargatim *)
@@ -6294,7 +6295,7 @@ value enter_indecl_ifcs () = do
 value enter_extra_iifcs () = do
   { let entry = "ahan" in (* for -aha- like pu.nyaahavaacanam *)
     enter1 entry (Bare Noun (code "aha"))
-  ; let entry = "aakyaa#2" in (* for -aakhya- like pu.nyaahavaacanam *)
+  ; let entry = "aakhyaa#2" in (* for -aakhya- like zaaradiiyaakhyanaamamaalaa *)
     enter1 entry (Bare Noun (code "aakhya"))
   ; let entry = "senaa" in (* for zuklasenadeva.h *)
     enter1 entry (Bare Noun (code "sena"))

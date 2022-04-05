@@ -42,6 +42,7 @@ and string_nominal = fun
   | Pfutm   -> "pfu." ^ " md." 
   | Pfutp k -> "pfp." ^ (gana_str k)
   | Action_noun -> "act."
+  | Agent_noun  -> "agt."
   ]
 and string_tense = fun
   [ Future       -> "fut."

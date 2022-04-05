@@ -122,7 +122,7 @@ value cached = (* potentially cached lexicon acquisitions *)
 (* initial: phases *)
 value initial =
    (* All phases but Ifc, Abso, Auxi, Auxiinv, Auxik, Auxiick, Lopa, Lopak. *)
-   [ Inde; Iicv; Iicc; Nouv; Nouc; Pron; A; An; Root; Kriv; Kric; Iikv; Iikc
+   [ Inde; Iicv; Iicc; Nouv; Nouc; Pron; (* A; An; !*) Root; Kriv; Kric; Iikv; Iikc
    ; Peri; Pv; Pvkv; Pvkc; Iiv; Iivv; Iivc; Iiy; Inv; Ai; Ani 
    ; Absv; Absc; Inftu; Vocv; Vocc; Vokv; Vokc ] @ cached
 ;
@@ -141,7 +141,7 @@ value dispatch w = fun (* w is the current input word *)
     (* This assumes that privative prefixes cannot prefix Ifc forms 
        justified by \Pan{2,2,6} a-x only if x is a subanta. *)
   | Iicv | Iicc | Iikv | Iikc | Iiif | Auxiick | Cachei -> (* Compounding *)
-       [ Iicv; Iicc; Nouv; Nouc; A; An; Ifcv; Ifcc; Iikv; Iikc; Kriv; Kric
+       [ Iicv; Iicc; Nouv; Nouc; (* A; An; !*) Ifcv; Ifcc; Iikv; Iikc; Kriv; Kric
        ; Indifc; Pvkv; Pvkc; Iiif; Iivv; Iivc; Vocv; Vocc; Vokv; Vokc; Vocf ]
        @ cached
   | Pv -> if phantomatic w then [] else

@@ -2297,6 +2297,7 @@ value compute_benedictive rstem root =
            | _ -> failwith "Anomaly bene_stem"
            ] (* NB Deshpande: also j~naayaat *)
       | "puu#1" -> revcode "punii" (* weak gana 9 puniiyaat Vi.s.nu sahasr. *)
+      | "paa#2" -> revcode "paa" (* paayaat *)
       | _ -> ps_stem
       ] in do
   { match root with 
@@ -2506,7 +2507,7 @@ value intercalates root =
             | "yuj#1" | "yudh#1" | "ra~nj" | "rabh" | "ram" | "raadh" | "ric"
             | "ruj#1" | "rudh#1" | "rudh#2" | "ruh#1" | "lip" | "liz" | "lih#1"
             | "lup" | "vac" | "vap#1" | "vic" | "vid#2" | "viz#1" | "vi.s#1" 
-            | "vyadh" | "zak" | "zad" | "zap" | "zi.s" | "zudh" | "zu.s" 
+            | "vyadh" | "zak" | "zad" | "zap" | "zi.s" | "zudh" | "zu.s#1" 
             | "zli.s" | "sa~nj" | "sic" | "sidh#1" | "s.rp" | "skand" 
             | "sva~nj" | "svid#2" | "had" 
                 -> anit 
@@ -2711,7 +2712,7 @@ value compute_ppp_stems root rstem =
       | _ -> failwith ("Unexpected ppp in -na for " ^ root)
       ]  (* end participles in -na *)
     | "pac" -> [ sVa "pak" ] (* exception \Pan{8.2.51} *)
-    | "zu.s" -> [ Ka rstem ] (* exception \Pan{8.2.52} *)
+    | "zu.s#1" -> [ Ka rstem ] (* exception \Pan{8.2.52} *)
     | _ -> (* otherwise participle in -ta (Panini kta) *)
            let ppstems =
        let ppstem = match root with 
@@ -4211,8 +4212,8 @@ value compute_aorist root =
   { match root with (* 1. root aorist - Panini sic-luk *)
     [ "k.r#1" | "kram" | "gam" | "gaa#1" | "ci" | "chid#1" | "jan" | "j~naa#1" 
     | "daa#1" | "daa#2" | "dhaa#1" | "dhaa#2" | "paa#1" | "bhid#1" | "bhuu#1" 
-    | "muc#1" | "v.r#1" | "zaa" | "saa#1" | "sthaa#1" | "svap" | "has" | "haa#1"
-      -> do
+    | "muc#1" | "v.r#1" | "zaa" | "saa#1" | "sthaa#1" | "svap" | "has" 
+    | "haa#1" -> do
       { compute_root_aorista weak strong root 
       ; match root with (* Atma rare *) 
         [ "k.r#1" | "gam" | "jan" | "v.r#1" -> 
@@ -4247,6 +4248,9 @@ value compute_aorist root =
     | "kaaz" | "k.sip" | "gur" | "tru.t" | "diip" | "duh#1" | "d.rz#1"
     | "dvi.s#1" | "budh#1" | "yuj#1" | "vid#1" | "s.rj#1" 
         -> compute_root_aoristp strong root 
+    | "zam#1" -> do { compute_root_aoristp weak root (* since udatta *)
+                    ; compute_root_aoristp long root (* WR *)
+                    }
     | "rabh" -> compute_root_aoristp (revcode "rambh") root 
     | "jaag.r" | "t.rr" | "pac" | "pad#1" | "zru" | "stu" | "hu"
         -> compute_root_aoristp long root
@@ -4270,7 +4274,7 @@ value compute_aorist root =
       { compute_thematic_aorista stem root
       ; compute_thematic_aoristm stem root 
       }
-    | "zak" | "zuu" | "z.rdh" | "zcut#1" | "zram" 
+    | "zak" | "zam#1" | "zuu" | "z.rdh" | "zcut#1" | "zram" 
         -> compute_thematic_aorista weak root
     | "zru"   -> compute_thematic_aorista (revcode "zrav") root
     | "khyaa" -> compute_thematic_aorista (revcode "khy") root
@@ -4924,7 +4928,7 @@ value alternate_pp = fun
   [ "m.r.s" | "svid#2" | "dh.r.s" | "puu#1" (*i \Pan{?} i*)
     (* next roots of gu.na 1 have penultimate "u" *)
   | "kul" | "k.sud" | "guh" | "jyut" | "dyut#1" | "mud#1" | "rud#1" | "ruh#1"
-  | "lul" | "zuc#1" | "zubh#1" | "zu.s" -> True
+  | "lul" | "zuc#1" | "zubh#1" | "zu.s#1" -> True
   | _ -> False
   ]
 ;
@@ -4971,7 +4975,7 @@ value record_ppp_abs_stems root rstem ppstems =
                  }
             ]
         }
-     | Ka w -> do (* zu.s *)
+     | Ka w -> do (* zu.s#1 *)
          { record_part_ppp (rfix w "ka") root (* zu.ska \Pan{8,2,51} *)
          ; record_abso_ya  (fix w "ya")  root (* -zu.sya *)
          }
@@ -5340,7 +5344,7 @@ value compute_present_system root rstem gana pada third =
               | "b.rh#1"  -> revcode "b.r.mh" (* WR; Bucknell adds barhati *)
               | "iir.s" | "gaa#2" (* = gai *)
               | "daa#3" | "dyaa" | "dhyaa" | "pyaa" (* = pyai *)
-              | "zu.s" | "zyaa" | "sphaa" -> [ 42 (* y *) :: rstem ] (* add y *)
+              | "zu.s#1" | "zyaa" | "sphaa" -> [ 42 (* y *) :: rstem ](* add y *)
               | "maa#4" -> revcode "may" (* shorten add y *)
               | "vyaa"  -> revcode "vyay"
               | "zuu"   -> revcode "zve" (* zvayati - similar to huu/hve *)
@@ -5672,8 +5676,8 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
    | "udazru" 
        -> [ 1 :: trunc_u rstem ] (* -()ayati - final u becomes a *)
    | "agha" | "azana#2" | "azva" | "ka.n.du" | "khela" | "jihma" | "pramada" 
-   | "lohita" | "mantu" | "manda" | "valgu" | "sakhi" | "samudra#1" 
-     (* to become \Pan{3,1,13} kya.s *)
+   | "mantu" | "valgu" | "sakhi" | "samudra#1" 
+   | "niila" | "manda" | "lohita" (* G{lohita} to become \Pan{3,1,13} kya.s *)
    | "asu" (* lexicalized under "asuuya" *) | "cira" 
        -> lengthen rstem (* lengthening -aayati *) 
    | "asuuya" (* "asu" lengthened *) | "gomaya" | "vyaya" (* euphony *)
@@ -5682,7 +5686,8 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
        -> [ 1 :: [ 37 :: [ 2 :: trunc rstem ] ] ] (* -aapayati - interc p *) 
    (* |  (* very rare Whitney§1059d e.g. "putra" *)
        -> [ 3 :: trunc_a rstem ] (* -()iyati *) *)
-   | "adhvara" | "tavi.sa" | "putra" | "praasaada" (* treat as \Pan{3,1,10} *)
+   | "adhvara" | "tavi.sa" | "putra" | "praasaada" 
+   | "mitra" (* treat as \Pan{3,1,10} *)
    | "udaka" | "kavi" | "dhana" | "maa.msa" | "vastra" (* desire Kale§643 *) 
        -> [ 4 :: trunc rstem ] (* -()iiyati *) (* \Pan{3,1,8} kyac *)
    | "kart.r" -> [ 4 :: [ 43 :: trunc rstem ] ] (* .r -> rii  Kale§642 *)
@@ -5701,7 +5706,7 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
    | "prati.sedha" | "pradak.si.na" | "prasaada" | "bhi.saj" (* | "mantra" *)
    | "malina" | "mizra" | "mukula" | "mukhara" | "mu.n.da" | "muutra" 
    | "m.rga" | "yantra" | "rasa" | "ruuk.sa" | "lagha" (* u -> a *)
-   (*| "var.na"*) | "vizada" | "vra.na" | "zaanta" | "zithila"
+   (*| "var.na" now varn:10 *) | "vizada" | "vra.na" | "zaanta" | "zithila"
    | "zyena" | ".sa.n.dha" | "sapi.n.da" | "saphala" | "sabhaaja" | "saantva" 
    | "saavadhaana" | "suutra" | "stena" (* practice \Pan{3,1,15} *)
    | "u.sas" | "namas" | "varivas" (* do \Pan{3,1,19} *)
@@ -5745,11 +5750,11 @@ value den_stem_m root = (* in general intransitive or reflexive Whitney§1059c *
    | "laalaa" | "svalpazilaa" | "vimanaa" 
    | "ajira" | "kalu.sa" | "k.rpa.na" | "kliiba" | "garva" | "jala" | "jihma"
    | "taru.na" | "nika.sa" | "parok.sa" | "piiyuu.savar.sa" | "pu.spa" | "priya"
-   | "bh.rza" | "maalyagu.na" | "lohita" | "zalabha" | "zithila" | "ziighra" 
+   | "bh.rza" | "maalyagu.na" | "zalabha" | "zithila" | "ziighra" 
    | "zyaama" | "zyena" | "safka.ta"
    | "ka.n.du" | "karu.na" | "sukha" | "du.hkha" (* feel \Pan{3,1,18} *)
-(* Ga.na{sukhaadi} take suffix kyaf in -aayate :
-   {sukha,du.hkha,t.rpta,k.rcchra,asra,aasra,aliika,pratiipa,karu.na,so.dha}  *)
+(* G{sukhaadi} take suffix kyaf in -aayate :
+   {sukha,du.hkha,t.rpta,k.rcchra,asra,aasra,aliika,pratiipa,karu.na,so.dha} *)
    | "t.rpta" (* -MW *)
    | "abhra" | "ka.nva" | "kalaha" | "k.sepa" | "megha" | "vaira" | "zabda" 
    | "z.rfga" (* do \Pan{3,1,17} *)
@@ -5761,7 +5766,8 @@ value den_stem_m root = (* in general intransitive or reflexive Whitney§1059c *
    | "gomaya" | "bh.rtya" | "sa.mdhyaa"  (* resemble *)
    | "puru.sa" (* imitate *)
    | "k.r.s.na" | "manda" | "bhuusvarga" (* to become *)
-       -> lengthen rstem (* reflexive causative middle to become \Pan{3,1,13} *)
+   | "niila" | "lohita" (* G{lohita} to become \Pan{3,1,13} *)
+       -> lengthen rstem (* -aayate *)
    | _ -> failwith ("Unknown denominative " ^ root)
    ] 
 ;
@@ -5900,7 +5906,8 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
      [ "ifg" | "paz" (* for d.rz *) | "bruu" (* for vac *) 
      | "k.saa" | "cud" | "dhii#1" | "pat#2" | "praa#1" | "vidh#1"
      | "haa#2" -> () (* no perif *)
-     | "saa#1" -> do { compute_perif (revcode "si") root ; compute_perif rstem root }
+     | "saa#1" -> do { compute_perif (revcode "si") root 
+                     ; compute_perif rstem root }
      | "vyadh" -> compute_perif (revcode "vidh") root 
      | "zuu"   -> compute_perif (revcode "zve") root 
      | ".s.thiiv" -> compute_perif (revcode ".s.thiv") root 
@@ -6102,12 +6109,14 @@ value compute_auxi_kridantas () =
       ] in do (* A few auxiliary action nouns are generative for cvi compounds *)
   { let (rst,st) = stems "kara.na" in 
     build_part_a_n (Primary,Action_noun) rst st "k.r#1" 
-  ; let (rst,st) = stems "kaara" in (* actually, should be [Agent_noun] *)
-    build_part_a_m (Primary,Action_noun) rst st "k.r#1" (* also fem in -ii? *)
+  ; let (rst,st) = stems "kaara" in 
+    build_part_a_m (Primary,Agent_noun) rst st "k.r#1" (* also n. f. in -ii? *)
   ; let (rst,st) = stems "bhaavana" in
-    build_part_a_m (Primary,Action_noun) rst st "bhuu#1"
+    build_part_a_n (Primary,Action_noun) rst st "bhuu#1" (* also Agent mnf ? *)
   ; let (rst,st) = stems "bhaava" in 
     build_part_a_m (Primary,Action_noun) rst st "bhuu#1"
+  ; let (rst,st) = stems "bhuuya" in 
+    build_part_a_n (Primary,Action_noun) rst st "bhuu#1"
   }
 ;
 (* Called by [Make_roots.roots_to_conjugs] *)
@@ -6226,9 +6235,6 @@ and compute_extra_huu () = do (* WR *)
   }
 ;
 (* Extra participial forms - intensive, desiderative, no present, etc *)
-(* Para part of Atma root *)
-value zinjat = Ppra_ 2 Primary (revstem "zi~nj") (revstem "zi~njat") "zi~nj"
-;
 value record_extra_participles () = do
   { record_part_ppp (revstem "gupta") "gup" (* gup gana 10 *)
   ; record_part_ppp (revstem "zaata") "zaa" 
@@ -6243,8 +6249,9 @@ value record_extra_participles () = do
   ; record_part (Pprm_ 1 Primary (revcode "gacchamaana") "gam")
   ; record_part (Pprm_ 4 Primary (revcode "kaayamaana") "kan")
   ; record_part (Ppra_ 1 Primary (revstem ".dam") (revstem ".damat") ".dam")
-  ; record_part zinjat
   }
+(* Para part of Atma root - now treated as specific entry 
+zinjat = Ppra_ 2 Primary (revstem "zi~nj") (revstem "zi~njat") "zi~nj" *)
 ;
 (* For verbs without present forms and variants, *)
 (* called by [Make_roots.roots_to_conjugs] at generation time *)
@@ -6330,7 +6337,6 @@ value fake_compute_conjugs (gana : int) (root : string) = do
       | "vadh"   -> compute_extra_vadh ()
       | "zaa"    -> record_part_ppp (revcode "zaata") root
       | "zaas"   -> compute_extra_zaas ()
-      | "zi~nj"  -> record_part zinjat
       | "zru"    -> compute_extra_zru () 
       | "sa~nj"  -> compute_extra_sanj () 
       | "sad#1"  -> compute_extra_sad ()

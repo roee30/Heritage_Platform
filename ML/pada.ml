@@ -63,8 +63,8 @@ value voices_of = fun
   | "valg" | "vaz" | "vas#1" | "vaa#2" | "vas#4" | "vaa~nch" | "vid#1" | "vidh#1"
   | "vi.s#1" | "vii#1" | "v.rj" | "v.r.s" | "v.rh" | "ven" | "vyac"| "vyadh"
   | "vraj" | "vrazc" | "za.ms" | "zak" | "zam#1" | "zam#2" | "zal" | "zaz" 
-  | "zas" | "zaas" | "zi.s" | "ziil" | "zuc#1" | "zudh" | "zumbh" | "zu.s"
-  | "zuu" | "z.rr" | "zcut#1" | "zraa" | "zli.s" | ".s.thiiv" 
+  | "zas" | "zaas" | "zi.s" | "ziil" | "zuc#1" | "zudh" | "zumbh" | "zu.s#1"
+  | "zuu" | "zcut#1" | "zraa" | "zli.s" | ".s.thiiv" 
   | "sad#1" | "sap#1" | "saa#1" | "sidh#1" | "sidh#2" | "siiv" 
   | "sur" | "s.r" | "s.rj#1" | "s.rp" | "skand" | "skhal" | "stan" | "stubh"
   | "sthag" | "snaa" | "snih#1" | "snu" | "snuh#1" | "sp.r" | "sphal" | "sphu.t"
@@ -91,12 +91,13 @@ value voices_of = fun
 (*| "has"  Atma needed for hasate *)
 (*| "uc"   Atma needed for uuce *)
 (*| "van"  Atma needed for vanute *)
-(*| "zu.s" Atma for zu.syate WR epic *)
+(*| "zu.s#1" Atma for zu.syate WR epic *)
 (*| "zvas#1" Atma for zvasate WR *)
 (*| "nam" Atma namate WR epic *)
 (*| "aap" Atma aapnute epic *)
 (*| "a~nj" also Atma afkte | "naath" "praz" "sp.rz#1" idem *)
 (*| Doubts: "bhuu1" could also be Atma bhavate *)
+(*| "z.rr" also Atma *)
 (*| "zru" also Atma in Vedic eg z.r.nu.sva & SP. r.r.nudhvam *)
 (*| "yu#2" could be Atma in Maitreya S. yuyudhvam *)
 (*| "krudh#1" krudhyate pm or ps or both ? *)
@@ -149,10 +150,10 @@ value voices_of = fun
   | "lak.s" | "labh" | "la.s" | "lip" | "lih#1" | "lup" | "luu#1" | "vad" 
   | "van" | "vap#1" | "vap#2" | "val" | "vah#1" | "vaa#3" | "vic" | "vij" 
   | "viz#1" | "viij" | "v.r#2" | "v.rt#1" | "v.rdh#1" | "vyath" | "vyaa" | "vrii"
-  | "zap" | "zaa" | "zu.s" | "zubh#1" | "z.rdh" | "zyaa" | "zram" | "zri" | "zru"
-  | "zvas#1" | "sru" | "san#1" | "sa~nj" | "sah#1" | "sic" | "su#2" | "suu#1"
-  | "suud" | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" | "sp.rh" | "smi"
-  | "syand" | "svad" | "had" | "hikk" | "hu" | "huu" | "h.r#1"
+  | "zap" | "zaa" | "zu.s#1" | "zubh#1" | "z.rdh" | "zyaa" | "zram" | "zri"
+  | "zru" | "zvas#1" | "sru" | "san#1" | "sa~nj" | "sah#1" | "sic" | "su#2"
+  | "suu#1" | "suud" | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" 
+  | "sp.rh" | "smi" | "syand" | "svad" | "had" | "hikk" | "hu" | "huu" | "h.r#1"
   ] *)
   (* + corr. "praz" | "k.rr" | "p.rc" | "bandh" *)
   (* NB. "ah" "rip" "vadh" have no pr, "mand2" is fictitious *) 

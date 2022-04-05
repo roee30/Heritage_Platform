@@ -54,19 +54,20 @@ and pr_mode =
   ]
 and tense = 
   [ Future (* (l.r.t) *)
-  | Perfect (* Remote past - resultative aspect (li.t) *)
-  | Aorist of aor_class (* Immediate past or future with perfective aspect (luf) *)
-  | Injunctive of aor_class (* (le.t) - injunctions also Prohibitive with maa *) 
-  | Benedictive (* Precative: optative aorist (aazirlif) *) 
-  | Conditional (* Preterit of future (l.rf) *)
-  | Subjunctive (* le.t *) (* Rare subjunctive, intermediate between Optative and Imperative *)
+  | Perfect (* (li.t) Remote past - resultative aspect *)
+  | Aorist of aor_class (* (luf) Immediate past or future - perfective aspect *)
+  | Injunctive of aor_class (* (le.t) - injunctions no tense or mood
+                               also Prohibitive with maa *) 
+  | Benedictive (* (aazirlif) Precative: optative aorist *) 
+  | Conditional (* (l.rf) Preterit of future *)
+  | Subjunctive (* (le.t) Rare subjunctive, in-between Optative and Imperative *)
   ]
 ;
 (* NB from Indo-European: the present stem has the imperfective aspect,
    the aorist one the perfective aspect, and the perfect one the resultative. *)
-(* Vedic Subjunctive and Pluperfect are not yet taken into account. The only
-   non-present passive forms are some passive aorist forms in 3rd sg. 
-   Future, Perfect and Aorist use Midddle forms for Passive. *)
+(* Vedic Pluperfect is not yet taken into account. The only non-present passive 
+   forms are some passive aorist forms in 3rd sg. Future, Perfect and Aorist 
+   use Middle forms for Passive. *)
 
 (* Verbal adjectives *)
 type kritya = int (* shades of intention of passive future/potential participle: 
@@ -78,7 +79,7 @@ type verbal = (conjugation * participle)
 and participle = (* participles *)
 (* These are the kridanta stems (primary verbal derivatives) with participial 
    value. They act as adjectives or gendered nouns. But [Ppra] does not qualify 
-   as a noun, but as an adverb, signifying simultaneous action. *)
+   as a noun, but as an adverb, signifying simultaneity with main action. *)
   [ Ppp          (* passive past participle *)
   | Pppa         (* active past participle *) 
   | Ppra of gana (* active present participle *)
@@ -90,6 +91,7 @@ and participle = (* participles *)
   | Pfutm (* middle future participle *)
   | Pfutp of kritya (* passive future/potential participle/gerundive 3 forms *)
   | Action_noun (* generative only for auxiliaries, for cvi compounds *)
+  | Agent_noun  (* id.  *)
 (*| [Agent_noun], etc. -- non generative, must be lexicalized; see nominal *)
   ]
 ;
@@ -165,6 +167,7 @@ and krit = (* coarser than Paninian krit suffixes *)
   | Object_root (* we should probably lump action and object in [Non_agent] *)
   | Object_a (* ka                                     -a n.    *) 
   | Instrument (* ka \Pan{3,1,136}                  0/amui n.   *)
+  | Location   (* gha  *)
   | Instra (* .s.tran -tra n.                -trii f. traa f.   *)
   | Orig_root (* sruc srut sruva *)
   | Agent_u   (* san+u                             -u on des stem  *)

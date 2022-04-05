@@ -425,6 +425,15 @@ type flexion =
   | Absotvaa of conjugation and word   (* abs-tvaa *)
   ]
 ;
+value mask = fun
+    [ "aacaarya" | "mugdha" | "muu.dha" -> False (* keep chunk-final vocative *)
+    | e -> is_kridanta e 
+    ]
+and allow = fun (* allow non-chunk-final vocative *)
+    [ "puu.san" | "raajan" -> True (* to be completed - non -a stems *)
+    | _ -> False
+    ]
+;
 
 (* Now functions that populate the inflected forms treebanks from the lexemes *)
 (* enter1: string -> flexion -> unit *)
@@ -436,8 +445,9 @@ value enter1 entry =
      where entern (c,w) = 
          let f = Noun_form g n c in 
          if c=Voc then 
-            if morpho_gen.val && is_kridanta entry then ((* f is in Kridv *)) 
-            else add_voca w delta f (* non-generative Voca *)
+            if morpho_gen.val && mask entry then ((* f is in Krid *)) 
+            else if allow entry then add_morph w delta f 
+                 else add_voca w delta f 
          else do { add_morph w delta f 
                  ; match entry with (* generative ifcs of infinitive bahus *)
                    [ "kaama" (* volition : who wants to do *)

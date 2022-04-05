@@ -314,7 +314,7 @@ value display_ind ind font = List.iter disp
   ; ps h3_end
   }
 ;
-value display_inflected_u font inf absya per abstva = do
+value display_indeclinables font inf absya per abstva = do
  { pl center_begin 
  ; display_ind (infinitive_caption font) font inf
  ; display_ind (absolutive_caption True font) font abstva
@@ -337,6 +337,7 @@ value encode_part = fun
   | Pfutm   -> "Pfutm" 
   | Pfutp _ -> "Pfutp" 
   | Action_noun -> "Act"
+  | Agent_noun  -> "Agt"
   ]
 ;
 (* inspired from [Print_html.decl_url] *)
@@ -572,14 +573,14 @@ value look_up_and_display font gana entry =
           ; let (inf,_,_,abstvaa) = Deco.fold sort_out_u init_u abstvaa.val 
             and (_,absya,_,_)   = Deco.fold sort_out_u init_u absya.val
             and (_,_,per,_)     = Deco.fold sort_out_u init_u peri.val in
-            if absya=[] && per=[] && abstvaa=[] then () else do
+            if inf=[] && absya=[] && per=[] && abstvaa=[] then () else do
             (* Display indeclinable forms *)
             { pl center_begin 
             ; pl (table_begin_style (centered Gris) [])
             ; ps tr_begin
             ; ps th_begin
             ; ps (indeclinables_caption font)
-            ; display_inflected_u font inf absya per abstvaa 
+            ; display_indeclinables font inf absya per abstvaa 
             ; ps th_end
             ; ps tr_end
             ; pl table_end (* Gris *)
@@ -673,6 +674,7 @@ value resolve_homonym entry =
     | "zii" 
     | "zuc" 
     | "zubh" 
+    | "zu.s" 
     | "zcut" 
     | "sad"
     | "sah"

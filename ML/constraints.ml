@@ -139,7 +139,7 @@ value root_regime = fun
   | "ru.s#1" | "ruh#1" | "lag" | "lamb" | "lal" | "las" | "vak.s" | "vas#1" 
   | "vah#1" (* nadii vahati *) | "vaa#2" | "vaaz" | "vij" | "vip" | "viz#1" 
   | "v.rt#1" | "v.rdh#1" | "vyath" | "zak" | "zad" | "zam#1" | "zii#1" | "ziil"
-  | "zuc#1" | "zudh" | "zubh#1" | "zu.s" | "zuu" | "zram" | "zrambh" | "zvas#1" 
+  | "zuc#1" | "zudh" | "zubh#1" | "zu.s#1" | "zuu" | "zram" | "zrambh" | "zvas#1"
   | "zvit#1" | "sap#1" | "saa#1" | "sidh#1" | "sur" | "skhal" | "stan" | "stu" 
   | "stubh" | "sthaa#1" | "snih#1" | "snu" | "spand" | "spardh" | "sphaa"
   | "sphu.t" | "sphur" | "smi" | "syand" | "sra.ms" | "svap" | "svar#1" 

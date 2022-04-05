@@ -224,6 +224,7 @@ value participle_name part = fun
                    | _ -> []
                    ]
       | Action_noun -> [ "krit" ] (* "gha~n" for -a "lyu.t" for -ana *)
+      | Agent_noun  -> [ "krit" ] (* dummy krit *)
       ]     in
   let cat s x = s ^ " " ^ (Encode.skt_raw_to_deva x) in
   List.fold_left cat "" indian_part (* no skt punctuation so far *)

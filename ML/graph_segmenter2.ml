@@ -58,6 +58,7 @@ open Control; (* star *)
 (* 859 attested as last sentence in Pancatantra *)
 value max_input_length = 1000
 and max_seg_rows = 1000 
+and max_best_solutions = 10 (* Modify this number based on requirement. Like 5, 10, 50 or 100 *)
 ;
 exception Overflow (* length of sentence exceeding array size *)
 ;
@@ -464,8 +465,8 @@ value log_chunk revsol =
         ; bump_counter ()
         ; (chunk_conf, chunk_text, no_of_segments, chunk_triplets)
         }
-    else let text_from_chunk = get_text cur_chunk.chunk in (* NOTE: Check if this text should be sent to the result *)
-    (1.0, text_from_chunk, 1, [(unknown,cur_chunk.chunk,Id)]) (* Temporarily given hard coded values to check for cases falling here *)
+    else
+    (1.0, "", 1, [(unknown,Word.mirror [],Id)]) (* Hard coded values for unrecognized chunks getting here after selection of segments *)
 ;
 
 (* Rest duplicated from Segmenter *)
@@ -647,8 +648,8 @@ value get_second_comp item =
 ;
 (* Adding new segmentation into list of possible segmentations for current chunk *)
 value add_to_chunk_splits (conf, text, no_of_seg, triplets) = 
-  (*if text = "" then () (* To not add those texts which are not segmentable. Check this for cases where the words are not recognized *) (* NOTE: Check if this is right, to compare the text -> Commented this to allow adding the unrecognized words to the segmentations *)
-  else*) do
+  if text = "" then () (* To not add those texts which are not segmentable after selection of segments by users *)
+  else do
   { let temp_list = chunk_solutions.possible_splits
   ; let sol_list = List.map get_second_comp temp_list
   ; if List.mem text sol_list then chunk_solutions.possible_splits := chunk_solutions.possible_splits
@@ -754,12 +755,11 @@ and register solution cont = (* Last check for sa/e.sa inter-chunk consistency *
 value init_segment_initial entries sentence = 
   List.map (fun phase -> Advance phase sentence [] []) entries
 ; 
-(* Works for Complete as well as Simplified mode *)
 value segment1 chunk = continue (init_segment_initial initial chunk) 
 ;
 value segment chunk = do
-  { cur_chunk.chunk := chunk
-  ; segment1 chunk (* does not assume Complete mode *)
+  { cur_chunk.chunk := chunk (* Added to save the unsegmentable chunk for use later to form segmentation solutions *)
+  ; segment1 chunk
   ; cur_chunk.segmentable || do 
     { graph.(cur_chunk.offset) := [ (unknown,[ (Word.mirror chunk,[]) ]) ]
     ; False 
@@ -805,14 +805,17 @@ value segment_chunk (full,count) chunk sa_check =
 value prioritize splits ((cur_conf, cur_text, cur_triplets) as cur_split) = 
   loop 1 [] False cur_split splits
   where rec loop sol_id acc inserted cur_split = fun
-  [ [] -> if inserted then acc else (acc @ [cur_split])
-  | [((conf,text,triplets) as hd) :: tl] -> if sol_id > 100 then acc (* Modify this number based on requirement. Like 5, 10, 50 or 100 *)
+  [ [] -> if inserted then acc else if sol_id > max_best_solutions then acc else (acc @ [cur_split])
+  | [((conf,text,triplets) as hd) :: tl] -> if sol_id > max_best_solutions then acc
                                    else if inserted then loop (sol_id + 1) (acc @ [hd]) inserted cur_split tl
                                    else if conf >= cur_conf then loop (sol_id + 1) (acc @ [hd]) inserted cur_split tl
-                                   else loop (sol_id + 2) ((acc @ [cur_split]) @ [hd]) True cur_split tl
+                                   else (* The final condition where the new segmentation is inserted *)
+                                   if sol_id < max_best_solutions then loop (sol_id + 2) ((acc @ [cur_split]) @ [hd]) True cur_split tl
+                                   else if sol_id = max_best_solutions then loop (sol_id + 1) (acc @ [cur_split]) True cur_split tl (* This condition is to make sure only one segmentation solution is added if it will reach the maximum limit *)
+                                   else loop sol_id acc inserted cur_split tl (* Dummy condition where nothing is inserted *)
   ]
 ;
-(* Traverse through all the chunks recursively, where loop through each of the segments of the chunks recursively, until the last chunk, where you form solutions based on higher conf values *)
+(* Traverse through all the chunks recursively, where loop through each of the segmentations of the chunks recursively, until the last chunk, where you form solutions based on higher conf values *)
 value get_top_solutions top_segments = 
   (* loop over the chunks *)
   top_solutions (1.0,"",[]) [] top_segments
@@ -850,7 +853,7 @@ value get_top_solutions top_segments =
 value dove_tail segments = 
   get_top_solutions chunk_solutions.total_sols
 ;
-(* Modified to update the global variable which stores the segmentations for each all the chunks as a list of lists *)
+(* Modified to update the global variable which stores the segmentations for all the chunks as a list of lists *)
 value segment_iter chunks = segment_chunks (True,1) chunks
   where rec segment_chunks acc = fun (* terminal recursion *) 
     [ [ (* last *) chunk ] -> do { let (full,count) = (segment_chunk acc chunk False)

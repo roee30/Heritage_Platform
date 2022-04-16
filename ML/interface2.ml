@@ -243,8 +243,6 @@ value is_conflicting ((w,tr,ph,k) as segment) =
          possible v for w', in which case it is an overlap returning a blue sign.
          If w' has any other possible v's, there is a conflict. *)
       (* This may only occur if w=[1] (a) and w' ends in a or aa *)       
-      (* e.g. In "naabhaava.h caakiirti.h",  "a" should be marked blue, and in
-         "mahaajana.h" after checking "mahaa", "a" should not be marked blue *)
                            where  match_tr' = fun
                              [ [ v ] -> not (v = w) || does_conflict rest
                              | _ -> True

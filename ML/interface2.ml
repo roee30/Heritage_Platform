@@ -470,7 +470,7 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
     else ()
   ; let call_scl_parser () = (* invocation of scl parser *)
         if scl_toggle then
-           td_wrap (call_reader text cpts "o" ^ "UoH Analysis Mode") |> ps
+           td_wrap (call_reader text checkpoints "o" ^ "UoH Analysis Mode") |> ps
         else () (* [scl_parser] is not visible unless toggle is set *) in
     if count > Web.max_count then 
        (* too many solutions would choke the parsers *) 
@@ -480,9 +480,9 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
             ; call_scl_parser ()
             }
          else do
-       { td_wrap (call_reader text cpts "p" ^ "Filtered Solutions") |> ps
+       { td_wrap (call_reader text checkpoints "p" ^ "Filtered Solutions") |> ps
        ; let info = string_of_int count ^ if full then "" else " Partial" in 
-         td_wrap (call_reader text cpts "t" ^ "All " ^ info ^ " Solutions") |> ps
+         td_wrap (call_reader text checkpoints "l" ^ "All " ^ info ^ " Solutions") |> ps
        ; call_scl_parser ()
        } 
   ; tr_end |> pl   (* tr end *)

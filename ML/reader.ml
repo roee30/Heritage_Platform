@@ -112,7 +112,7 @@ value print_solution2 text ind (n,cl,output,sentence) = do
   ; ps span_end
   ; pl html_break
   ; let _ = List.fold_left Lex.print_segment_words 0 (List.rev output) in
-    let _ = call_scl (get_sentence output) n (* check why the existing call_parser function is not used here *) in
+    let _ = call_scl (get_sentence output) n (* check why the existing [call_parser] function is not used here *) in
     ind+1
   }
 ;

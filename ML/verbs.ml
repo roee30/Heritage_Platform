@@ -2533,7 +2533,7 @@ value intercalates root =
 (* Whitney§631-§640 Bandharkar II p44 augment ii in present system 2nd class *)
 value augment_ii = fun (*  *)
   [ "an#2" | "rud#1" | "zvas#1" | "svap" | "jak.s" -> True 
-    (* and thus "praa.n#1" too gives praa.niit *) 
+    (* and thus "praa.n1" too gives praa.niit *) 
   | _ -> False 
   ]
 ;
@@ -2863,7 +2863,7 @@ value perstems rstem root =
               | "vrazc" -> code "vraz" (* ought to be truncated by int sandhi *)
               | "za.ms" -> code "zas"
               | "huu"   -> code "hvaa" 
-              | "dhru"  -> code "dhru" (* no_guna *)
+              | "dhru"  -> code "dhru" (* no guna *)
               | _ -> rev (match rstem with 
                      [ [ c :: r ] -> match c with
                          [ 10 | 11 | 12 | 13 -> [ 2 :: r ] (* eg gai -> gaa *)
@@ -2905,7 +2905,7 @@ value compute_future_gen rstem root =
              | "vas#1"    -> revcode "vat" (* vatsyati Whitney§167 Pan{7,4,49} *)
              | "vrazc"    -> revcode "vrak" (* vrak.sya *)
              | "saa#1"    -> rstem (* saa si *)
-             | "dhru"     -> rstem (* no_guna *)
+             | "dhru"     -> rstem (* no guna *)
              | _ -> sstem (* for nij gana 3 *)
              ] in sandhi w (code "sya") (* eg dah -> dhak.sya *)
        | 1 -> let w = match root with
@@ -4399,7 +4399,7 @@ value compute_aorist root =
               if vowel c then long 
               else match root with 
                    [ "ku.t" | "gur" | "tru.t" | "pu.t" | "lu.th"| "sphur"
-                       -> weak (* Kale no_guna *)
+                       -> weak (* Kale no guna *)
                    | "kan" | "khan" |"car" | "mad#1" | "vad" | "vraj" | "skhal" 
                        -> long 
                    | _ -> strong
@@ -4420,7 +4420,7 @@ value compute_aorist root =
       } 
     | "ku.s" | "gup" | "vrazc" | "zcut#1" | "sphu.t" -> (* active only *)
       compute_ath_is_aorista strong root 
-    | "gur" -> (* Kale no_guna only Atma *)
+    | "gur" -> (* Kale no guna only Atma *)
       compute_ath_is_aoristm weak root 
     | "zuu" -> 
       compute_ath_is_aorista (revcode "zve") root 
@@ -4862,10 +4862,10 @@ value record_part_ppp ppstem root = do
   ; record_part (Pppa_ Primary ppstem root) (* pp-vat (krit tavat) *)
   }
 ;
-value record_abso_ya form root = 
-  enter1 root (Invar (Primary,Absoya) form) (* ktvaa \Pan{3,4,18+} *)
-and record_abso_tvaa form root = 
-  enter1 root (Absotvaa Primary form) (* lyap \Pan{7,1,37} *)
+value record_abso_ya form root =  (* lyap \Pan{7,1,37} *)
+  enter1 root (Invar (Primary,Absoya) form) 
+and record_abso_tvaa form root = (* ktvaa \Pan{3,4,18+} *)
+  enter1 root (Absotvaa Primary form)
 ;
 (* First absolutives in -ya \Pan{7,1,37} lyap *)
 value record_abs_ya root rstem w = do
@@ -4975,7 +4975,7 @@ value record_ppp_abs_stems root rstem ppstems =
                  }
             ]
         }
-     | Ka w -> do (* zu.s#1 *)
+     | Ka w -> do (* zu.s1 *)
          { record_part_ppp (rfix w "ka") root (* zu.ska \Pan{8,2,51} *)
          ; record_abso_ya  (fix w "ya")  root (* -zu.sya *)
          }
@@ -5051,7 +5051,7 @@ value record_ppp_abs_den ystem root =
   }
 ;
 (* Absolutive in -am - Macdonell§166 Stenzler§288 \Pan{3,4,22} .namul          *)
-(* Registered both in Invar and in Absotvaa, since may be used with preverbs.  *)
+(* Registered in Inv-Absoya and in Absotvaa, since may be used with preverbs.  *)
 (* Used specially for verbs that may be iterated - having done again and again *)
 (* "gaaya.m gaayam" ayant chanté et chanté; "paaya.m paayam" ayant bu et bu.   *)
 value record_abso_am root = 
@@ -5059,45 +5059,59 @@ value record_abso_am root =
       { record_abso_tvaa word root (* no preverb *)
       ; record_abso_ya   word root (* some preverb *)
       } in 
-  match root with 
-  [ "as#2"    -> record "aasam" (* may overgenerate *)
+  match root with (* gu.na + am frequent, but exceptions *)
+  [ "as#2"    -> record "aasam" (* \Pan{3,4,57} may overgenerate *)
   | "ka.s"    -> record "kaa.sam" (* \Pan{3,4,34} *)
+  | "kuc"     -> record "kocam" (* \Pan{3,4,54} *)
   | "kram"    -> record "kraamam"
-  | "k.r#1"   -> record "kaaram" (* \Pan{3,4,26-28} *)
+  | "k.r#1"   -> record "kaaram" (* \Pan{3,4,26-28+61} *)
+  | "k.r.s"   -> record "kar.sam" (* \Pan{3,4,49} avec upa *)
   | "khan"    -> record "khaanam"
   | "gaa#2"   -> record "gaayam"
-  | "grah"    -> record "graaham"(* \Pan{3,4,39} *)
+  | "grah"    -> record "graaham"(* \Pan{3,4,39+58} *)
   | "c.rt"    -> record "c.rtam"
   | "jiiv"    -> record "jiivam" (* \Pan{3,4,30} *)
   | "j~naa#1" -> record "j~naayam"
   | "t.r.s#1" -> record "tar.sam"
+  | "da.mz"   -> record "da.mzam" (* \Pan{3,4,47} avec upa- *)
   | "daa#1"   -> record "daayam"
-  | "d.rz"    -> record "darzam" (* \Pan{3,4,29} Apte§166 totalité *)
-  | "naz#1"   -> record "naazam"
+  | "diz#1"   -> record "dezam" (* \Pan{3,4,58} avec aa-*)
+  | "d.rz#1"  -> record "darzam" (* \Pan{3,4,29} Apte§166 totalité *)
+  | "dhaa#1"  -> record "dhaayam" (* \Pan{3,4,45} *)
+  | "naz#1"   -> record "naazam" (* \Pan{3,4,43+45} *)
+  | "pat#1"   -> record "paatam" (* \Pan{3,4,56} *)
   | "paa#1"   -> record "paayam"
-  | "pi.s"    -> record "pe.sam" (* \Pan{3,4,35+38} *)
+  | "pi.s"    -> record "pe.sam" (* \Pan{3,4,35+38+55} *)
+  | "pii.d"   -> record "pii.dam" (* \Pan{3,4,49} avec upa *)
   | "pu.s#1"  -> record "po.sam" (* \Pan{3,4,40} *)
-  | "p.rr"    -> record "puuram" (* \Pan{3,4,31} *)
+  | "p.rr"    -> record "puuram" (* \Pan{3,4,31+44} *)
   | "praz"    -> record "p.rccham"
-  | "bandh"   -> record "bandham" 
+  | "bandh"   -> record "bandham" (* \Pan{3,4,41} *)
   | "bhuj#1"  -> record "bhojam"
   | "bhuu#1"  -> record "bhaavam"
+  | "rudh#2"  -> record "rodham" (* \Pan{3,4,49} avec upa *)
   | "vad"     -> record "vaadam"
+  | "vah#1"   -> record "vaaham" (* \Pan{3,4,43} *)
   | "vid#1"   -> record "vedam" (* \Pan{3,4,29} Apte§166 totalité *)
+  | "viz#1"   -> record "vezam" (* \Pan{3,4,56} *)
   | "v.rt#1"  -> record "vartam" (* \Pan{3,4,39} hastavartam *)
+  | "zu.s#1"  -> record "zo.sam" (* \Pan{3,4,44} *)
   | "zru"     -> record "zraavam"
   | "sa~nj"   -> record "sa~ngam"
   | "s.r"     -> record "saaram"
   | "s.rp"    -> record "sarpam"
-  | "skand"   -> record "skandam"
+  | "skand"   -> record "skandam" (* \Pan{3,4,56} *)
   | "stambh"  -> record "stambham"
   | "sthaa#1" -> record "sthaayam" (* Bhate: zayyosthaayam sauté du lit *)
-  | "han"     -> record "ghaatam" (* \Pan{3,4,36+37} *)
+  | "han"     -> record "ghaatam" (* \Pan{3,4,36+37+48} *)
   | "knuu"    -> record "knopam" (* from causative *)
   | _ -> ()
   ]
 (* NB Bandharkar: colloquial expressions iic+V.namul suivi de forme finie de V *)
 (* eg "hastagraaha.m g.r.naati" il tient par la main *)
+(* idem "zayyotthaaya.m bhufkte" sitôt levé du lit il mange \Pan{3,4,52} *)
+(* also go.spadapuuram \Pan{3,4,32}. Could be recognized with extra phases, 
+   or ad-hoc inclusion like "utthaayam" in [Nouns.enter_indecl_ifcs] - berk *)
 (* Should be also definable for causative, eg knopam ca{knuu} \Pan{3,4,33} *)
 ;
 (* absolutive of secondary conjugations *)
@@ -5344,7 +5358,7 @@ value compute_present_system root rstem gana pada third =
               | "b.rh#1"  -> revcode "b.r.mh" (* WR; Bucknell adds barhati *)
               | "iir.s" | "gaa#2" (* = gai *)
               | "daa#3" | "dyaa" | "dhyaa" | "pyaa" (* = pyai *)
-              | "zu.s#1" | "zyaa" | "sphaa" -> [ 42 (* y *) :: rstem ](* add y *)
+              | "zyaa" | "sphaa" -> [ 42 (* y *) :: rstem ](* aa/ai add y *)
               | "maa#4" -> revcode "may" (* shorten add y *)
               | "vyaa"  -> revcode "vyay"
               | "zuu"   -> revcode "zve" (* zvayati - similar to huu/hve *)
@@ -5718,7 +5732,8 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
    | "kelaa" | "rekhaa" | "tiras" | "uras" | "payas" (* Kale§660 *)
    | "vaac" (* consonant Kale§642 *)
    | "dantura" (* possess *)
-   | "k.r.s.na" (* agir comme *)
+   | "k.r.s.na" (* act as *)
+   | "vikaca#2" (* become *)
    | "viira" | "zabda" | "tira" (* MW *) | "ma~njara" | "sraja" | "manas" 
        -> rstem (* -yati *) (* standard causative meaning *)  
    | "putras" | "lava.nas" -> rstem (* trick for redundancy *) 
@@ -5874,7 +5889,7 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
    ; (* Injunctive *) compute_injunctive root
    }
    with [ Control.Warning s -> output_string stdout (s ^ "\n") ]
-   (* 3. Roots of gana#10 *)
+   (* 3. Roots of gana 10 *)
  | Conj_infos.Prim gana pada third -> 
    (* gana is root class, pada is True for Para, False for Atma of third form *)
    (* Primary conjugation *)
@@ -6159,7 +6174,7 @@ and compute_extra_trr () = do
 and compute_extra_dhaa () = do 
     { (* Gaayatrii dhiimahi precative m. Whitney§837b *)
       enter1 "dhaa#1" (Conju benem [ (Plural,[ (First, code "dhiimahi") ]) ])
-(*  ; record_part (Ppp_ Primary (revcode "dhita") "dhaa#1") (* alter hita *) *)
+(* [; record_part (Ppp_ Primary (revcode "dhita") "dhaa#1") (* alter hita *)] *)
     }
 (* also "vidmahi" on yantra ? *)
 and compute_extra_nind () = (* WR: RV *)
@@ -6251,7 +6266,7 @@ value record_extra_participles () = do
   ; record_part (Ppra_ 1 Primary (revstem ".dam") (revstem ".damat") ".dam")
   }
 (* Para part of Atma root - now treated as specific entry 
-zinjat = Ppra_ 2 Primary (revstem "zi~nj") (revstem "zi~njat") "zi~nj" *)
+zinjat = [Ppra_ 2 Primary (revstem "zi~nj") (revstem "zi~njat") "zi~nj"] *)
 ;
 (* For verbs without present forms and variants, *)
 (* called by [Make_roots.roots_to_conjugs] at generation time *)

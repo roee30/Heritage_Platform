@@ -99,8 +99,8 @@ type sols =
   { cur_offset : mutable int (* current offset *)
   ; solution : mutable string (* segmentation solution string *)
   ; number_of_chunks : mutable int (* number of chunks in the string *)
-  ; possible_splits : mutable (list (float * string * int * int * int * output)) (* list of <confidence_value, solution_string, current_chunk's offset, segmentation_id, number_of_segments, output> *)
-  ; total_sols: mutable (list (int * list (float * string * int * int * int * output))) (* list of <chunk_id, list of possible segmentations> *)
+  ; possible_splits : mutable (list (float * string * int * int * int * output)) (* list of [<confidence_value, solution_string, current_chunk's offset, segmentation_id, number_of_segments, output>] *)
+  ; total_sols: mutable (list (int * list (float * string * int * int * int * output))) (* list of [<chunk_id, list of possible segmentations>] *)
   }
 ;
 value chunk_solutions = { cur_offset = 0; solution = ""; number_of_chunks = 0;  possible_splits = []; total_sols = []} (* sols *)
@@ -286,7 +286,7 @@ value chk_ifc phase =
   }
 ;
 (* Assign unigram freqs for each sandhi rule 
-get_rule_freq returns the product of probablities of pada or compound components and their subsequent transitions *)
+[get_rule_freq] returns the product of probablities of pada or compound components and their subsequent transitions *)
 value get_rule_freq (phase,rword,transition) =
   let check_ifc = (chk_ifc phase) in
   let (word_prob, transition_prob) = 
@@ -294,10 +294,10 @@ value get_rule_freq (phase,rword,transition) =
     then ((get_comp_prob rword), (get_comp_transition_prob transition))
     else ((get_pada_prob rword), (get_pada_transition_prob transition)) in
     (* Comment the above conditions and use the following if the single list for both words and compound components is used *)
-    (*let w_prob = get_word_prob rword in
+    (* [let w_prob = get_word_prob rword in
     if ((compound_component phase) || check_ifc) (* Condition to check if previously added segment is an ii-component so that the current phase is an ifc *)
     then (w_prob, (get_comp_transition_prob transition))
-    else (w_prob, (get_pada_transition_prob transition)) in*)
+    else (w_prob, (get_pada_transition_prob transition)) in] *)
   (* The following condition is given to add '-' between compound components, and ' '  between normal words *)
   let decode_word = Canon.decode_WX (Morpho_html.visargify rword) in
   let word = 
@@ -305,10 +305,10 @@ value get_rule_freq (phase,rword,transition) =
     else (decode_word) in
   if transition_prob = 1.0 then (1.0, word)
   else
-  (word_prob, word) (* considers confidence value for a segment as word_probability alone *)
-  (*(transition_prob, word)*) (* considers confidence value for a segment as transition_probability alone *)
-  (*let cur_prob = (word_prob *. transition_prob) in
-  (cur_prob, word)*) (* considers confidence value for a segment as <word_probability * transition_probability> *)
+  (word_prob, word) (* considers confidence value for a segment as [word_probability] alone *)
+  (* [(transition_prob, word)] *) (* considers confidence value for a segment as [transition_probability] alone *)
+  (* [let cur_prob = (word_prob *. transition_prob) in
+  (cur_prob, word)] *) (* considers confidence value for a segment as [<word_probability * transition_probability>] *)
 ;
 
 value register_pada index (phase,pada,sandhi) = 
@@ -333,7 +333,7 @@ value register_pada index (phase,pada,sandhi) =
   | [] -> update_graph [ (phase,[ pada_right ]) ] (* new bucket *)
   ]   
   ;
-  (* The following is used to get the prob of the pada and sandhi and then return it to the parent function log_chunk *)
+  (* The following is used to get the prob of the pada and sandhi and then return it to the parent function [log_chunk] *)
   let (pada_conf_val, pada_text) = get_rule_freq (phase,pada,sandhi) in
   (pada_conf_val, pada_text)
   }
@@ -438,7 +438,7 @@ and reset_counter () = solutions_counter.val := 0
 value get_text sentence = 
   Morpho_html.hdecode sentence
 ;
-(* log_chunk is split for clarity *)
+(* [log_chunk] is split for clarity *)
 value log_chunk_rec index solution = 
   log_rec index 0 1.0 "" [] solution
   where rec log_rec index no_of_seg cumu_conf vakya acc_triplet = fun
@@ -658,7 +658,7 @@ value add_to_chunk_splits (conf, text, no_of_seg, triplets) =
     (* To sort segment chunks based on conf value *)
     ; chunk_solutions.possible_splits := add_chunk temp_list (conf,text,cur_chunk.offset,segment_id,no_of_seg,triplets)
     (* To not consider any order for chunk segments *)
-    (* chunk_solutions.possible_splits := (temp_list @ [(conf,text,cur_chunk.offset,segment_id)])*)
+    (* [chunk_solutions.possible_splits := (temp_list @ [(conf,text,cur_chunk.offset,segment_id)])] *)
     }
   }
 ;
@@ -805,14 +805,24 @@ value segment_chunk (full,count) chunk sa_check =
 value prioritize splits ((cur_conf, cur_text, cur_triplets) as cur_split) = 
   loop 1 [] False cur_split splits
   where rec loop sol_id acc inserted cur_split = fun
-  [ [] -> if inserted then acc else if sol_id > max_best_solutions then acc else (acc @ [cur_split])
-  | [((conf,text,triplets) as hd) :: tl] -> if sol_id > max_best_solutions then acc
-                                   else if inserted then loop (sol_id + 1) (acc @ [hd]) inserted cur_split tl
-                                   else if conf >= cur_conf then loop (sol_id + 1) (acc @ [hd]) inserted cur_split tl
-                                   else (* The final condition where the new segmentation is inserted *)
-                                   if sol_id < max_best_solutions then loop (sol_id + 2) ((acc @ [cur_split]) @ [hd]) True cur_split tl
-                                   else if sol_id = max_best_solutions then loop (sol_id + 1) (acc @ [cur_split]) True cur_split tl (* This condition is to make sure only one segmentation solution is added if it will reach the maximum limit *)
-                                   else loop sol_id acc inserted cur_split tl (* Dummy condition where nothing is inserted *)
+  [ [] -> if inserted then acc 
+          else if sol_id > max_best_solutions then acc 
+          else (acc @ [ cur_split ])
+  | [ ((conf,text,triplets) as hd) :: tl ] -> 
+       if sol_id > max_best_solutions then acc
+       else if inserted then 
+            loop (sol_id + 1) (acc @ [ hd ]) inserted cur_split tl
+       else if conf >= cur_conf then 
+            loop (sol_id + 1) (acc @ [ hd ]) inserted cur_split tl
+       else (* The final condition where the new segmentation is inserted *)
+            if sol_id < max_best_solutions then 
+            loop (sol_id + 2) ((acc @ [ cur_split ]) @ [ hd ]) True cur_split tl
+       else if sol_id = max_best_solutions then 
+            loop (sol_id + 1) (acc @ [ cur_split ]) True cur_split tl 
+            (* This condition is to make sure only one segmentation 
+            solution is added if it will reach the maximum limit *)
+       else loop sol_id acc inserted cur_split tl 
+            (* Dummy condition where nothing is inserted *)
   ]
 ;
 (* Traverse through all the chunks recursively, where loop through each of the segmentations of the chunks recursively, until the last chunk, where you form solutions based on higher conf values *)

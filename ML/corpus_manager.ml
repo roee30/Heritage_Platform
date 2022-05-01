@@ -129,7 +129,7 @@ value section_selection dir sections =
   option_select_label Params.corpus_dir options
 ;
 value add_sentence_form dir permission gap =
-  cgi_begin (cgi_bin "skt_heritage") "" ^ (* fakes mk_reader_page *)
+  cgi_begin (cgi_bin "skt_heritage") "" ^ (* fakes [mk_reader_page] *)
   "Add sentence: " ^ uplinks dir permission ^
   hidden_input Params.corpus_dir dir ^
   hidden_input Params.corpus_permission (Web_corpus.string_of_permission permission) ^

@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2022 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* CGI-bin conjugation for computing root conjugations.                   *)
@@ -674,7 +674,6 @@ value resolve_homonym entry =
     | "zii" 
     | "zuc" 
     | "zubh" 
-    | "zu.s" 
     | "zcut" 
     | "sad"
     | "sah"
@@ -699,7 +698,7 @@ value resolve_homonym entry =
     | "duh"
     | "draa" (* ambiguous with ["draa#2"] *)
     | "dvi.s" 
-    | "praa" (* but praa#1 missing *)
+    | "praa" (* but "praa#1" missing *)
     | "praa.n"
     | "bhaa"
     | "maa"
@@ -750,6 +749,7 @@ value resolve_homonym entry =
     | "mad" 
     | "yudh"
     | "zam" 
+    | "zu.s" 
     | "saa"
     | "sidh" 
     | "snih" 

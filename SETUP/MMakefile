@@ -340,7 +340,6 @@ $(DATA_LICENSES) $(DATA)/Makefile
 SOURCE=$(DOCSOURCE) $(DATASOURCE) $(ALLWEBSOURCES)
 
 # Miscellaneous documentation
-OBSOLETE_DOCS=DOC/sanskrit.pdf
 DOCS=DOC/sanskrit.pdf DOC/wsc.pdf DOC/tagger.pdf DOC/wcre.pdf DOC/coling.pdf \
 DOC/Mumbai.pdf DOC/Brown.pdf DOC/IWRIDL.pdf DOC/COLING_2012.pdf DOC/WSC13.pdf
 DOC_ML=DOC/Heritage_Platform.pdf
@@ -742,6 +741,6 @@ course:
 	cp -p $(SKTRESOURCES)COURSE/Lessons/style.css $(SERVERPUBLICDIR)COURSE/Lessons/style.css
 
 
-SAVED_VERSION=336a
+SAVED_VERSION=338a
 save: # saving sources of Heritage_Platform (after make clean in ML)
 	tar cvf ../ARCHIVE/Heritage_Platform_$(SAVED_VERSION).tar ML SITE JAVASCRIPT SETUP configure INSTALLATION DOC IMAGES README 

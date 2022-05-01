@@ -16,9 +16,9 @@
    These are stored in txt files in Resources/DATA, and retrieved here to generate rem files for the same *)
    
 (* This list of files is converted to  here:
-   a. comp_freq.txt -> list of compound components (ii-s) and their frequencies
-   b. pada_freq.txt -> list of words (which are not part of any compound) and their frequencies
-   c. word_freq.txt -> list of both the comp and pada together and their frequencies
+   a. [comp_freq.txt] -> list of compound components (ii-s) and their frequencies
+   b. [pada_freq.txt] -> list of words (which are not part of any compound) and their frequencies
+   c. [word_freq.txt] -> list of both the comp and pada together and their frequencies
 *)
 
 open Deco; (* [ empty ] *)
@@ -56,9 +56,9 @@ value rec process_file chin =
     deco_of_word_freq (a,b);
     process_file chin
   }
-  with [ End_of_file -> (*let lexicon = (word_freq.val : Trie.trie) in
-                        let mini = Mini.minimize lexicon  in
-                        mini*)
+  with [ End_of_file -> (* [let lexicon = (word_freq.val : Trie.trie) in
+                            let mini = Mini.minimize lexicon  in
+                            mini] *)
                         word_freq.val
        ]
 ;

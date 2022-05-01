@@ -144,7 +144,7 @@ value call_back text cpts (k,seg) conflict =
           if unanalysed seg then "" else anchor Red_ (invoke cgi_reject) x_sign
 ;
 value call_reader text cpts mode = (* mode = "o", "p", "g" or "t" *)
-  let cgi = reader_cgi ^ "?" ^ text ^ ";mode=" ^ mode ^ (*";test=no" ^ (* Sriram: Check whether the additional argument 'test' is required or not *)*)
+  let cgi = reader_cgi ^ "?" ^ text ^ ";mode=" ^ mode ^ (* [";test=no" ^] (* Sriram: Check whether the additional argument 'test' is required or not *)*)
             ";cpts=" ^ string_points cpts in 
   anchor Green_ (invoke cgi) check_sign
 ;
@@ -578,7 +578,7 @@ value graph_engine () = do
        guess gender revised [rev_off] [rev_ind] (User-aid) *)
     let url_encoded_input = get "text" env "" 
     and url_encoded_topic = get "topic" env "" (* topic carry-over *)
-    (*and url_encoded_mode  = get "mode" env "g"*)
+ (*[and url_encoded_mode  = get "mode" env "g"] *)
     and st = get "st" env "t" (* sentence parse default *)
     and us = get "us" env "f" (* sandhied text default *)
     and translit = get "t" env Paths.default_transliteration (* translit input *)

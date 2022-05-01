@@ -227,7 +227,7 @@ value analyse query output =
     else () 
   (*i DEBUG ; Sys.command "ls -l > /tmp/SKT_TEMP/junk" i*)
   (* Uncomment following for debugging parser
-  ; List.iter print_bucket top_groups  
+ [; List.iter print_bucket top_groups  
   ; match threshold with      
     [ None -> ()
     | Some p -> do
@@ -235,7 +235,7 @@ value analyse query output =
        ; html_red ("Truncated penalty " ^ string_of_int p ^ " or more") |> ps
        ; html_break |> ps
        }
-    ] *)
+    ] ] *)
   }
 ;
 value print_sems word morphs = do  

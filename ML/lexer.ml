@@ -91,8 +91,8 @@ value load_transition_list file =
 try (Gen.gobble file : trans_attrbs)
   with [ _ ->  [] ]
 ;
-(*value datapath = Paths.skt_install_dir ^ "DATA/"
-;*)
+(* [value datapath = Paths.skt_install_dir ^ "DATA/";] *)
+
 (* The following .rem files were generated from the parallel corpus of unsegmented-segmented sentences *)
 value words_freq_file = Data.word_freq_file (* .rem file containing the decorated trie of all the words and their frequencies *)
 ;
@@ -137,7 +137,7 @@ value int_list_to_string separator int_list =
      		   get_strings acc1 tl
      ] in
      do {
-     (*print_string ("Current String:   " ^ "[" ^ (get_strings "" int_list) ^ "]");*)
+     (* [print_string ("Current String:   " ^ "[" ^ (get_strings "" int_list) ^ "]");] *)
      "[" ^ (get_strings "" int_list) ^ "]"
      }
 ;
@@ -158,12 +158,10 @@ value get_freq word file_name =
 (* NOTE: The following needs to be calculated from the file rather than manually entering the values *)
 value total_words = 403233.0
 ;
-(*value total_padas = (calculate_word_freq padas_list) (* 129423.0 *)
-;*)
+(* [value total_padas = (calculate_word_freq padas_list) (* 129423.0 *);] *)
 value total_padas = 284930.0
 ;
-(*value total_comps = (calculate_word_freq comps_list) (* 68556.0 *)
-;*)
+(* [value total_comps = (calculate_word_freq comps_list) (* 68556.0 *);] *)
 value total_comps = 118303.0
 ;
 value total_words_types = 37015.0
@@ -239,7 +237,7 @@ value chk_ifc phase =
     }
 ;
 (* Assign unigram freqs for each sandhi rule 
-get_rule_freq returns the product of probablities of padas or compound components and their subsequent transition *)
+[get_rule_freq] returns the product of probablities of padas or compound components and their subsequent transition *)
 value get_rule_freq1 (phase,rword,transition) =
   let check_ifc = (chk_ifc phase) in
   let (word_prob, transition_prob) = 
@@ -247,10 +245,10 @@ value get_rule_freq1 (phase,rword,transition) =
     then ((get_comp_prob rword), (get_comp_transition_prob transition))
     else ((get_pada_prob rword), (get_pada_transition_prob transition)) in
     (* Comment the above conditions and use the following if the single list for both words and compound components is used *)
-    (*let w_prob = get_word_prob rword in
+    (* [let w_prob = get_word_prob rword in
     if ((compound_component phase) || check_ifc) (* Condition to check if previously added segment is an ii-component so that the current phase is an ifc *)
     then (w_prob, (get_comp_transition_prob transition))
-    else (w_prob, (get_pada_transition_prob transition)) in*)
+    else (w_prob, (get_pada_transition_prob transition)) in] *)
   (* The following condition is given to add '-' between compound components, and ' '  between padas *)
   let decode_word = Canon.decode_WX (Morpho_html.visargify rword) in
   let word = 
@@ -258,12 +256,12 @@ value get_rule_freq1 (phase,rword,transition) =
     else (decode_word ^ " ") in
   if transition_prob = 1.0 then (1.0, word) (* Sriram: Check if this condition is necessary *)
   else
-  (word_prob, word) (* considers confidence value for a segment as word_probability alone *)
-  (*(transition_prob, word)*) (* considers confidence value for a segment as transition_probability alone *)
-  (*let cur_prob = (word_prob *. transition_prob) in
-  (cur_prob, word)*) (* considers confidence value for a segment as <word_probability * transition_probability> *)
+  (word_prob, word) (* considers confidence value for a segment as [word_probability] alone *)
+  (* [(transition_prob, word)] *) (* considers confidence value for a segment as [transition_probability] alone *)
+  (* [let cur_prob = (word_prob *. transition_prob) in
+  (cur_prob, word)] *) (* considers confidence value for a segment as [<word_probability * transition_probability>] *)
 ;
-(* base function defined to return the confidence level for each segmentation as a product of the probablities of each rule *)
+(* base function defined to return the confidence level for each segmentation as a product of the probabilities of each rule *)
 (* Note: the confidence level and the complete string are added to the output *)
 value add_conf_level1 (n,output) =
  let outlist = List.rev output in
@@ -276,8 +274,8 @@ value add_conf_level1 (n,output) =
 ; 
 (* The above works well with the confidence formula as just the product of prob(word) and prob(transition) *)
 
-(* The confidence formula is modified to product of prob(word_1), prob(transition) and prob(word_2) in the following *)
-(* The following is changed to prob(word) and prob(transition) and prob(next_word) *)
+(* The confidence formula is modified to product of [prob(word_1)], [prob(transition)] and [prob(word_2)] in the following *)
+(* The following is changed to prob(word) and prob(transition) and [prob(next_word)] *)
 value get_rule_freq2 (phase1,rword1,transition1) (phase2,rword2,transition2) =
   let check_ifc = (chk_ifc phase1) in
   let (first_word_prob, transition_prob) = 
@@ -293,8 +291,8 @@ value get_rule_freq2 (phase1,rword1,transition1) (phase2,rword2,transition2) =
   let word = if (ii_component phase1) then (decode_word ^ "-")
              else (decode_word ^ " ") in
   if transition_prob = 1.0 then (1.0, word) (* Sriram: Check if this condition is necessary *)
-  else ((first_word_prob *. transition_prob *. second_word_prob), word) (* considers confidence value for a segment as <first_word_probability * transition_probability * second_word_probability> *)
-  (*else ((first_word_prob *. second_word_prob), word) (* considers confidence value for a segment as <first_word_probability * second_word_probability> *)*)
+  else ((first_word_prob *. transition_prob *. second_word_prob), word) (* considers confidence value for a segment as [<first_word_probability * transition_probability * second_word_probability>] *)
+  (* [else ((first_word_prob *. second_word_prob), word)] (* considers confidence value for a segment as [<first_word_probability * second_word_probability>] *)*)
 ;
 value add_conf_level2 (n,output) =
  let outlist = List.rev output in
@@ -330,8 +328,8 @@ value prioritize revsols =
           (* To give ordered solution numbers for the solutions *)
           (*give_sol_numbers*) final_sol
           (* give_sol_numbers acc1 (* For checking the performance of the original Reader, uncomment this line and comment the previous 4 lines *) *)
-  |[l :: r] -> let (n,cl,sol,sentence) = add_conf_level1 l in (* if the confidence value is <word_probability * transition_probability> *)
-               (*let (n,cl,sol,sentence) = add_conf_level2 l in (* if the confidence value is <word1_probability * transition_probability * word2_probability> *)*)
+  |[l :: r] -> let (n,cl,sol,sentence) = add_conf_level1 l in (* if the confidence value is [<word_probability * transition_probability>] *)
+               (* [let (n,cl,sol,sentence) = add_conf_level2 l in (* if the confidence value is <word1_probability * transition_probability * word2_probability> *)] *)
                let acc = acc1 @ [(n,cl,sol,sentence)] in
                loop1 acc r 
   ]

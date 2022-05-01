@@ -100,7 +100,8 @@ and participle = (* participles *)
    Infinitives are similar to dative substantival forms, periphrastic perfect
    forms are associated with an auxiliary verb in the perfect.
    Absolutives split into root absolutives in -tvaa and absolutives in -ya 
-   that must be prefixed with a preverb. Absolutives in -aam (.namul) are in both. *)
+   that must be prefixed with a preverb. Absolutives in -am (.namul) are in both
+*)
 type modal = (conjugation * invar) 
 and invar =
   [ Infi    (* infinitive (tumun) *)

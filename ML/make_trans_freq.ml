@@ -16,8 +16,8 @@
    These are stored in txt files in Resources/DATA, and retrieved here to generate rem files for the same *)
    
 (* This list of files is converted to  here:
-   a. comp_trans_freq_file.txt -> sandhi within compounds and their frequencies
-   b. pada_trans_freq_file.txt -> sandhi between words and their frequencies
+   a. [comp_trans_freq_file.txt] -> sandhi within compounds and their frequencies
+   b. [pada_trans_freq_file.txt] -> sandhi between words and their frequencies
 *)
 
 (* Transition and their frequencies are in this format <string, string, integer> *)

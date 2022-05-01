@@ -6023,7 +6023,7 @@ value compute_extra_iic = iter enter_iic
 (* Generative stems are not inspected for feminine stems              *)
 (* attested as substantives, and thus incurring a feminine iic stem.  *)
 (* This concerns privative compounds and participles.                 *)
-(* Equivalent to declaring a supplementary entry as \icfc.            *)
+(* Equivalent to declaring a supplementary entry as icfc.             *)
 value iicf_extra = 
   [ "abalaa" (* a-bala with fem abalaa *)  
   ; "ukhaa" (*  ukhaasrat *)
@@ -6167,6 +6167,7 @@ value compute_extra_tasils () = do (* add non-generative tasils - ad-hoc *)
   ; enter1 "bhasad" (Indecl Tas (code "bhasattas")) (* tasil on consonant stem *)
 (*; enter1 "nas#2" (Indecl Tas (code "nastas")) - idem but lexicalized *)
   ; enter1 "yad.rcchaa" (Indecl Tas (code "yad.rcchaatas")) (* tasil on fstem *)
+  ; enter1 "vivak.saa" (Indecl Tas (code "vivak.saatas")) (* id *)
 (* NB bhii.smadro.napramukhatas BhG{1,25} treated in [enter_extra_ifcs] below *) 
   } 
 ; 

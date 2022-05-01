@@ -348,24 +348,24 @@ value print_site_map dyn lang = (* the various Web services of the site *)
   if dyn then do 
   { anchor_ref (sanskrit_page_url lang) (emph "Top") |> ps; " | " |> pl  
   ; anchor_ref (indexer_page_url lang) (emph "Index") |> ps; " | " |> pl 
-(*; anchor_ref (indexer_page_url lang ^ "#stemmer") (emph "Stemmer") |> ps; " | " |> pl *)
+(*[; anchor_ref (indexer_page_url lang ^ "#stemmer") (emph "Stemmer") |> ps; " | " |> pl] *)
   ; anchor_ref (grammar_page_url lang) (emph "Grammar") |> ps; " | " |> pl
   ; anchor_ref (sandhi_page_url lang) (emph "Sandhi") |> ps; " | " |> pl 
   ; anchor_ref (reader_page_url lang) (emph "Reader") |> ps; " | " |> pl
   ; anchor_ref (corpus_page_url lang) (emph "Corpus") |> (* ps; " | " |> *) pl
-(*; anchor_ref (faq_page_url lang) (emph "Help") |> ps; " | " |> pl 
-  ; anchor_ref (portal_page_url lang) (emph "Portal") |> pl *)
+(*[; anchor_ref (faq_page_url lang) (emph "Help") |> ps; " | " |> pl 
+  ; anchor_ref (portal_page_url lang) (emph "Portal") |> pl] *)
   }
  else do
   { anchor_ref (rel_sanskrit_page_url lang) (emph "Top") |> ps; " | " |> pl
   ; anchor_ref (dico_index_page lang) (emph "Index") |> ps; " | " |> pl
-(*; anchor_ref (dico_index_page lang ^ "#stemmer") (emph "Stemmer") |> ps; " | " |> pl *)
+(*[; anchor_ref (dico_index_page lang ^ "#stemmer") (emph "Stemmer") |> ps; " | " |> pl] *)
   ; anchor_ref (dico_grammar_page lang) (emph "Grammar") |> ps; " | " |> pl
   ; anchor_ref (dico_sandhi_page lang) (emph "Sandhi") |> ps; " | " |> pl 
   ; anchor_ref (dico_reader_page lang) (emph "Reader") |> ps; " | " |> pl
   ; anchor_ref (dico_corpus_page lang) (emph "Corpus") |> (* ps; " | " |> *) pl
-(*; anchor_ref (rel_faq_page_url lang) (emph "Help") |> ps; " | " |> pl 
-  ; anchor_ref (rel_portal_page_url lang) (emph "Portal") |> pl *)
+(*[; anchor_ref (rel_faq_page_url lang) (emph "Help") |> ps; " | " |> pl 
+  ; anchor_ref (rel_portal_page_url lang) (emph "Portal") |> pl] *)
   }
 ;
 value pad () = do (* ad-hoc vertical padding to make room for the bandeau *)
@@ -409,7 +409,7 @@ value print_bandeau_enpied_dyn dyn lang color = do
   }
 ;
 (* Simputer - legacy code - could be reused for smartphones ?
-value print_bandeau_entete color = 
+[value print_bandeau_entete color = 
   let margin_bottom height = "margin-bottom:" ^ points height in
   let interval height = do 
     { tr_begin |> ps
@@ -427,7 +427,7 @@ value print_bandeau_entete color =
   ; interval 10
   ; table_end |> pl
   }
-; *)
+;] *)
 value page_end_dyn dyn lang bandeau = do 
   { match target with
     [ Simputer -> ()

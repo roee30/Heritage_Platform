@@ -98,7 +98,7 @@ value voices_of = fun
 (*| "a~nj" also Atma afkte | "naath" "praz" "sp.rz#1" idem *)
 (*| Doubts: "bhuu1" could also be Atma bhavate *)
 (*| "z.rr" also Atma *)
-(*| "zru" also Atma in Vedic eg z.r.nu.sva & SP. r.r.nudhvam *)
+(*| "zru" also Atma in Vedic eg z.r.nu.sva and SP. z.r.nudhvam *)
 (*| "yu#2" could be Atma in Maitreya S. yuyudhvam *)
 (*| "krudh#1" krudhyate pm or ps or both ? *)
       -> Para (* active only *) 
@@ -292,7 +292,7 @@ value voices_of_pv upasarga gana = fun
 [ "gam" | "svar" | "vid#1" (* "zru" | "praz" *) -> 
              if upasarga = "sam" then Ubha else Para (* \Pan{1,3,29} *)
 (* "praz" used in Atma with aa- but also without pv in epics (MW) *)
-(* "zru" also Atma in Vedic eg z.r.nu.sva & SP. z.r.nudhvam *)
+(* "zru" also Atma in Vedic eg z.r.nu.sva and SP. z.r.nudhvam *)
 | ".r" | "car" ->   if upasarga = "sam" then Ubha else Para (* \Pan{1,3,54} *)
 | "viz#1" -> if upasarga = "ni"  then Atma else Para (* \Pan{1,3,17} *)
 | "k.s.nu" -> if upasarga = "sam"  then Atma else Para (* \Pan{1,3,65} *)

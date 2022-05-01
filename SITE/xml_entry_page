@@ -5,10 +5,10 @@
 
 <title>Sanskrit Linguistic Resources</title>
 <meta name="author" content="Gérard Huet">
-<meta property="dc:datecopyrighted" content="2021">
+<meta property="dc:datecopyrighted" content="2022">
 <meta property="dc:rightsholder" content="Gérard Huet">
 <meta name ="keywords" content="india,dictionary,indology,sanskrit,lexicography,linguistics,indo-european,dictionnaire,sanscrit,panini,indology,linguistics">
-<meta name ="date" content="2021-09-03">
+<meta name ="date" content="2022-04-08">
 <meta name="classification" content="computational linguistics, sanskrit, morphology, lexicography, indology">
 <meta name="description" content="This page is for downloading Sanskrit resources.">
 <link rel="shortcut icon" href="IMAGES/favicon.ico"/>
@@ -39,7 +39,6 @@ engines of the Sanskrit Heritage Platform, processing the Sanskrit lexicon
 underlying the Sanskrit Heritage Dictionary. The version used for this
 generation is available <a href="Heritage.pdf">here</a> as a PDF document.
 <p>
-
 
 <h3 class=b3>Databanks description</h3>
 
@@ -168,11 +167,11 @@ All suggestions for improvements will be gratefully considered.
 <tr><td>
 <a href="index.html"><strong>Top</strong></a> |
 <a href="DICO/index.en.html"><strong>Index</strong></a> |
-<!-- <a href="DICO/index.en.html#stemmer"><strong>Stemmer</strong></a> |-->
+<!-- <a href="DICO/index.en.html#stemmer"><strong>Stemmer</strong></a> | OBS -->
 <a href="DICO/grammar.en.html"><strong>Grammar</strong></a> |
 <a href="DICO/sandhi.en.html"><strong>Sandhi</strong></a> |
 <a href="DICO/reader.en.html"><strong>Reader</strong></a> |
-<a href="DICO/corpus.en.html"><strong>Corpus</strong></a> <!-- |
+<a href="DICO/corpus.en.html"><strong>Corpus</strong></a> <!-- | OBS
 <a href="faq.en.html"><strong>Help</strong></a> |
 <a href="portal.en.html"><strong>Portal</strong></a> -->
 </td></tr>

@@ -122,7 +122,7 @@ value cached = (* potentially cached lexicon acquisitions *)
 (* initial: phases *)
 value initial =
    (* All phases but Ifc, Abso, Auxi, Auxiinv, Auxik, Auxiick, Lopa, Lopak. *)
-   [ Inde; Iicv; Iicc; Nouv; Nouc; Pron; (* A; An; !*) Root; Kriv; Kric; Iikv; Iikc
+   [ Inde; Iicv; Iicc; Nouv; Nouc; Pron; (* A; An; *) Root; Kriv; Kric; Iikv; Iikc
    ; Peri; Pv; Pvkv; Pvkc; Iiv; Iivv; Iivc; Iiy; Inv; Ai; Ani 
    ; Absv; Absc; Inftu; Vocv; Vocc; Vokv; Vokc ] @ cached
 ;
@@ -131,13 +131,14 @@ value dispatch w = fun (* w is the current input word *)
   [ Nouv | Nouc | Pron | Inde | Abso | Auxi | Auxiinv | Auxik | Kama | Ifcv
   | Ifcc | Indifc | Kriv | Kric | Absv | Absc | Avy | Lopak | Root | Lopa 
   | Cache -> initial
-  | A -> if phantomatic w then [] else
+(* privative prefixes are no more generative 
+ [| A -> if phantomatic w then [] else
          [ Iicc; Nouc; Iikc; Kric; Pvkc; Iivc; Vocc; Vokc ]
   | An -> if phantomatic w then [] else
           [ Iicv; Nouv; Iikv; Kriv; Pvkv; Iivv; Vocv; Vokv
-          ; A (* eg anak.sara anavadya *) ; An (* attested ? *) ] 
-  | Ai -> [ Absc; Pvc ]
-  | Ani -> [ Absv; Pvv ]
+          ; A (* eg anak.sara anavadya *) ; An (* attested ? *) ]] *)
+  | Ai -> [ Absc; Pvc ] (* negations of absolutives *)
+  | Ani -> [ Absv; Pvv ](* id *)
     (* This assumes that privative prefixes cannot prefix Ifc forms 
        justified by \Pan{2,2,6} a-x only if x is a subanta. *)
   | Iicv | Iicc | Iikv | Iikc | Iiif | Auxiick | Cachei -> (* Compounding *)
@@ -326,9 +327,14 @@ value validate_pv_k pv krit_form (delta,_) = (* see [Morpho.print_inv_morpho] *)
   let (homo,bare_stem) = homo_undo krit_stem in 
   let krit_infos = assoc_word bare_stem unique_kridantas in 
   let ((conj,krit),root) = look_up_homo homo krit_infos in
-  try let gana_pada = extract_gana_pada_k krit in  
-      if conj=Primary then attested_verb gana_pada pv root else attested pv root
-  with [ Unvoiced -> attested pv root ]
+  match krit with 
+  [ Action_noun | Agent_noun -> False (* reserved for cvi on auxiliaries *)
+  | _ -> (* participles *)
+     try let gana_pada = extract_gana_pada_k krit in  
+         if conj=Primary then attested_verb gana_pada pv root 
+                         else attested pv root
+     with [ Unvoiced -> attested pv root ]
+  ]
 ;
 value autonomous_form root_form = 
   match Deco.assoc root_form morpho.roots with
@@ -399,13 +405,18 @@ value iic_phase = fun
   | _ -> False ]
 ;
 value apply_sandhi rleft right = fun
-    [ Euphony (w,ru,v) -> 
-       let rl = chop rleft ru
-       and r =  chop right v in List2.unstack rl (w @ r)
-    | Id -> List2.unstack rleft right
-    ]
+  [ Euphony (w,ru,v) -> 
+      let rl = chop rleft ru
+      and r =  chop right v in List2.unstack rl (w @ r)
+  | Id -> List2.unstack rleft right
+  ]
 ;
-
+(* for restricting periphrastic perfect to perfect auxiliary forms *)
+value perfect_tag = fun 
+   [ Verb_form (Primary,Conjug Perfect _) _ _ -> True
+   | _ -> False 
+   ]
+;
 (*i debug for validate -- vomit in interface 
 [value printout seg = 
   let print_seg (ph,w,_) = do 
@@ -577,7 +588,7 @@ value validate out = match out with
       and peri_form = Word.mirror rev_peri_form in
       match Deco.assoc peri_form morpho.peris with
       [ [] -> failwith ("Unknown peri_form: " ^ Canon.decode peri_form)
-      | tags -> let valid (delta,morphs) = 
+      | tags -> let valid (delta,_) = 
                    let root = Word.patch delta peri_form in
                    attested pv_str root in 
                 if List.exists valid tags then
@@ -586,9 +597,19 @@ value validate out = match out with
                    [ (Comp (Pv,Peri) pv peri_form,cpd_form,s) :: r ]
                 else []
       ]
-(*i | [ (Auxi, rev_auxi_form,s) :: [ (Peri,rev_peri_form,s') :: r ] ] ->
-      let auxi_form = Word.mirror tag rev_auxi_form in
-      let auxi_tags = Deco.assoc auxi_form morpho.auxis in 
+  | [ (Auxi, rev_auxi_form,s) :: [ (Peri,rev_peri_form,s') :: r ] ] ->
+      let auxi_form = Word.mirror rev_auxi_form in
+      match Deco.assoc auxi_form morpho.auxis with
+      [ [] -> failwith ("Unknown auxi_form: " ^ Canon.decode auxi_form)
+      | tags -> let valid (_,morphs) = List.exists perfect_tag morphs in  
+                if List.exists valid tags then out else []
+      ] 
+(*
+      let perfect_tag = fun [ (_, Verb_form (Primary,Conjug Perfect _) _ _) -> True
+                            | _ -> False ] in
+      let perfect_multitag tags = List.exists perfect_tag tags in
+      if List.exists perfect_multitag auxi_tags then out else [] *)
+(*i OBS
       let perfect_tags = filter_perfect auxi_tags in match perfect_tags with
       [ [] -> []
       | tags -> let form = apply_sandhi rev_peri_form auxi_form s' in 

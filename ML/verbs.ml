@@ -6122,6 +6122,9 @@ value compute_auxi_kridantas () =
       [ [ 1 :: rst ] -> (rst,Word.mirror st) 
       | _ -> failwith "auxi_kridantas" 
       ] in do (* A few auxiliary action nouns are generative for cvi compounds *)
+  (* Problem: this induces ambiguities with lexicalized kara.na etc. which are 
+     not treated as participles and should be placed in a different phase, not
+     atteinable from preverbs, inducing a patch in [Dispatcher.validate_pv_k] *)
   { let (rst,st) = stems "kara.na" in 
     build_part_a_n (Primary,Action_noun) rst st "k.r#1" 
   ; let (rst,st) = stems "kaara" in 

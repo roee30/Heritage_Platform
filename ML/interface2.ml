@@ -113,6 +113,7 @@ value print_morpho phase word =
 
 (* Parsing mandatory checkpoints *)
 open Checkpoints; (* [string_points] *) 
+open Lexmap;
 
 value rpc = Paths.remote_server_host 
 and remote = ref False (* local invocation of cgi by default 
@@ -556,6 +557,21 @@ value save_button query nb_sols =
   cgi_end ^
   center_end
 ;
+value calculate_sum (word, flm) type_tot val_tot  =
+  match (List.hd flm) with 
+  [ (delta, freqs) -> 
+      let new_type_tot = type_tot + 1 
+      and new_val_tot = val_tot + (List.hd freqs) in 
+      (new_type_tot, new_val_tot)
+  ]
+;
+value rec process_deco type_tot val_tot = fun
+  [ [ hd :: tl ] -> 
+          let (new_type_tot, new_val_tot) = calculate_sum hd type_tot val_tot in 
+          process_deco new_type_tot new_val_tot tl 
+  | [] -> (float_of_int type_tot, float_of_int val_tot)
+  ]
+;
 value quit_button corpmode corpdir sentno =
   let submit_button_label = Web_corpus.(match corpmode with
                                         [ Annotator -> "Abort"
@@ -600,6 +616,33 @@ value graph_engine () = do
     and () = if st="f" then Lexer_control.star.val:=False 
              else () (* word vs sentence stemmer *)
     and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
+    and () = word_freq_ref.val := load_word_freq words_freq_file
+    and () = pada_freq_ref.val := load_word_freq pada_words_freq_file
+    and () = comp_freq_ref.val := load_word_freq comp_words_freq_file
+    and () = pada_transitions_list.val := 
+               load_transition_list Data.pada_trans_freq_file 
+    and () = comp_transitions_list.val := 
+               load_transition_list Data.comp_trans_freq_file 
+    and () = total_pada_transitions.val := 
+               calculate_transition_freq pada_transitions_list.val
+    and () = total_comp_transitions.val := 
+               calculate_transition_freq comp_transitions_list.val
+    and () = total_pada_transitions_types.val := 
+               float_of_int (List.length pada_transitions_list.val)
+    and () = total_comp_transitions_types.val := 
+               float_of_int (List.length comp_transitions_list.val)  
+    and (words_types, words) = 
+            process_deco 0 0 (Deco.contents word_freq_ref.val)  
+    and (padas_types, padas) = 
+            process_deco 0 0 (Deco.contents pada_freq_ref.val)  
+    and (comps_types, comps) = 
+            process_deco 0 0 (Deco.contents comp_freq_ref.val) in 
+    let () = total_words.val := words
+    and () = total_words_types.val := words_types
+    and () = total_padas.val := padas
+    and () = total_padas_types.val := padas_types
+    and () = total_comps.val := comps
+    and () = total_comps_types.val := comps_types 
     and url_enc_corpus_permission = (* Corpus mode *)
         get Params.corpus_permission env "true" in 
     let corpus_permission = 

@@ -14,10 +14,12 @@
    
 (* The frequency tables are generated using a parallel corpus obtained by 
    mapping DCS Sentences and the analysis of the Heritage Reader. 
-   These are stored in txt files in Resources/DATA, and retrieved here to 
-   generate rem files for the same *)
+   These are stored in txt files in Resources/DATA in WX Notation, 
+   and retrieved here to generate rem files for the same *)
    
-(* This list of files is converted to  here:
+(* WX notation in txt files -> (list int) in decorated trie *)
+   
+(* This list of files is converted to decorated tries here:
    a. [comp_freq.txt] -> list of compound components (ii-s)
                          and their frequencies
    b. [pada_freq.txt] -> list of words (which are not part of any compound) 
@@ -42,8 +44,6 @@ value add_word_freq w d f =
   word_freq.val:= Lexmap.addl word_freq.val w (d w, f)
 ;        
 value diff_str str w = Word.diff w (Encode.code_string_WX str)
-;
-value split2 str fmt =  Scanf.sscanf str fmt (fun x y -> (x,y))
 ;
 value deco_of_word_freq m = 
   match m with

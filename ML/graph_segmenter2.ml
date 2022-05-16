@@ -163,10 +163,18 @@ and freq = int
 and freqs = list freq 
 and wfreq = Lexmap.lexmap freqs
 ;
-value word_freq = ref (Deco.empty : wfreq)
+value word_freq_ref = ref (Deco.empty : wfreq)
+;
+value pada_freq_ref = ref (Deco.empty : wfreq)
+;
+value comp_freq_ref = ref (Deco.empty : wfreq)
 ;
 value load_word_freq file = 
   (Gen.gobble file : wfreq)
+;
+value load_word_list file = 
+  try (Gen.gobble file : word_attrbs)
+  with [ _ ->  [] ]
 ;
 value load_transition_list file = 
   try (Gen.gobble file : trans_attrbs)
@@ -184,18 +192,31 @@ value pada_words_freq_file = Data.pada_freq_file
 (* All the compound components and their frequencies *)
 value comp_words_freq_file = Data.comp_freq_file 
 ;
+value pada_freq_list = ref ([] : word_attrbs)
+;
+value comp_freq_list = ref ([] : word_attrbs)
+;
+value word_freq_list = ref ([] : word_attrbs)
+;
 (* List of tuples <sandhi between words, frequency> *)
-value pada_transitions_list = load_transition_list Data.pada_trans_freq_file 
+value pada_transitions_list = ref ([] : trans_attrbs)
 ;
 (* List of tuples <sandhi between compound components, frequency> *)
-value comp_transitions_list = load_transition_list Data.comp_trans_freq_file 
+value comp_transitions_list = ref ([] : trans_attrbs)
 ;
 (* To calculate the total number of transition entries in the parallel corpus *)
 value calculate_transition_freq triplets_list = 
      loop 0 triplets_list
      where rec loop freq_sum = fun
      [ [] -> (float_of_int freq_sum)
-     | [(f, s, v)::tl] -> loop (freq_sum + v) tl
+     | [ (f, s, v) :: tl ] -> loop (freq_sum + v) tl
+     ]
+;
+value calculate_word_freq couplets_list = 
+     loop 0 0 couplets_list
+     where rec loop freq_sum type_no = fun
+     [ [] -> (float_of_int freq_sum, float_of_int type_no)
+     | [ (f, v) :: tl ] -> loop (freq_sum + v) (type_no + 1) tl
      ]
 ;
 (*To find the third value of a triplet given the first two elements - 
@@ -218,42 +239,39 @@ value int_list_to_string separator int_list =
   "[" ^ (get_strings "" int_list) ^ "]"
 ;
 (* Get freq from weighted lexmap of given word *)
-value get_freq word file_name = 
-  let word_freq = load_word_freq file_name in
+value get_freq word freq_ref = 
   let updated_word = (Morpho_html.visargify word) in
   let freq = 
-  match Deco.assoc updated_word word_freq with
-  [ [] -> 0.0
-  | e -> let (delta, freq_lst) = (List.hd e) in
-         let freq = (List.hd freq_lst) in
-         float_of_int freq
-  ] in
+    match Deco.assoc updated_word freq_ref.val with
+    [ [] -> 0.0
+    | e -> let (delta, freq_lst) = (List.hd e) in
+           let freq = (List.hd freq_lst) in
+           float_of_int freq
+    ] in
   freq
 ;
 
 (* NOTE: The following needs to be calculated from the file 
    while generating the .rem files rather than manually entering the values.*)
-value total_words = 403233.0
+value total_words = ref 0.0 (* 403233.0 *)
 ;
-value total_padas = 284930.0
+value total_padas = ref 0.0 (* 284930.0 *)
 ;
-value total_comps = 118303.0
+value total_comps = ref 0.0 (* 118303.0 *)
 ;
-value total_words_types = 37015.0
+value total_words_types = ref 0.0 (* 37015.0 *)
 ;
-value total_padas_types = 27704.0
+value total_padas_types = ref 0.0 (* 27704.0 *)
 ;
-value total_comps_types = 16130.0
+value total_comps_types = ref 0.0 (* 16130.0 *)
 ;
-value total_pada_transitions = (calculate_transition_freq pada_transitions_list) 
+value total_pada_transitions = ref 0.0  
 ; (* 280622.0 *)
-value total_comp_transitions = (calculate_transition_freq comp_transitions_list) 
+value total_comp_transitions = ref 0.0  
 ; (* 78907.0 *)
-value total_pada_transitions_types = 
-  float_of_int (List.length pada_transitions_list)
+value total_pada_transitions_types = ref 0.0 
 ;
-value total_comp_transitions_types = 
-  float_of_int (List.length comp_transitions_list)
+value total_comp_transitions_types = ref 0.0 
 ;
 (* To return the individual elements of the transition *)
 value match_transition transition = 
@@ -267,22 +285,22 @@ value get_word rword =
   Canon.decode_WX (Word.mirror rword)
 ;
 (* To calculate probability for the word *)
-value get_prob rword freq_file tot_ref tot_types = 
-  let freq = get_freq rword freq_file in
+value get_prob rword freq_ref tot_ref tot_types = 
+  let freq = get_freq rword freq_ref in
   if freq = 0.0 then (1.0 /. (tot_ref +. tot_types))
   else (freq /. tot_ref)
 ;
 (* Word's probability when using the data as the decorated trie *)
 value get_pada_prob rword = 
-  get_prob rword pada_words_freq_file total_padas total_padas_types
+  get_prob rword pada_freq_ref total_padas.val total_padas_types.val
 ;
 (* Compound component's probability when using the data as the decorated trie *)
 value get_comp_prob rword = 
-  get_prob rword comp_words_freq_file total_comps total_comps_types
+  get_prob rword comp_freq_ref total_comps.val total_comps_types.val
 ;
 (* Used when word and compound components are treated alike *)
 value get_word_prob rword = 
-  get_prob rword words_freq_file total_words total_words_types
+  get_prob rword word_freq_ref total_words.val total_words_types.val
 ;
 (* Transition probability from the list of <transition, frequency> couplets *)
 value get_transition_prob transition transition_list tot_transitions 
@@ -298,13 +316,13 @@ value get_transition_prob transition transition_list tot_transitions
 ;
 (* To get the probability of transition between compound components *)
 value get_comp_transition_prob transition = 
-  get_transition_prob transition comp_transitions_list total_comp_transitions
-                      total_comp_transitions_types
+  get_transition_prob transition comp_transitions_list.val total_comp_transitions.val
+                      total_comp_transitions_types.val
 ;
 (* To get the probability of transition between words *)
 value get_pada_transition_prob transition = 
-  get_transition_prob transition pada_transitions_list total_pada_transitions 
-                      total_pada_transitions_types
+  get_transition_prob transition pada_transitions_list.val total_pada_transitions.val 
+                      total_pada_transitions_types.val
 ;
 (* To check the phase of the current segment in consideration, 
    for getting the probabilities according to the segment's phase

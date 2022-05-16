@@ -12,13 +12,18 @@
 (* Prepares the decorated trie structures of the word-freq tables
    from the text files in Resources/DATA  *)
    
-(* The frequency tables are generated using a parallel corpus obtained by mapping DCS Sentences and the analysis of the Heritage Reader. 
-   These are stored in txt files in Resources/DATA, and retrieved here to generate rem files for the same *)
+(* The frequency tables are generated using a parallel corpus obtained by 
+   mapping DCS Sentences and the analysis of the Heritage Reader. 
+   These are stored in txt files in Resources/DATA, and retrieved here to 
+   generate rem files for the same *)
    
 (* This list of files is converted to  here:
-   a. [comp_freq.txt] -> list of compound components (ii-s) and their frequencies
-   b. [pada_freq.txt] -> list of words (which are not part of any compound) and their frequencies
-   c. [word_freq.txt] -> list of both the comp and pada together and their frequencies
+   a. [comp_freq.txt] -> list of compound components (ii-s)
+                         and their frequencies
+   b. [pada_freq.txt] -> list of words (which are not part of any compound) 
+                         and their frequencies
+   c. [word_freq.txt] -> list of both the comp and pada together 
+                         and their frequencies
 *)
 
 open Deco; (* [ empty ] *)
@@ -48,7 +53,8 @@ value deco_of_word_freq m =
     add_word_freq word delta freq
   ]
 ;
-(* To make the decorated trie structure which stores all the words and their frequencies, minimize the trie *)
+(* To make the decorated trie structure which stores all the words and their 
+   frequencies, minimize the trie *)
 value rec process_file chin =
   try let line = input_line chin in
   let (a,b) = Scanf.sscanf line "%s@\t%d" (fun x y -> (x,y)) in 

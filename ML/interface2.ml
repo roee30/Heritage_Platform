@@ -72,9 +72,9 @@ module Viccheda = Segment2 Phases Machine Lexer_control
 open Viccheda (* [segment_iter visual_width] etc. *)
 ;
 
-(* Graph interface *)
-(*(* Mode parameter of the interface. Controled by service Interface for respectively
-   Summary or Best solutions *)
+(* Graph interface2 *)
+(*(* Mode parameter of the interface. Controled by service Interface2 
+     for respectively Summary or Best solutions *)
 (* Note that Interface is not a Reader/Parser mode. *)
 type mode = [ Summary | Best_Summary ]
 ;*)
@@ -144,7 +144,7 @@ value call_back text cpts (k,seg) conflict =
           if unanalysed seg then "" else anchor Red_ (invoke cgi_reject) x_sign
 ;
 value call_reader text cpts mode = (* mode = "o", "p", "g" or "t" *)
-  let cgi = reader_cgi ^ "?" ^ text ^ ";mode=" ^ mode ^ (* [";test=no" ^] (* Sriram: Check whether the additional argument 'test' is required or not *)*)
+  let cgi = reader_cgi ^ "?" ^ text ^ ";mode=" ^ mode ^ 
             ";cpts=" ^ string_points cpts in 
   anchor Green_ (invoke cgi) check_sign
 ;
@@ -390,7 +390,8 @@ value get_sandhi_word font (phase,rword,transition) =
     if font = "roma" then Canon.uniromcode visargified_word
     else if font  = "wx" then Canon.decode_WX visargified_word
     else if font  = "deva" then Canon.unidevcode visargified_word
-    else Canon.decode_WX visargified_word in (* Temporarily returning in WX notation for all other cases *)
+    (* Temporarily returning in WX notation for all other cases *)
+    else Canon.decode_WX visargified_word in 
   if (ii_component phase) then (decode_word ^ "-")
   else (decode_word ^ " ")
 ;
@@ -399,7 +400,8 @@ value get_sentence font output =
   loop "" output
   where rec loop acc = fun
   [ [] -> acc
-  | [(phase, rword, transition) :: tl] -> loop ((get_sandhi_word font (phase, rword, transition)) ^ acc) tl
+  | [(phase, rword, transition) :: tl] -> 
+      loop ((get_sandhi_word font (phase, rword, transition)) ^ acc) tl
   ]
 ;
 (* Display like reader with phase colours and link to SCL *)
@@ -455,7 +457,8 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
   let deva_chunks = List.map Canon.unidevcode raw_chunks in (* NEW *)
   let deva_input = String.concat " " deva_chunks 
   and cpts = sort_check checkpoints in 
-  let (full,count,solution_list) = best_mode_operations cpts chunks in do (* full iff all chunks segment *)
+  let (full,count,solution_list) = 
+      best_mode_operations cpts chunks in do (* full iff all chunks segment *)
   { make_visual cur_chunk.offset
   ; find_conflict 0
   ; html_break |> pl
@@ -481,8 +484,8 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
             }
          else do
        { td_wrap (call_reader text checkpoints "p" ^ "Filtered Solutions") |> ps
-       ; let info = string_of_int count ^ if full then "" else " Partial" in 
-         td_wrap (call_reader text checkpoints "l" ^ "All " ^ info ^ " Solutions") |> ps
+       ; (*let info = string_of_int count ^ if full then "" else " Partial" in *)
+         td_wrap (call_reader text checkpoints "l" ^ "List of Solutions") |> ps
        ; call_scl_parser ()
        } 
   ; tr_end |> pl   (* tr end *)
@@ -662,7 +665,8 @@ value graph_engine () = do
                                 url_encoded_topic abs 
                                 url_enc_corpus_permission corpus_dir sentence_no
        and new_input = decode_url updated_input in
-       check_sentence translit uns new_text revised_check new_input undo_enabled font
+       check_sentence translit uns new_text revised_check new_input undo_enabled 
+                      font
      ]
      (* Rest of the code concerns Corpus mode *)
      (* automatically refreshing the page only if guess parameter *)

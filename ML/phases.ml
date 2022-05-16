@@ -187,12 +187,14 @@ and is_cache = fun [ Cache | Cachei -> True | _ -> False ]
 ;
 (* To check all possible non-final components of compounds *)
 value rec ii_component = fun 
-    [ Comp (_,ph) _ _ -> ii_component ph
-    | Iic | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif | Auxiick | Ai | Ani | Iiy | Iiv | Iivv | Iivc -> True
-    | _ -> False
-    ]
+  [ Comp (_,ph) _ _ -> ii_component ph
+  | Iic | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif | Auxiick | Ai | Ani 
+        | Iiy | Iiv | Iivv | Iivc -> True
+  | _ -> False
+  ]
 ;
-(* To check all possible final components of compounds. Here ifc is recognized but all other phases which could be final components are not recognized *)
+(* To check all possible final components of compounds. Here ifc is recognized 
+   but all other phases which could be final components are not recognized *)
 value rec ifc_component = fun 
     [ Comp (_,ph) _ _ -> ifc_component ph
     | Ifc -> True
@@ -200,10 +202,12 @@ value rec ifc_component = fun
     ]
 ;
 (* To check if a word is a part of samasta pada according to its phase *)
-value compound_component phase = if ((ii_component phase) || (ifc_component phase)) then True else False
+value compound_component phase = 
+  if ((ii_component phase) || (ifc_component phase)) then True 
+  else False
 ;
 
-(* To provide the phase of a word if it is available, if not provide empty string *)
+(* To provide the phase of a word if it is available *)
 value get_string_of_phase phase = 
   match phase with
   [ Comp (_,ph) _ _ -> string_of_phase ph

@@ -107,7 +107,8 @@ automata.cmx make_automaton.cmx make_preverb_automaton.cmx \
 make_transducers.cmx -o make_transducers
 
 make_word_freq: make_word_freq.cmx
-	$(LINK) $(CORENATIVES) deco.cmx zen_lexer.cmx lexmap.cmx make_word_freq.cmx -o make_word_freq
+	$(LINK) $(CORENATIVES) deco.cmx zen_lexer.cmx lexmap.cmx \
+make_word_freq.cmx -o make_word_freq
 	
 make_trans_freq: make_trans_freq.cmx
 	$(LINK) $(CORENATIVES) make_trans_freq.cmx -o make_trans_freq
@@ -291,9 +292,9 @@ corpus_manager: corpus_manager_cgi.cmx
 		order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx	\
 		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
 		share.cmx minimap.cmx mini.cmx $(LEGACY) \
-		graph_segmenter.cmx graph_segmenter2.cmx checkpoints.cmx automaton.cmx	\
-		params.cmx save_corpus_params.cmx dir.cmx corpus.cmx	\
-		web_corpus.cmx multilingual.cmx				\
+		graph_segmenter.cmx graph_segmenter2.cmx checkpoints.cmx	\
+		automaton.cmx params.cmx save_corpus_params.cmx dir.cmx	\
+		corpus.cmx web_corpus.cmx multilingual.cmx				\
 		mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
 
 save_corpus: save_corpus_cgi.cmx
@@ -323,9 +324,9 @@ mkdir_corpus: mkdir_corpus_cgi.cmx
 		order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx	\
 		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
 		share.cmx minimap.cmx mini.cmx $(LEGACY) \
-		graph_segmenter.cmx graph_segmenter2.cmx checkpoints.cmx automaton.cmx	\
-		params.cmx save_corpus_params.cmx dir.cmx corpus.cmx	\
-		web_corpus.cmx multilingual.cmx				\
+		graph_segmenter.cmx graph_segmenter2.cmx checkpoints.cmx	\
+		automaton.cmx params.cmx save_corpus_params.cmx dir.cmx	\
+		corpus.cmx web_corpus.cmx multilingual.cmx			\
 		mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
 
 mk_corpus: mk_corpus.cmx
@@ -339,9 +340,9 @@ mk_corpus: mk_corpus.cmx
 		order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx	\
 		cgi.cmx load_morphs.cmx int_sandhi.cmx nouns.cmx	\
 		share.cmx minimap.cmx mini.cmx $(LEGACY) \
-		graph_segmenter.cmx graph_segmenter2.cmx checkpoints.cmx automaton.cmx	\
-		params.cmx save_corpus_params.cmx dir.cmx corpus.cmx	\
-		web_corpus.cmx  multilingual.cmx			\
+		graph_segmenter.cmx graph_segmenter2.cmx checkpoints.cmx	\
+		automaton.cmx params.cmx save_corpus_params.cmx dir.cmx	\
+		corpus.cmx web_corpus.cmx  multilingual.cmx			\
 		mkdir_corpus_params.cmx $< -o $@
 
 css: css.cmx

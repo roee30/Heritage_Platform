@@ -114,7 +114,10 @@ value dove_tail filter_mode init =
   let init_stack = trim init (* erasing constraints *) in
   dtrec 1 (0,[],[]) init_stack (* exits raising exception Solutions *)
   where rec dtrec n kept stack = (* invariant: |stack|=|init|=number of chunks *)
-  (* The following condition is commented so that the solution, if obtained after the truncation limit, is not avoided. Also, since we are pruning out certain solutions which are repetitive with respect to the words sequence, this allowance will not affect very much. *)
+  (* The following condition is commented so that 
+     the solution, if obtained after the truncation limit, is not avoided. 
+     Also, since we are pruning out certain solutions which are repetitive with 
+     respect to the words sequence, this allowance will not affect very much. *)
   (*if n > Web.truncation then emit None kept 
   else*) let full_output = List.fold_right conc stack []
                          where conc (o,_) oo = o @ oo in  

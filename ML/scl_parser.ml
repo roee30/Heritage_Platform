@@ -38,13 +38,15 @@ value print_scl_solution s =
 (* Invocation of UoH's CSL parser for dependency graph display *)
 value print_scl1 scl_font (solution : list (Phases.phase * Word.word)) =
   let svg_interface_url = scl_cgi ^ "SHMT/" in do
-  { ps ("<script type=\"text/javascript\" src=\"" ^ scl_url ^ "js_files/dragtable.js\"></script>")
-  ; ps ("<form name=\"word-order\" method=\"POST\" action = \""
+  { ps ("<script type=\"text/javascript\" src=\"" 
+       ^ scl_url ^ "js_files/dragtable.js\"></script>")
+  ; ps ("<form name=\"word-order\" method=\"POST\" action = \"" 
        ^ svg_interface_url ^ "prog/Word_order/call_heritage2anu.cgi\">\n")
   ; ps ("<table class=\"draggable\">")
   ; ps tr_begin
   ; print_scl_solution solution
-  ; ps ("<td><input type=\"hidden\" name=\"DISPLAY\" value=\"" ^ scl_font ^"\"/></td>")
+  ; ps ("<td><input type=\"hidden\" name=\"DISPLAY\" value=\"" 
+       ^ scl_font ^"\"/></td>")
   ; ps tr_end
   ; ps table_end 
   ; (Encode.skt_to_deva "sa.msaadhanii" ^ " : ") |> pl
@@ -61,10 +63,12 @@ value print_scl scl_font sols = match sols with
 value invoke_scl_parser text sol_num font  =
   let sol_num_string = (string_of_int sol_num) in
   let svg_interface_url = "/cgi-bin/scl/SHMT/" in do
-  { ps ("<form name=\"parse " ^ sol_num_string ^ "\" form style='display: inline;' method=\"GET\" action = \""
+  { ps ("<form name=\"parse " ^ sol_num_string 
+       ^ "\" form style='display: inline;' method=\"GET\" action = \""
        ^ svg_interface_url ^ "test_xml.cgi\">\n")
   ; ps ("<input type=\"hidden\" name=\"encoding\" value=\"WX\"/>")
-  ; ps ("<input type=\"hidden\" name=\"text\" value=\"" ^ (String.trim text) ^ "\"/>")
+  ; ps ("<input type=\"hidden\" name=\"text\" value=\"" 
+       ^ (String.trim text) ^ "\"/>")
   ; ps ("<input type=\"hidden\" name=\"splitter\" value=\"None\"/>")
   ; ps ("<input type=\"hidden\" name=\"out_encoding\" value=\"" ^ font ^ "\"/>")
   ; ps ("<input type=\"hidden\" name=\"parse\" value=\"Full\"/>")

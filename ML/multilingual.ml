@@ -240,6 +240,7 @@ value participle_name part = fun
       | Pfutm   -> "Future Middle Participle"
       | Pfutp _ -> "Future Passive Participle"
       | Action_noun -> "Action Noun"
+      | Agent_noun  -> "Agent Noun"
       ]    in western_part
   ]
 ;

@@ -57,12 +57,11 @@ value adjust c w = match Word.mirror w with
                         else w 
         | 1 (* a *) -> if c=1 then w else
                        if Phonetics.vowel c then raise Hiatus else w
-        | 2 (* aa *) -> if Phonetics.vowel c then raise Hiatus else 
-                        if Phonetics.elides_visarg_aa c then raise Hiatus else 
-                        w (* Hiatus except c surd unaspirate ? *) 
-                        (* NB "punaaramate" but not "punaa ramate" *)
+        | 2 (* aa *) -> if Phonetics.vowel c || Phonetics.elides_visarg_aa c 
+                           then raise Hiatus 
+                        else w (* NB "punaaramate" but not "punaa ramate" *)
         | 4 (* ii *) (* possible visarga vanishes - but "n.rpatiiraajati" *) 
-        | 6 (* uu *) -> (* if c=43 (* r *) then raise Hiatus else *) w
+        | 6 (* uu *) -> w
         (* next 4 rules attempt to revert [last] to 'd' in view of [c] *)
         | 34 (* d *) -> if c=35 (* dh *) then raise Glue else 
                         if Phonetics.is_voiced c 

@@ -5,7 +5,7 @@
 #                         Gérard Huet & Pawan Goyal                        #
 #                                                                          #
 ############################################################################
-#TEMPLATE Makefile of SKT Platform      #DATE      Copyright Gérard Huet 2021 #
+#TEMPLATE Makefile of SKT Platform      #DATE      Copyright Gérard Huet 2022 #
 ############################################################################
 #WARN
 
@@ -741,6 +741,6 @@ course:
 	cp -p $(SKTRESOURCES)COURSE/Lessons/style.css $(SERVERPUBLICDIR)COURSE/Lessons/style.css
 
 
-SAVED_VERSION=338a
+SAVED_VERSION=339a
 save: # saving sources of Heritage_Platform (after make clean in ML)
 	tar cvf ../ARCHIVE/Heritage_Platform_$(SAVED_VERSION).tar ML SITE JAVASCRIPT SETUP configure INSTALLATION DOC IMAGES README 

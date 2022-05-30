@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2022 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Dispatcher: Sanskrit Engine in 53 phases automaton (plus 2 fake ones) *)
@@ -604,17 +604,6 @@ value validate out = match out with
       | tags -> let valid (_,morphs) = List.exists perfect_tag morphs in  
                 if List.exists valid tags then out else []
       ] 
-(*
-      let perfect_tag = fun [ (_, Verb_form (Primary,Conjug Perfect _) _ _) -> True
-                            | _ -> False ] in
-      let perfect_multitag tags = List.exists perfect_tag tags in
-      if List.exists perfect_multitag auxi_tags then out else [] *)
-(*i OBS
-      let perfect_tags = filter_perfect auxi_tags in match perfect_tags with
-      [ [] -> []
-      | tags -> let form = apply_sandhi rev_peri_form auxi_form s' in 
-                [ (Peri_perf (rev_peri_form,tags),Word.mirror form,s) :: r ]
-      ] - TODO with new Peri_perf compounder - PB - accommoder les préverbes i*)
   | [ (Abso,rev_abso_form,s) :: [ (ph,prev,sv) :: r ] ] 
            when preverb_phase ph ->
       (* Takes care of absolutives in -ya *)

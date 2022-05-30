@@ -2623,6 +2623,7 @@ value intercalate_tvaa root rstem =
   | "av" -> [] (* WR no absol *)
   | "ka.s" | "dh.r.s" | "am" | "tvar" | ".r.s" | "v.rj" -> set 
   | "nud" -> anit
+  | "k.lp" -> vet (* Bucknell *)
   | _ -> if uu_it root || u_it root then vet
          else intercalate_pp root rstem 
   ]
@@ -4905,6 +4906,7 @@ value record_abs_ya root rstem w = do
                     }
     | "kram" -> record_abso_tvaa (code "krantvaa") root (* \Pan{6,4,18} *)
     | "bhram" -> record_abso_ya (code "bhraamya") root (* WR *)
+    | "k.lp" -> record_abso_ya (code "kalpya") root (* parikalpya KuS{1,2} *)
     | "zaas" -> (* passive stem zi.s *)
         let w = revcode "zi.s" in do (* as if ipad=0 *)
         { record_part_ppp (rfix w "ta") root 

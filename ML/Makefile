@@ -5,9 +5,9 @@
 #              Gérard Huet & Pawan Goyal & Sriram Krishnan                 #
 #                                                                          #
 ############################################################################
-# Makefile of Sanskrit Heritage Software  28-05-2020  Copyright INRIA 2021 #
+# Makefile of Sanskrit Heritage Software  15-06-2022  Copyright INRIA 2022 #
 ############################################################################
-# Prerequisites: Ocaml 4.07 and Camlp4 preprocessor
+# Prerequisites: Ocaml >= 4.07 and Camlp4 preprocessor
 
 # For change of make in all recursive Makefiles
 MAKE=make
@@ -73,10 +73,10 @@ TREE = parse_tree.ml parse_apte.ml stemmer.ml tag_tree.ml tag_apte.ml
 DEBUG=debug.ml 
 
 ENGINE=$(CORE) $(GRAM) $(WEB) $(CORPUS) 
-INACTIVE=$(TREE) nyaaya.ml mk_nyaaya_page.ml regression.ml regression_lexer.ml \
+OBSOLETE=$(TREE) nyaaya.ml mk_nyaaya_page.ml regression.ml regression_lexer.ml \
 statseg.ml
 
-SOURCES=$(ENGINE) $(DEBUG) $(INACTIVE) 
+SOURCES=$(ENGINE) $(DEBUG) $(OBSOLETE) 
 
 CORENATIVES=list2.cmx gen.cmx paths.cmx version.cmx word.cmx canon.cmx \
 min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx skt_lexer.cmx \

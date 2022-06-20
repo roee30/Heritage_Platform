@@ -18,7 +18,7 @@
    generated stem. For instance entry "k.rta" has etymology pp(k.r\#1). 
    It does not produce forms, and is skipped by the morphology generator,
    since the pp participal stem is a productive taddhita construction,
-   that will indeed generate stem k.rta from its root k.r\#1.
+   that will indeed generate stem k.rta from its root k.r1.
    The problem for the morphology generator is to display forms of k.rta
    with a link to k.rta in the hypertext lexicon. It is non-trivial, since
    homonymies occur. Thus homophony indexes associated with generators
@@ -42,12 +42,12 @@ value look_up_homo homo = look_rec
   | [ (morpho,n) :: rest ] -> if n=homo then morpho else look_rec rest
   ] 
 ;
-value unique_kridantas =  
-  try (Gen.gobble Data.public_unique_kridantas_file : deco_krid) 
-  with [ _ -> failwith "unique_kridantas" ] 
-and lexical_kridantas =  
+value lexical_kridantas =  
   try (Gen.gobble Data.public_lexical_kridantas_file : deco_krid) 
   with [ _ -> failwith "lexical_kridantas" ] 
+and unique_kridantas =  
+  try (Gen.gobble Data.public_unique_kridantas_file : deco_krid) 
+  with [ _ -> failwith "unique_kridantas" ] 
 ;
 (* This mechanism is used by [Make_roots] at morphology generation time,
    and by [Morpho.print_inv_morpho] and [Morpho_ext.print_inv_morpho_ext]
@@ -60,6 +60,5 @@ value preverbs_structure = (* Used in Morpho for display of pvs *)
   try (Gen.gobble Data.public_preverbs_file : Deco.deco Word.word) 
   with [ _ -> failwith "preverbs_structure" ]
 ;
-
 
 (*i end; i*)

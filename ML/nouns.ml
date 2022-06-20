@@ -685,7 +685,9 @@ value build_man g stem entry =
         ; decline Abl (if avoc then "manas" else "mnas")
         ; decline Gen (if avoc then "manas" else "mnas")
         ; decline Loc "mani"
-        ] @ (if g=Neu then [ decline Voc "ma" ] else []) (* Kaatyaayana *)
+        ] @ (if g=Neu then if entry = "naaman" then [] 
+                           else [ decline Voc "ma" ] (* Kaatyaayana *)
+             else []) 
           @ (if vedic_drop then [ decline Ins "naa" ] else [])
           @ (if avoc then [] else [ decline Loc "mni" ]))
    ; (Dual, (if g=Neu then 
@@ -1981,15 +1983,19 @@ value build_neu_a stem entry =
    ; Indecl Tas (fix stem "atas")
    ] @ (if a_n_iiv entry then [ Cvi (wrap stem 4) ] else []))
 ;
+value adj_neu_i = fun (* Kale§70 *)
+  [ "zuci" -> True | _ -> False ] (* add on demand *)
+;
 value build_neu_i trunc entry = (* stems in -i and -ii *)
   let stems = [ 3 :: trunc ] 
   and steml = [ 4 :: trunc ] in 
   let rstems = mirror stems
   and declines case suff = (case,fix stems suff) 
-  and declinel case suff = (case,fix steml suff) in
+  and declinel case suff = (case,fix steml suff) 
+  and declinem case suff = (case,fix trunc suff) in
   enter entry 
    [ Declined Noun Neu
-   [ (Singular,
+   [ (Singular, let l = 
         [ declines Voc ""
         ; declines Nom ""
         ; declines Acc ""
@@ -1998,8 +2004,15 @@ value build_neu_i trunc entry = (* stems in -i and -ii *)
         ; declines Abl "nas"
         ; declines Gen "nas"
         ; declines Loc "ni"
-        ])
-   ; (Dual,
+        ] in if adj_neu_i entry then (* Kale§70 : like Mas *)
+             let l' = [ declinem Voc "e"
+                      ; declinem Dat "aye"
+                      ; declinem Abl "es"
+                      ; declinem Gen "es"
+                      ; declinem Loc "au"
+                      ] in l @ l' 
+             else l)
+   ; (Dual, let l =
         [ declines Voc "nii"
         ; declines Nom "nii"
         ; declines Acc "nii"
@@ -2008,7 +2021,11 @@ value build_neu_i trunc entry = (* stems in -i and -ii *)
         ; declines Abl "bhyaam"
         ; declines Gen "nos"
         ; declines Loc "nos"
-        ])
+        ] in if adj_neu_i entry then (* Kale§70 *)
+             let l' = [ declinem Gen "yos"
+                      ; declinem Loc "yos"
+                      ] in l @ l' 
+             else l)
    ; (Plural, 
         [ declinel Voc "ni"
         ; declinel Nom "ni"
@@ -2024,14 +2041,18 @@ value build_neu_i trunc entry = (* stems in -i and -ii *)
    ; Avyayaf rstems
    ]
 ;
+value adj_neu_u = fun (* Kale§70 *)
+  [ "guru" -> True | _ -> False ] (* add on demand *)
+;
 value build_neu_u trunc entry = (* stems in -u and -uu *)
   let stems = [ 5 :: trunc ] 
   and steml = [ 6 :: trunc ] in 
   let declines case suff = (case,fix stems suff) 
-  and declinel case suff = (case,fix steml suff) in
+  and declinel case suff = (case,fix steml suff) 
+  and declinem case suff = (case,fix trunc suff) in
   enter entry 
    [ Declined Noun Neu
-   [ (Singular,
+   [ (Singular, let l =
         [ declines Voc ""
         ; declines Nom ""
         ; declines Acc ""
@@ -2040,8 +2061,15 @@ value build_neu_u trunc entry = (* stems in -u and -uu *)
         ; declines Abl "nas"
         ; declines Gen "nas"
         ; declines Loc "ni"
-        ])
-   ; (Dual,
+        ] in if adj_neu_u entry then (* Kale§70 : like Mas *)
+             let l' = [ declinem Voc "o"
+                      ; declinem Dat "ave"
+                      ; declinem Abl "es"
+                      ; declinem Gen "es"
+                      ; declinem Loc "au"
+                      ] in l @ l' 
+             else l)
+   ; (Dual, let l =
         [ declines Voc "nii"
         ; declines Nom "nii"
         ; declines Acc "nii"
@@ -2050,7 +2078,11 @@ value build_neu_u trunc entry = (* stems in -u and -uu *)
         ; declines Abl "bhyaam"
         ; declines Gen "nos"
         ; declines Loc "nos"
-        ])
+        ] in if adj_neu_u entry then (* Kale§70 *)
+             let l' = [ declinem Gen "vos"
+                      ; declinem Loc "vos"
+                      ] in l @ l' 
+             else l)
    ; (Plural, 
         [ declinel Voc "ni"
         ; declinel Nom "ni"
@@ -5922,14 +5954,17 @@ value iic_indecl = (* should be lexicalized or completed *)
 ;
 value declined_indecls =
 (* declined substantival forms used as adverbs - many could be added *)
-  [ "astam"
+  [ "antaraa"
+  ; "astam"
   ; "uccais" 
   ; "kam#1"
   ; "kaamam"
+  ; "divaa"
   ; "naktam"
   ; "niicais" 
   ; "param"
   ; "raatrim"
+  ; "sahasaa" 
   ]
 ;
 value compute_extra_indecls () =
@@ -6095,7 +6130,8 @@ value gatis = (* G{saak.sat} Wh§1092 *)
   ; "alam" (* ala.mk.rtya Pan{1,4,64} Wh§1078a *)
   ; "bahis" (* k.r1 bhuu1 Wh§1078a *)
   ; "zrat" (* dhaa1 Wh§1079 *) 
-  ; "sat" (* satk.rtya Pan{1,4,63}, but "asat" ignored *) *)
+  ; "sat" (* satk.rtya Pan{1,4,63}, but "asat" ignored *)
+  ; "paaram" (* i gam *) TODO *)
 (* antarhatya Pan{1,4,65} lexicalized *)
 (* Ignored at present
    ka.ne/manas ka.nehatya Pan{1,4,66} 
@@ -6292,6 +6328,8 @@ value enter_indecl_ifcs () = do
         enter1 entry (Indifc Adv (code "adhastaat")) (* postposition *) 
   ; let entry = "pazcaat" in (* dak.si.napazcaat *)
         enter1 entry (Indifc Adv (code "pazcaat")) (* postposition *) 
+  ; let entry = "naama" in (* devadatta-naama *)
+        enter1 entry (Indifc Prep (code "naama")) (* postposition *) 
   }
 ;
 value enter_extra_iifcs () = do

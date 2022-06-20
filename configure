@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#!/usr/bin/python3
 
 setup_dir="SETUP"
 makefile_path="Makefile"
@@ -36,10 +36,10 @@ import sys,re,shutil,os,os.path,subprocess
 
 def verif_config():
     if not os.path.exists(config_link_path):
-        print "Error : symbolic link", config_link_path  ,"is missing"
-        print "Please first create a symbolic link to your xxx_config.txt file."
-        print """You can find examples of different configurations in
-SETUP/CONFIGS directory."""
+        print("Error : symbolic link", config_link_path  ,"is missing")
+        print("Please first create a symbolic link to your xxx_config.txt file.")
+        print("""You can find examples of different configurations in
+SETUP/CONFIGS directory.""")
         exit(1)
 
 def generate(config_path):
@@ -71,7 +71,7 @@ def generate(config_path):
     makefile = open(makefile_path,'w')
     makefile.write(meta_makefile_content)
     makefile.close()
-    print makefile_path, "generated"
+    print(makefile_path, "generated")
 
     # INDEX PAGE
     site_entry_page = open(site_entry_page_path,'r')
@@ -94,14 +94,14 @@ def generate(config_path):
     sitepage_en_content = site_entry_page_content.replace('#LANG','en')   
     sitepage_en.write(sitepage_en_content)
     sitepage_en.close()
-    print sitepage_en_path, "(en) generated"
+    print(sitepage_en_path, "(en) generated")
     
     # FRENCH INDEX PAGE
     sitepage_fr = open(sitepage_fr_path,'w')
     sitepage_fr_content = site_entry_page_fr_content.replace('#LANG','fr')   
     sitepage_fr.write(sitepage_fr_content) 
     sitepage_fr.close()
-    print sitepage_fr_path, "(fr) generated"
+    print(sitepage_fr_path, "(fr) generated")
     
     # FAQ PAGE
     faq_page = open(faq_page_path,'r')
@@ -113,14 +113,14 @@ def generate(config_path):
     faq_page_en_content = faq_page_content.replace('#LANG','en')   
     faq_page_en.write(faq_page_en_content)
     faq_page_en.close()
-    print faq_page_en_path, "(en) generated"
+    print(faq_page_en_path, "(en) generated")
     
     # FRENCH FAQ PAGE
     faq_page_fr = open(faq_page_fr_path,'w')
     faq_page_fr_content = faq_page_content.replace('#LANG','fr')   
     faq_page_fr.write(faq_page_fr_content)
     faq_page_fr.close()
-    print faq_page_fr_path, "(fr) generated"
+    print(faq_page_fr_path, "(fr) generated")
     
     # PORTAL PAGE
     portal_page = open(portal_page_path,'r')
@@ -132,14 +132,14 @@ def generate(config_path):
     portal_page_en_content = portal_page_content.replace('#LANG','en')   
     portal_page_en.write(portal_page_en_content)
     portal_page_en.close()
-    print portal_page_en_path, "(en) generated"
+    print(portal_page_en_path, "(en) generated")
     
     # FRENCH PORTAL PAGE
     portal_page_fr = open(portal_page_fr_path,'w')
     portal_page_fr_content = portal_page_content.replace('#LANG','fr')   
     portal_page_fr.write(portal_page_fr_content)
     portal_page_fr.close()
-    print portal_page_fr_path, "(fr) generated"
+    print(portal_page_fr_path, "(fr) generated")
     
     # XML RESOURCES
     xml_entry_page = open(xml_entry_page_path,'r')
@@ -150,7 +150,7 @@ def generate(config_path):
     xmlpage = open(xmlpage_path,'w')
     xmlpage.write(xml_entry_page_content)
     xmlpage.close()
-    print xmlpage_path, "generated"
+    print(xmlpage_path, "generated")
     
     # GOLDEN DICT
     golden_entry_page = open(goldendict_entry_path,'r')
@@ -161,7 +161,7 @@ def generate(config_path):
     golden_page = open(goldendict_path,'w')
     golden_page.write(golden_page_content)
     golden_page.close()
-    print goldendict_path, "generated"
+    print(goldendict_path, "generated")
     
     # TEX
     if os.path.exists(meta_docintro_path):
@@ -173,18 +173,18 @@ def generate(config_path):
         docintro = open(docintro_path,'w')
         docintro.write(meta_docintro_content)
         docintro.close()
-        print docintro_path, "generated"
+        print(docintro_path, "generated")
 
 def clean(): # lacks "SETUP/config.version.py" 
     if os.path.exists(makefile_path):
         os.remove(makefile_path)
-        print makefile_path, "removed"
+        print(makefile_path, "removed")
     if os.path.exists(sitepage_en_path):
         os.remove(sitepage_en_path)
-        print sitepage_en_path, "removed"
+        print(sitepage_en_path, "removed")
     if os.path.exists(sitepage_fr_path):
         os.remove(sitepage_fr_path)
-        print sitepage_fr_path, "removed"
+        print(sitepage_fr_path, "removed")
     subprocess.call(["SETUP/config.version.py", "clean"])
 
 # MAIN

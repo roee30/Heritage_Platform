@@ -404,6 +404,10 @@ value voices_of_pv upasarga gana = fun
    | "adhi" | "anu" | "nis" | "prati" | "vi" -> Para
    | _ -> raise Unattested
    ]  
+| "haa#1" ->  match upasarga with 
+   [ "pari" -> Ubha (* for ps fut parihaasyate *)
+   | _ -> Para
+   ]
 | root -> voices_of_gana gana root
 ]
 ;

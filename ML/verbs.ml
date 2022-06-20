@@ -2408,10 +2408,13 @@ value compute_future stem root =
          { compute_futurea Primary stem root 
          ; match root with (* conditional or atma on demand *)
            [ "ku.t" (* Kale *) | "jiiv" | "bha.n" | "bhuu#1" | "zaas" | "stu"
-           | "sm.r" | "haa#1" 
+           | "sm.r" 
                      -> compute_conda Primary stem root
-           | "khaad" | "gad" | "vac" (* BhG pravak.sye *)
+           | "khaad" | "gad" | "vac" (* BhG pravak.sye *) 
                      -> compute_futurem Primary stem root 
+           | "haa#1" -> do { compute_futurem Primary stem root (* manquer *)
+                           ; compute_conda Primary stem root
+                           }
            | _ -> ()
            ]
          }
@@ -5800,6 +5803,7 @@ value compute_denom stem ystem root = do (* other than present system - rare *)
         [ "asuuya" -> () (* wrong asya *)
         | "m.rga" -> () (* from m.rg *)
         | "raajan" -> () (* from raaj2 *)
+        | "medhaa" -> () (* overgenerates with medhya *)
         | _ -> do (* experimental - rare acc. to Whitney *)
                { compute_passive_11 root rest
                ; record_pfp_10 root rest
@@ -6126,7 +6130,7 @@ value compute_auxi_kridantas () =
       ] in do (* A few auxiliary action nouns are generative for cvi compounds *)
   (* Problem: this induces ambiguities with lexicalized kara.na etc. which are 
      not treated as participles and should be placed in a different phase, not
-     atteinable from preverbs, inducing a patch in [Dispatcher.validate_pv_k] *)
+     attainable from preverbs, inducing a patch in [Dispatcher.validate_pv_k] *)
   { let (rst,st) = stems "kara.na" in 
     build_part_a_n (Primary,Action_noun) rst st "k.r#1" 
   ; let (rst,st) = stems "kaara" in 

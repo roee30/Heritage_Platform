@@ -195,7 +195,7 @@ function convert() {
 		if(mode_val=="g"){
 			output1=output1.replace("sktreader","sktgraph");
 			output1=output1.replace("sktgraph2","sktgraph");
-		}else if(mode_val=="b"){
+		}else if((mode_val=="b") || (mode_val=="f")){
 			if((output1.includes("sktgraph2"))==false){
 				output1=output1.replace("sktgraph","sktgraph2");
 				output1=output1.replace("sktreader","sktgraph2");

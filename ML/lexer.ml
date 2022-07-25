@@ -83,7 +83,11 @@ and freq = int
 and freqs = list freq 
 and wfreq = Lexmap.lexmap freqs
 ;
-value word_freq = ref (Deco.empty : wfreq)
+value word_freq_ref = ref (Deco.empty : wfreq) 
+;
+value pada_freq_ref = ref (Deco.empty : wfreq) 
+;
+value comp_freq_ref = ref (Deco.empty : wfreq) 
 ;
 value load_word_freq file = 
   (Gen.gobble file : wfreq)
@@ -111,13 +115,13 @@ value pada_words_freq_file = Data.pada_freq_file
 value comp_words_freq_file = Data.comp_freq_file 
 ;
 (* List of tuples <sandhi between words, frequency> *)
-value pada_transitions_list = load_transition_list Data.pada_trans_freq_file 
+value pada_transitions_list = ref ([] : trans_attrbs)
 ;
 (* List of tuples <sandhi between compound components, frequency> *)
-value comp_transitions_list = load_transition_list Data.comp_trans_freq_file 
+value comp_transitions_list = ref ([] : trans_attrbs)
 ;
 (* To calculate the total number of transition entries in the parallel corpus *)
-value calculate_transition_freq triplets_list = 
+value calculate_transitions triplets_list = 
   loop 0 triplets_list
   where rec loop freq_sum = fun
   [ [] -> (float_of_int freq_sum)
@@ -152,73 +156,66 @@ value int_list_to_string separator int_list =
   "[" ^ (get_strings "" int_list) ^ "]"
 ;
 (* Get freq from weighted lexmap of given word *)
-value get_freq word file_name = 
-  let word_freq = load_word_freq file_name in
+value get_freq word freq_ref = 
   let updated_word = (Morpho_html.visargify word) in
-  let freq = 
-  match Deco.assoc updated_word word_freq with
+  match Deco.assoc updated_word freq_ref.val with
   [ [] -> 0.0
   | e -> let (delta, freq_lst) = (List.hd e) in
          let freq = (List.hd freq_lst) in
          float_of_int freq
-  ] in
-  freq
+  ]
 ;
 
 (* NOTE: The following needs to be calculated from the file 
    while generating the .rem files rather than manually entering the values.*)
-value total_words = 403233.0
+value total_words = ref 0.0 (* 403233.0 *)
 ;
-(* [value total_padas = (calculate_word_freq padas_list) (* 129423.0 *);] *)
-value total_padas = 284930.0
+value total_padas = ref 0.0 (* 284930.0 *)
 ;
-(* [value total_comps = (calculate_word_freq comps_list) (* 68556.0 *);] *)
-value total_comps = 118303.0
+value total_comps = ref 0.0 (* 118303.0 *)
 ;
-value total_words_types = 37015.0
+value total_words_types = ref 0.0 (* 37015.0 *)
 ;
-value total_padas_types = 27704.0
+value total_padas_types = ref 0.0 (* 27704.0 *)
 ;
-value total_comps_types = 16130.0
+value total_comps_types = ref 0.0 (* 16130.0 *)
 ;
-value total_pada_transitions = (calculate_transition_freq pada_transitions_list) 
+value total_pada_transitions = ref 0.0  
 ; (* 280622.0 *)
-value total_comp_transitions = (calculate_transition_freq comp_transitions_list) 
+value total_comp_transitions = ref 0.0  
 ; (* 78907.0 *)
-value total_pada_transitions_types = 
-  float_of_int (List.length pada_transitions_list)
+value total_pada_transitions_types = ref 0.0 
 ;
-value total_comp_transitions_types = 
-  float_of_int (List.length comp_transitions_list)
+value total_comp_transitions_types = ref 0.0 
 ;
 (* To return the individual elements of the transition *)
 value match_transition transition = 
-match transition with
-[ Euphony (w,u,v) -> (w,u,v)
-| Id -> ([],[],[])
-]
+  match transition with
+  [ Euphony (w,u,v) -> (w,u,v)
+  | Id -> ([],[],[])
+  ]
 ;
 (* To get the text in WX Notation for debugging *)
 value get_word rword = 
   Canon.decode_WX (mirror rword)
 ;
 (* To calculate probability for the word *)
-value get_prob rword freq_file tot_ref tot_types = 
-  let freq = get_freq rword freq_file in
+value get_prob rword freq_ref tot_ref tot_types = 
+  let freq = get_freq rword freq_ref in
   if freq = 0.0 then (1.0 /. (tot_ref +. tot_types))
   else (freq /. tot_ref)
 ;
 (* Word's probability when using the data as the decorated trie *)
 value get_pada_prob rword = 
-  get_prob rword pada_words_freq_file total_padas total_padas_types
+  get_prob rword pada_freq_ref total_padas.val total_padas_types.val
 ;
 (* Compound component's probability when using the data as the decorated trie *)
 value get_comp_prob rword = 
-  get_prob rword comp_words_freq_file total_comps total_comps_types
+  get_prob rword comp_freq_ref total_comps.val total_comps_types.val
 ;
 (* Used when word and compound components are treated alike *)
 value get_word_prob rword = 
-  get_prob rword words_freq_file total_words total_words_types
+  get_prob rword word_freq_ref total_words.val total_words_types.val
 ;
 (* Transition probability from the list of <transition, frequency> couplets *)
 value get_transition_prob transition transition_list tot_transitions 
@@ -234,13 +231,54 @@ value get_transition_prob transition transition_list tot_transitions
 ;
 (* To get the probability of transition between compound components *)
 value get_comp_transition_prob transition = 
-  get_transition_prob transition comp_transitions_list total_comp_transitions 
-                      total_comp_transitions_types
+  get_transition_prob transition comp_transitions_list.val 
+                      total_comp_transitions.val total_comp_transitions_types.val
 ;
 (* To get the probability of transition between words *)
 value get_pada_transition_prob transition = 
-  get_transition_prob transition pada_transitions_list total_pada_transitions 
-                      total_pada_transitions_types
+  get_transition_prob transition pada_transitions_list.val 
+                      total_pada_transitions.val total_pada_transitions_types.val
+;
+
+value calculate_sum (word, flm) type_tot val_tot  =
+  match (List.hd flm) with 
+  [ (delta, freqs) -> 
+      let new_type_tot = type_tot + 1 
+      and new_val_tot = val_tot + (List.hd freqs) in 
+      (new_type_tot, new_val_tot)
+  ]
+;
+value rec process_deco type_tot val_tot = fun
+  [ [ hd :: tl ] -> 
+          let (new_type_tot, new_val_tot) = calculate_sum hd type_tot val_tot in 
+          process_deco new_type_tot new_val_tot tl 
+  | [] -> (float_of_int type_tot, float_of_int val_tot)
+  ]
+;
+
+value assign_freq_info  = 
+  let (words_types, words) = process_deco 0 0 (Deco.contents word_freq_ref.val)  
+  and (padas_types, padas) = process_deco 0 0 (Deco.contents pada_freq_ref.val)  
+  and (comps_types, comps) = process_deco 0 0 (Deco.contents comp_freq_ref.val) 
+  in do 
+  { word_freq_ref.val := load_word_freq words_freq_file
+  ; pada_freq_ref.val := load_word_freq pada_words_freq_file
+  ; comp_freq_ref.val := load_word_freq comp_words_freq_file
+  ; pada_transitions_list.val := load_transition_list Data.pada_trans_freq_file 
+  ; comp_transitions_list.val := load_transition_list Data.comp_trans_freq_file 
+  ; total_pada_transitions.val := calculate_transitions pada_transitions_list.val
+  ; total_comp_transitions.val := calculate_transitions comp_transitions_list.val
+  ; let pada_trans_len = List.length pada_transitions_list.val in 
+    total_pada_transitions_types.val := float_of_int pada_trans_len 
+  ; let comp_trans_len = List.length comp_transitions_list.val in 
+    total_comp_transitions_types.val := float_of_int comp_trans_len  
+  ; total_words.val := words
+  ; total_words_types.val := words_types
+  ; total_padas.val := padas
+  ; total_padas_types.val := padas_types
+  ; total_comps.val := comps
+  ; total_comps_types.val := comps_types
+  }
 ;
 (* To check the phase of the current segment in consideration, 
    for getting the probabilities according to the segment's phase

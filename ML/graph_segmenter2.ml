@@ -58,7 +58,7 @@ open Control; (* star *)
 (* 859 attested as last sentence in Pancatantra *)
 value max_input_length = 1000
 and max_seg_rows = 1000 
-and max_best_solutions = 10 (* Modify based on requirement. 5, 10, 50 or 100 *)
+and max_best_solutions = 50 (* Modify based on requirement. 5, 10, 50 or 100 *)
 ;
 exception Overflow (* length of sentence exceeding array size *)
 ;
@@ -205,7 +205,7 @@ value pada_transitions_list = ref ([] : trans_attrbs)
 value comp_transitions_list = ref ([] : trans_attrbs)
 ;
 (* To calculate the total number of transition entries in the parallel corpus *)
-value calculate_transition_freq triplets_list = 
+value calculate_transitions triplets_list = 
      loop 0 triplets_list
      where rec loop freq_sum = fun
      [ [] -> (float_of_int freq_sum)
@@ -316,13 +316,52 @@ value get_transition_prob transition transition_list tot_transitions
 ;
 (* To get the probability of transition between compound components *)
 value get_comp_transition_prob transition = 
-  get_transition_prob transition comp_transitions_list.val total_comp_transitions.val
-                      total_comp_transitions_types.val
+  get_transition_prob transition comp_transitions_list.val 
+                      total_comp_transitions.val total_comp_transitions_types.val
 ;
 (* To get the probability of transition between words *)
 value get_pada_transition_prob transition = 
-  get_transition_prob transition pada_transitions_list.val total_pada_transitions.val 
-                      total_pada_transitions_types.val
+  get_transition_prob transition pada_transitions_list.val
+                      total_pada_transitions.val total_pada_transitions_types.val
+;
+value calculate_sum (word, flm) type_tot val_tot  =
+  match (List.hd flm) with 
+  [ (delta, freqs) -> 
+      let new_type_tot = type_tot + 1 
+      and new_val_tot = val_tot + (List.hd freqs) in 
+      (new_type_tot, new_val_tot)
+  ]
+;
+value rec process_deco type_tot val_tot = fun
+  [ [ hd :: tl ] -> 
+          let (new_type_tot, new_val_tot) = calculate_sum hd type_tot val_tot in 
+          process_deco new_type_tot new_val_tot tl 
+  | [] -> (float_of_int type_tot, float_of_int val_tot)
+  ]
+;
+value assign_freq_info  = 
+  let (words_types, words) = process_deco 0 0 (Deco.contents word_freq_ref.val)  
+  and (padas_types, padas) = process_deco 0 0 (Deco.contents pada_freq_ref.val)  
+  and (comps_types, comps) = process_deco 0 0 (Deco.contents comp_freq_ref.val) 
+  in do 
+  { word_freq_ref.val := load_word_freq words_freq_file
+  ; pada_freq_ref.val := load_word_freq pada_words_freq_file
+  ; comp_freq_ref.val := load_word_freq comp_words_freq_file
+  ; pada_transitions_list.val := load_transition_list Data.pada_trans_freq_file 
+  ; comp_transitions_list.val := load_transition_list Data.comp_trans_freq_file 
+  ; total_pada_transitions.val := calculate_transitions pada_transitions_list.val
+  ; total_comp_transitions.val := calculate_transitions comp_transitions_list.val
+  ; let pada_trans_len = List.length pada_transitions_list.val in 
+    total_pada_transitions_types.val := float_of_int pada_trans_len 
+  ; let comp_trans_len = List.length comp_transitions_list.val in 
+    total_comp_transitions_types.val := float_of_int comp_trans_len 
+  ; total_words.val := words
+  ; total_words_types.val := words_types
+  ; total_padas.val := padas
+  ; total_padas_types.val := padas_types
+  ; total_comps.val := comps
+  ; total_comps_types.val := comps_types
+  }
 ;
 (* To check the phase of the current segment in consideration, 
    for getting the probabilities according to the segment's phase

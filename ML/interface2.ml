@@ -73,11 +73,11 @@ open Viccheda (* [segment_iter visual_width] etc. *)
 ;
 
 (* Graph interface2 *)
-(*(* Mode parameter of the interface. Controled by service Interface2 
+(* Mode parameter of the interface. Controled by service Interface2 
      for respectively Summary or Best solutions *)
 (* Note that Interface is not a Reader/Parser mode. *)
-type mode = [ Summary | Best_Summary ]
-;*)
+type mode = [ First | Best_Summary ]
+;
 (* At this point we have the sandhi inverser segmenting engine *)
 
 (* Display routines *)
@@ -416,7 +416,7 @@ value print_scl_segments output =
   Scl_parser.print_scl scl_font [ segmentations ]
 ;
 (* The following prints the solution on the web page *)
-value print_solution font text (id, (conf, sentence, output)) = do
+value print_solution font (id, (conf, sentence, output)) = do
   { pl html_break
   ; pl hr
   ; ps (span_begin Blue_)
@@ -431,10 +431,78 @@ value print_solution font text (id, (conf, sentence, output)) = do
   ; ()
   }
 ;
-value print_sols text sols font = (* stats = (kept,max) *) 
-  let _ = List.iter (print_solution font text) sols in
-  ()
+
+value solution_path = Paths.skt_install_dir ^ "ML/"
 ;
+
+(* To replace space with '+' *)
+value insert_plus strng = 
+  let str1 = Str.global_replace (Str.regexp " ") "+" strng in
+  (*let str2 = Str.global_replace (Str.regexp "-") "-+" str1 in*)
+  str1
+;
+
+(* Print all the solutions into file *)
+value print_all_sols cho solutions = 
+  loop solutions
+  where rec loop = fun
+  [ [] -> ()
+  | [ item ] -> output_string cho (insert_plus item)
+  | [ l :: r ] -> let _ = output_string cho (insert_plus l) in do 
+                  { output_string cho ";"
+                  ; loop r 
+                  }
+  ]
+;
+
+value get_string (_,str,_) = 
+  str
+;
+
+(* all_sols :: (int, (float, string, output)) list*)
+(* solutions :: (float, string, output) list*)
+(* sols :: string list*)
+value print_solution_to_file sols  = 
+  let segmented_output_file = solution_path ^ "best_sol.txt" in
+    let cho = 
+      open_out_gen [Open_creat; Open_trunc; Open_wronly] 0o666 segmented_output_file in do
+      { let first_sol = List.hd sols in 
+        let temp_sol = Str.global_replace (Str.regexp "-\+") "-" first_sol in
+        let best_sol = Str.global_replace (Str.regexp "+") " " temp_sol in
+        output_string cho best_sol
+      ; flush cho
+      ; close_out cho
+      }
+;
+
+value print_sols_to_file wx_input sols = 
+  let segmented_output_file = solution_path ^ "best_n_solutions.txt" in
+    let cho = 
+      open_out_gen [Open_append; Open_creat] 0o666 segmented_output_file in do
+      { output_string cho (wx_input ^ "\t"); (* Prints the unsegmented text *)
+        (* Prints all solutions separated with "-" *)
+        let _ = (print_all_sols cho sols) in 
+        output_string cho "\n"
+        ;
+        flush cho;
+        close_out cho
+      }
+;
+
+value print_sols wx_input sols font mode = (* stats = (kept,max) *) 
+  let solutions = List.map snd sols in 
+  let seg_sols = List.map get_string solutions in 
+  let print_sl sls = List.iter (print_solution font) sls in 
+  if mode = "f" then (* To record the first best solution *)
+    let _  = print_sl [(List.hd sols)] in 
+    print_solution_to_file seg_sols 
+  else (* To record all the solutions *)
+    let _ = print_sl sols in 
+  (* The following is for recording all solutions to file *)
+  (*  let _ = print_sols_to_file wx_input seg_sols in *)
+    ()
+;
+
 value best_mode_operations cpts chunks = 
   let _ = do {
     chkpts.all_checks := cpts
@@ -449,14 +517,16 @@ value best_mode_operations cpts chunks =
   (full, count, solution_list)
 ;
 (* The main procedure for computing the graph segmentation structure *)
-value check_sentence translit uns text checkpoints input undo_enabled font =
+value check_sentence translit uns text checkpoints input undo_enabled font mode =
   let encode = Encode.switch_code translit in
   let chunker = if uns (* sandhi undone *) then Sanskrit.read_raw_sanskrit 
                 else (* chunking *) Sanskrit.read_sanskrit in
   let raw_chunks = Sanskrit.read_raw_sanskrit encode input in (* NEW *)
   let chunks = chunker encode input in 
   let deva_chunks = List.map Canon.unidevcode raw_chunks in (* NEW *)
-  let deva_input = String.concat " " deva_chunks 
+  let deva_input = String.concat " " deva_chunks in 
+  let wx_chunks = List.map Canon.decode_WX raw_chunks in (* NEW *)
+  let wx_input = String.concat " " wx_chunks 
   and cpts = sort_check checkpoints in 
   let (full,count,solution_list) = 
       best_mode_operations cpts chunks in do (* full iff all chunks segment *)
@@ -513,14 +583,14 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
     [ [] -> acc
     | [hd :: tl] -> loop (id + 1) (acc @ [(id + 1, hd)]) tl
     ] in
-    print_sols input numbered_sol_list font
+    print_sols wx_input numbered_sol_list font mode 
   }
 ;
 value arguments trans lex font cache st us input topic abs
-                corpus_permission corpus_dir sentence_no =
+                corpus_permission corpus_dir sentence_no mode =
   "t=" ^ trans ^ ";lex=" ^ lex ^ ";font=" ^ font ^ ";cache=" ^ cache ^ 
   ";st=" ^ st ^ ";us=" ^ us ^ ";text=" ^ input ^ 
-  ";topic=" ^ topic ^ ";abs=" ^ abs ^ 
+  ";topic=" ^ topic ^ ";abs=" ^ abs ^ ";mode=" ^ mode ^ 
   ";" ^ Params.corpus_permission ^ "=" ^ corpus_permission ^
   ";" ^ Params.corpus_dir ^ "=" ^ corpus_dir ^
   ";" ^ Params.sentence_no ^ "=" ^ sentence_no
@@ -557,21 +627,6 @@ value save_button query nb_sols =
   cgi_end ^
   center_end
 ;
-value calculate_sum (word, flm) type_tot val_tot  =
-  match (List.hd flm) with 
-  [ (delta, freqs) -> 
-      let new_type_tot = type_tot + 1 
-      and new_val_tot = val_tot + (List.hd freqs) in 
-      (new_type_tot, new_val_tot)
-  ]
-;
-value rec process_deco type_tot val_tot = fun
-  [ [ hd :: tl ] -> 
-          let (new_type_tot, new_val_tot) = calculate_sum hd type_tot val_tot in 
-          process_deco new_type_tot new_val_tot tl 
-  | [] -> (float_of_int type_tot, float_of_int val_tot)
-  ]
-;
 value quit_button corpmode corpdir sentno =
   let submit_button_label = Web_corpus.(match corpmode with
                                         [ Annotator -> "Abort"
@@ -597,7 +652,7 @@ value graph_engine () = do
        guess gender revised [rev_off] [rev_ind] (User-aid) *)
     let url_encoded_input = get "text" env "" 
     and url_encoded_topic = get "topic" env "" (* topic carry-over *)
- (*[and url_encoded_mode  = get "mode" env "g"] *)
+    and url_encoded_mode  = get "mode" env "b"
     and st = get "st" env "t" (* sentence parse default *)
     and us = get "us" env "f" (* sandhied text default *)
     and translit = get "t" env Paths.default_transliteration (* translit input *)
@@ -610,39 +665,14 @@ value graph_engine () = do
     and () = toggle_sanskrit_font ft 
     and () = cache_active.val := cache 
     and abs = get "abs" env "f" (* default local paths *) in 
+    let mode = decode_url url_encoded_mode in 
     let lang = language_of_string lex (* lexicon indexing choice *)
     and input = decode_url url_encoded_input (* unnormalized string *)
     and uns = us="t" (* unsandhied vs sandhied corpus *) 
     and () = if st="f" then Lexer_control.star.val:=False 
              else () (* word vs sentence stemmer *)
     and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
-    and () = word_freq_ref.val := load_word_freq words_freq_file
-    and () = pada_freq_ref.val := load_word_freq pada_words_freq_file
-    and () = comp_freq_ref.val := load_word_freq comp_words_freq_file
-    and () = pada_transitions_list.val := 
-               load_transition_list Data.pada_trans_freq_file 
-    and () = comp_transitions_list.val := 
-               load_transition_list Data.comp_trans_freq_file 
-    and () = total_pada_transitions.val := 
-               calculate_transition_freq pada_transitions_list.val
-    and () = total_comp_transitions.val := 
-               calculate_transition_freq comp_transitions_list.val
-    and () = total_pada_transitions_types.val := 
-               float_of_int (List.length pada_transitions_list.val)
-    and () = total_comp_transitions_types.val := 
-               float_of_int (List.length comp_transitions_list.val)  
-    and (words_types, words) = 
-            process_deco 0 0 (Deco.contents word_freq_ref.val)  
-    and (padas_types, padas) = 
-            process_deco 0 0 (Deco.contents pada_freq_ref.val)  
-    and (comps_types, comps) = 
-            process_deco 0 0 (Deco.contents comp_freq_ref.val) in 
-    let () = total_words.val := words
-    and () = total_words_types.val := words_types
-    and () = total_padas.val := padas
-    and () = total_padas_types.val := padas_types
-    and () = total_comps.val := comps
-    and () = total_comps_types.val := comps_types 
+    and () = assign_freq_info 
     and url_enc_corpus_permission = (* Corpus mode *)
         get Params.corpus_permission env "true" in 
     let corpus_permission = 
@@ -654,8 +684,8 @@ value graph_engine () = do
     let undo_enabled = sentence_no = "" (* no undo in Reader corpus mode *)
                     || corpus_permission <> Web_corpus.Reader in
     let text = arguments translit lex font cache st us url_encoded_input
-                         url_encoded_topic abs 
-                         url_enc_corpus_permission corpus_dir sentence_no
+                         url_encoded_topic abs url_enc_corpus_permission
+                         corpus_dir sentence_no mode
     and checkpoints = 
       try let url_encoded_cpts = List.assoc "cpts" env in (* do not use get *)
           parse_cpts (decode_url url_encoded_cpts)
@@ -681,7 +711,8 @@ value graph_engine () = do
    try do 
    { match (revised,rev_off,rev_ind) with
      [ ("",-1,-1) -> (* Standard input processing *** Main call *** *)
-       check_sentence translit uns text checkpoints input undo_enabled font
+       check_sentence translit uns text checkpoints input undo_enabled font 
+                      mode
      | (new_word,word_off,chunk_ind) (* User-aid revision mode *) -> 
        let chunks = Sanskrit.read_sanskrit (Encode.switch_code translit) input in
        let rec decoded init ind = fun
@@ -705,11 +736,11 @@ value graph_engine () = do
          let revise (k,sec,sel) = (if k<word_off then k else k+diff,sec,sel) in
          List.map revise checkpoints
        and new_text = arguments translit lex font cache st us updated_input
-                                url_encoded_topic abs 
-                                url_enc_corpus_permission corpus_dir sentence_no
+                                url_encoded_topic abs url_enc_corpus_permission
+                                corpus_dir sentence_no mode
        and new_input = decode_url updated_input in
        check_sentence translit uns new_text revised_check new_input undo_enabled 
-                      font
+                      font mode
      ]
      (* Rest of the code concerns Corpus mode *)
      (* automatically refreshing the page only if guess parameter *)

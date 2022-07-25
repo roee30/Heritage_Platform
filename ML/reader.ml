@@ -296,6 +296,7 @@ value reader_engine () = do
         | "l" -> Best_list
         | s -> raise (Failure ("Unknown mode " ^ s))  
         ] 
+    and () = Lex.assign_freq_info 
     (* Contextual information from past discourse *)
     and topic_mark = decode_url url_encoded_topic in
     let topic = match topic_mark with

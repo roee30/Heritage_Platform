@@ -256,11 +256,7 @@ value rec process_deco type_tot val_tot = fun
   ]
 ;
 
-value assign_freq_info  = 
-  let (words_types, words) = process_deco 0 0 (Deco.contents word_freq_ref.val)  
-  and (padas_types, padas) = process_deco 0 0 (Deco.contents pada_freq_ref.val)  
-  and (comps_types, comps) = process_deco 0 0 (Deco.contents comp_freq_ref.val) 
-  in do 
+value assign_freq_info = do 
   { word_freq_ref.val := load_word_freq words_freq_file
   ; pada_freq_ref.val := load_word_freq pada_words_freq_file
   ; comp_freq_ref.val := load_word_freq comp_words_freq_file
@@ -271,13 +267,18 @@ value assign_freq_info  =
   ; let pada_trans_len = List.length pada_transitions_list.val in 
     total_pada_transitions_types.val := float_of_int pada_trans_len 
   ; let comp_trans_len = List.length comp_transitions_list.val in 
-    total_comp_transitions_types.val := float_of_int comp_trans_len  
-  ; total_words.val := words
-  ; total_words_types.val := words_types
-  ; total_padas.val := padas
-  ; total_padas_types.val := padas_types
-  ; total_comps.val := comps
-  ; total_comps_types.val := comps_types
+    total_comp_transitions_types.val := float_of_int comp_trans_len 
+  ; let (words_types, words) = process_deco 0 0 (Deco.contents word_freq_ref.val)  
+    and (padas_types, padas) = process_deco 0 0 (Deco.contents pada_freq_ref.val)  
+    and (comps_types, comps) = process_deco 0 0 (Deco.contents comp_freq_ref.val)
+    in do 
+    { total_words.val := words
+    ; total_words_types.val := words_types
+    ; total_padas.val := padas
+    ; total_padas_types.val := padas_types
+    ; total_comps.val := comps
+    ; total_comps_types.val := comps_types
+    }
   }
 ;
 (* To check the phase of the current segment in consideration, 

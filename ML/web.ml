@@ -467,8 +467,8 @@ value scl_toggle =
 ;
 value interaction_modes_default mode =  
   [ (" The Best! ","f",mode="f") 
-  ; (" Best & Summary ","b",mode="b") 
-  ; (" Best & List ","l",mode="l") 
+  ; (" Best n solutions ","b",mode="b") 
+  (*; (" Best & List ","l",mode="l") *)
   ; (" Summary ","g",mode="g") 
   ; (" Tagging ","t",mode="t") 
   ; (" Parsing ","p",mode="p") 

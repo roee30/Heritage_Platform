@@ -37,7 +37,8 @@ open Word;
 (* Mode parameter of the reader. Controled by service Reader for respectively
    tagging, shallow parsing, or dependency analysis with the UoH parser.  *)
 (* Note that Interface is not a Reader/Parser mode. *)
-type mode = [ Tag | Parse | Analyse | Best_list ]
+type mode = [ Tag | Parse | Analyse ]
+(*type mode = [ Tag | Parse | Analyse | Best_list ]*) (* Best_List in Summary *)
 ;
 value rpc = remote_server_host  
 and remote = ref False (* local invocation of cgi by default *)
@@ -49,11 +50,7 @@ value call_parser text sol =
   anchor Green_ invocation check_sign
 ;
 value call_graph text mode = 
-  let cur_cgi = 
-    if mode = Best_list
-    then graph_cgi2
-    else graph_cgi in
-  let cgi = cur_cgi ^ "?" ^ text ^ "g" in
+  let cgi = graph_cgi ^ "?" ^ text ^ "g" in
   let invocation = if remote.val then rpc ^ cgi else cgi in
   anchor Green_ invocation check_sign
 ;
@@ -146,8 +143,10 @@ value display limit mode text saved = fun
               [ Some n -> n | None -> truncation ] in do
     { if mode = Analyse then () 
       else do
-         { if mode = Best_list then print_sols2 text (*kept,max*) best_sols
-           else print_sols text (*kept,max*) best_sols
+         { (* This condition is commented to remove the list mode here 
+              as it is available alongside the summary mode *)
+           (*if mode = Best_list then print_sols2 text (*kept,max*) best_sols
+           else*) print_sols text (*kept,max*) best_sols
          ; pl html_break
          ; pl hr 
          ; if limit = None then do
@@ -293,7 +292,7 @@ value reader_engine () = do
         [ "t" -> Tag
         | "p" -> Parse
         | "o" -> Analyse (* Analyse mode of UoH parser *) 
-        | "l" -> Best_list
+(*        | "l" -> Best_list*)
         | s -> raise (Failure ("Unknown mode " ^ s))  
         ] 
     and () = Lex.assign_freq_info 
@@ -314,7 +313,7 @@ value reader_engine () = do
     try let text = arguments translit lex font cache st us url_encoded_input
                              url_encoded_topic abs checkpoints in do
         { (* Now we call the lexer *)
-           process_input text uns mode topic input encode cpts 
+           process_input text uns mode topic input encode checkpoints 
         ; pl hr
 	; pl html_break  
         ; close_page_with_margin () 

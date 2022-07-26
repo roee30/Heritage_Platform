@@ -58,13 +58,15 @@ open Control; (* star *)
 (* 859 attested as last sentence in Pancatantra *)
 value max_input_length = 1000
 and max_seg_rows = 1000 
-and max_best_solutions = 50 (* Modify based on requirement. 5, 10, 50 or 100 *)
+and default_max_best_solutions = 10
+and max_best_solutions = ref 10 (* Modify based on requirement. 5, 10, 50, 100 *)
 ;
 exception Overflow (* length of sentence exceeding array size *)
 ;
 (* segments of a given phase *)
 type phased_segment = (phase * list (Word.word * list Word.word)) 
-                                 (* (segment, mandatory prefixes of following segment) *)
+                                 (* (segment, mandatory prefixes of 
+                                              following segment) *)
 and segments = list phased_segment (* partially forgetting sandhi *)
 ;
 value null = ([] : segments) (* initialisation of graph entry *)
@@ -86,29 +88,40 @@ and visual_width = Array.make max_seg_rows 0
 (* Checkpoints structure (sparse subgraph with mandatory positioned padas) *)
 type phased_pada = (phase * Word.word) (* for checkpoints *)
 and check = (int * phased_pada * bool) (* checkpoint validation *) 
+and check_segment = (int * segment) (* for saving all the rejected segments *)
+;
+type rejected_segments_list = list check_segment 
 ;
 type checks = 
   { all_checks : mutable (list check)     (* checkpoints in valid solution *)
   ; segment_checks : mutable (list check) (* checkpoints in local segment  *)
+  ; rejected_segments : mutable rejected_segments_list (* checkpoints to be 
+                                                          rejected after choosing
+                                                          the best segments *)
   }
 ;
-value chkpts = { all_checks = []; segment_checks  = []}
+value chkpts = { all_checks = []; segment_checks  = []; rejected_segments = []}
 ;
 (* Solutions structure *)
 type sols =
   { cur_offset : mutable int (* current offset *)
   ; solution : mutable string (* segmentation solution string *)
   ; number_of_chunks : mutable int (* number of chunks in the string *)
-  ; possible_splits : mutable (list (float * string * int * int * int * output)) 
   (* list of [<confidence_value, 
                solution_string, 
                current_chunk's offset, 
                segmentation_id, 
                number_of_segments, 
-               output>] *)
-  ; total_sols: 
-      mutable (list (int * list (float * string * int * int * int * output)))
+               output_triplets,
+               all_triplets>] *)
+  ; possible_splits : 
+    mutable (list (float * string * int * int * int * 
+                   rejected_segments_list * rejected_segments_list))
   (* list of [<chunk_id, list of possible segmentations>] *)
+  ; total_sols: 
+      mutable (list (int * list (float * string * int * int * int * 
+                                 rejected_segments_list * 
+                                 rejected_segments_list)))
   }
 ;
 value chunk_solutions = { cur_offset = 0; 
@@ -321,7 +334,7 @@ value get_comp_transition_prob transition =
 ;
 (* To get the probability of transition between words *)
 value get_pada_transition_prob transition = 
-  get_transition_prob transition pada_transitions_list.val
+  get_transition_prob transition pada_transitions_list.val 
                       total_pada_transitions.val total_pada_transitions_types.val
 ;
 value calculate_sum (word, flm) type_tot val_tot  =
@@ -339,11 +352,7 @@ value rec process_deco type_tot val_tot = fun
   | [] -> (float_of_int type_tot, float_of_int val_tot)
   ]
 ;
-value assign_freq_info  = 
-  let (words_types, words) = process_deco 0 0 (Deco.contents word_freq_ref.val)  
-  and (padas_types, padas) = process_deco 0 0 (Deco.contents pada_freq_ref.val)  
-  and (comps_types, comps) = process_deco 0 0 (Deco.contents comp_freq_ref.val) 
-  in do 
+value assign_freq_info = do 
   { word_freq_ref.val := load_word_freq words_freq_file
   ; pada_freq_ref.val := load_word_freq pada_words_freq_file
   ; comp_freq_ref.val := load_word_freq comp_words_freq_file
@@ -355,12 +364,17 @@ value assign_freq_info  =
     total_pada_transitions_types.val := float_of_int pada_trans_len 
   ; let comp_trans_len = List.length comp_transitions_list.val in 
     total_comp_transitions_types.val := float_of_int comp_trans_len 
-  ; total_words.val := words
-  ; total_words_types.val := words_types
-  ; total_padas.val := padas
-  ; total_padas_types.val := padas_types
-  ; total_comps.val := comps
-  ; total_comps_types.val := comps_types
+  ; let (words_types, words) = process_deco 0 0 (Deco.contents word_freq_ref.val)  
+    and (padas_types, padas) = process_deco 0 0 (Deco.contents pada_freq_ref.val)  
+    and (comps_types, comps) = process_deco 0 0 (Deco.contents comp_freq_ref.val)
+    in do 
+    { total_words.val := words
+    ; total_words_types.val := words_types
+    ; total_padas.val := padas
+    ; total_padas_types.val := padas_types
+    ; total_comps.val := comps
+    ; total_comps_types.val := comps_types
+    }
   }
 ;
 (* To check the phase of the current segment in consideration, 
@@ -553,10 +567,21 @@ value log_chunk_rec index solution =
   where rec log_rec index no_of_seg cumu_conf vakya acc_triplet = fun
   [ [] -> (cumu_conf, vakya, no_of_seg, acc_triplet)
   | [ ((phase,word,sandhi) as triple) :: rest ] -> 
-       let triplet_acc = List.append [triple] acc_triplet in
-       let (pada_conf_val, pada_text) = register_pada index triple in
-       let cumulative_pada = if vakya = "" then pada_text 
-                             else (vakya ^ "+" ^ pada_text)
+       (* The current segment is saved in chkpts.rejected_segments and will be 
+          cross verified later with the segments in the best n solutions *)
+       let new_segment = (index, triple) in 
+       let triplet_acc = List.append [new_segment] acc_triplet in
+       let new_segment_check = 
+           if List.mem new_segment chkpts.rejected_segments 
+           then chkpts.rejected_segments 
+           else chkpts.rejected_segments @ [new_segment] in 
+       let (pada_conf_val, pada_text) = do 
+       { chkpts.rejected_segments := new_segment_check
+       ; register_pada index triple
+       } in 
+       let cumulative_pada = 
+           if vakya = "" then pada_text 
+           else (vakya ^ "+" ^ pada_text)
        and cumulative_conf = (cumu_conf *. pada_conf_val)
        and no_of_segments = no_of_seg + 1 in
        log_rec (index + Word.length word + offset sandhi) no_of_segments 
@@ -586,7 +611,7 @@ value log_chunk revsol =
     else
     (* Hard coded values for unrecognized chunks getting here 
        after selection of segments *)
-    (1.0, "", 1, [(unknown,Word.mirror [],Id)]) 
+    (1.0, "", 1, [(-1, (unknown,Word.mirror [],Id))]) 
 ;
 
 (* Rest duplicated from Segmenter *)
@@ -747,26 +772,52 @@ value schedule phase input output w cont =
   List.fold_right add transitions cont 
   (* respects dispatch order within a fair top-down search *)
 ; 
+(* If the new segment has the same text as any of the existing segments, then 
+   merge the new triplets with the existing triplets *)
+value edit_chunk_triplets splits ((cur_conf, cur_text, cur_offset, cur_seg_id, 
+                                   cur_no_of_seg, cur_output_triplets, 
+                                   cur_all_triplets) as cur_split) = 
+  modify_chunk_splits [] False cur_split splits
+  where rec modify_chunk_splits acc replaced cur_split = fun 
+  [ [] -> acc 
+  | [((conf, text, offset, seg_id, no_of_seg, 
+       output_triplets, all_triplets) as hd) :: tl] -> 
+    if replaced then modify_chunk_splits (acc @ [hd]) replaced cur_split tl
+    else if text = cur_text then 
+      let updated_all_triplets = 
+        merge_triplets all_triplets all_triplets cur_all_triplets
+      where rec merge_triplets all_triplets new_triplets = fun 
+      [ [] -> new_triplets
+      | [hd1 :: tl1] -> 
+          let new_triplet = if List.mem hd1 all_triplets then [] else [hd1] in
+          merge_triplets all_triplets (List.append new_triplet new_triplets) tl1 
+      ] in 
+      let updated_split = (conf, text, offset, seg_id, no_of_seg, 
+                           output_triplets, updated_all_triplets) in 
+      modify_chunk_splits (acc @ [updated_split]) True cur_split tl
+    else modify_chunk_splits (acc @ [hd]) replaced cur_split tl
+  ]
+;
 (* Adding new segmentation into list of possible segmentations based on 
    number of segments and confidence values for each chunk *)
-value add_chunk splits ((cur_conf,_,_,_,cur_no_of_seg,_) as cur_split) = 
+value add_chunk splits ((cur_conf,_,_,_,cur_no_of_seg,_,_) as cur_split) = 
   loop [] False cur_split splits
   where rec loop acc inserted cur_split = fun
   [ [] -> if inserted then acc else (acc @ [cur_split])
-  | [((conf,text,_,_,no_of_seg,triplets) as hd) :: tl] -> 
+  | [((conf,text,_,_,no_of_seg,_,_) as hd) :: tl] -> 
        if inserted then loop (acc @ [hd]) inserted cur_split tl
        else if no_of_seg > cur_no_of_seg then 
-            loop ((acc @ [cur_split]) @ [hd]) True cur_split tl
+         loop ((acc @ [cur_split]) @ [hd]) True cur_split tl
        else if no_of_seg = cur_no_of_seg then 
-            if conf >= cur_conf then loop (acc @ [hd]) inserted cur_split tl
-            else loop ((acc @ [cur_split]) @ [hd]) True cur_split tl
+         if conf >= cur_conf then loop (acc @ [hd]) inserted cur_split tl
+         else loop ((acc @ [cur_split]) @ [hd]) True cur_split tl
        else loop (acc @ [hd]) inserted cur_split tl
   ]
 ;
 (* snd *)
 value get_second_comp item = 
   match item with
-  [ (_,second,_,_,_,_) -> second
+  [ (_,second,_,_,_,_,_) -> second
   ]
 ;
 (* Adding the new segmentation into the list of possible 
@@ -777,18 +828,13 @@ value add_to_chunk_splits (conf, text, no_of_seg, triplets) =
   else do
   { let temp_list = chunk_solutions.possible_splits
   ; let sol_list = List.map get_second_comp temp_list
-  ; if List.mem text sol_list then 
-       chunk_solutions.possible_splits := chunk_solutions.possible_splits
-    else do
-       { let segment_id = List.length chunk_solutions.possible_splits
-       (* To sort segment chunks based on conf value *)
-       ; chunk_solutions.possible_splits := 
-           add_chunk temp_list 
-                     (conf,text,cur_chunk.offset,segment_id,no_of_seg,triplets)
-       (* To not consider any order for chunk segments *)
-       (* [chunk_solutions.possible_splits := 
-              (temp_list @ [(conf,text,cur_chunk.offset,segment_id)])] *)
-       }
+  ; let segment_id = List.length chunk_solutions.possible_splits
+  ; let new_item = (conf, text, cur_chunk.offset, segment_id, no_of_seg, 
+                    triplets, (List.rev triplets))
+  ; chunk_solutions.possible_splits := 
+    if List.mem text sol_list 
+    then edit_chunk_triplets temp_list new_item
+    else add_chunk temp_list new_item
   }
 ;
 (* The graph segmenter as a non deterministic reactive engine:
@@ -917,6 +963,7 @@ value segment_chunk (full,count) chunk sa_check =
     ; let segmentable = segment chunk 
       and local_count = get_counter () in do
       { set_segmentable False
+      ; let old_offset = cur_chunk.offset
       ; set_offset (succ extremity,future)
       ; if segmentable then do
            { reset_counter ()
@@ -926,31 +973,85 @@ value segment_chunk (full,count) chunk sa_check =
            }
         (* Original chunk is provided if segmentation is not possible *)
         else do 
-           { let chnk_txt = (get_text chunk) ^ " "
-             and chnk_sgmnt = [(unknown,(Word.mirror cur_chunk.chunk),Id)] in 
-             chunk_solutions.possible_splits := [(1.0,chnk_txt,1,1,0,chnk_sgmnt)]
+           { let new_segment = 
+               (old_offset,(unknown,(Word.mirror cur_chunk.chunk),Id))
+           ; let new_segment_check = 
+               if List.mem new_segment chkpts.rejected_segments 
+               then chkpts.rejected_segments 
+               else chkpts.rejected_segments @ [new_segment]
+           ; chkpts.rejected_segments := new_segment_check
+           ; let chnk_txt = (get_text chunk) ^ " "
+             and chnk_sgmnt = 
+                   [(old_offset,(unknown,(Word.mirror cur_chunk.chunk),Id))] in 
+             chunk_solutions.possible_splits := 
+               [(1.0,chnk_txt,1,1,0,chnk_sgmnt,chnk_sgmnt)]
            ; (full,count) (* unsegmentable chunk *)
            }
       }
     }
 ;
+(* For registering the best segments into the newly generated graph *)
+value new_register_for_segment (index, ((phase,pada,sandhi) as hd)) = 
+  register_pada index hd
+;
+(* To choose only the index and phased pada for saving the checkpoints *)
+value get_double item = 
+  match item with
+  [ (index,(phase,pada,sandhi)) -> (index,(phase,pada))
+  ]
+;
+(* The graph is reset and rebuilt with only the best segments. 
+   The best segments are collected during the dovetailing algorithm below *)
+value rebuild_graph solution_list = 
+  let _ = reset_graph () in 
+  (* Loop through the solutions to register the best segments 
+     and also to collect the best segments *)
+  let all_segments = register_solution [] solution_list 
+  where rec register_solution acc = fun 
+  [ [] -> acc
+  | [(_,_,_,chunk_all_triplets) :: tl] -> 
+      loop chunk_all_triplets
+      where rec loop = fun 
+      [ [] -> register_solution (acc @ chunk_all_triplets) tl
+      | [((index, triple) as hd) :: rest] -> 
+          let _ = set_cur_offset (index + 1) in 
+          let _ = new_register_for_segment hd in 
+          loop rest
+      ]
+  ] in 
+  let selected_segments = List.map get_double all_segments in 
+  let sorted_segments = List.sort compare selected_segments in 
+  (* Segments not part of the best solutions are rejected here and 
+     they are used as checkpoints for further analysis *)
+  let filter_func (index,(phase,pada,sandhi)) = 
+    not (List.mem (index,(phase,pada)) sorted_segments) in 
+  let rejected_segments = 
+    add_rejected_seg [] (List.filter filter_func chkpts.rejected_segments)
+    where rec add_rejected_seg acc = fun 
+    [ [] -> acc 
+    | [(index,(phase,word,_)) :: tl] -> 
+        add_rejected_seg (acc @ [(index,(phase,word),False)]) tl
+    ] in 
+  rejected_segments
+;
 (* Prioritizing top solutions based on confidence values for each segmentation *)
-value prioritize splits ((cur_conf, cur_text, cur_triplets) as cur_split) = 
+value prioritize splits ((cur_conf, cur_text, cur_output_triplets, 
+                          cur_all_triplets) as cur_split) = 
   loop 1 [] False cur_split splits
   where rec loop sol_id acc inserted cur_split = fun
   [ [] -> if inserted then acc 
-          else if sol_id > max_best_solutions then acc 
+          else if sol_id > max_best_solutions.val then acc 
           else (acc @ [ cur_split ])
-  | [ ((conf,text,triplets) as hd) :: tl ] -> 
-       if sol_id > max_best_solutions then acc
+  | [ ((conf,text,output_triplets,all_triplets) as hd) :: tl ] -> 
+       if sol_id > max_best_solutions.val then acc
        else if inserted then 
             loop (sol_id + 1) (acc @ [ hd ]) inserted cur_split tl
        else if conf >= cur_conf then 
             loop (sol_id + 1) (acc @ [ hd ]) inserted cur_split tl
        else (* The final condition where the new segmentation is inserted *)
-            if sol_id < max_best_solutions then 
+            if sol_id < max_best_solutions.val then 
             loop (sol_id + 2) ((acc @ [ cur_split ]) @ [ hd ]) True cur_split tl
-       else if sol_id = max_best_solutions then 
+       else if sol_id = max_best_solutions.val then 
             loop (sol_id + 1) (acc @ [ cur_split ]) True cur_split tl 
             (* This condition is to make sure only one segmentation 
             solution is added if it will reach the maximum limit *)
@@ -963,39 +1064,47 @@ value prioritize splits ((cur_conf, cur_text, cur_triplets) as cur_split) =
    form solutions based on higher conf values *)
 value get_top_solutions top_segments = 
   (* loop over the chunks *)
-  top_solutions (1.0,"",[]) [] top_segments
-  where rec top_solutions (conf,text,triplets) acc = fun
+  top_solutions (1.0,"",[],[]) [] top_segments
+  where rec top_solutions (conf,text,output_triplets,all_triplets) acc = fun
   [ [ (* last *) (chunk_key, chunk_segments) ] -> 
-       append (conf,text,triplets) acc chunk_segments
-       where rec append (conf,text,triplets) acc = fun
+       append (conf,text,output_triplets,all_triplets) acc chunk_segments
+       where rec append (conf,text,output_triplets,all_triplets) acc = fun
        [ [] -> acc
-       | [ (chunk_conf,chunk_text,_,_,_,chunk_triplets) :: rest ] ->
+       | [ (chunk_conf,chunk_text,_,_,_,
+            chunk_output_triplets,chunk_all_triplets) :: rest ] ->
             let new_text = if text = "" then chunk_text 
             else if (String.get text ((String.length text) - 1)) = '-' then 
                  text ^ "" ^ chunk_text 
             else text ^ " " ^ chunk_text
             and new_conf = conf *. chunk_conf
-            and new_triplets = List.append chunk_triplets triplets in
-            append (conf, text, triplets) 
-                   (prioritize acc (new_conf, new_text, new_triplets)) rest
+            and new_output_triplets = 
+                  List.append chunk_output_triplets output_triplets 
+            and new_all_triplets = all_triplets @ chunk_all_triplets in
+            append (conf, text, output_triplets, all_triplets) 
+                   (prioritize acc (new_conf, new_text, new_output_triplets, 
+                                    new_all_triplets)) rest
        ]
   | [ (chunk_key, chunk_segments) :: rest1 ] -> 
        (* loop over the segments of the chunks *)
-       loop (conf,text,triplets) acc chunk_segments
-       where rec loop (conf1, text1, triplets1) acc = fun
+       loop (conf,text,output_triplets,all_triplets) acc chunk_segments
+       where rec loop (conf1, text1, output_triplets1, all_triplets1) acc = fun
        [ [] -> acc
-       | [(chunk_conf,chunk_text,_,_,_,chunk_triplets) :: rest2] -> 
-            let new_text = if text = "" then chunk_text 
-            else if (String.get text1 ((String.length text1) - 1)) = '-' then 
-                 text1 ^ "" ^ chunk_text 
-            else text1 ^ " " ^ chunk_text 
-            and new_conf = conf1 *. chunk_conf
-            and new_triplets = List.append chunk_triplets triplets1 in
-            (* Move to next chunk with updated text and conf *)
-            let acc1 = top_solutions (new_conf, new_text, new_triplets) 
-                                     acc rest1 in
+       | [(chunk_conf,chunk_text,_,_,_,
+           chunk_output_triplets,chunk_all_triplets) :: rest2] -> 
+           let new_text = if text = "" then chunk_text 
+           else if (String.get text1 ((String.length text1) - 1)) = '-' then 
+                text1 ^ "" ^ chunk_text 
+           else text1 ^ " " ^ chunk_text 
+           and new_conf = conf1 *. chunk_conf
+           and new_output_triplets = 
+                 List.append chunk_output_triplets output_triplets1 
+           and new_all_triplets = all_triplets1 @ chunk_all_triplets in
+           (* Move to next chunk with updated text and conf *)
+           let acc1 = top_solutions 
+                      (new_conf, new_text, new_output_triplets, new_all_triplets)
+                      acc rest1 in
             (* Proceed to next segment of the current chunk *)
-            loop (conf1, text1, triplets1) acc1 rest2
+           loop (conf1, text1, output_triplets1, all_triplets1) acc1 rest2
        ]
   | [] -> acc
   ]

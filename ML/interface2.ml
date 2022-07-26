@@ -36,6 +36,8 @@ module Prel = struct (* Interface2's lexer prelude *)
                     ^ " to rule out segment" ^ h3_end)
   ; pl (h3_begin C3 ^ mouse_action_help 
                     ^ " on segment to get its lemma" ^ h3_end)
+  ; pl (h3_begin C3 ^ "In the list mode, " ^ mouse_action_help 
+                    ^ " on numbered box to redirect sentence to SCL Parser" ^ h3_end)
   ; open_page_with_margin 15
   }
 ;
@@ -75,8 +77,8 @@ open Viccheda (* [segment_iter visual_width] etc. *)
 (* Graph interface2 *)
 (* Mode parameter of the interface. Controled by service Interface2 
      for respectively Summary or Best solutions *)
-(* Note that Interface is not a Reader/Parser mode. *)
-type mode = [ First | Best_Summary ]
+(* Note that Interface2 is not a Reader/Parser mode. *)
+type best_mode = [ First_Summary | First_List | Best_Summary | Best_List ]
 ;
 (* At this point we have the sandhi inverser segmenting engine *)
 
@@ -131,20 +133,23 @@ value unanalysed (phase,_) = (phase=Phases.unknown)
 value already_checked = html_blue check_sign
 (*i TODO: call to undo this specific checkpoint i*)
 ;
-value call_back text cpts (k,seg) conflict = 
+value call_back text mode cpts rcpts (k,seg) conflict = 
   if mem_cpts k seg cpts then already_checked 
   else if not conflict && not (unanalysed seg) then already_checked
   else let choices b = string_points [ (k,seg,b) :: cpts ] 
        and (out_cgi,sign,color) = 
            if unanalysed seg then (user_aid_cgi,spade_sign,Red_) 
                              else (graph_cgi2,   check_sign,Green_) in
-       let call_back flag = out_cgi ^ "?" ^ text ^ ";cpts=" ^ choices flag in
+       let call_back flag = out_cgi ^ "?" ^ text ^ ";mode=" ^ mode ^ 
+                            ";cpts=" ^ choices flag ^ 
+                            ";rcpts=" ^ (string_points rcpts) in
        let cgi_select = call_back True
        and cgi_reject = call_back False in
        anchor color (invoke cgi_select) sign ^ 
           if unanalysed seg then "" else anchor Red_ (invoke cgi_reject) x_sign
 ;
-value call_reader text cpts mode = (* mode = "o", "p", "g" or "t" *)
+value call_reader text cpts mode = (* mode = "o", "p", "g", "t" - for overall 
+                                             "b", "f", "l", "s" - for best *)
   let cgi = reader_cgi ^ "?" ^ text ^ ";mode=" ^ mode ^ 
             ";cpts=" ^ string_points cpts in 
   anchor Green_ (invoke cgi) check_sign
@@ -294,38 +299,41 @@ value rec print_first_server chunk =
          ]
   ]
 ;
-value call_back_pseudo text cpts ph newpt =
+value call_back_pseudo text mode cpts rcpts ph newpt =
   if List.mem newpt cpts then already_checked 
   else let list_points = [ newpt :: cpts ] in
        let out_cgi = user_aid_cgi in
-       let cgi = out_cgi ^ "?" ^ text ^ ";cpts=" ^ (string_points list_points) in
+       let cgi = out_cgi ^ "?" ^ text ^ ";mode=" ^ mode ^ 
+                 ";cpts=" ^ (string_points list_points) ^ 
+                 ";rcpts=" ^ (string_points rcpts) in
        anchor_pseudo (invoke cgi) ph
 ;
 value un_analyzable (chunk:Word.word) = (Phases.Unknown,Word.mirror chunk)
 ;
-value rec print_first text cpts chunk_orig chunk chunk_ind = 
+value rec print_first text mode cpts rcpts chunk_orig chunk chunk_ind = 
   match Word.length chunk with
   [ 0 -> ps fixed_space
   | l -> match chunk with 
          [ [] -> fixed_space |> ps
          | [ st :: rest ] -> let to_print = Canon.uniromcode [ st ] in do
              { let unknown_chunk = (chunk_ind,un_analyzable chunk_orig,True) in
-               td_wrap (call_back_pseudo text cpts to_print unknown_chunk) |> ps
-             ; print_first text cpts chunk_orig rest chunk_ind
+               td_wrap (call_back_pseudo text mode cpts rcpts 
+                                         to_print unknown_chunk) |> ps
+             ; print_first text mode cpts rcpts chunk_orig rest chunk_ind
              }
          ]
   ]
  ;
 (* Making use of the index for printing the chunk callback *)
-value rec print_all text cpts chunks index = match chunks with
+value rec print_all text mode cpts rcpts chunks index = match chunks with
   [ [] -> ()
   | [ chunk :: rest ] -> do
-      { print_first text cpts chunk chunk index
-      ; print_all text cpts rest (succ (Word.length chunk))
+      { print_first text mode cpts rcpts chunk chunk index
+      ; print_all text mode cpts rcpts rest (succ (Word.length chunk))
       }
   ]
 ;
-value print_word last_ind text cpts (rword,phase,k,conflict) = 
+value print_word last_ind text mode cpts rcpts (rword,phase,k,conflict) = 
   let word = Word.mirror rword in do
   { let extra_space = k-last_ind in 
     if extra_space > 0 then print_extra extra_space else ()
@@ -345,29 +353,29 @@ value print_word last_ind text cpts (rword,phase,k,conflict) =
   ; td_end |> ps
   ; tr_end |> ps
   ; table_end |> ps 
-  ; call_back text cpts (k,(phase,rword)) conflict |> ps
+  ; call_back text mode cpts rcpts (k,(phase,rword)) conflict |> ps
   ; td_end |> ps
   }
 ;
 value max_col = ref 0
 ;
-value print_row text cpts =  print_this text cpts 0 
+value print_row text mode cpts rcpts =  print_this text cpts 0 
   where rec print_this text cpts last_ind = fun 
   [ [] -> let adjust = max_col.val - last_ind in
           if adjust > 0 then print_extra adjust else ()
   | [ (word,phase,k,conflict) :: rest ] -> do 
-      { print_word last_ind text cpts (word,phase,k,conflict)
+      { print_word last_ind text mode cpts rcpts (word,phase,k,conflict)
       ; print_this text cpts (k + seg_length word) rest
       }
   ]
 ;
-value print_interf text cpts () = vgrec 0 
+value print_interf text mode cpts rcpts () = vgrec 0 
   where rec vgrec k = 
   match visual_width.(k) with
   [ 0 -> ()
   | _ -> do
     { tr_begin |> ps
-    ; print_row text cpts visual_conf.(k) 
+    ; print_row text mode cpts rcpts visual_conf.(k) 
     ; tr_end |> ps
     ; vgrec (succ k)
     }
@@ -376,13 +384,34 @@ value print_interf text cpts () = vgrec 0
 value update_col_length chunk = 
   max_col.val := succ (max_col.val + Word.length chunk)
 ;
-value call_undo text cpts  = 
+value call_undo text mode cpts rcpts  = 
   let string_pts = match cpts with 
       [ [] -> "" (* Could raise warning "undo stack empty" *)
       | [ _ :: rest ] -> string_points rest
       ] in
-  let cgi = graph_cgi2 ^ "?" ^ text ^ ";cpts=" ^ string_pts in
+  let cgi = graph_cgi2 ^ "?" ^ text ^ ";mode=" ^ mode ^ ";cpts=" ^ string_pts ^ 
+            ";rcpts=" ^ (string_points rcpts) in
   anchor Green_ (invoke cgi) check_sign
+;
+(* Summary of All Solutions *)
+value call_full_graph text = 
+  let cgi = graph_cgi ^ "?" ^ text ^ ";mode=g" in
+  let invocation = if remote.val then rpc ^ cgi else cgi in
+  anchor Green_ invocation check_sign
+;
+(* Summary of best n solutions *)
+value call_best_graph text mode_id cpts rcpts = 
+  let cgi = graph_cgi2 ^ "?" ^ text ^ ";mode=" ^ mode_id ^ ";cpts=" ^ 
+            (string_points cpts) ^ ";rcpts=" ^ (string_points rcpts) in
+  let invocation = if remote.val then rpc ^ cgi else cgi in
+  anchor Green_ invocation check_sign
+;
+(* List of best n solutions *)
+value call_best_list text mode_id cpts rcpts = 
+  let cgi = graph_cgi2 ^ "?" ^ text ^ ";mode=" ^ mode_id ^ ";cpts=" ^ 
+            (string_points cpts) ^ ";rcpts=" ^ (string_points rcpts) in
+  let invocation = if remote.val then rpc ^ cgi else cgi in
+  anchor Green_ invocation check_sign
 ;
 (* To get the word from triple *)
 value get_sandhi_word font (phase,rword,transition) = 
@@ -401,7 +430,7 @@ value get_sentence font output =
   loop "" output
   where rec loop acc = fun
   [ [] -> acc
-  | [(phase, rword, transition) :: tl] -> 
+  | [(_, (phase, rword, transition)) :: tl] -> 
       loop ((get_sandhi_word font (phase, rword, transition)) ^ acc) tl
   ]
 ;
@@ -416,7 +445,7 @@ value print_scl_segments output =
   Scl_parser.print_scl scl_font [ segmentations ]
 ;
 (* The following prints the solution on the web page *)
-value print_solution font (id, (conf, sentence, output)) = do
+value print_solution font (id, (conf, sentence, output, all)) = do
   { pl html_break
   ; pl hr
   ; ps (span_begin Blue_)
@@ -455,7 +484,7 @@ value print_all_sols cho solutions =
   ]
 ;
 
-value get_string (_,str,_) = 
+value get_string (_,str,_,_) = 
   str
 ;
 
@@ -465,7 +494,8 @@ value get_string (_,str,_) =
 value print_solution_to_file sols  = 
   let segmented_output_file = solution_path ^ "best_sol.txt" in
     let cho = 
-      open_out_gen [Open_creat; Open_trunc; Open_wronly] 0o666 segmented_output_file in do
+      open_out_gen [Open_creat; Open_trunc; Open_wronly] 0o666 
+                   segmented_output_file in do
       { let first_sol = List.hd sols in 
         let temp_sol = Str.global_replace (Str.regexp "-\+") "-" first_sol in
         let best_sol = Str.global_replace (Str.regexp "+") " " temp_sol in
@@ -493,14 +523,157 @@ value print_sols wx_input sols font mode = (* stats = (kept,max) *)
   let solutions = List.map snd sols in 
   let seg_sols = List.map get_string solutions in 
   let print_sl sls = List.iter (print_solution font) sls in 
-  if mode = "f" then (* To record the first best solution *)
+  if mode = First_List then (* To record the first best solution *)
     let _  = print_sl [(List.hd sols)] in 
-    print_solution_to_file seg_sols 
+  (* The following is for recording the best solution to file *)  
+    let _ = print_solution_to_file seg_sols in 
+    ()
   else (* To record all the solutions *)
     let _ = print_sl sols in 
-  (* The following is for recording all solutions to file *)
+  (* The following is for recording all the best solutions to file *)
   (*  let _ = print_sols_to_file wx_input seg_sols in *)
     ()
+;
+
+value mode_id_of_mode mode = 
+  match mode with
+  [ Best_Summary -> "b"
+  | Best_List -> "l"
+  | First_Summary -> "f"
+  | First_List -> "s"
+  | _ -> raise (Failure ("Unknown mode type"))  
+  ] 
+;
+
+value mode_of_mode_id mode_id = 
+  match mode_id with
+  [ "b" -> Best_Summary
+  | "l" -> Best_List
+  | "f" -> First_Summary
+  | "s" -> First_List
+  | x -> raise (Failure ("Unknown mode " ^ x))  
+  ] 
+;
+
+(* Sriram: Check if numbering can be done implicitly *)
+value print_best_solutions wx_input font mode solution_list = 
+  let numbered_sol_list = loop 0 [] solution_list
+    where rec loop id acc = fun
+    [ [] -> acc
+    | [hd :: tl] -> loop (id + 1) (acc @ [(id + 1, hd)]) tl
+    ] in
+    print_sols wx_input numbered_sol_list font mode 
+;
+
+(* The following two functions are introduced for the 
+   Best-Summary and Best-List modes. These are accessible from each other.
+   Now, the same interface2 has both the modes. *)
+(* To display the list of best solutions *)
+value display_best_list text deva_input roman_input checkpoints cpts wx_input 
+                        undo_enabled font mode solution_list rcheckpoints = do 
+  { html_break |> pl
+  ; ps (div_begin Latin16)
+  ; html_latin16 "Sentence: " |> pl
+  ; match font with
+    [ "roma" -> do 
+                { ps (span_begin Blue_) 
+                ; ps roman_input (* roman *)
+                ; ps span_end
+                }
+    | "deva" -> deva16_blue deva_input |> ps (* devanagari *)
+    | _ -> do 
+           { ps (span_begin Blue_) 
+           ; ps roman_input (* roman for default *)
+           ; ps span_end
+           }
+    ]
+  ; table_begin Spacing20 |> pl
+  ; tr_begin |> pl (* tr begin *)
+  ; let (new_mode, link_text) = 
+      if mode = First_List 
+        then (mode_id_of_mode First_Summary, "Summary of First Solution") 
+      else if mode = Best_List 
+        then (mode_id_of_mode Best_Summary, "Summary of Best Solutions") 
+      else (mode_id_of_mode Best_Summary, "Summary of Best Solutions") in 
+    td_wrap (call_best_graph text new_mode checkpoints 
+                             rcheckpoints ^ link_text) |> ps 
+(*  ; html_break |> ps *)
+  ; td_wrap (call_full_graph text ^ "Summary of All Solutions") |> ps 
+  ; tr_end |> pl   (* tr end *)
+  ; table_end |> pl
+  ; print_best_solutions wx_input font mode solution_list
+  }
+;
+(* To display the summary of best solutions *)
+value display_best_summary text deva_input roman_input checkpoints cpts wx_input 
+                           chunks undo_enabled font mode full count solution_list
+                           rcheckpoints = do 
+  { make_visual cur_chunk.offset
+  ; find_conflict 0
+  ; html_break |> pl
+  ; div_begin Latin16 |> ps
+  ; html_latin16 "Sentence: " |> pl
+  ; match font with
+    [ "roma" -> do 
+                { ps (span_begin Blue_) 
+                ; ps roman_input (* roman *)
+                ; ps span_end
+                }
+    | "deva" -> deva16_blue deva_input |> ps (* devanagari *)
+    | _ -> do 
+           { ps (span_begin Blue_) 
+           ; ps roman_input (* roman for default *)
+           ; ps span_end
+           }
+    ]
+  ; html_break |> ps
+  ; table_begin Spacing20 |> pl
+  ; tr_begin |> pl (* tr begin *)
+  ; if undo_enabled then 
+       td_wrap (call_undo text (mode_id_of_mode mode) checkpoints 
+                          rcheckpoints ^ "Undo") |> ps
+    else ()
+  ; let (new_mode, link_text) = 
+      if mode = First_Summary 
+        then (mode_id_of_mode First_List, "First Solution")
+      else if mode = Best_Summary 
+        then (mode_id_of_mode Best_List, "List of Best Solutions") 
+      else (mode_id_of_mode Best_List, "List of Best Solutions") in 
+    td_wrap (call_best_list text new_mode checkpoints 
+                            rcheckpoints ^ link_text) |> ps
+  ; td_wrap (call_full_graph text ^ "Summary of All Solutions") |> ps 
+  ; let call_scl_parser () = (* invocation of scl parser *)
+        if scl_toggle then
+           td_wrap (call_reader text (cpts @ rcheckpoints) 
+                                "o" ^ "UoH Analysis Mode") |> ps
+        else () (* [scl_parser] is not visible unless toggle is set *) in
+    if count=1 (* Unique remaining solution *) then do
+    { td_wrap (call_parser text (cpts @ rcheckpoints) ^ "Unique Solution") |> ps
+    ; call_scl_parser ()
+    }
+    else call_scl_parser ()
+  ; tr_end |> pl   (* tr end *)
+  ; table_end |> pl
+  ; div_end |> ps (* Latin16 *)
+  ; html_break |> pl
+  ; div_begin Latin12 |> ps
+  ; table_begin Tcenter |> pl
+  ; tr_begin |> ps
+  ; List.iter update_col_length chunks 
+  ; if Paths.platform="Station" 
+    then print_all text (mode_id_of_mode mode) checkpoints rcheckpoints chunks 0
+    else List.iter print_first_server chunks
+  ; tr_end |> pl
+  ; print_interf text (mode_id_of_mode mode) checkpoints rcheckpoints ()
+  ; table_end |> pl
+  ; div_end |> ps (* Latin12 *)
+  ; html_break |> pl
+  ; if mode = First_Summary then 
+      let seg_sols = List.map get_string solution_list in 
+      let _ = print_solution_to_file seg_sols in 
+      ()
+    else ()
+  } 
 ;
 
 value best_mode_operations cpts chunks = 
@@ -517,80 +690,58 @@ value best_mode_operations cpts chunks =
   (full, count, solution_list)
 ;
 (* The main procedure for computing the graph segmentation structure *)
-value check_sentence translit uns text checkpoints input undo_enabled font mode =
+value check_sentence translit uns text checkpoints input undo_enabled 
+      font mode rcheckpoints =
   let encode = Encode.switch_code translit in
   let chunker = if uns (* sandhi undone *) then Sanskrit.read_raw_sanskrit 
                 else (* chunking *) Sanskrit.read_sanskrit in
   let raw_chunks = Sanskrit.read_raw_sanskrit encode input in (* NEW *)
   let chunks = chunker encode input in 
   let deva_chunks = List.map Canon.unidevcode raw_chunks in (* NEW *)
+  let roman_chunks = List.map Canon.uniromcode raw_chunks in (* NEW *)
   let deva_input = String.concat " " deva_chunks in 
+  let roman_input = String.concat " " roman_chunks in 
   let wx_chunks = List.map Canon.decode_WX raw_chunks in (* NEW *)
-  let wx_input = String.concat " " wx_chunks 
-  and cpts = sort_check checkpoints in 
+  let wx_input = String.concat " " wx_chunks in 
+  let rcpts = sort_check (checkpoints @ rcheckpoints) in 
+  let cpts = sort_check checkpoints in 
+  let list_mode = 
+    if mode = First_Summary 
+      then let _ = max_best_solutions.val := 1 in 
+           First_List
+    else if mode = Best_Summary
+      then let _ = max_best_solutions.val := default_max_best_solutions in 
+           Best_List 
+    else mode in 
   let (full,count,solution_list) = 
-      best_mode_operations cpts chunks in do (* full iff all chunks segment *)
-  { make_visual cur_chunk.offset
-  ; find_conflict 0
-  ; html_break |> pl
-  ; html_latin16 "Sentence: " |> pl
-  ; deva16_blue deva_input |> ps (* devanagari *)
-  ; html_break |> ps
-  ; div_begin Latin16 |> ps
-  ; table_begin Spacing20 |> pl
-  ; tr_begin |> pl (* tr begin *)
-  ; if undo_enabled then 
-       td_wrap (call_undo text checkpoints ^ "Undo") |> ps
-    else ()
-  ; let call_scl_parser () = (* invocation of scl parser *)
-        if scl_toggle then
-           td_wrap (call_reader text checkpoints "o" ^ "UoH Analysis Mode") |> ps
-        else () (* [scl_parser] is not visible unless toggle is set *) in
-    if count > Web.max_count then 
-       (* too many solutions would choke the parsers *) 
-       td_wrap ("(" ^ string_of_int count ^ " Solutions)") |> ps
-    else if count=1 (* Unique remaining solution *) then do
-            { td_wrap (call_parser text cpts ^ "Unique Solution") |> ps
-            ; call_scl_parser ()
-            }
-         else do
-       { td_wrap (call_reader text checkpoints "p" ^ "Filtered Solutions") |> ps
-       ; (*let info = string_of_int count ^ if full then "" else " Partial" in *)
-         td_wrap (call_reader text checkpoints "l" ^ "List of Solutions") |> ps
-       ; call_scl_parser ()
-       } 
-  ; tr_end |> pl   (* tr end *)
-  ; table_end |> pl
-  ; div_end |> ps (* Latin16 *)
-  ; html_break |> pl
-  ; div_begin Latin12 |> ps
-  ; table_begin Tcenter |> pl
-  ; tr_begin |> ps
-  ; List.iter update_col_length chunks 
-  ; if Paths.platform="Station" then print_all text checkpoints chunks 0
-                                else List.iter print_first_server chunks
-  ; tr_end |> pl
-  ; print_interf text checkpoints ()
-  ; table_end |> pl
-  ; div_end |> ps (* Latin12 *)
-  ; html_break |> pl
-  ; html_break |> pl
-  ; html_latin16 "List of top solutions: " |> pl
-  ; html_break |> pl
-  ; (* Sriram: Check if numbering can be done implicitly *)
-    let numbered_sol_list = loop 0 [] solution_list
-    where rec loop id acc = fun
-    [ [] -> acc
-    | [hd :: tl] -> loop (id + 1) (acc @ [(id + 1, hd)]) tl
-    ] in
-    print_sols wx_input numbered_sol_list font mode 
-  }
+      best_mode_operations rcpts chunks in (* full iff all chunks segment *) 
+  let rebuild = (((List.length rcheckpoints) = 0) && 
+                (count >= max_best_solutions.val)) in 
+  (* The graph is rebuilt only for the first call. 
+     From the second call the checkpoints are used to update the graph *)
+  let updated_rcheckpts = 
+        if rebuild then rebuild_graph solution_list 
+        else rcheckpoints in 
+  (* Checkpoints are not sorted here to make sure that 
+     the tracking back using Undo is as per the user's selection of segments *)
+  let updated_rcpts = updated_rcheckpts in 
+  let undo_enabled = ((List.length cpts) > 0) && undo_enabled in 
+  match mode with 
+  [ Best_List | First_List -> 
+      display_best_list text deva_input roman_input checkpoints cpts wx_input 
+                        undo_enabled font list_mode solution_list updated_rcpts 
+  | Best_Summary | First_Summary -> 
+      display_best_summary text deva_input roman_input checkpoints cpts wx_input 
+                           chunks undo_enabled font mode full count solution_list
+                           updated_rcpts 
+  | _ -> raise (Failure ("Incompatible mode")) 
+  ]
 ;
 value arguments trans lex font cache st us input topic abs
-                corpus_permission corpus_dir sentence_no mode =
+                corpus_permission corpus_dir sentence_no =
   "t=" ^ trans ^ ";lex=" ^ lex ^ ";font=" ^ font ^ ";cache=" ^ cache ^ 
   ";st=" ^ st ^ ";us=" ^ us ^ ";text=" ^ input ^ 
-  ";topic=" ^ topic ^ ";abs=" ^ abs ^ ";mode=" ^ mode ^ 
+  ";topic=" ^ topic ^ ";abs=" ^ abs ^ 
   ";" ^ Params.corpus_permission ^ "=" ^ corpus_permission ^
   ";" ^ Params.corpus_dir ^ "=" ^ corpus_dir ^
   ";" ^ Params.sentence_no ^ "=" ^ sentence_no
@@ -665,13 +816,13 @@ value graph_engine () = do
     and () = toggle_sanskrit_font ft 
     and () = cache_active.val := cache 
     and abs = get "abs" env "f" (* default local paths *) in 
-    let mode = decode_url url_encoded_mode in 
     let lang = language_of_string lex (* lexicon indexing choice *)
     and input = decode_url url_encoded_input (* unnormalized string *)
     and uns = us="t" (* unsandhied vs sandhied corpus *) 
     and () = if st="f" then Lexer_control.star.val:=False 
              else () (* word vs sentence stemmer *)
     and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
+    and mode = mode_of_mode_id (decode_url url_encoded_mode)
     and () = assign_freq_info 
     and url_enc_corpus_permission = (* Corpus mode *)
         get Params.corpus_permission env "true" in 
@@ -685,10 +836,15 @@ value graph_engine () = do
                     || corpus_permission <> Web_corpus.Reader in
     let text = arguments translit lex font cache st us url_encoded_input
                          url_encoded_topic abs url_enc_corpus_permission
-                         corpus_dir sentence_no mode
+                         corpus_dir sentence_no 
     and checkpoints = 
       try let url_encoded_cpts = List.assoc "cpts" env in (* do not use get *)
           parse_cpts (decode_url url_encoded_cpts)
+      with [ Not_found -> [] ]
+    (* The rejected segments are indicated with the rcheckpoints *)
+    and rcheckpoints = 
+      try let url_encoded_rcpts = List.assoc "rcpts" env in 
+          parse_cpts (decode_url url_encoded_rcpts)
       with [ Not_found -> [] ]
     (* Now we check if cache acquisition is required *)
     and guess_morph = decode_url (get "guess" env "") (* User-aid guessing *)
@@ -711,8 +867,8 @@ value graph_engine () = do
    try do 
    { match (revised,rev_off,rev_ind) with
      [ ("",-1,-1) -> (* Standard input processing *** Main call *** *)
-       check_sentence translit uns text checkpoints input undo_enabled font 
-                      mode
+       check_sentence translit uns text checkpoints input undo_enabled 
+                      font mode rcheckpoints
      | (new_word,word_off,chunk_ind) (* User-aid revision mode *) -> 
        let chunks = Sanskrit.read_sanskrit (Encode.switch_code translit) input in
        let rec decoded init ind = fun
@@ -737,17 +893,18 @@ value graph_engine () = do
          List.map revise checkpoints
        and new_text = arguments translit lex font cache st us updated_input
                                 url_encoded_topic abs url_enc_corpus_permission
-                                corpus_dir sentence_no mode
+                                corpus_dir sentence_no 
        and new_input = decode_url updated_input in
        check_sentence translit uns new_text revised_check new_input undo_enabled 
-                      font mode
+                      font mode rcheckpoints
      ]
      (* Rest of the code concerns Corpus mode *)
      (* automatically refreshing the page only if guess parameter *)
    ; if String.length guess_morph > 0 then 
         ps ("<script>\nwindow.onload = function () {window.location=\"" ^
             graph_cgi2 ^ "?" ^ text ^  
-            ";cpts=" ^ (string_points checkpoints) ^ "\";}\n</script>")
+            ";cpts=" ^ (string_points checkpoints) ^ 
+            ";rcpts=" ^ (string_points rcheckpoints) ^ "\";}\n</script>")
      else ()
      (* Save sentence button *)
    ; if corpus_permission = Web_corpus.Annotator then

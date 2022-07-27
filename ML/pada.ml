@@ -39,7 +39,7 @@ value voices_of = fun
   | "k.su" | "k.sudh#1" | "k.svi.d" | "kha~nj#1" | "khaad" | "khid"
   | "khel" | "khyaa" | "gaj" | "gad" | "garj" | "gard" | "gal" | "gaa#1" 
   | "gaa#2" | "gu~nj" | "gu.n.th" | "gup" | "gumph" | "g.rdh" 
-  | "g.rr#2" | "granth" | "glai" | "ghas" | "ghu.s" | "gh.r" | "gh.r.s" 
+  | "g.rr#2" | "granth" | "ghas" | "ghu.s" | "gh.r" | "gh.r.s" 
   | "ghraa" | "cakaas" | "ca.t" | "cand" | "cam" | "car" | "cal" | "cit#1" 
   | "cumb" | "c.rt" | "chur" | "ch.rd" | "jak.s" | "jap" | "jabh#2" | "jam" 
   | "jalp" | "jas" | "jaag.r" | "jinv" | "jiiv" | "jvar" | "jval" | "tak" 
@@ -47,10 +47,10 @@ value voices_of = fun
   | "t.rh" | "t.rr" | "tyaj#1" | "tras" | "tru.t" | "tvak.s" | "tsar" | "da.mz"
   | "dagh" | "dabh" | "dam#1" | "dal" | "das" | "dah#1" | "daa#2" | "daa#3" 
   | "du" | "du.s" | "d.rp" | "d.rbh" | "d.rz#1" | "d.rh" | "d.rr" 
-  | "dhyaa" | "draa#1" | "dru#1" | "druh#1" | "dham" | "dhaa#2" | "dhru"
+  | "draa#1" | "dru#1" | "druh#1" | "dham" | "dhaa#2" | "dhru"
   | "dhvan" | "dhv.r" | "na.t" | "nad" | "nand" | "nard" | "naz#1" 
   | "nind" | "nu#1" | "n.rt" | "pa.t" | "pat#1" | "path" | "paa#1" | "paa#2" 
-  | "pii" | "piz#1" | "pi.s" | "pu.t" | "p.r#1" | "p.r#2" | "p.r.s" | "p.rr" 
+  | "piz#1" | "pi.s" | "pu.t" | "p.r#1" | "p.r#2" | "p.r.s" | "p.rr" 
   | "praa#1" | "phal" | "bal" | "b.rh#1" | "b.rh#2" | "bha~nj" | "bha.n" 
   | "bha.s" | "bhas" | "bhaa#1" | "bhii#1" | "bhuj#1" | "bhuu#1" | "bhuu.s" 
   | "bhram" | "majj" | "ma.n.d" | "mad#1" | "manth" | "mah" | "maa#3" | "mi.s" 
@@ -107,8 +107,8 @@ value voices_of = fun
   | "kuu" | "k.rp" | "k.lp" (* but Henry: {cak.lpur} "ils s'arrangèrent" *)
   | "knuu" | "klav" | "k.sad" | "galbh" | "gur" | "glah" 
   | "gha.t" | "jabh#1" | "ju.s#1" | "j.rmbh" | ".damb" | ".dii" | ".dhauk" 
-  | "tandr" | "tij" | "trap" | "trai" | "tvar" | "dak.s" | "day" | "diik.s" 
-  | "d.r#1" | "dhii#1" | "dhuk.s" | "pa.n" | "pad#1" | "pi~nj" 
+  | "tandr" | "tij" | "trap" | "traa" | "tvar" | "dak.s" | "day" | "diik.s" 
+  | "d.r#1" | "dhii#1" | "dhuk.s" | "pa.n" | "pad#1" | "pi~nj" | "pii" 
   | "pyaa" | "prath" | "pru" | "plu" | "ba.mh" | "baadh" | "bha.n.d" | "bhand" 
   | "bhaam" | "bhaa.s" | "bhraaj" | "ma.mh" | "man" | "mand#1" | "yat#1" 
   | "rabh" | "ruc#1" | "lajj" | "lamb" | "lii" | "loc" | "vand" 
@@ -126,7 +126,7 @@ value voices_of = fun
 (*| "labh" labhati, laabhet occurs in epics *)
 (*| "v.rdh#1" v.rdhati needed for Vedic *)
    (* DRP restriction: "dyut1" *) 
-      -> Atma (* "deponent" verbs: middle only *)
+      -> Atma (* deponent verbs: middle only *)
   | _ -> Ubha (* default *) 
   (* Attested Ubha (over all ga.nas) : 
   [ "a~nc" | "arth" | "arh" | "aap" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" 
@@ -134,14 +134,14 @@ value voices_of = fun
   | "k.r#2" | "k.r.s" | "kram" | "krii#1" | "krii.d" | "krudh#1" | "k.san" 
   | "k.sap#1" | "k.sam" | "k.sal" | "k.sip" | "k.sud" | "k.subh" | "k.s.nu"
   | "khan" | "gam" | "garh" | "gaah" | "guh" | "g.rr#1" | "gras" | "grah" 
-  | "gha.t.t" | "cat" | "carc" | "ci" | "cint" | "cud" | "ce.s.t" | "cyu" 
-  | "chad#1" | "chand" | "chid#1" | "jan" | "juu" | "j~naa#1" | "jyaa#1" 
+  | "glaa" | "gha.t.t" | "cat" | "carc" | "ci" | "cint" | "cud" | "ce.s.t"
+  | "cyu" | "chad#1" | "chand" | "chid#1" | "jan" | "juu" | "j~naa#1" | "jyaa#1" 
   | "jyut" | "ta.d" | "tan#1" | "tan#2" | "tap" | "tud#1" | "tul" | "t.rd" 
   | "traa" | "daa#1" | "daaz#1" | "diz#1" | "dih" | "diip" | "duh#1" | "dev#1"
   | "draa#2" | "dvi.s#1" | "dhaa#1" | "dhaav#1" | "dhaav#2" | "dhuu#1" | "dh.r"
-  | "dhva.ms" | "nam" | "nah" | "naath" | "nij" | "nii#1" | "nud" | "pac" 
-  | "paz" | "pa.th" | "pii.d" | "pu.s#1" | "puu#1" | "puuj" | "puuy" | "p.rth" 
-  | "prii" | "pru.s#1" | "budh#1" | "bruu" | "bhak.s" | "bhaj" 
+  | "dhyaa" | "dhva.ms" | "nam" | "nah" | "naath" | "nij" | "nii#1" | "nud"
+  | "pac" | "paz" | "pa.th" | "pii.d" | "pu.s#1" | "puu#1" | "puuj" | "puuy" 
+  | "p.rth" | "prii" | "pru.s#1" | "budh#1" | "bruu" | "bhak.s" | "bhaj" 
   | "bharts" | "bhaas#1" | "bhid#1" | "bhuj#2" | "bh.r" | "bh.rjj" 
   | "mantr" | "maa#4" | "maarg" | "mi" | "mith" | "mil" | "mii" 
   | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.rz" | "m.r.s" 
@@ -173,6 +173,7 @@ jyaa1 4A 9P
 .damb 1A 10P (vi-)
 tap 1U 4A
 daa1 2P 1U 3U
+dhyaa 4U 2P
 draa2 2P 4U
 dh.r.s 1U 5P
 nij 2A 3U
@@ -217,7 +218,8 @@ value voices_of_gana g root = match g with
         | _ -> voices_of root (* man U (epic P) *)
         ] 
  | 2 -> match root with
-       [ "daa#1" | "dyaa" | "draa#2" | "maa#1" | "m.rj" | "rud#1" | "zvas#1"
+        [ "daa#1" | "dyaa" | "draa#2" | "maa#1" | "m.rj" | "rud#1" 
+        | "zvas#1"
             -> Para
         | "nij" | "vid#2" -> Atma
         | _ -> voices_of root 

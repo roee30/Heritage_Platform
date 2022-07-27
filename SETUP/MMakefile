@@ -672,6 +672,7 @@ install: #after distribution to host site: "./configure; make; sudo make install
 	SETUP/issudo.sh
 	test -f $(SERVERPUBLICDIR)DATA/cache.txt && echo "cold install" || $(MAKE) cold
 	cd $(SERVERPUBLICDIR)DATA; touch $(CACHES); chmod a+w $(CACHES)
+	touch $(SKTINSTALLDIR)ML/best_sol.txt; chmod 666 $(SKTINSTALLDIR)ML/best_sol.txt
 	$(MAKE) release
 	ML/restore_caches
 
@@ -741,6 +742,6 @@ course:
 	cp -p $(SKTRESOURCES)COURSE/Lessons/style.css $(SERVERPUBLICDIR)COURSE/Lessons/style.css
 
 
-SAVED_VERSION=339a
+SAVED_VERSION=339b
 save: # saving sources of Heritage_Platform (after make clean in ML)
 	tar cvf ../ARCHIVE/Heritage_Platform_$(SAVED_VERSION).tar ML SITE JAVASCRIPT SETUP configure INSTALLATION DOC IMAGES README 

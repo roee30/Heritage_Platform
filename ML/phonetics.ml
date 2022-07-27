@@ -128,6 +128,13 @@ and aspirate  c = c = 49 (* h *)
 ;
 value stop c = c > 16 && c < 42
 ;
+(* aspirated stops Pr(j.s) sonores et début de Pr(khav) sourdes - unused *) 
+value aspirated = fun 
+  (* kh   gh   ch   jh  .th  .dh   th   dh   ph   bh *)
+   [ 18 | 20 | 23 | 25 | 28 | 30 | 33 | 35 | 38 | 40 -> True
+   | _ -> False
+   ]
+;
 value nasal c = 
      c = 21 (* f *) || c =  26 (* ~n *) || c = 31 (* .n *) 
   || c = 36 (* n *) || c = 41  (*  m *) || anusvar c (* Pr(~nam) *)
@@ -175,7 +182,7 @@ value voiced = fun (* voices previous phoneme with homophone *)
 value voiced_consonant c = (* Pr(jhaz) *)
   List.mem c [ 19; 20; 24; 25; 29; 30; 34; 35; 39; 40 ]
 
-and mute_consonant c =(* Pr(khay) *)
+and mute_consonant c = (* Pr(khay) *)
   List.mem c [ 17; 27; 32; 37; 18; 22; 23; 28; 33; 38 ]
 ;
 value is_voiced c = (* voiced phonemes *)

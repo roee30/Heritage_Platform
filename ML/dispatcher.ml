@@ -399,7 +399,7 @@ value rec chop word = fun
      ]
   ]
 ; 
-value iic_phase = fun 
+value iic_phase = fun (* to unify with [Phases.ii_phase] *)
   [ Iicv | Iicc | Iikv | Iikc
   | Comp (_,Iikv) _ _ | Comp (_,Iikc) _ _ -> True
   | _ -> False ]

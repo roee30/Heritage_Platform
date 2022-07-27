@@ -182,7 +182,8 @@ and preverb_phase = fun
 and krid_phase = fun [ Krid | Kric | Kriv -> True | _ -> False ]
 and ikrid_phase = fun [ Iik | Iikc | Iikv -> True | _ -> False ]
 and vkrid_phase = fun [ Vokc | Vokv -> True | _ -> False ]
-and ii_phase = fun [ Iicv | Iicc | Iikv | Iikc | A | An -> True | _ -> False ]
+and ii_phase = fun [ Iicv | Iicc | Iikv | Iikc | Iiif | A | An -> True 
+                   | _ -> False ]
 and is_cache = fun [ Cache | Cachei -> True | _ -> False ]
 ;
 (* To check all possible non-final components of compounds *)

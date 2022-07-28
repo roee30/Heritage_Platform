@@ -244,7 +244,7 @@ value is_conflicting ((w,tr,ph,k) as segment) =
                    else does_conflict rest
        ]
   ]
-(* Remaining bug: "mahaabaho" when deleting "a", "ap" goes blue despite "baho" *)
+(* Remaining bug: "mahaabaho" where "ap" is blue despite "baho" *)
 ; 
 value rec find_conflict_seg acc l = fun 
   [ [] -> List.rev acc

@@ -115,7 +115,6 @@ value print_morpho phase word =
 
 (* Parsing mandatory checkpoints *)
 open Checkpoints; (* [string_points] *) 
-open Lexmap;
 
 value rpc = Paths.remote_server_host 
 and remote = ref False (* local invocation of cgi by default 
@@ -257,7 +256,7 @@ value is_conflicting ((w,tr,ph,k) as segment) =
                    else does_conflict rest
        ]
   ]
-(* Remaining bug: "mahaabaho" when deleting "a", "ap" goes blue despite "baho" *)
+(* Remaining bug: "mahaabaho" where "ap" is blue despite "baho" *)
 ; 
 value rec find_conflict_seg acc l = fun 
   [ [] -> List.rev acc
@@ -488,6 +487,11 @@ value get_string (_,str,_,_) =
   str
 ;
 
+value replace_plus str = 
+  let temp_str = Str.global_replace (Str.regexp "-\\+") "-" str in 
+  Str.global_replace (Str.regexp "+") " " temp_str 
+;
+
 (* all_sols :: (int, (float, string, output)) list*)
 (* solutions :: (float, string, output) list*)
 (* sols :: string list*)
@@ -496,21 +500,18 @@ value print_solution_to_file sols  =
     let cho = 
       open_out_gen [Open_creat; Open_trunc; Open_wronly] 0o666 
                    segmented_output_file in do
-      { let first_sol = List.hd sols in 
-        let temp_sol = Str.global_replace (Str.regexp "-\+") "-" first_sol in
-        let best_sol = Str.global_replace (Str.regexp "+") " " temp_sol in
-        output_string cho best_sol
+      { output_string cho (replace_plus (List.hd sols))
       ; flush cho
       ; close_out cho
       }
 ;
 
-value print_sols_to_file wx_input sols = 
+value print_all_sols_to_file wx_input sols = 
   let segmented_output_file = solution_path ^ "best_n_solutions.txt" in
     let cho = 
       open_out_gen [Open_append; Open_creat] 0o666 segmented_output_file in do
       { output_string cho (wx_input ^ "\t"); (* Prints the unsegmented text *)
-        (* Prints all solutions separated with "-" *)
+        (* Prints all solutions separated with ";" *)
         let _ = (print_all_sols cho sols) in 
         output_string cho "\n"
         ;
@@ -519,20 +520,21 @@ value print_sols_to_file wx_input sols =
       }
 ;
 
-value print_sols wx_input sols font mode = (* stats = (kept,max) *) 
-  let solutions = List.map snd sols in 
+(* The following is for recording the best solution(s) to file (for debug) *) 
+value print_sols_to_file wx_input mode solutions = 
+  let solutions = List.map snd solutions in 
   let seg_sols = List.map get_string solutions in 
+  if mode = First_List then let _ = print_solution_to_file seg_sols in ()
+  else let _ = print_all_sols_to_file wx_input seg_sols in ()
+;
+
+value print_sols wx_input sols font mode = (* stats = (kept,max) *) 
+  (* The following is uncommented during debugging to save solution(s) in file *)
+  (*let _ = print_sols_to_file wx_input mode sols in *)
   let print_sl sls = List.iter (print_solution font) sls in 
   if mode = First_List then (* To record the first best solution *)
-    let _  = print_sl [(List.hd sols)] in 
-  (* The following is for recording the best solution to file *)  
-    let _ = print_solution_to_file seg_sols in 
-    ()
-  else (* To record all the solutions *)
-    let _ = print_sl sols in 
-  (* The following is for recording all the best solutions to file *)
-  (*  let _ = print_sols_to_file wx_input seg_sols in *)
-    ()
+    print_sl [(List.hd sols)]
+  else print_sl sols (* To record all the solutions *)
 ;
 
 value mode_id_of_mode mode = 
@@ -563,6 +565,13 @@ value print_best_solutions wx_input font mode solution_list =
     | [hd :: tl] -> loop (id + 1) (acc @ [(id + 1, hd)]) tl
     ] in
     print_sols wx_input numbered_sol_list font mode 
+;
+
+(* In Pipeline, segmented solution is directly fed to standard output *)
+value write_sol_to_std_out solution_list = 
+(*  let solutions = List.map snd solution_list in *)
+  let seg_sols = List.map get_string solution_list in 
+  print_endline (replace_plus (List.hd seg_sols))
 ;
 
 (* The following two functions are introduced for the 
@@ -668,11 +677,6 @@ value display_best_summary text deva_input roman_input checkpoints cpts wx_input
   ; table_end |> pl
   ; div_end |> ps (* Latin12 *)
   ; html_break |> pl
-  ; if mode = First_Summary then 
-      let seg_sols = List.map get_string solution_list in 
-      let _ = print_solution_to_file seg_sols in 
-      ()
-    else ()
   } 
 ;
 
@@ -691,7 +695,7 @@ value best_mode_operations cpts chunks =
 ;
 (* The main procedure for computing the graph segmentation structure *)
 value check_sentence translit uns text checkpoints input undo_enabled 
-      font mode rcheckpoints =
+      font mode rcheckpoints pipeline =
   let encode = Encode.switch_code translit in
   let chunker = if uns (* sandhi undone *) then Sanskrit.read_raw_sanskrit 
                 else (* chunking *) Sanskrit.read_sanskrit in
@@ -726,6 +730,12 @@ value check_sentence translit uns text checkpoints input undo_enabled
      the tracking back using Undo is as per the user's selection of segments *)
   let updated_rcpts = updated_rcheckpts in 
   let undo_enabled = ((List.length cpts) > 0) && undo_enabled in 
+  (* Pipeline mode is enabled when the Segmenter is accessed directly from
+     Sa.msaadhanii. The best segmented solution is directly fed to the
+     standard output. By default, the pipeline is disabled to access the 
+     usual display of best segments' summary or best solutions' list *)
+  if pipeline then write_sol_to_std_out solution_list
+  else
   match mode with 
   [ Best_List | First_List -> 
       display_best_list text deva_input roman_input checkpoints cpts wx_input 
@@ -793,151 +803,156 @@ value quit_button corpmode corpdir sentno =
   center_end
 ;
 (* Main body of sktgraph2 cgi *)
-value graph_engine () = do
-  { Prel.prelude () 
-  ; let query = Sys.getenv "QUERY_STRING" in
-    let env = create_env query in
-    (* Multiple environment variables according to modes of use are: 
-       text topic st us t lex font cache abs cpts (standard mode) 
-       corpdir sentno corpmode (defined in Params) 
-       guess gender revised [rev_off] [rev_ind] (User-aid) *)
-    let url_encoded_input = get "text" env "" 
-    and url_encoded_topic = get "topic" env "" (* topic carry-over *)
-    and url_encoded_mode  = get "mode" env "b"
-    and st = get "st" env "t" (* sentence parse default *)
-    and us = get "us" env "f" (* sandhied text default *)
-    and translit = get "t" env Paths.default_transliteration (* translit input *)
-    and lex = get "lex" env Paths.default_lexicon (* lexicon choice *)
-    and font = get "font" env Paths.default_display_font in 
-    let ft = font_of_string font (* Deva vs Roma print *)
-    and cache = get "cache" env "f" (* no cache default *) in
-    (* ft and cache are persistent in the session *)
-    let () = toggle_lexicon lex (* sticky lexicon switch *)
-    and () = toggle_sanskrit_font ft 
-    and () = cache_active.val := cache 
-    and abs = get "abs" env "f" (* default local paths *) in 
-    let lang = language_of_string lex (* lexicon indexing choice *)
-    and input = decode_url url_encoded_input (* unnormalized string *)
-    and uns = us="t" (* unsandhied vs sandhied corpus *) 
-    and () = if st="f" then Lexer_control.star.val:=False 
-             else () (* word vs sentence stemmer *)
-    and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
-    and mode = mode_of_mode_id (decode_url url_encoded_mode)
-    and () = assign_freq_info 
-    and url_enc_corpus_permission = (* Corpus mode *)
-        get Params.corpus_permission env "true" in 
-    let corpus_permission = 
-      url_enc_corpus_permission
-      |> decode_url
-      |> Web_corpus.permission_of_string in
-    let corpus_dir = get Params.corpus_dir env "" 
-    and sentence_no = get Params.sentence_no env "" in
-    let undo_enabled = sentence_no = "" (* no undo in Reader corpus mode *)
-                    || corpus_permission <> Web_corpus.Reader in
-    let text = arguments translit lex font cache st us url_encoded_input
-                         url_encoded_topic abs url_enc_corpus_permission
-                         corpus_dir sentence_no 
-    and checkpoints = 
-      try let url_encoded_cpts = List.assoc "cpts" env in (* do not use get *)
-          parse_cpts (decode_url url_encoded_cpts)
-      with [ Not_found -> [] ]
-    (* The rejected segments are indicated with the rcheckpoints *)
-    and rcheckpoints = 
-      try let url_encoded_rcpts = List.assoc "rcpts" env in 
-          parse_cpts (decode_url url_encoded_rcpts)
-      with [ Not_found -> [] ]
-    (* Now we check if cache acquisition is required *)
-    and guess_morph = decode_url (get "guess" env "") (* User-aid guessing *)
-    and pseudo_gender = decode_url (get "gender" env "") in 
-    let _ = if String.length guess_morph > 0 && Paths.platform="Station" then
-               (* User-aid cache acquisition *)
-               let (entry,gender) = match pseudo_gender with 
-                                    [ "" -> parse_guess guess_morph 
-                                    | g -> (guess_morph,g) 
-                                    ] in do
-               { append_cache entry gender
-               ; let cache_txt_file = Data.public_cache_txt_file in
-                 let caches = Nouns.extract_current_caches cache_txt_file in
-                 make_cache_transducers caches
-               }
-            else () in
-    let revised = decode_url (get "revised" env "") (* User-aid revision *)
-    and rev_off = int_of_string (get "rev_off" env "-1") 
-    and rev_ind = int_of_string (get "rev_ind" env "-1") in 
-   try do 
-   { match (revised,rev_off,rev_ind) with
-     [ ("",-1,-1) -> (* Standard input processing *** Main call *** *)
-       check_sentence translit uns text checkpoints input undo_enabled 
-                      font mode rcheckpoints
-     | (new_word,word_off,chunk_ind) (* User-aid revision mode *) -> 
-       let chunks = Sanskrit.read_sanskrit (Encode.switch_code translit) input in
-       let rec decoded init ind = fun
-           [ [] -> String.sub init 0 ((String.length init)-1)
-           | [ a :: rest ] -> 
-               let ind' = ind+1 
-               and init' = if ind = chunk_ind then init ^ new_word ^ "+"
-                           else init ^ Canon.switch_decode translit a ^ "+" in
-               decoded init' ind' rest
-           ] in
-       let updated_input = decoded "" 1 chunks in
-       let rec find_word_len cur_ind = fun 
-           [ [] -> 0
-           | [ a :: rest ] -> if cur_ind = chunk_ind then Word.length a
-                              else find_word_len (cur_ind+1) rest
-           ] in
-       let word_len = find_word_len 1 chunks 
-       and new_chunk_len = Word.length (Encode.switch_code translit revised) in
-       let diff = new_chunk_len-word_len in
-       let revised_check = 
-         let revise (k,sec,sel) = (if k<word_off then k else k+diff,sec,sel) in
-         List.map revise checkpoints
-       and new_text = arguments translit lex font cache st us updated_input
-                                url_encoded_topic abs url_enc_corpus_permission
-                                corpus_dir sentence_no 
-       and new_input = decode_url updated_input in
-       check_sentence translit uns new_text revised_check new_input undo_enabled 
-                      font mode rcheckpoints
-     ]
-     (* Rest of the code concerns Corpus mode *)
-     (* automatically refreshing the page only if guess parameter *)
-   ; if String.length guess_morph > 0 then 
-        ps ("<script>\nwindow.onload = function () {window.location=\"" ^
-            graph_cgi2 ^ "?" ^ text ^  
-            ";cpts=" ^ (string_points checkpoints) ^ 
-            ";rcpts=" ^ (string_points rcheckpoints) ^ "\";}\n</script>")
-     else ()
-     (* Save sentence button *)
-   ; if corpus_permission = Web_corpus.Annotator then
-     (*i TODO: use [segment_iter] to compute the nb of sols instead of
-        passing 0 to [nb_sols]. i*)
-        save_button query 0 |> pl
-     else () 
-   ; html_break |> pl
-     (* Quit button: continue reading (reader mode) 
-                  or quit without saving (annotator mode) *)
-   ; if sentence_no <> "" then
-        quit_button corpus_permission
-                    (decode_url corpus_dir) (decode_url sentence_no) |> pl
-     else ()
-   ; close_page_with_margin ()
-   ; page_end lang True
-   } 
-   with 
- [ Sys_error s         -> abort lang Control.sys_err_mess s (* file pb *)
- | Stream.Error s      -> abort lang Control.stream_err_mess s (* file pb *)
- | Encode.In_error s   -> abort lang "Wrong input " s
- | Exit (* Sanskrit *) -> abort lang "Wrong character in input" "" 
- | Overflow            -> abort lang "Maximum input size exceeded" ""
- | Invalid_argument s  -> abort lang Control.fatal_err_mess s (* sub array *)
- | Failure s           -> abort lang Control.fatal_err_mess s (* anomaly *)
- | End_of_file         -> abort lang Control.fatal_err_mess "EOF" (* EOF *)
- | Not_found           -> let s = "You must choose a parsing option" in
-                          abort lang "Unset button in form - " s
- | Control.Fatal s     -> abort lang Control.fatal_err_mess s (* anomaly *)
- | Control.Anomaly s   -> abort lang Control.anomaly_err_mess s
- | _                   -> abort lang Control.fatal_err_mess "Unexpected anomaly" 
- ]
- }
+value graph_engine () = 
+  let query = Sys.getenv "QUERY_STRING" in
+  let env = create_env query in
+  (* Multiple environment variables according to modes of use are: 
+     text topic st us t lex font cache abs cpts (standard mode) 
+     corpdir sentno corpmode (defined in Params) 
+     guess gender revised [rev_off] [rev_ind] (User-aid) *)
+  let url_encoded_input = get "text" env "" 
+  and url_encoded_topic = get "topic" env "" (* topic carry-over *)
+  and url_encoded_mode  = get "mode" env "b"
+  and ppl = get "pipeline" env ""
+  and st = get "st" env "t" (* sentence parse default *)
+  and us = get "us" env "f" (* sandhied text default *)
+  and translit = get "t" env Paths.default_transliteration (* translit input *)
+  and lex = get "lex" env Paths.default_lexicon (* lexicon choice *)
+  and font = get "font" env Paths.default_display_font in 
+  let ft = font_of_string font (* Deva vs Roma print *)
+  and cache = get "cache" env "f" (* no cache default *) in
+  (* ft and cache are persistent in the session *)
+  let () = toggle_lexicon lex (* sticky lexicon switch *)
+  and () = toggle_sanskrit_font ft 
+  and () = cache_active.val := cache 
+  and abs = get "abs" env "f" (* default local paths *) in 
+  let lang = language_of_string lex (* lexicon indexing choice *)
+  and input = decode_url url_encoded_input (* unnormalized string *)
+  and uns = us="t" (* unsandhied vs sandhied corpus *) 
+  and () = if st="f" then Lexer_control.star.val:=False 
+           else () (* word vs sentence stemmer *)
+  and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
+  and mode = mode_of_mode_id (decode_url url_encoded_mode)
+  and pipeline = (ppl = "p")
+  and () = assign_freq_info 
+  and url_enc_corpus_permission = (* Corpus mode *)
+      get Params.corpus_permission env "true" in 
+  let corpus_permission = 
+    url_enc_corpus_permission
+    |> decode_url
+    |> Web_corpus.permission_of_string in
+  let corpus_dir = get Params.corpus_dir env "" 
+  and sentence_no = get Params.sentence_no env "" in
+  let undo_enabled = sentence_no = "" (* no undo in Reader corpus mode *)
+                  || corpus_permission <> Web_corpus.Reader in
+  let text = arguments translit lex font cache st us url_encoded_input
+                       url_encoded_topic abs url_enc_corpus_permission
+                       corpus_dir sentence_no 
+  and checkpoints = 
+    try let url_encoded_cpts = List.assoc "cpts" env in (* do not use get *)
+        parse_cpts (decode_url url_encoded_cpts)
+    with [ Not_found -> [] ]
+  (* The rejected segments are indicated with the rcheckpoints *)
+  and rcheckpoints = 
+    try let url_encoded_rcpts = List.assoc "rcpts" env in 
+        parse_cpts (decode_url url_encoded_rcpts)
+    with [ Not_found -> [] ]
+  (* Now we check if cache acquisition is required *)
+  and guess_morph = decode_url (get "guess" env "") (* User-aid guessing *)
+  and pseudo_gender = decode_url (get "gender" env "") in 
+  let _ = if String.length guess_morph > 0 && Paths.platform="Station" then
+             (* User-aid cache acquisition *)
+             let (entry,gender) = match pseudo_gender with 
+                                  [ "" -> parse_guess guess_morph 
+                                  | g -> (guess_morph,g) 
+                                  ] in do
+             { append_cache entry gender
+             ; let cache_txt_file = Data.public_cache_txt_file in
+               let caches = Nouns.extract_current_caches cache_txt_file in
+               make_cache_transducers caches
+             }
+          else () in
+  let revised = decode_url (get "revised" env "") (* User-aid revision *)
+  and rev_off = int_of_string (get "rev_off" env "-1") 
+  and rev_ind = int_of_string (get "rev_ind" env "-1") in 
+  let _ = if pipeline then ()
+          else Prel.prelude () in 
+  try let _ = 
+    match (revised,rev_off,rev_ind) with
+    [ ("",-1,-1) -> (* Standard input processing *** Main call *** *)
+      check_sentence translit uns text checkpoints input undo_enabled 
+                     font mode rcheckpoints pipeline
+    | (new_word,word_off,chunk_ind) (* User-aid revision mode *) -> 
+      let chunks = Sanskrit.read_sanskrit (Encode.switch_code translit) input in
+      let rec decoded init ind = fun
+          [ [] -> String.sub init 0 ((String.length init)-1)
+          | [ a :: rest ] -> 
+              let ind' = ind+1 
+              and init' = if ind = chunk_ind then init ^ new_word ^ "+"
+                          else init ^ Canon.switch_decode translit a ^ "+" in
+              decoded init' ind' rest
+          ] in
+      let updated_input = decoded "" 1 chunks in
+      let rec find_word_len cur_ind = fun 
+          [ [] -> 0
+          | [ a :: rest ] -> if cur_ind = chunk_ind then Word.length a
+                             else find_word_len (cur_ind+1) rest
+          ] in
+      let word_len = find_word_len 1 chunks 
+      and new_chunk_len = Word.length (Encode.switch_code translit revised) in
+      let diff = new_chunk_len-word_len in
+      let revised_check = 
+        let revise (k,sec,sel) = (if k<word_off then k else k+diff,sec,sel) in
+        List.map revise checkpoints
+      and new_text = arguments translit lex font cache st us updated_input
+                               url_encoded_topic abs url_enc_corpus_permission
+                               corpus_dir sentence_no 
+      and new_input = decode_url updated_input in
+      check_sentence translit uns new_text revised_check new_input undo_enabled 
+                     font mode rcheckpoints pipeline
+    ] in 
+    if pipeline then ()
+    else do 
+    {
+    (* Rest of the code concerns Corpus mode *)
+    (* automatically refreshing the page only if guess parameter *)
+      if String.length guess_morph > 0 then 
+         ps ("<script>\nwindow.onload = function () {window.location=\"" ^
+             graph_cgi2 ^ "?" ^ text ^  
+             ";cpts=" ^ (string_points checkpoints) ^ 
+             ";rcpts=" ^ (string_points rcheckpoints) ^ "\";}\n</script>")
+      else ()
+      (* Save sentence button *)
+    ; if corpus_permission = Web_corpus.Annotator then
+      (*i TODO: use [segment_iter] to compute the nb of sols instead of
+         passing 0 to [nb_sols]. i*)
+         save_button query 0 |> pl
+      else () 
+    ; html_break |> pl
+      (* Quit button: continue reading (reader mode) 
+                   or quit without saving (annotator mode) *)
+    ; if sentence_no <> "" then
+         quit_button corpus_permission
+                     (decode_url corpus_dir) (decode_url sentence_no) |> pl
+      else ()
+    ; close_page_with_margin ()
+    ; page_end lang True
+    } 
+  with 
+  [ Sys_error s         -> abort lang Control.sys_err_mess s (* file pb *)
+  | Stream.Error s      -> abort lang Control.stream_err_mess s (* file pb *)
+  | Encode.In_error s   -> abort lang "Wrong input " s
+  | Exit (* Sanskrit *) -> abort lang "Wrong character in input" "" 
+  | Overflow            -> abort lang "Maximum input size exceeded" ""
+  | Invalid_argument s  -> abort lang Control.fatal_err_mess s (* sub array *)
+  | Failure s           -> abort lang Control.fatal_err_mess s (* anomaly *)
+  | End_of_file         -> abort lang Control.fatal_err_mess "EOF" (* EOF *)
+  | Not_found           -> let s = "You must choose a parsing option" in
+                           abort lang "Unset button in form - " s
+  | Control.Fatal s     -> abort lang Control.fatal_err_mess s (* anomaly *)
+  | Control.Anomaly s   -> abort lang Control.anomaly_err_mess s
+  | _                   -> abort lang Control.fatal_err_mess "Unexpected anomaly" 
+  ]
 ; 
 value safe_engine () =
   (* Problem: in case of error, we lose the current language of the session *)

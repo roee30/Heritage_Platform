@@ -557,10 +557,6 @@ value bump_counter () = solutions_counter.val := solutions_counter.val + 1
 and get_counter () = solutions_counter.val
 and reset_counter () = solutions_counter.val := 0
 ;
-(* Decode text *)
-value get_text sentence = 
-  Morpho_html.hdecode sentence
-;
 (* [log_chunk] is split for clarity *)
 value log_chunk_rec index solution = 
   log_rec index 0 1.0 "" [] solution
@@ -980,7 +976,7 @@ value segment_chunk (full,count) chunk sa_check =
                then chkpts.rejected_segments 
                else chkpts.rejected_segments @ [new_segment]
            ; chkpts.rejected_segments := new_segment_check
-           ; let chnk_txt = (get_text chunk) ^ " "
+           ; let chnk_txt = (Canon.decode_WX chunk) 
              and chnk_sgmnt = 
                    [(old_offset,(unknown,(Word.mirror cur_chunk.chunk),Id))] in 
              chunk_solutions.possible_splits := 

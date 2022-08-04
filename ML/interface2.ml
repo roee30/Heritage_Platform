@@ -567,14 +567,15 @@ value print_best_solutions wx_input font mode solution_list =
     print_sols wx_input numbered_sol_list font mode 
 ;
 
-(* In Pipeline, segmented solution is directly fed to standard output *)
-value write_sol_to_std_out solution_list selected_segments print_form = 
-  if print_form then (* Sends the best segments' morph analysis *)
-    let final_segments = List.map snd selected_segments in 
-    Scl_parser.post_best_segments_scl final_segments
-  else (* Sends the best segmented solution string *)
-    let seg_sols = List.map get_string solution_list in 
-    print_endline (replace_plus (List.hd seg_sols))
+(* In Pipeline, segmented solution and all its possible morph analyses' 
+   are directly fed to standard output *)
+value write_sol_to_std_out solution_list selected_segments = 
+  let final_segments = List.map snd selected_segments
+  and seg_sols = List.map get_string solution_list in do 
+  { ("sentence: " ^ (replace_plus (List.hd seg_sols))) |> ps
+  ; "\n" |> ps
+  ; Scl_parser.post_best_segments_scl final_segments
+  }
 ;
 
 (* The following two functions are introduced for the 
@@ -737,7 +738,7 @@ value check_sentence translit uns text checkpoints input undo_enabled
      sa.msaadhanii. The best segmented solution is directly fed to the
      standard output. By default, the pipeline is disabled to access the 
      usual display of best segments' summary or best solutions' list *)
-  if pipeline then write_sol_to_std_out solution_list selected_segments True
+  if pipeline then write_sol_to_std_out solution_list selected_segments 
   else
   match mode with 
   [ Best_List | First_List -> 
@@ -816,7 +817,7 @@ value graph_engine () =
   let url_encoded_input = get "text" env "" 
   and url_encoded_topic = get "topic" env "" (* topic carry-over *)
   and url_encoded_mode  = get "mode" env "b"
-  and ppl = get "pipeline" env ""
+  and ppl = get "pipeline" env "false"
   and st = get "st" env "t" (* sentence parse default *)
   and us = get "us" env "f" (* sandhied text default *)
   and translit = get "t" env Paths.default_transliteration (* translit input *)
@@ -836,7 +837,7 @@ value graph_engine () =
            else () (* word vs sentence stemmer *)
   and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
   and mode = mode_of_mode_id (decode_url url_encoded_mode)
-  and pipeline = (ppl = "p")
+  and pipeline = (ppl = "true")
   and () = assign_freq_info 
   and url_enc_corpus_permission = (* Corpus mode *)
       get Params.corpus_permission env "true" in 

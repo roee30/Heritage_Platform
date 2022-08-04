@@ -619,7 +619,7 @@ value print_scl_segment counter (phase,rword) =
 value best_segments_for_scl counter (phase,rword) =
   let word = Morpho_html.visargify rword in do 
   { let ic = string_of_int counter in
-    "<form wx=\""
+    "morph: <form wx=\""
         ^ Canon.decode_WX word ^ "\"/>" |> ps
   ; match tags_of phase (mirror rword) with 
     [ Atomic tags ->

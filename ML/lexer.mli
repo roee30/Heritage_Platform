@@ -63,5 +63,6 @@ module Lexer : functor (* takes its prelude and iterator control as parameters *
   value print_segment_to_file : out_channel -> Machine.segment -> unit;
   value get_sandhi_word: (Machine.segment) -> string;
   value assign_freq_info: unit;
+  value best_segments_for_scl : int -> (Phases.phase * Word.word) -> int;
 end;
 

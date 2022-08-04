@@ -521,8 +521,8 @@ value print_all_sols_to_file wx_input sols =
 ;
 
 (* The following is for recording the best solution(s) to file (for debug) *) 
-value print_sols_to_file wx_input mode solutions = 
-  let solutions = List.map snd solutions in 
+value print_sols_to_file wx_input mode sols = 
+  let solutions = List.map snd sols in 
   let seg_sols = List.map get_string solutions in 
   if mode = First_List then let _ = print_solution_to_file seg_sols in ()
   else let _ = print_all_sols_to_file wx_input seg_sols in ()
@@ -568,10 +568,13 @@ value print_best_solutions wx_input font mode solution_list =
 ;
 
 (* In Pipeline, segmented solution is directly fed to standard output *)
-value write_sol_to_std_out solution_list = 
-(*  let solutions = List.map snd solution_list in *)
-  let seg_sols = List.map get_string solution_list in 
-  print_endline (replace_plus (List.hd seg_sols))
+value write_sol_to_std_out solution_list selected_segments print_form = 
+  if print_form then (* Sends the best segments' morph analysis *)
+    let final_segments = List.map snd selected_segments in 
+    Scl_parser.post_best_segments_scl final_segments
+  else (* Sends the best segmented solution string *)
+    let seg_sols = List.map get_string solution_list in 
+    print_endline (replace_plus (List.hd seg_sols))
 ;
 
 (* The following two functions are introduced for the 
@@ -723,18 +726,18 @@ value check_sentence translit uns text checkpoints input undo_enabled
                 (count >= max_best_solutions.val)) in 
   (* The graph is rebuilt only for the first call. 
      From the second call the checkpoints are used to update the graph *)
-  let updated_rcheckpts = 
-        if rebuild then rebuild_graph solution_list 
-        else rcheckpoints in 
+  let (selected_segments, updated_rcheckpts) = 
+    if rebuild then rebuild_graph solution_list 
+    else (get_best_segments solution_list, rcheckpoints) in 
   (* Checkpoints are not sorted here to make sure that 
      the tracking back using Undo is as per the user's selection of segments *)
   let updated_rcpts = updated_rcheckpts in 
   let undo_enabled = ((List.length cpts) > 0) && undo_enabled in 
   (* Pipeline mode is enabled when the Segmenter is accessed directly from
-     Sa.msaadhanii. The best segmented solution is directly fed to the
+     sa.msaadhanii. The best segmented solution is directly fed to the
      standard output. By default, the pipeline is disabled to access the 
      usual display of best segments' summary or best solutions' list *)
-  if pipeline then write_sol_to_std_out solution_list
+  if pipeline then write_sol_to_std_out solution_list selected_segments True
   else
   match mode with 
   [ Best_List | First_List -> 

@@ -996,6 +996,15 @@ value get_double item =
   [ (index,(phase,pada,sandhi)) -> (index,(phase,pada))
   ]
 ;
+value get_best_segments solution_list = 
+  let all_segments = get_best [] solution_list
+  where rec get_best acc = fun 
+  [ [] -> acc 
+  | [(_,_,_,chunk_all_triplets) :: tl] -> get_best (acc @ chunk_all_triplets) tl 
+  ] in 
+  let selected_segments = List.map get_double all_segments in 
+  List.sort compare selected_segments
+;
 (* The graph is reset and rebuilt with only the best segments. 
    The best segments are collected during the dovetailing algorithm below *)
 value rebuild_graph solution_list = 
@@ -1028,7 +1037,7 @@ value rebuild_graph solution_list =
     | [(index,(phase,word,_)) :: tl] -> 
         add_rejected_seg (acc @ [(index,(phase,word),False)]) tl
     ] in 
-  rejected_segments
+  (sorted_segments, rejected_segments)
 ;
 (* Prioritizing top solutions based on confidence values for each segmentation *)
 value prioritize splits ((cur_conf, cur_text, cur_output_triplets, 

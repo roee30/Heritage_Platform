@@ -614,5 +614,24 @@ value print_scl_segment counter (phase,rword) =
   ; counter+1
   } 
 ; 
+(* Getting the form for the best segments *)
+(* Called from [Scl_parser.post_best_segments_scl] *)
+value best_segments_for_scl counter (phase,rword) =
+  let word = Morpho_html.visargify rword in do 
+  { let ic = string_of_int counter in
+    "<form wx=\""
+        ^ Canon.decode_WX word ^ "\"/>" |> ps
+  ; match tags_of phase (mirror rword) with 
+    [ Atomic tags ->
+          print_scl_tags [] phase word tags
+    | Preverbed (_,phase) pvs form tags -> 
+         let ok_tags = 
+           if pvs = [] then tags 
+           else trim_tags (generative phase) form (Canon.decode pvs) tags in
+         print_scl_tags pvs phase form ok_tags
+    ] 
+  ; counter+1
+  }
+;
 end;
 

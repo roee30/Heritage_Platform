@@ -77,4 +77,7 @@ value invoke_scl_parser text sol_num font  =
   ; ps (xml_end "form")
   } 
 ;
+value post_best_segments_scl all_segments = 
+  let _ = List.fold_left Lex.best_segments_for_scl 1 all_segments in ()
+;
 (* end; *)

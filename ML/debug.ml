@@ -42,9 +42,16 @@ open List;
 
 #load "data.cmo";
 
+(* testing geminations *)
+#load "test_gem.cmo";
+
+open Test_gem;
+
+(* filter_gem [ 49 ];
+
 #load "automaton.cmo"; 
 open Automaton;
-
+*) 
 (* 
 #load "min_lexer.cmo"; 
 #load "transduction.cmo"; 

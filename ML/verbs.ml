@@ -2592,11 +2592,11 @@ value intercalate_pp root rstem =
            | "baadh" | "bha.n" | "bhas" | "bhaam" | "bhaa.s" | "bhaas#1" 
            | "bhuu.s" | "bhraaj" | "ma.mh" | "manth" | "mah" | "likh" | "mil" 
            | "mi.s" | "miil" | "mud#1" | "mu.s#1" | "m.rg" | "yaac" | "rac" 
-           | "ra.n" | "ras" | "rah" | "raaj#1" | "ruc#1" | "rud#1" | "lag"
-           | "lap" | "lal" | "la.s" | "las" | "lu.th" | "lul" | "lok" | "loc" 
-           | "vad" | "van" | "val" | "vaz" | "vas#2" | "vaaz"| "vaas#3" | "vid#1"
-           | "vip"| "ven" | "vyath" | "vraj" | "vra.n" | "vrii.d" | "zubh#1" 
-           | "zcut#1" | "zrath" | "zlath" | "zlaagh" | "zvas#1" 
+           | "ra.t" | "ra.n" | "ras" | "rah" | "raaj#1" | "ruc#1" | "rud#1" 
+           | "lag" | "lap" | "lal" | "la.s" | "las" | "lu.th" | "lul" | "lok" 
+           | "loc" | "vad" | "van" | "val" | "vaz" | "vas#2" | "vaaz"| "vaas#3"
+           | "vid#1" | "vip"| "ven" | "vyath" | "vraj" | "vra.n" | "vrii.d" 
+           | "zubh#1" | "zcut#1" | "zrath" | "zlath" | "zlaagh" | "zvas#1" 
            | "suuc" | "suud" | "sev" | "skhal" | "stan" | "stim" | "sthag"
            | "sphu.t" | "sphur" | "svad" | "svan" | "svar#1" | "has" | "hras" 
            | "hraad" | "hlaad" | "hval" | ".dhauk" 
@@ -4264,7 +4264,7 @@ value compute_aorist root =
     | "zam#1" -> do { compute_root_aoristp weak root (* since udatta *)
                     ; compute_root_aoristp long root (* WR *)
                     }
-    | "jaag.r" | "t.rr" | "pac" | "pad#1" | "zru" | "stu" | "hu"
+    | "jaag.r" | "t.rr" | "pac" | "pad#1" | "z.rr" | "zru" | "stu" | "hu"
         -> compute_root_aoristp long root
            (* NB "zru" -> azraavi WR while Whitney§844a *azraayi typo *) 
     (* | "i" -> iiyaat hard *)
@@ -5739,7 +5739,7 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
    | "a.mza" | "afka" | "afkha" | "andha" | "aparok.sa" | "apahasta" | "amitra"
    | "aakar.na" | "aakula" | "aahvaana" | "aavila" | "i.sa" | "unmuula" 
    | "upahasta" | "ka.thora" | "kadartha" | "kar.na" | "kalafka" | "kalu.sa"
-   | "kavala" | "kusuma" | "kha.da" | "garva" | "gocara" | "gopaa" | "carca"
+   | "kavala" | "kusuma" | "kha.da" | "garva" | "gocara" | "gopaa" 
    | "cuur.na" | "chala" | "chidra" | "tantra" | "tapas" | "tarafga" | "taru.na"
    | "tuhina" | "da.n.da" | "deva" | "dola" | "dravat" | "dhiira#1"
    | "nirmuula" | "nuutana" | "pa.tapa.taa" | "pallava"
@@ -5773,7 +5773,7 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
 value den_stem_m root = (* in general intransitive or reflexive Whitney§1059c *)
    let rstem = revstem root in 
    match root with 
-   [ "i.sa" | "utpuccha" | "kuha" | "carca" | "manas" | "muutra" 
+   [ "i.sa" | "utpuccha" | "kuha" | "manas" | "muutra" 
      (*| "artha" | "mantra" now ga.na 10 arth mantr *)
    | "m.rga" | "viira" | "safgraama" | "suutra" (* also zithila below *)
        -> rstem (* (a)-yate *) 

@@ -1,0 +1,455 @@
+Installation of a personal version of Sanskrit Heritage Platform (website: sanskrit.inria.fr) of 
+Professor Dr.Gerard Huet, under
+
+(1) Windows 11
+(2) Windows Subsystem for Linux (5.10.102.1-microsoft-standard-WSL2),
+(2) Ubuntu (Version 20.04) 
+(3) Apache2 (Server version: Apache/2.4.41 (Ubuntu))
+
+
+------------------------------------------------------------------------------------------------------------------
+
+(1) In BIOS,  set Intel Virtualization Technology to enable
+
+------------------------------------------------------------------------------------------------------------------
+(2) Windows -> Control Panel -> Programs and features -> Turn on Windows Features on or off 
+ 	Then 
+	- set Virtual Machine Platform to on 
+	- Set Windows Subsystem for Linux to on 
+
+------------------------------------------------------------------------------------------------------------------
+(3) Install Windows Subsystem for Linux (WSL) from Microsoft Store. Add it to Start menu if you so desire.
+
+------------------------------------------------------------------------------------------------------------------
+(4) Install Ubuntu from Microsoft Store. 
+
+------------------------------------------------------------------------------------------------------------------
+(5) Search and locate Ubuntu from the Windows start menu. Add Ubuntu to the Start Menu. Right click on Ubuntu icon and 
+    	click on 'Run as administrator'.  Provide a  user name and password when invoking Ubuntu bash shell for the first 
+	time. 
+
+------------------------------------------------------------------------------------------------------------------
+
+----
+Note 1: From now on, all the indicated commands are typed on the Ubuntu bash shell command prompt.
+	   All these commands can be cut (ctrl-c) and paste (ctrl-shift-v) into the shell command line.
+
+Note 2: Whenever the user name pitchumani is specified, substitute it with your own user name
+-----
+
+------------------------------------------------------------------------------------------------------------------
+(6) Ensure that 
+	
+	(1)	make 
+	(2)	tar 
+	(3)	sed
+	(4)	gcc and 
+	(5)	python 
+
+	binaries are available (required as stated in Heritage Installation Manual).	 
+
+	They are normally installed in /usr/bin.  
+
+	For each of these binaries, the following were observed during installation. (sudo is super user do,
+	where a command is executed at the super user level).
+
+	(6.1) Type
+	
+	Type make --version
+
+	make was not installed. Hence 
+
+	sudo apt install make
+
+	was used to install make.
+
+	(6.2) Type
+	tar  --version
+	
+	tar was already installed.
+
+	(6.3) Type
+	sed  --version
+
+	sed was already installed.
+
+	(6.4) Type
+	gcc  --version
+	
+	gcc was not installed. Hence
+
+	sudo apt install gcc
+	
+	was used. This also gave errors during install. It was suggested by the shell to run
+
+	apt-get update
+
+	to update the packages. But this also gave errors related to security, permission being denied.
+
+	Hence 
+
+	sudo apt-get update 
+
+	was done. The command went through without errors. 	Then
+
+	sudo apt install gcc
+
+	was done again. Installation was finally complete.
+
+	(6.5) The following python problem has been solved in July 2022, so
+now python3 only is used, and python2 is not required any more. Thus 
+continue at (7 below
+
+Type
+	
+	python  --version
+
+	python was not installed. 
+
+	Heritage platform uses the original python installation. This is no more available in Ubuntu installations.
+
+	python2 and python3 are available. python3 is available by default. python2 has to be installed. 
+
+	It was found that running python3 on the python scripts in Heritage platform leads to synatx errors in print 	
+	statements. python2 accepts the existing python syntax in Heritage Platform python scripts.
+
+	Hence python2 was installed using
+
+	sudo apt install python2
+	
+	Now type
+	
+	python2 --version
+
+	One would see that python2 is installed.
+------------------------------------------------------------------------------------------------------------------
+(7) Install apache by
+
+	sudo apt update 
+	sudo apt install apache2
+ 
+------------------------------------------------------------------------------------------------------------------
+(8)  Next, setup apache to listen to an alternate port, if necessary.
+
+	If the port 80 is not already being listened to by another web server, this step can be skipped.
+
+	If there is another web server listening at port 80, this apache server configuration should be changed to 
+	listen at another port, say,  8080. 
+
+	This is done as follows:  
+
+	Note: sudo is super user do. vi is the editor used. This step requires some basic knowledge of the vi editor.
+
+ 	(a) sudo vi /etc/apache2/ports.conf
+	(b) Use vi commands to change 80 to 8080 in the file and save.  Then
+	(c) sudo vi /etc/apache2/sites-available/000-default.conf 
+	(d) Use vi commands to change 80 to 8080 and save.
+	
+------------------------------------------------------------------------------------------------------------------
+(9) To start the apache service,  type 
+ 	
+	sudo service apache2 start
+
+------------------------------------------------------------------------------------------------------------------
+(10) To stop (or restart) the apache service at any time,  type
+
+	sudo service apache2 stop (or restart)
+
+------------------------------------------------------------------------------------------------------------------
+(11)	DocumentRoot is the default directory from where all documents are served by the webserver. 
+	Look for DocumentRoot in  
+	/etc/apache2/sites-available/000-default.conf where it is specified as /var/www/html.
+
+	Now, to test if apache is listening correctly,  type localhost or localhost:8080 in the web browser. 
+	The Apache Ubuntu default page in DocumentRoot should be shown. 
+
+------------------------------------------------------------------------------------------------------------------
+(12) The next step is to install Ocaml using the package manager Opam.
+		
+	Before installing Opam package Manager for Ocaml, update all the packages using
+	
+	sudo apt-get update
+
+------------------------------------------------------------------------------------------------------------------
+(13) Install opam using 
+	
+	// (1) and (2) may be left out. Needed only if a higer version of opam than the default of Ubuntu, is needed
+	
+	sudo add-apt-repository ppa:avsm/ppa (1)
+	sudo apt update (2)	; 
+	sudo apt install opam (3)
+
+	Opam is installed in /usr/bin. Then to check the version of opam , type 
+	opam --version 
+	It displays version as 2.0.5 (for default version when avsm repository has not been added).
+
+------------------------------------------------------------------------------------------------------------------
+(14) Initialize opam using
+	opam init
+
+------------------------------------------------------------------------------------------------------------------
+(15) Installing opam also installs ocaml, ocamlc (byte code compiler) and ocamlopt (native code compiler), 
+	all in /usr/bin. To get the versions of these and to ensure that they are installed, type
+	
+	ocaml -version; System replies as 4.08.1; 
+	ocamlc -version; System replies as 4.08.1; 
+	ocamlopt -version; System replies as 4.08.1; 
+
+	To switch to a higher version of the compiler (optional, may not be needed)
+
+	eval `opam env` 
+	# install given version of the compiler
+	opam switch create 4.11.1
+	eval `opam env`
+
+------------------------------------------------------------------------------------------------------------------
+(16) OCamlbuild is a generic build tool, that has built-in rules for building OCaml library and programs. 
+	In recent years, 	the OCaml community has converged towards a more recent and faster build tool Dune. 
+	However Heritage Sanskrit installation manual requires that this be installed. 
+
+	Hence install ocamlbuild using 
+	
+	sudo apt install ocamlbuild
+
+	It is installed in /usr/bin. Then to check the version of ocamlbuild, type 
+	ocamlbuild -version
+	It displays version as 0.14.0.
+
+------------------------------------------------------------------------------------------------------------------
+(17) Install camlp4 (an ocaml package for writing extensible parsers) using 
+	
+	sudo apt install camlp4 
+
+	It is installed in /usr/bin. Then to check the version of camlp4, type 
+	camlp4 -version
+	It displays the version as 4.08.1
+
+------------------------------------------------------------------------------------------------------------------
+(18) Next create a directory SanskritHeritage under 	/home/pitchumani by
+			
+	cd /home/pitchumani
+	mkdir SanskritHeritage 
+
+	Then get into SanskritHeritage by
+		
+	cd SanskritHeritage
+	
+------------------------------------------------------------------------------------------------------------------
+(19) The next step is to get all the libraries of Sanskrit Heritage platform, into the directory 
+	created in the previous step.  
+
+	From inside SanskritHeritage direcory, type the following commands:
+
+	(a) git clone https://gitlab.inria.fr/huet/Zen.git
+
+	(b) git clone https://gitlab.inria.fr/huet/Heritage_Resources.git
+
+	(c) git clone https://gitlab.inria.fr/huet/Heritage_Platform.git
+
+	This downloads all the required packages of Sanskrit Heritage platform into three different directories
+
+	Heritage_Platform 
+	Heritage_Resources and 
+	Zen
+
+	under /home/pitchumani/SanskritHeritage.
+		
+------------------------------------------------------------------------------------------------------------------
+(20)	The next step will be to create the directory for the installation of documents and other resources 
+	(htmls, Java scripts) in the web server area. 
+
+	DocumentRoot is the default directory from where all documents are served by the webserver. 
+	Look for DocumentRoot in  /etc/apache2/sites-available/000-default.conf, where it is specified as /var/www/html.
+
+	Sanskrit Heritage documents will be served from the subdirectory SanskritHeritage of DocumentRoot. 
+	This directory should be created as follows.
+
+	cd /var/www/html
+	sudo mkdir SanskritHeritage
+
+------------------------------------------------------------------------------------------------------------------
+(21) Next, setup apache so that it will look for the CGI files in the correct web directory when a URL requests
+	a CGI.
+
+	The configuration file /etc/apache2/conf-available/serve-cgi-bin.conf has in it, the statement 
+	ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/. 
+	
+	This associates the CGI alias /cgi-bin/ to /usr/lib/cgi-bin.
+
+	Hence, if there is an alias /cgi-bin/ in the URL, apache looks for all cgi scripts inside and under 
+	/usr/lib/cgi-bin/
+	
+	However, it has been recommended as a part of the documentation elsewhere to keep the CGI executables in the
+	Apache area (/var/www), instead. 
+
+	Hence, change the settings in /etc/apache2/conf-available/serve-cgi-bin.conf as follows:
+
+	cd /etc/apache2/conf-available
+	# Backup original configuration file
+	sudo cp serve-cgi-bin.conf serve-cgi-bin.conf.old
+	sudo vi serve-cgi-bin.conf
+	
+	Then change the string /usr/lib/cgi-bin to /var/www/cgi-bin in both the occurences using the appropriate 
+	vi commands. Save the file.
+
+	This change then associates the CGI alias /cgi-bin/ to /var/www/cgi-bin.
+
+	This will then make apache look for CGI files in /var/www/cgi-bin and its subdirectories for any URL with 
+	/cgi-bin/ as the alias.
+------------------------------------------------------------------------------------------------------------------
+(22) The next step is to create the directory for storing the CGI executables in the web server area.
+
+	cd /var/www
+	sudo mkdir cgi-bin
+
+	Then create another directory for CGI executables, specific for the Sanskrit Heritage platform
+
+	cd /var/www/cgi-bin
+	sudo mkdir SanskritHeritage
+
+	This creates the required directory structure required for CGI executables.
+	/var/www/cgi-bin/SanskritHeritage/.
+
+------------------------------------------------------------------------------------------------------------------
+(23) The next step is to create a configuration file containing various parameters for the creation of binaries 
+	for the Sanskrit Heritage platform.
+
+	A configuration file windows11_wsl_ubuntu_config.txt is available in this Windows directory 
+	(from where you are reading this 	file). This can be used as such, as the config file.
+
+	Copy this file into /home/pitchumani/SanskritHeritage/Heritage_Platform/SETUP/CONFIGS using
+
+	cd /home/pitchumani/SanskritHeritage/Heritage_Platform/SETUP/CONFIGS
+	// The dot at the end of the following command is needed.
+	sudo cp /mnt/d/02.Pitchumani-two/01.Software/SanskritHeritagePlatform.sanskrit.inria.fr/windows11_wsl_ubuntu_config.txt .
+
+	Type
+
+	cd /home/pitchumani/SanskritHeritage/Heritage_Platform/SETUP/CONFIGS
+	ls -a
+
+	and ensure that this file is present.
+
+	Then move one level up from CONFIGS subdirectory into SETUP subdirectory using 
+
+	cd /home/pitchumani/SanskritHeritage/Heritage_Platform/SETUP
+
+	Then, while inside the SETUP directory, create a symbolic link by name 'config' 
+	to point to windows11_wsl_ubuntu_config.txt in CONFIGS, using
+	
+	ln -s /home/pitchumani/SanskritHeritage/Heritage_Platform/SETUP/CONFIGS/windows11_wsl_ubuntu_config.txt config         
+
+	(Note on link command: ln -s file-to-be-linked link-name) (s stands for soft link)
+
+	After this, while still in /home/pitchumani/SanskritHeritage/Heritage_Platform/SETUP
+
+	ls -al
+
+	and ensure that the link config is created.
+
+	Note:     
+	----
+	For an understanding of the various parameters stated in the configuration file, one can read the instructions 
+	in this configuration file itself and as well as the following files from which these instructions have been derived.
+
+	(a) /home/pitchumani/SanskritHeritage/Heritage_Platform/INSTALLATION
+	(b) /home/pitchumani/SanskritHeritage/Heritage_Platform/SETUP/INSTALL
+	(c) /home/pitchumani/SanskritHeritage/Heritage_Platform/SETUP/config_help.txt"
+
+------------------------------------------------------------------------------------------------------------------
+(24) The next step is create the Makefile. First execute
+
+	cd /home/pitchumani/SanskritHeritage/Heritage_Platform
+
+	You will see an executable file by name 'configure'.  This is a python script. This uses the files
+
+	/home/pitchumani/SanskritHeritage/Heritage_Platform/SETUP/config and
+	/home/pitchumani/SanskritHeritage/Heritage_Platform/SETUP/MMakefile
+
+	to create the makefile 'Makefile' in the current directory.
+
+	Prior to executing this python script, a small change is required to be done inside this script.
+
+	vi configure
+	
+	and change, in the first line, 
+	
+	/usr/bin/python to /usr/bin/python2. 
+	This is because Ubuntu does not support python anymore. It only supports the latter version, python2. 
+	Save the python script 'configure'.
+
+	Type the following command to execute the 'configure' executable.
+
+	./configure
+
+	Look for error messages. If everything went on well, you will see the file 'Makefile'	in 	
+	/home/pitchumani/SanskritHeritage/Heritage_Platform
+
+------------------------------------------------------------------------------------------------------------------
+(25) Next, while still in 
+	/home/pitchumani/SanskritHeritage/Heritage_Platform
+	compile the Heritage platform packages using make as follows:
+
+	sudo make 
+
+	Look for any error messages.
+------------------------------------------------------------------------------------------------------------------
+(26) Next, install the executables and their data on the server using
+
+	sudo make install
+
+	Look for any error messages.
+------------------------------------------------------------------------------------------------------------------
+(27) The default page for invoking the Sanskrit Heritage platform through the browser will be set, next.
+	
+	Rename the default .html page that comes with Apache installation using
+
+	cd /var/www/html
+	sudo mv index.html index.html.old
+
+	The new default index.html page for the Sanskrit Heritage platform is available in this Windows directory 
+	(from where you are reading this file), under the same name, index.html.  
+	
+	From inside /var/www/html, copy this file into /var/www/html using 
+ 	
+	// The dot at the end of the command is needed.
+	sudo cp /mnt/d/02.Pitchumani-two/01.Software/SanskritHeritagePlatform.sanskrit.inria.fr/index.html .
+------------------------------------------------------------------------------------------------------------------
+(28) Prior to starting to invoke the Sanskrit Heritage platform through the web browser, it is necessary 
+	that Apache's cgi module be loaded, since all the executables of Heritage platform are executed as CGI.
+
+	sudo service apache2 stop
+	sudo a2enmod cgi
+	sudo service apache2 start
+
+------------------------------------------------------------------------------------------------------------------
+(29) Invoke the Sanskrit Heritage platform in the web browser through the URL
+	
+	localhost or
+	localhost:8080
+------------------------------------------------------------------------------------------------------------------
+	
+	
+	
+
+Additional notes:
+-----------------
+
+(1) To remove any package, say ocaml, 
+
+type apt-get remove ocaml -y;  
+Also type  
+apt autoremove -y  to remove all installed packages which are no longer required.
+
+------------------------------------------------------------------------------------
+(2) To Log into Linux as a super user
+
+sudo su
+
+Then type the password. Use exit to logout.
+------------------------------------------------------------------------------------
+(3) To compare directories including subdirectories: 
+
+diff dir-before dir-after
+--------------------------------------------------------------------------------------
+

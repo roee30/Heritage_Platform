@@ -2,6 +2,11 @@
 * Installation of the Sanskrit Heritage Platform *
 **************************************************
 
+The following instructions concern installation of the Sanskrit Heritage Platform
+on a UNIX platform, either on Apple Mac or on versions of Linux such as Ubuntu.
+The system may also be installed on a Windows 11 station, please see the README
+in directory WINDOW_INSTALLATION, courtesy of Pitchumani Srinivasan. 
+
 A. Generalities
 
 This library is developed on Unix/Linux, whereas the end product (Sanskrit 

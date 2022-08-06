@@ -1,0 +1,136 @@
+#----------------------------------------------------------------------------------------
+# Absolute path of the ML directory of the user's Zen installation
+
+ZENDIR='/home/pitchumani/SanskritHeritage/Zen/ML/'
+
+#----------------------------------------------------------------------------------------
+# Type of platform for the server
+# should be 'Station', 'Computer' or 'Server'
+# Station allows external analysis mode if UoH tools have been installed
+# Computer is standard client installation 
+# Server means opening the platform Web services as a Heritage mirror 
+
+PLATFORM='Computer'
+
+#----------------------------------------------------------------------------------------
+
+# Default transliteration : 'VH' (Velthius), 'WX' (Univ of Hyderabad), 'KH' (Kyoto Harvard) or 'SL'
+# Sanskrit Library (SLP1) or
+# Unicode input under UTF-8, 'DN' for Devanagari and ‘RN’ for IAST romanization
+# See http://sanskrit.inria.fr/faq.en.html#transliteration  for additional information.
+# We are using Harvard Kyoto transliteration scheme here.
+
+TRANSLIT='KH'
+
+#----------------------------------------------------------------------------------------
+# Default lexicon: SH for Sanskrit Heritage (French), MW for Monier-Williams (English)
+
+LEXICON='MW'
+
+#----------------------------------------------------------------------------------------
+# Default display font : 'roma' or 'deva'
+# roma is Roman character set. Deva is Devanagari.
+# We are using Devanagari display here.
+
+DISPLAY='deva'
+
+#----------------------------------------------------------------------------------------
+# URL of host server -- '127.0.0.1' for localhost. We will be using this server as a localhost. 
+
+# If we are having another web server listening at port 80, this web server should be made to listen at 
+# an alternate port, 8080.
+
+# Look inside SanskritHeritageWindowsInstallation.txt for instructions on how to change the apache
+# configuration files to listen at the new port 8080.
+
+# If port 80 is not already being listened to by another server, set SERVERHOST to '127.0.0.1'
+# If port 80 is already being listened to by another server, set SERVERHOST to '127.0.0.1:8080'
+
+SERVERHOST='127.0.0.1:8080'
+
+
+#----------------------------------------------------------------------------------------
+# Absolute path for the installation of documents and other resources (to be used by CGI executables)
+# in http server area. 
+
+# DocumentRoot is the default directory from where all documents are served by the webserver. 
+# Look for DocumentRoot in  /etc/apache2/sites-available/000-default.conf where it is specified as /var/www/html.
+
+# Sanskrit Heritage documents will be served from the subdirectory SanskritHeritage of DocumentRoot.
+# Hence it is specified as follows.
+
+# Note: This sub directory should be created. For help, look inside SanskritHeritageWindowsInstallation.txt.
+
+
+SERVERPUBLICDIR='/var/www/html/SanskritHeritage/'
+
+
+#----------------------------------------------------------------------------------------
+# This parameter is the specification in the URL for SERVERPUBLICDIR. SKTDIRURL is always relative to DocumentRoot.
+
+SKTDIRURL='/SanskritHeritage/'
+
+#----------------------------------------------------------------------------------------
+# Directory where the Heritage_Resources linguistic data have been installed.
+# This is usually in the user's  development area, parallel to Heritage_Platform. 
+# This is the directory which is created when downloading all the libraries of Sanskrit Heritage
+# as stated in SanskritHeritageWindowsInstallation.txt.
+
+SKTRESOURCES='/home/pitchumani/SanskritHeritage/Heritage_Resources/'
+
+#----------------------------------------------------------------------------------------
+
+# This parameter is the absolute path of CGI executables for the Heritage platfotm CGI files. 
+
+# The configuration file /etc/apache2/conf-available/serve-cgi-bin.conf has in it, the statement
+# ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/.  
+
+# This associates the CGI alias /cgi-bin/ to /usr/lib/cgi-bin.
+
+# Hence, if there is an alias /cgi-bin/ in the URL, apache looks for all cgi scripts inside and under 
+# /usr/lib/cgi-bin.
+
+# However, it has been recommended as a part of the documentation elsewhere to keep the CGI executables in the
+# Apache area /var/www/cgi-bin, instead of /usr/lib/cgi-bin.
+
+# Refer to the instructions in SanskritHeritageWindowsInstallation.txt, for changing the settings in 
+# serve-cgi-bin.conf configuration file, for this purpose.
+
+# These settings then associate the CGI alias /cgi-bin/ to /var/www/cgi-bin.
+
+# Since all the CGI executables of Heritage platform will be stored in the subdirectory SanskritHeritage
+# under /var/www/cgi-bin, this parameter is kept as follows for the Heritage platform:
+
+CGIDIR='/var/www/cgi-bin/SanskritHeritage/'
+
+#----------------------------------------------------------------------------------------
+# This parameter CGIBINURL is the specification in the URL for the parameter CGIDIR. 
+# CGIBINURL is always relative to the CGI alias /cgi-bin/ which is now associated with /var/www/cgi-bin.
+
+CGIBINURL='/cgi-bin/SanskritHeritage/'
+
+
+#----------------------------------------------------------------------------------------
+
+# Extension of CGI executables (if requested by httpd configuration, eg '.cgi'). 
+# The .cgi extension is not required by the web server configuration in the present case, 
+# since the ScriptAlias 'ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/'
+# in /etc/apache2/conf-available/serve-cgi-bin.conf takes care of locating the CGI executables.
+
+CGIEXT=''
+#----------------------------------------------------------------------------------------
+
+
+# Look-and-feel of the interface. 
+# It controls the morphology printing of the interface segments. 
+# Can be 'CLICK' or 'OVER' if you want the morphology jump and display on mouse over
+
+MOUSEACTION='CLICK'
+
+#----------------------------------------------------------------------------------------
+
+# site identification caption, possibly Html code to display counter or image
+
+CAPTION='Personal site Pitchumani'
+
+#----------------------------------------------------------------------------------------

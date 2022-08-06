@@ -5,11 +5,14 @@
 #                               Gérard Huet                                #
 #                                                                          #
 ############################################################################
-# Installation instructions                     Copyright Gérard Huet 2020 #
+# Installation instructions                     Copyright Gérard Huet 2022 #
 ############################################################################
 
-This is just a reminder for quick installation.
-A more complete installation procedure is described in file SETUP/INSTALL.
+This is just a reminder for quick installation on a UNIX platform, either
+Apple Mac or on versions of Linux such as Ubuntu.
+
+A more complete installation procedure is described in file SETUP/INSTALL,
+including installation on a Windows 11 station. 
 
 0) Install OCaml (>= 4.07). See http://ocaml.org for installation
 instructions.

@@ -4949,7 +4949,7 @@ value alternate_pp = fun
 ;
 (* Condition for extra abs in -tvaa with guna: root starts with consonant
    and ends in any consonant but y or v and has i or u as penultimate. 
-   Given by \Pan{1,2,26}. Example: sidh1 *)
+   Given by \Pan{1,2,26}. Example: sidh1 likh *)
 value alternate_tvaa root rstem =
   match Word.mirror rstem with (* double rev *)
   [ [ c :: _ ] -> consonant c && match rstem with
@@ -5010,7 +5010,7 @@ value record_ppp_abs_stems root rstem ppstems =
          ; (* abs -ya lyap computed whether set or anit *) 
            match root with 
            [ "av" -> record_abs_ya root rstem (revcode "aav") (* -aavya *)
-           | "v.rj" -> record_abs_ya root rstem (revcode "varj") (* -aavya *)
+           | "v.rj" -> record_abs_ya root rstem (revcode "varj") (* -varjya *)
            | _    -> record_abs_ya root rstem w
            ]
          }

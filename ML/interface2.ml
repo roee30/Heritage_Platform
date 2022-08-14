@@ -573,7 +573,7 @@ value write_sol_to_std_out solution_list selected_segments =
   let final_segments = List.map snd selected_segments
   and seg_sols = List.map get_string solution_list in do 
   { ("sentence: " ^ (replace_plus (List.hd seg_sols))) |> ps
-  ; "\n" |> ps
+  ; "\nmorph: " |> ps
   ; Scl_parser.post_best_segments_scl final_segments
   }
 ;
@@ -817,7 +817,7 @@ value graph_engine () =
   let url_encoded_input = get "text" env "" 
   and url_encoded_topic = get "topic" env "" (* topic carry-over *)
   and url_encoded_mode  = get "mode" env "b"
-  and ppl = get "pipeline" env "false"
+  and ppl = get "pipeline" env "f"
   and st = get "st" env "t" (* sentence parse default *)
   and us = get "us" env "f" (* sandhied text default *)
   and translit = get "t" env Paths.default_transliteration (* translit input *)
@@ -837,7 +837,7 @@ value graph_engine () =
            else () (* word vs sentence stemmer *)
   and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
   and mode = mode_of_mode_id (decode_url url_encoded_mode)
-  and pipeline = (ppl = "true")
+  and pipeline = (ppl = "t")
   and () = assign_freq_info 
   and url_enc_corpus_permission = (* Corpus mode *)
       get Params.corpus_permission env "true" in 

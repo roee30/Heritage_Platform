@@ -309,7 +309,7 @@ value reader_engine () = do
        try let url_encoded_cpts = List.assoc "cpts" env in (* do not use get *)
            Checkpoints.parse_cpts (decode_url url_encoded_cpts)
        with [ Not_found -> [] ] in     
-    let cpts = sort_check checkpoints in 
+(*  let cpts = sort_check checkpoints in -- legacy (?) *)
     try let text = arguments translit lex font cache st us url_encoded_input
                              url_encoded_topic abs checkpoints in do
         { (* Now we call the lexer *)

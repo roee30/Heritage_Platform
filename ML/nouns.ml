@@ -6095,8 +6095,8 @@ value compute_extra_iiv = iter enter_iiv
 value gatis = (* G{saak.sat} Wh§1092 *)
   [ "saak.saat" (*c in the sense of cvi - becoming Wh§1078a *)
   ; "mithyaa" (* G{saak.saat} *)
-  ; "cintaa"
-  ; "bhadraa"
+  ; "cintaa"  (* id *)
+  ; "bhadraa" (* id *)
   ; "locanaa"
   ; "vibhaa.saa" (* sampatkaa ? *)
   ; "aasthaa"
@@ -6112,7 +6112,7 @@ value gatis = (* G{saak.sat} Wh§1092 *)
   ; "vaze" (* vikampate vihasane prahasane pratapane *)
   ; "praadur" (* Wh§1078 *)
   ; "namas" (* namask.rtya Wh§1092a *)
-  ; "aavis" (* namask.rtya Wh§1078 *)
+  ; "aavis" (* aavisk.rtya Wh§1078 *)
   ; "urasi" (* Pan{1,4,75} in the sense of anatyaadhaana cf Sharma *)
   ; "manasi" (* id. *)
   ; "anye" (* Pan{1,4,76} id *)

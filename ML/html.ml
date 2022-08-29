@@ -187,7 +187,7 @@ and font_style = [ Normal | Italic | Slanted ]
 ;
 type color = 
   [ Black | White | Red | Blue | Green | Yellow | Orange | Deep_sky | Purple 
-  | Grey | Navy | Cyan | Brown | Carmin | Chamois | Broon | Maroon | Aquamarine
+  | Grey | Navy | Cyan | Brown | Carmin | Chamois | Broon | Maroon | Kaki
   | Gold | Magenta | Mauve | Pink | Gris | Lime | Light_blue | Lavender 
   | Lawngreen | Deep_pink | Pale_rose | Beige | Lilac | Violet ]
 ;
@@ -220,8 +220,8 @@ value rgb = fun (* a few selected HTML colors in rgb data *)
   | Red         -> "#FF0000" (* Firebrick = "#B02020" *)
   | Blue        -> "#0000FF" (* Canard = "#0000C0" ou "#0080FF" *)
   | Green       -> "#008000" (* Teal = "#008080" Olive = "#808000" *)
-  | Aquamarine  -> "#6FFFC3" (* actually Light Aquamarine *)
-  | Lawngreen   -> "#66FF99" (* was "#7CFC00" *)
+  | Kaki        -> "#CCCC00" 
+  | Lawngreen   -> "#80FF00" (* "#66FF99" (* was "#7CFC00" *)*)
   | Yellow      -> "#FFFF00" 
   | Orange      -> "#FFA000"  
   | Cyan        -> "#00FFFF" (* Aqua = Cyan, Turquoise = "#40E0D0" *)
@@ -329,7 +329,7 @@ type style_class =
     | Pink_back | Chamois_back | Cyan_back | Brown_back | Lime_back | Grey_back 
     | Deep_sky_back | Carmin_back | Orange_back | Red_back | Mauve_back 
     | Lavender_back | Lavender_cent | Green_back | Lawngreen_back | Magenta_back
-    | Aquamarine_back | Gris_cent
+    | Kaki_back | Kaki_cent | Gris_cent
     ]
 ;
 value background = fun
@@ -352,7 +352,7 @@ value background = fun
     | Lavender    -> Lavender_back
     | Green       -> Green_back
     | Lawngreen   -> Lawngreen_back
-    | Aquamarine  -> Aquamarine_back
+    | Kaki        -> Kaki_back
     | Grey        -> Grey_back
     | _ -> failwith "Unknown background style"
     ]
@@ -363,6 +363,7 @@ and centered = fun
     | Gold     -> Gold_cent
     | Deep_sky -> Deep_sky_cent
     | Cyan     -> Cyan_cent
+    | Kaki     -> Kaki_cent
     | Lavender -> Lavender_cent
     | _ -> failwith "Unknown centered style"
     ]
@@ -375,13 +376,13 @@ value styles = fun
     | Yellow_cent     -> [ Bgcolor Yellow; Tablecenter; Border 5; Padding 10 ]
     | Lavender_cent   -> [ Bgcolor Lavender; Tablecenter; Border 5; Padding 10 ]
     | Inflection      -> [ Bgcolor Light_blue; Tablecenter; Border 2; Padding 5 ]
-
     | Deep_sky_cent   -> [ Bgcolor Deep_sky; Tablecenter; Border 5; Padding 10 ]
     | Gold_cent       -> [ Bgcolor Gold; Tablecenter; Border 0; Padding 10 ] 
     | Cyan_cent       -> [ Bgcolor Cyan; Tablecenter; Border 5; Padding 10 ] 
+    | Kaki_cent       -> [ Bgcolor Kaki; Tablecenter; Border 5; Padding 10 ] 
     | Mauve_back      -> [ Bgcolor Mauve ]
     | Magenta_back    -> [ Bgcolor Magenta ]
-    | Aquamarine_back -> [ Bgcolor Aquamarine ]
+    | Kaki_back       -> [ Bgcolor Kaki ]
     | Pink_back       -> [ Bgcolor Pale_rose; No_margin ] (* Pink *)
     | Yellow_back     -> [ Bgcolor Yellow ] 
     | Gris_back       -> [ Bgcolor Gris ]
@@ -477,7 +478,8 @@ value class_of = fun
     | Red_back        -> "red_back"
     | Green_back      -> "green_back"
     | Lawngreen_back  -> "lawngreen_back"
-    | Aquamarine_back -> "aquamarine_back"
+    | Kaki_back       -> "kaki_back"
+    | Kaki_cent       -> "kaki_cent"
     | Grey_back       -> "grey_back"
     | Blue_           -> "blue" 
     | Green_          -> "green"

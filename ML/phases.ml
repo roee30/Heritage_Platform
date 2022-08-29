@@ -230,8 +230,8 @@ value rec color_of_phase = fun
   | Pron -> Light_blue
   | Root | Auxi | Lopa -> Carmin  
   | Inde | Indifc | Abso | Absv | Absc | Auxiinv | Ai | Ani | Avy -> Mauve
-  | Iic | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Iiif 
-        | Auxiick | Cachei -> Yellow
+  | Iic | A | An | Iicv | Iicc | Iik | Iikv | Iikc | Auxiick | Cachei -> Yellow
+  | Iiif -> Kaki
   | Peri | Iiv | Iivv | Iivc | Inftu -> Orange
   | Iiy -> Pink 
   | Voca | Vocv | Vocc | Inv | Vok | Vokv | Vokc | Vocf -> Lawngreen
@@ -239,7 +239,7 @@ value rec color_of_phase = fun
   | Unknown -> Grey
   | Comp (_,ph) _ _ -> color_of_phase ph 
   | Pv | Pvv | Pvc | Pvkc | Pvkv -> failwith "Illegal preverb segment" 
-(*i NB: unused background colors: Lavender Magenta Green Aquamarine Chamois i*)
+(*i NB: unused background colors: Lavender Magenta Green Chamois i*)
   ]
 ; 
 

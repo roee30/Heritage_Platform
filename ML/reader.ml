@@ -69,7 +69,7 @@ value get_segment output =
   | [(((ph: Phases.phase),(w: Word.word),_)) :: tl] -> loop (acc @ [(ph,w)]) tl
   ]
 ;
-value call_scl sentence sol_num font = 
+value call_scl sentence sol_num (* font ?? *) = 
   (* If possible, call the get method directly *)
   let scl_font = match sanskrit_font.val with
              [ Deva -> "DEV"

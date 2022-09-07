@@ -35,11 +35,11 @@ to settle for not the most recent version of Ocaml.
 
 2) Install the Heritage_resources package:
 
-   git clone https://gitlab.inria.fr/huet/Heritage_Resources.git
+   git clone -b development https://gitlab.inria.fr/huet/Heritage_Resources.git
 
 3) Install the Heritage_platform package:
 
-   git clone https://gitlab.inria.fr/huet/Heritage_Platform.git
+   git clone -b development https://gitlab.inria.fr/huet/Heritage_Platform.git
 
 4) Create your configuration file "config" in directory SETUP.
 

@@ -54,10 +54,10 @@ These packages may be pulled as Git packages.
 
 Create a clean installation directory HERITAGE, where you run successively:
 git clone git@gitlab.inria.fr:huet/Zen.git
-git clone git@gitlab.inria.fr:huet/Heritage_Resources.git
-git clone git@gitlab.inria.fr:huet/Heritage_Platform.git
+git clone -b development git@gitlab.inria.fr:huet/Heritage_Resources.git
+git clone -b development git@gitlab.inria.fr:huet/Heritage_Platform.git
 This will create three sub_directories, namely Zen, Heritage_Resources
-and Heritage_Platform. 
+and Heritage_Platform in their current stable versions.
 
 B. Sanskrit Platform installation.
 
@@ -123,7 +123,8 @@ installations, declare SERVERPUBLICDIR as /var/www/html/Heritage_Platform.
 SKTDIRURL should be its local url on the server - typically a relative address 
 in the httpd area such as /Heritage_Platform/
 or possibly a readable sub-directory of user's xxx public_html directory  
-such as /~xxx/Heritage_Platform/.
+such as /~xxx/Heritage_Platform/. This parameter should always start with
+"/" so that it is recognized as a subpath in the local server data directory.
 
 CGIDIR should be the absolute path on the server file system of its CGI 
 executables, typically on Linux /var/www/cgi-bin/ (or some other directory 
@@ -162,7 +163,8 @@ This is simply achieved by command:
 make
 
 This compiles the Zen linguistic platform, together with the various 
-Web services of the platform.
+Web services of the platform. It may take a few minutes to build the necessary 
+linguistic resources. 
 
 3. Installation
 

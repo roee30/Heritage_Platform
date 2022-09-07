@@ -47,7 +47,7 @@ value voices_of = fun
   | "t.rh" | "t.rr" | "tyaj#1" | "tras" | "tru.t" | "tvak.s" | "tsar" | "da.mz"
   | "dagh" | "dabh" | "dam#1" | "dal" | "das" | "dah#1" | "daa#2" | "daa#3" 
   | "du" | "du.s" | "d.rp" | "d.rbh" | "d.rz#1" | "d.rh" | "d.rr" 
-  | "draa#1" | "dru#1" | "druh#1" | "dham" | "dhaa#2" | "dhru"
+  | "draa#1" | "dru#1" | "druh#1" | "dham" | "dhaa#2" | "dhmaa" | "dhru"
   | "dhvan" | "dhv.r" | "na.t" | "nad" | "nand" | "nard" | "naz#1" 
   | "nind" | "nu#1" | "n.rt" | "pa.t" | "pat#1" | "path" | "paa#1" | "paa#2" 
   | "piz#1" | "pi.s" | "pu.t" | "p.r#1" | "p.r#2" | "p.r.s" | "p.rr" 

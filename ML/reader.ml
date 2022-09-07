@@ -69,6 +69,7 @@ value get_segment output =
   | [(((ph: Phases.phase),(w: Word.word),_)) :: tl] -> loop (acc @ [(ph,w)]) tl
   ]
 ;
+(* Obsolete 
 value call_scl sentence sol_num (* font ?? *) = 
   (* If possible, call the get method directly *)
   let scl_font = match sanskrit_font.val with
@@ -76,7 +77,8 @@ value call_scl sentence sol_num (* font ?? *) =
              | Roma -> "IAST"
              ] in 
   Scl_parser.invoke_scl_parser sentence sol_num scl_font
-;
+; *)
+
 value get_sentence output = 
   loop "" output
   where rec loop acc = fun
@@ -101,7 +103,7 @@ value print_solution text ind (n,output) = do
   }
 ;
 
-(* Updated print solution  *)
+(* Obsolete Updated print solution 
 (* ind is relative index within kept, n is absolute index within max *)
 value print_solution2 text ind (n,cl,output,sentence) = do
   { pl html_break
@@ -114,7 +116,7 @@ value print_solution2 text ind (n,cl,output,sentence) = do
     (* check why the existing [call_parser] function is not used here *)
     ind+1
   }
-;
+; *)
 
 (**************************************************************)
 (*     General display of solutions, in the various modes     *)
@@ -125,12 +127,13 @@ value print_sols text revsols = (* stats = (kept,max) *)
   let _ = List.fold_left process_sol 1 revsols in ()
 ;
 
+(* Obsolete
 value print_sols2 text revsols = (* stats = (kept,max) *) 
   let p_sols = Lex.prioritize revsols in
   let process_sol = print_solution2 text in
   let _ = List.fold_left process_sol 1 p_sols in
   ()
-;
+; *)
 
 value display limit mode text saved = fun
   (* [saved] is the list of all solutions of penalty 0 when 

@@ -473,7 +473,7 @@ transducers:
 	ML/make_transducers 
 	
 word_freq:
-	#ML/make_word_freq
+#	ML/make_word_freq
 	cd ML && $(MAKE) make_word_freq
 	ML/make_word_freq $(DATA)/comp_freq.txt > $(DATA)/comp_freq_max.rem
 	ML/make_word_freq $(DATA)/pada_freq.txt > $(DATA)/pada_freq_max.rem
@@ -486,7 +486,7 @@ word_freq:
 	rm $(DATA)/word_freq_max.rem
 	
 trans_freq:
-	#ML/make_trans_freq
+#	ML/make_trans_freq
 	cd ML && $(MAKE) make_trans_freq
 	ML/make_trans_freq $(DATA)/comp_trans_freq.txt $(DATA)/comp_trans_freq.rem
 	ML/make_trans_freq $(DATA)/pada_trans_freq.txt $(DATA)/pada_trans_freq.rem

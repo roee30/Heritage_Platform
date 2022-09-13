@@ -65,7 +65,7 @@ value invoke_scl_parser text sol_num font  =
   let svg_interface_url = "/cgi-bin/scl/MT/" in do
   { ps ("<form name=\"parse " ^ sol_num_string 
        ^ "\" form style='display: inline;' method=\"GET\" action = \""
-       ^ svg_interface_url ^ "test_xml.cgi\">\n")
+       ^ svg_interface_url ^ "anusaaraka.cgi\">\n")
   ; ps ("<input type=\"hidden\" name=\"encoding\" value=\"WX\"/>")
   ; ps ("<input type=\"hidden\" name=\"text\" value=\"" 
        ^ (String.trim text) ^ "\"/>")
@@ -73,6 +73,7 @@ value invoke_scl_parser text sol_num font  =
   ; ps ("<input type=\"hidden\" name=\"out_encoding\" value=\"" ^ font ^ "\"/>")
   ; ps ("<input type=\"hidden\" name=\"parse\" value=\"Full\"/>")
   ; ps ("<input type=\"hidden\" name=\"text_type\" value=\"Sloka\"/>")
+  ; ps ("<input type=\"hidden\" name=\"mode\" value=\"web\"/>")
   ; ps (submit_input (sol_num_string))
   ; ps (xml_end "form")
   } 

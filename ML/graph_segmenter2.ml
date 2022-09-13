@@ -1025,7 +1025,7 @@ value rebuild_graph solution_list =
       ]
   ] in 
   let selected_segments = List.map get_double all_segments in 
-  let sorted_segments = List.sort compare selected_segments in 
+  let sorted_segments = List.sort_uniq compare selected_segments in 
   (* Segments not part of the best solutions are rejected here and 
      they are used as checkpoints for further analysis *)
   let filter_func (index,(phase,pada,sandhi)) = 

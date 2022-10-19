@@ -15,6 +15,7 @@ type vmorph =
   [ Prim of int and bool and Word.word  (* primary conjugation *)
          (* gana    pada     form of present 3rd sg for checking *)
          (* pada=True Paradmaipada pada=False AAtmanepada   *)
+(* OBS  | No_present                  (* no present system        *)   *)
   | Causa of Word.word          (* causative 3rd sg form    *) 
   | Inten of Word.word          (* intensive 3rd sg form    *)
   | Desid of Word.word          (* desiderative 3rd sg form *)

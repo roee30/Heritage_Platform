@@ -826,6 +826,7 @@ value resolve_homonym entry =
     | "luu" -> first entry
     | "v.r" 
     | "h.r" -> second entry
+    | "grabh" -> "grah" (* generates both forms *)
     | _ -> entry
     ] 
   | 10 -> entry
@@ -867,6 +868,7 @@ value conjs_engine () = do
       | "9" -> 9
       | "10" -> 10
       | "11" -> 11 (* denominative verbs *)
+      | "0" -> 0 (* no present system *)
       | s -> raise (Control.Fatal ("Weird present class: " ^ s)) 
       ] 
     and encoding_function = Encode.switch_code translit 
@@ -894,7 +896,7 @@ value conjs_engine () = do
         ; page_end lang True
         } 
     with [ Stream.Error _ -> 
-             abort lang ("Illegal " ^ translit ^ " transliteration ") entry_tr ]
+           abort lang ("Illegal " ^ translit ^ " transliteration ") entry_tr ]
    with [ Not_found -> failwith "parameters q or c missing" ]
   }
 ;

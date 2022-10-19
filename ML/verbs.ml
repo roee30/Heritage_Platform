@@ -414,7 +414,7 @@ value passive_stem root rstem = (* Panini yak (k : no guna, samprasaara.na) *)
     | "praz"  -> revcode "p.rcch" (* id *)
     | "svap"  -> revcode "sup"   (* samprasaara.na va-x \R u-x \Pan{6,1,15} *) 
     | "vaz" | "vac" | "vap" | "vap#1" | "vap#2" | "vad" | "vas#1" | "vas#4" 
-    | "vah#1" (* idem - specific code for va-x roots *)
+    | "vah#1" | "vak.s" (* idem - specific code for va-x roots *)
               -> match rstem with 
                  [ [ 48 :: _ ] -> [ 47 ; 5 (* u *) ] (* vas  \R u.s *)
                  | [ c :: _ ] -> [ c ; 5 (* u *) ]   (* va-x \R u-x *)
@@ -1567,7 +1567,7 @@ value compute_athematic_present5a gana strong weak vow root third =
       [ [ c :: _ ] -> 
         if vowel c then 
            let w = if vow then weak else [ 45 (* v *) :: weak ] in
-           (person,fix w suff)
+           (person,fix w suff) (* \Pan{6,4,77} *) 
         else (person,fix weak suff)
       | [] -> error_suffix 9
       ]
@@ -2411,8 +2411,8 @@ value compute_future stem root =
        [ Para -> do (* active only *) 
          { compute_futurea Primary stem root 
          ; match root with (* conditional or atma on demand *)
-           [ "ku.t" (* Kale *) | "jiiv" | "bha.n" | "bhuu#1" | "zaas" | "stu"
-           | "sm.r" 
+           [ "ku.t" (* Kale *) | "jiiv" | "tyaj#1" | "bha.n" | "bhuu#1" 
+           | "zaas" | "stu" | "sm.r" 
                      -> compute_conda Primary stem root
            | "khaad" | "gad" | "vac" (* BhG pravak.sye *) 
                      -> compute_futurem Primary stem root 
@@ -2434,8 +2434,8 @@ value compute_future stem root =
          ; compute_futurem Primary stem root 
          ; match root with (* rare conditional *)
            [ "i" | "k.r#1" | "gam" | "grah" | "ji" | "j~naa#1" | "tap"
-           | "daa#1" | "nii#1" | "bandh" | "budh#1" | "m.r" | "yaj#1" | "vad"
-           | "sthaa#1" -> do
+           | "daa#1" | "nii#1" | "bandh" | "budh#1" | "bhid#1" | "m.r"
+           | "yaj#1" | "vad" | "sthaa#1" -> do
               { compute_conda Primary stem root 
               ; compute_condm Primary stem root 
               }
@@ -2915,6 +2915,7 @@ value compute_future_gen rstem root =
              | "gai"      -> revcode "gaa"
              | "jan"      -> revcode "jaa"
              | "nij"      -> revcode "nej" (* consistent with gana 3 *)
+             | "ghas"     -> revcode "ghat"
              | "bharts"   -> revcode "bhart"
              | "likh" | "vij" -> [ 3 :: rstem ] (* i with weak stem (hack) *)
              | "vas#1"    -> revcode "vat" (* vatsyati Whitney§167 Pan{7,4,49} *)
@@ -2965,11 +2966,11 @@ value compute_future_10 rstem root =
 
 value admits_passive = fun 
   [ (* We filter out roots with no attested passive forms *)
-    "an#2" | "av" | "as#1" | "ah" | "iiz#1" | "uc" | "kan" | "kuu" | "knuu"
-  | "k.sar" | "k.si" | "kha.n.d" | "glaa" | "daa#2" | "dyut#1" | "dru#1" 
-  | "pat#2" | "paz" | "paa#2" | "pii" | "pyaa" | "praa#1" | "bruu" | "ruc#1"
-  | "vas#4" | "vidh#1" | "vip" | "vyac" | "zam#1" | "zi~nj" | "z.rdh" 
-  | "zrambh" | "zvit#1"
+    "an#2" | "av" | "as#1" | "ah" | "iiz#1" | "uc" | "kan" | "kam" | "kuu"
+  | "k.r#2" | "knuu" | "k.sar" | "k.si" | "kha.n.d" | "glaa" | "ghas"| "chur"
+  | "ta.d" | "daa#2" | "dyut#1" | "dru#1" | "pat#2" | "paz" | "paa#2" | "pii" 
+  | "pyaa" | "praa#1" | "bruu" | "ruc#1" | "vas#4" | "vidh#1" | "vip" | "vyac"
+  | "zam#1" | "zi~nj" | "z.rdh" | "zrambh" | "zvit#1"
   | "sap#1" | "siiv" | "spaz#1" | "spardh" | "h.r#2" | "hrii#1" 
   | "ma.mh" (* supplied by "mah" *) (* | "arh" | "k.lp" no ps but pfp *)
       -> False
@@ -2981,11 +2982,12 @@ value admits_passive = fun
 value admits_ppp_abs = fun
   [ "ak.s" (* vedic a.s.ta overgenerates with a.s.tan *) 
   | "ad#1" (* jak.s jagdha \Pan{2,4,36} *)
-  | "bruu" (* vac *) 
+  | "ah" | "bruu" (* vac *) 
   | "paz"  (* d.rz *) 
-  | "as#1" | "kan" | "k.si" | "gaa#1" | "paa#2" | "praa#1" (* omit ved. praata *)
-  | "bal" | "ma.mh" | "va~nc" | "vip" | "vyac" | "zaz" | "zam#2" | "z.rdh" 
-  | "zvit#1" | "sac" | "sap#1" | "h.r#2" (* | "spaz#1" *) -> False
+  | "as#1" | "kan" | "k.r#2" | "k.si" | "gaa#1" | "ghas" | "chur" | "ta.d" 
+  |" paa#2" | "praa#1" (* omit ved. praata *) | "bal" | "ma.mh" | "va~nc" 
+  | "vadh" (* han *) | "vip" | "vyac" | "zaz" | "zam#2" | "z.rdh" 
+  | "zvit#1" | "sac" | "sap#1" | "h.r#2" -> False
   | _ -> True
   ]
 ;
@@ -3328,7 +3330,7 @@ value compute_perfecta conj strong weak olengthened eweak iopt root =
         [ conjugw First  "ima"
         ; conjugw Second "a"
         ; if root="raaj#1" then (Third, code "rejur")
-          else conjugw Third "ur" (* Henry: paptur véd. pat1 *)
+          else conjugw Third "ur" (* Henry: paptur véd. pat#1 Varenne§39 *)
         ] in l) (* [if iopt then [ conjugw First  "ma" :: l ] else l] NO *)
    ]) 
   ; let pstem = if root="raaj#1" then (revcode "rej") else weak in
@@ -3545,12 +3547,12 @@ value compute_perfectar conj stem root =
 ;
 value compute_perfect_ril stem root = (* -.rr or multiconsonant -.r *)
   match voices_of root with
-        [ Para -> compute_perfectar Primary stem root
-        | Atma -> compute_perfectm Primary stem root
-        | _ -> do { compute_perfectar Primary stem root
-                  ; compute_perfectm Primary stem root
-                  }
-        ]
+  [ Para -> compute_perfectar Primary stem root
+  | Atma -> compute_perfectm Primary stem root
+  | _ -> do { compute_perfectar Primary stem root
+            ; compute_perfectm Primary stem root
+            }
+  ]
 ;
 value compute_perfectm_v weak mc root = 
   let iforb = no_inter_i root
@@ -4277,10 +4279,10 @@ value compute_aorist root =
     | _ -> () 
     ]
   ; match root with (* 2. thematic aorist af *)
-    [ "aap" | "k.rt#1" | "krudh" | "gam" | "g.rdh" | "ghas" | "chid#1" | "das"
-    | "dyut#1"  | "bhid#1" | "mad#1" | "muc#1" | "yuj#1" | "ric" | "ruc#1"
-    | "rudh#2" | "ruh" | "vid#2" | "v.rt#1" | "v.rdh#1" | "zuc#1" | "zudh" 
-    | "sic" | "stan" | "huu" 
+    [ "aap" | "k.rt#1" | "krudh" | "gam" | "g.rdh" | "ghas" | "ghu.s"  
+    | "chid#1" | "das" | "dyut#1"  | "bhid#1" | "mad#1" | "muc#1" | "yuj#1" 
+    | "ric" | "ruc#1" | "rudh#2" | "ruh" | "vid#2" | "v.rt#1" | "v.rdh#1"
+    | "zuc#1" | "zudh" | "sic" | "stan" | "huu" 
      -> do
       { compute_thematic_aorista weak root
       ; compute_thematic_aoristm weak root (* middle very rare *)
@@ -4306,9 +4308,9 @@ value compute_aorist root =
     ]
   ; match root with (* 3. reduplicated aorist caf *)
     [ "am" | ".rc#1" | "kath" | "k.r#1" | "k.r.s" | "k.lp" | "ga.n" | "gam"
-    | "gaah" | "car" | "ce.s.t" | "jan" | "ji" | "tvar" | "tvi.s#1" | "dah#1"
-    | "diz#1" | "dih" | "diip" | "dru#1" | "dh.r" | "naz#1" | "pac" | "pa.th"
-    | "miil" | "muc#1" | "yaj#1" | "rak.s" | "ric" | "viz#1" | "v.r#1" 
+    | "gaah" | "ghu.s" | "car" | "ce.s.t" | "jan" | "ji" | "tvar" | "tvi.s#1"
+    | "dah#1" | "diz#1" | "dih" | "diip" | "dru#1" | "dh.r" | "naz#1" | "pac" 
+    | "pa.th" | "miil" | "muc#1" | "yaj#1" | "rak.s" | "ric" | "viz#1" | "v.r#1" 
     | "v.rt#1" | "v.rdh#1" | "vyadh" | "zri" | "zru" | "stu" | "svap" | "bh.r"
       (* | "dhaa#1" *) -> 
       let stem = redup_aor weak root in do
@@ -4400,13 +4402,12 @@ value compute_aorist root =
   ; match root with (* 5. i.s aorist se.t-sic *)
     [ "ak.s" | "aj" | "aas#2" | "i.s#1" | "iik.s" | "uk.s" | "uc" | "u.s" 
     | "uuh" | ".rc#1" | ".r.s" | "k.rt#1" | "krand" | "kram" | "kliz" | "ku.t"
-    | "k.san" | "car" | "ce.s.t" | "jap" | "jalp" | "jaag.r" | "t.rr" | "tru.t"
-    | "diip" | "pu.t" | "puu#1" | "p.rc"| "pru.s#1" | "baadh" | "budh#1" 
-    | "mad#1" | "mud#1" | "muurch" | "mlecch" | "yaac" | "rak.s" | "ruc#1"
-    | "lu~nc" | "lu.th" | "luu#1" | "vad" | "vadh" | "vaz" | "vid#1" | "v.r#1"
-    | "v.rdh#1" | "vyath" | "vraj" | "z.rr" | "sidh#2" | "skhal" | "stan" 
-    | "stu" | "sphur" | "hi.ms" 
-      -> do
+    | "k.san" | "ghu.s" | "car" | "ce.s.t" | "jap" | "jalp" | "jaag.r" | "t.rr" 
+    | "tru.t" | "diip" | "pu.t" | "puu#1" | "p.rc"| "pru.s#1" | "baadh" 
+    | "budh#1" | "mad#1" | "mud#1" | "muurch" | "mlecch" | "yaac" | "rak.s" 
+    | "ruc#1" | "lu~nc" | "lu.th" | "luu#1" | "vad" | "vadh" | "vaz" | "vid#1"
+    | "v.r#1" | "v.rdh#1" | "vyath" | "vraj" | "z.rr" | "sidh#2" | "skhal"
+    | "stan" | "stu" | "sphur" | "hi.ms" -> do
       { let stem = match weak with
             [ [ 7 (* .r *) :: _ ] -> (* complex Paninian see Müller Gram xii *)
               if root = "jaag.r" then strong (* jaagari.sam RF IC 2 p 88 *)
@@ -5480,7 +5481,6 @@ value compute_present_system root rstem gana pada third =
             { process10 (revcode "tulay")
             ; process10 (revcode "tolay") (* guna *)
             }
-        | "gup" -> process10 (revcode "gopay") (* guna *)
         | "mid" -> process10 (revcode "minday") (* nasal *)
         | _ -> let base_stem = strengthen_10 rstem root in 
                let ystem = rev (sandhi base_stem [ 1; 42 ] (* ay *)) in 
@@ -5520,6 +5520,7 @@ value compute_present_system root rstem gana pada third =
           match voices_of_gana 3 root with
        [ Para -> if pada then
           compute_active_present3 sstem wstem iiflag root third
+          (* TODO allow bibhi for weak bibhii root bhii#1 Whitney§679 *)
           else emit_warning ("Unexpected middle form: " ^ root)
        | Atma -> 
           if padam then emit_warning ("Unexpected active form: " ^ root)
@@ -5814,8 +5815,8 @@ value den_stem_m root = (* in general intransitive or reflexive Whitney§1059c *
    | "kurafga" | "pu.skara" | "yuga" | "vi.sa" | "zizu"  | "samudra#1" 
    | "gomaya" | "bh.rtya" | "sa.mdhyaa"  (* resemble *)
    | "puru.sa" (* imitate *)
-   | "k.r.s.na" | "manda" | "bhuusvarga" (* to become *)
-   | "niila" | "lohita" (* G{lohita} to become \Pan{3,1,13} *)
+   | "k.r.s.na" | "bhuusvarga" (* to become *) | "manda" | "niila" | "lohita"
+   | "harita" | "piita" (* G{lohita} to become \Pan{3,1,13} *)
        -> lengthen rstem (* -aayate *)
    | _ -> failwith ("Unknown denominative " ^ root)
    ] 
@@ -5884,6 +5885,78 @@ value compute_denominative root pada third =
                  else (* Atma *) compute_denominative_m root third  
   ]
 ;
+value compute_other_systems root rstem = do
+   { (* Future and Conditional *) 
+     match root with
+     [ "ah" | "ifg" | "paz" (* d.rz *)| "cint" (* cit *) | "bruu" (* vac *)
+     | "kan" | "k.saa" | "cud" | "chur" | "dhii#1" | "pat#2" | "pii" |"praa#1" 
+     | "vidh#1" | "zlath" | "spaz#1" -> () (* no future *)
+     | "tud#1" | "cakaas" -> () (* only periphrastic *)
+     | "bharts" -> compute_future_gen rstem root (* exception gana 10 *)
+     | "umbh" -> do { compute_future_gen (revcode "ubh") root (* 2 forms *)
+                    ; compute_future_gen rstem root
+                    }
+     | "saa#1" -> do { compute_future_gen (revcode "si") root
+                     ; compute_future_gen rstem root
+                     }
+     | "vyadh" -> compute_future_gen (revcode "vidh") root 
+     | "zuu" -> compute_future_gen (revcode "zve") root 
+     | ".s.thiiv" -> compute_future_gen (revcode ".s.thiv") root 
+     | "knuu" -> compute_future_gen (revcode "knuuy") root 
+     | _ -> compute_future_gen rstem root 
+     ]
+   ; (* Periphrastic future, Infinitive, Passive future part. in -tavya *)
+     match root with
+     [ "ah" | "ifg" | "kan" | "paz" (* for d.rz *) | "bruu" (* for vac *) 
+     | "k.saa" | "cud" | "dhii#1" | "pat#2" | "pii" | "praa#1" | "vidh#1"
+     | "spaz#1" | "haa#2" -> () (* no perif *)
+     | "saa#1" -> do { compute_perif (revcode "si") root 
+                     ; compute_perif rstem root }
+     | "vyadh" -> compute_perif (revcode "vidh") root 
+     | "zuu"   -> compute_perif (revcode "zve") root 
+     | ".s.thiiv" -> compute_perif (revcode ".s.thiv") root 
+     | "knuu"   -> compute_perif (revcode "knuuy") root 
+     | "stambh" -> compute_perif (revcode "stabh") root 
+     | _ -> compute_perif rstem root 
+     ]
+   ; (* Precative/Benedictive active rare, middle very rare in classical skt *)
+      match root with 
+      [ "as#1" | "ah" -> () (* uses bhuu#1 bruu *) (* but Zriivara: staat *)
+      | "kan" | "k.r#2" | ".s.thiiv" -> () (* unattested - to be added *)
+      | _ -> compute_benedictive rstem root 
+      ]
+   ; (* Passive *)
+     if admits_passive root then 
+        let ps_stem = passive_stem root rstem in do
+        { if root = "arh" || root = "k.lp" then () (* admits pfp but no ps *)
+          else compute_passive Primary root ps_stem 
+          (* Passive future participle (gerundive) in -ya and -aniiya *)
+        ; record_pfp root rstem 
+        }
+     else ()
+   ; (* Ppp computation and recording (together with absolutives) *)
+     if admits_ppp_abs root then do 
+        { let ppstems = compute_ppp_stems root rstem in 
+          record_ppp_abs_stems root rstem ppstems
+        ; record_abso_am root (* rare .namul *)
+        }
+     else ()
+   ; (* Perfect *) 
+     match root with
+     [ "paz"  (* d.rz *) | "bruu" (* vac *) | "ma.mh" (* mah *) | "ind" 
+     | "indh" | "inv" | "k.r#2" | "k.saa" | "cakaas" | "dhii#1" | "vidh#1" 
+        -> () (* no perfect *)
+     | "uuh" -> () (* periphrastic *)
+     | _ -> compute_perfect root
+     ] (* NB perfect forms may have a passive meaning *)
+   ; (* Periphrastic Perfect *) (* on demand - except gana 10 above *)
+     try let stem = peri_perf_stem root in
+         build_perpft Primary stem root
+     with [ Not_attested -> () ]
+   ; (* Aorist *) compute_aorist root
+   ; (* Injunctive *) compute_injunctive root
+   }
+;
 (***************************)
 (* Main conjugation engine *)
 (***************************)
@@ -5924,85 +5997,17 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
    ; (* Injunctive *) compute_injunctive root
    }
    with [ Control.Warning s -> output_string stdout (s ^ "\n") ]
-   (* 3. Roots of gana 10 *)
+   (* 3. Roots of gana <10 *)
  | Conj_infos.Prim gana pada third -> 
    (* gana is root class, pada is True for Para, False for Atma of third form *)
    (* Primary conjugation *)
    let rstem = revstem root in (* root stem reversed *)  
    try do
-   { compute_present_system root rstem gana pada third (* Present system *)
-   ; (* Future and Conditional *) 
-     match root with
-     [ "ifg" | "paz" (* d.rz *)| "cint" (* cit *) | "bruu" (* vac *)
-     | "k.saa" | "cud" | "dhii#1" | "pat#2" | "pii" |"praa#1" | "vidh#1" 
-     | "zlath" -> () (* no future *)
-     | "tud#1" | "cakaas" -> () (* only periphrastic *)
-     | "bharts" -> compute_future_gen rstem root (* exception gana 10 *)
-     | "umbh" -> do { compute_future_gen (revcode "ubh") root (* 2 forms *)
-                    ; compute_future_gen rstem root
-                    }
-     | "saa#1" -> do { compute_future_gen (revcode "si") root
-                     ; compute_future_gen rstem root
-                     }
-     | "vyadh" -> compute_future_gen (revcode "vidh") root 
-     | "zuu" -> compute_future_gen (revcode "zve") root 
-     | ".s.thiiv" -> compute_future_gen (revcode ".s.thiv") root 
-     | "knuu" -> compute_future_gen (revcode "knuuy") root 
-     | _ -> compute_future_gen rstem root 
-     ]
-   ; (* Periphrastic future, Infinitive, Passive future part. in -tavya *)
-     match root with
-     [ "ifg" | "paz" (* for d.rz *) | "bruu" (* for vac *) 
-     | "k.saa" | "cud" | "dhii#1" | "pat#2" | "pii" | "praa#1" | "vidh#1"
-     | "haa#2" -> () (* no perif *)
-     | "saa#1" -> do { compute_perif (revcode "si") root 
-                     ; compute_perif rstem root }
-     | "vyadh" -> compute_perif (revcode "vidh") root 
-     | "zuu"   -> compute_perif (revcode "zve") root 
-     | ".s.thiiv" -> compute_perif (revcode ".s.thiv") root 
-     | "knuu"   -> compute_perif (revcode "knuuy") root 
-     | "stambh" -> compute_perif (revcode "stabh") root 
-     | _ -> compute_perif rstem root 
-     ]
-   ; (* Precative/Benedictive active rare, middle very rare in classical skt *)
-      match root with 
-      [ "as#1" -> () (* uses bhuu *) (* but Zriivara: staat *)
-      | ".s.thiiv" -> () (* unattested - to be added *)
-      | _ -> compute_benedictive rstem root 
-      ]
-   ; (* Passive *)
-     if admits_passive root then 
-        let ps_stem = passive_stem root rstem in do
-        { if root = "arh" || root = "k.lp" then () (* admits pfp but no ps *)
-          else compute_passive Primary root ps_stem 
-          (* Passive future participle (gerundive) in -ya and -aniiya *)
-        ; record_pfp root rstem 
-        }
-     else ()
-   ; (* Ppp computation and recording (together with absolutives) *)
-     if admits_ppp_abs root then do 
-        { let ppstems = compute_ppp_stems root rstem in 
-          record_ppp_abs_stems root rstem ppstems
-        ; record_abso_am root (* rare .namul *)
-        }
-     else ()
-   ; (* Perfect *) 
-     match root with
-     [ "paz"  (* d.rz *) | "bruu" (* vac *) | "ma.mh" (* mah *) | "ind" 
-     | "indh" | "inv" | "k.saa" | "cakaas" | "dhii#1" | "vidh#1" 
-        -> () (* no perfect *)
-     | "uuh" -> () (* periphrastic *)
-     | _ -> compute_perfect root
-     ] (* NB perfect forms may have a passive meaning *)
-   ; (* Periphrastic Perfect *) (* on demand - except gana 10 above *)
-     try let stem = peri_perf_stem root in
-         build_perpft Primary stem root
-     with [ Not_attested -> () ]
-   ; (* Aorist *) compute_aorist root
-   ; (* Injunctive *) compute_injunctive root
+   { if gana=0 then () (* root with no present system *)
+     else compute_present_system root rstem gana pada third (* Present system *)
+   ; compute_other_systems root rstem 
    }
    with [ Control.Warning s -> output_string stdout (s ^ "\n") ]
-   (* end of Primary conjugation (including passive) *) 
    (* 4. Causatives  *)
  | Conj_infos.Causa third -> 
      (* Here we extract the causative stem from the third given in Dico *)
@@ -6112,7 +6117,7 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
 (* Vedic Subjunctive *)
 (*********************)
 
-(* Various Vedic subjunctives needed for citations Whitney§562 *)
+(* Various Vedic subjunctives needed for citations Whitney§557-562 *)
 (* No attempt for full paradigms, only specific attested forms *)
 (* TODO add paradigms for i a. and aas2 m. Whitney§614 *)
 value compute_subjunctives () = 
@@ -6141,13 +6146,18 @@ value compute_subjunctives () =
   ; subj_sg "vac" Third "vocati" (* primary endings *) 
   ; subj_sg "vac" Third "vocat" (* secondary endings *) 
   ; subj_sg "vac" Second "vocas" (* both forms also available as inj *) 
+  ; subj_sg "i" Third "ayati" (* primary endings *) 
+  ; subj_sg "i" Third "ayat" (* secondary endings *) 
+  ; subj_sg "bhuu#1" Third "bhavaat" (* Varenne§129 *)
+  ; subj_sg "su#2" Third "sunavat" (* Varenne§129 *)
   ; subj_sg "pat#1" Third "pataati"
   ; subj_pl "gam" Third "gman" (* for apigman *) 
   ; subj_cau_sg "jan" Second "janayaas"  
   ; subj_cau_sg "cud" Third "codayaat" (* Gaayatrii pracodayaat *)
   ; subj_int_sg "vi.s#1" Third "vevi.sati"
 (*; [subj_sg] "k.r#1" First "karavaa.ni" (* became imp Whitney§578 *) *)
-  ; subjm_sg3 "k.r#1" "k.r.nvate" (* aussi pr[5] md *)
+  ; subjm_sg3 "aas#2" "aasate" 
+  ; subjm_sg3 "aas#2" "aasaatai"
   }
 ;
 
@@ -6178,6 +6188,8 @@ value compute_conjugs root_word (infos : Conj_infos.root_infos) =
 (* Supplementary forms *)
 value compute_extra_rc () = (* vedic - \Pan{7,1,38} *)
   enter1 ".rc#1" (Absotvaa Primary (code "arcya")) (* abs -ya with no preverb *)
+and compute_extra_kan () = (* Lanmann "can" *)
+  enter1 "kan" (Conju (aora 5) [ (Singular,[ (Third, code "acaniit") ]) ])
 and compute_extra_khan () = (* WR MW *)
   let root = "khan"
   and conj = Primary 
@@ -6223,8 +6235,11 @@ and compute_extra_dhaa () = do
     }
 (* also "vidmahi" on yantra ? *)
 and compute_extra_nind () = (* WR: RV *)
-  enter1 "nand" (Conju perfa [ (Plural,[ (Third, code "ninidus") ])
+  enter1 "nand" (Conju perfa [ (Plural,[ (Third, code "ninidur") ])
                              ; (Plural,[ (First, code "nindimas") ]) ])
+and compute_extra_pat () = (* WR: RV Henry: paptur véd. Varenne§39 *)
+  enter1 "pat#1" (Conju perfa [ (Plural,[ (Third, code "paptur") ])
+                              ; (Plural,[ (First, code "paptima") ]) ])
 and compute_extra_prr () = (* paaryate as well as puuryate above *) 
     let stem = revcode "paar" in compute_passive Primary "p.rr" stem
 and compute_extra_bhaas () = do 
@@ -6249,15 +6264,6 @@ and compute_extra_muc () =  do
   }
 and compute_extra_yu2 () = (* Maitreya Sa.mhita MS{1,1.11} *)
   enter1 "yu#2" (Conju (imperm 3) [ (Plural,[ (Second, code "yuyudhvam") ]) ])
-and compute_extra_vadh () = (* no present - use "han#1" *)
-  let root = "vadh"
-  and rstem = revcode "vadh" in do 
-  { compute_aorist root
-  ; compute_injunctive root
-  ; compute_future_gen rstem root 
-  ; compute_passive_raw root
-  (* [record_pfp root rstem] is computed by [record_extra_participles] *)
-  }
 and compute_extra_zaas () = 
    let e = "zaas" in do (* epics zaasyate + Renou gram §29 *) 
      { let stem = revcode e in compute_passive Primary e stem 
@@ -6296,16 +6302,12 @@ and compute_extra_huu () = do (* WR *)
 ;
 (* Extra participial forms - intensive, desiderative, no present, etc *)
 value record_extra_participles () = do
-  { record_part_ppp (revstem "gupta") "gup" (* gup gana 10 *)
-  ; record_part_ppp (revstem "zaata") "zaa" 
-  ; record_part_ppp (revstem "kaanta") "kam" 
+  { record_part_ppp (revstem "zaata") "zaa" 
   ; record_part_ppp (revstem "k.sita") "k.sii" 
   ; record_part_ppp (revstem "diipita") "diip" 
-  ; record_part_ppp (revstem "spa.s.ta") "spaz#1"
   ; record_part_ppp (revstem "cintaaratnaayita") "cintaaratna"
   ; record_part (Ppra_ 1 Intensive (revstem "jaajam") (revstem "jaajamat") "jam")
   ; record_pfp "d.r#1" (revcode "d.r")
-  ; record_pfp "vadh" (revcode "vadh")
   ; record_part (Pprm_ 1 Primary (revcode "gacchamaana") "gam")
   ; record_part (Pprm_ 4 Primary (revcode "kaayamaana") "kan")
   ; record_part (Ppra_ 1 Primary (revstem ".dam") (revstem ".damat") ".dam")
@@ -6316,24 +6318,17 @@ zinjat = [Ppra_ 2 Primary (revstem "zi~nj") (revstem "zi~njat") "zi~nj"] *)
 (* For verbs without present forms and variants, *)
 (* called by [Make_roots.roots_to_conjugs] at generation time *)
 value compute_extra () = do
-  { compute_perfect "ah"   (* verbs with no present system *)
-  ; compute_aorist "kan" 
-  ; compute_perfect "kam" 
-  ; compute_perfect "ghas" 
-  ; compute_aorist "ghas" 
-  ; compute_perfect "ta.d" 
-  ; compute_perfect "spaz#1" 
-  ; compute_aorist "spaz#1" 
-  ; compute_aorist "k.r#2" 
-  ; compute_passive_raw "d.r#1"
+  { compute_passive_raw "d.r#1"
   (* Now for specific extra forms *)
   ; compute_extra_rc () 
+  ; compute_extra_kan ()
   ; compute_extra_khan ()
   ; compute_extra_car () 
   ; compute_extra_jnaa () 
   ; compute_extra_trr () 
   ; compute_extra_dham () 
   ; compute_extra_nind () 
+  ; compute_extra_pat () 
   ; compute_extra_prr () 
   ; compute_extra_bhaas () 
   ; compute_extra_bhuj2 ()
@@ -6341,7 +6336,6 @@ value compute_extra () = do
   ; compute_extra_bhram ()
   ; compute_extra_muc () 
   ; compute_extra_yu2 ()
-  ; compute_extra_vadh ()
   ; compute_extra_zaas () 
   ; compute_extra_zru () 
   ; compute_extra_sanj ()
@@ -6379,9 +6373,9 @@ value fake_compute_conjugs (gana : int) (root : string) = do
     { compute_conjugs_stems root (vmorph,False) (* False since no-op in fake *)
     ; match root with (* extra forms - to be completed from [compute_extra] *)
       [ ".rc#1"  -> compute_extra_rc ()
+      | "kan"    -> compute_extra_kan ()
       | "k.sii"  -> record_part_ppp (revcode "k.sita") root
       | "khan"   -> compute_extra_khan ()
-      | "gup"    -> record_part_ppp (revcode "gupta") root 
       | "car"    -> compute_extra_car ()
       | "j~naa#1"-> compute_extra_jnaa () 
       | "t.rr"   -> compute_extra_trr () 
@@ -6389,6 +6383,7 @@ value fake_compute_conjugs (gana : int) (root : string) = do
       | "dhmaa"  -> compute_extra_dhmaa () 
       | "dhaa#1" -> compute_extra_dhaa () 
       | "nind"   -> compute_extra_nind ()
+      | "pat#1"  -> compute_extra_pat ()
       | "p.rr"   -> compute_extra_prr ()
       | "bhaa.s" -> compute_extra_bhaas ()
       | "bhuj#2" -> compute_extra_bhuj2 ()
@@ -6396,14 +6391,12 @@ value fake_compute_conjugs (gana : int) (root : string) = do
       | "bhram"  -> compute_extra_bhram ()
       | "muc#1"  -> compute_extra_muc ()
       | "yu#2"   -> compute_extra_yu2 ()
-      | "vadh"   -> compute_extra_vadh ()
       | "zaa"    -> record_part_ppp (revcode "zaata") root
       | "zaas"   -> compute_extra_zaas ()
       | "zru"    -> compute_extra_zru () 
       | "sa~nj"  -> compute_extra_sanj () 
       | "sad#1"  -> compute_extra_sad ()
       | "suu#1"  -> compute_extra_suu ()
-      | "spaz#1" -> record_part_ppp (revcode "spa.s.ta") root
       | "syand"  -> compute_extra_syand ()
       | "hi.ms"  -> compute_extra_hims ()
       | "huu"    -> compute_extra_huu ()

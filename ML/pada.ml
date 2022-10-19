@@ -139,10 +139,10 @@ value voices_of = fun
   | "jyut" | "ta.d" | "tan#1" | "tan#2" | "tap" | "tud#1" | "tul" | "t.rd" 
   | "traa" | "daa#1" | "daaz#1" | "diz#1" | "dih" | "diip" | "duh#1" | "dev#1"
   | "draa#2" | "dvi.s#1" | "dhaa#1" | "dhaav#1" | "dhaav#2" | "dhuu#1" | "dh.r"
-  | "dhyaa" | "dhva.ms" | "nam" | "nah" | "naath" | "nij" | "nii#1" | "nud"
-  | "pac" | "paz" | "pa.th" | "pii.d" | "pu.s#1" | "puu#1" | "puuj" | "puuy" 
-  | "p.rth" | "prii" | "pru.s#1" | "budh#1" | "bruu" | "bhak.s" | "bhaj" 
-  | "bharts" | "bhaas#1" | "bhid#1" | "bhuj#2" | "bh.r" | "bh.rjj" 
+  | "dhyaa" | "dhva.ms" | "nabh" | "nam" | "nah" | "naath" | "nij" | "nii#1" 
+  | "nud" | "pac" | "paz" | "pa.th" | "pii.d" | "pu.s#1" | "puu#1" | "puuj" 
+  | "puuy" | "p.rth" | "prii" | "pru.s#1" | "budh#1" | "bruu" | "bhak.s"
+  | "bhaj" | "bharts" | "bhaas#1" | "bhid#1" | "bhuj#2" | "bh.r" | "bh.rjj" 
   | "mantr" | "maa#4" | "maarg" | "mi" | "mith" | "mil" | "mii" 
   | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.rz" | "m.r.s" 
   | "yaj#1" | "yam" | "yaac" | "yu#1" | "yuj#1" | "yudh#1" | "rac" | "ra~nj" 
@@ -207,7 +207,7 @@ value voices_of_gana g root = match g with
  [ 1 -> match root with
         [ "cur" | "budh#1" | "van" | "v.r#1" | "suu#1" 
             -> Para 
-        | "gave.s" | "gha.t.t" | "ghuur.n" | ".damb" | "bhra.mz" | "mid"
+        | "gave.s" | "gha.t.t" | "ghuur.n" | ".damb" | "nabh" | "bhra.mz" | "mid"
         | "mok.s" | "lok" | "svid#2" 
             -> Atma
         | "i" | "i.s#1" | ".r" (* ".r" Atma for pv sam \Pan{1,3,29} also "tap" *)
@@ -231,7 +231,7 @@ value voices_of_gana g root = match g with
         | _ -> voices_of root
         ]
  | 4 -> match root with 
-        [ "as#2" | "j.rr" | "bhra.mz" | "mid" | "zaa"
+        [ "as#2" | "j.rr" | "nabh" | "bhra.mz" | "mid" | "zaa"
         | "svid#2" -> Para
         | "i" | "jan" | "jyaa#1" | "tap" | "draa#2" | "budh#1" | "mii" | "ri"
         | "ric" |  "m.r" | "vrii" -> Atma 
@@ -257,7 +257,8 @@ value voices_of_gana g root = match g with
         | _ -> voices_of root 
         ]
  | 9 -> match root with
-        [ "jyaa#1" | "pu.s#1" | "mii" | "m.rd#1" | "ri" | "vrii" | "stambh"
+        [ "jyaa#1" | "nabh" | "pu.s#1" | "mii" | "m.rd#1" | "ri" | "vrii"
+        | "stambh"
             -> Para
         | _ -> voices_of root
         ]
@@ -291,7 +292,7 @@ value voices_of_pv upasarga gana = fun
    (* Beware: gana only used for "tap" "i" ".r" 
       but gana=0 for non-present forms *)
 (* Paninian requirements *)
-[ "gam" | "svar" | "vid#1" (* "zru" | "praz" *) -> 
+[ "gam" | "vid#1" | "svar" (* | "zru" | "praz" *) -> 
              if upasarga = "sam" then Ubha else Para (* \Pan{1,3,29} *)
 (* "praz" used in Atma with aa- but also without pv in epics (MW) *)
 (* "zru" also Atma in Vedic eg z.r.nu.sva and SP. z.r.nudhvam *)

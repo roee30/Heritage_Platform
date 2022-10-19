@@ -1267,11 +1267,14 @@ value build_as gen stem entry =
    [ (Singular, let l =
         [ decline Voc "as"
         ; decline Nom (match gen with
-           [ Mas -> match entry with (* gram Muller p72,  Whitney §416 *)
+           [ Mas -> match entry with (* gram Muller p72,  Whitney §416-419 *)
                     [ "anehas" | "uzanas" | "da.mzas" (* Puruda.mzas *) -> "aa" 
                     | _ -> "aas" (* Kane§108 candramas vedhas su/dur/unmanas *)
                     ]  
-           | Fem -> "aas"
+           | Fem -> match entry with
+                    [ "anehas" -> "aa" (* Whitney §419 *)
+                    | _ -> "aas" 
+                    ]
            | Neu -> "as" (* manas payas vyas? avas1 zreyas saras vacas *)
            | _ -> raise (Control.Anomaly "Nouns")
            ])
@@ -3357,7 +3360,7 @@ value build_mono_uu g stem entry =
         [ decline Voc "uus"
         ; decline Voc "u" (* alternative Renou §234 MW gram §126h Vopadeva *)
         ; decline Nom "uus"  
-        ; decline Acc "uvam" 
+        ; decline Acc "uvam" (* \Pan{6,4,77} *)
         ; decline Ins "uvaa"
         ; decline Dat "uve"
         ; decline Dat "uvai"
@@ -5956,7 +5959,8 @@ value iic_indecl = (* should be lexicalized or completed *)
 ;
 value declined_indecls =
 (* declined substantival forms used as adverbs - many could be added *)
-  [ "antaraa"
+  [ "a~njasaa"
+  ; "antaraa"
   ; "astam"
   ; "uccais" 
   ; "kam#1"

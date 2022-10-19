@@ -298,8 +298,11 @@ value valid_morph_pv_k pv krit_stem morph = (* morph of form [Part_form] *)
   let krit_infos = assoc_word bare_stem unique_kridantas in  
   let ((conj,krit),root) = look_up_homo homo krit_infos in try
   (* Asymmetry of treatment: conj is deduced from [krit_stem], not from morph *)
-  let gana_pada = extract_gana_pada_k krit in 
-  if conj=Primary then attested_verb gana_pada pv root else attested pv root 
+  let gana_pada = extract_gana_pada_k krit in match krit with 
+    [ Pprm _ -> True (* Pan{3,2,129} usual activity *)
+    | _ -> if conj=Primary then attested_verb gana_pada pv root 
+           else attested pv root 
+    ]
   with [ Unvoiced -> attested pv root ]
 ;
 value validate_pv pv root_form = 
@@ -356,10 +359,12 @@ value autonomous_form_k krid_form (delta,_) =
   let (homo,bare_stem) = homo_undo stem in
   let krid_infos = assoc_word bare_stem unique_kridantas in 
   let ((conj,krit),root) = look_up_homo homo krid_infos in 
-  try let gana_pada = extract_gana_pada_k krit in  
-      if conj=Primary then if filter_out_krit krit root then False
+  try let gana_pada = extract_gana_pada_k krit in match krit with 
+    [ Pprm _ -> True (* Pan{3,2,129} usual activity *)
+    | _ -> if conj=Primary then if filter_out_krit krit root then False
                            else autonomous_root gana_pada root 
-      else True
+           else True
+    ]
   with [ Unvoiced -> autonomous root ]
 ;
 (* Checks whether a verbal or participial form is attested/validated *)

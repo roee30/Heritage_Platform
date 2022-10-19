@@ -35,7 +35,7 @@ value print_conjugation_help lang =
     { ps (par_begin G2)
     ; ps "Submit root and present class"
     ; pl html_break 
-    ; ps "(Use 0 for secondary conjugations)"
+    ; ps "(Use 0 for roots with no present forms)"
     ; pl par_end (* G2 *)
     }
 ;

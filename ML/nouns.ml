@@ -5751,7 +5751,7 @@ value compute_nouns_stem_form e stem d p =
             | [ 4; 34 ] (* diiv\#2 *) -> build_diiv e
             | _ -> report stem g
             ]
-      | [ 46; 3; 36 ] (* niz *) -> build_root_weak Fem stem "nizaa"
+      | [ 46; 3; 36 ] (* niz *) -> build_root_weak Fem stem "niz"
       | [ 46 :: [ 7 :: [ 34 :: [ 4 :: _ ] ] ] ] (* -(k)iid.rz *) -> 
            build_root_pn Fem stem e
       | [ 47 :: r1 ] (* -.s *) -> match r1 with

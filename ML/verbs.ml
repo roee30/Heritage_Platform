@@ -4509,7 +4509,7 @@ value compute_injunctive root =
     | "zram" -> compute_thematic_injuncta weak root (* zramat *)
     | "vac" -> let weak = revcode "voc" in do
                { compute_thematic_injuncta weak root (* vocat *) 
-               ; compute_thematic_injunctm weak root (* vocantq *) 
+               ; compute_thematic_injunctm weak root (* vocanta *) 
                }
     | "zru" -> compute_thematic_injuncta (revcode "zrav") root (* zravat *)
     | _ -> () 
@@ -6248,7 +6248,7 @@ and compute_extra_bhaas () = do
       (* Mah{18,2,40} ava-bhaa.sire haplology *)
     }
 and compute_extra_bhuj2 () = 
-    enter1 "hhuj#2" (Conju (Primary,voa 7) (* epics Wh{688a} *) 
+    enter1 "bhuj#2" (Conju (Primary,voa 7) (* epics Wh{688a} *) 
                            [ (Singular,[ (First, code "bhu~njiiyaam") ])
                            ; (Singular,[ (Second, code "bhu~njiiyaas") ])
                            ; (Singular,[ (Third, code "bhu~njiiyaat") ])

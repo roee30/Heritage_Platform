@@ -6327,6 +6327,7 @@ value compute_extra () = do
   ; compute_extra_jnaa () 
   ; compute_extra_trr () 
   ; compute_extra_dham () 
+  ; compute_extra_dhaa () 
   ; compute_extra_nind () 
   ; compute_extra_pat () 
   ; compute_extra_prr () 

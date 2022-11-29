@@ -58,11 +58,7 @@ module Lexer : functor (* takes its prelude and iterator control as parameters *
   value print_scl_segment : int -> (Phases.phase * Word.word) -> int;
   value tags_of : Phases.phase -> Word.word -> 
                   (Load_morphs.Morphs Prel Phases).tag_sort; (* ugly *)
-  value prioritize : (list (int * list (Machine.segment))) -> list (int * float * list (Machine.segment) * string ) ;
   value print_segment_words : int -> Machine.segment -> int;
-  value print_segment_to_file : out_channel -> Machine.segment -> unit;
-  value get_sandhi_word: (Machine.segment) -> string;
-  value assign_freq_info: unit;
   value best_segments_for_scl : int -> (Phases.phase * Word.word) -> int;
 end;
 

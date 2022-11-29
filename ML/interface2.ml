@@ -434,8 +434,14 @@ value call_best_list text mode_id cpts rcpts =
   let invocation = if remote.val then rpc ^ cgi else cgi in
   anchor Green_ invocation check_sign
 ;
+(* Accessing SCL's default font *)
+value scl_font = match sanskrit_font.val with 
+  [ Deva -> "Devanagari"
+  | Roma -> "IAST"
+  ]
+;
 (* To get the word from triple *)
-value get_sandhi_word font (phase,rword,transition) = 
+value get_sandhi_word font (phase,rword) = 
   let visargified_word = (Morpho_html.visargify rword) in
   let decode_word = 
     if font = "roma" then Canon.uniromcode visargified_word
@@ -451,16 +457,12 @@ value get_sentence font output =
   loop "" output
   where rec loop acc = fun
   [ [] -> acc
-  | [(_, (phase, rword, transition)) :: tl] -> 
-      loop (acc ^ (get_sandhi_word font (phase, rword, transition))) tl
+  | [(phase, rword) :: tl] -> 
+      loop (acc ^ (get_sandhi_word font (phase, rword))) tl
   ]
 ;
 (* Invoking SCL's parser *)
 value call_scl_link id output = 
-  let scl_font = match sanskrit_font.val with
-    [ Deva -> "Devanagari"
-    | Roma -> "IAST"
-    ] in
   let sentence = get_sentence "wx" output in 
   Scl_parser.invoke_scl_parser sentence id scl_font 
 ;
@@ -475,13 +477,10 @@ value print_scl_link id output  = do
 ;
 (* Prints segmentation word-forms in list view (with phase details) 
    with a link to SCL *)
-value print_scl_segments id output = 
-  let forget_transitions (_,(phase,word,_)) = (phase,word) in
-  let segmentations = List.map forget_transitions output in
-  do
+value print_scl_segments id output = do
   { table_begin Latin12 |> pl
   ; tr_begin |> ps
-  ; List.iter print_best_word segmentations
+  ; List.iter print_best_word output
   ; print_scl_link id output
   ; tr_end |> ps
   ; table_end |> ps 
@@ -500,11 +499,13 @@ value print_list_segmentations font id output = do
 value print_solution font (id, (conf, sentence, output, all)) = do
   { pl html_break
   ; pl hr
-  ; if word_based_freq freq_mode.val
-    then print_list_segmentations font id (List.rev output)
+  ; let forget_transitions (_,(phase,word,_)) = (phase,word) in
+    let segmentations = List.map forget_transitions output in
+    if word_based_freq freq_mode.val
+    then print_list_segmentations font id (List.rev segmentations)
     else if morph_based_freq freq_mode.val
-      then print_scl_segments id (List.rev output)
-    else print_list_segmentations font id (List.rev output)
+      then print_scl_segments id (List.rev segmentations)
+    else print_list_segmentations font id (List.rev segmentations)
   }
 ;
 
@@ -549,7 +550,7 @@ value get_sandhi_word_for_file (_,_,_,output) =
     let prefix = 
       if phase = Unknown then "#"
       else "" in 
-    loop (prefix ^ (get_sandhi_word "wx" (phase, rword, transition)) ^ acc) tl
+    loop (prefix ^ (get_sandhi_word "wx" (phase, rword)) ^ acc) tl
   ]
 ;
 (* Prints the first solution to file in debug mode *)

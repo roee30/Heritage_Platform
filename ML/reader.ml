@@ -62,31 +62,6 @@ loop (List.rev output)
   | [l::r] -> let _ = (Lex.print_segment_words 0 l) in loop r
   ]
 ;
-value get_segment output = 
-  loop [] output
-  where rec loop acc = fun
-  [ [] -> acc
-  | [(((ph: Phases.phase),(w: Word.word),_)) :: tl] -> loop (acc @ [(ph,w)]) tl
-  ]
-;
-(* Obsolete 
-value call_scl sentence sol_num (* font ?? *) = 
-  (* If possible, call the get method directly *)
-  let scl_font = match sanskrit_font.val with
-             [ Deva -> "DEV"
-             | Roma -> "IAST"
-             ] in 
-  Scl_parser.invoke_scl_parser sentence sol_num scl_font
-; *)
-
-value get_sentence output = 
-  loop "" output
-  where rec loop acc = fun
-  [ [] -> acc
-  | [((phase, rword, transition)) :: tl] -> 
-      loop ((Lex.get_sandhi_word (phase, rword, transition)) ^ acc) tl
-  ]
-;
 
 (* Prints n-th solution *)
 (* ind is relative index within kept, n is absolute index within max *)
@@ -103,21 +78,6 @@ value print_solution text ind (n,output) = do
   }
 ;
 
-(* Obsolete Updated print solution 
-(* ind is relative index within kept, n is absolute index within max *)
-value print_solution2 text ind (n,cl,output,sentence) = do
-  { pl html_break
-  ; pl hr
-  ; ps (span_begin Blue_)
-  ; ps span_end
-  ; pl html_break
-  ; let _ = List.fold_left Lex.print_segment_words 0 (List.rev output) in
-    let _ = call_scl (get_sentence output) n in
-    (* check why the existing [call_parser] function is not used here *)
-    ind+1
-  }
-; *)
-
 (**************************************************************)
 (*     General display of solutions, in the various modes     *)
 (**************************************************************)
@@ -126,14 +86,6 @@ value print_sols text revsols = (* stats = (kept,max) *)
   let process_sol = print_solution text in
   let _ = List.fold_left process_sol 1 revsols in ()
 ;
-
-(* Obsolete
-value print_sols2 text revsols = (* stats = (kept,max) *) 
-  let p_sols = Lex.prioritize revsols in
-  let process_sol = print_solution2 text in
-  let _ = List.fold_left process_sol 1 p_sols in
-  ()
-; *)
 
 value display limit mode text saved = fun
   (* [saved] is the list of all solutions of penalty 0 when 
@@ -146,10 +98,7 @@ value display limit mode text saved = fun
               [ Some n -> n | None -> truncation ] in do
     { if mode = Analyse then () 
       else do
-         { (* This condition is commented to remove the list mode here 
-              as it is available alongside the summary mode *)
-           (*if mode = Best_list then print_sols2 text (*kept,max*) best_sols
-           else*) print_sols text (*kept,max*) best_sols
+         { print_sols text (*kept,max*) best_sols
          ; pl html_break
          ; pl hr 
          ; if limit = None then do
@@ -295,10 +244,8 @@ value reader_engine () = do
         [ "t" -> Tag
         | "p" -> Parse
         | "o" -> Analyse (* Analyse mode of UoH parser *) 
-(*        | "l" -> Best_list*)
         | s -> raise (Failure ("Unknown mode " ^ s))  
         ] 
-    and () = Lex.assign_freq_info 
     (* Contextual information from past discourse *)
     and topic_mark = decode_url url_encoded_topic in
     let topic = match topic_mark with

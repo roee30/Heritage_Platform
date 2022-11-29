@@ -637,7 +637,7 @@ value canon_uniromcode = fun
   ]
 ;
 (* Gives the Unicode representation of the romanisation of word *)
-(* [unicode : word -> string] *)
+(* [uniromcode : word -> string] *)
 value uniromcode word = 
   let catenate c (s,b) = 
       let b'= c>0 && c<14  (* Phonetics.vowel c *) in

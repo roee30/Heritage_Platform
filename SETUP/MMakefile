@@ -262,12 +262,15 @@ ML/make_automaton.ml ML/make_preverb_automaton.ml ML/automata_vector.mli \
 ML/make_transducers.ml ML/morpho_string.ml ML/morpho.ml ML/declension.ml \
 ML/conjugation.ml ML/indexer.ml ML/indexerd.ml ML/phases.ml ML/lemmatizer.ml \
 ML/auto.mli ML/load_transducers.ml ML/dispatcher.mli ML/dispatcher.ml \
-ML/segmenter.ml ML/load_morphs.ml ML/lexer.mli ML/lexer.ml \
-ML/rank.ml ML/scl_parser.ml ML/reader.ml ML/parser.ml ML/constraints.mli \
+ML/segmenter.ml ML/load_morphs.ml ML/lexer.mli ML/lexer.ml ML/rank.ml \
+ML/scl_parser.ml ML/reader.ml ML/parser.ml ML/constraints.mli \
 ML/constraints.ml ML/multilingual.ml ML/paraphrase.mli ML/paraphrase.ml \
-ML/bank_lexer.ml ML/checkpoints.ml ML/graph_segmenter.ml ML/frequency.ml ML/graph_segmenter2.ml ML/interface.mli ML/interface2.mli \
-ML/interface.ml ML/interface2.ml ML/user_aid.ml ML/reset_caches.ml ML/restore_caches.ml \
-ML/params.mli ML/params.ml ML/make_xml_data.ml ML/segmenter_auxi.ml ML/make_word_freq.ml ML/make_trans_freq.ml 
+ML/bank_lexer.ml ML/checkpoints.ml ML/morpho_analysis.ml ML/graph_segmenter.ml \
+ML/frequency.ml ML/graph_segmenter2.ml ML/interface.mli ML/interface2.mli \
+ML/interface.ml ML/interface2.ml ML/user_aid.ml ML/reset_caches.ml \
+ML/restore_caches.ml ML/params.mli ML/params.ml ML/make_xml_data.ml \
+ML/segmenter_auxi.ml ML/make_word_freq.ml ML/make_trans_freq.ml \
+ML/make_morph_freq.ml
 
 # WEB package - HTML, HTTP, CGI ad-hoc utilities for Web interface
 WEB=ML/html.ml ML/web.ml ML/css.ml ML/cgi.ml ML/morpho_html.ml ML/chapters.ml \
@@ -423,6 +426,8 @@ all:
 	$(MAKE) word_freq
 #	cd ML && $(MAKE) make_trans_freq
 	$(MAKE) trans_freq
+#	cd ML && $(MAKE) make_morph_freq
+	$(MAKE) morph_freq
 
 # When master Makefile SETUP/MMakefile has been changed, do manually:
 new:
@@ -490,6 +495,16 @@ trans_freq:
 	cd ML && $(MAKE) make_trans_freq
 	ML/make_trans_freq $(DATA)/comp_trans_freq.txt $(DATA)/comp_trans_freq.rem
 	ML/make_trans_freq $(DATA)/pada_trans_freq.txt $(DATA)/pada_trans_freq.rem
+
+morph_freq:
+#	ML/make_morph_freq
+	cd ML && $(MAKE) make_morph_freq
+	ML/make_morph_freq $(DATA)/comp_morphs_freq.tsv > $(DATA)/comp_freq_max.rem
+	ML/make_morph_freq $(DATA)/pada_morphs_freq.tsv > $(DATA)/pada_freq_max.rem
+	$(ZEN)/ML/dagify < $(DATA)/comp_freq_max.rem > $(DATA)/comp_morphs_freq_deco.rem
+	$(ZEN)/ML/dagify < $(DATA)/pada_freq_max.rem > $(DATA)/pada_morphs_freq_deco.rem
+	rm $(DATA)/comp_freq_max.rem
+	rm $(DATA)/pada_freq_max.rem
 
 xml_data: 
 	cd ML && $(MAKE) make_xml_data

@@ -243,4 +243,40 @@ value rec color_of_phase = fun
   ]
 ; 
 
+value string_of_color = fun 
+  [ Black -> "Black" 
+  | White -> "White" 
+  | Red -> "Red" 
+  | Blue -> "Blue" 
+  | Green -> "Green" 
+  | Yellow -> "Yellow" 
+  | Orange -> "Orange" 
+  | Deep_sky -> "Deep_sky" 
+  | Purple -> "Purple" 
+  | Grey -> "Grey" 
+  | Navy -> "Navy" 
+  | Cyan -> "Cyan" 
+  | Brown -> "Brown" 
+  | Carmin -> "Carmin" 
+  | Chamois -> "Chamois" 
+  | Broon -> "Broon" 
+  | Maroon -> "Maroon" 
+  | Kaki-> "Kaki" 
+  | Gold -> "Gold" 
+  | Magenta -> "Magenta" 
+  | Mauve -> "Mauve" 
+  | Pink -> "Pink" 
+  | Gris -> "Gris" 
+  | Lime -> "Lime" 
+  | Light_blue -> "Light_blue" 
+  | Lavender -> "Lavender" 
+  | Lawngreen -> "Lawngreen" 
+  | Deep_pink -> "Deep_pink" 
+  | Pale_rose -> "Pale_rose" 
+  | Beige -> "Beige" 
+  | Lilac -> "Lilac" 
+  | Violet -> "Violet" 
+  ]
+;
+
 end; (* Phases *)

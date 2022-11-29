@@ -67,9 +67,14 @@ open Machine
 ;
 (* At this point we have a Finite Eilenberg machine ready to instantiate *)
 (* the Eilenberg component of the Segment module.                        *)
-
+open Morpho_analysis;
+module Morpho_anal = Morpho_analysis Phases Lemmas Machine;
+open Morpho_anal;
+open Frequency;
+module Freq = Frequency Phases Machine Morpho_anal;
+open Freq;
 (* Viccheda sandhi splitting *)
-module Viccheda = Segment2 Phases Machine Lexer_control
+module Viccheda = Segment2 Phases Machine Lexer_control Freq
 ;
 open Viccheda (* [segment_iter visual_width] etc. *)
 ;
@@ -356,6 +361,23 @@ value print_word last_ind text mode cpts rcpts (rword,phase,k,conflict) =
   ; td_end |> ps
   }
 ;
+(* Prints the word-form with phase details *)
+value print_best_word (phase,rword) = 
+  let word = Word.mirror rword in do
+  { td_begin_att [ ("align","left") ] |> ps
+  ; let back = background (color_of_phase phase) in 
+    table_begin back |> pl
+  ; "<td " ^ display_morph_action ^ "=\"showBox('" |> ps
+  ; print_morpho phase word 
+  ; let close_box = 
+        "<a href=&quot;javascript:hideBox()&quot;> " ^ x_sign ^ "</a>', '" in 
+    close_box ^ rgb (color_of_phase phase) ^ "', this, event)\">" |> ps
+  ; Morpho_html.print_final rword (* visarga correction *)
+  ; td_end |> ps
+  ; table_end |> ps
+  ; td_end |> ps
+  }
+;
 value max_col = ref 0
 ;
 value print_row text mode cpts rcpts =  print_this text cpts 0 
@@ -430,33 +452,59 @@ value get_sentence font output =
   where rec loop acc = fun
   [ [] -> acc
   | [(_, (phase, rword, transition)) :: tl] -> 
-      loop ((get_sandhi_word font (phase, rword, transition)) ^ acc) tl
+      loop (acc ^ (get_sandhi_word font (phase, rword, transition))) tl
   ]
 ;
-(* Display like reader with phase colours and link to SCL *)
-value print_scl_segments output = 
-  let forget_transitions (phase,word,_) = (phase,word) in
-  let segmentations = List.map forget_transitions output in
+(* Invoking SCL's parser *)
+value call_scl_link id output = 
   let scl_font = match sanskrit_font.val with
-                 [ Deva -> "Devanagari"
-                 | Roma -> "IAST"
-                 ] in 
-  Scl_parser.print_scl scl_font [ segmentations ]
+    [ Deva -> "Devanagari"
+    | Roma -> "IAST"
+    ] in
+  let sentence = get_sentence "wx" output in 
+  Scl_parser.invoke_scl_parser sentence id scl_font 
+;
+(* Prints link to SCL's parser *)
+value print_scl_link id output  = do
+  { td_begin_att [ ("align","left") ] |> ps
+  ; table_begin Latin12 |> pl
+  ; call_scl_link id output
+  ; table_end |> ps
+  ; td_end |> ps
+  }
+;
+(* Prints segmentation word-forms in list view (with phase details) 
+   with a link to SCL *)
+value print_scl_segments id output = 
+  let forget_transitions (_,(phase,word,_)) = (phase,word) in
+  let segmentations = List.map forget_transitions output in
+  do
+  { table_begin Latin12 |> pl
+  ; tr_begin |> ps
+  ; List.iter print_best_word segmentations
+  ; print_scl_link id output
+  ; tr_end |> ps
+  ; table_end |> ps 
+  }
+;
+(* Prints segmentation word-forms in list view (without phase details)
+   with a link to SCL *)
+value print_list_segmentations font id output = do 
+  { ps (span_begin Blue_)
+  ; ps ((get_sentence font output) ^ " ")
+  ; call_scl_link id output
+  ; ps span_end
+  }
 ;
 (* The following prints the solution on the web page *)
 value print_solution font (id, (conf, sentence, output, all)) = do
   { pl html_break
   ; pl hr
-  ; ps (span_begin Blue_)
-  ; ps ((get_sentence font output) ^ " ")
-  ; let scl_font = match sanskrit_font.val with
-                 [ Deva -> "Devanagari"
-                 | Roma -> "IAST"
-                 ]
-  ; let _ = Scl_parser.invoke_scl_parser (get_sentence "wx" output) id scl_font
-  ; ps span_end
-  ; pl html_break
-  ; ()
+  ; if word_based_freq freq_mode.val
+    then print_list_segmentations font id (List.rev output)
+    else if morph_based_freq freq_mode.val
+      then print_scl_segments id (List.rev output)
+    else print_list_segmentations font id (List.rev output)
   }
 ;
 
@@ -469,17 +517,22 @@ value insert_plus strng =
   (*let str2 = Str.global_replace (Str.regexp "-") "-+" str1 in*)
   str1
 ;
-
+(* To replace "+" with " " *)
+value replace_plus str = 
+  let temp_str = Str.global_replace (Str.regexp "-\\+") "-" str in 
+  Str.global_replace (Str.regexp "+") " " temp_str 
+;
 (* Print all the solutions into file *)
 value print_all_sols cho solutions = 
   loop solutions
   where rec loop = fun
   [ [] -> ()
-  | [ item ] -> output_string cho (insert_plus item)
-  | [ l :: r ] -> let _ = output_string cho (insert_plus l) in do 
-                  { output_string cho ";"
-                  ; loop r 
-                  }
+  | [ item ] -> output_string cho (replace_plus item)
+  | [ l :: r ] -> 
+    let _ = output_string cho (replace_plus l) in do 
+    { output_string cho ";"
+    ; loop r 
+    }
   ]
 ;
 
@@ -487,14 +540,19 @@ value get_string (_,str,_,_) =
   str
 ;
 
-value replace_plus str = 
-  let temp_str = Str.global_replace (Str.regexp "-\\+") "-" str in 
-  Str.global_replace (Str.regexp "+") " " temp_str 
+(* Extract the chunk's segmentation from triplets *)
+value get_sandhi_word_for_file (_,_,_,output) = 
+  loop "" (List.rev output)
+  where rec loop acc = fun
+  [ [] -> (String.trim acc)
+  | [(_, (phase, rword, transition)) :: tl] -> 
+    let prefix = 
+      if phase = Unknown then "#"
+      else "" in 
+    loop (prefix ^ (get_sandhi_word "wx" (phase, rword, transition)) ^ acc) tl
+  ]
 ;
-
-(* all_sols :: (int, (float, string, output)) list*)
-(* solutions :: (float, string, output) list*)
-(* sols :: string list*)
+(* Prints the first solution to file in debug mode *)
 value print_solution_to_file sols  = 
   let segmented_output_file = solution_path ^ "best_sol.txt" in
     let cho = 
@@ -506,6 +564,7 @@ value print_solution_to_file sols  =
       }
 ;
 
+(* To record all the best solutions in debug mode *)
 value print_all_sols_to_file wx_input sols = 
   let segmented_output_file = solution_path ^ "best_n_solutions.txt" in
     let cho = 
@@ -523,14 +582,13 @@ value print_all_sols_to_file wx_input sols =
 (* The following is for recording the best solution(s) to file (for debug) *) 
 value print_sols_to_file wx_input mode sols = 
   let solutions = List.map snd sols in 
-  let seg_sols = List.map get_string solutions in 
+  let seg_sols = List.map get_sandhi_word_for_file solutions in
   if mode = First_List then let _ = print_solution_to_file seg_sols in ()
   else let _ = print_all_sols_to_file wx_input seg_sols in ()
 ;
 
-value print_sols wx_input sols font mode = (* stats = (kept,max) *) 
-  (* The following is uncommented during debugging to save solution(s) in file *)
-  (*let _ = print_sols_to_file wx_input mode sols in *)
+(* Prints solutions on the interface *)
+value print_sols sols font mode = (* stats = (kept,max) *) 
   let print_sl sls = List.iter (print_solution font) sls in 
   if mode = First_List then (* To record the first best solution *)
     print_sl [(List.hd sols)]
@@ -543,7 +601,7 @@ value mode_id_of_mode mode =
   | Best_List -> "l"
   | First_Summary -> "f"
   | First_List -> "s"
-  | _ -> raise (Failure ("Unknown mode type"))  
+  | _ -> raise (Failure ("Unknown mode type"))
   ] 
 ;
 
@@ -553,18 +611,17 @@ value mode_of_mode_id mode_id =
   | "l" -> Best_List
   | "f" -> First_Summary
   | "s" -> First_List
-  | x -> raise (Failure ("Unknown mode " ^ x))  
+  | x -> raise (Failure ("Unknown mode " ^ x))
   ] 
 ;
 
-(* Sriram: Check if numbering can be done implicitly *)
-value print_best_solutions wx_input font mode solution_list = 
-  let numbered_sol_list = loop 0 [] solution_list
-    where rec loop id acc = fun
-    [ [] -> acc
-    | [hd :: tl] -> loop (id + 1) (acc @ [(id + 1, hd)]) tl
-    ] in
-    print_sols wx_input numbered_sol_list font mode 
+(* Adds indices to the solution *)
+value add_indices solution_list = 
+  loop 0 [] solution_list
+  where rec loop id acc = fun
+  [ [] -> acc
+  | [hd :: tl] -> loop (id + 1) (acc @ [(id + 1, hd)]) tl
+  ]
 ;
 
 (* In Pipeline, segmented solution and all its possible morph analyses' 
@@ -577,7 +634,11 @@ value write_sol_to_std_out solution_list selected_segments =
   ; Scl_parser.post_best_segments_scl final_segments
   }
 ;
-
+(* In Debug, segmented solutions are directly fed to a local file *)
+value write_solutions_to_file wx_input mode solution_list = 
+  let numbered_sol_list = add_indices solution_list in 
+  let _ = print_sols_to_file wx_input mode numbered_sol_list in ()
+;
 (* The following two functions are introduced for the 
    Best-Summary and Best-List modes. These are accessible from each other.
    Now, the same interface2 has both the modes. *)
@@ -614,7 +675,9 @@ value display_best_list text deva_input roman_input checkpoints cpts wx_input
   ; td_wrap (call_full_graph text ^ "Summary of All Solutions") |> ps 
   ; tr_end |> pl   (* tr end *)
   ; table_end |> pl
-  ; print_best_solutions wx_input font mode solution_list
+  ; ps div_end
+  ; let numbered_sol_list = add_indices solution_list in 
+    print_sols numbered_sol_list font mode 
   }
 ;
 (* To display the summary of best solutions *)
@@ -699,7 +762,7 @@ value best_mode_operations cpts chunks =
 ;
 (* The main procedure for computing the graph segmentation structure *)
 value check_sentence translit uns text checkpoints input undo_enabled 
-      font mode rcheckpoints pipeline =
+      font mode rcheckpoints pipeline debug =
   let encode = Encode.switch_code translit in
   let chunker = if uns (* sandhi undone *) then Sanskrit.read_raw_sanskrit 
                 else (* chunking *) Sanskrit.read_sanskrit in
@@ -739,6 +802,7 @@ value check_sentence translit uns text checkpoints input undo_enabled
      standard output. By default, the pipeline is disabled to access the 
      usual display of best segments' summary or best solutions' list *)
   if pipeline then write_sol_to_std_out solution_list selected_segments 
+  else if debug then write_solutions_to_file input mode solution_list
   else
   match mode with 
   [ Best_List | First_List -> 
@@ -817,7 +881,9 @@ value graph_engine () =
   let url_encoded_input = get "text" env "" 
   and url_encoded_topic = get "topic" env "" (* topic carry-over *)
   and url_encoded_mode  = get "mode" env "b"
+  and f_mode = get "fmode" env "w"
   and ppl = get "pipeline" env "f"
+  and dbg = get "debug" env "f"
   and st = get "st" env "t" (* sentence parse default *)
   and us = get "us" env "f" (* sandhied text default *)
   and translit = get "t" env Paths.default_transliteration (* translit input *)
@@ -836,11 +902,12 @@ value graph_engine () =
   and () = if st="f" then Lexer_control.star.val:=False 
            else () (* word vs sentence stemmer *)
   and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
-  and mode = mode_of_mode_id (decode_url url_encoded_mode)
+  and mode = mode_of_mode_id url_encoded_mode
   and pipeline = (ppl = "t")
-  and () = assign_freq_info 
+  and debug = (dbg = "t")
   and url_enc_corpus_permission = (* Corpus mode *)
       get Params.corpus_permission env "true" in 
+  let () = assign_frequency f_mode in 
   let corpus_permission = 
     url_enc_corpus_permission
     |> decode_url
@@ -879,13 +946,13 @@ value graph_engine () =
   let revised = decode_url (get "revised" env "") (* User-aid revision *)
   and rev_off = int_of_string (get "rev_off" env "-1") 
   and rev_ind = int_of_string (get "rev_ind" env "-1") in 
-  let _ = if pipeline then ()
+  let _ = if (pipeline || debug) then ()
           else Prel.prelude () in 
   try let _ = 
     match (revised,rev_off,rev_ind) with
     [ ("",-1,-1) -> (* Standard input processing *** Main call *** *)
       check_sentence translit uns text checkpoints input undo_enabled 
-                     font mode rcheckpoints pipeline
+                     font mode rcheckpoints pipeline debug 
     | (new_word,word_off,chunk_ind) (* User-aid revision mode *) -> 
       let chunks = Sanskrit.read_sanskrit (Encode.switch_code translit) input in
       let rec decoded init ind = fun
@@ -913,9 +980,9 @@ value graph_engine () =
                                corpus_dir sentence_no 
       and new_input = decode_url updated_input in
       check_sentence translit uns new_text revised_check new_input undo_enabled 
-                     font mode rcheckpoints pipeline
+                     font mode rcheckpoints pipeline debug 
     ] in 
-    if pipeline then ()
+    if (pipeline || debug) then ()
     else do 
     {
     (* Rest of the code concerns Corpus mode *)

@@ -46,15 +46,20 @@ module Segment2
          end)
   (Control: sig value star : ref bool; (* chunk= if star then word+ else word *)
             end) 
+  (Frequency: sig (* To be instantiated by Interface2 *)
+         type frequency_mode;
+         value freq_mode : ref frequency_mode;
+         value word_based_freq : frequency_mode -> bool;
+         value morph_based_freq : frequency_mode -> bool;
+         value get_probability : 
+          frequency_mode -> Eilenberg.segment -> (float * string);
+        end)
   = struct
 
 open Phases;
 open Eilenberg;
 open Control; (* star *)
-
 open Frequency;
-module Freq = Frequency Phases Eilenberg;
-open Freq;
 
 (* The summarizing structure sharing sub-solutions *)
 (* It represents the union of all solutions *)
@@ -158,10 +163,6 @@ value get_pada pada = getrec where rec getrec = fun
   ]
 ;
 
-value assign_freq_info = 
-  Freq.assign_frequency
-;
-
 value register_pada index (phase,pada,sandhi) = 
   (* We search for bucket of given phase in graph *)
   let (al,ar) = split phase graph.(index) 
@@ -184,9 +185,10 @@ value register_pada index (phase,pada,sandhi) =
   | [] -> update_graph [ (phase,[ pada_right ]) ] (* new bucket *)
   ]   
   ;
-  (* The following is used to get the prob of the pada and sandhi 
-     and then return it to the parent function [log_chunk] *)
-  let (pada_conf_val, pada_text) = Freq.get_rule_freq (phase,pada,sandhi) in
+  (* The following is used to get the prob and then return it to 
+     the parent function [log_chunk] *)
+  let (pada_conf_val, pada_text) = 
+    get_probability freq_mode.val (phase,pada,sandhi) in
   (pada_conf_val, pada_text)
   }
 ;
@@ -549,6 +551,16 @@ value get_second_comp item =
   [ (_,second,_,_,_,_,_) -> second
   ]
 ;
+value update_chunk_splits text new_segment old_list = 
+  if word_based_freq freq_mode.val
+    then let sol_list = List.map get_second_comp old_list in 
+    if List.mem text sol_list 
+      then edit_chunk_triplets old_list new_segment
+    else add_chunk old_list new_segment
+  else if morph_based_freq freq_mode.val
+    then add_chunk old_list new_segment
+  else add_chunk old_list new_segment
+;
 (* Adding the new segmentation into the list of possible 
    segmentations for the current chunk *)
 value add_to_chunk_splits (conf, text, no_of_seg, triplets) = 
@@ -556,14 +568,25 @@ value add_to_chunk_splits (conf, text, no_of_seg, triplets) =
                           selection of segments by users *)
   else do
   { let temp_list = chunk_solutions.possible_splits
-  ; let sol_list = List.map get_second_comp temp_list
   ; let segment_id = List.length chunk_solutions.possible_splits
   ; let new_item = (conf, text, cur_chunk.offset, segment_id, no_of_seg, 
                     triplets, (List.rev triplets))
+  (* If the probability calculations are from the word-frequencies, then
+     [edit_chunk_triplets] is to be called for the following reason:
+     [chunk_solutions.possible_splits] will store the possible segmentations
+     of a particular chunk.  When the segmented forms of multiple segmentations
+     are identical, then only one entry is stored where the final list of 
+     triplets are appended with new triplets. This ensures text-level sharing
+     of segmentation solution.
+     This is handled by [edit_chunk_triplets]
+     
+     In case the probability calculations are from morph-frequencies, then
+     there wont be any text-level sharing of segmentation solutions. Each 
+     segmentation is considered separately as each segment has its own 
+     morphological analysis. In this case, a separate entry is added 
+     to [chunk_solutions.possible_splits] for each segmentation solution. *)
   ; chunk_solutions.possible_splits := 
-    if List.mem text sol_list 
-    then edit_chunk_triplets temp_list new_item
-    else add_chunk temp_list new_item
+      update_chunk_splits text new_item temp_list
   }
 ;
 (* The graph segmenter as a non deterministic reactive engine:
@@ -752,7 +775,6 @@ value rebuild_graph solution_list =
       where rec loop = fun 
       [ [] -> register_solution (acc @ chunk_all_triplets) tl
       | [((index, triple) as hd) :: rest] -> 
-          let _ = set_cur_offset (index + 1) in 
           let _ = new_register_for_segment hd in 
           loop rest
       ]

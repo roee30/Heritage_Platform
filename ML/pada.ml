@@ -55,7 +55,7 @@ value voices_of = fun
   | "bha.s" | "bhas" | "bhaa#1" | "bhii#1" | "bhuj#1" | "bhuu#1" | "bhuu.s" 
   | "bhram" | "majj" | "ma.n.d" | "mad#1" | "manth" | "mah" | "maa#3" | "mi.s" 
   | "mih" | "miil" | "mu.s#1" | "muh" | "muurch" | "m.r.d" | "mnaa"
-  | "mre.d" | "mlaa" | "mluc" | "mlecch" | "yabh" | "yam" | "yas" | "yaa#1" 
+  | "mre.d" | "mluc" | "mlecch" | "yabh" | "yam" | "yas" | "yaa#1" 
   | "yu#2" | "ra.mh" | "rak.s" | "ra.t" | "ra.n" | "rad" | "radh" | "raa#1" 
   | "raadh" | "ri.s" | "ru" | "ruj#1" | "rudh#1" | "ru.s#1" | "ruh#1" | "lag"
   | "lafg" | "lap" | "lal" | "las" | "laa" | "laa~nch" | "likh" | "liz" 
@@ -84,6 +84,7 @@ value voices_of = fun
 (*| "van"    Atma needed for vanute *)
 (*| "mah"    Atma needed for pft. maamahe *) 
 (*| "m.rz"   Atma needed for pft vivam.rze Mah{18,2,42} *)
+(*| "mlaa"   Atma for pari-mlaa and epics *)
 (*| "cit#1"  Atma needed for pft. cikite *)
 (*| "viz1"   Atma needed for nivizate \Pan{1,3,17} *)
 (*| "zram"   Atma needed for vizramate *)
@@ -144,7 +145,7 @@ value voices_of = fun
   | "puuy" | "p.rth" | "prii" | "pru.s#1" | "budh#1" | "bruu" | "bhak.s"
   | "bhaj" | "bharts" | "bhaas#1" | "bhid#1" | "bhuj#2" | "bh.r" | "bh.rjj" 
   | "mantr" | "maa#4" | "maarg" | "mi" | "mith" | "mil" | "mii" 
-  | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.rz" | "m.r.s" 
+  | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.rz" | "m.r.s" | "mlaa" 
   | "yaj#1" | "yam" | "yaac" | "yu#1" | "yuj#1" | "yudh#1" | "rac" | "ra~nj" 
   | "ram" | "rah" | "raaj#1" | "ri" | "ric" | "rud#1" | "rudh#2" | "lafgh" 
   | "lak.s" | "labh" | "la.s" | "lip" | "lih#1" | "lup" | "luu#1" | "vad" 
@@ -332,6 +333,7 @@ value voices_of_pv upasarga gana = fun
           | _ -> Para (* "" | "vi" *)
           ]
 | "m.rz" -> if upasarga = "pari" then Para else Ubha (* \Pan{1,3,82} *)
+| "mlaa" -> if upasarga = "pari" then Atma else Ubha
 | "tap" when gana = 1 -> match upasarga with
                          [ "ut" | "vi" -> Ubha 
                          | _ -> Para (* \Pan{1,3,27} *)

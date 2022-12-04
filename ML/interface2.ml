@@ -36,8 +36,9 @@ module Prel = struct (* Interface2's lexer prelude *)
                     ^ " to rule out segment" ^ h3_end)
   ; pl (h3_begin C3 ^ mouse_action_help 
                     ^ " on segment to get its lemma" ^ h3_end)
-  ; pl (h3_begin C3 ^ "In the list mode, " ^ mouse_action_help 
-                    ^ " on numbered box to redirect sentence to SCL Parser" ^ h3_end)
+  ; pl (h3_begin C3 ^ "In the list view, " ^ mouse_action_help 
+                    ^ " on numbered " ^ (html_green check_sign) 
+                    ^ " or button to redirect sentence to SCL Parser" ^ h3_end)
   ; open_page_with_margin 15
   }
 ;
@@ -84,6 +85,24 @@ open Viccheda (* [segment_iter visual_width] etc. *)
      for respectively Summary or Best solutions *)
 (* Note that Interface2 is not a Reader/Parser mode. *)
 type best_mode = [ First_Summary | First_List | Best_Summary | Best_List ]
+;
+value mode_id_of_mode mode = 
+  match mode with
+  [ Best_Summary -> "b"
+  | Best_List -> "l"
+  | First_Summary -> "f"
+  | First_List -> "s"
+  | _ -> raise (Failure ("Unknown mode type"))
+  ] 
+;
+value mode_of_mode_id mode_id = 
+  match mode_id with
+  [ "b" -> Best_Summary
+  | "l" -> Best_List
+  | "f" -> First_Summary
+  | "s" -> First_List
+  | x -> raise (Failure ("Unknown mode " ^ x))
+  ] 
 ;
 (* At this point we have the sandhi inverser segmenting engine *)
 
@@ -152,10 +171,14 @@ value call_back text mode cpts rcpts (k,seg) conflict =
        anchor color (invoke cgi_select) sign ^ 
           if unanalysed seg then "" else anchor Red_ (invoke cgi_reject) x_sign
 ;
-value call_reader text cpts mode = (* mode = "o", "p", "g", "t" - for overall 
-                                             "b", "f", "l", "s" - for best *)
-  let cgi = reader_cgi ^ "?" ^ text ^ ";mode=" ^ mode ^ 
-            ";cpts=" ^ string_points cpts in 
+value call_reader text cpts rcpts mode cur_mode fmode = 
+  (* mode = "o", "p", "g", "t" - for overall 
+     cur_mode = "b", "f", "l", "s" - for best *) 
+  let cgi = reader_cgi ^ "?" ^ text ^ ";mode=" ^ mode 
+            ^ ";best_mode=" ^ cur_mode 
+            ^ ";fmode=" ^ fmode 
+            ^ ";cpts=" ^ (string_points cpts) 
+            ^ ";rcpts=" ^ (string_points rcpts) in 
   anchor Green_ (invoke cgi) check_sign
 ;
 value call_parser text cpts =
@@ -461,50 +484,75 @@ value get_sentence font output =
       loop (acc ^ (get_sandhi_word font (phase, rword))) tl
   ]
 ;
-(* Invoking SCL's parser *)
-value call_scl_link id output = 
-  let sentence = get_sentence "wx" output in 
-  Scl_parser.invoke_scl_parser sentence id scl_font 
+value call_scl_segments text id mode_id fmode_id output = 
+  let get_chkpt (index, (phase, word, transition)) = 
+    (index, (phase, word), True) in 
+  let checkpoints = List.map get_chkpt output in 
+  call_reader text checkpoints [] "o" mode_id fmode_id ^ (string_of_int id)
 ;
-(* Prints link to SCL's parser *)
-value print_scl_link id output  = do
+value print_scl_link scl_font id segmentation = do 
   { td_begin_att [ ("align","left") ] |> ps
   ; table_begin Latin12 |> pl
-  ; call_scl_link id output
+  ; Scl_parser.print_scl_segmentation scl_font id segmentation
   ; table_end |> ps
   ; td_end |> ps
   }
 ;
-(* Prints segmentation word-forms in list view (with phase details) 
+(* Prints segmentation word-forms (along with phase details) in list view 
    with a link to SCL *)
-value print_scl_segments id output = do
+value print_scl_segments text id mode_id fmode_id segmentation output = do
   { table_begin Latin12 |> pl
   ; tr_begin |> ps
-  ; List.iter print_best_word output
-  ; print_scl_link id output
+  ; List.iter print_best_word segmentation 
+  ; if scl_toggle then
+      print_scl_link scl_font id segmentation 
+    (* Either run the SCL's script directly as above or 
+       call UoH Analysis mode in Reader page as below.
+       The UoH Analysis mode in the Reader page sometimes
+       produces multiple solutions even if there is only one
+       possible solution. So, temporarily the following is 
+       commented. *)
+    (* td_wrap (call_scl_segments text id mode_id fmode_id output) |> ps *)
+    else ()
   ; tr_end |> ps
   ; table_end |> ps 
   }
 ;
-(* Prints segmentation word-forms in list view (without phase details)
+(* Call the SCL's parser directly with a link. *)
+value call_scl_text text font = 
+  let cgi = "/cgi-bin/scl/MT/anusaaraka.cgi?encoding=WX&text=" ^ text 
+            ^ "&splitter=None&out_encoding=" ^ font 
+            ^ "&parse=Full&text_type=Sloka&mode=web&tlang=Hindi" in 
+  anchor Green_ (invoke cgi) check_sign
+;
+(* Prints segmentation word-forms (without phase details) in list view
    with a link to SCL *)
-value print_list_segmentations font id output = do 
+value print_list_segmentations font id segmentations = do 
   { ps (span_begin Blue_)
-  ; ps ((get_sentence font output) ^ " ")
-  ; call_scl_link id output
+  ; ps ((get_sentence font segmentations) ^ " ")
+  ; let sentence = (get_sentence "wx" segmentations)
+  ; if scl_toggle then 
+    call_scl_text sentence scl_font ^ (string_of_int id) |> ps
+    else () 
   ; ps span_end
   }
 ;
 (* The following prints the solution on the web page *)
-value print_solution font (id, (conf, sentence, output, all)) = do
+value print_solution text font mode_id fmode_id (id, (_, _, output, all)) = do
   { pl html_break
   ; pl hr
   ; let forget_transitions (_,(phase,word,_)) = (phase,word) in
     let segmentations = List.map forget_transitions output in
+    (* If word-frequencies are used, we will not have phase / morph details. 
+       So segmentation-forms are listed down with a link to SCL's parser. 
+       If morph-frequencies are used, we will have phase and morph details.
+       So segmentation-forms with phase and links to morphs are displated, 
+       along with a link to SCL's parser. *)
     if word_based_freq freq_mode.val
     then print_list_segmentations font id (List.rev segmentations)
     else if morph_based_freq freq_mode.val
-      then print_scl_segments id (List.rev segmentations)
+      then print_scl_segments text id mode_id fmode_id (List.rev segmentations)
+                              (List.rev output)
     else print_list_segmentations font id (List.rev segmentations)
   }
 ;
@@ -589,31 +637,13 @@ value print_sols_to_file wx_input mode sols =
 ;
 
 (* Prints solutions on the interface *)
-value print_sols sols font mode = (* stats = (kept,max) *) 
-  let print_sl sls = List.iter (print_solution font) sls in 
+value print_sols text sols font mode fmode_id = (* stats = (kept,max) *) 
+  let mode_id = (mode_id_of_mode mode) in 
+  let print_sl sls = 
+    List.iter (print_solution text font mode_id fmode_id) sls in 
   if mode = First_List then (* To record the first best solution *)
     print_sl [(List.hd sols)]
   else print_sl sols (* To record all the solutions *)
-;
-
-value mode_id_of_mode mode = 
-  match mode with
-  [ Best_Summary -> "b"
-  | Best_List -> "l"
-  | First_Summary -> "f"
-  | First_List -> "s"
-  | _ -> raise (Failure ("Unknown mode type"))
-  ] 
-;
-
-value mode_of_mode_id mode_id = 
-  match mode_id with
-  [ "b" -> Best_Summary
-  | "l" -> Best_List
-  | "f" -> First_Summary
-  | "s" -> First_List
-  | x -> raise (Failure ("Unknown mode " ^ x))
-  ] 
 ;
 
 (* Adds indices to the solution *)
@@ -645,7 +675,8 @@ value write_solutions_to_file wx_input mode solution_list =
    Now, the same interface2 has both the modes. *)
 (* To display the list of best solutions *)
 value display_best_list text deva_input roman_input checkpoints cpts wx_input 
-                        undo_enabled font mode solution_list rcheckpoints = do 
+                        undo_enabled font mode solution_list rcheckpoints 
+                        fmode = do 
   { html_break |> pl
   ; ps (div_begin Latin16)
   ; html_latin16 "Sentence: " |> pl
@@ -672,19 +703,18 @@ value display_best_list text deva_input roman_input checkpoints cpts wx_input
       else (mode_id_of_mode Best_Summary, "Summary of Best Solutions") in 
     td_wrap (call_best_graph text new_mode checkpoints 
                              rcheckpoints ^ link_text) |> ps 
-(*  ; html_break |> ps *)
   ; td_wrap (call_full_graph text ^ "Summary of All Solutions") |> ps 
   ; tr_end |> pl   (* tr end *)
   ; table_end |> pl
   ; ps div_end
   ; let numbered_sol_list = add_indices solution_list in 
-    print_sols numbered_sol_list font mode 
+    print_sols text numbered_sol_list font mode fmode 
   }
 ;
 (* To display the summary of best solutions *)
 value display_best_summary text deva_input roman_input checkpoints cpts wx_input 
                            chunks undo_enabled font mode full count solution_list
-                           rcheckpoints = do 
+                           rcheckpoints fmode = do 
   { make_visual cur_chunk.offset
   ; find_conflict 0
   ; html_break |> pl
@@ -721,14 +751,28 @@ value display_best_summary text deva_input roman_input checkpoints cpts wx_input
   ; td_wrap (call_full_graph text ^ "Summary of All Solutions") |> ps 
   ; let call_scl_parser () = (* invocation of scl parser *)
         if scl_toggle then
-           td_wrap (call_reader text (cpts @ rcheckpoints) 
-                                "o" ^ "UoH Analysis Mode") |> ps
+           td_wrap (call_reader text checkpoints rcheckpoints "o" 
+                                (mode_id_of_mode mode) fmode 
+                    ^ "UoH Analysis Mode") |> ps 
         else () (* [scl_parser] is not visible unless toggle is set *) in
-    if count=1 (* Unique remaining solution *) then do
-    { td_wrap (call_parser text (cpts @ rcheckpoints) ^ "Unique Solution") |> ps
+    (* This is a work-around to check whether the number of solutions is 
+       equal to 1. When there is only 1 solution, the "Unique Solution" and 
+       "Uoh Analysis Mode" are to be active.
+       Currently, the segmenter runs only once and registers the graph, 
+       also counting the total number of solutions. And then best segments 
+       are obtained and the graph is rebuilt. But the count is not changed. 
+       In the First_Summary mode with stem and morph freqs there will be 
+       definitely only one solution. Also, when the segmenter produces only 
+       one solution, the count value will be 1. *)
+    let single_solution = 
+      ((((fmode_of_fmode_id fmode) = Frequency_Stem_Morph) && 
+      (mode = First_Summary)) ||
+      count = 1) in 
+    if single_solution (* Unique remaining solution *) then do
+    { td_wrap (call_parser text (checkpoints @ rcheckpoints) 
+               ^ "Unique Solution") |> ps
     ; call_scl_parser ()
-    }
-    else call_scl_parser ()
+    } else ()
   ; tr_end |> pl   (* tr end *)
   ; table_end |> pl
   ; div_end |> ps (* Latin16 *)
@@ -763,7 +807,7 @@ value best_mode_operations cpts chunks =
 ;
 (* The main procedure for computing the graph segmentation structure *)
 value check_sentence translit uns text checkpoints input undo_enabled 
-      font mode rcheckpoints pipeline debug =
+      font mode rcheckpoints pipeline debug fmode =
   let encode = Encode.switch_code translit in
   let chunker = if uns (* sandhi undone *) then Sanskrit.read_raw_sanskrit 
                 else (* chunking *) Sanskrit.read_sanskrit in
@@ -809,10 +853,11 @@ value check_sentence translit uns text checkpoints input undo_enabled
   [ Best_List | First_List -> 
       display_best_list text deva_input roman_input checkpoints cpts wx_input 
                         undo_enabled font list_mode solution_list updated_rcpts 
+                        fmode 
   | Best_Summary | First_Summary -> 
       display_best_summary text deva_input roman_input checkpoints cpts wx_input 
                            chunks undo_enabled font mode full count solution_list
-                           updated_rcpts 
+                           updated_rcpts fmode 
   | _ -> raise (Failure ("Incompatible mode")) 
   ]
 ;
@@ -882,7 +927,7 @@ value graph_engine () =
   let url_encoded_input = get "text" env "" 
   and url_encoded_topic = get "topic" env "" (* topic carry-over *)
   and url_encoded_mode  = get "mode" env "b"
-  and f_mode = get "fmode" env "w"
+  and fmode = get "fmode" env "w"
   and ppl = get "pipeline" env "f"
   and dbg = get "debug" env "f"
   and st = get "st" env "t" (* sentence parse default *)
@@ -908,7 +953,7 @@ value graph_engine () =
   and debug = (dbg = "t")
   and url_enc_corpus_permission = (* Corpus mode *)
       get Params.corpus_permission env "true" in 
-  let () = assign_frequency f_mode in 
+  let () = assign_frequency fmode in 
   let corpus_permission = 
     url_enc_corpus_permission
     |> decode_url
@@ -953,7 +998,7 @@ value graph_engine () =
     match (revised,rev_off,rev_ind) with
     [ ("",-1,-1) -> (* Standard input processing *** Main call *** *)
       check_sentence translit uns text checkpoints input undo_enabled 
-                     font mode rcheckpoints pipeline debug 
+                     font mode rcheckpoints pipeline debug fmode 
     | (new_word,word_off,chunk_ind) (* User-aid revision mode *) -> 
       let chunks = Sanskrit.read_sanskrit (Encode.switch_code translit) input in
       let rec decoded init ind = fun
@@ -981,7 +1026,7 @@ value graph_engine () =
                                corpus_dir sentence_no 
       and new_input = decode_url updated_input in
       check_sentence translit uns new_text revised_check new_input undo_enabled 
-                     font mode rcheckpoints pipeline debug 
+                     font mode rcheckpoints pipeline debug fmode 
     ] in 
     if (pipeline || debug) then ()
     else do 

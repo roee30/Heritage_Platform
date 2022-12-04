@@ -53,6 +53,22 @@ value print_scl1 scl_font (solution : list (Phases.phase * Word.word)) =
   ; ps (submit_input "Submit")
   } 
 ;
+(* Invocation of UoH's SCL parser for dependency graph display.
+   Shortened version of [print_scl1] to access [Lex.print_scl_segment_forms] 
+   directly. *)
+value print_scl_segmentation scl_font sol_num 
+                             (solution : list (Phases.phase * Word.word)) =
+  let sol_num_string = ((string_of_int sol_num) ^ " - UoH") in
+  let svg_interface_url = scl_cgi ^ "MT/" in do
+  { ps ("<form name=\"word-order\" method=\"POST\" action = \"" 
+       ^ svg_interface_url ^ "prog/Word_order/call_heritage2anu.cgi\">")
+  ; ps ("<input type=\"hidden\" name=\"DISPLAY\" value=\"" 
+  ^ scl_font ^"\"/>")
+  ; let _ = List.fold_left Lex.print_scl_segment_forms 1 solution in () 
+  ; ps (submit_input sol_num_string)
+  ; ps (xml_end "form")
+  } 
+;
 (* We restrict to the first solution - TEMPORARY *)
 value print_scl scl_font sols = match sols with 
   [ [] -> failwith "No sol"
@@ -74,6 +90,7 @@ value invoke_scl_parser text sol_num font  =
   ; ps ("<input type=\"hidden\" name=\"parse\" value=\"Full\"/>")
   ; ps ("<input type=\"hidden\" name=\"text_type\" value=\"Sloka\"/>")
   ; ps ("<input type=\"hidden\" name=\"mode\" value=\"web\"/>")
+  ; ps ("<input type=\"hidden\" name=\"tlang\" value=\"Hindi\"/>")
   ; ps (submit_input (sol_num_string))
   ; ps (xml_end "form")
   } 

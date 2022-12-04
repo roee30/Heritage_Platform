@@ -56,6 +56,7 @@ module Lexer : functor (* takes its prelude and iterator control as parameters *
   value un_analyzable : Word.word -> (list Machine.segment * Viccheda.resumption); 
   value set_offset : (int * list Viccheda.check) -> unit;
   value print_scl_segment : int -> (Phases.phase * Word.word) -> int;
+  value print_scl_segment_forms : int -> (Phases.phase * Word.word) -> int;
   value tags_of : Phases.phase -> Word.word -> 
                   (Load_morphs.Morphs Prel Phases).tag_sort; (* ugly *)
   value print_segment_words : int -> Machine.segment -> int;

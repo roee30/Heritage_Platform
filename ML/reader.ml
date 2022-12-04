@@ -32,13 +32,35 @@ open Cgi; (* [get decode_url] *)
 open Phases; (* [Phases] *)
 open Rank; (* [Prel Lex Lexer_control Transducers segment_all Solutions] *) 
 open Word; 
+open Checkpoints; (* [string_points] *)
 
 (* Reader interface *)
 (* Mode parameter of the reader. Controled by service Reader for respectively
    tagging, shallow parsing, or dependency analysis with the UoH parser.  *)
 (* Note that Interface is not a Reader/Parser mode. *)
 type mode = [ Tag | Parse | Analyse ]
-(*type mode = [ Tag | Parse | Analyse | Best_list ]*) (* Best_List in Summary *)
+;
+(* For backtracking, the following declaration is required *)
+type best_mode = [ First_Summary | First_List | Best_Summary | Best_List | Full ]
+;
+value mode_id_of_mode mode = 
+  match mode with
+  [ Best_Summary -> "b"
+  | Best_List -> "l"
+  | First_Summary -> "f"
+  | First_List -> "s"
+  | Full -> "g"
+  | _ -> raise (Failure ("Unknown mode type"))
+  ] 
+;
+value mode_of_mode_id mode_id = 
+  match mode_id with
+  [ "b" -> Best_Summary
+  | "l" -> Best_List
+  | "f" -> First_Summary
+  | "s" -> First_List
+  | _ -> Full
+  ] 
 ;
 value rpc = remote_server_host  
 and remote = ref False (* local invocation of cgi by default *)
@@ -51,6 +73,13 @@ value call_parser text sol =
 ;
 value call_graph text mode = 
   let cgi = graph_cgi ^ "?" ^ text ^ "g" in
+  let invocation = if remote.val then rpc ^ cgi else cgi in
+  anchor Green_ invocation check_sign
+;
+value call_best_mode text cpts rcpts mode_id fmode = 
+  let cgi = graph_cgi2 ^ "?" ^ text ^ mode_id ^ 
+            ";fmode=" ^ fmode ^ 
+            ";rcpts=" ^ (Checkpoints.string_points rcpts) in
   let invocation = if remote.val then rpc ^ cgi else cgi in
   anchor Green_ invocation check_sign
 ;
@@ -160,7 +189,8 @@ value display limit mode text saved = fun
    However, the use of "decode" below to compute the romanisation and devanagari
    renderings does a conversion through VH transliteration which may not be
    faithful to encodings which represent eg the sequence of phonemes t and h. *)
-value process_input text us mode topic (input:string) encode cpts = 
+value process_input text us mode topic (input:string) encode cpts 
+                    best_mode fmode checkpoints rcheckpoints rcpts = 
   let pieces = Sanskrit.read_raw_sanskrit encode input in
   let romapieces = List.map Canon.uniromcode pieces in
   let romainput = String.concat " " romapieces in
@@ -171,7 +201,12 @@ value process_input text us mode topic (input:string) encode cpts =
   let deva_input = String.concat " " deva_chunks in do
   { pl (xml_begin_with_att "p" [ ("align","center") ])
   ; ps (div_begin Latin16)
-  ; pl (call_graph text mode ^ " Show Summary of Solutions")
+  ; if best_mode = Full then 
+      pl (call_graph text mode ^ " Show Summary of Solutions")
+    else
+      let mode_id = mode_id_of_mode best_mode in 
+      pl (call_best_mode text checkpoints rcheckpoints mode_id fmode 
+          ^ " Show Best Solutions") 
   ; pl (xml_end "p")
   ; pl "Input:" 
   ; ps (roma16_red_sl romainput) (* romanisation *)
@@ -187,7 +222,7 @@ value process_input text us mode topic (input:string) encode cpts =
         | None -> chunks
         ] in
     let filter_mode = mode=Parse || mode=Analyse in
-    try segment_all filter_mode all_chunks cpts with
+    try segment_all filter_mode all_chunks (cpts @ rcpts) with
         [ Solutions limit revsols saved ->  
            let sols = List.rev revsols in 
            display limit mode text saved sols 
@@ -221,6 +256,8 @@ value reader_engine () = do
     let env = create_env query in
     let url_encoded_input = get "text" env "" 
     and url_encoded_mode  = get "mode" env "p"
+    and bmode = get "best_mode" env ""
+    and fmode = get "fmode" env ""
     and url_encoded_topic = get "topic" env ""
     and st = get "st" env "t" (* default vaakya rather than isolated pada *)
     and us = get "us" env "f" (* default input sandhied *)
@@ -240,6 +277,7 @@ value reader_engine () = do
     and () = if abs="t" then remote.val:=True else () (* Web service mode *)
     and () = if st="f" then Lexer_control.star.val:=False else () (* word stemmer *)
     and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
+    and best_mode = mode_of_mode_id bmode
     and mode = match decode_url url_encoded_mode with
         [ "t" -> Tag
         | "p" -> Parse
@@ -259,11 +297,19 @@ value reader_engine () = do
        try let url_encoded_cpts = List.assoc "cpts" env in (* do not use get *)
            Checkpoints.parse_cpts (decode_url url_encoded_cpts)
        with [ Not_found -> [] ] in     
-(*  let cpts = sort_check checkpoints in -- legacy (?) *)
+    (* Sorting is necessary for segmentation in [Rank.segment_all] but 
+       the unsorted checkpoints are to be used while going back to Summary *)
+    let cpts = sort_check checkpoints in
+    let rcheckpoints = (* fixed checkpoints in best mode *)
+       try let url_encoded_rcpts = List.assoc "rcpts" env in 
+           Checkpoints.parse_cpts (decode_url url_encoded_rcpts)
+       with [ Not_found -> [] ] in 
+    let rcpts = sort_check rcheckpoints in (* -- legacy (?) *)
     try let text = arguments translit lex font cache st us url_encoded_input
                              url_encoded_topic abs checkpoints in do
         { (* Now we call the lexer *)
-           process_input text uns mode topic input encode checkpoints 
+           process_input text uns mode topic input encode cpts 
+                         best_mode fmode checkpoints rcheckpoints rcpts 
         ; pl hr
 	; pl html_break  
         ; close_page_with_margin () 

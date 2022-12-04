@@ -17,7 +17,7 @@ value main =
   and font = Cgi.decoded_get Params.corpus_font Paths.default_display_font env 
   and lex = Cgi.decoded_get Params.corpus_lex Paths.default_lexicon env in
   let permission = Web_corpus.permission_of_string corpperm in
-  let lang =  Html.default_language in
+  let lang =  lex |> Html.language_of_string in
   try
     Corpus_manager.mk_page corpdir permission font lex
   with

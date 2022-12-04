@@ -262,7 +262,7 @@ value mk_page dir permission font lex =
   ; page_begin (title title_str)
   ; body_begin Chamois_back |> pl
   ; open_page_with_margin 15
-  ; clickable_title |> print_title (Some default_language)
+  ; clickable_title |> print_title None
   ; body dir permission font lex
   ; close_page_with_margin ()
   ; page_end default_language True

@@ -1333,10 +1333,7 @@ value build_as gen stem entry =
          ])
      @ (match entry with
          [ "anas" | "manas" | "cetas" | "jaras" -> [ Avyayaf (fix stem "asam") ]
-         | _ -> []
-         ])
-     @ (match entry with
-         [ "nabhas" -> [ Avyayaf (fix stem "as"); Avyayaf (fix stem "yam") ]
+         | "nabhas" -> [ Avyayaf (fix stem "as"); Avyayaf (fix stem "yam") ]
          | _ -> []
          ])
      @ (if gen=Neu && as_iiv entry then [ Cvi (wrap stem 4) ] else []))

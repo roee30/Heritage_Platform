@@ -2664,6 +2664,7 @@ value compute_ppp_stems root rstem =
     [ "vrazc" -> [ sNa "v.rk" ] (* exception - v.rk root stem of vrazc *)
     (* Most roots starting with 2 consonants take -na \Pan{8,2,43} *)
     (* but not "k.svi.d" "zrath" *)
+    (* "ad#1" could give "anna", declared unaadi at present *)
     | "iir" | "und" | "k.rr" | "klid" | "k.saa" | "k.sii" | "k.sud" | "k.svid"
     | "khid" | "g.rr#1" | "glaa" | "chad#1" | "chid#1" | "ch.rd" | "j.rr" 
     | ".dii" | "tud#1" | "t.rd" | "t.rr" | "dagh" | "d.rr" | "dev" | "draa#1"
@@ -2981,7 +2982,8 @@ value admits_passive = fun
 ;
 value admits_ppp_abs = fun
   [ "ak.s" (* vedic a.s.ta overgenerates with a.s.tan *) 
-  | "ad#1" (* jak.s jagdha \Pan{2,4,36} *)
+  | "ad#1" (* but anna could be ppp ? *)
+  (* jak.s jagdha \Pan{2,4,36} *)
   | "ah" | "bruu" (* vac *) 
   | "paz"  (* d.rz *) 
   | "as#1" | "kan" | "k.r#2" | "k.si" | "gaa#1" | "ghas" | "chur" | "ta.d" 
@@ -4883,9 +4885,17 @@ value record_part_ppp ppstem root = do
   ; record_part (Pppa_ Primary ppstem root) (* pp-vat (krit tavat) *)
   }
 ;
+(* No attested abso in classical language - Brocquet§4.5 *)
+value no_abso = fun (* could add: "majj" *)
+  [ "jan" | "pad#1" | "puuj" | "p.rr" | "bh.r" | "rak.s" -> True
+  | _ -> False
+  ]
+;
 value record_abso_ya form root =  (* lyap \Pan{7,1,37} *)
+  if no_abso root then () else
   enter1 root (Invar (Primary,Absoya) form) 
 and record_abso_tvaa form root = (* ktvaa \Pan{3,4,18+} *)
+  if no_abso root then () else
   enter1 root (Absotvaa Primary form)
 ;
 (* First absolutives in -ya \Pan{7,1,37} lyap *)

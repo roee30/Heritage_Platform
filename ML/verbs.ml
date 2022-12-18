@@ -606,7 +606,7 @@ and o_it = fun (* these roots have ppp in -na \Pan{8,2,45} - unused here *)
       -> True 
   | _ -> False
   ]
-and no_guna = fun (* ku.taadi Kale§§463 *)
+and no_guna = fun (* ku.taadi Kale§463 *)
   [ "kuc" | "ku.t" | "gur" | "ghu.t" | "cu.t" | "cu.d" | "chur" | "ju.t" 
   | "tu.t" | "tu.d" | "tru.t" | "dham" | "dhma" | "dhru" | "nuu" | "pu.t"
   | "pu.d" | "lu.t" | "lu.th" | "lu.d" | "vra.d" | "sphu.t" | "sphur" -> True
@@ -855,7 +855,7 @@ and compute_desiderativem = compute_thematic_middle des_gana Desiderative
 
 (*** Gana 2 (root conjugation) ***)
 
-(* [fix2: Word.word -> string -> string -> Word.word] *)
+(* [fix2: Word.word -> string -> string -> bool -> Word.word] *)
 (* set indicates connecting vowel string of se.t root *)
 value fix2 stem suff set = 
   let codesf = code suff in 
@@ -2717,7 +2717,7 @@ value compute_ppp_stems root rstem =
         match root with 
         [ "vid#2" -> [ Ta rstem :: ppn ] (* 2 forms *)
         | "nud" -> [ Ta rstem :: [ Tia rstem :: ppn ] ] (* 3 forms *)
-        | _ -> ppn
+        | _ -> ppn (* eg ad#1 -> anna *)
         ]
  (*     | [ 36 :: ([ 1 :: r ] as w) ] (* -an *) -> 
              [ Ta w :: ppna [ 2 :: r ] ] (* mata+maana *) *)
@@ -2776,7 +2776,6 @@ value compute_ppp_stems root rstem =
            | "dhaav#2" -> revcode "dhau"
            | "dhv.r"   -> revcode "dhuur"
            | "puuy"    -> revcode "puu"
-           | "bhi.saj#2" -> revcode "bhi.sajy" 
            | "skambh" -> revcode "skabh" (* skambh -> skabh *)
            | "stambh" -> revcode "stabh" (* stambh -> stabh *)
            | "zrath"  -> revcode "zranth"
@@ -4751,7 +4750,7 @@ value velarification rstem = (* \Pan{7,3,52} *)
 (* Actually the following velarification should be registered as an optional
 form, since \Pan{7,3,65} says that it does not apply in the sense of necessity *)
   | _ -> let st = match rstem with (* [Int_sandhi.restore_stem] not needed *)
-               [ [ 22 (* c *) :: [ 26 (* ~n *) :: r ] ] ->  
+             [ [ 22 (* c *) :: [ 26 (* ~n *) :: r ] ] ->  
                [ 17 (* k *) :: [ 21 (* f *) :: r ] ]      (* vafkya *)
              | [ 22 (* c *) :: r ] -> [ 17 (* k *) :: r ] (* paakya vaakya *)
              | [ 24 (* j *) :: [ 24 (* j *) :: r ] ] ->
@@ -5762,7 +5761,7 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
    | "tuhina" | "da.n.da" | "deva" | "dola" | "dravat" | "dhiira#1"
    | "nirmuula" | "nuutana" | "pa.tapa.taa" | "pallava"
    | "pavitra" | "paaza" | "pi.n.da" | "pulaka" | "puula" | "pratikuula" 
-   | "prati.sedha" | "pradak.si.na" | "prasaada" | "bhi.saj" (* | "mantra" *)
+   | "prati.sedha" | "pradak.si.na" | "prasaada" | "bhi.saj" 
    | "malina" | "mizra" | "mukula" | "mukhara" | "mu.n.da" | "muutra" 
    | "m.rga" | "yantra" | "rasa" | "ruuk.sa" | "lagha" (* u -> a *)
    (*| "var.na" now varn:10 *) | "vizada" | "vra.na" | "zaanta" | "zithila"
@@ -5792,7 +5791,7 @@ value den_stem_m root = (* in general intransitive or reflexive Whitney§1059c *
    let rstem = revstem root in 
    match root with 
    [ "i.sa" | "utpuccha" | "kuha" | "manas" | "muutra" 
-     (*| "artha" | "mantra" now ga.na 10 arth mantr *)
+     (* "artha" | "mantra" now ga.na 10 arth mantr *)
    | "m.rga" | "viira" | "safgraama" | "suutra" (* also zithila below *)
        -> rstem (* (a)-yate *) 
    | "asuuya" (* "asu" lengthened *) | "vyaya" (* euphony *)

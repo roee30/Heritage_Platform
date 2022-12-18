@@ -887,7 +887,7 @@ value build_an g stem entry =
    ; Indecl Tas (fix stem "atas")
    ] @ if g=Neu then [ Avyayaf (fix stem "a") ] else []) (* \Pan{5,4,109} *)
 ;
-value build_an_god stem entry = (* Whitney §426a *)
+value build_an_god stem entry = (* Whitney §426a Un{1,157} *)
   let decline case suff = (case,fix stem suff) in
   enter entry 
    [ Declined Noun Mas

@@ -2738,7 +2738,7 @@ value compute_ppp_stems root rstem =
            | "k.svi.d" -> revcode "k.sve.d"
            | "vip"    -> revcode "vep"
            | "m.rg"   -> revcode "marg" (* strong *)
-           | "jak.s"  -> revcode "jagh" (* jagdha *)
+           | "jak.s"  -> revcode "jagh" (* jagdha \Pan{2,4,36} *)
            | "k.san"  -> revcode "k.sa" (* removal of final nasal *) 
            | "gam"    -> revcode "ga" (* \Pan{6,4,37} *)
            | "tan#1"  -> revcode "ta"
@@ -4709,7 +4709,7 @@ value perif conj perstem root = do
         [ Primary -> (* Difference infinitive/tavya forms and peri-future *)
              match root with (* should rather appear in perstems *)
              [ "g.rr#1" -> revcode "giri" (* giritum, not gariitum *) 
-             | "jak.s"  -> revcode "jagh" (* jagdhum *)
+             | "jak.s"  -> revcode "jagh" (* jagdhum \Pan{2,4,36} *)
              | "dabh"   -> revcode "dabh" (* dabhdum WR *)
              | "p.rr"   -> revcode "puuri" (* puuritum *)
              | "sva~nj" -> revcode "svaj" (* svaktum *)
@@ -4913,9 +4913,10 @@ value record_abs_ya root rstem w = do
             | "daa#1" (* \Pan{7,4,46} *)
             | "dhaa#1" (* \Pan{7,4,42} *)
                    -> rstem 
-            | "zii#1" -> revcode "zay" (* \Pan{7,4,22} *)
-            | "arh" -> revcode "argh" (* arghya (h=h') *)
+            | "zii#1"  -> revcode "zay" (* \Pan{7,4,22} *)
+            | "arh"    -> revcode "argh" (* arghya (h=h') *)
             | "k.rt#1" -> revcode "kart" (* strong to avoid k.rtya from k.r *)
+            | "jak.s"  -> revcode "jagdh" (* \Pan{2,4,36} prajagdhya *)
             | _ -> w (* follows pp *)
             ] in match root with
                  [ "hi.ms" -> code "hi.msya" (* no retroflex s Whitney§183 *)

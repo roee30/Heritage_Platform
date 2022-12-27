@@ -1062,6 +1062,7 @@ value build_mas_zvan stem entry =  (* \Pan{6,4,133} Whitney§427 *)
    ]
 ;
 value build_athin stem entry = (* pathin, supathin, mathin *)
+(* \Pan{7.1.85}  pathi-mathy-.rbhuk.saam aat *)
   let decline case suff = (case,fix stem suff) in (* stem = pa for pathin *)
   enter entry 
    [ Declined Noun Mas

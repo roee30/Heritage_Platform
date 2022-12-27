@@ -94,7 +94,7 @@ value gen_stem (v,root) stem = (* stem is a bare stem with no homo index *)
 ;
 (* Now for participle forming paradigms *)
 (* 12-02-2022 Removal of vocatives of participles canceled on 13-03-2022
-   on account of aaacaarya and  muu.dha *)
+   on account of aacaarya and muu.dha *)
 
 (* Similar to [Nouns.build_mas_at [1 :: stem]] if vat=False
    and to [Nouns.build_mas_mat stem] if vat=True *)

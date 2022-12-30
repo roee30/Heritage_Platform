@@ -52,7 +52,7 @@ type morph_anal = (stem * derivational_morph * base * (list inflectional_morph))
 and morph_anal_list = list morph_anal
 ;
 
-(* Choose between the derived stem and base stem accoriding to 
+(* Choose between the derived stem and base stem according to 
    pre-existing kridantas *)
 value krt_stem stem homo bare_stem = 
   match Deco.assoc bare_stem lexical_kridantas with 
@@ -66,12 +66,12 @@ value krt_stem stem homo bare_stem =
   ] 
 ;
 
-(* Extract unique kridantas based on bare_stem *)
+(* Extract unique kridantas based on [bare_stem] *)
 value krit_infos bare_stem = 
   Deco.assoc bare_stem unique_kridantas
 ;
 
-(* Get the tuple of derived_stem, derivational morph analysis, base_stem
+(* Get the tuple of [derived_stem], derivational morph analysis, [base_stem]
    and list of all inflectional morph analysis (multi-tags) *)
 value get_morph preverbs_str form generative_cond (delta,morphs) = 
   let stem = Word.patch delta form in (* stem may have homo index *)

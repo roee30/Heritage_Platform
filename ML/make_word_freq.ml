@@ -45,7 +45,7 @@ value add_word_freq w d f =
 ;        
 value diff_str str w = Word.diff w (Encode.code_string_WX str)
 ;
-(* Add entry to the morph_freq decorated trie structure *)
+(* Add entry to the [morph_freq] decorated trie structure *)
 value deco_of_word_freq (frm,freq) = 
   let word = Transduction.code_raw_WX (frm) 
   and delta = diff_str frm in
@@ -66,7 +66,7 @@ value rec process_file chin =
                         word_freq.val
        ]
 ;
-(* Constructing the decorated trie structure and pushing it to STD_OUT *)
+(* Constructing the decorated trie structure and pushing it to [STD_OUT] *)
 value make_deco txt_file = 
   let chin = open_in txt_file in
   let output = process_file chin in

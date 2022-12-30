@@ -236,7 +236,7 @@ value print_abs entry =
 (* Translation Sanskrit -> English of tool words *)
 value translate_tool = fun
   [ "ca"     -> "and"
-  | "vaa"    -> "or"
+  | "vaa#1"  -> "or"
   | "saha"   -> "with"
   | "iva"    -> "indeed"
   | "iti"    -> "even"

@@ -10,7 +10,7 @@
 (*i module Make_morph_freq = struct  i*)
 
 (* Prepares the decorated trie structures of the 
-   (stem, inflectional_morph, base, derivational_morph, freq) tables
+   [(stem, inflectional_morph, base, derivational_morph, freq)] tables
    from the text files in Resources/DATA  *)
    
 (* The frequency tables are generated using a parallel corpus obtained by 
@@ -53,7 +53,7 @@ value add_morph_freq w d m =
 value diff_str str w = Word.diff w (Encode.code_string_WX str)
 ;
 
-(* Add entry to the morph_freq decorated trie structure *)
+(* Add entry to the [morph_freq] decorated trie structure *)
 value deco_of_sm_freq (stm,mrph,bs,bs_mrph,frq) = 
   let word = Transduction.code_raw_WX (stm) 
   and delta = diff_str stm in
@@ -77,7 +77,7 @@ value rec process_file chin =
        ]
 ;
 
-(* Constructing the decorated trie structure and pushing it to STD_OUT *)
+(* Constructing the decorated trie structure and pushing it to [STD_OUT] *)
 value make_deco txt_file = 
   let chin = open_in txt_file in
   let output = process_file chin in

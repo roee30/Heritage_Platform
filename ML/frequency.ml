@@ -7,19 +7,19 @@
 (* ©2022 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-(* Used by Graph_segmenter2 while registering every segment in interface
+(* Used by [Graph_segmenter2] while registering every segment in interface
    Gets the frequencies of each segment depending on whether the segment is
    a word or a compound component.  Loads frequency data from Resources:
    
-   comp_freq_ref -> compound components (iic and ifc) and their frequencies
-   pada_freq_ref -> words (not iic and ifc) and their frequencies
-   word_freq_ref -> all words and their frequencies
-   pada_morphs_freq_ref -> stem and morph analysis of compound components
+   [comp_freq_ref] -> compound components (iic and ifc) and their frequencies
+   [pada_freq_ref] -> words (not iic and ifc) and their frequencies
+   [word_freq_ref] -> all words and their frequencies
+   [pada_morphs_freq_ref] -> stem and morph analysis of compound components
    (iic and ifc) and their frequencies
-   comp_morphs_freq_ref -> stem and morph analysis of words (not iic and ifc)
+   [comp_morphs_freq_ref] -> stem and morph analysis of words (not iic and ifc)
    and their frequencies
-   comp_transitions_list -> transitions (sandhi) between compound components
-   pada_transitions_list -> transitions (sandhi) between words
+   [comp_transitions_list] -> transitions (sandhi) between compound components
+   [pada_transitions_list] -> transitions (sandhi) between words
    
    Calculates word and transition probabilities for each segment *)
    
@@ -105,7 +105,7 @@ value freq_mode = ref (Frequency_Stem_Morph : frequency_mode)
    do not require morph level information and hence by neglecting the morph
    information, multiple segmentation solutions collapse to one owing to 
    same segmentation forms. The following two functions are used to alter 
-   such functionalities based on the frequency_mode. *)
+   such functionalities based on the [frequency_mode]. *)
 value word_based_freq fmode = 
   match fmode with 
   [ Frequency_Word | Frequency_Transition| Frequency_Word_Transition
@@ -312,7 +312,7 @@ value get_freq word freq_ref =
     ] in
   freq
 ;
-(* Get frequency of the given tuple from the weighted lexmap of morph_freq *)
+(* Get frequency of the given tuple from the weighted lexmap of [morph_freq] *)
 value morph_frequency word morph_str base_str base_morph_str freq_ref = 
   match Deco.assoc word freq_ref with
   [ [] -> 0.0
@@ -349,8 +349,8 @@ value other_possibilities first second third fourth freq_ref =
     let new_freq = 
       morph_frequency first hd third fourth freq_ref in 
     loop (update_freq new_freq acc) tl 
-    (* if new_freq > acc then loop new_freq tl
-    else loop acc tl *)
+    (* [if new_freq > acc then loop new_freq tl
+    else loop acc tl] *)
   ] in 
   new_highest_freq
 ;
@@ -438,12 +438,12 @@ value morph_prob phase rword freq_ref tot_morphs tot_morphs_types =
     (1.0 /. (tot_morphs +. tot_morphs_types))
   else (highest_morph_freq /. tot_morphs)
 ;
-(* Calclate probability of compound component from phase and word *)
+(* Calculate probability of compound component from phase and word *)
 value get_comp_morph_prob phase rword = 
   morph_prob phase rword comp_morphs_freq_ref.val total_comp_morphs.val 
                  total_comp_morphs_types.val
 ;
-(* Calclate probability of word from phase and word *)
+(* Calculate probability of word from phase and word *)
 value get_pada_morph_prob phase rword = 
   morph_prob phase rword pada_morphs_freq_ref.val total_pada_morphs.val 
                  total_pada_morphs_types.val
@@ -535,7 +535,7 @@ value get_word_probability (phase,rword,transition) =
 ;
 
 (* [get_stem_morph_probability] returns the probability of the tuple
-   (stem, inflectional_morph, base, derivational_morph) whihc are extracted
+   [(stem, inflectional_morph, base, derivational_morph)] which are extracted
    from the segment *)
 value get_stem_morph_probability (phase,rword,transition) = 
   let morph_prob = 

@@ -298,7 +298,7 @@ value log_chunk_rec index solution =
   where rec log_rec index no_of_seg cumu_conf vakya acc_triplet = fun
   [ [] -> (cumu_conf, vakya, no_of_seg, acc_triplet)
   | [ ((phase,word,sandhi) as triple) :: rest ] -> 
-       (* The current segment is saved in chkpts.rejected_segments and will be 
+       (* The current segment is saved in [chkpts.rejected_segments] and will be 
           cross verified later with the segments in the best n solutions *)
        let new_segment = (index, triple) in 
        let triplet_acc = List.append [new_segment] acc_triplet in

@@ -2461,7 +2461,7 @@ value compute_future_ca stem root = do
 (* Possible intercalating vowel i for se.t and ve.t roots Whitney§935 *)
 (* [intercalates] returns a set of possible intercalations.           *)
 (* 3 indicates metathesis: ar becomes ra by [ar_ra] below             *)
-(* 4 is specific to naz nasalisation                                  *)
+(* 4 is specific to naz1 nasalisation                                  *)
 (* This information should be lexicalised with a generative lexicon.  *)
 value intercalates root = 
   let anit = [ 0 ]    (* no intercalation *) 
@@ -2540,8 +2540,8 @@ value intercalates root =
 ;
 (* Whitney§631-§640 Bandharkar II p44 augment ii in present system 2nd class *)
 value augment_ii = fun (*  *)
-  [ "an#2" | "rud#1" | "zvas#1" | "svap" | "jak.s" -> True 
-    (* and thus "praa.n1" too gives praa.niit *) 
+  [ "an#2" (* and thus "praa.n1" too gives praa.niit *) 
+  | "rud#1" | "zvas#1" | "svap" | "jak.s" -> True 
   | _ -> False 
   ]
 ;
@@ -2664,7 +2664,7 @@ value compute_ppp_stems root rstem =
     [ "vrazc" -> [ sNa "v.rk" ] (* exception - v.rk root stem of vrazc *)
     (* Most roots starting with 2 consonants take -na \Pan{8,2,43} *)
     (* but not "k.svi.d" "zrath" *)
-    (* "ad#1" could give "anna", declared unaadi at present *)
+    (* "ad1" could give "anna", declared unaadi at present *)
     | "iir" | "und" | "k.rr" | "klid" | "k.saa" | "k.sii" | "k.sud" | "k.svid"
     | "khid" | "g.rr#1" | "glaa" | "chad#1" | "chid#1" | "ch.rd" | "j.rr" 
     | ".dii" | "tud#1" | "t.rd" | "t.rr" | "dagh" | "d.rr" | "dev" | "draa#1"
@@ -2717,7 +2717,7 @@ value compute_ppp_stems root rstem =
         match root with 
         [ "vid#2" -> [ Ta rstem :: ppn ] (* 2 forms *)
         | "nud" -> [ Ta rstem :: [ Tia rstem :: ppn ] ] (* 3 forms *)
-        | _ -> ppn (* eg ad#1 -> anna *)
+        | _ -> ppn (* eg ad1 -> anna *)
         ]
  (*     | [ 36 :: ([ 1 :: r ] as w) ] (* -an *) -> 
              [ Ta w :: ppna [ 2 :: r ] ] (* mata+maana *) *)
@@ -2860,7 +2860,7 @@ value perstems rstem root =
              | "snih#1" | "snuh#1" (* \Pan{7,2,45} *)
              | "i.s#1" | "sah#1" | "lubh" | "ru.s#1" | "ri.s" (* \Pan{7,2,48} *)
                  -> [ 0; 1 ]
-             (* perhaps also optionally all [uu-it] roots ? \Pan{7,2,44} *)
+             (* perhaps also optionally all [uu_it] roots ? \Pan{7,2,44} *)
              | _ -> intercalates root rstem 
 
              ] 
@@ -2868,10 +2868,10 @@ value perstems rstem root =
   map insert_sfx inter
      where insert_sfx = fun
        [ 0 -> match root with
-              [ "majj" -> code "mafk"  (* Whitney§936a *)
-              | "jan" -> code "jaa"
-              | "dham" -> code "dhmaa"
-              | "nij" -> code "nej" (* for gana 3 *)
+              [ "majj"  -> code "mafk"  (* Whitney§936a *)
+              | "jan"   -> code "jaa"
+              | "dham"  -> code "dhmaa"
+              | "nij"   -> code "nej" (* for gana 3 *)
               | "vah#1" -> code "voh" (* vo.dhaa \Pan{6,3,112} *)
               | "sah#1" -> code "soh" (* so.dhum \Pan{6,3,112} *)
               | "likh" | "vij" -> rev [ 3 :: rstem ] (* i with weak stem *)
@@ -2900,7 +2900,7 @@ value perstems rstem root =
               sandhi w (code "i") (* sandhi sanitizes a possible j' or h' *)
        | 2 -> sandhi sstem (code "ii") (* grah *)
        | 3 -> rev (ar_ra sstem) (* metathesis: kra.s.taa bhra.s.taa dra.s.taa *)
-       | 4 -> code "na.mz" (* exception naz *)
+       | 4 -> code "na.mz" (* exception naz1 *)
        | _ -> failwith "perstems: unexpected intercalate code"
        ]
 ;
@@ -3258,6 +3258,7 @@ value redup_perf root =
                      (revaffix True [ 10 (* e *); c ] w,True,True)
                      (* Scharf: roots of form c.a.c' with c,c' consonant or .m *)
                      (* cf. \Pan{6,4,119-126} -- ZZ may lead to hiatus *)
+                | [ 24; 24 ] (* majj *) -> (glue revw,False,True)
                 | _ -> (glue revw,False,False)
                 ]
               ] 
@@ -3286,11 +3287,6 @@ value redup_perf root =
        (strong, weak, olong, eweak, iopt)
   ]
 ;
-value naz = fun (* for "naz#1" Whitney§801g *)
-  [ [ c :: vstem ] -> [ c :: [ 14 :: vstem ] ] 
-  | _ -> failwith "naz"
-  ]
-;
 value compute_perfecta conj strong weak olengthened eweak iopt root = 
   let conjugs person suff = (person,fix strong suff)
   and conjugw person suff = (person,fix weak suff) in do
@@ -3316,9 +3312,10 @@ value compute_perfecta conj strong weak olengthened eweak iopt root =
         ; conjugs Third  "a" (* actually also regular aaza Whitney§788a *)
         ] else [] (* Whitney§788a *)
     ] in if iopt then (* add forms without intercalating i *)
-        let conjug = (* Whitney§801g *)
-            if root = "naz#1" then fun p s -> (p,fix (naz strong) s)
-            else conjugs in 
+        let conjug = (* Whitney§801g nana.m.s.tha mafktha *)
+            if root="naz#1" then fun p s -> (p,fix (revcode "nana.mz") s)
+            else if root="majj" then fun p s -> (p,fix (revcode "ma.mj") s)
+            else conjugs in
         [ conjug Second "tha" :: l ] 
             else if no_guna root then (* Kale ku.taadi *)
         [ conjugw Second "itha" :: l ] else l)
@@ -3331,7 +3328,7 @@ value compute_perfecta conj strong weak olengthened eweak iopt root =
         [ conjugw First  "ima"
         ; conjugw Second "a"
         ; if root="raaj#1" then (Third, code "rejur")
-          else conjugw Third "ur" (* Henry: paptur véd. pat#1 Varenne§39 *)
+          else conjugw Third "ur" (* Henry: paptur véd. pat1 Varenne§39 *)
         ] in l) (* [if iopt then [ conjugw First  "ma" :: l ] else l] NO *)
    ]) 
   ; let pstem = if root="raaj#1" then (revcode "rej") else weak in
@@ -5530,7 +5527,7 @@ value compute_present_system root rstem gana pada third =
           match voices_of_gana 3 root with
        [ Para -> if pada then
           compute_active_present3 sstem wstem iiflag root third
-          (* TODO allow bibhi for weak bibhii root bhii#1 Whitney§679 *)
+          (* TODO allow bibhi for weak bibhii root bhii1 Whitney§679 *)
           else emit_warning ("Unexpected middle form: " ^ root)
        | Atma -> 
           if padam then emit_warning ("Unexpected active form: " ^ root)
@@ -5931,7 +5928,7 @@ value compute_other_systems root rstem = do
      ]
    ; (* Precative/Benedictive active rare, middle very rare in classical skt *)
       match root with 
-      [ "as#1" | "ah" -> () (* uses bhuu#1 bruu *) (* but Zriivara: staat *)
+      [ "as#1" | "ah" -> () (* uses bhuu1 bruu *) (* but Zriivara: staat *)
       | "kan" | "k.r#2" | ".s.thiiv" -> () (* unattested - to be added *)
       | _ -> compute_benedictive rstem root 
       ]

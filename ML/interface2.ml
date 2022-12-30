@@ -173,7 +173,7 @@ value call_back text mode cpts rcpts (k,seg) conflict =
 ;
 value call_reader text cpts rcpts mode cur_mode fmode = 
   (* mode = "o", "p", "g", "t" - for overall 
-     cur_mode = "b", "f", "l", "s" - for best *) 
+     [cur_mode] = "b", "f", "l", "s" - for best *) 
   let cgi = reader_cgi ^ "?" ^ text ^ ";mode=" ^ mode 
             ^ ";best_mode=" ^ cur_mode 
             ^ ";fmode=" ^ fmode 
@@ -186,20 +186,6 @@ value call_parser text cpts =
             ";cpts=" ^ string_points cpts ^ ";n=1" in
   anchor Green_ (invoke cgi) check_sign
 ;
-(*i Legacy interface with Sanskrit Library [
-value call_SL text cpts mode corpus solutions sent_id link_num = 
-  let cgi = tomcat ^ corpus ^ "/SaveTagging?slp1Sentence=" 
-            ^ text ^ "&numSolutions=" ^ (string_of_int solutions) 
-            ^ "&submit=submit&command=resend&sentenceNumber=" ^ sent_id 
-            ^ "&linkNumber=" ^ link_num ^ "&displayEncoding=roman&"
-            ^ "inflectionFormat=SL&inputEncoding=slp1&OS=MacOS&cpts=" 
-            ^ string_points cpts in
-  anchor Green_ (invoke cgi) check_sign
-;
-value invoke_SL text cpts corpus_id count sent_id link_num =
-  ps (td_wrap (call_SL text cpts "t" corpus_id count sent_id link_num 
-               ^ "Sanskrit Library Interface"))
-;] i*)
 value sort_check cpts = 
   let compare_index (a,_,_) (b,_,_) = compare a b in
   List.sort compare_index cpts
@@ -512,7 +498,7 @@ value print_scl_segments text id mode_id fmode_id segmentation output = do
        produces multiple solutions even if there is only one
        possible solution. So, temporarily the following is 
        commented. *)
-    (* td_wrap (call_scl_segments text id mode_id fmode_id output) |> ps *)
+    (* [td_wrap (call_scl_segments text id mode_id fmode_id output) |> ps] *)
     else ()
   ; tr_end |> ps
   ; table_end |> ps 
@@ -563,7 +549,7 @@ value solution_path = Paths.skt_install_dir ^ "ML/"
 (* To replace space with '+' *)
 value insert_plus strng = 
   let str1 = Str.global_replace (Str.regexp " ") "+" strng in
-  (*let str2 = Str.global_replace (Str.regexp "-") "-+" str1 in*)
+  (* [let str2 = Str.global_replace (Str.regexp "-") "-+" str1 in] *)
   str1
 ;
 (* To replace "+" with " " *)
@@ -761,7 +747,7 @@ value display_best_summary text deva_input roman_input checkpoints cpts wx_input
        Currently, the segmenter runs only once and registers the graph, 
        also counting the total number of solutions. And then best segments 
        are obtained and the graph is rebuilt. But the count is not changed. 
-       In the First_Summary mode with stem and morph freqs there will be 
+       In the [First_Summary] mode with stem and morph freqs there will be 
        definitely only one solution. Also, when the segmenter produces only 
        one solution, the count value will be 1. *)
     let single_solution = 

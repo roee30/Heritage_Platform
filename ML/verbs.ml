@@ -365,7 +365,7 @@ value weak_stem root rstem = (* rstem = revstem root *)
     | "nij"    -> revcode "ni~nj" (* nasalisation *)
     | "vaz"    -> revcode "uz" (* but not vac ! *)
     | "myak.s" -> revcode "mik.s" 
-    | "dhmaa"  -> revcode "dham" 
+(*  | "dhmaa"  -> revcode "dham" - incorrect for perfect *)
 (*  | "grah"   -> revcode "g.rh"
     | "grabh"  -> revcode "g.rbh" -- implicit from stems *)
 (*  | "sad#1"  -> revcode "siid" - incorrect for perfect ! *)
@@ -448,7 +448,7 @@ value passive_stem root rstem = (* Panini yak (k : no guna, samprasaara.na) *)
             | [ 42 (* y *); 35 (* dh *) ] (* dhyaa *) -> weak
             | [ 42 (* y *) :: r ] -> [ 4 (* ii *) :: r ] (* ziiyate stiiyate *)
             | _ -> match root with
-                   [ "j~naa#1" | "traa" | "dham" | "dhmaa" | "bhaa#1" | "mnaa" 
+                   [ "j~naa#1" | "traa" | "dhmaa" | "bhaa#1" | "mnaa" 
                    | "laa" | "zaa" | "haa#2" -> weak
                    | _ -> [ 4 (* ii *) :: rst ]
                    ]
@@ -608,7 +608,7 @@ and o_it = fun (* these roots have ppp in -na \Pan{8,2,45} - unused here *)
   ]
 and no_guna = fun (* ku.taadi Kale§463 *)
   [ "kuc" | "ku.t" | "gur" | "ghu.t" | "cu.t" | "cu.d" | "chur" | "ju.t" 
-  | "tu.t" | "tu.d" | "tru.t" | "dham" | "dhma" | "dhru" | "nuu" | "pu.t"
+  | "tu.t" | "tu.d" | "tru.t" | "dham" | "dhmaa" | "dhru" | "nuu" | "pu.t"
   | "pu.d" | "lu.t" | "lu.th" | "lu.d" | "vra.d" | "sphu.t" | "sphur" -> True
   |  _ -> False
   ]

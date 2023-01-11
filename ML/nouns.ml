@@ -2217,7 +2217,7 @@ value build_neu_vas stem entry =
         ])
    ] 
    ; Bare Noun (fix stem "vat") (* eg vidvat- *)
-   ; Avyayaf (fix stem "vas") (* vat Acc ? *)
+   ; Avyayaf (fix stem "vat") (* ? *)
    ]
 ;
 (* i is dropped before u.s - Macdonnel §89a *)
@@ -2340,7 +2340,7 @@ value build_neu_at stem entry =
         ; decline Loc "tsu"
         ])
    ] 
-   ; Avyayaf (fix stem "tam") (* why not Acc ? *)
+   ; Avyayaf (fix stem "tam") (* why not "t" Acc ? *)
    ]
 ;
 value build_neu_mahat stem entry = 
@@ -2378,7 +2378,7 @@ value build_neu_mahat stem entry =
         ; decline Loc "atsu"
         ])
    ]
-   ; Avyayaf (fix stem "atam") 
+   ; Avyayaf (fix stem "at") (* Z *)
    ]
 ;
 (* pronominal use of aatman in sg for refl use of 3 genders and 3 numbers *)

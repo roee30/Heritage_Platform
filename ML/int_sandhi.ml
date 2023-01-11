@@ -226,7 +226,7 @@ value int_sandhi wl wr = try
                        ]
              (* let glue ... *) in
                 retro_join before (glue @ after)
-          else (* first consonant last vowel *) match first with
+          else (* first consonant, last vowel *) match first with
                [ 23 (* ch *) when short_vowel last -> 
                   (mirror wl) @ [ 22 :: wr ] (* cch *) 
                | 42 (* y *) -> 

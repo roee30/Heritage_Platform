@@ -1393,7 +1393,7 @@ value compute_athematic_impft3a strong weak iiflag root =
              else l)
    ])
 ;
-(* common to [impft_m]  and [root_aoristm] *)
+(* common to [impft_m] and [root_aoristm] *)
 value conjugs_past_m conjug =
    [ (Singular, 
         [ conjug First  "i"
@@ -2850,7 +2850,8 @@ value perstems rstem root =
       | _ -> match root with
              [ "gam" | "dham" | "praz" | "vaa#3" | "za.ms" | "han#1" | "huu"
                -> [ 0 ]
-             | "k.rt#1" | "v.rj" | "v.rt#1" | "v.rdh#1" | "z.rdh" -> [ 1 ] 
+             | "k.rt#1" | "jan" | "v.rj" | "v.rt#1" | "v.rdh#1" | "z.rdh"
+               -> [ 1 ] 
                 (* not "syand" WR syanttaa *)
              | "zuc#1" -> [ 0; 1 ] (* zoktum *)
              | "d.rz#1" | "sp.rz#1" -> [ 3 ] (* ar -> ra dra.s.tum *)
@@ -4230,12 +4231,12 @@ value compute_aorist root =
   let (weak,strong,long) = stems root in do (* 7 formations *)
   { match root with (* 1. root aorist - Panini sic-luk *)
     [ "k.r#1" | "kram" | "gam" | "gaa#1" | "ci" | "chid#1" | "jan" | "j~naa#1" 
-    | "daa#1" | "daa#2" | "dhaa#1" | "dhaa#2" | "paa#1" | "bhid#1" | "bhuu#1" 
-    | "muc#1" | "v.r#1" | "zaa" | "saa#1" | "sthaa#1" | "svap" | "has" 
-    | "haa#1" -> do
+    | "tan#1" | "daa#1" | "daa#2" | "dhaa#1" | "dhaa#2" | "paa#1" | "bhid#1" 
+    | "bhuu#1" | "muc#1" | "v.r#1" | "zaa" | "saa#1" | "sthaa#1" | "svap" 
+    | "has" | "haa#1" -> do
       { compute_root_aorista weak strong root 
       ; match root with (* Atma rare *) 
-        [ "k.r#1" | "gam" | "jan" | "v.r#1" -> 
+        [ "k.r#1" | "gam" | "jan" | "tan#1" | "v.r#1" -> 
                     compute_root_aoristm weak root 
         | "sthaa#1" (* Whitney§834a. *) ->
                     compute_root_aoristm (revstem "sthi") root (* asthita *) 
@@ -4246,6 +4247,7 @@ value compute_aorist root =
             [ "kram" | "gam" | "jan" -> weak (* ajani but Vedic ajaani *)
             | "muc#1" -> strong 
             | "ci" -> revstem "ce.s" (* Deshpande irregular *)
+            | "tan#1" -> revstem "taay" (* WR *)
             |  _ -> match long with 
                     [ [ 2 (* aa *) :: _ ] -> [ 42 (* y *) :: long ]
                     | _ -> long
@@ -4400,8 +4402,8 @@ value compute_aorist root =
   ; match root with (* 5. i.s aorist se.t-sic *)
     [ "ak.s" | "aj" | "aas#2" | "i.s#1" | "iik.s" | "uk.s" | "uc" | "u.s" 
     | "uuh" | ".rc#1" | ".r.s" | "k.rt#1" | "krand" | "kram" | "kliz" | "ku.t"
-    | "k.san" | "ghu.s" | "car" | "ce.s.t" | "jap" | "jalp" | "jaag.r" | "t.rr" 
-    | "tru.t" | "diip" | "pu.t" | "puu#1" | "p.rc"| "pru.s#1" | "baadh" 
+    | "k.san" | "ghu.s" | "car" | "ce.s.t" | "jap" | "jalp" | "jaag.r" | "tan#1"
+    | "t.rr" | "tru.t" | "diip" | "pu.t" | "puu#1" | "p.rc"| "pru.s#1" | "baadh" 
     | "budh#1" | "mad#1" | "mud#1" | "muurch" | "mlecch" | "yaac" | "rak.s" 
     | "ruc#1" | "lu~nc" | "lu.th" | "luu#1" | "vad" | "vadh" | "vaz" | "vid#1"
     | "v.r#1" | "v.rdh#1" | "vyath" | "vraj" | "z.rr" | "sidh#2" | "skhal"

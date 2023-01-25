@@ -139,13 +139,40 @@ value get_morph_string derived_stem base_morph base morph_list =
   ^ "]{" ^ morphs_string ^ "}"
 ;
 
-(* Used for debugging - to print the word and it's morph analysis *)
-value print_morph word all_morph_list = 
-  let _ = print_string (Canon.decode_WX (Morpho_html.visargify word)) in 
-  let all_morph_list_str = 
+(* Used for debugging - to get the word and it's morph analysis *)
+value morph_string word all_morph_list = 
+  let form = (Canon.decode_WX (Morpho_html.visargify word)) 
+  and all_morph_list_str = 
     List.map (fun (a,b,c,d) -> get_morph_string a b c d) all_morph_list in 
   let tot_morph_str = String.concat " ; " all_morph_list_str in 
-  print_string (" -> " ^ tot_morph_str ^ "<br>")
+  (form ^ " -> " ^ tot_morph_str ^ "<br>")
+;
+
+(* Generates a json string of all morphological analyses in a sequence *)
+value get_morph_json_string derived_stem base_morph base morph_list = 
+  let get_ms x = "\"" ^ x ^ "\"" in 
+  let morphs_lst = List.map get_ms morph_list in 
+  let morphs_lst_str = "[" ^ (String.concat ", " morphs_lst) ^ "]" in 
+  "{\"derived_stem\": \"" ^ derived_stem ^ "\"" ^ 
+  ",\"base\": \"" ^ base ^ "\"" ^ 
+  ",\"derivatioanal_morph\": \"" ^ base_morph ^ "\"" ^ 
+  ",\"inflectional_morphs\": " ^ morphs_lst_str ^ "}"
+;
+
+(* Get all the morphological analyses of the given phase and word *)
+value best_segments acc (phase,rword) =
+  let word = Word.mirror rword in 
+  let morph_list = morph_analysis_list phase word in 
+  let morph_lst = 
+    List.map (fun (a,b,c,d) -> get_morph_json_string a b c d) morph_list in 
+  acc @ morph_lst
+;
+
+(* Get the formatted morphological analyses *)
+value get_all_morphs_str final_segments = 
+  let morph_json_lst = List.fold_left best_segments [] final_segments in 
+  let morph_json_str = String.concat ", " morph_json_lst in 
+  ("[" ^ morph_json_str ^ "]")
 ;
 
 (* Uses Sandhi module for performing sandhi of two given strings *)

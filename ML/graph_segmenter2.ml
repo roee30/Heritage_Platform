@@ -759,7 +759,7 @@ value get_best_segments solution_list =
   | [(_,_,_,chunk_all_triplets) :: tl] -> get_best (acc @ chunk_all_triplets) tl 
   ] in 
   let selected_segments = List.map get_double all_segments in 
-  List.sort compare selected_segments
+  List.sort_uniq compare selected_segments
 ;
 (* The graph is reset and rebuilt with only the best segments. 
    The best segments are collected during the dovetailing algorithm below *)

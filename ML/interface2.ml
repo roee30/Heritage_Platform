@@ -651,10 +651,24 @@ value write_sol_to_std_out solution_list selected_segments =
   ; Scl_parser.post_best_segments_scl final_segments
   }
 ;
-(* In Debug, segmented solutions are directly fed to a local file *)
+(* In Stemmer, segmented form and all its possible morph analyses' 
+   are directly fed to standard output *)
+value write_json_to_std_out solution_list selected_segments = 
+  let final_segments = List.map snd selected_segments
+  and seg_sols = List.map get_string solution_list in 
+  let lst_fn x = "\"" ^ (replace_plus x) ^ "\"" in 
+  let words_lst = List.map lst_fn seg_sols in 
+  let word = "[" ^ (String.concat ", " words_lst) ^ "]" in 
+  let word = "\"word\": " ^ word in 
+  let morph = "\"morph\": " ^ (get_all_morphs_str final_segments) in 
+  let json_string_output = "{" ^ word ^ ", " ^ morph ^ "}" in 
+  print_string json_string_output
+;
+(* In Debug, segmented solutions are directly output to a local file *)
 value write_solutions_to_file wx_input mode solution_list = 
   let numbered_sol_list = add_indices solution_list in 
-  let _ = print_sols_to_file wx_input mode numbered_sol_list in ()
+  let _ = print_sols_to_file wx_input mode numbered_sol_list in 
+  let _ = print_string "Solution(s) written to file" in ()
 ;
 (* The following two functions are introduced for the 
    Best-Summary and Best-List modes. These are accessible from each other.
@@ -793,7 +807,7 @@ value best_mode_operations cpts chunks =
 ;
 (* The main procedure for computing the graph segmentation structure *)
 value check_sentence translit uns text checkpoints input undo_enabled 
-      font mode rcheckpoints pipeline debug fmode =
+      font mode rcheckpoints pipeline stemmer debug fmode =
   let encode = Encode.switch_code translit in
   let chunker = if uns (* sandhi undone *) then Sanskrit.read_raw_sanskrit 
                 else (* chunking *) Sanskrit.read_sanskrit in
@@ -828,11 +842,16 @@ value check_sentence translit uns text checkpoints input undo_enabled
      the tracking back using Undo is as per the user's selection of segments *)
   let updated_rcpts = updated_rcheckpts in 
   let undo_enabled = ((List.length cpts) > 0) && undo_enabled in 
-  (* Pipeline mode is enabled when the Segmenter is accessed directly from
-     sa.msaadhanii. The best segmented solution is directly fed to the
-     standard output. By default, the pipeline is disabled to access the 
-     usual display of best segments' summary or best solutions' list *)
+  (* Pipeline -> is enabled when the Segmenter is accessed directly from
+                 sa.msaadhanii. The best segmented solution is directly 
+                 fed to the standard output.
+     Stemmer -> is enabled for getting the morphological analyses for the
+                given word form in the json format
+     Debug mode -> is used internally for evaluation purposes 
+     By default, these three are disabled to access the usual display of 
+     best segments' summary or best solutions' list*)
   if pipeline then write_sol_to_std_out solution_list selected_segments 
+  else if stemmer then write_json_to_std_out solution_list selected_segments 
   else if debug then write_solutions_to_file input mode solution_list
   else
   match mode with 
@@ -915,6 +934,7 @@ value graph_engine () =
   and url_encoded_mode  = get "mode" env "b"
   and fmode = get "fmode" env "w"
   and ppl = get "pipeline" env "f"
+  and stm = get "stemmer" env "f"
   and dbg = get "debug" env "f"
   and st = get "st" env "t" (* sentence parse default *)
   and us = get "us" env "f" (* sandhied text default *)
@@ -936,6 +956,7 @@ value graph_engine () =
   and () = Lexer_control.transducers_ref.val:=Transducers.mk_transducers ()
   and mode = mode_of_mode_id url_encoded_mode
   and pipeline = (ppl = "t")
+  and stemmer = (stm = "t")
   and debug = (dbg = "t")
   and url_enc_corpus_permission = (* Corpus mode *)
       get Params.corpus_permission env "true" in 
@@ -978,13 +999,13 @@ value graph_engine () =
   let revised = decode_url (get "revised" env "") (* User-aid revision *)
   and rev_off = int_of_string (get "rev_off" env "-1") 
   and rev_ind = int_of_string (get "rev_ind" env "-1") in 
-  let _ = if (pipeline || debug) then ()
+  let _ = if (pipeline || stemmer || debug) then (pl http_header)
           else Prel.prelude () in 
   try let _ = 
     match (revised,rev_off,rev_ind) with
     [ ("",-1,-1) -> (* Standard input processing *** Main call *** *)
       check_sentence translit uns text checkpoints input undo_enabled 
-                     font mode rcheckpoints pipeline debug fmode 
+                     font mode rcheckpoints pipeline stemmer debug fmode 
     | (new_word,word_off,chunk_ind) (* User-aid revision mode *) -> 
       let chunks = Sanskrit.read_sanskrit (Encode.switch_code translit) input in
       let rec decoded init ind = fun
@@ -1012,9 +1033,9 @@ value graph_engine () =
                                corpus_dir sentence_no 
       and new_input = decode_url updated_input in
       check_sentence translit uns new_text revised_check new_input undo_enabled 
-                     font mode rcheckpoints pipeline debug fmode 
+                     font mode rcheckpoints pipeline stemmer debug fmode 
     ] in 
-    if (pipeline || debug) then ()
+    if (pipeline || stemmer || debug) then ()
     else do 
     {
     (* Rest of the code concerns Corpus mode *)

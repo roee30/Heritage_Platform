@@ -124,8 +124,8 @@ and pada_freq_file    = data "pada_freq.rem"
 and word_freq_file    = data "word_freq.rem"
 and comp_trans_freq_file    = data "comp_trans_freq.rem"
 and pada_trans_freq_file    = data "pada_trans_freq.rem"
-and comp_morphs_freq_ref_file    = data "comp_morphs_freq_deco.rem"
-and pada_morphs_freq_ref_file    = data "pada_morphs_freq_deco.rem"
+and comp_morphs_freq_file    = data "comp_morphs_freq_deco.rem"
+and pada_morphs_freq_file    = data "pada_morphs_freq_deco.rem"
 ;
 (* Next are the inflected forms banks, read at cgi time by [Lexer.load_morphs] *)
 value public_nouns_file     = public_data "nouns.rem" 
@@ -174,4 +174,16 @@ and public_cachei_file     = public_data "cachei.rem" (* cache iics *)
 and public_cache_txt_file  = public_data "cache.txt" (* master cache *) 
 and public_trans_cache_file  = public_data "transca.rem"
 and public_trans_cachei_file = public_data "transcai.rem"
+and public_comp_freq_txt_file    = public_data "comp_freq.txt"
+and public_pada_freq_txt_file    = public_data "pada_freq.txt"
+and public_word_freq_txt_file    = public_data "word_freq.txt"
+and public_comp_trans_freq_txt_file    = public_data "comp_trans_freq.txt"
+and public_pada_trans_freq_txt_file    = public_data "pada_trans_freq.txt"
+and public_comp_freq_file    = public_data "comp_freq.rem"
+and public_pada_freq_file    = public_data "pada_freq.rem"
+and public_word_freq_file    = public_data "word_freq.rem"
+and public_comp_trans_freq_file    = public_data "comp_trans_freq.rem"
+and public_pada_trans_freq_file    = public_data "pada_trans_freq.rem"
+and public_comp_morphs_freq_file    = public_data "comp_morphs_freq_deco.rem"
+and public_pada_morphs_freq_file    = public_data "pada_morphs_freq_deco.rem"
 ;

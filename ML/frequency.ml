@@ -567,9 +567,9 @@ value get_probability f_mode =
    Assigns constants for words anf compound components
    (to be used for probability calculations) *)
 value assign_word_frequencies = do 
- { word_freq_ref.val := load_word_freq Data.word_freq_file
- ; pada_freq_ref.val := load_word_freq Data.pada_freq_file
- ; comp_freq_ref.val := load_word_freq Data.comp_freq_file
+ { word_freq_ref.val := load_word_freq Data.public_word_freq_file
+ ; pada_freq_ref.val := load_word_freq Data.public_pada_freq_file
+ ; comp_freq_ref.val := load_word_freq Data.public_comp_freq_file
  ; let (words_types, words) = process_deco 0 0 (Deco.contents word_freq_ref.val)
    and (padas_types, padas) = process_deco 0 0 (Deco.contents pada_freq_ref.val)
    and (comps_types, comps) = process_deco 0 0 (Deco.contents comp_freq_ref.val)
@@ -588,8 +588,8 @@ value assign_word_frequencies = do
    Assigns constants for transitions
    (to be used for probability calculations) *)
 value assign_transition_frequencies = do 
- { pada_transitions_list.val := load_transition_list Data.pada_trans_freq_file
- ; comp_transitions_list.val := load_transition_list Data.comp_trans_freq_file
+ { pada_transitions_list.val := load_transition_list Data.public_pada_trans_freq_file
+ ; comp_transitions_list.val := load_transition_list Data.public_comp_trans_freq_file
  ; total_pada_transitions.val := calculate_transitions pada_transitions_list.val
  ; total_comp_transitions.val := calculate_transitions comp_transitions_list.val
  ; let pada_trans_len = List.length pada_transitions_list.val in 
@@ -603,8 +603,8 @@ value assign_transition_frequencies = do
    Assigns constants for stem and morphological analyses
    (to be used for probability calculations) *)
 value assign_stem_morph_frequencies = do 
- { pada_morphs_freq_ref.val := load_morph_freq Data.pada_morphs_freq_ref_file
- ; comp_morphs_freq_ref.val := load_morph_freq Data.comp_morphs_freq_ref_file
+ { pada_morphs_freq_ref.val := load_morph_freq Data.public_pada_morphs_freq_file
+ ; comp_morphs_freq_ref.val := load_morph_freq Data.public_comp_morphs_freq_file
  ; let (pada_morphs_types, pada_morphs) = 
      process_morph_deco 0 0 (Deco.contents pada_morphs_freq_ref.val)
    and (comp_morphs_types, comp_morphs) = 

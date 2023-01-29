@@ -104,7 +104,9 @@ DOC_IMAGES=IMAGES/lexer10.jpg IMAGES/lexer17.jpg IMAGES/lexer40.jpg # Copy GH
 SCRIPTS=JAVASCRIPT/utf82VH.js JAVASCRIPT/dragtable.js JAVASCRIPT/util.js
 
 #Frequency files
-FREQS=$(DATA)/comp_freq.rem $(DATA)/pada_freq.rem $(DATA)/word_freq.rem $(DATA)/comp_trans_freq.rem $(DATA)/pada_trans_freq.rem
+FREQS=$(DATA)/comp_freq.rem $(DATA)/pada_freq.rem $(DATA)/word_freq.rem \
+$(DATA)/comp_trans_freq.rem $(DATA)/pada_trans_freq.rem \
+$(DATA)/comp_morphs_freq_deco.rem $(DATA)/pada_morphs_freq_deco.rem
 
 # Next are copyright specific images
 SITE_IMAGES=IMAGES/yinyang.gif IMAGES/panini.jpg IMAGES/spin-new.gif \
@@ -483,9 +485,9 @@ word_freq:
 	ML/make_word_freq $(DATA)/comp_freq.txt > $(DATA)/comp_freq_max.rem
 	ML/make_word_freq $(DATA)/pada_freq.txt > $(DATA)/pada_freq_max.rem
 	ML/make_word_freq $(DATA)/word_freq.txt > $(DATA)/word_freq_max.rem
-	$(ZEN)/ML/dagify < $(DATA)/comp_freq_max.rem > $(DATA)/comp_freq.rem
-	$(ZEN)/ML/dagify < $(DATA)/pada_freq_max.rem > $(DATA)/pada_freq.rem
-	$(ZEN)/ML/dagify < $(DATA)/word_freq_max.rem > $(DATA)/word_freq.rem
+	$(ZEN)/dagify < $(DATA)/comp_freq_max.rem > $(DATA)/comp_freq.rem
+	$(ZEN)/dagify < $(DATA)/pada_freq_max.rem > $(DATA)/pada_freq.rem
+	$(ZEN)/dagify < $(DATA)/word_freq_max.rem > $(DATA)/word_freq.rem
 	rm $(DATA)/comp_freq_max.rem
 	rm $(DATA)/pada_freq_max.rem
 	rm $(DATA)/word_freq_max.rem
@@ -501,8 +503,8 @@ morph_freq:
 	cd ML && $(MAKE) make_morph_freq
 	ML/make_morph_freq $(DATA)/comp_morphs_freq.tsv > $(DATA)/comp_freq_max.rem
 	ML/make_morph_freq $(DATA)/pada_morphs_freq.tsv > $(DATA)/pada_freq_max.rem
-	$(ZEN)/ML/dagify < $(DATA)/comp_freq_max.rem > $(DATA)/comp_morphs_freq_deco.rem
-	$(ZEN)/ML/dagify < $(DATA)/pada_freq_max.rem > $(DATA)/pada_morphs_freq_deco.rem
+	$(ZEN)/dagify < $(DATA)/comp_freq_max.rem > $(DATA)/comp_morphs_freq_deco.rem
+	$(ZEN)/dagify < $(DATA)/pada_freq_max.rem > $(DATA)/pada_morphs_freq_deco.rem
 	rm $(DATA)/comp_freq_max.rem
 	rm $(DATA)/pada_freq_max.rem
 

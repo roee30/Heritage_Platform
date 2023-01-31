@@ -641,8 +641,9 @@ value add_indices solution_list =
   ]
 ;
 
-(* In Pipeline, segmented solution and all its possible morph analyses' 
-   are directly fed to standard output *)
+(* In Pipeline, when called from sa.msaadhanii's parser, segmented 
+   solution and all its possible morph analyses' are directly fed to 
+   standard output *)
 value write_sol_to_std_out solution_list selected_segments = 
   let final_segments = List.map snd selected_segments
   and seg_sols = List.map get_string solution_list in do 
@@ -651,15 +652,43 @@ value write_sol_to_std_out solution_list selected_segments =
   ; Scl_parser.post_best_segments_scl final_segments
   }
 ;
+
+(* Get the list of solutions as list string *)
+value get_solutions_str solution_list = 
+  let seg_sols = List.map get_string solution_list in 
+  let seg_sol_str sol = "\"" ^ (replace_plus sol) ^ "\"" in 
+  let seg_sols_lst = List.map seg_sol_str seg_sols in 
+  let segmented_sols_str = "[" ^ (String.concat ", " seg_sols_lst) ^ "]" in 
+  segmented_sols_str
+;
+
+(* In pipeline mode, when the call is from the sandhi-splitter of 
+   sa.msaadhanii, then the list view is activated and hence the 
+   segmentation solutions alone are writted to stdout as json *)
+value write_sol_lst_json_to_stdout solution_list input = 
+  let segmented_sols_str = get_solutions_str solution_list in 
+  let solutions_str = "\"segmentation\": " ^ segmented_sols_str
+  and input_str = "\"input\": " ^ "\"" ^ input ^ "\"" in 
+  let json_string_output = "{" ^ input_str ^ ", " ^ solutions_str ^ "}" in 
+  print_string json_string_output
+;
+
+(* Handle Calls from sa.msaadhanii here (pipeline = t) *)
+value handle_scl_calls solution_list selected_segments input mode = 
+  match mode with 
+  [ Best_Summary | First_Summary -> 
+      write_sol_to_std_out solution_list selected_segments 
+  | Best_List | First_List -> 
+      write_sol_lst_json_to_stdout solution_list input 
+  ]
+;
+
 (* In Stemmer, segmented form and all its possible morph analyses' 
    are directly fed to standard output *)
 value write_json_to_std_out solution_list selected_segments = 
   let final_segments = List.map snd selected_segments
-  and seg_sols = List.map get_string solution_list in 
-  let lst_fn x = "\"" ^ (replace_plus x) ^ "\"" in 
-  let words_lst = List.map lst_fn seg_sols in 
-  let word = "[" ^ (String.concat ", " words_lst) ^ "]" in 
-  let word = "\"word\": " ^ word in 
+  and sols_str = get_solutions_str solution_list in 
+  let word = "\"word\": " ^ sols_str in 
   let morph = "\"morph\": " ^ (get_all_morphs_str final_segments) in 
   let json_string_output = "{" ^ word ^ ", " ^ morph ^ "}" in 
   print_string json_string_output
@@ -672,7 +701,8 @@ value write_error_json error_str =
 value write_solutions_to_file wx_input mode solution_list = 
   let numbered_sol_list = add_indices solution_list in 
   let _ = print_sols_to_file wx_input mode numbered_sol_list in 
-  let _ = print_string "Solution(s) written to file" in ()
+  let message = "{\"success\": \"Solution(s) written to file\"}" in 
+  let _ = print_string message in ()
 ;
 (* The following two functions are introduced for the 
    Best-Summary and Best-List modes. These are accessible from each other.
@@ -825,14 +855,13 @@ value check_sentence translit uns text checkpoints input undo_enabled
   let wx_input = String.concat " " wx_chunks in 
   let rcpts = sort_check (checkpoints @ rcheckpoints) in 
   let cpts = sort_check checkpoints in 
-  let list_mode = 
-    if mode = First_Summary 
-      then let _ = max_best_solutions.val := 1 in 
-           First_List
-    else if mode = Best_Summary
-      then let _ = max_best_solutions.val := default_max_best_solutions in 
-           Best_List 
-    else mode in 
+  let (max_solutions, list_mode) = 
+    match mode with 
+    [ First_Summary | First_List -> (1, First_List)
+    | Best_Summary | Best_List -> (default_max_best_solutions, Best_List)
+    | _ -> (default_max_best_solutions, mode)
+    ] in 
+  let _ = max_best_solutions.val := max_solutions in 
   let (full,count,solution_list) = 
       best_mode_operations rcpts chunks in (* full iff all chunks segment *) 
   let rebuild = (((List.length rcheckpoints) = 0) && 
@@ -854,7 +883,7 @@ value check_sentence translit uns text checkpoints input undo_enabled
      Debug mode -> is used internally for evaluation purposes 
      By default, these three are disabled to access the usual display of 
      best segments' summary or best solutions' list*)
-  if pipeline then write_sol_to_std_out solution_list selected_segments 
+  if pipeline then handle_scl_calls solution_list selected_segments wx_input mode
   else if stemmer then write_json_to_std_out solution_list selected_segments 
   else if debug then write_solutions_to_file input mode solution_list
   else
@@ -927,9 +956,8 @@ value quit_button corpmode corpdir sentno =
 ;
 (* Failsafe Aborting for pipeline, debug, stemmer and default *)
 value abort_i lang s1 s2 p d s = 
-  if p (* pipeline *) = True then (ps ("error: " ^ s1 ^ " - " ^ s2))
-  else if d (* debug *) = True then (ps ("error: " ^ s1 ^ " - " ^ s2))
-  else if s (* stemmer *) = True then write_error_json (s1 ^ " - " ^ s2)
+  if p (* pipeline *) || d (* debug *) || s (* stemmer *)
+     then write_error_json (s1 ^ " - " ^ s2)
   else abort lang s1 s2
 ;
 (* Main body of sktgraph2 cgi *)

@@ -155,7 +155,7 @@ value get_morph_json_string derived_stem base_morph base morph_list =
   let morphs_lst_str = "[" ^ (String.concat ", " morphs_lst) ^ "]" in 
   "{\"derived_stem\": \"" ^ derived_stem ^ "\"" ^ 
   ",\"base\": \"" ^ base ^ "\"" ^ 
-  ",\"derivatianal_morph\": \"" ^ base_morph ^ "\"" ^ 
+  ",\"derivational_morph\": \"" ^ base_morph ^ "\"" ^ 
   ",\"inflectional_morphs\": " ^ morphs_lst_str ^ "}"
 ;
 

@@ -664,6 +664,10 @@ value write_json_to_std_out solution_list selected_segments =
   let json_string_output = "{" ^ word ^ ", " ^ morph ^ "}" in 
   print_string json_string_output
 ;
+value write_error_json error_str = 
+  let error = "\"error\": \"" ^ error_str ^ "\"" in 
+  print_string ("{" ^ error ^ "}")
+;
 (* In Debug, segmented solutions are directly output to a local file *)
 value write_solutions_to_file wx_input mode solution_list = 
   let numbered_sol_list = add_indices solution_list in 
@@ -921,6 +925,13 @@ value quit_button corpmode corpdir sentno =
      cgi_end ^
   center_end
 ;
+(* Failsafe Aborting for pipeline, debug, stemmer and default *)
+value abort_i lang s1 s2 p d s = 
+  if p (* pipeline *) = True then (ps ("error: " ^ s1 ^ " - " ^ s2))
+  else if d (* debug *) = True then (ps ("error: " ^ s1 ^ " - " ^ s2))
+  else if s (* stemmer *) = True then write_error_json (s1 ^ " - " ^ s2)
+  else abort lang s1 s2
+;
 (* Main body of sktgraph2 cgi *)
 value graph_engine () = 
   let query = Sys.getenv "QUERY_STRING" in
@@ -1063,19 +1074,31 @@ value graph_engine () =
     ; page_end lang True
     } 
   with 
-  [ Sys_error s         -> abort lang Control.sys_err_mess s (* file pb *)
-  | Stream.Error s      -> abort lang Control.stream_err_mess s (* file pb *)
-  | Encode.In_error s   -> abort lang "Wrong input " s
-  | Exit (* Sanskrit *) -> abort lang "Wrong character in input" "" 
-  | Overflow            -> abort lang "Maximum input size exceeded" ""
-  | Invalid_argument s  -> abort lang Control.fatal_err_mess s (* sub array *)
-  | Failure s           -> abort lang Control.fatal_err_mess s (* anomaly *)
-  | End_of_file         -> abort lang Control.fatal_err_mess "EOF" (* EOF *)
+  [ Sys_error s         -> abort_i lang Control.sys_err_mess s (* file pb *) 
+                                   pipeline debug stemmer
+  | Stream.Error s      -> abort_i lang Control.stream_err_mess s (* file pb *)
+                                   pipeline debug stemmer
+  | Encode.In_error s   -> abort_i lang "Wrong input " s
+                                   pipeline debug stemmer
+  | Exit (* Sanskrit *) -> abort_i lang "Wrong character in input" "" 
+                                   pipeline debug stemmer
+  | Overflow            -> abort_i lang "Maximum input size exceeded" ""
+                                   pipeline debug stemmer
+  | Invalid_argument s  -> abort_i lang Control.fatal_err_mess s (* sub array *)
+                                   pipeline debug stemmer
+  | Failure s           -> abort_i lang Control.fatal_err_mess s (* anomaly *)
+                                   pipeline debug stemmer
+  | End_of_file         -> abort_i lang Control.fatal_err_mess "EOF" (* EOF *)
+                                   pipeline debug stemmer
   | Not_found           -> let s = "You must choose a parsing option" in
-                           abort lang "Unset button in form - " s
-  | Control.Fatal s     -> abort lang Control.fatal_err_mess s (* anomaly *)
-  | Control.Anomaly s   -> abort lang Control.anomaly_err_mess s
-  | _                   -> abort lang Control.fatal_err_mess "Unexpected anomaly" 
+                           abort_i lang "Unset button in form - " s
+                                   pipeline debug stemmer
+  | Control.Fatal s     -> abort_i lang Control.fatal_err_mess s (* anomaly *)
+                                   pipeline debug stemmer
+  | Control.Anomaly s   -> abort_i lang Control.anomaly_err_mess s
+                                   pipeline debug stemmer
+  | _                   -> abort_i lang Control.fatal_err_mess 
+                                   "Unexpected anomaly" pipeline debug stemmer 
   ]
 ; 
 value safe_engine () =

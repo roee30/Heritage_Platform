@@ -53,9 +53,9 @@ computational linguistics Ocaml library.
 These packages may be pulled as Git packages. 
 
 Create a clean installation directory HERITAGE, where you run successively:
-git clone git@gitlab.inria.fr:huet/Zen.git
-git clone -b development git@gitlab.inria.fr:huet/Heritage_Resources.git
-git clone -b development git@gitlab.inria.fr:huet/Heritage_Platform.git
+git clone git@gitlab.inria.fr/huet/Zen.git
+git clone -b development git@gitlab.inria.fr/huet/Heritage_Resources.git
+git clone -b development git@gitlab.inria.fr/huet/Heritage_Platform.git
 This will create three sub_directories, namely Zen, Heritage_Resources
 and Heritage_Platform in their current stable versions.
 

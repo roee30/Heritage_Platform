@@ -27,7 +27,8 @@ for download and installation instructions. You may have to install
 the auxiliary package Ocamlbuild. 
 
 Beware: camlp4 is not updated at every Ocaml distribution, so you may have 
-to settle for not the most recent version of Ocaml.
+to settle for not the most recent version of Ocaml. Currently (Feb. 2023)
+we recommend Ocaml V4.10+1 
 
 1) Install the Zen computational linguistics library:
 

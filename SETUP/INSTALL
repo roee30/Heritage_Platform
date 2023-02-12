@@ -21,25 +21,16 @@ install the site.
 
 Installation assumes prior installation of Objective Caml available
 from site http://ocaml.org. The distribution version
-4.07 ought to be used, available at "http://ocaml.org/releases/".
+4.10+1 should be used with opam. 
 
 The proper sequence of commands is:
 ./configure
 make world.opt
 sudo make install
 
-Then install package Ocamlbuild from https://github.com/ocaml/ocamlbuild/releases
-for instance OCamlbuild 0.12.0:
-make configure # beware: not ./configure
-make
-sudo make install
-
-Then install Camlp4 from GitHub, in the 4.07 branch, available from
-https://github.com/ocaml/camlp4/releases; take for instance 4.07+1. 
-This should be installed by:
-./configure
-make all # beware: not just make
-sudo make install
+Then install Camlp4 by:
+opam install ocamlbuild 0.14.2
+opam install camlp4
 
 The following instructions assume installation under some version of the 
 Unix operating system, such as FreeBSD, Linux or MacOSX. 
@@ -127,10 +118,12 @@ such as /~xxx/Heritage_Platform/. This parameter should always start with
 "/" so that it is recognized as a subpath in the local server data directory.
 
 CGIDIR should be the absolute path on the server file system of its CGI 
-executables, typically on Linux /var/www/cgi-bin/ (or some other directory 
+executables, typically on Linux /var/www/cgi-bin/ and on MacOS
+/Library/WebServer/CGI-Executables/ (or some other directory 
 indicated as possibly containing cgis in Apache's configuration file).
 
 CGIBINURL is the corresponding URL, such as '/cgi-bin/Heritage_Platform/'
+Beware. On MacOS too it should start with '/cgi-bin", and not "/CGI-Executables".
 
 CGIEXT is the extension of cgi executables,
 if needed by the Apache configuration.
@@ -189,10 +182,18 @@ a complex and risky operation. For instance, check that your httpd.conf
 configuration file has an uncommented line:
 LoadModule cgi_module ...
 
+Warning. On current Apache2 distributions of MacOS, the cgi_module is
+disabled by default, by commenting the bove line in its httpd.conf.
+Thus you have to uncomment this line in file /private/etc/apache2/httpd.conf
+by editing it in su mode. Then restart the server by:
+sudo killall -c httpd 
+sudo httpd -k restart
+This cgi enabling will have to be repeated at update of your MacOS :-(
+
 Another route is to install the software with XAMPP, an open-source 
 lightweight Apache distribution that makes it easier for developers 
 to install a local web server. Another possible replacement for Apache
-is the MAMP package. 
+is the MAMP package. This has nor been tested
 
 ______________
 

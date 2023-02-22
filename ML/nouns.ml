@@ -1662,7 +1662,8 @@ value build_mas_ivas stem entry =
         ; declinev Loc "vatsu"
         ])
    ] 
-   ; Avyayaf (fix stem "vas")
+  ; Bare Noun (fix stem "ivat") 
+  ; Avyayaf (fix stem "ivas")
    ]
 ;
 value build_mas_aac stem entry = 

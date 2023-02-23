@@ -94,7 +94,7 @@ value gen_stem (v,root) stem = (* stem is a bare stem with no homo index *)
 ;
 (* Now for participle forming paradigms *)
 (* 12-02-2022 Removal of vocatives of participles canceled on 13-03-2022
-   on account of aacaarya and muu.dha *)
+   on account of aacaarya and muu.dha. TODO: make a list of such nouns *)
 
 (* Similar to [Nouns.build_mas_at [1 :: stem]] if vat=False
    and to [Nouns.build_mas_mat stem] if vat=True *)
@@ -435,9 +435,10 @@ value build_part_aa verbal stem prati root =
         ])
    ] ]
 ;
-(* Similar to [Nouns.build_mas_vas] *)
+(* Similar to [Nouns.build_mas_(i)vas] *)
 (* Except for proper intercalation of i *)
-value build_mas_ppfa verbal stem inter stem_vas root = 
+value build_mas_ppfa verbal stem inter root = 
+  let stem_vas = fix stem (if inter then "ivas" else "vas") in
   let gen_entry = gen_stem (verbal,root) stem_vas in
   let krid = Krid verbal root in
   let decline case suff = (case,fix stem suff) 
@@ -447,9 +448,9 @@ value build_mas_ppfa verbal stem inter stem_vas root =
    [ Declined krid Mas
    [ (Singular,
         [ declinev Voc "van" 
-        ; declinev Nom "vaan"
+        ; declinev Nom "vaan"  (* strong stem is -vaa.ms *)
         ; declinev Acc "vaa.msam"
-        ; decline  Ins "u.saa"
+        ; decline  Ins "u.saa" (* weakest stem is -u.s *)
         ; decline  Dat "u.se"
         ; decline  Abl "u.sas"
         ; decline  Gen "u.sas"
@@ -473,15 +474,16 @@ value build_mas_ppfa verbal stem inter stem_vas root =
         ; declinev Dat "vadbhyas"
         ; declinev Abl "vadbhyas"
         ; decline  Gen "u.saam"
-        ; declinev Loc "vatsu"
+        ; declinev Loc "vatsu" (* weak stem is -vat *)
         ])
    ]
-   ; Bare krid (fix stem "vat") (* eg vidvat- *)
+   ; Bare krid (fix stem (if inter then "ivat" else "vat")) (* eg vidvat- *)
 (* ; Avyayaf (fix stem "vas") - Not dealt with by [Inflected.enter_form] *)
    ]
 ;
 (* Similar to [Nouns.build_neu_vas] *)
-value build_neu_ppfa verbal stem inter stem_vas root = 
+value build_neu_ppfa verbal stem inter root = 
+  let stem_vas = fix stem (if inter then "ivas" else "vas") in
   let gen_entry = gen_stem (verbal,root) stem_vas in
   let krid = Krid verbal root in
   let decline case suff = (case,fix stem suff) 
@@ -520,12 +522,11 @@ value build_neu_ppfa verbal stem inter stem_vas root =
         ; declinev Loc "vatsu"
         ])
    ]
-   ; Bare krid (fix stem "vat") (* eg vidvat- *)
-(* ; Avyayaf (fix stem "vas") - Not dealt with by [Inflected.enter_form] *)
    ]
 ;
 (* Supplementary forms with intercalation of i in later language Whitney§805b *)
-value build_late_ppfa verbal stem stem_vas root = 
+value build_late_ppfa verbal stem root = 
+  let stem_vas = fix stem "ivas" in
   let gen_entry = gen_stem (verbal,root) stem_vas in
   let krid = Krid verbal root in
   let declinev case suff = (case,fix stem ("i" ^ suff)) in do
@@ -574,7 +575,7 @@ value build_late_ppfa verbal stem stem_vas root =
         ; declinev Loc "vatsu"
         ])
    ]    
-   ; Bare krid (fix stem "vat") 
+   ; Bare krid (fix stem "ivat") 
    ]
    }
 ;
@@ -605,10 +606,10 @@ and build_part_vat part_kind stem stemf root =
 and build_part_vas c stem inter stemf root = 
     let prati = fix stem (if inter then "ivas" else "vas") 
     and verbal = (c,Ppfta) in do 
-  { build_mas_ppfa verbal stem inter prati root (* (i)vas *)
-  ; build_neu_ppfa verbal stem inter prati root (* (i)vas *)
+  { build_mas_ppfa verbal stem inter root (* (i)vas *)
+  ; build_neu_ppfa verbal stem inter root (* (i)vas *)
   ; if (root="d.rz#1" || root="vid#2" || root="viz#1") && c=Primary
-    then build_late_ppfa verbal stem prati root (* i supplement Whitney§805b *)
+    then build_late_ppfa verbal stem root (* i supplement Whitney§805b *)
     else ()
   ; build_part_ii verbal stemf prati root (* u.sii *)
   }

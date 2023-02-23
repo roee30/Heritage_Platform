@@ -5345,8 +5345,8 @@ value compute_nouns_stem_form e stem d p =
             [ [ 1 :: r2 ] (* -as *) -> match r2 with
                [ [ 42 :: _ ] (* -yas *) -> build_mas_yas r2 e
                | [ 45 :: r3 ] (* -vas *) -> 
-                 if p = "Ppfta" then build_mas_vas r3 e
-                 else match r3 with 
+            (* OBS  if p = "Ppfta" then build_mas_vas r3 e else *) 
+                   match r3 with 
                    [ [ 1 :: [ 43 :: _ ] ] (* -ravas *) -> build_as Mas r2 e   
                      (* uccaisravas, puruuravas, ugrazravas, vizravas non ppf *)
                    | [ 3 :: r4 ] (* -ivas *) -> build_mas_ivas r4 e
@@ -5552,8 +5552,8 @@ value compute_nouns_stem_form e stem d p =
                [ [ 34; 1 ] (* adas *) -> build_asau_adas Neu 
                | [ 42 :: _ ] (* -yas *) -> build_neu_yas r2 e
                | [ 45 :: r3 ] (* -vas *) -> 
-                 if p = "Ppfta" then build_neu_vas r3 e
-                 else match r3 with 
+                 (* OBS if p = "Ppfta" then build_neu_vas r3 e else *)
+                 match r3 with 
                  [ [ 1 ] (* avas1 - non ppf *)
                  | [ 1 :: [ 43 :: _ ] ] (* -ravas eg zravas, sravas - non ppf *)
                  | [ 5 :: [ 48 :: _ ] ] (* -suvas *) 

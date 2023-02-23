@@ -3475,7 +3475,7 @@ value fix_dup weak suff mc = (* Gonda §18.I §6 *)
   | _ -> error_suffix 12
   ]
 ;
-(* TODO: merge with Phonetics.mult *)
+(* Different from Phonetics.mult, assumes root starts with vowel *)
 value multi_consonant root = match revstem root with
   [ [ v :: r ] -> vowel v && length r > 1
   | [] -> error_empty 15

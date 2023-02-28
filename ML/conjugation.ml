@@ -689,6 +689,7 @@ value resolve_homonym entry =
     | "svid" -> second entry
     | "maa" -> fourth entry
     | "arc" -> ".rc#1" (* link - bizarre *)
+    | "zvaa" | "zvi" -> "zuu" 
     | _ -> entry
     ]
   | 2 -> match entry with 

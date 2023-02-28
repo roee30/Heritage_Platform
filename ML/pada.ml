@@ -64,7 +64,7 @@ value voices_of = fun
   | "vidh#1" | "vi.s#1" | "vii#1" | "v.rj" | "v.r.s" | "v.rh" | "ven" | "vyac"
   | "vyadh" | "vraj" | "vrazc" | "za.ms" | "zak" | "zam#1" | "zam#2" | "zal" 
   | "zaz"  | "zas" | "zaas" | "zi.s" | "ziil" | "zuc#1" | "zudh" | "zumbh" 
-  | "zu.s#1" | "zuu" | "zcut#1" | "zraa" | "zli.s" | ".s.thiiv" 
+  | "zu.s#1" | "zuu" | "zcut#1" | "zraa" | "zli.s" | "zvaa" | ".s.thiiv" 
   | "sad#1" | "sap#1" | "saa#1" | "sidh#1" | "sidh#2" | "siiv" 
   | "sur" | "s.r" | "s.rj#1" | "s.rp" | "skand" | "skhal" | "stan" | "stubh"
   | "sthag" | "snaa" | "snih#1" | "snu" | "snuh#1" | "sp.r" | "sphal" | "sphu.t"

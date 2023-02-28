@@ -3180,7 +3180,7 @@ value redup_perf root =
                   ] in
               (s, w, None, False, iopt)
       else (* root starts with consonant c1 *)
-      let rec lookvoy = fun (* search for lefmost vowel *)
+      let rec lookvoy = fun (* search for leftmost vowel *)
            [ [] -> error_vowel 1 (* no vowel *)
            | [ c2 ] -> if vowel c2 then (c2,False,True)
                        else error_vowel 2 (* no vowel *)
@@ -3695,8 +3695,13 @@ value compute_perfect root =
         }
     | "ah" -> compute_perfect_ah root
     | "vyaa" -> compute_perfect_vyaa root (* does not fit standard aa scheme *)
-    | "zvaa" -> let (strong, weak,_,_,_) = redup_perf "zuu" in (* \Pan{6,1,30} *)
-                compute_perfect_v strong weak root (* Whitney§794b zizvaaya *)
+    | "zuu" | "zvaa" (* zuu in lexicon *) -> do 
+        { let (strong, weak,_,_,_) = redup_perf "zuu" in 
+          (* we allow vocalic deployment even though not \Pan{6,1,17} *)
+          compute_perfect_v strong weak root (* zuzaava *)
+        ; let (strong, weak,_,_,_) = redup_perf "zvi" in (* \Pan{6,1,30} *)
+          compute_perfect_v strong weak root (* Whitney§794b zizvaaya *)
+        }
 (* Whitney§794b also jyaa pyaa vyaa hvaa; we treat vyaa above, and hvaa is huu.
    Thus pyaa is covered by pii. jyaa1 as jii gives jijyau same WR *)
     | "indh" -> compute_perfectm Primary (revcode "iidh") root

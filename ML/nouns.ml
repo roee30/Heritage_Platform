@@ -150,7 +150,7 @@ and as_iiv = fun (* sn *)
   | _ -> False
   ]
 and aa_iiv = fun 
-  [ "kathaa" -> True  
+  [ "kathaa" | "mak.sikaa" -> True  (* to be completed *)
   | _ -> False   
   ]
 (*i NB [aa_iic] obsolete, now use separate entry femcf marked fstem and 
@@ -6080,6 +6080,7 @@ value iiv_krids =
   ; "vibhinna"
   ; "vyakta"
   ; "ziir.na"
+  ; "ziita"
   ; "zuddha"
   ; "spa.s.ta"
   ; "saaci" (* ind *) 

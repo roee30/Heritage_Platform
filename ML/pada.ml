@@ -293,11 +293,13 @@ value voices_of_pv upasarga gana = fun
    (* Beware: gana only used for "tap" "i" ".r" 
       but gana=0 for non-present forms *)
 (* Paninian requirements *)
-[ "gam" | "vid#1" | "svar" (* | "zru" | "praz" *) -> 
-             if upasarga = "sam" then Ubha else Para (* \Pan{1,3,29} *)
-(* "praz" used in Atma with aa- but also without pv in epics (MW) *)
+(* NB: \Pan{1,3,29} applies only for intransitive use :
+| "gam" | "vid#1" | "svar" (* | "zru" | "praz" *) -> 
+             if upasarga = "sam" then Ubha else Para *)
+(* gam transitive used in Atma in Ram{3,45,43} : gami.sye *)
 (* "zru" also Atma in Vedic eg z.r.nu.sva and SP. z.r.nudhvam *)
-| ".r" | "car" ->   if upasarga = "sam" then Ubha else Para (* \Pan{1,3,54} *)
+(* "praz" used in Atma with aa- but also without pv in epics (MW) *)
+[ ".r" | "car" ->   if upasarga = "sam" then Ubha else Para (* \Pan{1,3,54} *)
 | "viz#1" -> if upasarga = "ni"  then Atma else Para (* \Pan{1,3,17} *)
 | "k.s.nu" -> if upasarga = "sam"  then Atma else Para (* \Pan{1,3,65} *)
 | "huu" -> match upasarga with

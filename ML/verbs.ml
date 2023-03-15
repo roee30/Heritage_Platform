@@ -2410,8 +2410,8 @@ value compute_future stem root =
     | _ -> match voices_of root with
        [ Para -> do (* active only *) 
          { compute_futurea Primary stem root 
-         ; match root with (* conditional or atma on demand *)
-           [ "ku.t" (* Kale *) | "jiiv" | "tyaj#1" | "bha.n" | "bhuu#1" 
+         ; match root with (* conditional or Atma on demand *)
+           [ "ku.t" (* Kale *)| "jiiv" | "tyaj#1" | "d.rz#1" | "bha.n" | "bhuu#1" 
            | "zaas" | "stu" | "sm.r" 
                      -> compute_conda Primary stem root
            | "khaad" | "gad" | "vac" (* BhG pravak.sye *) 

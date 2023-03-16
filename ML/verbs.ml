@@ -2411,8 +2411,8 @@ value compute_future stem root =
        [ Para -> do (* active only *) 
          { compute_futurea Primary stem root 
          ; match root with (* conditional or Atma on demand *)
-           [ "ku.t" (* Kale *)| "jiiv" | "tyaj#1" | "d.rz#1" | "bha.n" | "bhuu#1" 
-           | "zaas" | "stu" | "sm.r" 
+           [ "ku.t" (* Kale *)| "jiiv" | "tyaj#1" | "d.rz#1" | "pat#1" | "bha.n"
+           | "bhii#1" |  "bhuu#1" | "zaas" | "stu" | "sm.r" 
                      -> compute_conda Primary stem root
            | "khaad" | "gad" | "vac" (* BhG pravak.sye *) 
                      -> compute_futurem Primary stem root 
@@ -2434,8 +2434,8 @@ value compute_future stem root =
          ; compute_futurem Primary stem root 
          ; match root with (* rare conditional *)
            [ "i" | "k.r#1" | "gam" | "grah" | "ji" | "j~naa#1" | "tap"
-           | "daa#1" | "nii#1" | "bandh" | "budh#1" | "bhid#1" | "m.r"
-           | "yaj#1" | "vad" | "sthaa#1" -> do
+           | "daa#1" | "nii#1" | "bandh" | "budh#1" | "bhid#1" | "bh.r" | "m.r"
+           | "yaj#1" | "vad" | "sthaa#1"| "hu" -> do
               { compute_conda Primary stem root 
               ; compute_condm Primary stem root 
               }

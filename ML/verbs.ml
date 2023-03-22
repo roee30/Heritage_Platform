@@ -20,8 +20,9 @@ are updated. But the Reader/Parser needs a full pass of generation, with
 open List; (* map, length, rev *)
 open Phonetics; (* [vowel, homonasal, duhify, mrijify, nahify, light, nasal, 
                     gana, mult, aug, trunc_a, trunc_aa, trunc_ii, trunc_u] *)
-open Skt_morph;
-open Inflected; (* [Conju, Invar, Inftu, roots, enter1, morpho_gen, admits_aa] *)
+open Skt_morph; (* Infi, Absoya, Perpft *)
+open Inflected; (* [Conju, Invar, Inftu, Absotvaa, roots, enter1, morpho_gen, 
+                    admits_aa] *)
 open Parts; (* [memo_part, record_part, cau_gana, fix, fix_augment, rfix,
                 compute_participles] *)
 (* This module also uses modules [List2 Word Control Canon Encode Int_sandhi] 
@@ -4693,7 +4694,7 @@ value build_infinitive c inf_stem root = do
    bhaavitum have to be entered as supplements; see Witney§1051c. *)
   { enter1 root (Invar (c,Infi) (fix inf_stem "tum"))
   ; enter1 root (Inftu c (fix inf_stem "tu")) (* Xtu-kaama compounds *)
-(* NB. bahuv cpds in -kaama and -manas constructed with infinitives in -tu 
+(* NB. bahuvrihi cpds in -kaama and -manas constructed with infinitives in -tu 
    See Renou HLS p72 from Pata~njali; Renou grammaire §107 dagdhukaama
    Vt to Pan{6,1,144} bhoktukaama.h 
    also Assimil p194 eg tyaktukaama and Kale§917 noted "tufkaamamanasorapi" 

@@ -653,9 +653,22 @@ value write_sol_to_std_out solution_list selected_segments =
   }
 ;
 
+value collapse_duplicates seg_sols = 
+  let collapsed_seg_sols = loop [] seg_sols
+  where rec loop acc = fun 
+  [ [] -> acc
+  | [ hd :: tr ] -> if List.mem hd acc then loop acc tr
+                    else loop (acc @ [ hd ]) tr
+  ] in 
+  collapsed_seg_sols
+;
+
 (* Get the list of solutions as list string *)
-value get_solutions_str solution_list = 
-  let seg_sols = List.map get_string solution_list in 
+value get_solutions_str solution_list collapse = 
+  let seg_solutions = List.map get_string solution_list in 
+  let seg_sols = 
+    if collapse then collapse_duplicates seg_solutions
+    else seg_solutions in 
   let seg_sol_str sol = "\"" ^ (replace_plus sol) ^ "\"" in 
   let seg_sols_lst = List.map seg_sol_str seg_sols in 
   let segmented_sols_str = "[" ^ (String.concat ", " seg_sols_lst) ^ "]" in 
@@ -666,10 +679,24 @@ value get_solutions_str solution_list =
    sa.msaadhanii, then the list view is activated and hence the 
    segmentation solutions alone are writted to stdout as json *)
 value write_sol_lst_json_to_stdout solution_list input = 
-  let segmented_sols_str = get_solutions_str solution_list in 
+  let segmented_sols_str = get_solutions_str solution_list False in 
   let solutions_str = "\"segmentation\": " ^ segmented_sols_str
   and input_str = "\"input\": " ^ "\"" ^ input ^ "\"" in 
   let json_string_output = "{" ^ input_str ^ ", " ^ solutions_str ^ "}" in 
+  print_string json_string_output
+;
+
+value write_sol_lst_json_for_debug solution_list input collapse = 
+  let (segmented_sols_str, collapsed_segmented_sols) = 
+    if collapse then (get_solutions_str solution_list False, 
+                      get_solutions_str solution_list True)
+    else (get_solutions_str solution_list False, "[]") in 
+  let solutions_str = "\"segmentation\": " ^ segmented_sols_str
+  and collapsed_sols_str = 
+    "\"collapsed_segmentation\": " ^ collapsed_segmented_sols
+  and input_str = "\"input\": " ^ "\"" ^ input ^ "\"" in 
+  let json_string_output = 
+    "{" ^ input_str ^ ", " ^ solutions_str ^ ", " ^ collapsed_sols_str ^ "}" in 
   print_string json_string_output
 ;
 
@@ -687,15 +714,16 @@ value handle_scl_calls solution_list selected_segments input mode =
    are directly fed to standard output *)
 value write_json_to_std_out solution_list selected_segments = 
   let final_segments = List.map snd selected_segments
-  and sols_str = get_solutions_str solution_list in 
+  and sols_str = get_solutions_str solution_list False in 
   let word = "\"word\": " ^ sols_str in 
   let morph = "\"morph\": " ^ (get_all_morphs_str final_segments) in 
   let json_string_output = "{" ^ word ^ ", " ^ morph ^ "}" in 
   print_string json_string_output
 ;
-value write_error_json error_str = 
-  let error = "\"error\": \"" ^ error_str ^ "\"" in 
-  print_string ("{" ^ error ^ "}")
+value write_error_json input_str error_str = 
+  let input = "\"input\": \"" ^ input_str ^ "\""
+  and error = "\"segmentation\": \"" ^ error_str ^ "\"" in 
+  print_string ("{" ^ input ^ ", " ^ error ^ "}")
 ;
 (* In Debug, segmented solutions are directly output to a local file *)
 value write_solutions_to_file wx_input mode solution_list = 
@@ -885,7 +913,9 @@ value check_sentence translit uns text checkpoints input undo_enabled
      best segments' summary or best solutions' list*)
   if pipeline then handle_scl_calls solution_list selected_segments wx_input mode
   else if stemmer then write_json_to_std_out solution_list selected_segments 
-  else if debug then write_solutions_to_file input mode solution_list
+  (* else if debug then write_solutions_to_file input mode solution_list *)
+  (* Instead of saving it in local file, the results are now sent as JSON *)
+  else if debug then write_sol_lst_json_for_debug solution_list wx_input False
   else
   match mode with 
   [ Best_List | First_List -> 
@@ -955,9 +985,9 @@ value quit_button corpmode corpdir sentno =
   center_end
 ;
 (* Failsafe Aborting for pipeline, debug, stemmer and default *)
-value abort_i lang s1 s2 p d s = 
-  if p (* pipeline *) || d (* debug *) || s (* stemmer *)
-     then write_error_json (s1 ^ " - " ^ s2)
+value abort_i lang s1 s2 input p d s = 
+  if p (* pipeline *) || d (* debug *) || s (* stemmer *) then 
+    write_error_json input ("error: " ^ s1 ^ " - " ^ s2)
   else abort lang s1 s2
 ;
 (* Main body of sktgraph2 cgi *)
@@ -1038,8 +1068,6 @@ value graph_engine () =
   let revised = decode_url (get "revised" env "") (* User-aid revision *)
   and rev_off = int_of_string (get "rev_off" env "-1") 
   and rev_ind = int_of_string (get "rev_ind" env "-1") in 
-  let _ = if (pipeline || stemmer || debug) then (pl http_header)
-          else Prel.prelude () in 
   try let _ = 
     match (revised,rev_off,rev_ind) with
     [ ("",-1,-1) -> (* Standard input processing *** Main call *** *)
@@ -1103,38 +1131,53 @@ value graph_engine () =
     } 
   with 
   [ Sys_error s         -> abort_i lang Control.sys_err_mess s (* file pb *) 
-                                   pipeline debug stemmer
+                                   url_encoded_input pipeline debug stemmer
   | Stream.Error s      -> abort_i lang Control.stream_err_mess s (* file pb *)
-                                   pipeline debug stemmer
+                                   url_encoded_input pipeline debug stemmer
   | Encode.In_error s   -> abort_i lang "Wrong input " s
-                                   pipeline debug stemmer
+                                   url_encoded_input pipeline debug stemmer
   | Exit (* Sanskrit *) -> abort_i lang "Wrong character in input" "" 
-                                   pipeline debug stemmer
+                                   url_encoded_input pipeline debug stemmer
   | Overflow            -> abort_i lang "Maximum input size exceeded" ""
-                                   pipeline debug stemmer
+                                   url_encoded_input pipeline debug stemmer
   | Invalid_argument s  -> abort_i lang Control.fatal_err_mess s (* sub array *)
-                                   pipeline debug stemmer
+                                   url_encoded_input pipeline debug stemmer
   | Failure s           -> abort_i lang Control.fatal_err_mess s (* anomaly *)
-                                   pipeline debug stemmer
+                                   url_encoded_input pipeline debug stemmer
   | End_of_file         -> abort_i lang Control.fatal_err_mess "EOF" (* EOF *)
-                                   pipeline debug stemmer
+                                   url_encoded_input pipeline debug stemmer
   | Not_found           -> let s = "You must choose a parsing option" in
                            abort_i lang "Unset button in form - " s
-                                   pipeline debug stemmer
+                                   url_encoded_input pipeline debug stemmer
   | Control.Fatal s     -> abort_i lang Control.fatal_err_mess s (* anomaly *)
-                                   pipeline debug stemmer
+                                   url_encoded_input pipeline debug stemmer
   | Control.Anomaly s   -> abort_i lang Control.anomaly_err_mess s
-                                   pipeline debug stemmer
+                                   url_encoded_input pipeline debug stemmer
   | _                   -> abort_i lang Control.fatal_err_mess 
-                                   "Unexpected anomaly" pipeline debug stemmer 
+                                   "Unexpected anomaly" url_encoded_input
+                                   pipeline debug stemmer 
   ]
 ; 
 value safe_engine () =
   (* Problem: in case of error, we lose the current language of the session *)
-  let abor = abort default_language in
+  let query = Sys.getenv "QUERY_STRING" in
+  let env = create_env query in
+  let url_encoded_input = get "text" env "" 
+  and ppl = get "pipeline" env "f"
+  and stm = get "stemmer" env "f"
+  and dbg = get "debug" env "f" in
+  let pipeline = (ppl = "t")
+  and stemmer = (stm = "t")
+  and debug = (dbg = "t") in  (* unnormalized string *)
+  let _ = if (pipeline || stemmer || debug) then (pl http_header)
+          else Prel.prelude () in
   try graph_engine () with  
-  [ Failure s -> abor Control.fatal_err_mess s (* [parse_cpts phase_string] ? *)
-  | _ -> abor Control.fatal_err_mess "Unexpected anomaly - broken session" 
+  [ Failure s -> abort_i default_language Control.fatal_err_mess s 
+                         (* [parse_cpts phase_string] ? *)
+                         url_encoded_input pipeline stemmer debug
+  | _ -> abort_i default_language Control.fatal_err_mess 
+                 "Unexpected anomaly - broken session" url_encoded_input 
+                 pipeline stemmer debug
   ]
 ;
 end (* Interface2 *)

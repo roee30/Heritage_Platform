@@ -736,7 +736,7 @@ value segment_chunk (full,count) chunk sa_check =
              and chnk_sgmnt = 
                    [(old_offset,(unknown,(Word.mirror cur_chunk.chunk),Id))] in 
              chunk_solutions.possible_splits := 
-               [(1.0,chnk_txt,1,1,0,chnk_sgmnt,chnk_sgmnt)]
+               [(1.0,("#" ^ chnk_txt),1,1,0,chnk_sgmnt,chnk_sgmnt)]
            ; (full,count) (* unsegmentable chunk *)
            }
       }

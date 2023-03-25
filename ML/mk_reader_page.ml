@@ -53,7 +53,7 @@ value reader_page () = do
       ] in try 
     let env = create_env query in
     let url_encoded_input = get "text" env "" 
-    and url_encoded_mode  = get "mode" env "g"
+    and url_encoded_mode  = get "mode" env "f" (* V3.45 replaces "g" *)
     and url_encoded_topic = get "topic" env ""
     and st = get "st" env "t" (* default vaakya rather than isolated pada *)
     and us = get "us" env "f" (* default input sandhied *)

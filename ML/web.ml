@@ -475,9 +475,8 @@ value interaction_modes_default mode =
   ] @ if scl_toggle then (* Needs the SCL tools *)
   [ (" Analysis ","o",mode="o") ] else []
 ;
-value interaction_modes = 
-  interaction_modes_default "f" (* default First (was All) *)
-;
+(* V3.45: default "f" for First, replacing "g" for Summary renamed All *)
+
 value corpus_read_only =
   match target with
   [ Station -> False

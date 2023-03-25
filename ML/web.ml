@@ -466,17 +466,17 @@ value scl_toggle =
   not (SCLpaths.scl_url="") (* True if SCL tools are installed *)
 ;
 value interaction_modes_default mode =  
-  [ (" The Best! ","f",mode="f") 
-  ; (" Best n solutions ","b",mode="b") 
-  (*; (" Best & List ","l",mode="l") *)
-  ; (" Summary ","g",mode="g") 
+  [ (" First ","f",mode="f") (* Was " The Best! " *)
+  ; (" Best ","b",mode="b") (* Was " Best n solutions " *)
+  (*; (" Best & List ","l",mode="l") - deprecated *)
+  ; (" All ","g",mode="g") (* Was " Summary " *)
   ; (" Tagging ","t",mode="t") 
   ; (" Parsing ","p",mode="p") 
   ] @ if scl_toggle then (* Needs the SCL tools *)
   [ (" Analysis ","o",mode="o") ] else []
 ;
 value interaction_modes = 
-  interaction_modes_default "g" (* default graph interface mode *)
+  interaction_modes_default "f" (* default First (was All) *)
 ;
 value corpus_read_only =
   match target with

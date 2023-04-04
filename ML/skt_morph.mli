@@ -68,6 +68,7 @@ and tense =
 (* Vedic Pluperfect is not yet taken into account. The only non-present passive 
    forms are some passive aorist forms in 3rd sg. Future, Perfect and Aorist 
    use Middle forms for Passive. *)
+(* Missing: Vedic imperative root aorist Pan(6,4,102) eg "k.rdhi" for "k.r#1" *)
 
 (* Verbal adjectives *)
 type kritya = int (* shades of intention of passive future/potential participle: 

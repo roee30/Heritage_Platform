@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2022 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2023 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Verbs defines the conjugation paradigms, and computes conjugated forms *)
@@ -485,7 +485,7 @@ value passive_stem root rstem = (* Panini yak (k : no guna, samprasaara.na) *)
          [w] is the (reversed) weak stem word, 
          [b] is a boolean flag for special aa roots *)
 value redup3 root rstem = 
-  match mirror rstem with 
+  match Word.mirror rstem with 
     [ [] -> failwith "Empty root"
     | [ 7 (* .r *) ] -> (* Whitney§643d *) (revstem "iyar",revstem "iy.r",False)
     | [ c1 :: r ] -> if vowel c1 then failwith "Attempt reduplicating vowel root"
@@ -759,9 +759,9 @@ value compute_thematic_imperativea cl conj stem root =
   let conjug person suff = (person,fix stem suff) in
   enter1 root (Conju (fimpera cl conj)
    [ (Singular, 
-        [ conjug First  "aani"
-        ; conjug Second "a"
-        ; conjug Third  "atu"
+        [ conjug First  "aani" (* gacchaani let me  go *)
+        ; conjug Second "a"    (* gaccha    go         *)
+        ; conjug Third  "atu"  (* gacchatu  let him go *)
         ])
    ; (Dual,
         [ conjug First  "aava"
@@ -4261,7 +4261,7 @@ value compute_aorist root =
             ] in
         compute_root_aoristp stem root (* passive *)
       (* For root aorist participles, see Whitney§840 and Burrow p178 *)
-      (* For optative mode Whitney§837 see benedictive/precative. *)
+      (* For optative mode Whitney§837 see benedictive/precative.     *)
       }
     | "prii" -> let st = revcode "priiyaa" in compute_root_aorista st st root 
     | "svid#2" -> let st = revcode "svidyaa" in compute_root_aorista st st root

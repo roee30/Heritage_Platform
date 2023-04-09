@@ -31,12 +31,7 @@ module Prel = struct (* Interface's lexer prelude *)
   ; page_begin graph_meta_title 
   ; pl (body_begin Chamois_back)
   ; pl interface_title
-  ; pl (h3_begin C3 ^ "Click on " ^ html_green check_sign 
-                    ^ " to select segment, click on " ^ html_red x_sign 
-                    ^ " to rule out segment" ^ h3_end)
-  ; pl (h3_begin C3 ^ mouse_action_help 
-                    ^ " on segment to get its lemma" ^ h3_end)
-  ; open_page_with_margin 15
+  ; open_page_with_margin 15 
   }
 ;
  end (* Prel *)
@@ -146,20 +141,6 @@ value call_parser text cpts =
             ";cpts=" ^ string_points cpts ^ ";n=1" in
   anchor Green_ (invoke cgi) check_sign
 ;
-(*i Legacy interface with Sanskrit Library [
-value call_SL text cpts mode corpus solutions sent_id link_num = 
-  let cgi = tomcat ^ corpus ^ "/SaveTagging?slp1Sentence=" 
-            ^ text ^ "&numSolutions=" ^ (string_of_int solutions) 
-            ^ "&submit=submit&command=resend&sentenceNumber=" ^ sent_id 
-            ^ "&linkNumber=" ^ link_num ^ "&displayEncoding=roman&"
-            ^ "inflectionFormat=SL&inputEncoding=slp1&OS=MacOS&cpts=" 
-            ^ string_points cpts in
-  anchor Green_ (invoke cgi) check_sign
-;
-value invoke_SL text cpts corpus_id count sent_id link_num =
-  ps (td_wrap (call_SL text cpts "t" corpus_id count sent_id link_num 
-               ^ "Sanskrit Library Interface"))
-;] i*)
 value sort_check cpts = 
   let compare_index (a,_,_) (b,_,_) = compare a b in
   List.sort compare_index cpts
@@ -244,7 +225,6 @@ value is_conflicting ((w,tr,ph,k) as segment) =
                    else does_conflict rest
        ]
   ]
-(* Remaining bug: "mahaabaho" where "ap" is blue despite "baho" *)
 ; 
 value rec find_conflict_seg acc l = fun 
   [ [] -> List.rev acc
@@ -293,7 +273,7 @@ value call_back_pseudo text cpts ph newpt =
        let cgi = out_cgi ^ "?" ^ text ^ ";cpts=" ^ (string_points list_points) in
        anchor_pseudo (invoke cgi) ph
 ;
-value un_analyzable (chunk:Word.word) = (Phases.Unknown,Word.mirror chunk)
+value un_analyzable (chunk : Word.word) = (Phases.Unknown,Word.mirror chunk)
 ;
 value rec print_first text cpts chunk_orig chunk chunk_ind = 
   match Word.length chunk with
@@ -414,11 +394,10 @@ value check_sentence translit uns text checkpoints input undo_enabled =
          else do
        { td_wrap (call_reader text checkpoints "p" ^ "Filtered Solutions") |> ps
        ; let info = string_of_int count ^ if full then "" else " Partial" in 
-         td_wrap (call_reader text checkpoints "t" ^ "All " ^ info ^ " Solutions") |> ps
-       ; call_scl_parser ()
+         call_scl_parser ()
        } 
   ; tr_end |> pl   (* tr end *)
-  ; table_end |> pl
+  ; table_end |> pl (* Spacing20  *)
   ; div_end |> ps (* Latin16 *)
   ; html_break |> pl
   ; div_begin Latin12 |> ps
@@ -530,10 +509,10 @@ value graph_engine () = do
     and sentence_no = get Params.sentence_no env "" in
     let undo_enabled = sentence_no = "" (* no undo in Reader corpus mode *)
                     || corpus_permission <> Web_corpus.Reader in
-    (* 12-2021 for course: Corpus Reader set to MW lexicon and Deva printing 
+    (*i 12-2021 for course: Corpus Reader set to MW lexicon and Deva printing 
    [let () = if sentence_no = "" then ()
              else if corpus_permission <> Web_corpus.Reader then ()
-             else do { toggle_lexicon "MW"; toggle_sanskrit_font Deva } in] *)
+             else do { toggle_lexicon "MW"; toggle_sanskrit_font Deva } in] i*)
     let text = arguments translit lex font cache st us url_encoded_input
                          url_encoded_topic abs 
                          url_enc_corpus_permission corpus_dir sentence_no
@@ -561,7 +540,7 @@ value graph_engine () = do
     and rev_ind = int_of_string (get "rev_ind" env "-1") in 
    try do 
    { match (revised,rev_off,rev_ind) with
-     [ ("",-1,-1) -> (* Standard input processing *** Main call *** *)
+     [ ("",-1,-1) -> (* Standard input processing *** Main call *** *) 
        check_sentence translit uns text checkpoints input undo_enabled
      | (new_word,word_off,chunk_ind) (* User-aid revision mode *) -> 
        let chunks = Sanskrit.read_sanskrit (Encode.switch_code translit) input in
@@ -606,7 +585,7 @@ value graph_engine () = do
      else () 
    ; html_break |> pl
      (* Quit button: continue reading (reader mode) 
-                  or quit without saving (annotator mode) *)
+               or quit without saving (annotator mode) *)
    ; if sentence_no <> "" then
         quit_button corpus_permission lex font
                     (decode_url corpus_dir) (decode_url sentence_no) |> pl

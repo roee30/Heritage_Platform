@@ -48,10 +48,9 @@ and conjs_cgi      = cgi_bin Paths.cgi_conj       (* conjugations *)
 and lemmatizer_cgi = cgi_bin Paths.cgi_lemmatizer (* lemmatizer *) 
 and reader_cgi     = cgi_bin Paths.cgi_reader     (* reader *) 
 and parser_cgi     = cgi_bin Paths.cgi_parser     (* parser *) 
-and graph_cgi      = cgi_bin Paths.cgi_graph      (* summarizer graphical interface *) 
-and graph_cgi2     = cgi_bin Paths.cgi_graph2     (* summarizer graphical interface 
-                                                     with best solutions *) 
-and user_aid_cgi   = cgi_bin Paths.cgi_user_aid   (* unknown chunks processing *) 
+and graph_cgi      = cgi_bin Paths.cgi_graph      (* summary graph interface *) 
+and graph_cgi2     = cgi_bin Paths.cgi_graph2     (* same with best solutions *) 
+and user_aid_cgi   = cgi_bin Paths.cgi_user_aid   (* unknown chunks processing *)
 and sandhier_cgi       = cgi_bin Paths.cgi_sandhier   (* sandhier *) 
 and corpus_manager_cgi = cgi_bin Paths.cgi_corpus_manager (* Corpus manager *)
 and save_corpus_cgi    = cgi_bin Paths.cgi_save_corpus
@@ -344,7 +343,6 @@ and reader_page l = dico_page (dico_reader_page l)   (* [mk_reader_page]  *)
 and sandhi_page l = dico_page (dico_sandhi_page l)   (* [mk_sandhi_page]  *) 
 and corpus_page l = dico_page (dico_corpus_page l)   (* [mk_corpus_page]  *)
 ; 
-
 value print_site_map dyn lang = (* the various Web services of the site *)
   if dyn then do 
   { anchor_ref (sanskrit_page_url lang) (emph "Top") |> ps; " | " |> pl  

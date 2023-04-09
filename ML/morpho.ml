@@ -74,7 +74,7 @@ value print_inv_morpho pe pne pu form (seg_num,sub) generative (delta,morphs) =
           [ [] (* not in lexicon *) -> 
               if stem = [ 3; 32; 1 ] (* ita ifc *) then stem |> pe
                                                    else bare_stem |> pne
-          | entries (* bare stem is lexicalized *) ->
+          | entries (* [bare_stem] is lexicalized *) ->
               if List.exists (fun (_,h) -> h=homo) entries
                  then stem |> pe (* stem with exact homo is lexical entry *)
               else bare_stem |> pne
@@ -107,27 +107,6 @@ value print_inv_morpho_link pvs pe pne pu form =
    since only existential test in [Dispatcher.validate_pv]. Thus
    [anusandhiiyate] should show [dhaa#1], not [dhaa#2], [dhii#1] or [dhyaa] *)
 ;
-
-(* Used in [Lexer.record_tagging] for regression analysis - Legacy 
-[value report_morph gen form (delta,morphs) =
-  let stem = Word.patch delta form in do (* stem may have homo index *)
-    { "{ " |> ps
-    ; print_morphs (0,0) morphs 
-    ; " }[" |> ps 
-    ; if gen then (* interpret stem as unique name *)
-        let (homo,bare) = homo_undo stem in
-        let krid_infos = Deco.assoc bare unique_kridantas in 
-        let (vb,root) = look_up_homo homo krid_infos in do
-        { match Deco.assoc stem lexical_kridantas with
-          [ [] (* not in lexicon *)      -> do { "G:" |> ps; pr_word bare }
-          | _  (* stem is lexicalized *) -> do { "L:" |> ps; pr_word stem }
-          ]
-        ; " { " |> ps; print_verbal vb; " }[" |> ps; pr_word root; "]" |> ps
-        }
-      else pr_word stem
-    ; "]" |> ps
-    } 
-; ]*)
 
 end;
 

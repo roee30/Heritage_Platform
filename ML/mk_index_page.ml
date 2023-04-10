@@ -11,49 +11,59 @@
    index interface to the Sanskrit Heritage dictionary. *)
 
 (*i module Mk_index_page = struct i*)
-
 open Html;
 open Web; (* ps pl abort etc. *)
 
 value deva = (Paths.default_display_font="deva") 
 ;
+value print_index_help lang = 
+  if narrow_screen then () else do
+  { par_begin G2 |> pl
+  ; "Search for an entry matching an initial pattern:" |> ps
+  ; html_break |> pl 
+  ; print_transliteration_help lang
+  ; par_end |> pl (* G2 *)
+  }
+;
+value print_dummy_help_en () = 
+  if narrow_screen then () else do
+  { par_begin G2 |> pl
+  ; "The simplified interface below allows search without diacritics" |> ps
+  ; html_break |> pl 
+  ; "Proper names may be entered with an initial capital" |> pl
+  ; par_end |> pl (* G2 *)
+  }
+;
 value print_query lang cgi = do
-  { pl (cgi_begin cgi "convert")
+  { cgi_begin cgi "convert" |> pl
   ; print_lexicon_select (lexicon_of lang)
-  ; pl html_break
-(*[ ; ps "Output font for inflexion tool"
-  ; pl (hidden_input "font" Paths.default_display_font) 
-  ; pl (option_select_default "font"  
-        [ (" Roman","roma",not deva)  (* default roma - Computer *)
-        ; (" Devanagari","deva",deva) (* default deva - Simputer *) 
-        ])
-  ; pl html_break ] TODO: switch to specific version of dictionaries *)
-  ; pl (text_input "focus" "q")  
-  ; print_transliteration_switch "trans"
-  ; pl html_break
-  ; pl (submit_input "Search")  
-  ; pl (reset_input "Reset")
-  ; pl cgi_end
+  ; html_break |> pl
+  ; text_input "focus" "q" |> pl  
+  ; print_transliteration_switch "trans" 
+  ; html_break |> pl
+  ; submit_input "Search" |> pl
+  ; reset_input "Reset" |> pl
+  ; cgi_end |> pl
   }
 ;
 value print_query_dummy lang cgi = do
-  { pl (cgi_begin cgi "convert")
-  ; pl (hidden_input "lex" (lexicon_of lang))
-  ; pl (text_input "unused" "q")
-  ; ps "ASCII"
-  ; pl html_break
-  ; pl (submit_input "Search")  
-  ; pl (reset_input "Reset")
-  ; pl cgi_end
+  { cgi_begin cgi "convert" |> pl
+  ; hidden_input "lex" (lexicon_of lang) |> pl
+  ; text_input "unused" "q" |> pl
+  ; "ASCII" |> pl
+  ; html_break |> pl
+  ; submit_input "Search" |> pl  
+  ; reset_input "Reset" |> pl
+  ; cgi_end |> pl
   }
 ;
 value print_query_lemma lang cgi = do
-  { pl (cgi_begin cgi "convert1")
-  ; pl (hidden_input "lex" (lexicon_of lang))
-  ; pl (text_input "focus1" "q")
+  { cgi_begin cgi "convert1" |> pl
+  ; hidden_input "lex" (lexicon_of lang) |> pl
+  ; text_input "focus1" "q" |> pl
   ; print_transliteration_switch "trans1"
-  ; pl html_break 
-  ; pl (option_select_default "c" 
+  ; html_break |> pl
+  ; option_select_default "c" 
         [ (" Noun ","Noun",True)  (* default Noun *)
         ; (" Pron ","Pron",False) 
         ; (" Verb ","Verb",False) 
@@ -66,38 +76,37 @@ value print_query_lemma lang cgi = do
         ; (" Ifc " ,"Ifc", False) 
         ; (" Iiv " ,"Iiv", False) 
         ; (" Piic ","Piic",False) 
-        ])
-  ; pl html_break 
-  ; pl (submit_input "Search")
-  ; pl (reset_input "Reset")
-  ; pl cgi_end
+        ] |> pl
+  ; html_break |> pl 
+  ; submit_input "Search" |> pl
+  ; reset_input "Reset" |> pl
+  ; cgi_end |> pl
   }
 ;
 value indexer lang = do (* Not yet in xhtml validated form *)
   { open_html_file (indexer_page lang) heritage_dictionary_title 
-  ; pl (body_begin (background Chamois))
-    (* will be closed by [close_html_file] *)
+  ; body_begin (background Chamois) |> pl (* closed by [close_html_file] *)
   ; print_title (Some lang) (dico_title lang)
-  ; pl center_begin (* closed at the end *)
+  ; center_begin |> pl (* closed at the end *)
      (* Sankskit index section *)
   ; print_index_help lang
   ; print_query lang index_cgi
-  ; pl html_paragraph
-  ; pl hr
+  ; html_paragraph |> pl
+  ; hr |> pl
      (* Sankskrit made easy section (Sanskrit for dummies) *)
-  ; pl (anchor_def "easy" "") 
-  ; pl dummy_title_en
+  ; anchor_def "easy" "" |> pl 
+  ; dummy_title_en |> pl
   ; print_dummy_help_en ()
   ; print_query_dummy lang dummy_cgi
-  ; pl html_paragraph
-  ; pl hr
+  ; html_paragraph |> pl
+  ; hr |> pl
      (* Stemmer section *)
-  ; pl stem_title_en
-  ; pl (anchor_def "stemmer" "") (* for access from dock link *)
+  ; stem_title_en |> pl
+  ; anchor_def "stemmer" "" |> pl (* for access from dock link *)
   ; print_stemmer_help_en ()
   ; print_query_lemma lang lemmatizer_cgi
-  ; pl html_break
-  ; pl center_end
+  ; html_break |> pl
+  ; center_end |> pl
   ; close_html_file lang True
   }
 ;

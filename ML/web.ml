@@ -292,25 +292,6 @@ value print_sanskrit_font_select dft = do
       ] |> pl
   }
 ;
-value print_index_help lang = 
-  if narrow_screen then () else do
-  { par_begin G2 |> pl
-  ; html_break |> pl
-  ; "Search for an entry matching an initial pattern:" |> ps
-  ; html_break |> pl 
-  ; print_transliteration_help lang
-  ; par_end |> pl (* G2 *)
-  }
-;
-value print_dummy_help_en () = 
-  if narrow_screen then () else do
-  { par_begin G2 |> pl
-  ; "The simplified interface below allows search without diacritics" |> ps
-  ; html_break |> pl 
-  ; "Proper names may be entered with an initial capital" |> pl
-  ; par_end |> pl (* G2 *)
-  }
-;
 value print_stemmer_help_en () = 
   if narrow_screen then () else do
   { par_begin G2 |> ps
@@ -377,7 +358,7 @@ value pad () = do (* ad-hoc vertical padding to make room for the bandeau *)
   }
 ;
 value print_bandeau_enpied_dyn dyn lang color = do
-  { pad () (* necessary padding to avoid hiding by bandeau *)
+  { pad () (* ugly necessary padding to avoid hiding by bandeau *)
   ; elt_begin "div" Enpied |> pl
   ; table_begin Bandeau |> ps
   ; tr_begin |> ps (* main row begin *)
@@ -532,10 +513,9 @@ value error_page title_str msg submsg = do
   ; abort default_language msg submsg
   }
 ;
-(* [invalid_corpus_mode_page expected_mode current_mode] generates an HTML on
-   [output_channel] to notify the user that the requested operation
-   on the corpus is available only in [expected_mode] and not in
-   [current_mode].  *)
+(* [invalid_corpus_permission_page expected_mode current_mode] generates an 
+   HTML on [output_channel] to notify the user that the requested operation on
+   the corpus is available only in [expected_mode] and not in [current_mode]. *)
 value invalid_corpus_permission_page expected current =
   error_page "Corpus Manager" "Invalid permission "
     ("Expected permission: " ^ expected ^ " | Current permission: " ^ current)

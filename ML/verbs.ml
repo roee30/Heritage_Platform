@@ -2403,8 +2403,7 @@ value compute_condm conj stem root =
 ;
 value compute_future stem root = 
   match root with
-    [ "as#1" -> () (* uses bhuu *) 
-    | "iiz#1" | "lii" | "knuu" | "baadh" -> do (* Para allowed in future *)
+    [ "iiz#1" | "lii" | "knuu" | "baadh" -> do (* Para allowed in future *)
          { compute_futurea Primary stem root 
          ; compute_futurem Primary stem root  
          }
@@ -4824,7 +4823,7 @@ value pfp_ya rstem root =
     | [ 32; 7; 17 ] (* k.rt *) -> strong (* kartya WR *)
     | [ 47; 7 ] (* .r.sya autonomous *)
     | [ 48; 1 ] (* as1 *) -> 
-            if root = "as#1" then raise Not_attested (* use bhuu *) 
+            if root = "as#1" then raise Not_attested (* \Pan{2,4,52} use bhuu *) 
                              else rstem (* asya - may overgenerate *)   
     | [ 48; 1; 46 ] (* zas *) -> rstem 
     | [ 48; 2; 46 ] (* zaas *) -> rstem (* zaasya + zi.sya extra *)
@@ -5903,9 +5902,9 @@ value compute_denominative root pada third =
 value compute_other_systems root rstem = do
    { (* Future and Conditional *) 
      match root with
-     [ "ah" | "ifg" | "paz" (* d.rz *)| "cint" (* cit *) | "bruu" (* vac *)
-     | "kan" | "k.saa" | "cud" | "chur" | "dhii#1" | "pat#2" | "pii" |"praa#1" 
-     | "vidh#1" | "zlath" | "spaz#1" -> () (* no future *)
+     [ "as#1" (* bhuu *) | "ah" | "ifg" | "paz" (* d.rz *)| "cint" (* cit *) 
+     | "bruu" (* vac *) | "kan" | "k.saa" | "cud" | "chur" | "dhii#1" | "pat#2"
+     | "pii" |"praa#1" | "vidh#1" | "zlath" | "spaz#1" -> () (* no future *)
      | "tud#1" | "cakaas" -> () (* only periphrastic *)
      | "bharts" -> compute_future_gen rstem root (* exception gana 10 *)
      | "umbh" -> do { compute_future_gen (revcode "ubh") root (* 2 forms *)

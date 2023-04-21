@@ -5825,7 +5825,7 @@ value den_stem_m root = (* in general intransitive or reflexive Whitney§1059c *
    | "durdina" | "sudina" | "niihaara" (* id. vaartika *)
    | "ka.s.ta" | "k.rcchra" (* strive to \Pan{3,1,14} *)
    | "romantha" (* practice \Pan{3,1,15} *)
-   | "dhuuma" | "baa.spa" | "phena" (* emit \Pan{3,1,16} *)
+   | "dhuuma" | "baa.spa" | "phala" | "phena" (* emit \Pan{3,1,16} *)
    | "kurafga" | "pu.skara" | "yuga" | "vi.sa" | "zizu"  | "samudra#1" 
    | "gomaya" | "bh.rtya" | "sa.mdhyaa"  (* resemble *)
    | "puru.sa" (* imitate *)

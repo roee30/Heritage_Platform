@@ -2852,7 +2852,7 @@ value perstems rstem root =
                -> [ 0 ]
              | "k.rt#1" | "jan" | "v.rj" | "v.rt#1" | "v.rdh#1" | "z.rdh"
                -> [ 1 ] 
-                (* not "syand" WR syanttaa *)
+             (* not "syand" WR syanttaa *)
              | "zuc#1" -> [ 0; 1 ] (* zoktum *)
              | "d.rz#1" | "sp.rz#1" -> [ 3 ] (* ar -> ra dra.s.tum *)
              | "k.r.s" | "bh.rjj" -> [ 0; 3 ] (* berk *)
@@ -3094,7 +3094,7 @@ value compute_passive conj root stem =
   let ps_stem = affix_y stem (* "y" marks passive *) in 
   compute_passive_system conj root ps_stem 
 ;
-value compute_passive_raw root =
+value compute_passive_raw root = (* "d.r#1" *)
   let ps_stem = passive_stem root (revstem root) in 
   compute_passive Primary root ps_stem 
 ;
@@ -5904,7 +5904,7 @@ value compute_other_systems root rstem = do
      match root with
      [ "as#1" (* bhuu *) | "ah" | "ifg" | "paz" (* d.rz *)| "cint" (* cit *) 
      | "bruu" (* vac *) | "kan" | "k.saa" | "cud" | "chur" | "dhii#1" | "pat#2"
-     | "pii" |"praa#1" | "vidh#1" | "zlath" | "spaz#1" -> () (* no future *)
+     | "pii" | "praa#1" | "vidh#1" | "zlath" | "spaz#1" -> () (* no future *)
      | "tud#1" | "cakaas" -> () (* only periphrastic *)
      | "bharts" -> compute_future_gen rstem root (* exception gana 10 *)
      | "umbh" -> do { compute_future_gen (revcode "ubh") root (* 2 forms *)
@@ -5925,7 +5925,8 @@ value compute_other_systems root rstem = do
      | "k.saa" | "cud" | "dhii#1" | "pat#2" | "pii" | "praa#1" | "vidh#1"
      | "spaz#1" | "haa#2" -> () (* no perif *)
      | "saa#1" -> do { compute_perif (revcode "si") root 
-                     ; compute_perif rstem root }
+                     ; compute_perif rstem root
+                     }
      | "vyadh" -> compute_perif (revcode "vidh") root 
      | "zuu"   -> compute_perif (revcode "zve") root 
      | ".s.thiiv" -> compute_perif (revcode ".s.thiv") root 
@@ -5933,7 +5934,7 @@ value compute_other_systems root rstem = do
      | "stambh" -> compute_perif (revcode "stabh") root 
      | _ -> compute_perif rstem root 
      ]
-   ; (* Precative/Benedictive active rare, middle very rare in classical skt *)
+   ; (* Precative/Benedictive active rare, middle very rare in classical Skt *)
       match root with 
       [ "as#1" | "ah" -> () (* uses bhuu1 bruu *) (* but Zriivara: staat *)
       | "kan" | "k.r#2" | ".s.thiiv" -> () (* unattested - to be added *)
@@ -6027,7 +6028,7 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
      (* Here we extract the causative stem from the third given in Dico *)
      (* rather than implementing all special cases of Whitney§1042.     *)
      (* Alternative: compute cstem instead of reading it from the lexicon.    
-        Voir Panini krit ".ni" \Pan{7,3,36-43}                           *)
+        See Panini krit{.ni} \Pan{7,3,36-43}                            *)
      let (cstem,active) = match Word.mirror third with
          [ [ 3 :: [ 32 :: [ 1 :: st ] ] ]  (* remove -ati *)
              -> (st,True)
@@ -6102,7 +6103,7 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
          { record_pppdes st root
          ; record_pfp_aniiya Desiderative st root 
          ; record_pfp_ya Desiderative st root 
-(*i      ; record_des_aa Desiderative st root (* Des k.rdantas TODO *) 
+(*i      ; record_des_aa Desiderative st root (* Des k.rdantas lexicalized *) 
          ; record_des_u Desiderative st root i*)
          ; perif Desiderative [ 3 :: st ] root 
          } in
@@ -6246,14 +6247,15 @@ and compute_extra_dhaa () = do
     { (* Gaayatrii dhiimahi precative m. Whitney§837b *)
       enter1 "dhaa#1" (Conju benem [ (Plural,[ (First, code "dhiimahi") ]) ])
 (* [; record_part (Ppp_ Primary (revcode "dhita") "dhaa#1") (* alter hita *)] *)
-    }
-(* also "vidmahi" on yantra ? *)
+    } (* also "vidmahi" on yantra ? *)
 and compute_extra_nind () = (* WR: RV *)
   enter1 "nand" (Conju perfa [ (Plural,[ (Third, code "ninidur") ])
-                             ; (Plural,[ (First, code "nindimas") ]) ])
+                             ; (Plural,[ (First, code "nindimas") ]) 
+                             ])
 and compute_extra_pat () = (* WR: RV Henry: paptur véd. Varenne§39 *)
   enter1 "pat#1" (Conju perfa [ (Plural,[ (Third, code "paptur") ])
-                              ; (Plural,[ (First, code "paptima") ]) ])
+                              ; (Plural,[ (First, code "paptima") ])
+                              ])
 and compute_extra_prr () = (* paaryate as well as puuryate above *) 
     let stem = revcode "paar" in compute_passive Primary "p.rr" stem
 and compute_extra_bhaas () = do 
@@ -6271,7 +6273,7 @@ and compute_extra_bhr () = (* Epics sa.mbhriyantu Oberlies 8.7 *)
    enter1 "bh.r" (Conju (Primary,vmp) [ (Plural,[ (Third, code "bhriyantu") ]) ])
 and compute_extra_bhram () = (* MW: Mah *)
   enter1 "bhram" (Conju perfa [ (Plural,[ (Third, code "bhremur") ]) ])
-and compute_extra_muc () =  do 
+and compute_extra_muc () = do 
   { (* ved precative `fasse que je sois libéré' *)
     enter1 "muc#1" (Conju benem [ (Singular,[ (First, code "muk.siiya") ]) ])
   ; build_infinitive Causative (revcode "moci") "muc#1"    (* Whitney§1051c *)
@@ -6287,7 +6289,8 @@ and compute_extra_zru () = (*i was zrudhi but Whitney§594a zrudhii i*)
   enter1 "zru" (* ved écoute *) (* Whitney§704 z.r.nuhi z.r.nudhi *)
          (Conju (impera 5) [ (Singular,[ (Second, code "z.rnuhi") ]) ])
 and compute_extra_sad () = (* WR E. Mah(1.214.027c) (Gretil) sa.mni.siidatu.h *)
-  enter1 "sad#1" (Conju (Primary,Conjug Perfect Active) [ (Dual,[ (Third, code "siidatus") ]) ])
+  enter1 "sad#1" (Conju (Primary,Conjug Perfect Active) 
+                        [ (Dual,[ (Third, code "siidatus") ]) ])
 and compute_extra_sanj () = (* WR Oberlies p LI but maybe prm of variant sajj *)
   let root = "sa~nj" 
   and conj = Primary
@@ -6327,7 +6330,7 @@ value record_extra_participles () = do
   ; record_part (Ppra_ 1 Primary (revstem ".dam") (revstem ".damat") ".dam")
   }
 (* Para part of Atma root - now treated as specific entry 
-zinjat = [Ppra_ 2 Primary (revstem "zi~nj") (revstem "zi~njat") "zi~nj"] *)
+   zinjat = [Ppra_ 2 Primary (revstem "zi~nj") (revstem "zi~njat") "zi~nj"] *)
 ;
 (* For verbs without present forms and variants, *)
 (* called by [Make_roots.roots_to_conjugs] at generation time *)
@@ -6361,12 +6364,12 @@ value compute_extra () = do
   ; compute_extra_hims ()
   ; compute_extra_huu ()
   ; build_infinitive Primary (revcode "rami") "ram"
-  ; build_infinitive Primary (revcode "aas") "aas#2" (* Whitney§968d *)
+  ; build_infinitive Primary (revcode "aas") "aas#2"       (* Whitney§968d *)
   ; build_infinitive Causative (revcode "bhaavi") "bhuu#1" (* Whitney§1051c *)
   ; build_infinitive Causative (revcode "dhaari") "dh.r"   (* Whitney§1051c *)
   ; build_infinitive Causative (revcode "ze.si") "zi.s"    (* Whitney§1051c *)
   ; build_infinitive Causative (revcode "j~naap") "j~naa#1" (* WR epics *)
-    (* Infinitives in -as (kasun k.rt) \Pan{3,4,17} *)
+    (* Infinitives in -as krit{kasun} \Pan{3,4,17} *)
   ; enter1 "s.rp" (Invar (Primary,Infi) (code "s.rpas")) (* vi.s.rpas *)
   ; enter1 "t.rd" (Invar (Primary,Infi) (code "t.rdas")) (* aat.rdas *)
   ; let st = revcode "si.saadhayi.s" in (* des of ca of sidh1 *)

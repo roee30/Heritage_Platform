@@ -31,14 +31,6 @@ module Prel = struct (* Interface2's lexer prelude *)
   ; page_begin graph_meta_title 
   ; pl (body_begin Chamois_back)
   ; pl interface_title
-  ; pl (h3_begin C3 ^ "Click on " ^ html_green check_sign 
-                    ^ " to select segment, click on " ^ html_red x_sign 
-                    ^ " to rule out segment" ^ h3_end)
-  ; pl (h3_begin C3 ^ mouse_action_help 
-                    ^ " on segment to get its lemma" ^ h3_end)
-  ; pl (h3_begin C3 ^ "In the list view, " ^ mouse_action_help 
-                    ^ " on numbered " ^ (html_green check_sign) 
-                    ^ " or button to redirect sentence to SCL Parser" ^ h3_end)
   ; open_page_with_margin 15
   }
 ;
@@ -270,7 +262,6 @@ value is_conflicting ((w,tr,ph,k) as segment) =
                    else does_conflict rest
        ]
   ]
-(* Remaining bug: "mahaabaho" where "ap" is blue despite "baho" *)
 ; 
 value rec find_conflict_seg acc l = fun 
   [ [] -> List.rev acc
@@ -321,7 +312,7 @@ value call_back_pseudo text mode cpts rcpts ph newpt =
                  ";rcpts=" ^ (string_points rcpts) in
        anchor_pseudo (invoke cgi) ph
 ;
-value un_analyzable (chunk:Word.word) = (Phases.Unknown,Word.mirror chunk)
+value un_analyzable (chunk : Word.word) = (Phases.Unknown,Word.mirror chunk)
 ;
 value rec print_first text mode cpts rcpts chunk_orig chunk chunk_ind = 
   match Word.length chunk with
@@ -722,7 +713,7 @@ value write_json_to_std_out solution_list selected_segments =
 ;
 value write_error_json input_str error_str = 
   let input = "\"input\": \"" ^ input_str ^ "\""
-  and error = "\"segmentation\": \"" ^ error_str ^ "\"" in 
+  and error = "\"segmentation\": [\"" ^ error_str ^ "\"]" in 
   print_string ("{" ^ input ^ ", " ^ error ^ "}")
 ;
 (* In Debug, segmented solutions are directly output to a local file *)
@@ -767,7 +758,7 @@ value display_best_list text deva_input roman_input checkpoints cpts wx_input
                              rcheckpoints ^ link_text) |> ps 
   ; td_wrap (call_full_graph text ^ "Summary of All Solutions") |> ps 
   ; tr_end |> pl   (* tr end *)
-  ; table_end |> pl
+  ; table_end |> pl (* Spacing20  *)
   ; ps div_end
   ; let numbered_sol_list = add_indices solution_list in 
     print_sols text numbered_sol_list font mode fmode 
@@ -836,7 +827,7 @@ value display_best_summary text deva_input roman_input checkpoints cpts wx_input
     ; call_scl_parser ()
     } else ()
   ; tr_end |> pl   (* tr end *)
-  ; table_end |> pl
+  ; table_end |> pl (* Spacing20  *)
   ; div_end |> ps (* Latin16 *)
   ; html_break |> pl
   ; div_begin Latin12 |> ps
@@ -987,7 +978,12 @@ value quit_button corpmode corpdir sentno =
 (* Failsafe Aborting for pipeline, debug, stemmer and default *)
 value abort_i lang s1 s2 input p d s = 
   if p (* pipeline *) || d (* debug *) || s (* stemmer *) then 
-    write_error_json input ("error: " ^ s1 ^ " - " ^ s2)
+    (* In some cases, the exception string has double-quotes ("")
+       For smooth processing of JSON string, it is replaced with
+       single quotation ('') here *)
+    let s1_mod = Str.global_replace (Str.regexp "\"") "'" s1 
+    and s2_mod = Str.global_replace (Str.regexp "\"") "'" s2 in 
+    write_error_json input ("error: " ^ s1_mod ^ " - " ^ s2_mod)
   else abort lang s1 s2
 ;
 (* Main body of sktgraph2 cgi *)
@@ -1070,7 +1066,7 @@ value graph_engine () =
   and rev_ind = int_of_string (get "rev_ind" env "-1") in 
   try let _ = 
     match (revised,rev_off,rev_ind) with
-    [ ("",-1,-1) -> (* Standard input processing *** Main call *** *)
+    [ ("",-1,-1) -> (* Standard input processing *** Main call *** *) 
       check_sentence translit uns text checkpoints input undo_enabled 
                      font mode rcheckpoints pipeline stemmer debug fmode 
     | (new_word,word_off,chunk_ind) (* User-aid revision mode *) -> 
@@ -1121,7 +1117,7 @@ value graph_engine () =
       else () 
     ; html_break |> pl
       (* Quit button: continue reading (reader mode) 
-                   or quit without saving (annotator mode) *)
+                or quit without saving (annotator mode) *)
     ; if sentence_no <> "" then
          quit_button corpus_permission
                      (decode_url corpus_dir) (decode_url sentence_no) |> pl

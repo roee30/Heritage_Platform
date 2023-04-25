@@ -393,8 +393,7 @@ value check_sentence translit uns text checkpoints input undo_enabled =
             }
          else do
        { td_wrap (call_reader text checkpoints "p" ^ "Filtered Solutions") |> ps
-       ; let info = string_of_int count ^ if full then "" else " Partial" in 
-         call_scl_parser ()
+       ; call_scl_parser ()
        } 
   ; tr_end |> pl   (* tr end *)
   ; table_end |> pl (* Spacing20  *)

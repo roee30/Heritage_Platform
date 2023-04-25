@@ -317,6 +317,8 @@ value lengthened = fun
   [ [] -> error_empty 2
   | [ v :: rest ] when vowel v -> final_vriddhi v rest 
   | [ c :: [ v :: rest ] ] when short_vowel v -> [ c :: final_vriddhi v rest ]
+  | [ c :: [ n :: [ v :: rest ] ] ] when short_vowel v && nasal n -> 
+    [ c :: [ n :: final_vriddhi v rest ] ] (* NEW 23-04-23 abhaantsiit *)
   | s -> s
   ]
 ;
@@ -4354,7 +4356,7 @@ value compute_aorist root =
   ; match root with (* 4. sigma aorist sic *)
     [ "aap" | "k.r#1" | "khan" | "gup" | "gh.r" | "ci" | "chid#1" | "ji"
     | "tud#1" | "t.rr" | "tyaj#1" | "dah#1" | "daa#1" | "d.rz#1" | "draa#2" 
-    | "dhaa#1" | "dhyaa" | "dhyai" | "dhv.r" | "nak.s" | "nii#1" | "pac" 
+    | "dhaa#1" | "dhyaa" | "dhyai" | "dhv.r" | "nak.s" | "nii#1" | "pac" | "bandh"
     | "bhid#1" | "m.r" (* Deshpande: am.rta [1] am.r.saataam [4] am.r.sata [4] *)
     | "yaj#1" | "yuj#1" | "ram" | "rudh#2" | "labh" | "v.r#2" | "vyadh" | "zru"
     | "sidh#1" | "s.rj#1" | "stu" | "sp.rz#1" | "svap" | "haa#1" | "hu" 
@@ -4362,11 +4364,11 @@ value compute_aorist root =
       { let stem = match root with
             [ "d.rz#1" | "s.rj#1" | "sp.rz#1" -> long_metathesis weak
             | ".r.s" | "ram" -> weak 
-            | _ -> long
+            | _ -> long (* bandh -> abhaantsiit Whitney§891 *) 
             ] in
         compute_ath_s_aorista stem root 
       ; match root with (* Whitney§890 *)
-            [ "khan" (* akhaan *)
+            [ "khan" (* akhaan *) 
             | "dah#1" (* adhaak *)
             (*i | "d.rz1" adraak wrong *adaar.t below TODO use [ar_ra] i*)
             | "yaj#1" (* ayaa.t *)

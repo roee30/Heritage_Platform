@@ -131,7 +131,7 @@ value dispatch w = fun (* w is the current input word *)
   [ Nouv | Nouc | Pron | Inde | Abso | Auxi | Auxiinv | Auxik | Kama | Ifcv
   | Ifcc | Indifc | Kriv | Kric | Absv | Absc | Avy | Lopak | Root | Lopa 
   | Cache -> initial
-(* privative prefixes are no more generative 
+(* privative prefixes are no more generative except absolutibes 
  [| A -> if phantomatic w then [] else
          [ Iicc; Nouc; Iikc; Kric; Pvkc; Iivc; Vocc; Vokc ]
   | An -> if phantomatic w then [] else
@@ -147,7 +147,7 @@ value dispatch w = fun (* w is the current input word *)
        @ cached
   | Pv -> if phantomatic w then [] else
           if amuitic w then [ Lopa ] else [ Root; Abso; Peri; Inftu ]
-  | Pvc | Pvv -> if phantomatic w then [] else [ Abso ]
+  | Pvc | Pvv -> if phantomatic w then [] else [ Abso ] (* for negative abso *)
   | Pvkc | Pvkv -> if phantomatic w then [] else
           if amuitic w then [ Lopak ] else [ Iikv; Iikc; Kriv; Kric; Vokv; Vokc ]
   | Iiv -> [ Auxi; Auxiinv ] (* as bhuu as and k.r finite, abs and inf  forms *)
@@ -159,7 +159,7 @@ value dispatch w = fun (* w is the current input word *)
       (* only chunk-final vocatives so no Iic overlap *) 
   | Inv -> [ Vocv; Vocc; Vokv; Vokc ] (* invocations before vocatives *) 
 (* Privative prefixes A and An are not allowed to prefix Ifc like a-dhii *)
-  | Noun | Iic | Iik | Voca | Krid | Vok
+  | Noun | Iic | Iik | Voca | Krid | Vok (* deprecated *)
   | Unknown -> failwith "Dispatcher anomaly"
   | ph -> failwith ("Dispatcher fake phase: " ^ string_of_phase ph) 
   ]
@@ -373,6 +373,7 @@ value valid_morpho gen =
 ;
 (* This inspects a multitag in order to filter out pv-inconsistent taggings. *)
 (* It is used by Interface and Lexer for Reader and Parser *)
+(* should be used below instead of exists *)
 value trim_tags gen form pv tags = List.fold_right trim tags []
       where trim (delta,morphs) acc = (* tags : Morphology.multitag *)  
         let stem = Word.patch delta form in (* root or kridanta *)
@@ -407,7 +408,8 @@ value rec chop word = fun
 value iic_phase = fun (* to unify with [Phases.ii_phase] *)
   [ Iicv | Iicc | Iikv | Iikc
   | Comp (_,Iikv) _ _ | Comp (_,Iikc) _ _ -> True
-  | _ -> False ]
+  | _ -> False
+  ]
 ;
 value apply_sandhi rleft right = fun
   [ Euphony (w,ru,v) -> 
@@ -617,7 +619,7 @@ value validate out = match out with
       and abso_form = Word.mirror rev_abso_form in
       match Deco.assoc abso_form morpho.absya with
       [ [] -> failwith ("Unknown abs_form: " ^ Canon.decode abso_form)
-      | tags -> let valid (delta,morphs) = 
+      | tags -> let valid (delta,_) = 
                    let root = Word.patch delta abso_form in
                    attested pv_str root in 
                 if List.exists valid tags then

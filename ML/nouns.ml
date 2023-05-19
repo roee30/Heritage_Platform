@@ -6144,6 +6144,7 @@ value gatis = (* G{saak.sat} Wh§1092 *)
    accha acchaa acchagatya acchodya Pan{1,4,69} Wh§1078 
    adas ada.hk.rtya Pan{1,4,70} 
    vinaa Wh§1078a 
+   g.rhya abs used as ifc cvi{grah} hastag.rhya kar.nag.rhya RV Wh§990h
    also ignored onomatopeae pa.tapa.taakaroti etc. .daac Pan{5,4,57-67} 
    also interjections like va.sa.t va.sa.tkaroti but va.sa.tkaara lexicalized *)
   ]

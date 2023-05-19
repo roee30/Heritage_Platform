@@ -4553,9 +4553,8 @@ value compute_injunctive root =
     | "uuh" | ".rc#1" | "k.rt#1" | "krand" | "kram" | "k.san"  | "khan"  | "car" 
     | "ce.s.t" | "jalp" | "jaag.r" | "t.rr" | "diip" | "pa.th" 
     | "puu#1" | "p.rc" | "baadh" | "budh#1" | "mad#1" | "mud#1" | "muurch" 
-    | "mlecch" | "yaac" | "ruc#1" | "lu~nc" | "luu#1" | "vad" | "vadh" | "vaz" 
-    | "vid#1" | "v.r#1" | "vyath" | "vraj" | "z.rr" | "sidh#2" | "skhal" | "stan"
-    | "stu" | "hi.ms" -> do
+    | "mlecch" | "yaac" | "raadh" | "ruc#1" | "lu~nc" | "luu#1" | "vad" | "vadh"     | "vaz" | "vid#1" | "v.r#1" | "vyath" | "vraj" | "z.rr" | "sidh#2" 
+    | "skhal" | "stan" | "stu" | "hi.ms" -> do
       { let stem = match weak with
             [ [ 7 (* .r *) :: _ ] -> 
               if root = "jaag.r" then strong (* jaagari.sam RF IC 2 p 88 *)
@@ -6207,8 +6206,10 @@ value compute_extra_rc () = (* vedic - \Pan{7,1,38} *)
   enter1 ".rc#1" (Absotvaa Primary (code "arcya")) (* abs -ya with no preverb *)
 and compute_extra_kan () = (* Lanmann "can" *)
   enter1 "kan" (Conju (aora 5) [ (Singular,[ (Third, code "acaniit") ]) ])
+and compute_extra_kri () = (* Atharva Veda *)
+  enter1 "k.r#1" (Conju (impera 2) [ (Singular,[ (Second, code "k.rdhi") ]) ])
 and compute_extra_khan () = (* WR MW *)
-  let root = "khan"
+  let root = "khan" 
   and conj = Primary 
   and pstem = revcode "khaa" (* khaa substituted optionally in ps *) in 
   compute_passive conj root pstem 
@@ -6341,6 +6342,7 @@ value compute_extra () = do
   (* Now for specific extra forms *)
   ; compute_extra_rc () 
   ; compute_extra_kan ()
+  ; compute_extra_kri () 
   ; compute_extra_khan ()
   ; compute_extra_car () 
   ; compute_extra_jnaa () 
@@ -6394,6 +6396,7 @@ value fake_compute_conjugs (gana : int) (root : string) = do
     ; match root with (* extra forms - to be completed from [compute_extra] *)
       [ ".rc#1"  -> compute_extra_rc ()
       | "kan"    -> compute_extra_kan ()
+      | "k.r#1"  -> compute_extra_kri () 
       | "k.sii"  -> record_part_ppp (revcode "k.sita") root
       | "khan"   -> compute_extra_khan ()
       | "car"    -> compute_extra_car ()

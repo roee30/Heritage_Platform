@@ -375,9 +375,9 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
   ; html_break |> pl
   ; html_latin16 "Sentence: " |> pl
   ; match font with
-    [ "roma" -> roma16_blue roman_input |> ps (* romanized *)
+    [ "roma" -> roma16_blue roma_input |> ps (* romanized *)
     | "deva" -> deva16_blue deva_input |> ps (* devanagari *)
-    | _ -> roma16_blue roman_input |> ps (* romanized by default*) 
+    | _ -> roma16_blue roma_input |> ps (* romanized by default*) 
     ]
   ; html_break |> ps
   ; div_begin Latin16 |> ps

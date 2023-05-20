@@ -482,7 +482,8 @@ value class_of = fun
     | Green_          -> "green"
     | Navy_           -> "navy"
     | Red_            -> "red"
-    | Roma16o         -> "red16"
+    | Roma16          -> "roma16"
+    | Roma16o         -> "roma16o"
     | Roma12o         -> "roma12o"
     | Magenta_        -> "magenta"
     | Header_deva     -> "header_deva"
@@ -492,7 +493,6 @@ value class_of = fun
     | Devared_        -> "devared"
     | Devac           -> "devac" 
     | Deva16          -> "deva16"
-    | Roma16          -> "roma16"
     | Deva16c         -> "deva16c"
     | Deva20c         -> "deva20c"
     | Alphabet        -> "alphabet"
@@ -582,12 +582,12 @@ and html_math          = span Math
 and html_latin12       = span Latin12
 and html_latin16       = span Latin16
 and roma16_red_sl      = span Roma16o
+and roma16_blue        = span Roma16
 and roma12_sl          = span Roma12o
 and span2_center       = span B2
 and span3_center       = span B3
 and deva12_blue_center = span_skt Devac
 and deva16_blue        = span_skt Deva16
-and roma16_blue        = span_skt Roma16
 and deva16_blue_center = span_skt Deva16c
 and deva20_blue_center = span_skt Deva20c
 ;

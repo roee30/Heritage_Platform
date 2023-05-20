@@ -261,15 +261,13 @@ and   x_sign     = "&#10008;"
 (* Fonts used for the Web site. *)
 (* "Times IndUni" is deprecated, now called "IndUni-T" (John Smith's fonts) *)
 value roman_fonts = [ "IndUni-T"; "Arial Unicode MS" ] (* "Times_CSX" *)
+   (* Used also for Sanskrit romanisation with diacritics *)
 and greek_fonts = [ "Arial Unicode MS"; "Symbol" ] (* "Latin Extended-B" Greek *)
-and diacr_fonts = [ "IndUni-T"; "Arial Unicode MS" ]
-   (* Sanskrit transliteration in romanised script with diacritics *)
 and deva_fonts = [ "IndUni-T"; "Arial Unicode MS" ] (* Devanagari fonts *)
 (* NB: "Devanagari MT" deprecated because wrong rendering of tacchrutvaa *)
 ; 
 value roman_font = Font_family roman_fonts
 and   greek_font = Font_family greek_fonts
-and   trans_font = Font_family diacr_fonts 
 and   deva_font  = Font_family deva_fonts
 ;
 value points  n = string_of_int n ^ "pt"
@@ -320,9 +318,9 @@ value enpied = "position: fixed; bottom: 0pt; width: 100%"
 type style_class = 
     [ Blue_ | Green_ | Navy_ | Red_ | Magenta_ | Hidden_
     | Header_deva | Header_tran | Bandeau | Body | Spacing20 | Pad60 | Border2
-    | Latin12 | Trans12 | Deva | Devac | Deva16 | Deva16c | Deva20c 
+    | Latin12 | Deva | Devac | Deva16 | Deva16c | Deva20c | Roma16
     | Roma16o | Roma12o | Inflection
-    | Alphabet | G2 | Title | Latin16 | Trans16 | Devared_ | Math | Enpied 
+    | Alphabet | G2 | Title | Latin16 | Devared_ | Math | Enpied 
     | B1 | B2 | B3 | C1 | C2 | C3 | Cell5 | Cell10 | Center_ | Tcenter | Centered
     | Gold_cent | Mauve_cent | Yellow_cent | Cyan_cent | Deep_sky_cent 
     | Yellow_back | Blue_back | Gris_back | Light_blue_back | Gold_back 
@@ -401,23 +399,23 @@ value styles = fun
     | Green_back      -> [ Bgcolor Green ]
     | Light_blue_back -> [ Bgcolor Light_blue ]
     | Lavender_back   -> [ Bgcolor Lavender ]
-    | Blue_        -> [ trans_font; Color Blue ] 
-    | Green_       -> [ trans_font; Color Green ]
-    | Navy_        -> [ trans_font; Color Navy ]
-    | Red_         -> [ trans_font; Color Red ]
-    | Roma16o      -> [ trans_font; Color Red; Font_size 16; Font_style Slanted ]
+    | Blue_        -> [ roman_font; Color Blue ] 
+    | Green_       -> [ roman_font; Color Green ]
+    | Navy_        -> [ roman_font; Color Navy ]
+    | Red_         -> [ roman_font; Color Red ]
+    | Roma16o      -> [ roman_font; Color Red; Font_size 16; Font_style Slanted ]
     | Devared_     -> [ deva_font; Color Red ]
-    | Magenta_     -> [ trans_font; Color Magenta ]
+    | Magenta_     -> [ roman_font; Color Magenta ]
     | Header_deva  -> [ deva_font; Color Red; Font_size 24; Textalign Left ]
-    | Header_tran  -> [ trans_font; Color Red; Font_size 24; Textalign Left ]
+    | Header_tran  -> [ roman_font; Color Red; Font_size 24; Textalign Left ]
     | Deva         -> [ deva_font; Color Maroon; Font_size 12 ] 
     | Devac        -> [ deva_font; Color Blue; Font_size 12; Textalign Center ]
     | Deva16       -> [ deva_font; Color Blue; Font_size 16 ] 
+    | Roma16       -> [ roman_font; Color Blue; Font_size 16 ] 
     | Deva16c      -> [ deva_font; Color Blue; Font_size 16; Textalign Center ]
     | Deva20c      -> [ deva_font; Color Blue; Font_size 20; Textalign Center ]
-    | Alphabet     -> [ trans_font; Font_size 24; Textalign Center ]
+    | Alphabet     -> [ roman_font; Font_size 24; Textalign Center ]
     | Title        -> [ roman_font; Color Blue; Font_size 24; Textalign Center ]
-    | Trans12      -> [ trans_font; Font_size 12 ]
     | B1           -> [ roman_font; Color Blue; Font_size 20 ]
     | B2           -> [ roman_font; Color Blue; Font_size 16 ]
     | B3           -> [ roman_font; Color Blue; Font_size 12 ]
@@ -428,10 +426,9 @@ value styles = fun
     | Center_      -> [ Textalign Center ]
     | Pad60        -> [ Textalign Center; Height 60; Full_width ]
     | Tcenter      -> [ Tablecenter ]
-    | Roma12o      -> [ trans_font; Color Black; Font_size 12; Font_style Slanted ]
+    | Roma12o      -> [ roman_font; Color Black; Font_size 12; Font_style Slanted ]
     | Latin12      -> [ roman_font; Color Black; Font_size 12 ]
     | Latin16      -> [ roman_font; Color Black; Font_size 16 ]
-    | Trans16      -> [ trans_font; Color Black; Font_size 16 ]
     | Math         -> [ greek_font; Color Black; Font_size 12 ]
     | Enpied       -> [ Position enpied ]
     | Bandeau      -> [ roman_font; Bgcolor Cyan; Border_sep; Border_sp 10 
@@ -495,11 +492,11 @@ value class_of = fun
     | Devared_        -> "devared"
     | Devac           -> "devac" 
     | Deva16          -> "deva16"
+    | Roma16          -> "roma16"
     | Deva16c         -> "deva16c"
     | Deva20c         -> "deva20c"
     | Alphabet        -> "alphabet"
     | Title           -> "title"
-    | Trans12         -> "trans12"
     | B1              -> "b1"
     | B2              -> "b2"
     | B3              -> "b3"
@@ -511,7 +508,6 @@ value class_of = fun
     | Tcenter         -> "center"
     | Spacing20       -> "spacing20"
     | Latin16         -> "latin16"
-    | Trans16         -> "trans16"
     | Math            -> "math"
     | Enpied          -> "enpied"
     | Bandeau         -> "bandeau"
@@ -583,8 +579,6 @@ and html_magenta       = span Magenta_
 and html_blue          = span Blue_
 and html_green         = span Green_
 and html_math          = span Math
-and html_trans12       = span Trans12
-and html_trans16       = span Trans16
 and html_latin12       = span Latin12
 and html_latin16       = span Latin16
 and roma16_red_sl      = span Roma16o
@@ -593,6 +587,7 @@ and span2_center       = span B2
 and span3_center       = span B3
 and deva12_blue_center = span_skt Devac
 and deva16_blue        = span_skt Deva16
+and roma16_blue        = span_skt Roma16
 and deva16_blue_center = span_skt Deva16c
 and deva20_blue_center = span_skt Deva20c
 ;

@@ -774,17 +774,9 @@ value display_best_summary text deva_input roman_input checkpoints cpts wx_input
   ; div_begin Latin16 |> ps
   ; html_latin16 "Sentence: " |> pl
   ; match font with
-    [ "roma" -> do 
-                { ps (span_begin Blue_) 
-                ; ps roman_input (* roman *)
-                ; ps span_end
-                }
+    [ "roma" -> roma16_blue roman_input |> ps (* romanized *)
     | "deva" -> deva16_blue deva_input |> ps (* devanagari *)
-    | _ -> do 
-           { ps (span_begin Blue_) 
-           ; ps roman_input (* roman for default *)
-           ; ps span_end
-           }
+    | _ -> roma16_blue roman_input |> ps (* romanized by default*) 
     ]
   ; html_break |> ps
   ; table_begin Spacing20 |> pl

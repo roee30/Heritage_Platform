@@ -357,7 +357,7 @@ value call_undo text cpts  =
   anchor Green_ (invoke cgi) check_sign
 ;
 (* The main procedure for computing the graph segmentation structure *)
-value check_sentence translit uns text checkpoints input undo_enabled =
+value check_sentence translit uns text checkpoints input undo_enabled font =
   let encode = Encode.switch_code translit in
   let chunker = if uns (* sandhi undone *) then Sanskrit.read_raw_sanskrit 
                 else (* chunking *) Sanskrit.read_sanskrit in
@@ -540,7 +540,7 @@ value graph_engine () = do
    try do 
    { match (revised,rev_off,rev_ind) with
      [ ("",-1,-1) -> (* Standard input processing *** Main call *** *) 
-       check_sentence translit uns text checkpoints input undo_enabled
+       check_sentence translit uns text checkpoints input undo_enabled font
      | (new_word,word_off,chunk_ind) (* User-aid revision mode *) -> 
        let chunks = Sanskrit.read_sanskrit (Encode.switch_code translit) input in
        let rec decoded init ind = fun
@@ -568,6 +568,7 @@ value graph_engine () = do
                                 url_enc_corpus_permission corpus_dir sentence_no
        and new_input = decode_url updated_input in
        check_sentence translit uns new_text revised_check new_input undo_enabled
+                      font
      ]
      (* Rest of the code concerns Corpus mode *)
      (* automatically refreshing the page only if guess parameter *)

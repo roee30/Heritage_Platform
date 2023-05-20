@@ -114,7 +114,7 @@ value sentence_links dir permission skt_font lex sentences =
     let display =
       match font with
       [ Deva -> deva16_blue
-      | Roma -> span Trans16
+      | Roma -> roma16_blue
       ] in 
     text
     |> anchor_ref (url |> escape)

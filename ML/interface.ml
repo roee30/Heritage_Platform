@@ -361,10 +361,12 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
   let encode = Encode.switch_code translit in
   let chunker = if uns (* sandhi undone *) then Sanskrit.read_raw_sanskrit 
                 else (* chunking *) Sanskrit.read_sanskrit in
-  let raw_chunks = Sanskrit.read_raw_sanskrit encode input in (* NEW *)
+  let raw_chunks = Sanskrit.read_raw_sanskrit encode input in 
   let chunks = chunker encode input in 
-  let deva_chunks = List.map Canon.unidevcode raw_chunks in (* NEW *)
+  let deva_chunks = List.map Canon.unidevcode raw_chunks 
+  and roma_chunks = List.map Canon.uniromcode raw_chunks in
   let deva_input = String.concat " " deva_chunks 
+  and roma_input = String.concat " " roma_chunks 
   and cpts = sort_check checkpoints in 
   let _ = chkpts.all_checks := cpts
   and (full,count) = segment_iter chunks in do (* full iff all chunks segment *)
@@ -372,7 +374,11 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
   ; find_conflict 0
   ; html_break |> pl
   ; html_latin16 "Sentence: " |> pl
-  ; deva16_blue deva_input |> ps (* devanagari *)
+  ; match font with
+    [ "roma" -> roma16_blue roman_input |> ps (* romanized *)
+    | "deva" -> deva16_blue deva_input |> ps (* devanagari *)
+    | _ -> roma16_blue roman_input |> ps (* romanized by default*) 
+    ]
   ; html_break |> ps
   ; div_begin Latin16 |> ps
   ; table_begin Spacing20 |> pl

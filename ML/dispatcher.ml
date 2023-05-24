@@ -131,14 +131,14 @@ value dispatch w = fun (* w is the current input word *)
   [ Nouv | Nouc | Pron | Inde | Abso | Auxi | Auxiinv | Auxik | Kama | Ifcv
   | Ifcc | Indifc | Kriv | Kric | Absv | Absc | Avy | Lopak | Root | Lopa 
   | Cache -> initial
-(* privative prefixes are no more generative except absolutibes 
+(* privative prefixes are no more generative except absolutives 
  [| A -> if phantomatic w then [] else
          [ Iicc; Nouc; Iikc; Kric; Pvkc; Iivc; Vocc; Vokc ]
   | An -> if phantomatic w then [] else
           [ Iicv; Nouv; Iikv; Kriv; Pvkv; Iivv; Vocv; Vokv
           ; A (* eg anak.sara anavadya *) ; An (* attested ? *) ]] *)
-  | Ai -> [ Absc; Pvc ] (* negations of absolutives *)
-  | Ani -> [ Absv; Pvv ](* id *)
+  | Ai -> [ Absc; Pvc ] (* negations of absolutives - eg ak.rtya apraapya *)
+  | Ani -> [ Absv; Pvv ](* id eg anaaruhya *)
     (* This assumes that privative prefixes cannot prefix Ifc forms 
        justified by \Pan{2,2,6} a-x only if x is a subanta. *)
   | Iicv | Iicc | Iikv | Iikc | Iiif | Auxiick | Cachei -> (* Compounding *)

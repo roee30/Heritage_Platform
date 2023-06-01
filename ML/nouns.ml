@@ -6108,7 +6108,7 @@ value gatis = (* G{saak.sat} Wh§1092 *)
   ; "zraddhaa" (* praajaryaa praajaruhaa viijaryaa viijaruhaa sa.msaryaa *)
   ; "arthe"
   ; "lava.nam"
-  ; "u.s.nam" 
+  ; "u.s.nam" (* u.s.na.mk.rtya Pan{1,4,74} *)
   ; "ziitam"
   ; "udakam"
   ; "aardram" 

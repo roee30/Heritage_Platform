@@ -2971,9 +2971,9 @@ value admits_passive = fun
   [ (* We filter out roots with no attested passive forms *)
     "an#2" | "av" | "as#1" | "ah" | "iiz#1" | "uc" | "kan" | "kam" | "kuu"
   | "k.r#2" | "knuu" | "k.sar" | "k.si" | "kha.n.d" | "glaa" | "ghas"| "chur"
-  | "ta.d" | "daa#2" | "dyut#1" | "dru#1" | "pat#2" | "paz" | "paa#2" | "pii" 
-  | "pyaa" | "praa#1" | "bruu" | "ruc#1" | "vas#4" | "vidh#1" | "vip" | "vyac"
-  | "zam#1" | "zi~nj" | "z.rdh" | "zrambh" | "zvit#1"
+  | "ta.d" | "daa#2" | "dyut#1" | "dru#1" | "pat#2" | "paz" | "paa#2" 
+  | "pii" | "pyaa" | "praa#1" | "bruu" | "ruc#1" | "vas#4" | "vidh#1" | "vip"
+  | "vyac" | "zam#1" | "zi~nj" | "z.rdh" | "zrambh" | "zvit#1"
   | "sap#1" | "siiv" | "spaz#1" | "spardh" | "h.r#2" | "hrii#1" 
   | "ma.mh" (* supplied by "mah" *) (* | "arh" | "k.lp" no ps but pfp *)
       -> False
@@ -5183,7 +5183,10 @@ value record_pppca cpstem cstem root =
             -> cstem  (* retains ay: -gamayya to distinguish from -gamya *)
         | _ -> cpstem (* eg -vaadya -vezya -k.saalya *)
         ] 
-    and abs_stem_tvaa = cstem (* retains ay: gamayitvaa *) in
+    and abs_stem_tvaa = match root with 
+        [ "smi" -> cpstem (* smaayitvaa not smaayayitvaa ? *)
+        | _ -> cstem (* retains ay: gamayitvaa *) 
+        ] in
     record_absolutive Causative abs_stem_tvaa abs_stem_ya True root 
        (* cp-ita -> cp-ayitvaa, -cp-ayya ou -cp-ya *)
   }
@@ -6038,7 +6041,7 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
            (* We lose some information, but generate both active and middle *)
          | _ -> failwith ("Weird causative " ^ Canon.decode third)
          ] in
-     let cpstem = match cstem with
+     let cpstem = match cstem with (* tentative, should be checked *)
          [ [ 42 :: [ 1 :: st ] ] (* -ay *) -> match root with
             [ "dhvan" -> revcode "dhvaan"
             | _ -> st 
@@ -6048,7 +6051,6 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
          (* Why no ca in -aayati while such forms exist for ga.na 10 and 11 ?  *)
          | _ -> failwith ("Anomalous causative " ^ Canon.decode third)
          ] in
-     let icstem = [ 3 :: cstem ] (* -ayi *) in
      let compute_causative stem = do (* both active and middle are generated *)
          { compute_causativea stem root (if active then third else [])
          ; compute_causativem stem root (if active then [] else third)
@@ -6072,7 +6074,11 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
        (* Passive past participle and absolutives *)
      ; record_pppca cpstem cstem root
        (* Periphrastic future, Infinitive, Gerundive/pfp in -tavya *)
-     ; perif Causative icstem root 
+     ; let icstem = [ 3 :: stem ] where stem = 
+          match root with [ "smi" -> cpstem (* -i Z tentative *) 
+                          | _ -> cstem (* -ayi *) 
+                          ] in
+       perif Causative icstem root 
        (* Periphrastic perfect Whitney§1045 *)
      ; build_perpft Causative cstem root (* gamayaa.mcakaara *)
      } 
@@ -6238,6 +6244,12 @@ and compute_extra_trr () = do
              ; (Dual,[ (First, code "teriva") ])
              ])
       }
+and compute_extra_dri () = do 
+  { compute_passive_raw "d.r#1" (* aadriyate *)
+  ; record_pfp "d.r#1" (revcode "d.r")
+  ; record_abso_ya (code "d.rtya") "d.r#1" (* aad.rtya *)
+  ; record_part_ppp (revstem "d.rta") "d.r#1"  (* aad.rta *)
+  }
 and compute_extra_dham () = let stem = revcode "dhmaa" in do
     { compute_future_gen stem "dham" (* Bucknell Pan{7,3,78} *)
     ; compute_passive Primary "dham" (revstem "dham") (* WR *)
@@ -6305,6 +6317,10 @@ and compute_extra_skand () = do (* WR *)
   { enter1 "skand" (Invar (Primary,Infi) (code "skanditum")) 
   ; record_abso_ya (code "skadya") "skand"
   }
+and compute_extra_smi () = do (* WR *)
+  { record_abso_tvaa (code "smayitvaa") "smi" 
+  ; record_abso_ya (code "smayitya") "smi" (* ? *)
+  }
 and compute_extra_syand () = do (* WR *)
   { record_abso_tvaa (code "syattvaa") "syand" 
   ; record_abso_ya (code "syadya") "syand" 
@@ -6327,7 +6343,6 @@ value record_extra_participles () = do
   ; record_part_ppp (revstem "diipita") "diip" 
   ; record_part_ppp (revstem "cintaaratnaayita") "cintaaratna"
   ; record_part (Ppra_ 1 Intensive (revstem "jaajam") (revstem "jaajamat") "jam")
-  ; record_pfp "d.r#1" (revcode "d.r")
   ; record_part (Pprm_ 1 Primary (revcode "gacchamaana") "gam")
   ; record_part (Pprm_ 4 Primary (revcode "kaayamaana") "kan")
   ; record_part (Ppra_ 1 Primary (revstem ".dam") (revstem ".damat") ".dam")
@@ -6338,15 +6353,15 @@ value record_extra_participles () = do
 (* For verbs without present forms and variants, *)
 (* called by [Make_roots.roots_to_conjugs] at generation time *)
 value compute_extra () = do
-  { compute_passive_raw "d.r#1"
-  (* Now for specific extra forms *)
-  ; compute_extra_rc () 
+  { (* Extra forms for specific roots *)
+    compute_extra_rc () 
   ; compute_extra_kan ()
   ; compute_extra_kri () 
   ; compute_extra_khan ()
   ; compute_extra_car () 
   ; compute_extra_jnaa () 
   ; compute_extra_trr () 
+  ; compute_extra_dri () 
   ; compute_extra_dham () 
   ; compute_extra_dhaa () 
   ; compute_extra_nind () 
@@ -6364,6 +6379,7 @@ value compute_extra () = do
   ; compute_extra_sad ()
   ; compute_extra_suu ()
   ; compute_extra_skand () 
+  ; compute_extra_smi ()
   ; compute_extra_syand ()
   ; compute_extra_hims ()
   ; compute_extra_huu ()
@@ -6402,6 +6418,7 @@ value fake_compute_conjugs (gana : int) (root : string) = do
       | "car"    -> compute_extra_car ()
       | "j~naa#1"-> compute_extra_jnaa () 
       | "t.rr"   -> compute_extra_trr () 
+      | "d.r#1"  -> compute_extra_dri () 
       | "dham"   -> compute_extra_dham () 
       | "dhmaa"  -> compute_extra_dhmaa () 
       | "dhaa#1" -> compute_extra_dhaa () 
@@ -6420,6 +6437,7 @@ value fake_compute_conjugs (gana : int) (root : string) = do
       | "sa~nj"  -> compute_extra_sanj () 
       | "sad#1"  -> compute_extra_sad ()
       | "suu#1"  -> compute_extra_suu ()
+      | "smi"    -> compute_extra_smi ()
       | "syand"  -> compute_extra_syand ()
       | "hi.ms"  -> compute_extra_hims ()
       | "huu"    -> compute_extra_huu ()

@@ -24,6 +24,7 @@ module Morpho_analysis
   (Phases: sig  
     type phase;
     value generative : phase -> bool;
+    value ii_component: phase -> bool;
   end)
   (Lemmas: sig
     type tag_sort =
@@ -149,11 +150,12 @@ value morph_string word all_morph_list =
 ;
 
 (* Generates a json string of all morphological analyses in a sequence *)
-value get_morph_json_string derived_stem base_morph base morph_list = 
+value get_morph_json_string word derived_stem base_morph base morph_list = 
   let get_ms x = "\"" ^ x ^ "\"" in 
   let morphs_lst = List.map get_ms morph_list in 
   let morphs_lst_str = "[" ^ (String.concat ", " morphs_lst) ^ "]" in 
-  "{\"derived_stem\": \"" ^ derived_stem ^ "\"" ^ 
+  "{\"word\": \"" ^ word ^ "\"" ^ 
+  ",\"derived_stem\": \"" ^ derived_stem ^ "\"" ^ 
   ",\"base\": \"" ^ base ^ "\"" ^ 
   ",\"derivational_morph\": \"" ^ base_morph ^ "\"" ^ 
   ",\"inflectional_morphs\": " ^ morphs_lst_str ^ "}"
@@ -161,10 +163,14 @@ value get_morph_json_string derived_stem base_morph base morph_list =
 
 (* Get all the morphological analyses of the given phase and word *)
 value best_segments acc (phase,rword) =
+  let decode_word = Canon.decode_WX (Morpho_html.visargify rword) in
+  let form = 
+    if (ii_component phase) then (decode_word ^ "-")
+    else (decode_word) in 
   let word = Word.mirror rword in 
   let morph_list = morph_analysis_list phase word in 
   let morph_lst = 
-    List.map (fun (a,b,c,d) -> get_morph_json_string a b c d) morph_list in 
+    List.map (fun (a,b,c,d) -> get_morph_json_string form a b c d) morph_list in 
   acc @ morph_lst
 ;
 

@@ -106,7 +106,7 @@ SCRIPTS=JAVASCRIPT/utf82VH.js JAVASCRIPT/dragtable.js JAVASCRIPT/util.js
 #Frequency files
 FREQS=$(DATA)/comp_freq.rem $(DATA)/pada_freq.rem $(DATA)/word_freq.rem \
 $(DATA)/comp_trans_freq.rem $(DATA)/pada_trans_freq.rem \
-$(DATA)/comp_morphs_freq_deco.rem $(DATA)/pada_morphs_freq_deco.rem
+$(DATA)/comp_morph_freq.rem $(DATA)/pada_morph_freq.rem
 
 # Next are copyright specific images
 SITE_IMAGES=IMAGES/yinyang.gif IMAGES/panini.jpg IMAGES/spin-new.gif \
@@ -482,9 +482,9 @@ transducers:
 word_freq:
 #	ML/make_word_freq
 	cd ML && $(MAKE) make_word_freq
-	ML/make_word_freq $(DATA)/comp_freq.txt > $(DATA)/comp_freq_max.rem
-	ML/make_word_freq $(DATA)/pada_freq.txt > $(DATA)/pada_freq_max.rem
-	ML/make_word_freq $(DATA)/word_freq.txt > $(DATA)/word_freq_max.rem
+	ML/make_word_freq $(DATA)/comp_freq.tsv > $(DATA)/comp_freq_max.rem
+	ML/make_word_freq $(DATA)/pada_freq.tsv > $(DATA)/pada_freq_max.rem
+	ML/make_word_freq $(DATA)/word_freq.tsv > $(DATA)/word_freq_max.rem
 	$(ZEN)/dagify < $(DATA)/comp_freq_max.rem > $(DATA)/comp_freq.rem
 	$(ZEN)/dagify < $(DATA)/pada_freq_max.rem > $(DATA)/pada_freq.rem
 	$(ZEN)/dagify < $(DATA)/word_freq_max.rem > $(DATA)/word_freq.rem
@@ -495,16 +495,16 @@ word_freq:
 trans_freq:
 #	ML/make_trans_freq
 	cd ML && $(MAKE) make_trans_freq
-	ML/make_trans_freq $(DATA)/comp_trans_freq.txt $(DATA)/comp_trans_freq.rem
-	ML/make_trans_freq $(DATA)/pada_trans_freq.txt $(DATA)/pada_trans_freq.rem
+	ML/make_trans_freq $(DATA)/comp_trans_freq.tsv $(DATA)/comp_trans_freq.rem
+	ML/make_trans_freq $(DATA)/pada_trans_freq.tsv $(DATA)/pada_trans_freq.rem
 
 morph_freq:
 #	ML/make_morph_freq
 	cd ML && $(MAKE) make_morph_freq
-	ML/make_morph_freq $(DATA)/comp_morphs_freq.tsv > $(DATA)/comp_freq_max.rem
-	ML/make_morph_freq $(DATA)/pada_morphs_freq.tsv > $(DATA)/pada_freq_max.rem
-	$(ZEN)/dagify < $(DATA)/comp_freq_max.rem > $(DATA)/comp_morphs_freq_deco.rem
-	$(ZEN)/dagify < $(DATA)/pada_freq_max.rem > $(DATA)/pada_morphs_freq_deco.rem
+	ML/make_morph_freq $(DATA)/comp_morph_freq.tsv > $(DATA)/comp_freq_max.rem
+	ML/make_morph_freq $(DATA)/pada_morph_freq.tsv > $(DATA)/pada_freq_max.rem
+	$(ZEN)/dagify < $(DATA)/comp_freq_max.rem > $(DATA)/comp_morph_freq.rem
+	$(ZEN)/dagify < $(DATA)/pada_freq_max.rem > $(DATA)/pada_morph_freq.rem
 	rm $(DATA)/comp_freq_max.rem
 	rm $(DATA)/pada_freq_max.rem
 

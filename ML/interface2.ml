@@ -703,12 +703,14 @@ value handle_scl_calls solution_list selected_segments input mode =
 
 (* In Stemmer, segmented form and all its possible morph analyses' 
    are directly fed to standard output *)
-value write_json_to_std_out solution_list selected_segments = 
+value write_json_to_std_out solution_list input selected_segments = 
   let final_segments = List.map snd selected_segments
   and sols_str = get_solutions_str solution_list False in 
-  let word = "\"word\": " ^ sols_str in 
+  let input_str = "\"input\": " ^ "\"" ^ input ^ "\"" in 
+  let word = "\"segmentation\": " ^ sols_str in 
   let morph = "\"morph\": " ^ (get_all_morphs_str final_segments) in 
-  let json_string_output = "{" ^ word ^ ", " ^ morph ^ "}" in 
+  let json_string_output = 
+    "{" ^ input_str ^ ", " ^ word ^ ", " ^ morph ^ "}" in 
   print_string json_string_output
 ;
 value write_error_json input_str error_str = 
@@ -872,7 +874,12 @@ value check_sentence translit uns text checkpoints input undo_enabled
     | Best_Summary | Best_List -> (default_max_best_solutions, Best_List)
     | _ -> (default_max_best_solutions, mode)
     ] in 
-  let _ = max_best_solutions.val := max_solutions in 
+  let (max_sols, collapse) = match fmode with 
+  [ "w" | "x" -> (max_solutions, False)
+  | "t" | "s" | "m" | "x" | "n" -> (((max_solutions * 2)), True)
+  | _ -> (max_solutions, False)
+  ] in 
+  let _ = max_best_solutions.val := max_sols in 
   let (full,count,solution_list) = 
       best_mode_operations rcpts chunks in (* full iff all chunks segment *) 
   let rebuild = (((List.length rcheckpoints) = 0) && 
@@ -895,10 +902,10 @@ value check_sentence translit uns text checkpoints input undo_enabled
      By default, these three are disabled to access the usual display of 
      best segments' summary or best solutions' list*)
   if pipeline then handle_scl_calls solution_list selected_segments wx_input mode
-  else if stemmer then write_json_to_std_out solution_list selected_segments 
+  else if stemmer then write_json_to_std_out solution_list wx_input selected_segments 
   (* else if debug then write_solutions_to_file input mode solution_list *)
   (* Instead of saving it in local file, the results are now sent as JSON *)
-  else if debug then write_sol_lst_json_for_debug solution_list wx_input False
+  else if debug then write_sol_lst_json_for_debug solution_list wx_input collapse
   else
   match mode with 
   [ Best_List | First_List -> 

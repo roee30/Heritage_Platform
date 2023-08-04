@@ -6210,8 +6210,10 @@ value compute_conjugs root_word (infos : Conj_infos.root_infos) =
 (* Supplementary forms *)
 value compute_extra_rc () = (* vedic - \Pan{7,1,38} *)
   enter1 ".rc#1" (Absotvaa Primary (code "arcya")) (* abs -ya with no preverb *)
-and compute_extra_kan () = (* Lanmann "can" *)
-  enter1 "kan" (Conju (aora 5) [ (Singular,[ (Third, code "acaniit") ]) ])
+and compute_extra_kan () = do (* Lanmann "can" *)
+  { enter1 "kan" (Conju (aora 5) [ (Singular,[ (Third, code "acaniit") ]) ])
+  ; record_part (Pprm_ 4 Primary (revcode "kaayamaan") "kan") 
+  }
 and compute_extra_kri () = (* Atharva Veda *)
   enter1 "k.r#1" (Conju (impera 2) [ (Singular,[ (Second, code "k.rdhi") ]) ])
 and compute_extra_khan () = (* WR MW *)
@@ -6342,19 +6344,15 @@ value record_extra_participles () = do
   ; record_part_ppp (revstem "k.sita") "k.sii" 
   ; record_part_ppp (revstem "diipita") "diip" 
   ; record_part_ppp (revstem "cintaaratnaayita") "cintaaratna"
-  ; record_part (Ppra_ 1 Intensive (revstem "jaajam") (revstem "jaajamat") "jam")
-  ; record_part (Pprm_ 1 Primary (revcode "gacchamaana") "gam")
-  ; record_part (Pprm_ 4 Primary (revcode "kaayamaana") "kan")
   ; record_part (Ppra_ 1 Primary (revstem ".dam") (revstem ".damat") ".dam")
+  ; record_part (Ppra_ 1 Intensive (revstem "jaajam") (revstem "jaajamat") "jam")
+  ; record_part (Pprm_ 1 Intensive (revstem "cekitaan") "cit#1")
   }
-(* Para part of Atma root - now treated as specific entry 
-   zinjat = [Ppra_ 2 Primary (revstem "zi~nj") (revstem "zi~njat") "zi~nj"] *)
 ;
 (* For verbs without present forms and variants, *)
 (* called by [Make_roots.roots_to_conjugs] at generation time *)
-value compute_extra () = do
-  { (* Extra forms for specific roots *)
-    compute_extra_rc () 
+value compute_extra () = do (* Extra forms for specific roots *)
+  { compute_extra_rc () 
   ; compute_extra_kan ()
   ; compute_extra_kri () 
   ; compute_extra_khan ()

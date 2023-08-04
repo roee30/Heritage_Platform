@@ -636,6 +636,8 @@ value validate out = match out with
   | [ (phase,_,_) :: [ (pv,_,_) :: _ ] ] when preverb_phase pv -> 
       let m = "validate: " ^ string_of_phase pv ^ " " ^ string_of_phase phase in 
       raise (Control.Anomaly m) (* all preverbs ought to have been processed *)
+    (* The following is a first try at filtering out illegal contiguity *)
+  | [ (Inde,[1 ; 36],_) :: [ (Inde,[1 ; 36],_) :: r ] ] -> [] (* no na-na *)
   | [ ((_,rform,_) as last) :: next ] -> let form = Word.mirror rform in
                                          prune_sa out form last next 
   ]

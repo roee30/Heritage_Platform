@@ -4040,31 +4040,32 @@ value build_archaic_yuj stem (* yu~nj remnant nasal Kale§97 *) g entry =
 ;
 (* Root words opt. substitutes in weak cases \Pan{6,1,63} Whitney§397 *)
 value build_root_weak g stem entry = 
-  let decline case suff = (case,fix stem suff) 
+  let declinev case suff = (case,fix stem suff) 
+  and declinec case suff = (case,fix (finalize stem) suff) (* ni.dbhyas *)
   and bare = mirror (finalize stem) in 
   enter entry (* strong stem entry paada danta etc. *)
    [ Declined Noun g
    [ (Singular,
-        [ decline Ins "aa"
-        ; decline Dat "e"
-        ; decline Abl "as"
-        ; decline Gen "as"
-        ; decline Loc "i"
+        [ declinev Ins "aa"
+        ; declinev Dat "e"
+        ; declinev Abl "as"
+        ; declinev Gen "as"
+        ; declinev Loc "i"
         ])
    ; (Dual, 
-        [ decline Ins "bhyaam"
-        ; decline Dat "bhyaam"
-        ; decline Abl "bhyaam"
-        ; decline Gen "os"
-        ; decline Loc "os"
+        [ declinec Ins "bhyaam"
+        ; declinec Dat "bhyaam"
+        ; declinec Abl "bhyaam"
+        ; declinev Gen "os"
+        ; declinev Loc "os"
         ])
    ; (Plural, 
-        [ decline Acc "as"
-        ; decline Ins "bhis"
-        ; decline Dat "bhyas"
-        ; decline Abl "bhyas"
-        ; decline Gen "aam"
-        ; decline Loc "su"
+        [ declinev Acc "as"
+        ; declinec Ins "bhis"
+        ; declinec Dat "bhyas"
+        ; declinec Abl "bhyas"
+        ; declinev Gen "aam"
+        ; declinec Loc "su"
         ])
    ] 
    ; Bare Noun bare

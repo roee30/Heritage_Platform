@@ -5219,6 +5219,7 @@ value compute_nouns_stem_form e stem d p =
                  [ [] -> () (* ac utilisé seulement avec px *)
                  | [ 42 :: r3 ] (* yac *) -> build_mas_yac r3 e
                  | [ 45 :: r3 ] (* vac *) -> build_mas_vac r3 e
+                 | [ 37 :: r3 ] (* pac *) -> build_root Mas stem e
                  |  _ (* udac ... *) -> build_mas_ac r2 e 
                  ]
             | [ 2 :: r2 ] (* -aac *) -> match r2 with
@@ -5440,6 +5441,7 @@ value compute_nouns_stem_form e stem d p =
                  [ [] -> () (* ac utilisé seulement avec px *)
                  | [ 42 :: r3 ] -> build_neu_yac r3 e
                  | [ 45 :: r3 ] -> build_neu_vac r3 e
+                 | [ 37 :: r3 ] (* pac *) -> build_root Neu stem e
                  |  _ (* udac ... *) -> build_neu_ac r2 e 
                  ]
             | [ 2 :: _ ] (* -aac *) -> build_neu_aac r1 e

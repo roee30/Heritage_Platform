@@ -467,7 +467,7 @@ value passive_stem root rstem = (* Panini yak (k : no guna, samprasaara.na) *)
             ]
         | 8 (* .rr *) -> match rst with
             [ [ d :: _ ] -> 
-              if labial d then [ 43 :: [ 6 :: rst ] ] (* puuryate *)
+              if labial d then [ 43 :: [ 6 :: rst ] ] (* puuryate \Pan{7,1,102}*)
                           else [ 43 :: [ 4 :: rst ] ] (* kiiryate ziiryate *)
             | _ -> error_empty 4
             ] 
@@ -536,6 +536,7 @@ value redup3 root rstem =
                    [ [ 2 :: rest ] -> rest (* drop final aa *)
                    | _ -> failwith "Anomaly Verbs"
                    ]
+                | "p.rr" -> revstem "puur"(* \Pan{7,1,102} [labial].rr -> ur *)
                 | _ -> rstem 
                 ] in 
       (strong rstem,wstem)
@@ -546,7 +547,7 @@ value redup3 root rstem =
     ]
 ;
 
-(* Dhatupatha it markers (from AK's listing) *)
+(* Dhatupatha it markers (from AK's listing) Renou: exposant d'une racine *)
 (* NB Use of these markers should progressively replace lists of exceptions *)
 value aa_it = fun
   [ (* "muurch" | WRONG ? *) 
@@ -581,7 +582,7 @@ and ii_it = fun
       -> True
   | _ -> False
   ]
-and u_it = fun (* Pan{7,2,56} governs vet nature for -tvaa *)
+and u_it = fun (* \Pan{7,2,56} -i- optional before -tvaa vet *)
   [ "sidh#2" | "a~nc" | "va~nc" | "zrambh" | "stubh" | "kam" | "cam" | "jam"
   | "kram" | ".s.thiiv" | "dhaav#1" | "gras" | "mi.s" | "p.r.s" | "v.r.s" 
   | "gh.r.s" | "zas" | "za.ms" | "sra.ms" | "dhva.ms" | "v.rt" | "v.rdh#1" 
@@ -2687,7 +2688,7 @@ value compute_ppp_stems root rstem =
       | [ 8 :: r ] (* .rr -> r+vow *) -> 
         let vow = 
           match root with
-          [ "p.rr" -> 6 (* uu *) 
+          [ "p.rr" -> 6 (* uu *) (* \Pan{7,1,102} [labial].rr -> ur *) 
           | _ -> 4 (* ii *) 
               (* "k.rr" | "g.rr#1" | "j.rr" | "t.rr" | "d.rr" | "st.rr" *)
           ] in
@@ -2763,7 +2764,7 @@ value compute_ppp_stems root rstem =
            | "bhram"  -> revcode "bhraan" 
            | "vam"    -> revcode "vaan"
            | "zram"   -> revcode "zraan" 
-           | "zam#1" | "zam#2" -> revcode "zaan"
+           | "zam#1" | "zam#2" -> revcode "zaan" (* a -> aa \Pan{6,4,15} *)
            | "dhvan"   -> revcode "dhvaan" (* id. for final n *) (* Wh§955a *)
            | "daa#2"   -> revcode "di" (* aa -> i \Pan{7,4,40} *)
            | "maa#1"   -> revcode "mi"
@@ -4716,7 +4717,7 @@ value perif conj perstem root = do
              [ "g.rr#1" -> revcode "giri" (* giritum, not gariitum *) 
              | "jak.s"  -> revcode "jagh" (* jagdhum \Pan{2,4,36} *)
              | "dabh"   -> revcode "dabh" (* dabhdum WR *)
-             | "p.rr"   -> revcode "puuri" (* puuritum *)
+             | "p.rr"   -> revcode "puuri" (* puuritum \Pan{7,1,102} *)
              | "sva~nj" -> revcode "svaj" (* svaktum *)
              | "sa~nj"  -> revcode "saj" (* saktum *)
              | "s.rp"   -> revcode "sarpi" (* sarpitum *)
@@ -5131,7 +5132,7 @@ value record_abso_am root =
   | "pi.s"    -> record "pe.sam" (* \Pan{3,4,35+38+55} *)
   | "pii.d"   -> record "pii.dam" (* \Pan{3,4,49} avec upa *)
   | "pu.s#1"  -> record "po.sam" (* \Pan{3,4,40} *)
-  | "p.rr"    -> record "puuram" (* \Pan{3,4,31+44} *)
+  | "p.rr"    -> record "puuram" (* \Pan{3,4,31+44} \Pan{7,1,102} *)
   | "praz"    -> record "p.rccham"
   | "bandh"   -> record "bandham" (* \Pan{3,4,41} *)
   | "bhuj#1"  -> record "bhojam"

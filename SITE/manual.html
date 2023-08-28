@@ -50,7 +50,7 @@ published recently as
 <a href="http://jlm.ipipan.waw.pl/index.php/JLM/article/view/108/140">Design and
 analysis of a lean interface for Sanskrit corpus annotation</a>.
 <p>
-Written on September 8th 2022, for Sanskrit Engine Version 3.40.
+Written on August 25th 2023, for Sanskrit Engine Version 3.49.
 
 <h2 class="b2" id="tour">First approach to using the Sanskrit Heritage engine</h2>
 
@@ -75,21 +75,47 @@ at you or storing your connection data in cookies.
 
 The page has a green bar at the bottom, which is the navigation control panel.
 Just click on the Reader link and you reach the Sanskrit Reader Companion page.
-You may now enter a Sanskrit sentence candidate in the input window.
-You may choose for this purpose a variety of input conventions
-in the corresponding menu.
-Let us assume you choose Velthuis transliteration proposed as default,
-and input
-"praaptavyam artha.m labhate manu.syo devo'pi ta.m lafghayitu.m na zakta.h".
-After you press the Read button, you will see your input displayed in
-devanāgarī script, followed by a graphical display with colored
-rectangles labeled by word forms. Notice how <i>manu.syo</i> (resp. <i>devo</i>)
-became <i>manuṣyaḥ</i> (resp. <i>devaḥ</i>) 
-by sandhi analysis. Similarly <i>lafghayitu.m</i> became <i>laṅghayitum</i>.
+This page gives you access to a Sanskrit analyser, that will attempt to
+interpret a Sanskrit input sentence as a list of Sanskrit words,
+themselves informed with their morphology.
+
+Our Sanskrit Reader has many parameters, that may be set in this interface page.
+First is a toggle "Lexicon access", which is set by default to "Heritage"
+if you access the site at URL sanskrit.inria.fr, and at "Monier-Wiliams"
+if you access it at sanskrit.inria.fr/index.en.html.
+For the sake of the example, let us assume the toggle is set to Heritage.
+
+Next there a toggle Text, set to Sentence, and Format, set to Sandhied.
+Now you have choice of the font used by the tool to display Sanskrit text.
+It is set by default to phonemic romanization in the "IAST" standard,
+but may be set to "Devanagari".
+
+Below the Input line are more toggles. An important one is the Input
+convention. It proposes a choice of input text formats. The first four
+choices are ASCII phonemic encodings, and are meant for users who want to
+type-in the sentence from their keyboard. Velthuis and KH (Kyoto-Harvard)
+are two antique and incomplete encodings, WX from University of Hyderabad
+and SLP1 from the Sanskrit Library are correct, but hard-reading.
+The serious alternatives are IAST and Devanagari in UTF-8 encodings
+like you will find on the Web. Let us select IAST. 
+
+The next toggle, "Optional topic", should be ignored.
+Last is a toggle "Mode" that gives various modes of use of the Reader tool.
+In this first experiment, let us set Mode to "All".
+Now we are ready. Select as input 
+"prāptavyam arthaṃ labhate manuṣyo devo'pi taṃ laṅghayituṃ na śaktaḥ",
+for instance by copying it from this manual with your mouse,
+and pasting it into the input zone. Now press the button "Read".
+
+You now see the result of segmentation of the sentence, in a page
+showing a graphical display with colored
+rectangles labeled by word forms. Notice how <imanuṣyo</i> (resp. <i>devo</i>)
+becomes <i>manuṣyaḥ</i> (resp. <i>devaḥ</i>) 
+by sandhi analysis. Similarly <i>lafghayituṃ</i> becomes <i>laṅghayitum</i>.
 <p>
 
 The display actually represents all possible decompositions of your sentence
-into padas (word forms),
+into padas (inflected word forms),
 aligned on your input represented in the blue line above.
 Blue rectangles are <i>subantas</i> (adjectives and substantives), red rectangles
 are <i>tiṅantas</i> (finite verbal forms).
@@ -102,10 +128,10 @@ For instance, clicking on the red <i>labhate</i> reveals that it is a 3rd person
 singular form of the present of root <i>labh</i> in the middle voice
 (<i>ātmanepadī</i>) of present class (<i>gaṇa</i>) 1.
 Furthermore, underlined <i>labh</i> is a link to the lexicon,
-which you may visit to check its meaning. 
+which you may visit to check its meaning, to obtain.
 
 <p>
-
+<!-- Obsolete
 Here there are two scenarios. Had the Lexicon Access field been set to
 Heritage in the reader input page, you would be directed to the Sanskrit-French
 Heritage dictionary. If it had been set to Monier-Williams, you would be
@@ -115,18 +141,23 @@ By default, you will get Monier-Williams access if you enter the site through it
 entry URL. Furthermore, this choice is sticky, which means it is persistent
 throughout a session, until an explicit choice of lexicon is set. 
 <p>
-In both cases
-you obtain the definition of root <i>labh</i>, decorated with its present
-class index (<i>gaṇa</i>), here 1, in red.
+In both cases you obtain a gloss of the meaning of verbal root <i>labh</i>.
+But if you choose the Heritage dictionary, which is the generative lexicon
+of the site, -->
+
+Furthermore, in the Heritage dictionary, 
+you get in addition the grammatical information:
+[<span class="red">1</span>], indicating that root
+<i>labh</i> belongs to class (<i>gaṇa</i>) 1. 
 This index is itself a link to the conjugation
-service, that reveals all the conjugated forms of <i>labh</i>, as well as all its
+service. If you click on it, it will display the tables of the conjugated forms
+of <i>labh</i>, as well as all its
 participial stems. These stems, e.g. past passive participle <i>labdha</i>, are
 listed as gendered stems, the gender marks being links to the declension
 service. This exhibits the generative nature of the lexicon: all the forms
 obtainable from a root, either as finite conjugated forms, or as declined
 first-level nominals (<i>kṛdanta</i>), are the building blocks of our analyser. 
 <p>
-
 Similarly, if you click on the blue <i>artham</i> form in the graphical
 display, you will get its lemma as singular accusative of masculine stem
 <i>artha</i>. This stem itself is a link leading to the corresponding lexicon
@@ -152,11 +183,11 @@ In two clicks on the green upper signs you get the intended segmentation.
 <p>
 
 Now let us return to the Reader window, and remove all the blanks in your input:
-"praaptavyamartha.mlabhatemanu.syodevo'pita.mlafghayitu.mnazakta.h".
+"prāptavyamarthaṃlabhatemanuṣyodevo'pitaṃlaṅghayituṃnaśaktaḥ".
 The segmenter now returns more solutions, 54 instead of 6, and you see
 unexpected new forms appear, such as <i>prāptavyamartham</i>,
 whose stem happens to be lexicalized as the name <i>Prāptavyamartha</i> of
-the young boy from Pañcatantra, blamed by his father for having bought
+the young boy from the Pañcatantra, blamed by his father for having bought
 a book containing just one poem, starting precisely with our sentence.
 Other forms such as <i>ude</i> or <i>evaḥ</i>
 are just noise due to sandhi ambiguity. But the
@@ -166,15 +197,20 @@ correct solution is easily attained. Note how clicking on blue segment
 <p>
 If you click on a selection by mistake, it is easy to backtrack by clicking
 on the Undo button of the page. Other command links on the same
-line (Filtered Solutions, All 54 Solutions) should be ignored at this stage,
+line (Filtered Solutions, UoH Analysis Mode) should be ignored at this stage,
 and will be explained in section <a href=#parser2>Shallow parsing</a> below.
 <p>
+Now try again the same example, but now using parameters Monier-Williams
+for Lexicon Access in order to get the English gloss of the meanings,
+Devanagari both for Sanskrit Display Font and Input convention, and input:
+"प्राप्तव्यम् अर्थं लभते मनुष्यो देवोऽपि तं लङ्घयितुं न शक्तः".
+<!-- Obs
 Please note that the default Velthuis transliteration is just an option.
 You may input devanāgarī script like
 यतः कृष्णस्ततोधर्मः यतोधर्मस्ततोजयः by selecting the appropriate slot in
 the "Input convention menu". Try this now by cut and paste from this document.
 Similarly you may use the IAST standard Indic romanisation in Unicode,
-like <i>yataḥ kṛṣṇastatodharmaḥ yatodharmastatojayaḥ</i>.  
+like <i>yataḥ kṛṣṇastatodharmaḥ yatodharmastatojayaḥ</i>.  -->
 
 <h2 class="b2" id="grammar">Morphological tools</h2>
 
@@ -204,6 +240,8 @@ as well.
 Please note that in the Roman output the first person appears first,
 whereas in the devanāgarī output the third person appears first
 (<i>prathama</i>), consistently with vyākaraṇa tradition.
+Parameter 0 may be used for displaying conjugations of a root not admitting
+the present system, such as "ah". 
 <p>
 
 Homonyms are adressed using homonymy indexes, like in <i>kara#1</i> and
@@ -211,7 +249,7 @@ Homonyms are adressed using homonymy indexes, like in <i>kara#1</i> and
 the lexicon.
 If you do not specify the index, the system will make an educated guess of
 the intended homonym. For instance, if you ask for the conjugation of
-root <i>mā</i> in class 1, the system will propose the forms of <i>mā_4</i>;
+root <i>mā</i> in class 1, the system will propose the forms of <i>mā_4</i>, and
 in class 2 or 3 it will propose <i>mā_1</i>. But if you intend <i>mā_3</i>
 of class 3 you must address it explicitly as <i>maa#3</i>.
 If you enter random stems and parameters, you will get arbitrary nonsense,
@@ -220,14 +258,15 @@ declension of stem <i>blablabla</i> in the masculine you will get
 nonsensical forms such as ablative <i>blablablāt</i>.
 But at least you are warned by the
 system, that indicates its doubt by labeling the declension table as
-<i>blablabla?</i> If you ask for its forms in the feminine,
+<i>?blablabla</i>. And if you ask for its forms in the feminine,
 you will get a Gender anomaly report.
 <p>
 
 This morphological engine is available from within the dictionary pages,
 where the gender indications of nouns, and the present family indications
 of roots, are active links which activate the Sanskrit Grammarian with the
-correct parameters. 
+correct parameters. However, in the Monier-Williams dictionary, only
+declension links are available, but not conjugation links of roots. 
 
 <h3 class="b3" id="stemmer">Stemmer</h3>
 Conversely, an inflected form which is derivable from the dictionary entries
@@ -269,7 +308,7 @@ The Sanskrit Heritage Dictionary is the latest edition of a Sanskrit
 to French Dictionary
 "Dictionnaire Français de l'Héritage Sanskrit" compiled by
 Gérard Huet since 1994. This dictionary is freely available
-as a 1047 pages <a href="Heritage.pdf">book</a> under the pdf format,
+as a 1139 pages <a href="Heritage.pdf">book</a> under the pdf format,
 easily readable with Acrobat Reader, a free Adobe product.  
 This dictionary is still under development, and is
 automatically updated along with the site,
@@ -395,18 +434,20 @@ The parameter "Cache" is for advance use, explained below in
 The parameter "Text" is set by default to Sentence, and may be set to Word
 if you want to recognize a single pada.
 For instance, if you parse the following compound (taken from Pañcatantra):
-"pravaran.rpamuku.tama.nimariicima~njariicayacarcitacara.nayugala.h"
-in Sentence mode, you will be offered 32 solutions, but only 6 solutions
-in Word mode. 
+"pravaranṛpamukuṭamaṇimarīcimañjarīcayacarcitacaraṇayugalaḥ"
+in Sentence format, you will be offered 96 solutions, but only 6 solutions
+in Word format, and a unique one in First mode. Furthermore, explicit hyphens
+in the input help the disambiguation, like:
+"pravara-nṛpa-mukuṭa-maṇi-marīci-mañjarī-caya-carcita-caraṇa-yugalaḥ".
 <p>
 
 The next parameter "Format" is a toggle between reading sandhied text and reading
 text which has already been analysed in words (padapāṭha).
-Thus the sentence "si.mhovyaakara.nasyakarturaharatpraa.naanmune.hpaa.nine.h"
-my be parsed in sandhied mode (yelding 44 potential solutions),
-or may be presented in padapāṭha form as
-"si.mha.h vyaakara.nasya kartu.h aharat praa.naat mune.h paa.nine.h"
-(yielding only 30 solutions).
+Thus the sentence "siṃhovyākaraṇasyakarturaharatprāṇānmuneḥpāṇineḥ"
+my be parsed in Sandhied format (yelding a total of 26 potential solutions),
+or may be presented in Unsandhied format as
+"siṃhaḥ vyākaraṇasya kartuḥ aharat prāṇāt muneḥ pāṇineḥ"
+(yielding only 18 solutions in All mode, and only one in First mode).
 <p>
 
 The parameter "Sanskrit display font" may be set to Devanagari or to IAST,
@@ -418,9 +459,8 @@ Hyderabad), KH (Kyoto-Harvard), and SLP1 (Sanskrit Library). These various
 conventions are presented in a 
 <a href="DOC/transliterations.pdf">synthetic document</a>.
 Thus <i>vaiśeṣikaḥ</i> may be input as <i>vaize.sika.h</i> in the default Velthuis scheme,
-as <i>vaizeSikaH</i> in the Kyoto-Harvard scheme, as <i>vESeRikaH</i> in the WX scheme, or as <i>vESezikaH</i> in the SLP1 scheme. 
-<p>
-
+as <i>vaizeSikaH</i> in the Kyoto-Harvard scheme, as <i>vESeRikaH</i> in the WX
+scheme, or as <i>vESezikaH</i> in the SLP1 scheme. 
 In addition, Unicode input
 may be used, both for devanāgarī and for the IAST romanisation with diacritics,
 the Indology standard. Thus one may input directly वैशेषिकः or vaiśeṣikaḥ.
@@ -431,19 +471,55 @@ topic usable as ellipsed agent. This is an experimental feature.
 <p>
 
 Finally, the "Mode" parameter offers several modes of operation of the Engine.
-We saw the default Summary mode. Other modes are provided to display
-all solutions sequentially. These modes are mostly deprecated, since they
+Three modes are available under the graphical display format: First, Best
+and All. The most complete one is All, that gives all available segmentations,
+and that generally over-generates. Whereas mode First, currently the default
+one, gives only the most
+probable solutions, according to a statistical analysis. The mode Best is
+intermediate between the two.
+
+We saw the default Summary mode. Other modes, such as "Tagging" are provided
+to display all solutions sequentially (with explicit sandhi information).
+These modes are mostly deprecated, since they
 produce enormous pages when there are many solutions. It is possible to access
 these modes from the graphical Summary mode, when there remain only a
 few solutions.
 
+Finally, the Analysis mode may be used to continue the shallow analysis
+of the tool into a deeper semantic analysis provided by the
+University of Hyderabad Saṃsādhanī dependency parser. This facility
+is also available form the other modes, under the choice of "First Solution".
+This facility is still experimental, and will not be fully documented in this
+version of the manual. 
+
 <h3 class="b3" id="parser1">Shallow parsing, a first approach</h3>
 
+This section describes a shallow parser that is now deprecated, in favor
+of the much more powerful Saṃsādhanī dependency parser.
+
 Let us call the Reader with a simple sentence such as:
+<i>kṛṣṇo brāhmaṇāya dhanaṃ dadāti</i>, using mode All.
+
+It returns a graphical display where there is a choice of segmentations
+of chunk <i>dadāti</i>. It offers a service called "Filtered solutions" which
+then reduces to a unique solution proposed as the right one. This solution
+is still ambiguous as to the morphological parameters of segments
+<i>brāhmaṇāya</i> (dative form of a masculine or neuter stem) and
+<i>dhanam</i> (neuter stem in nominative or accusative). This solution
+is listed with a check sign : "Solution 1 : ✓" which is a link to a service
+that allows the user to choose the correct morphological parameter of these
+segments. When the user is satisfied with these choices
+(using resettable buttons), it may proceed with submitting this Final analysis,
+yielding a Web page giving a rendition of the completely disambiguated sentence,
+or may choose to submit to संसाधनी, in order to get a deeper analysis in terms of
+semantic roles. 
+
+<!-- obs
+
 <i>vana.mgatvaadhyaana.mkaroti</i> (in Velthuis).
 The summary interface returns a page
 showing you your input sentence in blue devanāgarī, then a line with a number
-of green check marks, the first one being labeled Undo, then the graphical
+of green check signs, the first one being labeled Undo, then the graphical
 display where segments may be selected or discarded, as explained above.
 The third button is labeled "All 18 Solutions". It indicates that there is a
 total of 18 segmentation solutions at this initial stage. Indeed, when you
@@ -494,10 +570,11 @@ Thus at best this representation is some approximation of syntax.
 Below the three columns you find a button labeled Submit. You may press it
 to validate the morphological choices, and the resulting page gives you
 a unique parse as a hypertext <i>padapāṭha</i> which you may save in user space.
-<!-- Obsolete
+
+
 Actually, if you install the software on your own workstation, by configuring it
 in mode Station you will have in the page a Validate button
-usable to record this solution in a non-regression suite. -->
+usable to record this solution in a non-regression suite. 
 
 <p>
 
@@ -510,13 +587,15 @@ its commitment. We shall return to this in the next section.
 <h3 class="b3" id="parser2">Shallow parsing, advanced</h3>
 
 Let us return to the original state of our interface interaction, after
-entering <i>vana.mgatvaadhyaana.mkaroti</i>. We notice in the first menu line
+entering <i>vanaṅgatvādhyānaṅkaroti</i> and setting mode All.
+We notice in the first menu line
 a button labeled "Filtered Solutions". If you click on it, you see a listing
 of solutions similar to what we saw in the last section, but now
 solutions are listed according to some constraint satisfaction ranking.
 The first one (labeled 2) is the intended one, followed by another one
 (labeled 7), proposing <i>ādhyānam</i> in place of <i>dhyānam</i>.
-You may select the one you prefer, and go directly to the Parser
+You may select the one you prefer by clicking on its green check sign,
+and go directly to the Parser
 Assistant page as seen above. You may also go back to the graphical summary
 interface, allowing mutual interaction between the two modes of operation.
 <p>
@@ -524,7 +603,7 @@ interface, allowing mutual interaction between the two modes of operation.
 Let us illustrate this shallow parsing facility on a much-discussed
 ambiguous sentence going back to Patañjali. 
 Go back to the Reader interface, and enter
-<i>zvetodhaavati</i>, using Summary Mode. You see a display of the
+<i>śvetodhāvati</i>, using All Mode. You see a display of the
 22 segmentation solutions. You are also offered a green check sign labeled
 Filtered Solutions. Click on it.
 You see one particular solution, labeled 11, formed with blue <i>śvetaḥ</i>
@@ -535,12 +614,17 @@ root <i>dhāv_1</i> (running) or from root <i>dhāv_2</i> (cleaning).
 
 Clicking on the green check sign brings you to the Sanskrit Parser Assistant
 page. The interpretation "It runs" is pre-marked, favoring root <i>dhāv_1</i>.
+<!-- Obsolete, not displayed any more 
 Lower in the page, you see indeed that this interpretation incurs no
 penalty. Clicking on the green heart sign, or equivalently to the preset Submit
-button brings you to the fully disambiguated padapāṭha
+-->
+Clicking on the "Final analysis:" Submit button
+brings you to the fully disambiguated padapāṭha
 "The white one is running".
+<!--
 The other segmentation has some penalty, explained with the "-Obj" indication,
-marking the absence of the object or goal to a transitive verb.
+marking the absence of the object or goal to a transitive verb.-->
+
 <p>
 
 In this example, the machine has succeeded in focusing on a correct solution
@@ -562,8 +646,10 @@ segmentation candidates is below a threshold set by default to 100.
 This is in contrast with the situation with the graphical interface, which
 is fast and robust. Thus entering the following verse from Kālidāsa, we obtain
 very quicky a display factorizing an astronomical number
-(200734305586053120) of solutions:
-<i>yaa tapovize.saparizafkitasya sukumaaramprahara.nam mahendrasyapratyaadeza.h ruupagarvitaayaa.h zriya.h ala.mkaara.h svargasyasaana.h priyasakhyurvazii kuberabhavanaat pratinivartamaanaasamaapattid.r.s.tena kezinaadaanavenacitralekhaadvitiiyaa bandigraaha.mg.rhiitaa</i>.
+(3383038148345856) of solutions:
+<i>yā tapoviśeṣapariśaṅkitasya sukumārampraharaṇam mahendrasyapratyādeśaḥ rūpagarvitāyāḥ śriyaḥ alaṅkāraḥ svargasyasānaḥ priyasakhyurvaśī kuberabhavanāt pratinivartamānāsamāpattidṛṣṭena keśinādānavenacitralekhādvitīyā bandigrāhaṅgṛhītā</i>.
+
+-->
 
 <h3 class="b3" id="parser3">Lexical categories</h3>
 
@@ -577,17 +663,25 @@ The main lexical categories exhibited so far are:<br>
 <p>
 Actually, complex compounds with n+1 components appear as a sequence of n
 yellow segments denoting stems, followed by a blue nominal inflected form.
-For instance, enter in the Reader the following input (Velthuis)
-<i>pravaran.rpamuku.tama.nimariicima~njariicayacarcitacara.nayugala.h</i>
-or प्रवरनृपमुकुटमणिमरीचिमञ्जरीचयचर्चितचरणयुगलः (Devanagari). The returned display
+For instance, enter in the Reader the following input (IAST)
+<i>pravaranṛpamukuṭamaṇimarīcimañjarīcayacarcitacaraṇayugalaḥ</i>
+or प्रवरनृपमुकुटमणिमरीचिमञ्जरीचयचर्चितचरणयुगलः (Devanagari). Using First mode, we get
+a unique segmentation displayed, of one compound pada with many yellow
+stem segments. 
+
+<!-- obs
+
+The returned display
 exhibits 96 solutions in Sentence mode. But if you select Word rather than
 Sentence as Text mode parameter, you get only 6 solutions, which denote various
-nominal compounds with many components. Actually, there are remaining
-ambiguities concerning the bracketing of their constituents. Let us examine
+nominal compounds with many components.
+-->
+Actually, there are remaining
+ambiguities concerning the bracketing of these constituents. Let us examine
 a few typical situations. <p>
 
-First of all, some of the constituents may constitute a <i>dvandva</i>
-compound. For instance, consider (IAST) <i>yakṣagandharvanāgāḥ</i>.
+First of all, some contiguous constituents may constitute a <i>dvandva</i>
+compound. For instance, consider <i>yakṣagandharvanāgāḥ</i>.
 It is a <i>dvandva</i> compound with 3 components <i>yakṣa</i>,
 <i>gandharva</i>, and <i>nāgāḥ</i>. The first two are bare stems, only
 the third one bears declension (<i>vibhakti</i>). Note that actually we
@@ -595,8 +689,9 @@ distinguish two cases of the last segment: a blue one for nominative,
 and a green one for vocative. This distinction between vocatives
 and other cases is important, since vocatives are not really syntactic
 components of a sentence, but rather separate interjections, part of the
-communicative structure. We also note on this example the parasitic <i>nā</i>
-- a rare form for man (<i>nṛ</i>). 
+communicative structure. We also note on this example, analysed in All mode,
+the parasitic <i>nā</i>- a rare nominative form for man (<i>nṛ</i>), which is
+ignored in mode First because of its low frequency. 
 <p>
 
 Let us now consider binary branching compounds. A three component display
@@ -607,19 +702,19 @@ in ambiguous ways, since the mechanical reader does not know how to choose
 between them on the sole basis of grammatical dependencies.
 <p>
 
-Now consider the compound stem <i>pitāmbara</i>. It may denote a determinative
+Now consider the compound <i>pītāmbaram</i>. It may denote a determinative
 compound (<i>tatpuruṣa</i>), meaning "yellow garment", of neuter gender
 inherited from its component <i>ambara</i>. Or it may denote an exocentric
 compound (<i>bahuvrīhi</i>), of adjectival meaning "who wears a yellow garment".
-Thus, on input <i>pitāmbaram</i>, in mode Word, we have two solutions,
-sharing the yellow initial component <i>pitā</i>. The first solution proposes
+Thus, on input <i>pītāmbaram/i>, in modes (Word, All), we have two solutions,
+sharing the yellow initial component <i>pīta</i>. The first solution proposes
 a blue neuter nominal segment <i>ambaram</i>, analysed as accusative or
 nominative of stem <i>ambara</i> in the neuter gender.
 The second <i>ambaram</i> however is of a distinct cyan colour,
 and is analysed as masculine accusative. This second solution is mandatorily
 the exocentric compound "he who wears a yellow garment", typically an
 epithet of Lord Viṣṇu. The cyan colour segment may not occur stand-alone,
-it is mandatorily preceded by a yellow segment in order to form an
+it is obligatory preceded by a yellow segment in order to form an
 exocentric adjectival compound. But the first solution is ambiguous,
 since it may be interpreted as a <i>tatpuruṣa</i> or as a <i>bahuvrīhi</i>.
 This example ought to be thoroughly understood in order to learn how to
@@ -627,12 +722,13 @@ select the segments corresponding to the intended meaning.
 <p>
 
 There exists yet another variety of compound, the so-called <i>avyayībhāva</i>
-"turned into undeclinable". Let us consider a typical example,
-<i>nirmakṣikam</i> (without flies). Here this input is analysed as a sequence
+"turned into indeclinable". Let us consider a typical example,
+<i>nirmakṣikam</i> (without flies). Here, again in modes (Word, All),
+this input is analysed as a sequence
 of segments, first the preposition <i>nis</i>, colored lavender, and then the
 stem <i>makṣikā</i>, turned into an invariable form <i>makṣikam</i>,
-colored magenta. We remark that the segment <i>makṣikam</i> is not accepted
-as stand-alone input. Please also note on this last example that an
+colored magenta. Please note that the segment <i>makṣikam</i> is not accepted
+as stand-alone input. Also note on this last example that an
 unrecognized chunk of input yields a grey rectangle with undefined morphology.
 <p>
 
@@ -651,11 +747,12 @@ Another periphrastic construction is the inchoative "cvi" verbal compound.
 Its left part is a special substantival stem in <i>ī</i> or <i>ū</i>,
 and its right part a finite verb form of one of the auxiliaries,
 like <i>kadarthīkaroti</i> (he despises) or <i>mṛdūbhavati</i> (it softens).
-It in turns gives rise to primary derivatives (<i>kṛdanta</i>) like
+It may also give rise to primary derivatives (<i>kṛdanta</i>) like
 <i>khilībhūtaḥ</i> (abandoned). Here too the left part is orange,
 and the right part is either red for verbal forms, blue for participial forms,
 like <i>kadarthīkṛtaḥ</i>, or mauve for absolutives and infinitives, like
-<i>nimittīkṛtya</i>. This construction also avails for a number of word forms
+respectively <i>nimittīkṛtya</i> and <i>nimittīkartum</i>.
+This construction also avails for a number of word forms
 usable before auxiliary verbal forms, and traditionally called <i>gati</i>s,
 such as <i>sākṣāt</i>, <i>mithyā</i>, <i>namas</i>, etc.
 <p>
@@ -670,6 +767,8 @@ preceded by a special infinitive verbal form in <i>-tu</i>. Try for instance
 is necessarily used together with the salmon-colored special infinitive segment
 <i>vaktu</i>. Similarly for <i>draṣṭumanāḥ</i> ("inclined to see").
 <p>
+
+<!-- wrong
 The user of our machinery may be occasionally puzzled by what may appear as
 redundancies. For instance, consider the input <i>mānam</i>. Two blue
 apparently identical segments labeled <i>mānam</i> occur. However,
@@ -680,9 +779,9 @@ the same color, being both <i>subanta</i> nominal forms, they do not obey
 the same combinatorics, since a participle (<i>kṛdanta</i>) stem like
 <i>māna_1</i> is liable to be prefixed by the preverb particles
 (<i>upasarga</i>) allowed for root <i>man</i>. Check this with input
-<i>pramānam</i>.
+<i>pramāṇam</i>.
+<p>  -->
 
-<p>
 Another interesting example is <i>virodhitayā</i>. The two blue segments look
 alike, and they are both instrumental singular forms of the feminine stem
 <i>virodhitā</i>. But one is the past participle of the causative of
@@ -693,19 +792,20 @@ requiring a substantive as its qualificand.
 <p>
 
 In order to understand the segmenting algorithm, one should study its control
-automaton. Here is the <a href="IMAGES/lexer10.jpg">simplified automaton</a>,
+automaton. Here is a <a href="IMAGES/lexer10.jpg">simplified automaton</a>,
 explaining the main constructions.
 Words (<i>pada</i>) are recognized by paths going doing from the starting state
 S, and ending in the accepting state Accept. The link going upward from Accept
 to S allows to recognize a sentence as a sequence of words, sandhi being
 effected on the arcs of the diagram. Please note the cycle through state Iic,
 allowing the recognition of arbitrary length (flattened) compounds.
+<!-- Beware: A/An now deprecated 
 When this diagram is mastered, consider the
 <a href="IMAGES/lexer17.jpg">extended automaton</a>, which adds vocatives,
 cvi verbal compounds, and privative compounds. The bank Nounc (respectively
 Nounv) is the subset of nominal forms Noun starting with a consonant
 (respectively a vowel). Privative compounds are obtained by prefixing them
-with <i>a-</i> (respectively <i>an-</i>).
+with <i>a-</i> (respectively <i>an-</i>). 
 Finally, consider the <a href="IMAGES/lexer40.jpg">complete automaton</a>.
 The state Krid corresponds to first-level nominal constructions from roots,
 notably participial forms. These may be preceded by preverbs (Pvk).
@@ -713,23 +813,39 @@ The state Priv stands for one of the two forms of the privative prefix a/an.
 One must imagine partitioning all banks whose state follows Priv into
 forms started with a consonant or a vowel, similarly to the preceding diagram.
 Finally, the state Neg stands also for the privative prefix a/an, prefixing
-a root absolutive in <i>-tvā</i>, like <i>akṛtvā</i> (having not done). 
+a root absolutive in <i>-tvā</i>, like <i>akṛtvā</i> (having not done).
+--> 
 <p>
 The results returned by our graphical interface may be thought of as describing
-all paths following this state diagram, except that preverbs are glued
-to the root and participial forms following them. 
+all paths following such a state diagram, except that preverbs are glued
+to the root and participial forms following them. The actual automaton
+has many more states, accounting for more constructions. 
 
 <h3 class="b3" id="parser3">Deep parsing</h3>
 
 The Sanskrit Heritage Engine may also be used as segmentation front-end
 for the dependency parser designed by Pr Amba Kulkarni at University
-of Hyderabad. 
+of Hyderabad. We have signaled above various possibilities to invoke this
+Saṃsādhanī analyser from our Reader. Firstly, if you use the All mode,
+as soon as the current number of solutions goes below a certain threshold
+(currently set at 100), it is possible to switch to the parsers, respectivally
+by buttons "Filtered solutions" for our shallow parser, or "UoH Analysis Mode"
+for Saṃsādhanī. <!-- but what are the colors then ??? -->
+Secondly, if you use mode "First", there is a button "First Solution" that
+provides a proxy page with the unique (uncolored) segmentation  presented
+with a clickable button calling Saṃsādhanī. From this proxy page it is also
+possible to return to the graphical display, either in "First" or in "All" mode.
+Finally,  if you use mode "Best", there is a button "List of Best Solutions"
+that provides a proxy page, but now with several uncolored segmentation
+candidates. 
 <p>
-This allows the production of dependency graphs labeled with semantic
+Once you access Saṃsādhanī, you have all the functionalities of this tool
+available, up to the production of dependency graphs labeled with semantic
 relations, and ranked by decreasing satisfaction of dependency constraints.
-We shall not explain further this facility, which is still under development
-and not yet publicly released.
+We shall not explain further this facility, for which we refer to
+Saṃsādhanī's own documentation. 
 
+<!-- This does not work anymore !!
 <h3 class="b3" id="user-aid">The User Aid facility for lexicon acquisition</h3>
 
 Our generating lexicon is not an extensive dictionary of Sanskrit.
@@ -784,18 +900,20 @@ The lexicon cache is reset by command "sudo make empty_caches"
 in the installation directory. But re-installing a new version of the Heritage
 Engine will preserve the current cache. 
 
-<h3 class="b3" id="user-aid">Fine-grained input considerations</h3>
+-->
+
+<h3 class="b3" id="Input">Fine-grained input considerations</h3>
 
 We already discussed above the parameters Format and Input conventions.
 In the "Sandhied" format, blanks are necessary only when there is an
 actual hiatus in the devanāgarī representation. For instance, in 
-<i>vanād grāmam adyopetyaudana aazvapatenāpāci</i>, only the third
+<i>vanād grāmam adyopetyaudana āzvapatenāpāci</i>, only the third
 blank space is mandatory. The others may be removed. They are just
 help for the segmenter, in indicating pada boundaries. Of course, if you remove
 them, the number of potential solutions may increase, since the system
 will attempt analyses not respecting these word boundaries. The third space
-above is mandatory even in devanāgarī, as a genuie hiatus.
-It actually gives rise to two distinct segmentations, one with
+above is mandatory even in devanāgarī, as a genuine hiatus.
+It actually gives rise (in mode All) to two distinct segmentations, one with
 the form <i>odanaḥ</i>, the other with the form <i>odane</i>.
 <p>
 Note that in the system's rendering, the mandatory space is indicated by
@@ -862,8 +980,9 @@ Verses (<i>śloka</i>) may be entered as lists of lines ended with the vertical
 bar | (<i>daṇḍa</i>), terminated by a line ended with two vertical
 bars || (<i>pūrṇavirāma</i>). Thus, for instance:
 <p>
-d.r.s.tvaa tu paa.n.davaaniika.m vyuu.dha.m duryodhanastadaa |<br>
-aacaaryamupasafgamya raajaa vacanamabraviit ||<br>
+dṛṣṭvā tu pāṇḍavānīkaṃ vyūḍhaṃ duryodhanastadā |<br>
+ācāryamupasaṅgamya rājā vacanamabravīt||<br>
+
 <p>
 Please note that this notation is mandatory for such examples, where the
 first verse should not be glued by sandhi to the second one. 
@@ -912,6 +1031,7 @@ It may be considered as our vyākaraṇasūtrasaṃgraha.
 
 The Heritage Engine is distributed as a stand-alone software for
 workstations running versions of UNIX such as Linux or Apple's MacOSX.
+It is now also possible to install it on Windows.
 <p>
 In order to install it, you must download three git repositories:<br>
 <a href="https://gitlab.inria.fr/huet/Zen.git">

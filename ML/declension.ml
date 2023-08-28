@@ -309,7 +309,7 @@ value decls_engine () = do
              (* We should check it is indeed a substantive entry 
                 and that Any is used for deictics/numbers (TODO) *)
              (* Also it should use unique naming for possible homo index *)
-          else Morpho_html.skt_html_font ft entry |> italics in
+          else doubt (Morpho_html.skt_html_font ft entry) in
 (*i DEPRECATED indication of root for kridanta
         [let root = if source = "" then "?" (* unknown in lexicon *)
                     else " from " ^ (* should test font *) in

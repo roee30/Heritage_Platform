@@ -2541,13 +2541,6 @@ value intercalates root =
             ]
   ] 
 ;
-(* Whitney§631-§640 Bandharkar II p44 augment ii in present system 2nd class *)
-value augment_ii = fun (*  *)
-  [ "an#2" (* and thus "praa.n1" too gives praa.niit *) 
-  | "rud#1" | "zvas#1" | "svap" | "jak.s" -> True 
-  | _ -> False 
-  ]
-;
 
 (* Perfect passive participle *)
 
@@ -2941,7 +2934,7 @@ value compute_future_gen rstem root =
              | _ -> sstem
              ] in sandhi w (code "i.sya")
        | 2 -> sandhi sstem (code "ii.sya") (* grah *)
-       | 3 -> sandhi (ar_ra sstem) (code "sya") (* metathesis k.r.s bh.rjj s.rj *)
+       | 3 -> sandhi (ar_ra sstem) (code "sya")(* metathesis k.r.s bh.rjj s.rj *)
        | _ -> failwith "Weird intercalate code"
        ] in
   iter mk_future stems 
@@ -5508,7 +5501,12 @@ value compute_present_system root rstem gana pada third =
      | _ -> failwith "Anomaly Verbs"
      ] (* end of thematic conjugation *) 
    | 2 -> (* athematic conjugation: 2nd class (root class) *)
-     let set = augment_ii root 
+     (* Whitney§631-§640 Bandharkar II p44 augment ii *)
+     let set = match root with
+               [ "an#2" (* and thus "praa.n1" too gives praa.niit *) 
+               | "rud#1" | "zvas#1" | "svap" | "jak.s" -> True 
+               | _ -> False 
+               ]
      and sstem = strong_stem root rstem 
      and wstem = if root="as#1" then [ 48 ] (* rare archaic forms *)
          (* svap opt supyaat MW but Kane§42  and DRK do not support weak "sup" *)
@@ -6291,6 +6289,8 @@ and compute_extra_bhr () = (* Epics sa.mbhriyantu Oberlies 8.7 *)
    enter1 "bh.r" (Conju (Primary,vmp) [ (Plural,[ (Third, code "bhriyantu") ]) ])
 and compute_extra_bhram () = (* MW: Mah *)
   enter1 "bhram" (Conju perfa [ (Plural,[ (Third, code "bhremur") ]) ])
+and compute_extra_mil () = 
+  compute_future (revcode "meli.sy") "mil" (* Kale meli.syati *)
 and compute_extra_muc () = do 
   { (* ved precative `fasse que je sois libéré' *)
     enter1 "muc#1" (Conju benem [ (Singular,[ (First, code "muk.siiya") ]) ])
@@ -6370,6 +6370,7 @@ value compute_extra () = do (* Extra forms for specific roots *)
   ; compute_extra_bhuj2 ()
   ; compute_extra_bhr ()
   ; compute_extra_bhram ()
+  ; compute_extra_mil () 
   ; compute_extra_muc () 
   ; compute_extra_yu2 ()
   ; compute_extra_zaas () 
@@ -6428,6 +6429,7 @@ value fake_compute_conjugs (gana : int) (root : string) = do
       | "bhuj#2" -> compute_extra_bhuj2 ()
       | "bh.r"   -> compute_extra_bhr ()
       | "bhram"  -> compute_extra_bhram ()
+      | "mil"    -> compute_extra_mil ()
       | "muc#1"  -> compute_extra_muc ()
       | "yu#2"   -> compute_extra_yu2 ()
       | "zaa"    -> record_part_ppp (revcode "zaata") root

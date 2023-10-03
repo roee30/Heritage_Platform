@@ -2886,7 +2886,7 @@ value perstems rstem root =
               ] 
        | 1 -> let w = match root with 
                 [ r when no_guna r -> rstem
-                | "uc" | "mil" (* WR MW but Kale mel *) -> rstem (* cf futur *)
+                | "uc"    -> rstem 
                 | "guh"   -> revcode "guuh" (* \Pan{6,4,89} *) 
                 | "dabh"   -> revcode "dambh" (* WR *)
                 | "sad#1" -> revcode "siid" 
@@ -2923,7 +2923,7 @@ value compute_future_gen rstem root =
              ] in sandhi w (code "sya") (* eg dah -> dhak.sya *)
        | 1 -> let w = match root with
              [ r when no_guna r -> rstem
-             | "uc" | "mil" (* WR MW but Kale mel *) -> rstem 
+             | "uc"     -> rstem 
              | "guh"    -> revcode "guuh" (* \Pan{6,4,89} *) 
              | "dabh"   -> revcode "dambh" (* WR *)
              | "nij"    -> revcode "ni~nj" (* consistent with gana 2 *)
@@ -4691,12 +4691,12 @@ value build_infinitive c inf_stem root = do
 (* NB. bahuvrihi cpds in -kaama and -manas constructed with infinitives in -tu 
    See Renou HLS p72 from Pata~njali; Renou grammaire §107 dagdhukaama
    Vt to Pan{6,1,144} bhoktukaama.h 
-   also Assimil p194 eg tyaktukaama and Kale§917 noted "tufkaamamanasorapi" 
+   also Assimil p194 eg tyaktukaama and Kale§917 (noted "tufkaamamanasorapi") 
    anu.s.thaatukaama "desirious to proceed" vaktukaama "who wants to speak"
    pratiyaatukaamam "désireux de retourner" Rag{5,18} 
    pra.s.tumanas Kum{5,40} "désireux de poser une question" Kale§917
    dra.s.tumanas "inclined to see" 
-   dra.s.tuzakya "able to see" - possible extension in -zakya compoudns *)
+   dra.s.tuzakya "able to see" - possible extension in -zakya compounds *)
   }
 ;
 value perif conj perstem root = do 
@@ -5147,7 +5147,7 @@ value record_abso_am root =
   | "stambh"  -> record "stambham"
   | "sthaa#1" -> record "sthaayam" (* Bhate: zayyosthaayam sauté du lit *)
   | "sm.r"    -> record "smaaram" (* Deshpande *)
-  | "han"     -> record "ghaatam" (* \Pan{3,4,36+37+48} *)
+  | "han#1"   -> record "ghaatam" (* \Pan{3,4,36+37+48} *)
   | "knuu"    -> record "knopam" (* from causative *)
   | _ -> ()
   ]
@@ -5819,10 +5819,10 @@ value den_stem_m root = (* in general intransitive or reflexive Whitney§1059c *
    | "taru.na" | "nika.sa" | "parok.sa" | "piiyuu.savar.sa" | "pu.spa" | "priya"
    | "bh.rza" | "maalyagu.na" | "zalabha" | "zithila" | "ziighra" 
    | "zyaama" | "zyena" | "safka.ta"
-   | "ka.n.du" | "karu.na" | "sukha" | "du.hkha" (* feel \Pan{3,1,18} *)
-(* G{sukhaadi} take suffix kyaf in -aayate :
-   {sukha,du.hkha,t.rpta,k.rcchra,asra,aasra,aliika,pratiipa,karu.na,so.dha} *)
-   | "t.rpta" (* -MW *)
+   | "ka.n.du" | "karu.na" | "pratiipa"| "sukha" | "du.hkha" (* feel *)
+   | "aliika" | "so.dhaaya"  | "t.rpta" (* -MW *)
+     (* \Pan{3,1,18} G{sukhaadi} take suffix kyaf in -aayate :
+     {sukha,du.hkha,t.rpta,k.rcchra,asra,aasra,aliika,pratiipa,karu.na,so.dha} *)
    | "abhra" | "ka.nva" | "kalaha" | "k.sepa" | "megha" | "vaira" | "zabda" 
    | "z.rfga" (* do \Pan{3,1,17} *)
    | "durdina" | "sudina" | "niihaara" (* id. vaartika *)
@@ -6192,8 +6192,8 @@ value compute_auxi_kridantas () =
      attainable from preverbs, inducing a patch in [Dispatcher.validate_pv_k] *)
   { let (rst,st) = stems "kara.na" in 
     build_part_a_n (Primary,Action_noun) rst st "k.r#1" 
-  ; let (rst,st) = stems "kaara" in 
-    build_part_a_m (Primary,Agent_noun) rst st "k.r#1" (* also n. f. in -ii? *)
+(*  ; let (rst,st) = stems "kaara" in OBS 11-09-23
+    build_part_a_m (Primary,Agent_noun) rst st "k.r#1" - also n. f. in -ii? *)
   ; let (rst,st) = stems "bhaavana" in
     build_part_a_n (Primary,Action_noun) rst st "bhuu#1" (* also Agent mnf ? *)
   ; let (rst,st) = stems "bhaava" in 
@@ -6290,7 +6290,7 @@ and compute_extra_bhr () = (* Epics sa.mbhriyantu Oberlies 8.7 *)
 and compute_extra_bhram () = (* MW: Mah *)
   enter1 "bhram" (Conju perfa [ (Plural,[ (Third, code "bhremur") ]) ])
 and compute_extra_mil () = 
-  compute_future (revcode "meli.sy") "mil" (* Kale meli.syati *)
+  compute_future (revcode "mili.sy") "mil" (* WR MW but Kale mel *)
 and compute_extra_muc () = do 
   { (* ved precative `fasse que je sois libéré' *)
     enter1 "muc#1" (Conju benem [ (Singular,[ (First, code "muk.siiya") ]) ])

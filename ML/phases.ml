@@ -225,8 +225,7 @@ value rec generative = fun
 
 open Html;
 value rec color_of_phase = fun
-  [ Noun | Lopak | Nouc | Nouv | Kriv | Kric | Krid | Auxik | Kama
-         | Cache -> Deep_sky 
+  [ Noun | Lopak | Nouc | Nouv | Kriv | Kric | Krid | Auxik | Cache -> Deep_sky 
   | Pron -> Light_blue
   | Root | Auxi | Lopa -> Carmin  
   | Inde | Indifc | Abso | Absv | Absc | Auxiinv | Ai | Ani | Avy -> Mauve
@@ -235,7 +234,7 @@ value rec color_of_phase = fun
   | Peri | Iiv | Iivv | Iivc | Inftu -> Orange
   | Iiy -> Pink 
   | Voca | Vocv | Vocc | Inv | Vok | Vokv | Vokc | Vocf -> Lawngreen
-  | Ifc | Ifcv | Ifcc -> Cyan
+  | Ifc | Ifcv | Ifcc | Kama -> Cyan
   | Unknown -> Grey
   | Comp (_,ph) _ _ -> color_of_phase ph 
   | Pv | Pvv | Pvc | Pvkc | Pvkv -> failwith "Illegal preverb segment" 

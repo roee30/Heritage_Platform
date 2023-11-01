@@ -33,8 +33,8 @@ value voices_of = fun
   | "ard" | "av" | "az#2" | "as#1" | "as#2" | "ifg" | "in" | "ind" 
   | "inv" | "il" | "i.s#2" | "iifkh" | "iir.s" | "uk.s" | "ujjh" | "u~nch"
   | "und" | "umbh" | "u.s" | ".rc#1" | ".rdh" | ".r.s" | "ej" | "kas" | "kiirt"
-  | "kiil" | "ku.t" | "ku.t.t" | "ku.n.th" | "kunth" | "kup" | "kul" | "ku.s"
-  | "kuuj" | "k.rt#1" | "k.rz" | "krand" | "kru~nc#1" | "kruz" | "klam" 
+  | "kiil" | "kuc" | "ku.t" | "ku.t.t" | "ku.n.th" | "kunth" | "kup" | "kul"
+  | "ku.s" | "kuuj" | "k.rt#1" | "k.rz" | "krand" | "kru~nc#1" | "kruz" | "klam" 
   | "klid" | "kliz" | "kvath" | "k.sar" | "k.sal" | "k.saa" | "k.si" | "k.sii"
   | "k.su" | "k.sudh#1" | "k.svi.d" | "kha~nj#1" | "khaad" | "khid"
   | "khel" | "khyaa" | "gaj" | "gad" | "garj" | "gard" | "gal" | "gaa#1" 
@@ -68,7 +68,7 @@ value voices_of = fun
   | "sad#1" | "sap#1" | "saa#1" | "sidh#1" | "sidh#2" | "siiv" 
   | "sur" | "s.r" | "s.rj#1" | "s.rp" | "skand" | "skhal" | "stan" | "stubh"
   | "sthag" | "snaa" | "snih#1" | "snu" | "snuh#1" | "sp.r" | "sphal" | "sphu.t"
-  | "sphur" | "sm.r" | "svan" | "svap"  | "svar#1" | "svar#2" | "ha.th" 
+  | "sm.r" | "svan" | "svap"  | "svar#1" | "svar#2" | "ha.th" 
   | "haa#1" | "hi#2" | "hi.ms" | "h.r.s" | "hras" | "hrii#1" | "hval"
   | "karakaasaara" (* denominative of cpd resembling gana 1 - tentative *)
 (*| "k.subh" needed for k.subhyate *)
@@ -105,7 +105,7 @@ value voices_of = fun
       -> Para (* active only *) 
   | "az#1" | "aas#2" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" | "ii.s" 
   | "iih"  | "edh" | "ka~nc" | "katth" | "kam" | "kamp" | "kaaz" | "kaas#1"
-  | "kuu" | "k.rp" | "k.lp" (* but Henry: {cak.lpur} "ils s'arrangèrent" *)
+  | "ku~nc" | "kuu" | "k.rp" | "k.lp" (* Z Henry: {cak.lpur} ils s'arrangèrent *)
   | "knuu" | "klav" | "k.sad" | "galbh" | "gur" | "glah" 
   | "gha.t" | "jabh#1" | "ju.s#1" | "j.rmbh" | ".damb" | ".dii" | ".dhauk" 
   | "tandr" | "tij" | "trap" | "traa" | "tvar" | "dak.s" | "day" | "diik.s" 
@@ -153,8 +153,9 @@ value voices_of = fun
   | "viz#1" | "viij" | "v.r#2" | "v.rt#1" | "v.rdh#1" | "vyath" | "vyaa" | "vrii"
   | "zap" | "zaa" | "zu.s#1" | "zubh#1" | "z.rdh" | "zyaa" | "zram" | "zri"
   | "zru" | "zvas#1" | "sru" | "san#1" | "sa~nj" | "sah#1" | "sic" | "su#2"
-  | "suu#1" | "suud" | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sp.rz#1" 
-  | "sp.rh" | "smi" | "syand" | "svad" | "had" | "hikk" | "hu" | "huu" | "h.r#1"
+  | "suu#1" | "suud" | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sphur" 
+  | "sp.rz#1" | "sp.rh" | "smi" | "syand" | "svad" | "had" | "hikk" | "hu" 
+  | "huu" | "h.r#1"
   ] *)
   (* + corr. "praz" | "k.rr" | "p.rc" | "bandh" *)
   (* NB. "ah" "rip" "vadh" have no pr, "mand2" is fictitious *) 
@@ -165,7 +166,6 @@ value voices_of = fun
 as2 1U 4P (* 4P Vedic - may overgenerate ? *)
 i 1A 2P 4A 5P
 .r 1U 3P 5P
-kuc 1U 6P
 k.r.s 1P 6U
 ghuur.n 1A 6P
 jan 4A 1U
@@ -208,11 +208,11 @@ value voices_of_gana g root = match g with
  [ 1 -> match root with
         [ "cur" | "budh#1" | "van" | "v.r#1" | "suu#1" 
             -> Para 
-        | "gave.s" | "gha.t.t" | "ghuur.n" | ".damb" | "nabh" | "bhra.mz" | "mid"
-        | "mok.s" | "lok" | "svid#2" 
+        | "ku~c" | "gave.s" | "gha.t.t" | "ghuur.n" | ".damb" | "nabh"
+        | "bhra.mz" | "mid" | "mok.s" | "lok" | "svid#2" 
             -> Atma
         | "i" | "i.s#1" | ".r" (* ".r" Atma for pv sam \Pan{1,3,29} also "tap" *)
-        | "j.rr" | "tap" | "daa#1" | "dh.r.s" | "as#2" | "kuc" | "k.r.s" 
+        | "j.rr" | "tap" | "daa#1" | "dh.r.s" | "as#2" | "k.r.s" 
         | "m.rj" | "m.rd#1" | "rud#1" | "stambh" 
             -> Ubha
         | "kliiba" -> Atma (* denominative verb *)
@@ -245,7 +245,7 @@ value voices_of_gana g root = match g with
         | _ -> voices_of root
         ]
  | 6 -> match root with
-        [ "kuc" | "ghuur.n" | "suu#1" -> Para
+        [ "ghuur.n" | "suu#1" -> Para
         | "k.r.s" | "m.rj" | "rud#1" | "vid#2" -> Ubha
         | _ -> voices_of root
         ]

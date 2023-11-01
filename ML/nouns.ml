@@ -5242,8 +5242,9 @@ value compute_nouns_stem_form e stem d p =
             | [ 2 :: [ 42 :: _ ] ] (* -yaaj2 *) (* but not -bhaaj *)
             | [ 2 :: [ 43 :: _ ] ] (* -raaj2 viraaj2 *) 
             | [ 7 :: [ 40 :: _ ] ] (* -bh.rj *) 
-            | [ 7 :: [ 48 :: _ ] ] (* -s.rj2 *)
-                -> build_root Mas [ 124 (* j' *) :: r1 ] e
+(*          | [ 7 :: [ 48 :: _ ] ] (* -s.rj2 *) changed 10/10/2023 
+               doubt: WR in aor. gives both asraak and asraat *)
+                -> build_root Mas [ 124 (* j' *) :: r1 ] e 
             | [ 5; 42 ] (* yuj2 *) -> do 
                 { build_root Mas stem e
                 ; build_archaic_yuj [ 24; 26; 5; 42 ] (* yu~nj *) Mas e
@@ -5453,7 +5454,7 @@ value compute_nouns_stem_form e stem d p =
             | [ 2 :: [ 42 :: _ ] ] (* -yaaj2 *) (* but not -bhaaj *)
             | [ 2 :: [ 43 :: _ ] ] (* -raaj2 viraaj2 *) 
             | [ 7 :: [ 40 :: _ ] ] (* -bh.rj *) 
-            | [ 7 :: [ 48 :: _ ] ] (* -s.rj2 *)
+(*          | [ 7 :: [ 48 :: _ ] ] (* -s.rj2 *) Not *as.r.t but as.rk *)
                 -> build_root Neu [ 124 (* j' *) :: r1 ] e
             | [ 5; 42 ] (* yuj2 *) -> do  
                 { build_root Neu stem e
@@ -5707,7 +5708,7 @@ value compute_nouns_stem_form e stem d p =
             | [ 2 :: [ 42 :: _ ] ] (* -yaaj2 *) (* but not -bhaaj *)
             | [ 2 :: [ 43 :: _ ] ] (* -raaj2 viraaj2 *) 
             | [ 7 :: [ 40 :: _ ] ] (* -bh.rj *) 
-            | [ 7 :: [ 48 :: _ ] ] (* -s.rj2 *)
+(*          | [ 7 :: [ 48 :: _ ] ] (* -s.rj2 *) s.rk *)
                 -> build_root Fem [ 124 (* j' *) :: r1 ] e
             | [ 5; 42 ] (* yuj2 *) -> do 
                 { build_root Fem stem e

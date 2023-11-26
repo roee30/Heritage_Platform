@@ -39,9 +39,9 @@ value voices_of = fun
   | "k.su" | "k.sudh#1" | "k.svi.d" | "kha~nj#1" | "khaad" | "khid"
   | "khel" | "khyaa" | "gaj" | "gad" | "garj" | "gard" | "gal" | "gaa#1" 
   | "gaa#2" | "gu~nj" | "gu.n.th" | "gup" | "gumph" | "g.rdh" 
-  | "g.rr#2" | "granth" | "ghas" | "ghu.s" | "gh.r" | "gh.r.s" 
-  | "ghraa" | "cakaas" | "ca.t" | "cand" | "cam" | "car" | "cal" | "cit#1" 
-  | "cumb" | "c.rt" | "chur" | "ch.rd" | "jak.s" | "jap" | "jabh#2" | "jam" 
+  | "g.rr#2" | "granth" | "ghas" | "ghu.s" | "gh.r" | "gh.r.s" | "ghraa"  
+  | "cakaas" | "ca.t" | "cand" | "cam" | "car" | "cal" | "cit#1"  | "cumb" 
+  | "cur" | "c.rt" | "chur" | "ch.rd" | "jak.s" | "jap" | "jabh#2" | "jam" 
   | "jalp" | "jas" | "jaag.r" | "jinv" | "jiiv" | "jvar" | "jval" | "tak" 
   | "tak.s" | "ta~nc" | "tam" | "tarj" | "tup" | "tu.s" | "t.rp#1" | "t.r.s#1"
   | "t.rh" | "t.rr" | "tyaj#1" | "tras" | "tru.t" | "tvak.s" | "tsar" | "da.mz"
@@ -55,8 +55,8 @@ value voices_of = fun
   | "bha.s" | "bhas" | "bhaa#1" | "bhii#1" | "bhuj#1" | "bhuu#1" | "bhuu.s" 
   | "bhram" | "majj" | "ma.n.d" | "mad#1" | "manth" | "mah" | "maa#3" | "mi.s" 
   | "mih" | "miil" | "mu.s#1" | "muh" | "muurch" | "m.r.d" | "mnaa"
-  | "mre.d" | "mluc" | "mlecch" | "yabh" | "yam" | "yas" | "yaa#1" 
-  | "yu#2" | "ra.mh" | "rak.s" | "ra.t" | "ra.n" | "rad" | "radh" | "raa#1" 
+  | "mre.d" | "mluc" | "mlecch" | "yabh" | "yam" | "yas" | "yaa#1" | "yu#2"
+  | "ra.mh" | "rak.s" | "rac" | "ra.t" | "ra.n" | "rad" | "radh" | "raa#1" 
   | "raadh" | "ri.s" | "ru" | "ruj#1" | "rudh#1" | "ru.s#1" | "ruh#1" | "lag"
   | "lafg" | "lap" | "lal" | "las" | "laa" | "laa~nch" | "likh" | "liz" 
   | "lu.n.th" | "lubh" | "lul" | "vak.s" | "vac" | "vaj" | "va~nc" | "vam" 
@@ -66,7 +66,7 @@ value voices_of = fun
   | "zaz"  | "zas" | "zaas" | "zi.s" | "ziil" | "zuc#1" | "zudh" | "zumbh" 
   | "zu.s#1" | "zuu" | "zcut#1" | "zraa" | "zli.s" | "zvaa" | ".s.thiiv" 
   | "sad#1" | "sap#1" | "saa#1" | "sidh#1" | "sidh#2" | "siiv" 
-  | "sur" | "s.r" | "s.rj#1" | "s.rp" | "skand" | "skhal" | "stan" | "stubh"
+  | "sur" | "s.r" | "s.rj#1" | "s.rp" | "skhal" | "stan" | "stubh"
   | "sthag" | "snaa" | "snih#1" | "snu" | "snuh#1" | "sp.r" | "sphal" | "sphu.t"
   | "sm.r" | "svan" | "svap"  | "svar#1" | "svar#2" | "ha.th" 
   | "haa#1" | "hi#2" | "hi.ms" | "h.r.s" | "hras" | "hrii#1" | "hval"
@@ -103,16 +103,16 @@ value voices_of = fun
 (*| "yu#2" could be Atma in Maitreya S. yuyudhvam *)
 (*| "krudh#1" krudhyate pm or ps or both ? *)
       -> Para (* active only *) 
-  | "az#1" | "aas#2" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" | "ii.s" 
-  | "iih"  | "edh" | "ka~nc" | "katth" | "kam" | "kamp" | "kaaz" | "kaas#1"
-  | "ku~nc" | "kuu" | "k.rp" | "k.lp" (* Z Henry: {cak.lpur} ils s'arrangèrent *)
+  | "arth" | "az#1" | "aas#2" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" 
+  | "ii.s" | "iih"  | "edh" | "ka~nc" | "katth" | "kam" | "kamp" | "kaaz" 
+  | "kaas#1" | "ku~nc" | "kuu" | "k.rp" | "k.lp" (* Z Henry: {cak.lpur} ils s'arrangèrent *)
   | "knuu" | "klav" | "k.sad" | "galbh" | "gur" | "glah" 
   | "gha.t" | "jabh#1" | "ju.s#1" | "j.rmbh" | ".damb" | ".dii" | ".dhauk" 
   | "tandr" | "tij" | "trap" | "traa" | "tvar" | "dak.s" | "day" | "diik.s" 
   | "d.r#1" | "dhii#1" | "dhuk.s" | "pa.n" | "pad#1" | "pi~nj" | "pii" 
   | "pyaa" | "prath" | "pru" | "plu" | "ba.mh" | "baadh" | "bha.n.d" | "bhand" 
   | "bhaam" | "bhaa.s" | "bhraaj" | "ma.mh" | "man" | "mand#1" | "yat#1" 
-  | "rabh" | "ruc#1" | "lajj" | "lamb" | "lii" | "loc" | "vand" 
+  | "rabh" | "ruc#1" | "lajj" | "lamb" | "lii" | "lok" | "loc" | "vand" 
   | "vas#2" | "vaaz" | "vip" | "ve.s.t" | "vrii.d" | "zafk" | "zad"
   | "zi~nj" | "zii#1" | "zrambh" | "zlaagh" | "zvit#1" | "sac" | "sev"
   | "styaa" | "spand" | "spardh" | "spaz#1" | "sphaa" | "sra.ms"
@@ -130,7 +130,7 @@ value voices_of = fun
       -> Atma (* deponent verbs: middle only *)
   | _ -> Ubha (* default *) 
   (* Attested Ubha (over all ga.nas) : 
-  [ "a~nc" | "arth" | "arh" | "aap" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" 
+  [ "a~nc" | "arh" | "aap" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" 
   | ".r" | ".rj" | "ka.n.d" | "kal" | "ka.s" | "ku.n.d" | "k.r#1"
   | "k.r#2" | "k.r.s" | "kram" | "krii#1" | "krii.d" | "krudh#1" | "k.san" 
   | "k.sap#1" | "k.sam" | "k.sal" | "k.sip" | "k.sud" | "k.subh" | "k.s.nu"
@@ -146,16 +146,16 @@ value voices_of = fun
   | "bhaj" | "bharts" | "bhaas#1" | "bhid#1" | "bhuj#2" | "bh.r" | "bh.rjj" 
   | "mantr" | "maa#4" | "maarg" | "mi" | "mith" | "mil" | "mii" 
   | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.rz" | "m.r.s" | "mlaa" 
-  | "yaj#1" | "yam" | "yaac" | "yu#1" | "yuj#1" | "yudh#1" | "rac" | "ra~nj" 
+  | "yaj#1" | "yam" | "yaac" | "yu#1" | "yuj#1" | "yudh#1" | "ra~nj" 
   | "ram" | "rah" | "raaj#1" | "ri" | "ric" | "rud#1" | "rudh#2" | "lafgh" 
   | "lak.s" | "labh" | "la.s" | "lip" | "lih#1" | "lup" | "luu#1" | "vad" 
   | "van" | "vap#1" | "vap#2" | "val" | "vah#1" | "vaa#3" | "vic" | "vij" 
   | "viz#1" | "viij" | "v.r#2" | "v.rt#1" | "v.rdh#1" | "vyath" | "vyaa" | "vrii"
   | "zap" | "zaa" | "zu.s#1" | "zubh#1" | "z.rdh" | "zyaa" | "zram" | "zri"
   | "zru" | "zvas#1" | "sru" | "san#1" | "sa~nj" | "sah#1" | "sic" | "su#2"
-  | "suu#1" | "suud" | "stambh" | "stu" | "st.rr" | "sthaa#1" | "sphur" 
-  | "sp.rz#1" | "sp.rh" | "smi" | "syand" | "svad" | "had" | "hikk" | "hu" 
-  | "huu" | "h.r#1"
+  | "suu#1" | "suud" | "skand" | "stambh" | "stu" | "st.rr" | "sthaa#1" 
+  | "sphur" | "sp.rz#1" | "sp.rh" | "smi" | "syand" | "svad" | "had" | "hikk"
+  | "hu" | "huu" | "h.r#1"
   ] *)
   (* + corr. "praz" | "k.rr" | "p.rc" | "bandh" *)
   (* NB. "ah" "rip" "vadh" have no pr, "mand2" is fictitious *) 
@@ -206,10 +206,10 @@ svid2 1A 4P
    Incorrect associations will be captured at Reader time by Dispatcher. *)
 value voices_of_gana g root = match g with 
  [ 1 -> match root with
-        [ "cur" | "budh#1" | "van" | "v.r#1" | "suu#1" 
+        [ "budh#1" | "bharts" | "van" | "v.r#1" | "suu#1" 
             -> Para 
         | "ku~c" | "gave.s" | "gha.t.t" | "ghuur.n" | ".damb" | "nabh"
-        | "bhra.mz" | "mid" | "mok.s" | "lok" | "svid#2" 
+        | "bhra.mz" | "mid" | "mok.s" | "svid#2" 
             -> Atma
         | "i" | "i.s#1" | ".r" (* ".r" Atma for pv sam \Pan{1,3,29} also "tap" *)
         | "j.rr" | "tap" | "daa#1" | "dh.r.s" | "as#2" | "k.r.s" 
@@ -264,7 +264,7 @@ value voices_of_gana g root = match g with
         | _ -> voices_of root
         ]
  | 10 -> match root with
-        [ "gha.t.t" | ".damb" | "mid" | "mok.s" | "lok" 
+        [ "ka.n.d" | "gha.t.t" | ".damb" | "mid" | "mok.s" 
             -> Para
         | _ -> voices_of root 
         ]

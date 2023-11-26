@@ -105,6 +105,15 @@ and short c =
   else if vowel c then c
        else failwith "Bad arg to short"
 ;
+value shorten v = (* used for reduplicating vowel in perfect *)
+  if short_vowel v then v
+  else if long_vowel v then v-1
+  else match v with
+       [ 10 (* e *) | 12 (* ai *) -> 3 (* i *)
+       | 11 (* o *) | 13 (* au *) -> 5 (* u *)
+       | _ -> failwith "Bad arg to shorten"
+       ]
+;
 (* lengthens the final vowel of a (reverse) stem *)
 value lengthen = fun
   [ [ v :: r ] -> [ long v :: r ]

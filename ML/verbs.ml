@@ -1566,6 +1566,8 @@ and compute_middle_present3 sstem wstem iiflag root third = do
 
 (*** Gana 5  ***)
 
+(* Elision of "u" before m 1st pl pr after single consonant "vow" cf VG§18 *)
+
 value compute_athematic_present5a gana strong weak vow root third = 
   let conjugs person suff = (person,fix strong suff)
   and conjugw person suff = match code suff with
@@ -3748,6 +3750,7 @@ value peri_perf_stem root =
     (* Macdonell§140a1 Whitney§1071c Filliozat§66 edhaa.mcakre *)
   | "ind" | "indh" | "inv" | "ii.s" | "umbh" | "cakaas" -> root
   | "aas#2"  -> "aas" (* trim homo *)
+  | "kaas#1" -> "kaas" (* id \Pan{3,1,35} *)
   | "iiz#1"  -> "iiz" (* id MWG§385 *) 
   | "u.s"    -> "o.s" (* guna WR *) 
   | "jaag.r" -> "jaagar" (* Macdonell§140a2 *)
@@ -4721,6 +4724,7 @@ value perif conj perstem root = do
         [ Primary -> (* Difference infinitive/tavya forms and peri-future *)
              match root with (* should rather appear in perstems *)
              [ "g.rr#1" -> revcode "giri" (* giritum, not gariitum *) 
+             | "cak.s"  -> revcode "ca.s" (* ca.s.tum *)
              | "jak.s"  -> revcode "jagh" (* jagdhum \Pan{2,4,36} *)
              | "dabh"   -> revcode "dabh" (* dabhdum WR *)
              | "p.rr"   -> revcode "puuri" (* puuritum \Pan{7,1,102} *)
@@ -5324,19 +5328,26 @@ value compute_intensivea wstem sstem root third =
   ; compute_intensive_impfta sstem wstem iiflag root
   ; compute_intensive_optativea wstem iiflag root 
   ; compute_intensive_imperativea sstem wstem iiflag root 
-  ; if root="bhuu#1" (* bobhoti *) then
-       let stem = revcode "bobhav" in 
-       build_perpft Intensive stem root
-    else () (* EXPERIMENTAL *)
+  ; (* periphrastic perfect Pan{3,1,35} - to be completed *)
+    try let stem = match root with 
+            [ "bhuu#1" (* bobhoti *) -> "bobhav"
+            | "draa#1" (* daridraati *) -> "daridr" 
+            | "luu#1" (* loluuyate *) -> "loluy"
+            | _ -> raise Not_attested
+            ] in build_perpft Intensive (revcode stem) root
+    with [ Not_attested -> () ]
   ; if root = "draa#1" then
        let ppstem = revcode "daridrita" in
        record_part (Ppp_ Intensive ppstem root) 
-    else ((* TODO *))
+    else ((* to be completed *))
   }
 ;
 (* Takes reduplicated stem from lexicon. A generative version would use 
    [redup3] and add "ya" like passive *)
-value compute_intensivem = compute_thematic_middle int_gana Intensive 
+value compute_intensivem st root third = do
+  { compute_thematic_middle int_gana Intensive st root third
+  ; build_perpft Intensive st root 
+  }
 and compute_intensivem2 st = 
   compute_athematic_present3m Intensive int_gana st False 
 ;
@@ -5754,8 +5765,8 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
        -> [ 1 :: trunc_aa rstem ] (* -()ayati - shortening final aa *)
    | "udazru" 
        -> [ 1 :: trunc_u rstem ] (* -()ayati - final u becomes a *)
-   | "agha" | "azana#2" | "azva" | "ka.n.du" | "khela" | "jihma" | "pramada" 
-   | "mantu" | "valgu" | "sakhi" | "samudra#1" 
+   | "agha" | "azana#2" | "azva" | ".rta" | "ka.n.du" | "khela" | "jihma" 
+   | "pramada" | "mantu" | "valgu" | "sakhi" | "samudra#1" 
    | "niila" | "manda" | "lohita" (* G{lohita} to become \Pan{3,1,13} kya.s *)
    | "asu" (* lexicalized under "asuuya" *) | "cira" 
        -> lengthen rstem (* lengthening -aayati *) 
@@ -5811,7 +5822,7 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
 value den_stem_m root = (* in general intransitive or reflexive Whitney§1059c *)
    let rstem = revstem root in 
    match root with 
-   [ "i.sa" | "utpuccha" | "kuha" | "manas" | "muutra" 
+   [ "i.sa" | "utpuccha" | ".rta" | "kuha" | "manas" | "muutra" 
      (* "artha" | "mantra" now ga.na 10 arth mantr *)
    | "m.rga" | "viira" | "safgraama" | "suutra" (* also zithila below *)
        -> rstem (* (a)-yate *) 

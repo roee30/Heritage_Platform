@@ -78,7 +78,7 @@ Please visit the <a href="manual.html">Reference manual</a> for learning how
 to use the various facilities.
 </p>
 <p>
-<strong><span class="red">!!! NEW !!!</span></strong>
+<!--<strong><span class="red">!!! NEW !!!</span></strong>-->
 An elementary Sanskrit course for beginners, using the site resources,
 may be found in its French version
  <a href="COURSE/Lessons/lesson1.fr.html">ici</a> and in its English version
@@ -462,11 +462,12 @@ as free software under the Gnu Lesser General Public License (LGPL) from the
 Please visit the <a href="http://sanskrit.inria.fr/zf/">Zen Forum</a> for
 announcements and discussions concerning the ZEN toolkit. -->
 
+<!-- Portal legacy closed
 <h2 class="b2"><img src="IMAGES/ganesh.jpg" alt="Ganesh">
 The Sanskrit Portal</h2>
 
 Please visit our <a href="portal.html">Sanskrit Portal</a>
-to find links to other Sanskrit resources.
+to find links to other Sanskrit resources. -->
 <p>
 <!--
 If you are reading this from a mirror site, don't forget to regularly update

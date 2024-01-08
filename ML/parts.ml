@@ -592,7 +592,7 @@ and build_part_at part_kind stem stemf root =
   ; build_part_ii part_kind stemf prati root 
   }
 and build_part_at_red part_kind stem stemf root = 
-  let prati = mirror [ 32 :: [ 1 :: stem ] ] in do (* [Pprared_] *)
+  let prati = fix stem "at" in do (* [Ppra_red] eg jighrat gh.r ga.na 3 *)
   { build_part_at_m_red part_kind stem prati root 
   ; build_part_at_n_red part_kind stem prati root 
   ; build_part_ii part_kind stemf prati root 

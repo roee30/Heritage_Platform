@@ -150,11 +150,11 @@ and as_iiv = fun (* sn *)
   | _ -> False
   ]
 and aa_iiv = fun 
-  [ "kathaa" | "mak.sikaa" -> True  (* to be completed *)
+  [ "kathaa" | "parikhaa" | "mak.sikaa" -> True  (* to be completed *)
   | _ -> False   
   ]
-(*i NB [aa_iic] obsolete, now use separate entry femcf marked fstem and 
-[extract_fem_stems] will generate its iic. i*)
+(* NB [aa_iic] obsolete, now use separate entry femcf marked fstem and 
+[extract_fem_stems] will generate its iic. *)
 ;
 (*************************************)
 (************* Paradigms *************)
@@ -195,7 +195,8 @@ value build_mas_a stem entry =
         [ decline Voc "aas"
         ; decline Nom "aas"
         ; decline Acc "aan"
-        ; decline Ins "ais"
+        ; decline Ins "ais" 
+        ; decline Ins "ebhis" (* Vedic eg kar.nebhi.h *) 
         ; decline Dat "ebhyas"
         ; decline Abl "ebhyas"
         ; decline Gen "aanaam"
@@ -475,7 +476,7 @@ value build_nri stem entry = (* currently disabled by skip in Dico *)
    [ Declined Noun Mas
    [ (Singular,
         [ decline Nom "aa"  (* other cases from nara like naram *)
-        ; decline Loc "ari" (* MacDonell §101b *)
+        ; decline Loc "ari" (* MacDonell§101b *)
         ])
    ; (Dual, 
         [ decline Voc "arau"
@@ -4372,6 +4373,16 @@ value pseudo_nominal_basis = fun
   | _ -> False
   ] 
 ;
+value tasil_gen = fun 
+  (* lexicalized tasils among pseudo_nominal stems *)
+  [ [ 42; 1; 40; 5 ] (* ubhaya *) 
+  | [ 43; 1; 37 ] (* para *)
+  | [ 45; 46; 3; 45 ] (* vizva *) 
+  | [ 45; 48 ] (* sva *) -> []
+  | stem -> [ Indecl Tas (fix stem "atas") ] (* dak.si.natas *) 
+  ] 
+;
+
 (* builds existentials with -cit and -cana from inflected forms of kim *)
 value existential part =
   let entry = "ki~n" ^ part (* ad-hoc hand made e-sandhi *)
@@ -4486,18 +4497,18 @@ value build_pron_a g stem entry = (* g=Mas ou g=Neu *)
                        | _ -> mirror [ 1 :: stem ]
                        ] in 
              [ Bare phase iic ]
-          else if g=Mas && stem = [ 42; 36; 1 ] (* anya *) 
+          else (* g=Mas *) if stem = [ 42; 36; 1 ] (* anya *) 
                then [ Bare phase (code "anya") ] (* optional anya- *)
-          else if pseudo_nominal && g=Mas then (* needed ? *)
-                  [ Avyayaf (fix stem "am"); Avyayaf (fix stem "aat") ]
-(*                ; Indecl Tas (fix stem "atas") -- not needed *)
+          else if pseudo_nominal then
+                  [ Avyayaf (fix stem "am"); Avyayaf (fix stem "aat") ] @ 
+                  tasil_gen stem 
                else [])
        @ (if g=Mas then match entry with
                        [ "eka" -> [ Cvi (code "ekii") ] 
                        | "sva" -> [ Cvi (code "svii") ] 
                        | _ -> [] 
                        ]
-          else [] ))
+          else []))
 ;
 value build_saa stem entry = 
   let decline case suff = (case,fix stem suff) in 
@@ -5870,6 +5881,7 @@ value compute_decls_stem e (s,d) p =
      m+n->nn must be added in [Compile_sandhi] *)
 ;
 (* We keep entries with only feminine stems, in order to put them in Iic *)
+(* eg haridraa but durgaa must be noted \fstemi to keep its fem iic *)
 value extract_fem_stems = extract_rec []
   where rec extract_rec acc = fun
      [ [] -> acc
@@ -6076,6 +6088,9 @@ value iicf_extra =
   [ "abalaa" (* a-bala with fem abalaa *)  
   ; "ukhaa" (*  ukhaasrat *)
   ; "kaantaa" (* kaanta pp *)
+  ; "draak.saa" (* draak.saaphala *) 
+  ; "madhymaa" (* superlative tarjanī-madhyamā-anāman *)
+(*i TODO: merge with [enter_iic_stem] above i*)
   ] 
 ;
 (* Glitch to allow Cvi construction to kridanta entries, even though
@@ -6204,8 +6219,7 @@ Also necessary when non contiguous see cite{796} *)
   ; enter1 "puras" (Indecl Tas (code "puratas")) (* on indecl puras *)]
 *)
 value compute_extra_tasils () = do (* add non-generative tasils - ad-hoc *) 
-  { enter1 "aze.sa" (Indecl Tas (code "aze.satas")) (* tasil on privative cpd *)
-  ; enter1 "ekaruupa" (Indecl Tas (code "ekaruupatas")) (* tasil on cpd *)  
+  { enter1 "ekaruupa" (Indecl Tas (code "ekaruupatas")) (* tasil on cpd *)  
   ; enter1 "ekaanta" (Indecl Tas (code "ekaantatas")) (* tasil on cpd *)  
   ; enter1 "kaamacaara" (Indecl Tas (code "kaamacaaratas")) (* id *)  
 (*; enter1 "d.r.s.taanta" (Indecl Tas (code "d.r.s.taantatas")) tasil on icpd *)
@@ -6328,12 +6342,16 @@ value enter_indecl_ifcs () = do
         enter1 entry (Indifc Adv (code entry))
   ; let entry = "vibhaagazas" in
         enter1 entry (Indifc Adv (code entry))
-  ; let entry = "pramukha" in 
+(* tasils used as ifc *)
+  ; let entry = "pramukha" in (* eg bhii.sma-dro.na-pramukhatas *)
         enter1 entry (Indifc Tas (code "pramukhatas")) (* ifc tasil *)
   ; let entry = "kaara" in (* eg "kaamakaaratas" of his/her own will *)
         enter1 entry (Indifc Tas (code "kaaratas")) (* ifc tasil *)
   ; let entry = "bhaava" in 
         enter1 entry (Indifc Tas (code "bhaavatas")) (* ifc tasil *)
+  ; let entry = "yoga" in 
+        enter1 entry (Indifc Tas (code "yogatas")) (* afguli-traya-yogatas *)
+(* namuls used as ifc *)
   ; let entry = "utthaa" in (* ad-hoc for compound zayyotthaayam Pan{3,4,52} *)
         enter1 entry (Indifc Abs (code "utthaayam")) (* ifc .namul *) 
 (*; let entry = "p.rr" in (* ad-hoc for compound go.spadapuuram Pan{3,4,32} *)

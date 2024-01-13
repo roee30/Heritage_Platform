@@ -4414,8 +4414,9 @@ value existential part =
          ; glue Loc "kasmi.mz"
          ])
     ; (Plural,
-         [ glue Nom "kaani" (* kanicit *)
+         [ glue Nom "kaani" (* kaanicit *)
          ; glue Acc "kaani" 
+         ; glue Loc "ke.su" 
          ])
     ]
     ; Declined Noun Fem
@@ -5937,6 +5938,7 @@ value iic_indecl = (* should be lexicalized or completed *)
   ; "k.rcchraat" (* k.rcchraadavaapta *)
   ; "ciram"     (* cira.mjiiva *)
   ; "tatra"     (* tatrabhavat *)
+  ; "tathaa"    (* tathaagata *)
   ; "divaa"     (* divaanidraa *)
   ; "dhik"      (* dhikkaara *)
   ; "na~n"      (* na~nvaada *)
@@ -5953,8 +5955,7 @@ value iic_indecl = (* should be lexicalized or completed *)
   ; "praayas"   (* praayazcitta *)
   ; "pha.t"     (* pha.dantena *)
   ; "bahis"     (* bahirafga *)
-  ; "mithyaa"   (* mithyaak.rta *)
-  ; "tathaa"    (* tathaagata *)
+  ; "mithyaa"   (* mithyaak.rta *) (* G{saak.saat} *)
   ; "yathaa"    (* yathaanirdi.s.ta *)
   ; "vinaa"     (* vinaabhava *)
   ; "vau.sa.t"  (* vau.sadantena *)
@@ -5966,7 +5967,7 @@ value iic_indecl = (* should be lexicalized or completed *)
   ; "sarvatra"  (* sarvatraga *)
   ; "sarvathaa" (* sarvathaavi.saya *)
   ; "saha#2"    (* problematic -- overgenerates  *)
-  ; "saak.saat"
+  ; "saak.saat"  (* saak.saadd.r.s.ta *) (* G{saak.saat} *)
   ; "saaci"
   ; "saamaanyatas" (* saamaanyatod.r.s.ta - tasil *)
   ; "saami"     (* saamipiita *)
@@ -6119,19 +6120,19 @@ value compute_extra_iiv = iter enter_iiv
 ;
 
 (* Gati forms used as prefixes of auxiliary verbs, like Iiv -- form Absya *)
-value gatis = (* G{saak.sat} Wh§1092 *)
-  [ "saak.saat" (*c in the sense of cvi - becoming Wh§1078a *)
-  ; "mithyaa" (* G{saak.saat} *)
-  ; "cintaa"  (* id *)
-  ; "bhadraa" (* id *)
-  ; "locanaa"
-  ; "vibhaa.saa" (* sampatkaa ? *)
-  ; "aasthaa"
+value gatis = (* G{saak.sat} \Pan{1,4,74} + G(uurii) \Pan{1,4,61} *)
+  [ "saak.saat" (* in the sense of cvi - becoming Wh§1078a *)
+  ; "mithyaa" 
+  ; "cintaa"  
+  ; "bhadraa" 
+  ; "locanaa" 
+  ; "vibhaa.saa" (* sampatkaa ? *) 
+  ; "aasthaa" 
   ; "amaa"
   ; "zraddhaa" (* praajaryaa praajaruhaa viijaryaa viijaruhaa sa.msaryaa *)
   ; "arthe"
   ; "lava.nam"
-  ; "u.s.nam" (* u.s.na.mk.rtya Pan{1,4,74} *)
+  ; "u.s.nam" (* u.s.na.mk.rtya \Pan{1,4,74} *)
   ; "ziitam"
   ; "udakam"
   ; "aardram" 
@@ -6140,35 +6141,35 @@ value gatis = (* G{saak.sat} Wh§1092 *)
   ; "praadur" (* Wh§1078 *)
   ; "namas" (* namask.rtya Wh§1092a *)
   ; "aavis" (* aavisk.rtya Wh§1078 *)
-  ; "urasi" (* Pan{1,4,75} in the sense of anatyaadhaana cf Sharma *)
+  ; "urasi" (* \Pan{1,4,75} in the sense of anatyaadhaana cf Sharma *)
   ; "manasi" (* id. *)
-  ; "anye" (* Pan{1,4,76} id *)
+  ; "anye" (* \Pan{1,4,76} id *)
   ; "pade"
   ; "madhye"
   ; "nivacane"
-  ; "haste" (* Pan{1,4,77} upayamana (mariage) *)
+  ; "haste" (* \Pan{1,4,77} upayamana (mariage) *)
   ; "paa.nau"
   ; "svayam"
-  ; "uurii" (* Pan{1,4,61} G{uurii} uuriik.rtya but Wh§1094b says uriik.r *)
+  ; "uurii" (* \Pan{1,4,61} G{uurii} uuriik.rtya but Wh§1094b says uriik.r *)
   (* other G{uurii}: yadurii,urarii,yadurarii,paapii,laalii,aattaalii,vetaalii,
      dhuurii,zakalii,sa.mzaklii,phaluu,phalii,viklii, etc. ignored or Cvi *)
 (* The following gatis are treated as preverbs to specific roots:
-  ; "astam" (* gam,i Pan{1,4,68} asta.mgatya Wh§1092b *)
-  ; "puras" (* k.r1,dhaa1,i Pan{1,4,67} Wh§1078 *)
-  ; "tiras" (* k.r1,dhaa1 Pan{1,4,71-72} Wh§1078 *)
-  ; "alam" (* ala.mk.rtya Pan{1,4,64} Wh§1078a *)
+  ; "astam" (* gam,i \Pan{1,4,68} asta.mgatya Wh§1092b *)
+  ; "puras" (* k.r1,dhaa1,i \Pan{1,4,67} Wh§1078 *)
+  ; "tiras" (* k.r1,dhaa1 \Pan{1,4,71-72} Wh§1078 *)
+  ; "alam" (* ala.mk.rtya \Pan{1,4,64} Wh§1078a *)
   ; "bahis" (* k.r1 bhuu1 Wh§1078a *)
   ; "zrat" (* dhaa1 Wh§1079 *) 
-  ; "sat" (* satk.rtya Pan{1,4,63}, but "asat" ignored *)
+  ; "sat" (* satk.rtya \Pan{1,4,63}, but "asat" ignored *)
   ; "paaram" (* i gam *) TODO *)
-(* antarhatya Pan{1,4,65} lexicalized *)
+(* antarhatya \Pan{1,4,65} lexicalized *)
 (* Ignored at present
-   ka.ne/manas ka.nehatya Pan{1,4,66} 
-   accha acchaa acchagatya acchodya Pan{1,4,69} Wh§1078 
-   adas ada.hk.rtya Pan{1,4,70} 
+   ka.ne/manas ka.nehatya \Pan{1,4,66} 
+   accha acchaa acchagatya acchodya \Pan{1,4,69} Wh§1078 
+   adas ada.hk.rtya \Pan{1,4,70} 
    vinaa Wh§1078a 
    g.rhya abs used as ifc cvi{grah} hastag.rhya kar.nag.rhya RV Wh§990h
-   also ignored onomatopeae pa.tapa.taakaroti etc. .daac Pan{5,4,57-67} 
+   also ignored onomatopeae pa.tapa.taakaroti etc. .daac \Pan{5,4,57-67} 
    also interjections like va.sa.t va.sa.tkaroti but va.sa.tkaara lexicalized *)
   ]
 ;

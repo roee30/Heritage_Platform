@@ -5976,6 +5976,7 @@ value iic_indecl = (* should be lexicalized or completed *)
   ; "saaci"
   ; "saamaanyatas" (* saamaanyatod.r.s.ta - tasil *)
   ; "saami"     (* saamipiita *)
+  ; "saayam"    (* saayamazana *)
   ; "su.s.thu"  (* su.s.thuprayoga *)
   ; "svayam"    (* svaya.mvara *)
   ; "svar#3"    (* svargatim *)

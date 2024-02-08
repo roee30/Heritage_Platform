@@ -2586,7 +2586,7 @@ value intercalate_pp root rstem =
            | "aj" | "a.t" | "at" | "an#2" | "az#2" | "aas#2" | "i.s#2"
            | "ii.d" | "iir" | "iiz#1" | "ii.s" | "iih" | "uc" | ".rc#1" | ".rj" 
            | "ej" | "edh" | "kath" | "kal" | "kaaz" | "kiil" | "kuc" | "ku~nc"
-           | "kup" | "ku.s" | "kuuj" | "k.rz" | "krii.d" | "klav" | "kvath" 
+           | "ku.t" | "kup" | "ku.s" | "kuuj" | "k.rz" | "krii.d" | "klav" | "kvath" 
            | "k.sar" | "k.sudh#1" | "k.svi.d" | "khaad" | "ga.n" | "gad" | "gal" 
            | "granth" | "gha.t" | "ghaat" | "cak" | "ca.t" | "car" | "cal"
            | "cud" | "cur" | "chal" | "jiiv" | "jval" | "ta.d" | "tam" | "tul" 

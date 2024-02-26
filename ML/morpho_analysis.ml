@@ -82,7 +82,7 @@ value get_morph preverbs_str form generative_cond (delta,morphs) =
       try let (verbal,root) = look_up_homo homo (krit_infos bare_stem) in 
         let k_stem = krt_stem stem homo bare_stem in 
         let preverbed_k_stem = (preverbs_str ^ (Canon.decode_WX k_stem))
-        and verbal_string = (string_verbal verbal)
+        and verbal_string = (str_verbal_roma verbal)
         and preverbed_base = (preverbs_str ^ (Canon.decode_WX root)) in 
         (preverbed_k_stem, verbal_string, preverbed_base)
       with [ _ -> ((Canon.decode_WX bare_stem),"","") ]
@@ -91,7 +91,7 @@ value get_morph preverbs_str form generative_cond (delta,morphs) =
       [ [ Unanalysed ] -> ((Canon.decode_WX stem),"","") 
       | _ -> ((preverbs_str ^ (Canon.decode_WX stem)),"","")
       ] in 
-  let morph_list = List.map string_morph morphs in 
+  let morph_list = List.map str_morph_roma morphs in 
   (derived_stem, base_morph, base, morph_list)
 ;
 

@@ -25,8 +25,19 @@ value pl s = s ^ "\n" |> ps
 ;
 value pr_word w = Canon.decode w |> ps
 ;
-value print_morph m = string_morph m |> ps
-and print_verbal vb = string_verbal vb |> ps
+value string_morph_gen m = 
+  match Web.sanskrit_font.val with 
+  [ Deva -> str_morph_deva m
+  | Roma -> str_morph_roma m
+  ]
+and string_verbal_gen vb = 
+  match Web.sanskrit_font.val with 
+  [ Deva -> str_verbal_deva vb
+  | Roma -> str_verbal_roma vb
+  ]
+;
+value print_morph m = string_morph_gen m |> ps
+and print_verbal vb = string_verbal_gen vb |> ps
 ;
 (*i Anomaly: Morpho should be independent of Html i*)
 value select_morph (seg_num,sub,seg_count) morph = do 

@@ -4365,8 +4365,9 @@ value compute_aorist root =
   ; match root with (* 4. sigma aorist sic *)
     [ "aap" | "k.r#1" | "khan" | "gup" | "gh.r" | "ci" | "chid#1" | "ji"
     | "tud#1" | "t.rr" | "tyaj#1" | "dah#1" | "daa#1" | "d.rz#1" | "draa#2" 
-    | "dhaa#1" | "dhyaa" | "dhyai" | "dhv.r" | "nak.s" | "nii#1" | "pac" | "bandh"
-    | "bhid#1" | "m.r" (* Deshpande: am.rta [1] am.r.saataam [4] am.r.sata [4] *)
+    | "dhaa#1" | "dhyaa" | "dhyai" | "dhv.r" | "nak.s" | "nii#1" | "pac" 
+    | "bha~nj" | "bandh" | "bhid#1" 
+    | "m.r" (* Deshpande: am.rta [1] am.r.saataam [4] am.r.sata [4] *)
     | "yaj#1" | "yuj#1" | "ram" | "rudh#2" | "labh" | "v.r#2" | "vyadh" | "zru"
     | "sidh#1" | "s.rj#1" | "stu" | "sp.rz#1" | "svap" | "haa#1" | "hu" 
      -> do
@@ -4389,7 +4390,7 @@ value compute_aorist root =
            then compute_ath_s_aorista strong root else ()
         (* ayok.siit and acchetsiit besides ayauk.siit and acchaitsiit *)
       ; match root with
-        [ "gup" | "gh.r" | "t.rr" | "d.rz#1" | "s.rj#1"
+        [ "gup" | "gh.r" | "t.rr" | "d.rz#1" | "bha~nj" | "s.rj#1"
             -> ()  (* active only *)
         | _ -> let stemm = match weak with
             [ [ c :: r ] -> match c with 

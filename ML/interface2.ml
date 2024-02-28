@@ -732,22 +732,7 @@ value write_solutions_to_file wx_input mode solution_list =
 value display_best_list text deva_input roman_input checkpoints cpts wx_input 
                         undo_enabled font mode solution_list rcheckpoints 
                         fmode = do 
-  { html_break |> pl
-  ; ps (div_begin Latin16)
-  ; html_latin16 "Sentence: " |> pl
-  ; match font with
-    [ "roma" -> do 
-                { ps (span_begin Blue_) 
-                ; ps roman_input (* roman *)
-                ; ps span_end
-                }
-    | "deva" -> deva16_blue deva_input |> ps (* devanagari *)
-    | _ -> do 
-           { ps (span_begin Blue_) 
-           ; ps roman_input (* roman for default *)
-           ; ps span_end
-           }
-    ]
+  { ps (div_begin Latin16)
   ; table_begin Spacing20 |> pl
   ; tr_begin |> pl (* tr begin *)
   ; let (new_mode, link_text) = 
@@ -772,15 +757,7 @@ value display_best_summary text deva_input roman_input checkpoints cpts wx_input
                            rcheckpoints fmode = do 
   { make_visual cur_chunk.offset
   ; find_conflict 0
-  ; html_break |> pl
   ; div_begin Latin16 |> ps
-  ; html_latin16 "Sentence: " |> pl
-  ; match font with
-    [ "roma" -> roma16_blue roman_input |> ps (* romanized *)
-    | "deva" -> deva16_blue deva_input |> ps (* devanagari *)
-    | _ -> roma16_blue roman_input |> ps (* romanized by default*) 
-    ]
-  ; html_break |> ps
   ; table_begin Spacing20 |> pl
   ; tr_begin |> pl (* tr begin *)
   ; if undo_enabled then 
@@ -839,6 +816,28 @@ value display_best_summary text deva_input roman_input checkpoints cpts wx_input
   } 
 ;
 
+(* Displays the input provided by the user in Devanagari and the output of the 
+   chunker in IAST. This output contains the normalized input along with the introduction of the 
+   underscore wherever the hiatus is ambiguous. *)
+value display_sentences raw_deva_input deva_input roma_input roma_output_chunks = do 
+  { html_break |> pl
+  ; html_latin16 "Input: " |> pl (* raw input provided by the user *)
+  ; deva16_blue raw_deva_input |> pl (* always produced in Devanagari *)
+  ; html_break |> ps
+  (* The normalized input which was printed earlier depending on the user's 
+     output convention, is now discarded but kept commented here for future. *)
+  (* ; html_latin16 "Normalized: " |> pl
+  ; match font with
+    [ "roma" -> roma16_blue roma_input |> ps (* romanized *)
+    | "deva" -> deva16_blue deva_input |> ps (* devanagari *)
+    | _ -> roma16_blue roma_input |> ps (* romanized by default*) 
+    ]
+  ; html_break |> ps *)
+  ; html_latin16 "Chunks: " |> pl (* The result of chunking with underscores *)
+  ; roma16_blue roma_output_chunks |> pl 
+  ; html_break |> pl
+  }
+;
 value best_mode_operations cpts chunks = 
   let _ = do {
     chkpts.all_checks := cpts
@@ -856,18 +855,24 @@ value best_mode_operations cpts chunks =
 value check_sentence translit uns text checkpoints input undo_enabled 
       font mode rcheckpoints pipeline stemmer debug fmode =
   let encode = Encode.switch_code translit in
+  let encode_no_norm = Encode.switch_code_no_norm translit in 
   let chunker = if uns (* sandhi undone *) then Sanskrit.read_raw_sanskrit 
                 else (* chunking *) Sanskrit.read_sanskrit in
   let raw_chunks = Sanskrit.read_raw_sanskrit encode input in (* NEW *)
+  let raw_chunks_no_norm = Sanskrit.read_raw_sanskrit encode_no_norm input in 
   let chunks = chunker encode input in 
   let deva_chunks = List.map Canon.unidevcode raw_chunks in (* NEW *)
-  let roman_chunks = List.map Canon.uniromcode raw_chunks in (* NEW *)
+  let deva_chunks_no_norm = List.map Canon.unidevcode raw_chunks_no_norm in 
+  let roma_chunks = List.map Canon.uniromcode raw_chunks in (* NEW *)
   let deva_input = String.concat " " deva_chunks in 
-  let roman_input = String.concat " " roman_chunks in 
+  let raw_deva_input = String.concat " " deva_chunks_no_norm in 
+  let roma_input = String.concat " " roma_chunks in 
   let wx_chunks = List.map Canon.decode_WX raw_chunks in (* NEW *)
   let wx_input = String.concat " " wx_chunks in 
   let rcpts = sort_check (checkpoints @ rcheckpoints) in 
   let cpts = sort_check checkpoints in 
+  let output_chunks = List.map Canon.uniromcode chunks in 
+  let roma_output_chunks = String.concat " " output_chunks in 
   let (max_solutions, list_mode) = 
     match mode with 
     [ First_Summary | First_List -> (1, First_List)
@@ -906,18 +911,20 @@ value check_sentence translit uns text checkpoints input undo_enabled
   (* else if debug then write_solutions_to_file input mode solution_list *)
   (* Instead of saving it in local file, the results are now sent as JSON *)
   else if debug then write_sol_lst_json_for_debug solution_list wx_input collapse
-  else
-  match mode with 
-  [ Best_List | First_List -> 
-      display_best_list text deva_input roman_input checkpoints cpts wx_input 
-                        undo_enabled font list_mode solution_list updated_rcpts 
-                        fmode 
-  | Best_Summary | First_Summary -> 
-      display_best_summary text deva_input roman_input checkpoints cpts wx_input 
-                           chunks undo_enabled font mode full count solution_list
-                           updated_rcpts fmode 
-  | _ -> raise (Failure ("Incompatible mode")) 
-  ]
+  else do 
+  { display_sentences raw_deva_input deva_input roma_input roma_output_chunks
+  ; match mode with 
+    [ Best_List | First_List -> 
+        display_best_list text deva_input roma_input checkpoints cpts wx_input 
+                          undo_enabled font list_mode solution_list updated_rcpts 
+                          fmode 
+    | Best_Summary | First_Summary -> 
+        display_best_summary text deva_input roma_input checkpoints cpts wx_input 
+                             chunks undo_enabled font mode full count solution_list
+                             updated_rcpts fmode 
+    | _ -> raise (Failure ("Incompatible mode")) 
+    ]
+  }
 ;
 value arguments trans lex font cache st us input topic abs
                 corpus_permission corpus_dir sentence_no =

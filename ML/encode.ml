@@ -64,6 +64,15 @@ value switch_code = fun (* normalizes anusvaara in its input *)
   | _ -> failwith "Unknown transliteration scheme"
   ] 
 ;
+(* Switching code function according to transliteration convention *)
+value switch_code_no_norm = fun (* does not normalize anusvaara in its input *)
+  [ "VH" -> code_raw    (* [Canon.decode]    *)
+  | "WX" -> code_raw_WX (* [Canon.decode_WX] *)
+  | "KH" -> code_raw_KH (* [Canon.decode_KH] *)
+  | "SL" -> code_raw_SL (* [Canon.decode_SL] *)
+  | _ -> failwith "Unknown transliteration scheme"
+  ]
+;
 value rev_code_string str = Word.mirror (code_string str)
 ;
 (* [anchor : string -> string] -- used in [Morpho_html.url] and Sanskrit *)

@@ -49,8 +49,9 @@ value print_scl1 scl_font (solution : list (Phases.phase * Word.word)) =
        ^ scl_font ^"\"/></td>")
   ; ps tr_end
   ; ps table_end 
-  ; (Encode.skt_to_deva "sa.msaadhanii" ^ " : ") |> pl
-  ; ps (submit_input "Submit")
+  (* Since the Submit button is renamed to UoH Analysis, this label is redundant *)
+  (* ; (Encode.skt_to_deva "sa.msaadhanii" ^ " : ") |> pl *)
+  ; ps (submit_input "UoH Analysis")
   } 
 ;
 (* Invocation of UoH's SCL parser for dependency graph display.

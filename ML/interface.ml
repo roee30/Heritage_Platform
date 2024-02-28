@@ -406,11 +406,11 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
        (* too many solutions would choke the parsers *) 
        td_wrap ("(" ^ string_of_int count ^ " Solutions)") |> ps
     else if count=1 (* Unique remaining solution *) then do
-            { td_wrap (call_parser text cpts ^ "Unique Solution") |> ps
+            { td_wrap (call_parser text cpts ^ "SH Selection") |> ps
             ; call_scl_parser ()
             }
          else do
-       { td_wrap (call_reader text checkpoints "p" ^ "Filtered Solutions") |> ps
+       { td_wrap (call_reader text checkpoints "p" ^ "SH Selections") |> ps
        ; call_scl_parser ()
        } 
   ; tr_end |> pl   (* tr end *)

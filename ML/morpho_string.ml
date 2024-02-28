@@ -130,7 +130,7 @@ value gana_str_deva k =
   if k=0 then failwith "gana_str_deva"
   else match k with
   [ 1 -> "भ्वादि"
-  | 2 -> "आदादि"
+  | 2 -> "अदादि"
   | 3 -> "जुहोत्यादि"
   | 4 -> "दिवादि"
   | 5 -> "स्वादि"
@@ -145,9 +145,9 @@ value gana_str_deva k =
 ;
 
 value str_voice_deva = fun 
-  [ Active  -> " कर्तरि पप" 
-  | Middle  -> " कर्तरि आप" 
-  | Passive -> " कर्मणि  आप" 
+  [ Active  -> " कर्तरि पप " 
+  | Middle  -> " कर्तरि आप " 
+  | Passive -> " कर्मणि  आप " 
   ] 
 and str_conjugation_deva = fun
   [ Primary      -> ""
@@ -156,11 +156,11 @@ and str_conjugation_deva = fun
   | Desiderative -> " सन् "
   ]
 and str_nominal_deva = fun
-  [ Ppp     -> " क्त"
-  | Pppa    -> " क्तवतु"
-  | Ppra k  -> (gana_str_deva k) ^ " शतृ_लट्" 
-  | Pprm k  -> (gana_str_deva k) ^ " शानच्_लट्" 
-  | Pprp    -> " शानच्_लट्" 
+  [ Ppp     -> " क्त "
+  | Pppa    -> " क्तवतु "
+  | Ppra k  -> (gana_str_deva k) ^ " शतृ_लट् " 
+  | Pprm k  -> (gana_str_deva k) ^ " शानच्_लट् " 
+  | Pprp    -> " शानच्_लट् " 
   | Ppfta   -> "ppf." ^ " ac." 
   | Ppftm   -> "ppf." ^ " md." 
   | Pfuta   -> "pfu." ^ " ac." 
@@ -175,8 +175,8 @@ and str_tense_deva = fun
   | Aorist k     -> "लुङ्" ^ (gana_str_deva k)
   | Injunctive k -> "लुङ्" ^ (gana_str_deva k)
   | Conditional  -> "लृङ्"
-  | Benedictive  -> "आसीर्लिङ्"
-  | Subjunctive  -> "subj."
+  | Benedictive  -> "आषीर्लिङ्"
+  | Subjunctive  -> "लेट्"
   ]
 and str_case_deva = fun 
   [ Nom -> "1"
@@ -197,7 +197,7 @@ and str_gender_deva = fun
   [ Mas -> "पुं"
   | Neu -> "नपुं"
   | Fem -> "स्त्री" 
-  | Deictic _ -> "*" 
+  | Deictic _ -> "सर्व" 
   ]
 and str_pr_mode_deva = fun
   [ Present    -> "लट्"
@@ -211,26 +211,26 @@ and str_person_deva = fun
   | Third  -> "3" 
   ] 
 and str_ind_kind_deva = fun
-  [ Part -> ""
-  | Prep -> ""
-  | Conj -> ""
-  | Abs  -> ""
-  | Adv  -> ""
+  [ Part -> "अव्यय"
+  | Prep -> "उपसर्ग"
+  | Conj -> "अव्यय" (* or निपात *)
+  | Abs  -> "अव्यय"
+  | Adv  -> "अव्यय"
   | Tas  -> "तसिल्"
-  | _    -> ""
+  | _    -> "अव्यय"
   ]
 and str_invar_deva = fun
   [ Infi   -> "तुमुन्" 
-  | Absoya -> "क्त्वा" 
-  | Perpft -> "per. pft."
+  | Absoya -> "ल्यप्/णमुल्" 
+  | Perpft -> "लिट्"
   ]
 ;
 value str_paradigm_deva = fun
   [ Conjug t v    -> (str_tense_deva t) ^ (str_voice_deva v)
-  | Presenta k pr -> (str_pr_mode_deva pr) ^ (gana_str_deva k) ^ " कर्तरि पप"
-  | Presentm k pr -> (str_pr_mode_deva pr) ^ (gana_str_deva k) ^ " कर्तरि आप"
-  | Presentp pr   -> (str_pr_mode_deva pr ) ^ " कर्मणि आप"
-  | Perfut v      -> "per. fut." ^ (str_voice_deva v)
+  | Presenta k pr -> (str_pr_mode_deva pr) ^ (gana_str_deva k) ^ " कर्तरि पप "
+  | Presentm k pr -> (str_pr_mode_deva pr) ^ (gana_str_deva k) ^ " कर्तरि आप "
+  | Presentp pr   -> (str_pr_mode_deva pr ) ^ " कर्मणि आप "
+  | Perfut v      -> "लुट्" ^ (str_voice_deva v)
   ]
 ;
 value str_finite_deva (c,p) = (str_conjugation_deva c) ^ (str_paradigm_deva p)
@@ -241,11 +241,11 @@ value str_morph_deva = fun
   [ Noun_form g n c 
   | Part_form _ g n c -> (str_gender_deva g) ^ (str_number_deva n) ^ (str_case_deva c) 
   | Bare_stem | Avyayai_form -> "पूर्वपद"
-  | Avyayaf_form -> "अव्य"
+  | Avyayaf_form -> "अव्यय"
   | Verb_form f n p -> (str_finite_deva f) ^ (str_number_deva n) ^ (str_person_deva p)
   | Ind_form k -> str_ind_kind_deva k
-  | Abs_root c -> (str_conjugation_deva c) ^ "क्त्वा"
-  | Gati ->  "iiv."
+  | Abs_root c -> (str_conjugation_deva c) ^ "क्त्वा/णमुल्"
+  | Gati ->  "iiv." (* च्वि *)
   | Ind_verb m -> str_modal_deva m
   | Unanalysed -> "?"
   | PV pvs -> "उपस्रग" 

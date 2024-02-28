@@ -504,12 +504,12 @@ value call_scl_text text font =
 ;
 (* Prints segmentation word-forms (without phase details) in list view
    with a link to SCL *)
-value print_list_segmentations font id segmentations = do 
+value print_list_segmentations font id segmentations call_scl = do 
   { ps (span_begin Blue_)
   ; ps ((get_sentence font segmentations) ^ " ")
   ; let sentence = (get_sentence "wx" segmentations)
-  ; if scl_toggle then 
-    call_scl_text sentence scl_font ^ (string_of_int id) |> ps
+  ; if scl_toggle && (call_scl = True) then 
+      call_scl_text sentence scl_font ^ (string_of_int id) |> ps
     else () 
   ; ps span_end
   }
@@ -526,11 +526,11 @@ value print_solution text font mode_id fmode_id (id, (_, _, output, all)) = do
        So segmentation-forms with phase and links to morphs are displated, 
        along with a link to SCL's parser. *)
     if word_based_freq freq_mode.val
-    then print_list_segmentations font id (List.rev segmentations)
+      then print_list_segmentations font id (List.rev segmentations) True
     else if morph_based_freq freq_mode.val
       then print_scl_segments text id mode_id fmode_id (List.rev segmentations)
                               (List.rev output)
-    else print_list_segmentations font id (List.rev segmentations)
+    else print_list_segmentations font id (List.rev segmentations) True
   }
 ;
 
@@ -735,15 +735,24 @@ value display_best_list text deva_input roman_input checkpoints cpts wx_input
   { ps (div_begin Latin16)
   ; table_begin Spacing20 |> pl
   ; tr_begin |> pl (* tr begin *)
-  ; let (new_mode, link_text) = 
+  (* The following is commented temporarily to stop redirection
+     to the List view in First mode because the solution is already
+     made available at the top. This will also make sure that 
+     the UoH analysis mode can be accessed from only one location 
+     rather than from two locations. *)
+  (* ; let (new_mode, link_text) = 
       if mode = First_List 
         then (mode_id_of_mode First_Summary, "Summary of First Solution") 
       else if mode = Best_List 
         then (mode_id_of_mode Best_Summary, "Summary of Best Solutions") 
       else (mode_id_of_mode Best_Summary, "Summary of Best Solutions") in 
     td_wrap (call_best_graph text new_mode checkpoints 
-                             rcheckpoints ^ link_text) |> ps 
-  ; td_wrap (call_full_graph text ^ "Summary of All Solutions") |> ps 
+                             rcheckpoints ^ link_text) |> ps  *)
+  ; td_wrap (call_best_graph text (mode_id_of_mode Best_Summary) checkpoints 
+                             rcheckpoints ^ "Summary of Best Solutions") |> ps
+  ; td_wrap (call_best_graph text (mode_id_of_mode First_Summary) [] [] 
+                             ^ "First Solution") |> ps
+  ; td_wrap (call_full_graph text ^ "All Solutions") |> ps 
   ; tr_end |> pl   (* tr end *)
   ; table_end |> pl (* Spacing20  *)
   ; ps div_end
@@ -758,26 +767,50 @@ value display_best_summary text deva_input roman_input checkpoints cpts wx_input
   { make_visual cur_chunk.offset
   ; find_conflict 0
   ; div_begin Latin16 |> ps
+  ; if (mode = First_Summary || count = 1 || ((List.length solution_list) = 1)) then do 
+    { html_latin16 "Segmentation: " |> pl
+    ; let (_, _, output, all) = (List.hd solution_list) in 
+      let forget_transitions (_,(phase,word,_)) = (phase,word) in
+      let segmentations = List.map forget_transitions output in
+      print_list_segmentations font 1 (List.rev segmentations) False
+    }
+    else () 
   ; table_begin Spacing20 |> pl
   ; tr_begin |> pl (* tr begin *)
   ; if undo_enabled then 
        td_wrap (call_undo text (mode_id_of_mode mode) checkpoints 
                           rcheckpoints ^ "Undo") |> ps
     else ()
-  ; let (new_mode, link_text) = 
+  (* The following is commented temporarily to stop redirection
+     to the List view in First mode because the solution is already
+     made available at the top. This will also make sure that 
+     the UoH analysis mode can be accessed from only one location 
+     rather than from two locations. *)
+  (* ; let (new_mode, link_text) = 
       if mode = First_Summary 
         then (mode_id_of_mode First_List, "First Solution")
       else if mode = Best_Summary 
         then (mode_id_of_mode Best_List, "List of Best Solutions") 
       else (mode_id_of_mode Best_List, "List of Best Solutions") in 
     td_wrap (call_best_list text new_mode checkpoints 
-                            rcheckpoints ^ link_text) |> ps
-  ; td_wrap (call_full_graph text ^ "Summary of All Solutions") |> ps 
+                            rcheckpoints ^ link_text) |> ps *)
+  ; if mode = Best_Summary
+      then do 
+      { td_wrap (call_best_list text (mode_id_of_mode Best_List) checkpoints 
+                                rcheckpoints ^ "List of Best Solutions") |> ps
+      ; td_wrap (call_best_graph text (mode_id_of_mode First_Summary) [] [] 
+                                 ^ "First Solution") |> ps
+      }
+    else if mode = First_Summary 
+      then td_wrap (call_best_graph text (mode_id_of_mode Best_Summary) [] [] 
+                                    ^ "Best Solutions") |> ps
+    else ()
+  ; td_wrap (call_full_graph text ^ "All Solutions") |> ps 
   ; let call_scl_parser () = (* invocation of scl parser *)
         if scl_toggle then
            td_wrap (call_reader text checkpoints rcheckpoints "o" 
                                 (mode_id_of_mode mode) fmode 
-                    ^ "UoH Analysis Mode") |> ps 
+                                ^ "UoH Analysis") |> ps 
         else () (* [scl_parser] is not visible unless toggle is set *) in
     (* This is a work-around to check whether the number of solutions is 
        equal to 1. When there is only 1 solution, the "Unique Solution" and 
@@ -789,14 +822,22 @@ value display_best_summary text deva_input roman_input checkpoints cpts wx_input
        definitely only one solution. Also, when the segmenter produces only 
        one solution, the count value will be 1. *)
     let single_solution = 
+      ((mode = First_Summary) || (mode = First_List)) || (count = 1) in 
+    (* The following is commented temporarily to check if SH selections and 
+       SCL parser are to be provided always in First mode *)
+    (* let single_solution = 
       ((((fmode_of_fmode_id fmode) = Frequency_Stem_Morph) && 
       (mode = First_Summary)) ||
-      count = 1) in 
+      count = 1) in  *)
     if single_solution (* Unique remaining solution *) then do
     { td_wrap (call_parser text (checkpoints @ rcheckpoints) 
-               ^ "Unique Solution") |> ps
+               ^ "SH Selection") |> ps
     ; call_scl_parser ()
-    } else ()
+    } else do 
+    { td_wrap (call_reader text checkpoints rcheckpoints "p"
+                           (mode_id_of_mode mode) fmode 
+                           ^ "SH Selections") |> ps
+    }
   ; tr_end |> pl   (* tr end *)
   ; table_end |> pl (* Spacing20  *)
   ; div_end |> ps (* Latin16 *)

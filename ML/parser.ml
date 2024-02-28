@@ -212,7 +212,7 @@ value analyse query output =
       | _ -> 0
       ] in
     pl (xml_empty_with_att "input" (* Final call to Parser for display *)
-           [ ("type","submit"); ("value","Submit"); 
+           [ ("type","submit"); ("value","SH Selection"); 
              ("onclick","unique('" ^ parser_cgi ^ "?" ^ query 
              ^ ";p=','" ^ string_of_int (find_len top_groups) ^ "')" )
            ] ^ html_break)

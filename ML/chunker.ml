@@ -193,4 +193,15 @@ value chunker read_chunk l = (* l is list of chunks separated by blanks   *)
   let (_,padas) = pad_rec l in padas
 ;
 
+(* Examples of hiatus (avasaana) in Velthuis notation :
+devaa api => devaa_api 
+devaa uktaa.h => devaa_uktaa.h
+deva ukta.h => deva_ukta.h
+deva icchati => deva_icchati 
+deva api => deva api (no hiatus deva voc) = deva!api 
+devo'pi => deva.h api
+devaapi => devaa api but not allowed for deva voc which must be chunk-final 
+devopi or deva'pi not recognized
+*)
+
 (*i end; i*)

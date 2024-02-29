@@ -205,8 +205,14 @@ value process_input text us mode topic (input:string) encode cpts
       pl (call_graph text mode ^ " Show Summary of Solutions")
     else
       let mode_id = mode_id_of_mode best_mode in 
+      let link_text = 
+        match best_mode with 
+        [ Best_Summary | Best_List -> " Show Best Solutions"
+        | First_Summary | First_List -> " Show First Solution"
+        | _ -> " Show Summary of Solutions"
+        ] in 
       pl (call_best_mode text checkpoints rcheckpoints mode_id fmode 
-          ^ " Show Best Solutions") 
+                         ^ link_text) 
   ; pl (xml_end "p")
   ; pl "Input:" 
   ; ps (roma16_red_sl romainput) (* romanisation *)

@@ -379,7 +379,10 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
   { make_visual cur_chunk.offset
   ; find_conflict 0
   ; html_break |> pl
-  ; html_latin16 "Input: " |> pl (* raw input provided by the user *)
+  ; match font with 
+    [ "roma" -> html_latin16 "Input: " |> pl
+    | "deva" -> deva16_black "इन्पुट्: " |> pl
+    ] (* raw input provided by the user *)
   ; deva16_blue raw_deva_input |> pl (* always produced in Devanagari *)
   ; html_break |> ps
   (* ; html_latin16 "Normalized: " |> pl
@@ -389,7 +392,11 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
     | _ -> roma16_blue roma_input |> ps (* romanized by default*) 
     ]
   ; html_break |> ps *)
-  ; html_latin16 "Chunks: " |> pl (* The output of chunker which introduces underscores *)
+  ; match font with 
+    [ "roma" -> html_latin16 "Chunks: " |> pl
+    | "deva" -> deva16_black "वर्णक्रम: " |> pl
+    ] (* The output of chunker which introduces underscores and normalization
+       of anusvaara to anunaasika *)
   ; roma16_blue roma_output_chunks |> pl 
   ; html_break |> pl
   ; div_begin Latin16 |> ps
@@ -400,7 +407,7 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
     else ()
   ; let call_scl_parser () = (* invocation of scl parser *)
         if scl_toggle then
-           td_wrap (call_reader text checkpoints "o" ^ "UoH Analysis Mode") |> ps
+           td_wrap (call_reader text checkpoints "o" ^ "UoH Analysis") |> ps
         else () (* [scl_parser] is not visible unless toggle is set *) in
     if count > Web.max_count then 
        (* too many solutions would choke the parsers *) 

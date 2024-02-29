@@ -318,7 +318,7 @@ value enpied = "position: fixed; bottom: 0pt; width: 100%"
 type style_class = 
     [ Blue_ | Green_ | Navy_ | Red_ | Magenta_ | Hidden_
     | Header_deva | Header_tran | Bandeau | Body | Spacing20 | Pad60 | Border2
-    | Latin12 | Deva | Devac | Deva16 | Deva16c | Deva20c | Roma16
+    | Latin12 | Deva | Devac | Deva16 | Deva16c | Deva20c | Deva16b | Roma16
     | Roma16o | Roma12o | Inflection
     | Alphabet | G2 | Title | Latin16 | Devared_ | Math | Enpied 
     | B1 | B2 | B3 | C1 | C2 | C3 | Cell5 | Cell10 | Center_ | Tcenter | Centered
@@ -411,6 +411,7 @@ value styles = fun
     | Deva         -> [ deva_font; Color Maroon; Font_size 12 ] 
     | Devac        -> [ deva_font; Color Blue; Font_size 12; Textalign Center ]
     | Deva16       -> [ deva_font; Color Blue; Font_size 16 ] 
+    | Deva16b      -> [ deva_font; Color Black; Font_size 16 ]
     | Roma16       -> [ roman_font; Color Blue; Font_size 16 ] 
     | Deva16c      -> [ deva_font; Color Blue; Font_size 16; Textalign Center ]
     | Deva20c      -> [ deva_font; Color Blue; Font_size 20; Textalign Center ]
@@ -495,6 +496,7 @@ value class_of = fun
     | Deva16          -> "deva16"
     | Deva16c         -> "deva16c"
     | Deva20c         -> "deva20c"
+    | Deva16b         -> "deva16b"
     | Alphabet        -> "alphabet"
     | Title           -> "title"
     | B1              -> "b1"
@@ -590,6 +592,7 @@ and deva12_blue_center = span_skt Devac
 and deva16_blue        = span_skt Deva16
 and deva16_blue_center = span_skt Deva16c
 and deva20_blue_center = span_skt Deva20c
+and deva16_black       = span_skt Deva16b
 ;
 value title s = xml_begin "title" ^ s ^ xml_end "title"
 and h1_title s = h1_begin Title ^ s ^ h1_end 

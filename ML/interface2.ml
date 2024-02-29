@@ -766,7 +766,11 @@ value display_best_summary text deva_input roman_input checkpoints cpts wx_input
   ; find_conflict 0
   ; div_begin Latin16 |> ps
   ; if (mode = First_Summary || count = 1 || ((List.length solution_list) = 1)) then do 
-    { html_latin16 "Segmentation: " |> pl
+    { match font with 
+      [ "roma" -> html_latin16 "Segmentation: " |> pl
+      | "deva" -> deva16_black "पदपाठ: " |> pl
+      ] (* The segmented string obtained from the ranked solutions 
+           is printed here *)
     ; print_list_segmentations font 1 segmentations False
     }
     else () 
@@ -858,9 +862,12 @@ value display_best_summary text deva_input roman_input checkpoints cpts wx_input
 (* Displays the input provided by the user in Devanagari and the output of the 
    chunker in IAST. This output contains the normalized input along with the introduction of the 
    underscore wherever the hiatus is ambiguous. *)
-value display_sentences raw_deva_input deva_input roma_input roma_output_chunks = do 
+value display_sentences raw_deva_input deva_input roma_input roma_output_chunks font = do 
   { html_break |> pl
-  ; html_latin16 "Input: " |> pl (* raw input provided by the user *)
+  ; match font with 
+    [ "roma" -> html_latin16 "Input: " |> pl
+    | "deva" -> deva16_black "इन्पुट्:‌" |> pl
+    ] (* raw input provided by the user *)
   ; deva16_blue raw_deva_input |> pl (* always produced in Devanagari *)
   ; html_break |> ps
   (* The normalized input which was printed earlier depending on the user's 
@@ -872,7 +879,11 @@ value display_sentences raw_deva_input deva_input roma_input roma_output_chunks 
     | _ -> roma16_blue roma_input |> ps (* romanized by default*) 
     ]
   ; html_break |> ps *)
-  ; html_latin16 "Chunks: " |> pl (* The result of chunking with underscores *)
+  ; match font with 
+    [ "roma" -> html_latin16 "Chunks: " |> pl
+    | "deva" -> deva16_black "वर्णक्रम: " |> pl
+    ] (* The output of chunker which introduces underscores and normalization
+       of anusvaara to anunaasika *)
   ; roma16_blue roma_output_chunks |> pl 
   ; html_break |> pl
   }
@@ -958,7 +969,7 @@ value check_sentence translit uns text checkpoints input undo_enabled
   (* Instead of saving it in local file, the results are now sent as JSON *)
   else if debug then write_sol_lst_json_for_debug solution_list wx_input collapse
   else do 
-  { display_sentences raw_deva_input deva_input roma_input roma_output_chunks
+  { display_sentences raw_deva_input deva_input roma_input roma_output_chunks font 
   ; match mode with 
     [ Best_List | First_List -> 
         display_best_list text deva_input roma_input checkpoints cpts wx_input 

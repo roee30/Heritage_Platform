@@ -497,9 +497,7 @@ value print_scl_segments text id mode_id fmode_id segmentation output = do
 ;
 (* Call the SCL's parser directly with a link. *)
 value call_scl_text text font = 
-  let cgi = "/cgi-bin/scl/MT/anusaaraka.cgi?encoding=WX&text=" ^ text 
-            ^ "&splitter=None&out_encoding=" ^ font 
-            ^ "&parse=Full&text_type=Sloka&mode=web&tlang=Hindi" in 
+  let cgi = Scl_parser.generate_scl_cgi text font in 
   anchor Green_ (invoke cgi) check_sign
 ;
 (* Prints segmentation word-forms (without phase details) in list view
@@ -763,16 +761,13 @@ value display_best_list text deva_input roman_input checkpoints cpts wx_input
 (* To display the summary of best solutions *)
 value display_best_summary text deva_input roman_input checkpoints cpts wx_input 
                            chunks undo_enabled font mode full count solution_list
-                           rcheckpoints fmode = do 
+                           rcheckpoints fmode segmentations = do 
   { make_visual cur_chunk.offset
   ; find_conflict 0
   ; div_begin Latin16 |> ps
   ; if (mode = First_Summary || count = 1 || ((List.length solution_list) = 1)) then do 
     { html_latin16 "Segmentation: " |> pl
-    ; let (_, _, output, all) = (List.hd solution_list) in 
-      let forget_transitions (_,(phase,word,_)) = (phase,word) in
-      let segmentations = List.map forget_transitions output in
-      print_list_segmentations font 1 (List.rev segmentations) False
+    ; print_list_segmentations font 1 segmentations False
     }
     else () 
   ; table_begin Spacing20 |> pl
@@ -808,9 +803,12 @@ value display_best_summary text deva_input roman_input checkpoints cpts wx_input
   ; td_wrap (call_full_graph text ^ "All Solutions") |> ps 
   ; let call_scl_parser () = (* invocation of scl parser *)
         if scl_toggle then
-           td_wrap (call_reader text checkpoints rcheckpoints "o" 
-                                (mode_id_of_mode mode) fmode 
-                                ^ "UoH Analysis") |> ps 
+          if count = 1 then 
+            td_wrap (call_reader text checkpoints rcheckpoints "o" 
+                                 (mode_id_of_mode mode) fmode 
+                                 ^ "UoH Analysis") |> ps
+           else let sentence = (get_sentence "wx" segmentations) in 
+             td_wrap (call_scl_text sentence scl_font ^ "UoH Analysis") |> ps 
         else () (* [scl_parser] is not visible unless toggle is set *) in
     (* This is a work-around to check whether the number of solutions is 
        equal to 1. When there is only 1 solution, the "Unique Solution" and 
@@ -939,6 +937,13 @@ value check_sentence translit uns text checkpoints input undo_enabled
      the tracking back using Undo is as per the user's selection of segments *)
   let updated_rcpts = updated_rcheckpts in 
   let undo_enabled = ((List.length cpts) > 0) && undo_enabled in 
+  let segmentations = 
+    if (mode = First_Summary || count = 1 || ((List.length solution_list) = 1)) then 
+      let (_, _, output, all) = (List.hd solution_list) in 
+      let forget_transitions (_,(phase,word,_)) = (phase,word) in
+      let segs = List.map forget_transitions output in 
+      List.rev segs
+    else [] in 
   (* Pipeline -> is enabled when the Segmenter is accessed directly from
                  sa.msaadhanii. The best segmented solution is directly 
                  fed to the standard output.
@@ -962,7 +967,7 @@ value check_sentence translit uns text checkpoints input undo_enabled
     | Best_Summary | First_Summary -> 
         display_best_summary text deva_input roma_input checkpoints cpts wx_input 
                              chunks undo_enabled font mode full count solution_list
-                             updated_rcpts fmode 
+                             updated_rcpts fmode segmentations 
     | _ -> raise (Failure ("Incompatible mode")) 
     ]
   }

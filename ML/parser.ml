@@ -204,9 +204,11 @@ value analyse query output =
   let sorted_groups = sort_flatten groups in 
   let (top_groups, threshold) = truncate_groups sorted_groups in do
   { xml_empty "p" |> pl
-  ; span_begin Latin12 |> ps
+  (* Since the subsequent button contains the label SH selection, the following 
+     has been commented *)
+  (* ; span_begin Latin12 |> ps
   ; "Final analysis: " |> pl
-  ; span_end |> ps
+  ; span_end |> ps *)
   ; let find_len = fun
       [ [ (_,[ a :: _ ]) :: _ ] -> List.length a
       | _ -> 0

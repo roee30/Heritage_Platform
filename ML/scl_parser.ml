@@ -79,7 +79,7 @@ value print_scl scl_font sols = match sols with
 (* This is an additional method to directly call scl's MT interface *)
 value invoke_scl_parser text sol_num font  =
   let sol_num_string = (string_of_int sol_num) in
-  let svg_interface_url = "/cgi-bin/scl/MT/" in do
+  let svg_interface_url = scl_cgi ^ "MT/" in do
   { ps ("<form name=\"parse " ^ sol_num_string 
        ^ "\" form style='display: inline;' method=\"GET\" action = \""
        ^ svg_interface_url ^ "anusaaraka.cgi\">\n")
@@ -98,5 +98,11 @@ value invoke_scl_parser text sol_num font  =
 ;
 value post_best_segments_scl all_segments = 
   let _ = List.fold_left Lex.best_segments_for_scl 1 all_segments in ()
+;
+
+value generate_scl_cgi text font = 
+  scl_cgi ^ "MT/anusaaraka.cgi?encoding=WX&text=" ^ text 
+          ^ "&splitter=None&out_encoding=" ^ font 
+          ^ "&parse=Full&text_type=Sloka&mode=web&tlang=Hindi"
 ;
 (* end; *)

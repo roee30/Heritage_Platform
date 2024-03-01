@@ -206,9 +206,9 @@ and str_pr_mode_deva = fun
   | Imperfect  -> "लङ् आप"
   ] 
 and str_person_deva = fun 
-  [ First  -> "1" 
-  | Second -> "2" 
-  | Third  -> "3" 
+  [ First  -> "3" (* t.rtiiya *)
+  | Second -> "2" (* dvitiiya *)
+  | Third  -> "1" (* prathama ! *)
   ] 
 and str_ind_kind_deva = fun
   [ Part -> "अव्यय"

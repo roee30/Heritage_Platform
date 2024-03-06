@@ -36,8 +36,6 @@ value i_root = "i"  (* [Subst.record_ifc2] *)
 and ita_part = "ita" (* id *)
 and dagh_root = "dagh" (* id *) 
 and daghna_part = "daghna" (* id - accent needed *)
-and arcya_absolutive = "arcya" (* [Subst.record_noun_gen] *)
-(* and kaara = "kaara" *)
 ;
 module Gramskt = Camlp4.PreCast.MakeGram Skt_lexer 
 ;

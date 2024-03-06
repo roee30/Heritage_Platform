@@ -18,15 +18,25 @@ and genders = list gender
 ;
 type number = [ Singular | Dual | Plural ] 
 ;
-type case = [ Nom (* nominatif *)
-            | Acc (* accusatif *)
-            | Ins (* instrumental *) (* comitatif (Henry) *)
-            | Dat (* datif *)
-            | Abl (* ablatif *)
-            | Gen (* génitif *)
-            | Loc (* locatif *)
-            | Voc (* vocatif *)
-            ]
+type case = 
+  [ Nom (* nominatif *)
+  | Acc (* accusatif *)
+  | Ins (* instrumental *) (* comitatif (Henry) *)
+  | Dat (* datif *)
+  | Abl (* ablatif *)
+  | Gen (* génitif *)
+  | Loc (* locatif *)
+  | Voc (* vocatif *)
+  ]
+;
+(* Varieties of na~n-samaasas *)
+type nan_kind =
+  [ Neg  (* logical negation: adj -> adj *)
+  | Not  (* sentential negation: adv -> adv *)
+  | Opp  (* opposite notion: subst -> subst preserving gender *)
+  | Priv (* bahuvrihi: noun -> adj with gender-raising *)
+  | Abse (* absence noun -> noun in n. *) 
+  ]
 ;
 (* The verb system *)
 type gana = int (* present class: 1 to 10, plus 11 for denominatives *)
@@ -108,26 +118,6 @@ and invar =
   [ Infi    (* infinitive (tumun) *)
   | Absoya  (* absolutive (gerund, invariable participle) (lyap) *) 
   | Perpft  (* periphrastic perfect (li.t) *)
-  ]
-;
-(* Varieties of na~n-samaasas *)
-type nan_kind =
-  [ Neg  (* logical negation: adj -> adj *)
-  | Not  (* sentential negation: adv -> adv *)
-  | Opp  (* opposite notion: subst -> subst preserving gender *)
-  | Priv (* bahuvrihi: noun -> adj with gender-raising *)
-  | Abse (* absence noun -> noun in n. *) 
-  ]
-;
-type sadhana = (* karaka, action or absolutive - coarser than krit *)
-  [ Agent
-  | Action
-  | Object
-  | Instr
-  | Orig (* unused *)
-  | Loca 
-  | Absolu
-  | Nan of nan_kind
   ]
 ;
 (* Primary nominal formations (k.rdantas) *)

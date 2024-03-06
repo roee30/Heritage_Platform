@@ -22,8 +22,6 @@ value i_root : skt;
 value ita_part : skt;
 value dagh_root : skt;
 value daghna_part : skt;
-value arcya_absolutive : skt;
-(* value kaara : skt; *)
 value trad_skt : string -> skt;
 value trad_sanscrit : string -> sloka; 
 value trad_skt_list : string -> list skt; 

@@ -604,7 +604,7 @@ value validate out = match out with
                    [ (Comp (Pv,Peri) pv peri_form,cpd_form,s) :: r ]
                 else []
       ]
-  | [ (Auxi, rev_auxi_form,s) :: [ (Peri,rev_peri_form,s') :: r ] ] ->
+  | [ (Auxi,rev_auxi_form,s) :: [ (Peri,rev_peri_form,s') :: r ] ] ->
       let auxi_form = Word.mirror rev_auxi_form in
       match Deco.assoc auxi_form morpho.auxis with
       [ [] -> failwith ("Unknown auxi_form: " ^ Canon.decode auxi_form)

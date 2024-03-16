@@ -21,7 +21,7 @@ value gana_str_roma k =
 ;
 value str_voice_roma = fun 
   [ Active  -> " ac." 
-  | Middle  -> " md." 
+  | Middle  -> " mo." 
   | Passive -> " ps." 
   ] 
 and str_conjugation_roma = fun
@@ -34,12 +34,12 @@ and str_nominal_roma = fun
   [ Ppp     -> "pp."
   | Pppa    -> "ppa."
   | Ppra k  -> "ppr." ^ (gana_str_roma k) ^ " ac." 
-  | Pprm k  -> "ppr." ^ (gana_str_roma k) ^ " md." 
+  | Pprm k  -> "ppr." ^ (gana_str_roma k) ^ " mo." 
   | Pprp    -> "ppr." ^ " ps." 
   | Ppfta   -> "ppf." ^ " ac." 
-  | Ppftm   -> "ppf." ^ " md." 
+  | Ppftm   -> "ppf." ^ " mo." 
   | Pfuta   -> "pfu." ^ " ac." 
-  | Pfutm   -> "pfu." ^ " md." 
+  | Pfutm   -> "pfu." ^ " mo." 
   | Pfutp k -> "pfp." ^ (gana_str_roma k)
   | Action_noun -> "act."
   | Agent_noun  -> "agt."
@@ -103,7 +103,7 @@ and str_invar_roma = fun
 value str_paradigm_roma = fun
   [ Conjug t v    -> (str_tense_roma t) ^ (str_voice_roma v)
   | Presenta k pr -> (str_pr_mode_roma pr) ^ (gana_str_roma k) ^ " ac."
-  | Presentm k pr -> (str_pr_mode_roma pr) ^ (gana_str_roma k) ^ " md."
+  | Presentm k pr -> (str_pr_mode_roma pr) ^ (gana_str_roma k) ^ " mo."
   | Presentp pr   -> (str_pr_mode_roma pr ) ^ " ps."
   | Perfut v      -> "per. fut." ^ (str_voice_roma v)
   ]
@@ -162,9 +162,9 @@ and str_nominal_deva = fun
   | Pprm k  -> (gana_str_deva k) ^ " शानच्_लट् " 
   | Pprp    -> " शानच्_लट् " 
   | Ppfta   -> "ppf." ^ " ac." 
-  | Ppftm   -> "ppf." ^ " md." 
+  | Ppftm   -> "ppf." ^ " mo." 
   | Pfuta   -> "pfu." ^ " ac." 
-  | Pfutm   -> "pfu." ^ " md." 
+  | Pfutm   -> "pfu." ^ " mo." 
   | Pfutp k -> "pfp." ^ (gana_str_deva k)
   | Action_noun -> "act."
   | Agent_noun  -> "agt."

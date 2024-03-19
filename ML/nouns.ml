@@ -2492,6 +2492,7 @@ value build_aksan stem entry =
    [ Declined Noun Neu
    [ (Singular,
         [ decline Voc "e"
+        ; decline Voc "i"
         ; decline Nom "i"
         ; decline Acc "i"
         ; decline Ins "naa"
@@ -2510,11 +2511,11 @@ value build_aksan stem entry =
         ; decline Abl "ibhyaam"
         ; decline Gen "nos"
         ; decline Loc "nos"
-        ] in if entry="ak.san" then 
-        [ decline Voc "ii"
-        ; decline Nom "ii" 
+        ] in if entry="ak.san" || entry="sakthan" then 
+        [ decline Voc "ii"  (* ak.sii Vedic: Sun and moon *)
+        ; decline Nom "ii"  (* sakthii les deux cuisses *)
         ; decline Acc "ii"
-        ] @ l (* Vedic: Sun and moon *)
+        ] @ l
       else l)
    ; (Plural, 
         [ decline Voc "iini"
@@ -5433,7 +5434,13 @@ value compute_nouns_stem_form e stem d p =
             ]
       | [ 2 :: _ ] -> report stem Neu (* (missing) ahigopaa raa vibhaa sthaa *)
       | [ 4; 40; 1 ] (* abhii2 *) -> () (* overgenerates *)
-      | [ 3 :: r1 ] (* -i *) 
+      | [ 3 :: r1 ] (* -i *) -> match r1 with 
+               [ [ 33; 17; 1; 48 ] (* sakthan/sakthi *) 
+               | [ 33; 48; 1 ] (* asthan/asthi *) 
+               | [ 35; 1; 34 ] (* dadhan/dadhi *)
+               | [ 47; 17; 1 ] (* ak.san/ak.si *) -> build_aksan r1 e     
+               | _ ->  build_neu_i r1 e
+               ]
       | [ 4 :: r1 ] (* -ii - rare *) -> build_neu_i r1 e
       | [ 5 :: r1 ] (* -u *) 
       | [ 6 :: r1 ] (* -uu - rare *) -> build_neu_u r1 e

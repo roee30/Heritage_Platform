@@ -254,7 +254,7 @@ value aug = fun (* augment last phoneme of word *)
   | [] -> failwith "Empty stem in aug"   
   ]
 ;
-value light = fun (* light roots end in short vowel Pan{6,1,69} *)
+value light (* rstem *) = fun (* light roots end in short vowel Pan{6,1,69} *)
    [ [] -> failwith "light" 
    | [ c :: _ ] -> short_vowel c 
    ]

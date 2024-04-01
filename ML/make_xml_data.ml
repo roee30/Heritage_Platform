@@ -253,7 +253,7 @@ value print_system = fun
   ]
 and print_invar = fun
   [ Infi   -> "<inf/>" |> ps
-  | Absoya -> "<abs/>" |> ps
+  | Absoya | Absotvaa | Namul -> "<abs/>" |> ps
   | Perpft -> "<per/>" |> ps
   ]
 ;
@@ -306,14 +306,14 @@ value print_morph = fun
            | Prep -> "<prep/>" |> ps
            | Conj -> "<conj/>" |> ps
            | Tas  -> "<tasil/>" |> ps
-           | Abs  -> () (* redundant absolutive forms *)
+           | Abs  -> () (* redundant absolutive forms *) 
            | Infl -> () (* redundant inflected form *)
            | Nota -> () (* skipped grammatical notation *)
            ]
       ; "</uf>" |> ps
       }
   | Avyayaf_form -> "<avya/>" |> ps
-  | Abs_root c -> do { "<ab>" |> ps; print_conjugation c; "</ab>" |> ps }
+(* | Abs_root c -> do { "<ab>" |> ps; print_conjugation c; "</ab>" |> ps } OBS *)
   | Bare_stem | Avyayai_form -> "<iic/>" |> ps
   | Gati -> "<iiv/>" |> ps
   | Ind_verb m -> do { "<vu>" |> ps; print_modal m ; "</vu>" |> ps }

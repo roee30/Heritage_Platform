@@ -122,7 +122,7 @@ value rdecode w = decode (Word.mirror w)
       [code_raw "a i" =  [11]] and not [[1; 50; 3]]. 
    Thus one should use underscore for hiatus in digitalised corpus: 
       [code_raw "a_i" =  [1; 3]]. The chunking of text by interpreting spaces 
-   is done in a preliminary pass by Sanskrit.padapatha. *)
+   is done in a preliminary pass by Chunker.chunker. *)
 
 (* Support for other translitteration schemes *)
 

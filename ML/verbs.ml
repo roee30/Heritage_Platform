@@ -2740,7 +2740,7 @@ value compute_ppp_stems root rstem =
            | "m.rg"   -> revcode "marg" (* strong *)
            | "jak.s"  -> revcode "jagh" (* jagdha \Pan{2,4,36} *)
            | "k.san"  -> revcode "k.sa" (* removal of final nasal *) 
-           | "gam"    -> revcode "ga" (* \Pan{6,4,37} *)
+           | "gam"    -> revcode "ga"   (* \Pan{6,4,37} *)
            | "tan#1"  -> revcode "ta"
            | "nam"    -> revcode "na"
            | "yam"    -> revcode "ya"
@@ -2792,18 +2792,16 @@ value compute_ppp_stems root rstem =
             (* vérifier forme passive pour racines ci-dessus *)
            | _ -> passive_stem root rstem (* possibly duhified and mirjified *)
            ] in [ Ta ppstem :: match root with  
-                  (* pp in -ita built on rstem (default) or on ppstem or both *)
-                    [ ".rc#1" | ".rj" | "k.svi.d" | "granth" | "grah" | "praz"
-                    | "ba.mh" | "ma.mh" | "manth" | "m.rg" | "yaj#1" | "vyadh"
-                    | "vrazc" | "vaz" | "vas#1" | "vas#4" | "zrath" 
-                    | "stambh"| "svap" ->
-                           [ Tia ppstem ] 
-                    | "vap" | "vap#1" | "vap#2" | "vad" ->
-                           [ Tia rstem; Tia ppstem ]
-                    | "dhmaa" -> [ Tia (revstem "dham") ]
-                    | "guh" -> [ Tia (revstem "guuh") ] (* \Pan{6,4,89} *)
-                    | _ -> [ Tia rstem ] (* standard Paninian way *)
-                    ] 
+                 (* pp in -ita built on rstem (default) or on ppstem or both *)
+                 [ ".rc#1" | ".rj" | "k.svi.d" | "granth" | "grah" | "jaag.r"
+                 | "praz" | "ba.mh" | "ma.mh" | "manth" | "m.rg" | "yaj#1"
+                 | "vyadh" | "vrazc" | "vaz" | "vas#1" | "vas#4" | "zrath" 
+                 | "stambh"| "svap" -> [ Tia ppstem ] 
+                 | "vap" | "vap#1" | "vap#2" | "vad" -> [ Tia rstem; Tia ppstem ]
+                 | "dhmaa" -> [ Tia (revstem "dham") ]
+                 | "guh" -> [ Tia (revstem "guuh") ] (* \Pan{6,4,89} *)
+                 | _ -> [ Tia rstem ] (* standard Paninian way *)
+                 ] 
                 ] in 
            let extra_forms = 
            match root with (* supplementary forms *)
@@ -2845,6 +2843,7 @@ value perstems rstem root =
   let sstem = strong_stem root rstem in 
   let inter = match rstem with 
       [ [ 7; 45 (* v.r *) ] -> [ 1; 2 ] (* i/ii* [v.r#1] and [v.r#2] *)
+      | [ 7; 19; 2; 24 ] (*jaag.r *) -> [ 1 ]
       | [ 7 (*.r *) :: _ ] -> [ 0 ]
       | _ -> match root with
              [ "gam" | "dham" | "praz" | "vaa#3" | "za.ms" | "han#1" | "huu"
@@ -3112,7 +3111,7 @@ value compute_passive_11 root ps_stem =
 (* Perfect system *)
 (******************)
 
-(* Reduplication for perfect. [redup_perf] takes a string, and returns 
+(* Reduplication for perfect. [redupl_perf] takes a string, and returns 
    [(s,w,o,e,b)] where [s] is the (reversed) strong stem word,
    [w] is the (reversed) weak stem word, 
    [o] is an optional lengthened stem word,
@@ -3277,11 +3276,7 @@ value redupl_perf root =
                              ] in (revw,iopt) 
                 ] in (glue short,False,iopt) 
           ] 
-       and strong = glue (if p then match root with 
-                             [ "jaag.r" -> revs (* verrue but Deshpande OK *)
-                             | _        -> revw
-                             ]
-                          else revs) 
+       and strong = glue (if p then revw else revs) 
        and longifvr = if vriddhi then revl else revs in 
        let olong = if p then None else Some (glue longifvr) in
        (strong, weak, olong, eweak, iopt)
@@ -3705,6 +3700,14 @@ value compute_perfect root =
         ; let (strong, weak,_,_,_) = redupl_perf "zvi" in (* \Pan{6,1,30} *)
           compute_perfect_v strong weak root (* Whitney§794b zizvaaya *)
         }
+    | "jaag.r" -> do 
+          { (* perfect stem from "g.r" *)
+            let (strong, weak,_,_,_) = redupl_perf "g.r" in 
+            compute_perfect_v strong weak root 
+          ; (* perfect stem from "jaag.r" - Epics *)
+            let (strong, weak,_,_,_) = redupl_perf "jaag.r" in 
+            compute_perfect_v strong weak root 
+          }
 (* Whitney§794b also jyaa pyaa vyaa hvaa; we treat vyaa above, and hvaa is huu.
    Thus pyaa is covered by pii. jyaa1 as jii gives jijyau same WR *)
     | "indh" -> compute_perfectm Primary (revcode "iidh") root
@@ -4444,7 +4447,7 @@ value compute_aorist root =
             ] in
         compute_ath_is_aorista stem root 
        ; match root with (* weird logic *)      
-        [ ".r.s" | "ku.t" | "t.rr" | "tru.t" | "pu.t" | "sphur" 
+        [ ".r.s" | "ku.t" | "jaag.r" | "t.rr" | "tru.t" | "pu.t" | "sphur" 
             -> ()  (* active only *)
         | _ -> compute_ath_is_aoristm strong root 
         ]
@@ -4583,7 +4586,7 @@ value compute_injunctive root =
             ] in
         compute_ath_is_injuncta stem root 
       ; match root with 
-        [ "t.rr" -> () (* active only *)
+        [ "t.rr" | "jaag.r" -> () (* active only *)
         | _ -> compute_ath_is_injunctm strong root 
         ]
       } 
@@ -4913,7 +4916,7 @@ value record_abso_ya form root =  (* lyap \Pan{7,1,37} *)
   enter1 root (Invar (Primary,Absoya) form) 
 and record_abso_tvaa form root = (* ktvaa \Pan{3,4,18+} *)
   if no_abso root then () else
-  enter1 root (Absotvaa Primary form)
+  enter1 root (Invar (Primary,Absotvaa) form)
 ;
 (* First absolutives in -ya \Pan{7,1,37} lyap *)
 value record_abs_ya root rstem w = do
@@ -4967,7 +4970,7 @@ value record_abs_ya root rstem w = do
   }
 ;
 (* For absolutives of roots gana 10 - Macdonell§164a Whitney§1051d *) 
-value light_10 = fun 
+value light_10 = fun (* rstem *)
    [ [] -> False
    | [ c :: r ] -> if vowel c then False else match r with
           [ [] -> False
@@ -4977,7 +4980,7 @@ value light_10 = fun
 ;
 value alternate_pp = fun
   [ "m.r.s" | "svid#2" | "dh.r.s" | "puu#1" (*i \Pan{?} i*)
-    (* next roots of gu.na 1 have penultimate "u" *)
+    (* next roots of ga.na 1 have penultimate "u" *)
   | "kul" | "k.sud" | "guh" | "jyut" | "dyut#1" | "mud#1" | "rud#1" | "ruh#1"
   | "lul" | "zuc#1" | "zubh#1" | "zu.s#1" -> True
   | _ -> False
@@ -5180,7 +5183,7 @@ value record_abso_am root =
 (* absolutive of secondary conjugations *)
 value record_absolutive c abs_stem_tvaa abs_stem_ya intercal root = 
   let record_abso_ya form = enter1 root (Invar (c,Absoya) form) 
-  and record_abso_tvaa form = enter1 root (Absotvaa c form) in do
+  and record_abso_tvaa form = enter1 root (Invar (c,Absotvaa) form) in do
   { let sfx = if intercal then "itvaa" else "tvaa" in
     record_abso_tvaa (fix abs_stem_tvaa sfx)
   ; record_abso_ya   (fix abs_stem_ya "ya")
@@ -6241,7 +6244,7 @@ value compute_conjugs root_word (infos : Conj_infos.root_infos) =
 ;
 (* Supplementary forms *)
 value compute_extra_rc () = (* vedic - \Pan{7,1,38} *)
-  enter1 ".rc#1" (Absotvaa Primary (code "arcya")) (* abs -ya with no preverb *)
+  enter1 ".rc#1" (Invar (Primary,Absotvaa) (code "arcya")) (* abs -ya with no preverb *)
 and compute_extra_kan () = do (* Lanmann "can" *)
   { enter1 "kan" (Conju (aora 5) [ (Singular,[ (Third, code "acaniit") ]) ])
   ; record_part (Pprm_ 4 Primary (revcode "kaayamaan") "kan") 
@@ -6254,8 +6257,8 @@ and compute_extra_khan () = (* WR MW *)
   and pstem = revcode "khaa" (* khaa substituted optionally in ps *) in 
   compute_passive conj root pstem 
 and compute_extra_car () = do
-  { enter1 "car" (Absotvaa Primary (code "cartvaa"))
-  ; enter1 "car" (Absotvaa Primary (code "ciirtvaa"))
+  { enter1 "car" (Invar (Primary,Absotvaa) (code "cartvaa"))
+  ; enter1 "car" (Invar (Primary,Absotvaa) (code "ciirtvaa"))
   ; enter1 "car" (Invar (Primary,Infi) (code "cartum")) (* epic *)
   }
 and compute_extra_jnaa () =

@@ -261,7 +261,7 @@ value get_roles entry = fun
                 else if g=Deictic Numeral || entry="eka" then Number g c n
                 else Actor (gram_role n entry c) g n (* beware n duplication *)
   | Verb_form f n p -> get_fin_roles entry f n p 
-  | Abs_root _ -> get_abs_roles entry 
+(*  | Abs_root _ -> get_abs_roles entry  *)
   | Ind_form Conj -> match entry with
                      [ "ca" -> Tool Coordination
                      | _ -> Ignored (* TODO vaa etc *)

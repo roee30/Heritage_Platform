@@ -89,14 +89,14 @@ and str_ind_kind_roma = fun
   [ Part -> "part."
   | Prep -> "prep."
   | Conj -> "conj."
-  | Abs  -> "abs."
+  | Abs  -> "abs." 
   | Adv  -> "adv."
   | Tas  -> "tasil"
   | _    -> "ind."
   ]
 and str_invar_roma = fun
   [ Infi   -> "inf." 
-  | Absoya -> "abs." 
+  | Absoya | Absotvaa | Namul -> "abs." 
   | Perpft -> "per. pft."
   ]
 ;
@@ -119,7 +119,7 @@ value str_morph_roma = fun
   | Avyayaf_form -> "ind."
   | Verb_form f n p -> (str_finite_roma f) ^ (str_number_roma n) ^ (str_person_roma p)
   | Ind_form k -> str_ind_kind_roma k
-  | Abs_root c -> (str_conjugation_roma c) ^ "abs."
+(* OBS   | Abs_root c -> (str_conjugation_roma c) ^ "abs." *)
   | Gati ->  "iiv."
   | Ind_verb m -> str_modal_roma m
   | Unanalysed -> "?"
@@ -214,14 +214,16 @@ and str_ind_kind_deva = fun
   [ Part -> "अव्यय"
   | Prep -> "उपसर्ग"
   | Conj -> "अव्यय" (* or निपात *)
-  | Abs  -> "अव्यय"
+(*  | Abs  -> "अव्यय" OBS *)
   | Adv  -> "अव्यय"
   | Tas  -> "तसिल्"
   | _    -> "अव्यय"
   ]
 and str_invar_deva = fun
   [ Infi   -> "तुमुन्" 
-  | Absoya -> "ल्यप्/णमुल्" 
+  | Absoya -> "ल्यप्"
+  | Absotvaa -> "क्त्वा"
+  | Namul -> "णमुल्"
   | Perpft -> "लिट्"
   ]
 ;
@@ -244,8 +246,8 @@ value str_morph_deva = fun
   | Avyayaf_form -> "अव्यय"
   | Verb_form f n p -> (str_finite_deva f) ^ (str_number_deva n) ^ (str_person_deva p)
   | Ind_form k -> str_ind_kind_deva k
-  | Abs_root c -> (str_conjugation_deva c) ^ "क्त्वा/णमुल्"
-  | Gati ->  "iiv." (* च्वि *)
+(* OBS   | Abs_root c -> (str_conjugation_deva c) ^ "क्त्वा/णमुल्" *)
+  | Gati -> "च्वि" 
   | Ind_verb m -> str_modal_deva m
   | Unanalysed -> "?"
   | PV pvs -> "उपस्रग" 

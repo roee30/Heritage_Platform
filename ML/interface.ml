@@ -362,15 +362,15 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
   let encode_no_norm = Encode.switch_code_no_norm translit in 
   let chunker = if uns (* sandhi undone *) then Sanskrit.read_raw_sanskrit 
                 else (* chunking *) Sanskrit.read_sanskrit in
-  let raw_chunks = Sanskrit.read_raw_sanskrit encode input in 
+(*  let raw_chunks = Sanskrit.read_raw_sanskrit encode input in OBS *)
   let raw_chunks_no_norm = Sanskrit.read_raw_sanskrit encode_no_norm input in 
-  let chunks = chunker encode input in 
-  let deva_chunks = List.map Canon.unidevcode raw_chunks 
-  and deva_chunks_no_norm = List.map Canon.unidevcode raw_chunks_no_norm 
-  and roma_chunks = List.map Canon.uniromcode raw_chunks in
-  let deva_input = String.concat " " deva_chunks 
-  and raw_deva_input = String.concat " " deva_chunks_no_norm  
-  and roma_input = String.concat " " roma_chunks 
+  let chunks = chunker encode input 
+(*  let deva_chunks = List.map Canon.unidevcode raw_chunks OBS *)
+  and deva_chunks_no_norm = List.map Canon.unidevcode raw_chunks_no_norm in
+(*  and roma_chunks = List.map Canon.uniromcode raw_chunks in OBS *)
+(*  let deva_input = String.concat " " deva_chunks OBS *)
+  let raw_deva_input = String.concat " " deva_chunks_no_norm  
+(*  and roma_input = String.concat " " roma_chunks OBS *)
   and cpts = sort_check checkpoints in 
   let output_chunks = List.map Canon.uniromcode chunks in 
   let roma_output_chunks = String.concat " " output_chunks in 
@@ -380,12 +380,12 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
   ; find_conflict 0
   ; html_break |> pl
   ; match font with 
-    [ "roma" -> html_latin16 "Input: " |> pl
-    | "deva" -> deva16_black "इन्पुट्: " |> pl
+    [ Roma -> html_latin16 "Input: " |> pl
+    | Deva -> deva16_black "इन्पुट्: " |> pl
     ] (* raw input provided by the user *)
   ; deva16_blue raw_deva_input |> pl (* always produced in Devanagari *)
   ; html_break |> ps
-  (* ; html_latin16 "Normalized: " |> pl
+  (* OBS ; html_latin16 "Normalized: " |> pl
   ; match font with
     [ "roma" -> roma16_blue roma_input |> ps (* romanized *)
     | "deva" -> deva16_blue deva_input |> ps (* devanagari *)
@@ -393,8 +393,8 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
     ]
   ; html_break |> ps *)
   ; match font with 
-    [ "roma" -> html_latin16 "Chunks: " |> pl
-    | "deva" -> deva16_black "वर्णक्रम: " |> pl
+    [ Roma -> html_latin16 "Chunks: " |> pl
+    | Deva -> deva16_black "वर्णक्रम: " |> pl
     ] (* The output of chunker which introduces underscores and normalization
        of anusvaara to anunaasika *)
   ; roma16_blue roma_output_chunks |> pl 
@@ -565,7 +565,7 @@ value graph_engine () = do
    try do 
    { match (revised,rev_off,rev_ind) with
      [ ("",-1,-1) -> (* Standard input processing *** Main call *** *) 
-       check_sentence translit uns text checkpoints input undo_enabled font
+       check_sentence translit uns text checkpoints input undo_enabled ft
      | (new_word,word_off,chunk_ind) (* User-aid revision mode *) -> 
        let chunks = Sanskrit.read_sanskrit (Encode.switch_code translit) input in
        let rec decoded init ind = fun
@@ -593,7 +593,7 @@ value graph_engine () = do
                                 url_enc_corpus_permission corpus_dir sentence_no
        and new_input = decode_url updated_input in
        check_sentence translit uns new_text revised_check new_input undo_enabled
-                      font
+                      ft
      ]
      (* Rest of the code concerns Corpus mode *)
      (* automatically refreshing the page only if guess parameter *)

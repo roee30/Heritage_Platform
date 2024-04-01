@@ -107,14 +107,14 @@ and print_scl_nominal = fun
   ]
 and print_scl_invar = fun 
   [ Infi   -> ps "<inf/>" 
-  | Absoya -> ps "<abs/>"
+  | Absoya | Absotvaa | Namul -> ps "<abs/>"
   | Perpft -> ps "<perpft/>"
   ]
 and print_scl_kind = fun
   [ Part -> ps "<part/>"
   | Prep -> ps "<prep/>"
   | Conj -> ps "<conj/>"
-  | Abs  -> ps "<abs/>"
+  | Abs  -> ps "<abs/>" 
   | Adv  -> ps "<adv/>"
   | _    -> ps "<ind/>"
   ]
@@ -141,7 +141,6 @@ value print_scl_morph = fun
       }
   | Ind_form k -> print_scl_kind k
   | Avyayaf_form -> ps "<avya/>"
-  | Abs_root c   -> do { print_scl_conjugation c; ps "<abs/>" }
   | Gati    -> ps "<iiv/>"
   | Ind_verb m   -> print_scl_modal m
   | PV _         -> ps "<pv/>"

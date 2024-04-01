@@ -6157,11 +6157,11 @@ value gatis = (* G{saak.sat} \Pan{1,4,74} + G(uurii) \Pan{1,4,61} *)
   ; "urasi" (* \Pan{1,4,75} in the sense of anatyaadhaana cf Sharma *)
   ; "manasi" (* id. *)
   ; "anye" (* \Pan{1,4,76} id *)
-  ; "pade"
-  ; "madhye"
-  ; "nivacane"
+  ; "pade" (* id. *)
+  ; "madhye" (* id. *)
+  ; "nivacane" (* id. *)
   ; "haste" (* \Pan{1,4,77} upayamana (mariage) *)
-  ; "paa.nau"
+  ; "paa.nau" (* id. *)
   ; "svayam"
   ; "uurii" (* \Pan{1,4,61} G{uurii} uuriik.rtya but Wh§1094b says uriik.r *)
   (* other G{uurii}: yadurii,urarii,yadurarii,paapii,laalii,aattaalii,vetaalii,
@@ -6173,16 +6173,17 @@ value gatis = (* G{saak.sat} \Pan{1,4,74} + G(uurii) \Pan{1,4,61} *)
   ; "alam" (* ala.mk.rtya \Pan{1,4,64} Wh§1078a *)
   ; "bahis" (* k.r1 bhuu1 Wh§1078a *)
   ; "zrat" (* dhaa1 Wh§1079 *) 
-  ; "sat" (* satk.rtya \Pan{1,4,63}, but "asat" ignored *)
+  ; "sat" (* satk.rtya \Pan{1,4,63}, and "asat" recognized in a-satk.rtya *)
+  ; "ka.ne"/"manas" ka.nehatya \Pan{1,4,66} 
+  ; "antar" (* i gam dhaa han antarhatya \Pan{1,4,65} *)
   ; "paaram" (* i gam *) TODO *)
-(* antarhatya \Pan{1,4,65} lexicalized *)
+(*; "adas" ada.hk.rtya \Pan{1,4,70} TODO *)
 (* Ignored at present
-   ka.ne/manas ka.nehatya \Pan{1,4,66} 
    accha acchaa acchagatya acchodya \Pan{1,4,69} Wh§1078 
-   adas ada.hk.rtya \Pan{1,4,70} 
    vinaa Wh§1078a 
    g.rhya abs used as ifc cvi{grah} hastag.rhya kar.nag.rhya RV Wh§990h
-   also ignored onomatopeae pa.tapa.taakaroti etc. .daac \Pan{5,4,57-67} 
+   also ignored onomatopeae pa.tapa.taakaroti etc. .daac \Pan{5,4,57-67}
+   and samayaa for samaya in samayaakaroti  \Pan{5,4,61}
    also interjections like va.sa.t va.sa.tkaroti but va.sa.tkaara lexicalized *)
   ]
 ;

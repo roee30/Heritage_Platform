@@ -255,7 +255,7 @@ value print_sem w = fun
   [ Noun_form g n c -> print_noun c n g
   | Part_form v g n c -> do { print_verbal v; print_noun c n g }
   | Verb_form f n p -> print_verb w f n p
-  | Abs_root _ | Ind_form Abs -> print_abs w 
+  | Ind_form Abs -> print_abs w 
   | Ind_form Adv -> ps "Adverb"
   | Ind_form _ -> ps (translate_tool w)
   | Bare_stem -> ps "Compound"

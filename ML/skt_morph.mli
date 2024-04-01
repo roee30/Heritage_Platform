@@ -115,9 +115,11 @@ and participle = (* participles *)
 *)
 type modal = (conjugation * invar) 
 and invar =
-  [ Infi    (* infinitive (tumun) *)
-  | Absoya  (* absolutive (gerund, invariable participle) (lyap) *) 
-  | Perpft  (* periphrastic perfect (li.t) *)
+  [ Infi     (* infinitive (tumun) *)
+  | Absoya   (* absolutive (gerund, invariable participle) (lyap) *) 
+  | Absotvaa (* absolutive of roots (ktvaa) *)
+  | Namul    (* absolutive in -am (.namul) *)
+  | Perpft   (* periphrastic perfect (li.t) *)
   ]
 ;
 (* Primary nominal formations (k.rdantas) *)

@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2022 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2024 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* CGI-bin conjugation for computing root conjugations.                   *)
@@ -536,11 +536,11 @@ value look_up_and_display font gana entry =
   and sort_out_u accu form = fun
   [ [ (_,morphs) ] -> List.fold_left (reorg form) accu morphs
       where reorg f (inf,absya,per,abstva) = fun
-        [ Ind_verb (c,Infi) when c=conj -> ([ (c,f) :: inf ],absya,per,abstva) 
-        | Ind_verb (c,Absoya) when c=conj -> (inf,[ (c,f) :: absya ],per,abstva) 
-        | Ind_verb (c,Perpft) when c=conj -> (inf,absya,[ (c,f) :: per ],abstva) 
-        | Abs_root c when c=conj -> (inf,absya,per,[ (c,f) :: abstva ]) 
-        | _ -> (inf,absya,per,abstva)
+      [ Ind_verb (c,Infi) when c=conj -> ([(c,f) :: inf ],absya,per,abstva) 
+      | Ind_verb (c,Absoya) when c=conj -> (inf,[(c,f) :: absya ],per,abstva) 
+      | Ind_verb (c,Perpft) when c=conj -> (inf,absya,[(c,f) :: per ],abstva) 
+      | Ind_verb (c,Absotvaa) when c=conj -> (inf,absya,per,[(c,f) :: abstva ])
+      | _ -> (inf,absya,per,abstva)
         ]
   | _ -> raise (Control.Fatal "Weird inverse map N")
   ]

@@ -165,10 +165,7 @@ value sort_out accu form = fun
               ]
         | Bare_stem | Gati -> (mas,fem,neu,any,[ f :: iic ],avya)
         | Avyayaf_form -> (mas,fem,neu,any,iic,[ f :: avya ])
-        | Ind_form _ | Verb_form _ _ _  | Ind_verb _ | Abs_root _ 
-        | Avyayai_form | Unanalysed | PV _ 
-        | Part_form _ _ _ _ ->
-          failwith "Unexpected form in declensions"
+        | _ -> failwith "Unexpected form in declensions"
         ]
      | _ -> failwith "Weird table"
      ]

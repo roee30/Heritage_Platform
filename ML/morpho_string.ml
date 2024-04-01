@@ -2,9 +2,9 @@
 (*                                                                        *)
 (*                     The Sanskrit Heritage Platform                     *)
 (*                                                                        *)
-(*                              Gérard Huet                               *)
+(*                     Gérard Huet & Sriram Krishnan                      *)
 (*                                                                        *)
-(* ©2019 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2024 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (* Linearizes morphological information as a string.
@@ -119,7 +119,6 @@ value str_morph_roma = fun
   | Avyayaf_form -> "ind."
   | Verb_form f n p -> (str_finite_roma f) ^ (str_number_roma n) ^ (str_person_roma p)
   | Ind_form k -> str_ind_kind_roma k
-(* OBS   | Abs_root c -> (str_conjugation_roma c) ^ "abs." *)
   | Gati ->  "iiv."
   | Ind_verb m -> str_modal_roma m
   | Unanalysed -> "?"
@@ -214,7 +213,6 @@ and str_ind_kind_deva = fun
   [ Part -> "अव्यय"
   | Prep -> "उपसर्ग"
   | Conj -> "अव्यय" (* or निपात *)
-(*  | Abs  -> "अव्यय" OBS *)
   | Adv  -> "अव्यय"
   | Tas  -> "तसिल्"
   | _    -> "अव्यय"
@@ -246,7 +244,6 @@ value str_morph_deva = fun
   | Avyayaf_form -> "अव्यय"
   | Verb_form f n p -> (str_finite_deva f) ^ (str_number_deva n) ^ (str_person_deva p)
   | Ind_form k -> str_ind_kind_deva k
-(* OBS   | Abs_root c -> (str_conjugation_deva c) ^ "क्त्वा/णमुल्" *)
   | Gati -> "च्वि" 
   | Ind_verb m -> str_modal_deva m
   | Unanalysed -> "?"

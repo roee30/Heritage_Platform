@@ -362,15 +362,10 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
   let encode_no_norm = Encode.switch_code_no_norm translit in 
   let chunker = if uns (* sandhi undone *) then Sanskrit.read_raw_sanskrit 
                 else (* chunking *) Sanskrit.read_sanskrit in
-(*  let raw_chunks = Sanskrit.read_raw_sanskrit encode input in OBS *)
-  let raw_chunks_no_norm = Sanskrit.read_raw_sanskrit encode_no_norm input in 
+  let raw_chunks = Sanskrit.read_raw_sanskrit encode_no_norm input in 
   let chunks = chunker encode input 
-(*  let deva_chunks = List.map Canon.unidevcode raw_chunks OBS *)
-  and deva_chunks_no_norm = List.map Canon.unidevcode raw_chunks_no_norm in
-(*  and roma_chunks = List.map Canon.uniromcode raw_chunks in OBS *)
-(*  let deva_input = String.concat " " deva_chunks OBS *)
-  let raw_deva_input = String.concat " " deva_chunks_no_norm  
-(*  and roma_input = String.concat " " roma_chunks OBS *)
+  and deva_chunks = List.map Canon.unidevcode raw_chunks in
+  let raw_deva_input = String.concat " " deva_chunks 
   and cpts = sort_check checkpoints in 
   let output_chunks = List.map Canon.uniromcode chunks in 
   let roma_output_chunks = String.concat " " output_chunks in 
@@ -385,13 +380,6 @@ value check_sentence translit uns text checkpoints input undo_enabled font =
     ] (* raw input provided by the user *)
   ; deva16_blue raw_deva_input |> pl (* always produced in Devanagari *)
   ; html_break |> ps
-  (* OBS ; html_latin16 "Normalized: " |> pl
-  ; match font with
-    [ "roma" -> roma16_blue roma_input |> ps (* romanized *)
-    | "deva" -> deva16_blue deva_input |> ps (* devanagari *)
-    | _ -> roma16_blue roma_input |> ps (* romanized by default*) 
-    ]
-  ; html_break |> ps *)
   ; match font with 
     [ Roma -> html_latin16 "Chunks: " |> pl
     | Deva -> deva16_black "वर्णक्रम: " |> pl

@@ -422,7 +422,6 @@ type flexion =
   | Preverb of word and list word
   | Invar of modal and word            (* infinitive absolutive perpft *) 
   | Inftu of conjugation and Word.word (* infinitive in -tu *)
-(* OBS  | Absotvaa of conjugation and word   (* abs-tvaa *) *)
   ]
 ;
 value mask = fun
@@ -519,8 +518,6 @@ value enter1 entry =
      ]
    | Inftu m w -> let f = Ind_verb (m,Infi) in 
                   add_morphinftu w delta f (* infinitive in -tu *)
-(* OBS   | Absotvaa c w -> let f = Abs_root c in 
-                     add_morphabstvaa w delta f (* abs-tvaa: no preverb *)*)
    | Preverb w lw -> add_morphp w lw (* w is (normalised) sandhi of lw *)
    | _ -> failwith "Unexpected arg to enter"
    ]

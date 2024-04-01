@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2024 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Inflected : sig i*)
@@ -68,7 +68,6 @@ type flexion =
   | Preverb of Word.word and list Word.word
   | Invar of modal and Word.word          (* inf abs-ya perpft *)
   | Inftu of conjugation and Word.word    (* infinitive in -tu *)
-(* OBS | Absotvaa of conjugation and Word.word (* absolutive in -tvaa *) *)
   ]
 ;
 value enter1 : string -> flexion -> unit

@@ -571,7 +571,7 @@ value get_sandhi_word_for_file (_,_,_,output) =
   [ [] -> (String.trim acc)
   | [(_, (phase, rword, transition)) :: tl] -> 
     let prefix = 
-      if phase = Unknown then "#"
+      if phase = Unknown then "?"
       else "" in 
     loop (prefix ^ (get_sandhi_word "wx" (phase, rword)) ^ acc) tl
   ]
@@ -923,15 +923,15 @@ value check_sentence translit uns text checkpoints input undo_enabled
   let cpts = sort_check checkpoints in 
   let output_chunks = List.map Canon.uniromcode chunks in 
   let roma_output_chunks = String.concat " " output_chunks in 
-  let (max_solutions, list_mode) = 
+  let (max_solutions, list_mode, first) = 
     match mode with 
-    [ First_Summary | First_List -> (1, First_List)
-    | Best_Summary | Best_List -> (default_max_best_solutions, Best_List)
-    | _ -> (default_max_best_solutions, mode)
+    [ First_Summary | First_List -> (1, First_List, True)
+    | Best_Summary | Best_List -> (default_max_best_solutions, Best_List, False)
+    | _ -> (default_max_best_solutions, mode, False)
     ] in 
   let (max_sols, collapse) = match fmode with 
   [ "w" | "x" -> (max_solutions, False)
-  | "t" | "s" | "m" | "x" | "n" -> (((max_solutions * 2)), True)
+  | "t" | "s" | "m" | "x" | "n" -> (if first then 1 else (max_solutions * 2), True)
   | _ -> (max_solutions, False)
   ] in 
   let _ = max_best_solutions.val := max_sols in 

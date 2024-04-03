@@ -4681,7 +4681,7 @@ value compute_aor_ca cpstem root =
 
 value compute_peri_fut conj perstem root = 
   let conjug person suff = (person,sandhi perstem (code suff)) in
-  enter1 root (Conju (conj,Perfut Active)
+  enter1 root (Conju (conj,Conjug Future2 Active)
    [ (Singular, 
         [ conjug First  "taasmi"
         ; conjug Second "taasi"
@@ -5112,10 +5112,8 @@ value record_ppp_abs_den ystem root =
 (* Used specially for verbs that may be iterated - having done again and again *)
 (* "gaaya.m gaayam" ayant chanté et chanté; "paaya.m paayam" ayant bu et bu.   *)
 value record_abso_am root = 
-  let record form = let word = code form in do 
-      { record_abso_tvaa word root (* no preverb *)
-      ; record_abso_ya   word root (* some preverb *)
-      } in 
+  let record form = let word = code form in 
+                    enter1 root (Invar (Primary,Namul) word) in
   match root with (* gu.na + am frequent, but exceptions *)
   [ "as#2"    -> record "aasam" (* \Pan{3,4,57} may overgenerate *)
   | "ka.s"    -> record "kaa.sam" (* \Pan{3,4,34} *) 
@@ -5123,7 +5121,7 @@ value record_abso_am root =
   | "kram"    -> record "kraamam"
   | "k.r#1"   -> record "kaaram" (* \Pan{3,4,26-28+61} *)
   | "k.r.s"   -> record "kar.sam" (* \Pan{3,4,49} avec upa *)
-  | "k.sp"    -> record "k.sepam" (* Deshpande *)
+  | "k.sip"   -> record "k.sepam" (* Deshpande *)
   | "khan"    -> record "khaanam"
   | "gaa#2"   -> record "gaayam" (* Deshpande *)
   | "grah"    -> record "graaham"(* \Pan{3,4,39+58} *)

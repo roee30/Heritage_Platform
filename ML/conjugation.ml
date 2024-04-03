@@ -196,7 +196,7 @@ value sort_out_v accu form = fun
      (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,[ t :: ba ],bm,fpa,ps,ip,op,ep,ca,cm)
           | Conjug Benedictive Middle -> 
      (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,[ t :: bm ],fpa,ps,ip,op,ep,ca,cm)
-          | Perfut Active -> 
+          | Conjug Future2 Active -> 
      (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,[ t :: fpa ],ps,ip,op,ep,ca,cm)
           | Presentp Present -> 
      (pa,pm,ia,im,oa,om,ea,em,fa,fm,pfa,pfm,aa,am,ap,ja,jm,jp,ba,bm,fpa,[ t :: ps ],ip,op,ep,ca,cm)

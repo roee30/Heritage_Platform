@@ -263,7 +263,7 @@ value extract_gana_pada = fun
            [ Presenta g _ -> (Some g,Active)
            | Presentm g _ -> (Some g,Middle)
            | Presentp _   -> (None,Passive)
-           | Conjug _ v | Perfut v -> (None,v)
+           | Conjug _ v   -> (None,v)
            ] in
        (conj,(o_gana,pada_of_voice voice))
   | Ind_verb _ _ -> raise Unvoiced (* could be refined *)

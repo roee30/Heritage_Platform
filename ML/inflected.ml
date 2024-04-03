@@ -410,7 +410,7 @@ type nominal =
 type sup = (number * list (case * word   (* stem *))) (* nominal generators *)
  and tin = (number * list (person * word (* root *))) (* verbal generators *)
 ;
-type flexion =
+type flexion = (* should be (Morphology.inflexion_tag * Word.word) ? *)
   [ Declined of nominal and gender and list sup
   | Conju of finite and list tin
   | Indecl of ind_kind and word (* avyaya, particle, interjection, nota *)
@@ -511,7 +511,11 @@ value enter1 entry =
          { add_morphabstvaa w delta f (* abs-tvaa: no preverb *)
          ; if auxiliary entry then add_morphauxiinv w delta f else ()
          }
-     | Namul (* abso in -am *) -> () (* TODO *) 
+     | Namul (* abso in -am *) -> do (* 2 cases: with and without preverbs *)
+         { add_morphabsya w delta f aapv
+         ; add_morphabstvaa w delta f 
+         ; if auxiliary entry then add_morphauxiinv w delta f else () 
+         }
      | Perpft -> add_morphperi w delta f
      (* NB Allows perpft of verbs with preverbs but overgenerates since
            it allows perpft followed by a non perfect form of auxiliary *)

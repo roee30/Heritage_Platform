@@ -213,6 +213,7 @@ and print_pr_mode pr = do
   }
 and print_tense = fun
   [ Future       -> "<fut/>" |> ps
+  | Future2      -> "<fut2/>" |> ps
   | Perfect      -> "<prf/>" |> ps
   | Aorist k     -> do { "<aor" |> ps; kind_attr k |> ps; "/>" |> ps }
   | Injunctive k -> do { "<inj" |> ps; kind_attr k |> ps; "/>" |> ps }
@@ -249,7 +250,7 @@ value print_system = fun
   | Presentm k pr -> do { "<prs" |> ps; pg k; ">" |> ps; 
                           print_pr_mode pr; "<atma/></prs>" |> ps }
   | Presentp pr   -> do { "<pas>" |> ps; print_pr_mode pr; "</pas>" |> ps }
-  | Perfut v      -> do { "<pef>" |> ps; print_voice v; "</pef>" |> ps }
+(* OBS  | Perfut v      -> do { "<pef>" |> ps; print_voice v; "</pef>" |> ps }*)
   ]
 and print_invar = fun
   [ Infi   -> "<inf/>" |> ps

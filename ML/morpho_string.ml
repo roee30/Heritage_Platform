@@ -46,6 +46,7 @@ and str_nominal_roma = fun
   ]
 and str_tense_roma = fun
   [ Future       -> "fut."
+  | Future2      -> "per. fut."
   | Perfect      -> "pft."
   | Aorist k     -> "aor." ^ (gana_str_roma k)
   | Injunctive k -> "inj." ^ (gana_str_roma k)
@@ -105,7 +106,7 @@ value str_paradigm_roma = fun
   | Presenta k pr -> (str_pr_mode_roma pr) ^ (gana_str_roma k) ^ " ac."
   | Presentm k pr -> (str_pr_mode_roma pr) ^ (gana_str_roma k) ^ " mo."
   | Presentp pr   -> (str_pr_mode_roma pr ) ^ " ps."
-  | Perfut v      -> "per. fut." ^ (str_voice_roma v)
+(* OBS  | Perfut v      -> "per. fut." ^ (str_voice_roma v) *)
   ]
 ;
 value str_finite_roma (c,p) = (str_conjugation_roma c) ^ (str_paradigm_roma p)
@@ -170,6 +171,7 @@ and str_nominal_deva = fun
   ]
 and str_tense_deva = fun
   [ Future       -> "लृट्"
+  | Future2      -> "लुट्"
   | Perfect      -> "लिट्"
   | Aorist k     -> "लुङ्" ^ (gana_str_deva k)
   | Injunctive k -> "लुङ्" ^ (gana_str_deva k)
@@ -230,7 +232,7 @@ value str_paradigm_deva = fun
   | Presenta k pr -> (str_pr_mode_deva pr) ^ (gana_str_deva k) ^ " कर्तरि पप "
   | Presentm k pr -> (str_pr_mode_deva pr) ^ (gana_str_deva k) ^ " कर्तरि आप "
   | Presentp pr   -> (str_pr_mode_deva pr ) ^ " कर्मणि आप "
-  | Perfut v      -> "लुट्" ^ (str_voice_deva v)
+(* OBS  | Perfut v      -> "लुट्" ^ (str_voice_deva v) *)
   ]
 ;
 value str_finite_deva (c,p) = (str_conjugation_deva c) ^ (str_paradigm_deva p)

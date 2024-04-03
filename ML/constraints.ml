@@ -223,9 +223,9 @@ value regime entry (cj,t) =
                    | _ -> Indicative (* now, only Imperative for Present *) 
                    ] in
         (aspect,valency,mood) 
-     | Perfut _ -> (if regime=Factitive then Statif else Imperfectif, 
+(* OBS     | Perfut _ -> (if regime=Factitive then Statif else Imperfectif, 
                     match regime with [ Transitive -> [ Object ] | _ -> [] ],
-                    Indicative)
+                    Indicative) *)
      ] 
 ;
 value get_fin_roles entry f n p = 

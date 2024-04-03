@@ -53,7 +53,7 @@ and paradigm =
   | Presentm of gana and pr_mode (* aatmanepade *)
   | Presentp of pr_mode (* passive of present system *)
   | Conjug of tense and voice (* other tenses/modes/aspects *)
-  | Perfut of voice (* periphrastic futur (lu.t) - always active *)
+(* OBS  | Perfut of voice (* periphrastic futur (lu.t) - always active *) *)
   ]
 and voice = [ Active | Middle | Passive ] (* diathesis (pada: Para Atma Ubha) *)
 and pr_mode = 
@@ -63,12 +63,13 @@ and pr_mode =
   | Optative (* Potential (lif) *) 
   ]
 and tense = 
-  [ Future (* (l.r.t) *)
-  | Perfect (* (li.t) Remote past - resultative aspect *)
+  [ Perfect (* (li.t) Remote past - resultative aspect *)
   | Aorist of aor_class (* (luf) Immediate past or future - perfective aspect *)
   | Injunctive of aor_class (* (le.t) - injunctions no tense or mood
                                also Prohibitive with maa *) 
   | Benedictive (* (aazirlif) Precative: optative aorist *) 
+  | Future (* (l.r.t) *)
+  | Future2 (* periphrastic futur (lu.t) *)
   | Conditional (* (l.rf) Preterit of future *)
   | Subjunctive (* (le.t) Rare subjunctive, in-between Optative and Imperative *)
   ]
@@ -163,7 +164,6 @@ and krit = (* coarser than Paninian krit suffixes *)
   | Instrument (* ka \Pan{3,1,136}                  0/amui n.   *)
   | Location   (* gha  *)
   | Instra (* .s.tran -tra n.                -trii f. traa f.   *)
-  | Orig_root (* sruc srut sruva *)
   | Agent_u   (* san+u                             -u on des stem  *)
   | Action_aa (* san+a+.taap  \Pan{3,3,102}        -aa on des stem *)
   | Abstract (* abstract nouns n.           -as u.naadi suffix *)

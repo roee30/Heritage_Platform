@@ -196,8 +196,8 @@ and print_conjugation cg = do
   ; match cg with 
        [ Primary      -> "<prim/>" |> ps
        | Causative    -> "<ca/>"   |> ps
-       | Intensive    -> "<int/>"  |> ps
        | Desiderative -> "<des/>"  |> ps
+       | Intensive    -> "<int/>"  |> ps
        ]
   ; "</cj>" |> ps
   }
@@ -205,19 +205,19 @@ and print_pr_mode pr = do
   { "<md>" |> ps
   ; match pr with 
        [ Present    -> "<pr/>" |> ps
+       | Imperfect  -> "<im/>" |> ps
        | Imperative -> "<ip/>" |> ps
        | Optative   -> "<op/>" |> ps
-       | Imperfect  -> "<im/>" |> ps
        ]
   ; "</md>" |> ps
   }
 and print_tense = fun
-  [ Future       -> "<fut/>" |> ps
-  | Future2      -> "<fut2/>" |> ps
-  | Perfect      -> "<prf/>" |> ps
+  [ Perfect      -> "<prf/>" |> ps
   | Aorist k     -> do { "<aor" |> ps; kind_attr k |> ps; "/>" |> ps }
   | Injunctive k -> do { "<inj" |> ps; kind_attr k |> ps; "/>" |> ps }
   | Benedictive  -> "<ben/>" |> ps
+  | Future       -> "<fut/>" |> ps
+  | Future2      -> "<fut2/>" |> ps
   | Conditional  -> "<cnd/>" |> ps
   | Subjunctive  -> "<subj/>" |> ps
   ] 
@@ -240,7 +240,8 @@ value print_nominal = fun
   | Pfuta   -> do { "<pfut>" |> ps; print_voice Active; "</pfut>" |> ps }
   | Pfutm   -> do { "<pfut>" |> ps; print_voice Middle; "</pfut>" |> ps }
   | Pfutp k -> do { "<pfutp>" |> ps; pfutp_kind k |> ps; "</pfutp>" |> ps }
-  | _       -> "<act/>" |> ps (* action verbal nouns *)
+  | Action_noun  -> "<act/>" |> ps (* action verbal nouns *)
+  | Agent_noun   -> "<agt/>" |> ps (* action verbal nouns *)
   ]
 ;
 value print_system = fun

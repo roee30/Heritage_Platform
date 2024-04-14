@@ -1309,7 +1309,7 @@ value build_as gen stem entry =
         ; decline Loc "asos"
         ])
    ; (Plural, 
-      let direct = match gen with
+        let direct = match gen with
           [ Mas | Fem -> "asas"
           | Neu  -> "aa.msi" 
 (* eg chandaa.msi: chandas-as Pan{7,1,20}{1,1,42} chandas-zi Pan{7,1,72} 

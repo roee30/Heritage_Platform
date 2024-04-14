@@ -2967,8 +2967,8 @@ value compute_future_10 rstem root =
 value admits_passive = fun 
   [ (* We filter out roots with no attested passive forms *)
     "an#2" | "av" | "as#1" | "ah" | "iiz#1" | "uc" | "kan" | "kam" 
-  | "ku~nc" (* supplied by "kuc" *) | "kuu"
-  | "k.r#2" | "knuu" | "k.sar" | "k.si" | "kha.n.d" | "glaa" | "ghas"| "chur"
+  | "ku~nc" (* supplied by "kuc" *) | "kuu" | "k.r#2" | "knuu" 
+  | "k.sar" | "k.sal" | "k.si" | "kha.n.d" | "glaa" | "ghas"| "chur"
   | "ta.d" | "daa#2" | "dyut#1" | "dru#1" | "pat#2" | "paz" | "paa#2" 
   | "pii" | "pyaa" | "praa#1" | "bruu" | "ruc#1" | "vas#4" | "vidh#1" | "vip"
   | "vyac" | "zam#1" | "zi~nj" | "z.rdh" | "zrambh" | "zvit#1"
@@ -6203,6 +6203,7 @@ value compute_subjunctives () =
   ; subj_sg "vac" Second "vocas" (* both forms also available as inj *) 
   ; subj_sg "i" Third "ayati" (* primary endings *) 
   ; subj_sg "i" Third "ayat" (* secondary endings *) 
+  ; subj_pl "i" Third "ayan" 
   ; subj_sg "bhuu#1" Third "bhavaat" (* Varenne§129 *)
   ; subj_sg "su#2" Third "sunavat" (* Varenne§129 *)
   ; subj_sg "pat#1" Third "pataati"

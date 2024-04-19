@@ -2439,7 +2439,7 @@ value compute_future stem root =
          { compute_futurea Primary stem root 
          ; compute_futurem Primary stem root 
          ; match root with (* rare conditional *)
-           [ "i" | "k.r#1" | "gam" | "grah" | "ji" | "j~naa#1" | "tap"
+           [ "aap" | "i" | "k.r#1" | "gam" | "grah" | "ji" | "j~naa#1" | "tap"
            | "daa#1" | "nii#1" | "bandh" | "budh#1" | "bhid#1" | "bh.r" | "m.r"
            | "yaj#1" | "vad" | "sthaa#1"| "hu" -> do
               { compute_conda Primary stem root 

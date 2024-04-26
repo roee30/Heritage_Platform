@@ -5781,6 +5781,7 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
    | "adhvara" | "tavi.sa" | "putra" | "praasaada" 
    | "mitra" (* treat as \Pan{3,1,10} *)
    | "udaka" | "kavi" | "dhana" | "maa.msa" | "vastra" (* desire Kale§643 *) 
+   | "zaa.na#1" (* use as *)
        -> [ 4 :: trunc rstem ] (* -()iiyati *) (* \Pan{3,1,8} kyac *)
    | "kart.r" -> [ 4 :: [ 43 :: trunc rstem ] ] (* .r -> rii  Kale§642 *)
    | "go"     -> [ 45 :: [ 1 :: trunc rstem ] ] (* o -> av    Kale§642 *) 
@@ -6040,7 +6041,7 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
               { record_part_ppp ppstem root 
               ; record_abso_tvaa (fix ystem "itvaa") root
               ; let ya_stem = if light_10 rstem then ystem else stem in
-              record_abso_ya (fix ya_stem "ya") root 
+                record_abso_ya (fix ya_stem "ya") root 
               } 
             }
      ]
@@ -6269,17 +6270,17 @@ and compute_extra_jnaa () =
   ; perif Causative cstem root 
   }
 and compute_extra_trr () = do 
-      { build_infinitive Primary (revcode "tarii") "t.rr" (* id. *)
-      ; build_infinitive Primary (revcode "tar") "t.rr" (* Whitney roots *)
-      ; enter1 "t.rr" (Conju perfa (* archaic forms Whitney§794k *)
-             [ (Plural,[ (Third, code "terus") ])
-             ; (Plural,[ (Second, code "tera") ])
-             ; (Plural,[ (First, code "terima") ])
-             ; (Dual,[ (Third, code "teratus") ])
-             ; (Dual,[ (Second, code "terathus") ])
-             ; (Dual,[ (First, code "teriva") ])
-             ])
-      }
+  { build_infinitive Primary (revcode "tarii") "t.rr" (* id. *)
+  ; build_infinitive Primary (revcode "tar") "t.rr" (* Whitney roots *)
+  ; enter1 "t.rr" (Conju perfa (* archaic forms Whitney§794k *)
+     [ (Plural,[ (Third, code "terus") ])
+     ; (Plural,[ (Second, code "tera") ])
+     ; (Plural,[ (First, code "terima") ])
+     ; (Dual,[ (Third, code "teratus") ])
+     ; (Dual,[ (Second, code "terathus") ])
+     ; (Dual,[ (First, code "teriva") ])
+      ])
+  }
 and compute_extra_dri () = do 
   { compute_passive_raw "d.r#1" (* aadriyate *)
   ; record_pfp "d.r#1" (revcode "d.r")
@@ -6287,18 +6288,18 @@ and compute_extra_dri () = do
   ; record_part_ppp (revstem "d.rta") "d.r#1"  (* aad.rta *)
   }
 and compute_extra_dham () = let stem = revcode "dhmaa" in do
-    { compute_future_gen stem "dham" (* Bucknell Pan{7,3,78} *)
-    ; compute_passive Primary "dham" (revstem "dham") (* WR *)
-    }
+  { compute_future_gen stem "dham" (* Bucknell Pan{7,3,78} *)
+  ; compute_passive Primary "dham" (revstem "dham") (* WR *)
+  }
 and compute_extra_dhmaa () = let stem = revcode "dham" in do 
-    { compute_future_gen stem "dhmaa" (* Id *)
-    ; compute_passive Primary "dhmaa" (revstem "dham")
-    }
+  { compute_future_gen stem "dhmaa" (* Id *)
+  ; compute_passive Primary "dhmaa" (revstem "dham")
+  }
 and compute_extra_dhaa () = do 
-    { (* Gaayatrii dhiimahi precative m. Whitney§837b but WR prc{2} de dhii *)
-      enter1 "dhaa#1" (Conju benem [ (Plural,[ (First, code "dhiimahi") ]) ])
+  { (* Gaayatrii dhiimahi precative m. Whitney§837b but WR prc{2} de dhii *)
+    enter1 "dhaa#1" (Conju benem [ (Plural,[ (First, code "dhiimahi") ]) ])
 (* [; record_part (Ppp_ Primary (revcode "dhita") "dhaa#1") (* alter hita *)] *)
-    } (* also "vidmahi" on yantra ? *)
+  } (* also "vidmahi" on yantra ? *)
 and compute_extra_nind () = (* WR: RV *)
   enter1 "nand" (Conju perfa [ (Plural,[ (Third, code "ninidur") ])
                              ; (Plural,[ (First, code "nindimas") ]) 

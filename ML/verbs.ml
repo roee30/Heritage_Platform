@@ -335,7 +335,7 @@ value long_metathesis = fun (* .r penultimate -> raa *)
   | _ -> failwith "long_metathesis"
   ]
 ;
-(* truncates an rstem eg bh.rjj -> bh.rj *)
+(* truncates an rstem eg bh.rjj -> bh.rj (ungemination) *)
 value truncate = fun 
   [ [] -> error_empty 3
   | [ _ :: r ] -> r
@@ -362,10 +362,10 @@ value weak_stem root rstem = (* rstem = revstem root *)
   match root with 
     [ "dah#1" | "dih" | "duh#1" | "druh#1" | "muh" | "snih#1" | "snuh#1"
                -> duhify rstem
-    | "nah"    -> nahify rstem
     | "m.rj" | "yaj#1" | "vraj" | "raaj#1" | "bhraaj" | "s.rj#1" 
                -> mrijify rstem
     | "bh.rjj" -> mrijify (truncate rstem)
+    | "nah"    -> nahify rstem
     | "nij"    -> revcode "ni~nj" (* nasalisation *)
     | "vaz"    -> revcode "uz" (* but not vac ! *)
     | "myak.s" -> revcode "mik.s" 
@@ -386,6 +386,8 @@ value stems root =
       let lstem = lengthened rstem in
       (revstem substitute,rstem,lstem) in
   match root with (* This shows what ought to be the root name, its weak form *)
+  (* the root form is obtained by replacing the weak stem vowel v with v+a *)
+  (* \Pan{1,1,45} i, u, .r, .l remplace ya, va, ra, la *) 
      [ "grah"   -> sampra "g.rh" (* \Pan{6,1,15} *) 
      | "grabh"  -> sampra "g.rbh" (* archaic variant of grah *) 
      | "vyadh"  -> sampra "vidh" (* \Pan{6,1,15} *) 
@@ -2969,8 +2971,8 @@ value admits_passive = fun
     "an#2" | "av" | "as#1" | "ah" | "iiz#1" | "uc" | "kan" | "kam" 
   | "ku~nc" (* supplied by "kuc" *) | "kuu" | "k.r#2" | "knuu" 
   | "k.sar" | "k.sal" | "k.si" | "kha.n.d" | "glaa" | "ghas"| "chur"
-  | "ta.d" | "daa#2" | "dyut#1" | "dru#1" | "pat#2" | "paz" | "paa#2" 
-  | "pii" | "pyaa" | "praa#1" | "bruu" | "ruc#1" | "vas#4" | "vidh#1" | "vip"
+  | "ta.d" | "daa#2" | "dyut#1" | "dru#1" | "pat#2" | "paz" | "paa#2" | "pii" 
+  | "pyaa" | "praa#1" | "bandh" | "bruu" | "ruc#1" | "vas#4" | "vidh#1" | "vip"
   | "vyac" | "zam#1" | "zi~nj" | "z.rdh" | "zrambh" | "zvit#1"
   | "sap#1" | "siiv" | "suud" | "spaz#1" | "spardh" | "h.r#2" | "hrii#1" 
   | "ma.mh" (* supplied by "mah" *) (* | "arh" | "k.lp" no ps but pfp *)
@@ -5788,10 +5790,10 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
    | "nau#1"  -> [ 45 :: [ 2 :: trunc rstem ] ] (* au -> aav  Kale§642 *)
    | "raajan" -> [ 4 :: trunc (trunc rstem) ]   (* nasal amui Kale§642 *)
      (* now the general case: keep the nominal stem - to cause (transitive) *)
-   | "a.mza" | "afka" | "afkha" | "andha" | "aparok.sa" | "apahasta" | "amitra"
-   | "aakar.na" | "aakula" | "aahvaana" | "aavila" | "i.sa" | "unmuula" 
-   | "upahasta" | "ka.thora" | "kadartha" | "kar.na" | "kalafka" | "kalu.sa"
-   | "kavala" | "kusuma" | "kha.da" | "garva" | "gocara" | "gopaa" 
+   | "a.mza" | "afka" | "afkha" | "anta" | "andha" | "aparok.sa" | "apahasta" 
+   | "amitra" | "aakar.na" | "aakula" | "aahvaana" | "aavila" | "i.sa" 
+   | "unmuula" | "upahasta" | "ka.thora" | "kadartha" | "kar.na" | "kalafka" 
+   | "kalu.sa" | "kavala" | "kusuma" | "kha.da" | "garva" | "gocara" | "gopaa" 
    | "cuur.na" | "chala" | "chidra" | "tantra" | "tapas" | "tarafga" | "taru.na"
    | "tuhina" | "da.n.da" | "deva" | "dola" | "dravat" | "dhiira#1"
    | "nirmuula" | "nuutana" | "pa.tapa.taa" | "pallava"
@@ -6165,6 +6167,7 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
            }
        | _ -> failwith ("Weird desiderative " ^ Canon.decode third)
        ] 
+(* ï Conj_infos Desica third -> TODO desiderative of causative *)
  ] 
   } (* end main do *)
 ;

@@ -11,16 +11,19 @@
 
 (* NB no module value, [Conj_infos] is a purely defining types signature *)
 
-type vmorph =
+(* Information about roots obtained from the lexicon *)
+
+type vmorph = (* conjugation generators *)
   [ Prim of int and bool and Word.word  (* primary conjugation *)
          (* gana    pada     form of present 3rd sg for checking *)
          (* pada=True Paradmaipada pada=False AAtmanepada   *)
   | Causa of Word.word          (* causative 3rd sg form    *) 
   | Inten of Word.word          (* intensive 3rd sg form    *)
   | Desid of Word.word          (* desiderative 3rd sg form *)
+(*| Desica of Word.word      TODO desiderative of causative *)
   ]
 ;
 type root_infos = (vmorph * bool) (* [True] means root admits preverb aa- *)
-; (* NB could be (list vmorph * bool) for better factorisation *)
+; (* NB could be (list vmorph * bool) for better factorisation - TODO *)
 
 (*i end; i*)

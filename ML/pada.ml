@@ -55,7 +55,7 @@ value voices_of = fun
   | "bha.s" | "bhas" | "bhaa#1" | "bhii#1" | "bhuj#1" | "bhuu#1" | "bhuu.s" 
   | "bhram" | "majj" | "ma.n.d" | "mad#1" | "manth" | "mah" | "maa#3" | "mi.s" 
   | "mih" | "miil" | "mu.s#1" | "muh" | "muurch" | "m.r.d" | "mnaa"
-  | "mre.d" | "mluc" | "mlecch" | "yabh" | "yam" | "yas" | "yaa#1" | "yu#2"
+  | "mre.d" | "mluc" | "mlecch" | "yabh" | "yas" | "yaa#1" | "yu#2"
   | "ra.mh" | "rak.s" | "rac" | "ra.t" | "ra.n" | "rad" | "radh" | "raa#1" 
   | "raadh" | "ri.s" | "ru" | "ruj#1" | "rudh#1" | "ru.s#1" | "ruh#1" | "lag"
   | "lafg" | "lap" | "lal" | "las" | "laa" | "laa~nch" | "likh" | "liz" 
@@ -97,7 +97,7 @@ value voices_of = fun
 (*| "nam" Atma namate WR epic *)
 (*| "aap" Atma aapnute epic *)
 (*| "a~nj" also Atma afkte | "naath" "praz" "sp.rz#1" idem *)
-(*| Doubts: "bhuu1" could also be Atma bhavate *)
+(*| Doubts: "bhuu1" could also be Atma bhavate Kale: rare vedic or epic *)
 (*| "z.rr" also Atma *)
 (*| "zru" also Atma in Vedic eg z.r.nu.sva and SP. z.r.nudhvam *)
 (*| "yu#2" could be Atma in Maitreya S. yuyudhvam *)

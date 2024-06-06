@@ -99,14 +99,23 @@ value trad_skt = trad_string skt1
   and trad_sanscrit = trad_string sanscrit
   and trad_skt_list = trad_string skt_list
 ;
-
-value maha_epic = "Mahaabhaarata" (* for [Print_html] *)
-  and rama_epic = "Raamaaya.na"
-;
 value skt_to_tex = Transduction.skt_to_tex;    (* romanisation Tex diacritics *)
 value skt_to_devnag = Transduction.skt_to_devnag; (* for Tex with devnag *)
 value skt_to_html = Transduction.skt_to_html;  (* romanisation *)
 
+(* For [Print_html]: skt references *)
+value maha_epic = "Mahaabhaarata"
+and rama_epic = "Raamaaya.na"
+and pancatantra = "Pa~ncatantra"
+and kss = "Kathaasaritsaagara"
+and kadam = "Kaadambarii"
+and satapatha = "Zatapatha"
+and rigveda = ".Rgveda"
+and megadhuta = "Meghaduuta"
+and katha = "Ka.thopa.ni.sad"
+and kiraata = "Kiraataarjuniiya"
+and vikramorvazii = "Vikramorvazii"
+;
 (* Encoding functions skt -> word *)
 value raw_sanskrit_word = Transduction.code_raw; (* no normalisation no accent*) 
 value sanskrit_word = Encode.code_string; (* normalisation *)
@@ -195,4 +204,3 @@ and read_raw_sanskrit_corpus encode str = (* [encode : string -> word] *)
   read_raw_skt_stream_corpus encode (Stream.of_string str)
 ;
 (*i end; i*)
-

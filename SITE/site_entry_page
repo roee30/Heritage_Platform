@@ -33,7 +33,10 @@
 <h3 class="c3">Version #VERSION [#DATE] (#LANG)<br>
 #CAPTION <!-- (since 01/09/2003) -->
 </h3>
-
+  
+<p>
+<strong><span class="red">Warning! This site will be unavailable for a few days,
+  starting June 15th, for server maintenance. Apologies for inconvenience. </span></strong>
 <p>
 Welcome to the Sanskrit Heritage site.
 It provides various services for the computational treatment of Sanskrit.

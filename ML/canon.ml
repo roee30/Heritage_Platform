@@ -769,7 +769,8 @@ value unidevcode word =
             if b (* add glyph *) then (s ^ halant ^ code,True)
             else (s ^ code,True) 
          else if b then 
-              if c=0 (* - *) || c>50 (* homo *) then (s ^ halant ^ code,False)
+              if c=0 (* - *) || c>50 (* homo *) || c=15  (* candrabindu *)
+                 then (s ^ halant ^ code,False)
               else (* add matra *) let m = matra_unicode c in (s ^ m,False)
          else (s ^ code,False) 
      with (* hiatus represented by space in devanagarii output *)

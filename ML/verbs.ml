@@ -2469,8 +2469,9 @@ value compute_future_ca stem root = do
 (* Possible intercalating vowel i for se.t and ve.t roots Whitney§935 *)
 (* [intercalates] returns a set of possible intercalations.           *)
 (* 3 indicates metathesis: ar becomes ra by [ar_ra] below             *)
-(* 4 is specific to naz1 nasalisation                                  *)
+(* 4 is specific to naz1 nasalisation                                 *)
 (* This information should be lexicalised with a generative lexicon.  *)
+(* This is used by compute_future_gen and perstems                    *)
 value intercalates root = 
   let anit = [ 0 ]    (* no intercalation *) 
   and set  = [ 1 ]    (* intercalate i *)
@@ -2561,7 +2562,7 @@ value intercalate_pp root rstem =
      if vowel c then 
         match root with
         [ "jaag.r" | "zii#1" -> set
-        | "dhmaa" -> vet
+        | "dhmaa" | "puu#1" (* \Pan{7,2,51} *) -> vet
         | _ -> anit 
         ]
   (* else if semivowel c then set (* consistent with intercalates *) TO CHECK *)
@@ -2577,7 +2578,7 @@ value intercalate_pp root rstem =
            | "zak" (* zakita \Pan{7,2,17} (Kaazikaa) *)
            | "gaah" (* gaahita *)
            | "yas" (* aayasita *)
-           | "kliz" |  "puu#1" | "a~nc" (* \Pan{7,2,51,53,50} *) -> vet
+           | "kliz" | "a~nc" (* \Pan{7,2,53,50} *) -> vet
            | "ghu.s" (* \Pan{7,2,23} *) | "ka.s" (* \Pan{7,2,22} *) 
            | "dh.r.s" (* \Pan{7,2,19} *) 
            | "am" | "tvar" (* \Pan{7,2,28} *) -> vet (* but only set for -tvaa *)
@@ -5413,7 +5414,7 @@ value compute_present_system root rstem gana pada third =
                     (if pada then [] else third) (* havate *)
                }
             | _ -> let stem = match root with 
-              [ ".r"     -> revcode ".rcch"  (* \Pan{7,3,78} Whitney§747 *)
+              [ ".r"     -> revcode ".rcch" (* \Pan{7,3,78} Whitney§747 *)
               | "gam"    -> revcode "gacch" (* \Pan{7,3,77} Whitney§747 *)
               | "yam"    -> revcode "yacch" (* \Pan{7,3,77} *)
               | "yu#2"   -> revcode "yucch" 

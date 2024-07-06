@@ -89,6 +89,7 @@ and indian_pr = fun
 ;
 value western_tense = fun
   [ Future       -> "Future" 
+  | Future2      -> "Future2" 
   | Perfect      -> "Perfect" 
   | Aorist _     -> "Aorist"
   | Injunctive _ -> "Injunctive"
@@ -98,6 +99,7 @@ value western_tense = fun
   ]
 and indian_tense = fun
   [ Future       -> "l.r.t" 
+  | Future2      -> "lu.t" 
   | Perfect      -> "li.t" 
   | Aorist _     -> "luf"
   | Injunctive _ -> "aagamaabhaavayuktaluf" 

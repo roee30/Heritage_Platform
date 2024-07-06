@@ -115,7 +115,7 @@ and megadhuta = "Meghaduuta"
 and katha = "Ka.thopa.ni.sad"
 and kiraata = "Kiraataarjuniiya"
 and vikramorvazii = "Vikramorvazii"
-;
+and dazakumaaracarita = "Dazakumaaracarita";
 (* Encoding functions skt -> word *)
 value raw_sanskrit_word = Transduction.code_raw; (* no normalisation no accent*) 
 value sanskrit_word = Encode.code_string; (* normalisation *)

@@ -6293,6 +6293,11 @@ value compute_extra iic_only_stems = do
   ; compute_extra_iic iic_only_stems (* aajaanu etc. *)
   ; compute_extra_iic iicf_extra (* abalaa etc. *)
   ; compute_extra_iiv iiv_krids (* zuddhii *) 
+  ; enter1 "ekaika" decl (* ad hoc pronominal vibhakti *)
+    where decl = Declined Noun Mas [ (Singular,[ (Dat,code "ekaikasmai") 
+                                               ; (Abl,code "ekaikasmaat") 
+                                               ; (Loc,code "ekaikasmin") 
+                                               ]) ]
   ; enter1 "u" (* Vedic *) (Indecl Interj [ 5 ] (* u *))
   ; existential "cit" (* cid1 *)
   ; existential "cana"

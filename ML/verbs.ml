@@ -2970,13 +2970,14 @@ value compute_future_10 rstem root =
 value admits_passive = fun 
   [ (* We filter out roots with no attested passive forms *)
     "an#2" | "av" | "as#1" | "ah" | "iiz#1" | "uc" | "kan" | "kam" 
-  | "ku~nc" (* supplied by "kuc" *) | "kuu" | "k.r#2" | "knuu" 
+  | "ku~nc" (* supplied by "kuc" *) | "kuu" | "k.r#2" | "k.lp" | "knuu" 
   | "k.sar" | "k.sal" | "k.si" | "kha.n.d" | "glaa" | "ghas"| "chur"
   | "ta.d" | "daa#2" | "dyut#1" | "dru#1" | "pat#2" | "paz" | "paa#2" | "pii" 
-  | "pyaa" | "praa#1" | "bandh" | "bruu" | "ruc#1" | "vas#4" | "vidh#1" | "vip"
+  | "pyaa" | "praa#1" | "bruu" | "ruc#1" | "vas#4" | "vidh#1" | "vip"
   | "vyac" | "zam#1" | "zi~nj" | "z.rdh" | "zrambh" | "zvit#1"
   | "sap#1" | "siiv" | "suud" | "spaz#1" | "spardh" | "h.r#2" | "hrii#1" 
-  | "ma.mh" (* supplied by "mah" *) (* | "arh" | "k.lp" no ps but pfp *)
+  | "ma.mh" (* supplied by "mah" *) 
+  | "arh" (* but "argh" kept for arghya *)
       -> False
 (* But "iiz#1" "uc" "ku~nc" "kuu" "k.sar" "glaa" "dru#1" "pii" "ruc#1" "vip" 
        "zam#1" "zi~nj" "zrambh" "siiv" "spardh" "hrii#1" admit ppp. *)
@@ -4526,7 +4527,7 @@ value compute_injunctive root =
     | _ -> () 
     ]
   ; match root with (* 2. thematic injunct *)
-    [ "k.rt#1" | "gam" | "g.rdh" | "ghas" | "zuc#1" -> do
+    [ (* "k.rt#1" clash k.rta pp *) "gam" | "g.rdh" | "ghas" | "zuc#1" -> do
       { compute_thematic_injuncta weak root
       ; compute_thematic_injunctm weak root (* middle is very rare *)
       }
@@ -4862,6 +4863,7 @@ value pfp_ya rstem root =
     (* NB car gad mad yam also take -yat \Pan{3,1,100}: [record_extra_pfp_ya] *) 
     | [ 24; 1 ] (* aj *) -> rstem (* ajya *)
     | [ 31; 1; 43 ] (* ra.n *) -> rstem (* ra.nya *)
+    | [ 44; 5; 32 ] (* tul *) -> rstem (* tulya *)
     | [ c :: [ 1 :: _ ] ] when labial c -> rstem  (* \Pan{3,1,98} -yat *) 
     | [ c :: [ 1 :: r ] ] -> [ c :: [ 2 :: r ] ] 
                       (* a lengthened if last non labial *)
@@ -4881,7 +4883,7 @@ value pfp_ya_10 rstem root =
 value pfp_aniiya rstem root =
   let iya_stem = 
      match root with 
-     [ "uk.s" | "cint" -> rstem (*i others ? PB [strong_stem] ? i*)
+     [ "uk.s" | "cint" | "tul" -> rstem (*i others ? PB [strong_stem] ? i*)
      | "yu#1" | "yu#2" -> raise Not_attested 
      | "dham" -> revcode "dhmaa"  (* \Pan{7,3,78} *)
      | "vyadh" -> revcode "vedh"
@@ -5973,15 +5975,16 @@ value compute_other_systems root rstem = do
       | "kan" | "k.r#2" | ".s.thiiv" -> () (* unattested - to be added *)
       | _ -> compute_benedictive rstem root 
       ]
-   ; (* Passive *)
-     if admits_passive root then 
-        let ps_stem = passive_stem root rstem in do
-        { if root = "arh" || root = "k.lp" then () (* admits pfp but no ps *)
-          else compute_passive Primary root ps_stem 
-          (* Passive future participle (gerundive) in -ya and -aniiya *)
+   ; (* Passive + Passive future participle (gerundive) in -ya and -aniiya *)
+     if admits_passive root then do
+        { let ps_stem = passive_stem root rstem in
+                  compute_passive Primary root ps_stem 
         ; record_pfp root rstem 
-        }
-     else ()
+        } 
+     else match root with 
+          [ "ruc#1" -> record_pfp root rstem  (* pfp rucya but no passive *)
+          | _ ->  ()
+          ]
    ; (* Ppp computation and recording (together with absolutives) *)
      if admits_ppp_abs root then do 
         { let ppstems = compute_ppp_stems root rstem in 
@@ -6033,9 +6036,9 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
      [ "garh" | "lelaa" -> ((* no passive*)) 
      | _ -> let ps_stem = passive_stem root rstem in 
             let stem = match root with
-                       [ "sp.rh" -> ps_stem (* Whitney§1042b keep weak stem *)
-                       | _ -> strong ps_stem
-                       ] in do 
+                [ "sp.rh" | "tul" -> ps_stem (* Whitney§1042b keep weak stem *)
+                | _ -> strong ps_stem
+                 ] in do 
             { compute_passive Primary root stem
             ; record_pfp_10 root stem  
               (* Ppp and Absolutives *)
@@ -6101,7 +6104,8 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
      ; compute_aor_ca cpstem root (* Whitney§861b Henry§339 *)
      ; (* Passive future participle in -ya *)
        match root with
-       [ "gad" | "yam" | "has" -> () (* to avoid redundancy with Primary pfp *)
+       [ (* avoiding redundancy with Primary pfp *)
+         "gad" | "yam" | "has" -> () 
        (* zi.s : justified redundancy with Primary pfp *)
        (* car :  redundancy with Primary pfp to be justified *)
        | _ -> record_pfp_ya Causative cpstem root 

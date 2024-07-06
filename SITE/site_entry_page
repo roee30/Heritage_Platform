@@ -35,9 +35,7 @@
 </h3>
   
 <p>
-<strong><span class="red">Warning! This site will be unavailable for a few days,
-  starting June 15th, for server maintenance. Apologies for inconvenience. </span></strong>
-<p>
+
 Welcome to the Sanskrit Heritage site.
 It provides various services for the computational treatment of Sanskrit.
 <p>
@@ -87,11 +85,13 @@ may be found in its French version
  <a href="COURSE/Lessons/lesson1.fr.html">ici</a> and in its English version
  <a href="COURSE/Lessons/lesson1.en.html">here.</a>
 It allows you to read and understand a simple text, extracted from the
-Vikramacarita story.
+Vikramacarita story. An updated version of the English lesson is available
+ <a href="COURSE/Lessons/HST_1.html">here.</a> <br>
 A more extensive course on using Hypertext Sanskrit Tools, developed jointly
 with the Sanskrit Studies Department of the University of Hyderabad,
-is under development. It may be accessed 
- <a href="COURSE/Lessons/HST_1.html">here.</a>
+was taught remotely in Spring 2024. Its video contents may be accessed 
+<a href="https://sanskrit.uohyd.ac.in/IOE-2024/lecture_notes.html">here.</a>
+
 </p>
 
 <h2 class="b2"> Sanskrit Heritage dictionary in book form </h2>

@@ -39,6 +39,7 @@ value megadhuta : skt;
 value katha : skt;
 value kiraata : skt;
 value vikramorvazii : skt;
+value dazakumaaracarita : skt;
 value skt_raw_to_deva : skt -> string;
 value skt_strip_to_deva : skt -> string;
 value skt_to_anchor : skt -> string;

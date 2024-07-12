@@ -60,8 +60,10 @@ value adjust c w = match Word.mirror w with
         | 2 (* aa *) -> if Phonetics.vowel c || Phonetics.elides_visarg_aa c 
                            then raise Hiatus 
                         else w (* NB "punaaramate" but not "punaa ramate" *)
-        | 4 (* ii *) (* possible visarga vanishes - but "n.rpatiiraajati" *) 
-        | 6 (* uu *) -> w
+        | 4 (* ii *) (* possible visarga vanishes before r *)
+        | 6 (* uu *) -> if c=43 (* r *) (* "n.rpatiiraajati" for n.rpati.h *) 
+                           then raise Hiatus (* graama.nii raajanya.h *)
+                        else w 
         (* next 4 rules attempt to revert [last] to 'd' in view of [c] *)
         | 34 (* d *) -> if c=35 (* dh *) then raise Glue else 
                         if Phonetics.is_voiced c 

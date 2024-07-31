@@ -114,13 +114,13 @@ value ext_sandhi_pair wl wr =
          if vowel first then 
             if visarg last then visargcompv first before (* may start with -1 *)
             else match last with 
-                 [ 21 -> match before with 
+                 [ 21 (* f *) -> match before with 
                     [ [] -> failwith "left arg too short"
                     | [ v :: rest ] -> if short_vowel v then 
                                           [ 21 :: [ 21 :: uph first ] ] (* ff *)
                                        else [ 21 :: uph first ] 
                     ]
-                 | 36 -> match before with 
+                 | 36 (* n *) -> match before with 
                     [ [] -> failwith "left arg too short"
                     | [ v :: rest ] -> if short_vowel v then 
                                           [ 36 :: [ 36 :: uph first ] ] (* nn *)
@@ -137,14 +137,16 @@ value ext_sandhi_pair wl wr =
              | 32 | 34 -> [ 34; 35 ] (* t+h {\R} ddh,  d+h {\R} ddh *)
              | 37 | 39 -> [ 39; 40 ] (* p+h {\R} bbh,  b+h {\R} bbh *)
              | 41      -> [ 14; first ] (* m+h {\R} {\d m}h *) 
-                  (* but m+hm {\R} mhm and m+hn {\R} mhn preferably (Deshpande) *)
+                 (* Deshpande: but m+hm {\R} mhm and m+hn {\R} mhn preferably *)
              | c       -> [ c; first ]
              ]
      | 46 (* \'s *) -> match last with
              [ 32 | 34 | 22 -> [ 22; 23 ] (* t+\'s {\R} cch  idem d c *) 
                           (* optionally [ 22; 46 ] c's see [compile_sandhi] *)
-             | 36      -> [ 26; 23 ] (* n+\'s {\R} \~nch (or [ 26; 46 ] \~n\'s) *)
-             | 41      -> [ 14; first ] (* m+\'s {\R} {\d m}\'s (or \~nch optional) *)
+             | 36      -> [ 26; 23 ] (* n+\'s {\R} \~nch *)
+                          (* optionally [ 26; 46 ] \~n\'s) *)
+             | 41      -> [ 14; first ] (* m+\'s {\R} {\d m}\'s *)
+                          (* optionally \~nch *)
              | c       -> [ if visargor c then 16 else c; first ]
              ]
      | 36 | 41 (* n m *) ->
@@ -157,14 +159,12 @@ value ext_sandhi_pair wl wr =
              | 41      -> [ 14; first ] (* m+n {\R} {\d m}n *)
              | c       -> [ c; first ]  (* \.n+n {\R} \.nn etc. *)
              ]
-     | 47 | 48 (* {\d s} s *) ->
-               match last with
+     | 47 | 48 (* {\d s} s *) -> match last with
              [ 41 -> [ 14; first ] (* m+s {\R} {\d m}s *)
              | 34 -> [ 32; first ] (* d+s {\R} ts *) 
              | c  -> [ if visargor c then 16 else c; first ]
              ]
-     | 37 | 38 | 17 | 18 (* p ph k kh *) ->
-               match last with
+     | 37 | 38 | 17 | 18 (* p ph k kh *) -> match last with
              [ 41 -> [ 14; first ] (* m+p {\R} {\d m}p *)
              | 34 -> [ 32; first ] (* d+p {\R} tp *) 
              | c  -> [ if visargor c then 16 else c; first ] (* s+k {\R} {\d h}k but optional {\d s}k *)
@@ -206,10 +206,11 @@ value ext_sandhi_pair wl wr =
      | 24 | 25 (* j jh *) ->
             if visarg last then visargcomp1 first before
             else match last with
-             [ 41      -> [ 14; first ] (* m+j {\R} {\d m}j == \~nj *)
-             | 32 | 34 -> [ 24; first ] (* t+j {\R} jj  d+j {\R} jj *) 
+             [ 41 -> [ 14; first ] (* m+j {\R} {\d m}j == \~nj *)
+             | 32 
+             | 34 -> [ 24; first ] (* t+j {\R} jj  d+j {\R} jj *) 
              | 36 -> [ 26; first ] (* n+j {\R} \~nj *)
-             | c       -> [ voiced c; first ]
+             | c  -> [ voiced c; first ]
              ]
      | 32 | 33 (* t th *) -> match last with 
              [ 41 -> [ 14; first ]     (* m+t {\R} {\d m}t == nt *)
@@ -218,10 +219,11 @@ value ext_sandhi_pair wl wr =
              | c  -> [ if visargor c then 48 else c; first ] (* s+t {\R} st *)
              ]
      | 27 | 28 (* {\d t} {\d t}h *) -> match last with 
-             [ 41      -> [ 14; first ] (* m+{\d t} {\R} {\d m}{\d t} == {\d n}{\d t} *)
-             | 32 | 34 -> [ 27; first ] (* t+{\d t} {\R} {\d t}{\d t}  d+{\d t} {\R} {\d t}{\d t} *) 
-             | 36      -> [ 14; 47; first ] (* n+{\d t} {\R} {\d m}{\d s}{\d t} *)
-             | c       -> [ if visargor c then 47 else c; first ]
+             [ 41 -> [ 14; first ] (* m+{\d t} {\R} {\d m}{\d t} == {\d n}{\d t} *)
+             | 32 
+             | 34 -> [ 27; first ] (* t+{\d t} {\R} {\d t}{\d t}  d+{\d t} {\R} {\d t}{\d t} *) 
+             | 36 -> [ 14; 47; first ] (* n+{\d t} {\R} {\d m}{\d s}{\d t} *)
+             | c  -> [ if visargor c then 47 else c; first ]
              ]
      | 22 | 23 (* c ch *) -> match last with 
              [ 41      -> [ 14; first ] (* m+c {\R} {\d m}c == \~nc *)

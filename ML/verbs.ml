@@ -2257,7 +2257,8 @@ value compute_present9 sstem wstem short vow stem root third pada padam =
 ;
 
 (* Benedictive/precative, formed from [conjug_optativea] with aorist stem *)
-(* NB. Whitney§837 makes it an optative mode of the root aorist *)
+(* Whitney§837 makes it an optative mode of the root aorist *)
+(* Paninian aazirlif *)
 value conjug_benedictivea conj weak root = 
   let conjugw person suff = (person,fix weak suff) in
   enter1 root 
@@ -4157,11 +4158,6 @@ value compute_redup_injunctm stem root =
   let conjug person suff = (person,fix stem suff) in
   enter1 root (Conju (injm 3) (thematic_preterit_m conjug))
 ;
-value amui = fun (* root with a amui - used in [redup_aor] *)
-  [ "kath" -> True (* \Pan{7,4,93} *)
-  | _ -> False
-  ]
-;
 (* Reduplication for aorist/injunctive *)
 value redup_aor weak root = 
   let mess = "Redup_aor " ^ root in 
@@ -4216,7 +4212,7 @@ value redup_aor weak root =
              | "j~naa#1" | "sthaa#1" | "hlaad" (* hidden heavy since stem in i *)
                  -> 3 
              | "gaah" (* heavy exception *) -> 4  
-             | _ -> if heavy || amui root then 
+             | _ -> if heavy then 
                        if v=1 || v=2 || v=7 then 1 (* Whitney§860 *) 
                        else 3 (* short \R ii, long \R i *) (* \Pan{7,4,93} *)
                     else 4 

@@ -83,7 +83,7 @@ value western_pr = fun
 and indian_pr = fun
   [ Present    -> "la.t"
   | Imperative -> "lo.t" 
-  | Optative   -> "vidhilif"
+  | Optative   -> "lif" (* "vidhilif" *)
   | Imperfect  -> "laf"
   ]
 ;
@@ -126,21 +126,20 @@ value tense_name gentense = fun
   ]
 and perfut_name = fun
   [ Deva -> deva16_blue_center (Encode.skt_raw_to_deva "lu.t")
-  | Roma -> span2_center "Periphrastic Future"
+  | Roma -> span2_center "Future2"
   ]
 ;
 value person_name person = fun
   [ Deva -> let deva_person = match person with
-                [ First -> "uttama"
+                [ First  -> "uttama"
                 | Second -> "madhyama"
-                | Third -> "prathama"
+                | Third  -> "prathama"
                 ] in 
-            deva12_blue_center 
-                (Encode.skt_raw_to_deva deva_person)
+            deva12_blue_center (Encode.skt_raw_to_deva deva_person)
   | Roma -> let roma_person = match person with
-                [ First -> "First"
+                [ First  -> "First"
                 | Second -> "Second"
-                | Third -> "Third"
+                | Third  -> "Third"
                 ] in 
             span3_center roma_person
   ]

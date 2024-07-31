@@ -1138,7 +1138,6 @@ value build_ribhuksin stem entry =
         ; decline Loc "asu"
         ])
    ]
-(* ; Avyayaf ? *)
    ]
 ;
 value build_mas_yuvan entry =  (* \Pan{6,4,133} *)

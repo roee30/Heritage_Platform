@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                       Gérard Huet & Pawan Goyal                        *)
 (*                                                                        *)
-(* ©2021 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2024 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 (* Chunking mechanism for guessing partial padapatha from list of chunks. *)
 (* Essential for maximum parallelism in segmentation                      *)
@@ -27,7 +27,9 @@ exception Glue
 ;
 (* We raise Glue below when there are multiple ways to obtain the current break,
    in which case we do not profit of the sandhi hint. Furthermore, this is 
-   incomplete, notably when one of the sandhied forms is a vocative. *)
+   incomplete, notably when one of the sandhied forms is a vocative. 
+   We raise Hiatus when there is a potential hiatus situation, in which case 
+   the space is mandatory.*)
 (* Chunk [w] is adjusted for padapatha in view of next character [c] *)
 (* No attempt is made to change [c] and thus "tacchrutvaa" is not chunkable. *)
 (* This function defines the maximal separability of devanaagarii into chunks

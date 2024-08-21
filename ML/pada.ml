@@ -60,7 +60,7 @@ value voices_of = fun
   | "raadh" | "ri.s" | "ru" | "ruj#1" | "rudh#1" | "ru.s#1" | "ruh#1" | "lag"
   | "lafg" | "lap" | "lal" | "las" | "laa" | "laa~nch" | "likh" | "liz" 
   | "lu.n.th" | "lubh" | "lul" | "vak.s" | "vac" | "vaj" | "va~nc" | "vam" 
-  | "var.n" | "valg" | "vaz" | "vas#1" | "vaa#2" | "vas#4" | "vaa~nch" | "vid#1"
+  | "var.n" | "vaz" | "vas#1" | "vaa#2" | "vas#4" | "vaa~nch" | "vid#1"
   | "vidh#1" | "vi.s#1" | "vii#1" | "v.rj" | "v.r.s" | "v.rh" | "ven" | "vyac"
   | "vyadh" | "vraj" | "vrazc" | "za.ms" | "zak" | "zam#1" | "zam#2" | "zal" 
   | "zaz"  | "zas" | "zaas" | "zi.s" | "ziil" | "zuc#1" | "zudh" | "zumbh" 
@@ -99,6 +99,7 @@ value voices_of = fun
 (*| "a~nj" also Atma afkte | "naath" "praz" "sp.rz#1" idem *)
 (*| Doubts: "bhuu1" could also be Atma bhavate Kale: rare vedic or epic *)
 (*| "z.rr" also Atma *)
+(*| "valg" Apte valgate *)
 (*| "zru" also Atma in Vedic eg z.r.nu.sva and SP. z.r.nudhvam *)
 (*| "yu#2" could be Atma in Maitreya S. yuyudhvam *)
 (*| "krudh#1" krudhyate pm or ps or both ? *)

@@ -616,7 +616,9 @@ and o_it = fun (* these roots have ppp in -na \Pan{8,2,45} - unused here *)
 and no_guna = fun (* ku.taadi Kale§463 *)
   [ "ku~nc" | "ku.t" | "gur" | "ghu.t" | "cu.t" | "cu.d" | "chur" | "ju.t" 
   | "tu.t" | "tu.d" | "tru.t" | "dham" | "dhmaa" | "dhru" | "nuu" | "pu.t"
-  | "pu.d" | "lu.t" | "lu.th" | "lu.d" | "vra.d" | "sphu.t" | "sphur" -> True
+  | "pu.d" | "lu.t" | "lu.th" | "lu.d" | "vra.d" | "zuc#1" (* added aug 2024 *)
+  | "sphu.t" | "sphur" (* | "uc" ? *)
+       -> True
   |  _ -> False
   ]
 ;
@@ -2506,8 +2508,8 @@ value intercalates root =
             | "tap" | "tyaj#1" | "dah#1" | "d.rp" | "nam" | "naz#1" 
             | "bandh" | "budh#1" | "bhaj" | "majj" | "man" | "m.rj"
             | "yam" | "ruh" | "labh" | "likh" | "vap#2" | "vas#1" | "vah#1" 
-            | "vij" | "vid#1" | "v.rj" | "v.rt#1" | "v.rdh#1" | "vrazc" | "z.rdh"
-            | "sad#1" | "sah#1" | "sidh#2" | "svap" | "han#1" | "syand" 
+            | "vij" | "vid#1" | "v.rj" | "v.rt#1" | "v.rdh#1" | "vrazc" 
+            | "z.rdh" | "sad#1" | "sah#1" | "sidh#2" | "svap" | "han#1" | "syand"
             (* Pan{7,2,59} set A anit P "v.rt#1" "v.rdh#1" "z.rdh" "syand" 
                for these 4 roots, we generate both forms in Atma and in Para *)
                 -> vet 
@@ -2585,7 +2587,7 @@ value intercalate_pp root rstem =
            | "am" | "tvar" (* \Pan{7,2,28} *) -> vet (* but only set for -tvaa *)
                            (* also "ru.s#1" et "sa.m-ghu.h" "aa-svan" *)
            | "kas" | "k.sam" | "gup" | "dyut#1" | "dham" | "nud" 
-           | "m.rj" -> vet 
+           | "m.rj" | "zuc#1" -> vet 
              (* NB zaas vet for stem zaas but admits also zi.s only anit *)
            | "aj" | "a.t" | "at" | "an#2" | "az#2" | "aas#2" | "i.s#2"
            | "ii.d" | "iir" | "iiz#1" | "ii.s" | "iih" | "uc" | ".rc#1" | ".rj" 
@@ -2635,7 +2637,7 @@ value intercalate_tvaa root rstem =
   [ "zam#2"    (* unused without preverb *)
   | "av" -> [] (* WR no absol *)
   | "ka.s" | "k.rt#1" | "dh.r.s" | "am" | "tvar" | ".r.s" | "v.rj" | "m.r.d"
-          -> set 
+  | "zuc#1" -> set 
   | "nud" -> anit
   | "k.lp" -> vet (* Bucknell *)
   | _ -> if uu_it root || u_it root then vet
@@ -2904,7 +2906,7 @@ value perstems rstem root =
        | 2 -> sandhi sstem (code "ii") (* grah *)
        | 3 -> rev (ar_ra sstem) (* metathesis: kra.s.taa bhra.s.taa dra.s.taa *)
        | 4 -> code "na.mz" (* exception naz1 *)
-       | _ -> failwith "perstems: unexpected intercalate code"
+       | _ -> failwith "Weird intercalate code"
        ]
 ;
 value compute_future_gen rstem root =
@@ -3312,12 +3314,12 @@ value compute_perfecta conj strong weak olengthened eweak iopt root =
         ; conjugs Third  "a" (* actually also regular aaza Whitney§788a *)
         ] else [] (* Whitney§788a *)
     ] in if iopt then (* add forms without intercalating i *)
-        let conjug = (* Whitney§801g nana.m.s.tha mafktha *)
-            if root="naz#1" then fun p s -> (p,fix (revcode "nana.mz") s)
-            else if root="majj" then fun p s -> (p,fix (revcode "ma.mj") s)
-            else conjugs in
+            let conjug = (* Whitney§801g nana.m.s.tha mafktha *)
+              if root="naz#1" then fun p s -> (p,fix (revcode "nana.mz") s)
+              else if root="majj" then fun p s -> (p,fix (revcode "ma.mj") s)
+              else conjugs in
         [ conjug Second "tha" :: l ] 
-            else if no_guna root then (* Kale ku.taadi *)
+         else if no_guna root then (* Kale ku.taadi *)
         [ conjugw Second "itha" :: l ] else l)
    ; (Dual, let l =
         [ conjugw First  "iva"
@@ -4983,7 +4985,7 @@ value alternate_pp = fun
   [ "m.r.s" | "svid#2" | "dh.r.s" | "puu#1" (*i \Pan{?} i*)
     (* next roots of ga.na 1 have penultimate "u" *)
   | "kul" | "k.sud" | "guh" | "jyut" | "dyut#1" | "mud#1" | "rud#1" | "ruh#1"
-  | "lul" | "zuc#1" | "zubh#1" | "zu.s#1" -> True
+  | "lul" (* | "zuc#1" *) | "zubh#1" | "zu.s#1" -> True
   | _ -> False
   ]
 ;
@@ -6150,20 +6152,22 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
 (*i      ; record_des_aa Desiderative st root (* Des k.rdantas lexicalized *) 
          ; record_des_u Desiderative st root i*)
          ; perif Desiderative [ 3 :: st ] root 
+         ; build_perpft Desiderative st root (* tentative *)
          } in
      match Word.mirror third with (* active or middle are generated on demand *)
        [ [ 3 :: [ 32 :: [ 1 :: st ] ] ] -> do 
            { compute_desiderativea st root third
            ; compute_passive Desiderative root st 
            ; compute_futurea Desiderative [ 42 :: st ] root 
-           ; compute_perfect_desida st root 
+           (* OBS ; compute_perfect_desida st root *)
+           ; build_perpft Desiderative st root (* tentative *)
            ; compute_krid st 
            }
        | [ 10 :: [ 32 :: [ 1 :: st ] ] ] -> do 
            { compute_desiderativem st root third
            ; compute_passive Desiderative root st 
            ; compute_futurem Desiderative [ 42 :: st ] root 
-           ; compute_perfect_desidm st root 
+           (* OBS ; compute_perfect_desidm st root *)
            ; compute_krid st
            }
        | _ -> failwith ("Weird desiderative " ^ Canon.decode third)

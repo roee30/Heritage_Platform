@@ -48,7 +48,8 @@ and   int_gana = 14
    we may generate the stem from its parameters. Also, it may suggest a 
    more precise sense if two ganas of the same root generate the same stem.
    But then at analysis this creates overgeneration, whence this patch
-   to avoid homonyms. *)
+   to avoid homonyms. This ignores accent. 
+   NB. We also have ambiguity of present Atma and passive for roots of ga.na 4 *)
 value redundant_gana k = fun 
   [ "svap"  -> k=1
   | "rud#1" -> k=6

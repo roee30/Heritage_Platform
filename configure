@@ -32,7 +32,7 @@ version_keys=["VERSION","DATE"]
 TEMPLATE='#'
 WARN='# WARNING - Produced from MMakefile by configure - Do not edit manually'
 
-import sys,re,shutil,os,os.path,subprocess
+import sys,re,shutil,os,io,os.path,subprocess
 
 def verif_config():
     if not os.path.exists(config_link_path):
@@ -44,7 +44,7 @@ SETUP/CONFIGS directory.""")
 
 def generate(config_path):
     # CONFIG FILE
-    config = open (config_path,'r')
+    config = io.open (config_path,'r')
     config_content = config.read()
     config.close()
     config_pattern="([A-Z]*)='([^']*)'"
@@ -53,14 +53,14 @@ def generate(config_path):
     items["WARN"]=WARN
     for item in re.finditer(config_pattern, config_content):
         items[item.group(1)] = item.group(2)
-    config_version = open (config_version_path, 'r')
+    config_version = io.open (config_version_path, 'r')
     config_version_content = config_version.read()
     config_version.close()
     for item in re.finditer(config_pattern, config_version_content):
         items[item.group(1)] = item.group(2)    
 
     # MAKEFILE
-    meta_makefile = open(meta_makefile_path)
+    meta_makefile = io.open(meta_makefile_path)
     meta_makefile_content = meta_makefile.read()
     meta_makefile.close()
     for key in makefile_keys:
@@ -68,16 +68,16 @@ def generate(config_path):
     meta_makefile_content = meta_makefile_content.replace('#SKTINSTALLDIR',os.getcwd()+"/")
     for key in version_keys:
         meta_makefile_content = meta_makefile_content.replace('#'+key,items[key])
-    makefile = open(makefile_path,'w')
+    makefile = io.open(makefile_path,'w')
     makefile.write(meta_makefile_content)
     makefile.close()
     print(makefile_path, "generated")
 
     # INDEX PAGE
-    site_entry_page = open(site_entry_page_path,'r')
+    site_entry_page = io.open(site_entry_page_path,'r')
     site_entry_page_content = site_entry_page.read()
     site_entry_page.close()
-    site_entry_page_fr = open(site_entry_page_path,'r') # site_entry_page_fr_path
+    site_entry_page_fr = io.open(site_entry_page_path,'r') # site_entry_page_fr_path
     site_entry_page_fr_content = site_entry_page_fr.read()
     site_entry_page_fr.close()
     for key in counter_keys:
@@ -90,87 +90,87 @@ def generate(config_path):
         site_entry_page_fr_content = site_entry_page_fr_content.replace('#'+key,items[key])
 
     # ENGLISH INDEX PAGE
-    sitepage_en = open(sitepage_en_path,'w')
+    sitepage_en = io.open(sitepage_en_path,'w')
     sitepage_en_content = site_entry_page_content.replace('#LANG','en')   
     sitepage_en.write(sitepage_en_content)
     sitepage_en.close()
     print(sitepage_en_path, "(en) generated")
     
     # FRENCH INDEX PAGE
-    sitepage_fr = open(sitepage_fr_path,'w')
+    sitepage_fr = io.open(sitepage_fr_path,'w')
     sitepage_fr_content = site_entry_page_fr_content.replace('#LANG','fr')   
     sitepage_fr.write(sitepage_fr_content) 
     sitepage_fr.close()
     print(sitepage_fr_path, "(fr) generated")
     
     # FAQ PAGE
-    faq_page = open(faq_page_path,'r')
+    faq_page = io.open(faq_page_path,'r')
     faq_page_content = faq_page.read()
     faq_page.close()
 
     # ENGLISH FAQ PAGE
-    faq_page_en = open(faq_page_en_path,'w')
+    faq_page_en = io.open(faq_page_en_path,'w')
     faq_page_en_content = faq_page_content.replace('#LANG','en')   
     faq_page_en.write(faq_page_en_content)
     faq_page_en.close()
     print(faq_page_en_path, "(en) generated")
     
     # FRENCH FAQ PAGE
-    faq_page_fr = open(faq_page_fr_path,'w')
+    faq_page_fr = io.open(faq_page_fr_path,'w')
     faq_page_fr_content = faq_page_content.replace('#LANG','fr')   
     faq_page_fr.write(faq_page_fr_content)
     faq_page_fr.close()
     print(faq_page_fr_path, "(fr) generated")
     
     # PORTAL PAGE
-    portal_page = open(portal_page_path,'r')
+    portal_page = io.open(portal_page_path,'r')
     portal_page_content = portal_page.read()
     portal_page.close()
 
     # ENGLISH PORTAL PAGE
-    portal_page_en = open(portal_page_en_path,'w')
+    portal_page_en = io.open(portal_page_en_path,'w')
     portal_page_en_content = portal_page_content.replace('#LANG','en')   
     portal_page_en.write(portal_page_en_content)
     portal_page_en.close()
     print(portal_page_en_path, "(en) generated")
     
     # FRENCH PORTAL PAGE
-    portal_page_fr = open(portal_page_fr_path,'w')
+    portal_page_fr = io.open(portal_page_fr_path,'w')
     portal_page_fr_content = portal_page_content.replace('#LANG','fr')   
     portal_page_fr.write(portal_page_fr_content)
     portal_page_fr.close()
     print(portal_page_fr_path, "(fr) generated")
     
     # XML RESOURCES
-    xml_entry_page = open(xml_entry_page_path,'r')
+    xml_entry_page = io.open(xml_entry_page_path,'r')
     xml_entry_page_content = xml_entry_page.read()
     xml_entry_page.close()
     for key in version_keys:
         xml_entry_page_content = xml_entry_page_content.replace('#'+key,items[key])
-    xmlpage = open(xmlpage_path,'w')
+    xmlpage = io.open(xmlpage_path,'w')
     xmlpage.write(xml_entry_page_content)
     xmlpage.close()
     print(xmlpage_path, "generated")
     
     # GOLDEN DICT
-    golden_entry_page = open(goldendict_entry_path,'r')
+    golden_entry_page = io.open(goldendict_entry_path,'r')
     golden_page_content = golden_entry_page.read()
     golden_entry_page.close()
     for key in version_keys:
         golden_page_content = golden_page_content.replace('#'+key,items[key])
-    golden_page = open(goldendict_path,'w')
+    golden_page = io.open(goldendict_path,'w')
     golden_page.write(golden_page_content)
     golden_page.close()
     print(goldendict_path, "generated")
     
     # TEX
     if os.path.exists(meta_docintro_path):
-        meta_docintro = open(meta_docintro_path,'r')
+        meta_docintro = io.open(meta_docintro_path,'r')
         meta_docintro_content = meta_docintro.read()
         meta_docintro.close()
         for key in version_keys:
             meta_docintro_content = meta_docintro_content.replace('#'+key,items[key])
-        docintro = open(docintro_path,'w')
+        docintro = io.open(docintro_path,'w')
         docintro.write(meta_docintro_content)
         docintro.close()
         print(docintro_path, "generated")

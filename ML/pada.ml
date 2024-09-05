@@ -36,7 +36,7 @@ value voices_of = fun
   | "kiil" | "kuc" | "ku.t" | "ku.t.t" | "ku.n.th" | "kunth" | "kup" | "kul"
   | "ku.s" | "kuuj" | "k.rt#1" | "k.rz" | "krand" | "kru~nc#1" | "kruz" | "klam" 
   | "klid" | "kliz" | "kvath" | "k.sar" | "k.sal" | "k.saa" | "k.si" | "k.sii"
-  | "k.su" | "k.sudh#1" | "k.svi.d" | "kha~nj#1" | "khaad" | "khid"
+  | "k.su" | "k.sudh#1" | "k.svi.d" | "kha~nj#1" | "khid"
   | "khel" | "khyaa" | "gaj" | "gad" | "garj" | "gard" | "gal" | "gaa#1" 
   | "gaa#2" | "gu~nj" | "gu.n.th" | "gup" | "gumph" | "g.rdh" 
   | "g.rr#2" | "granth" | "ghas" | "ghu.s" | "gh.r" | "gh.r.s" | "ghraa"  
@@ -62,7 +62,7 @@ value voices_of = fun
   | "lu.n.th" | "lubh" | "lul" | "vak.s" | "vac" | "vaj" | "va~nc" | "vam" 
   | "var.n" | "vaz" | "vas#1" | "vaa#2" | "vas#4" | "vaa~nch" | "vid#1"
   | "vidh#1" | "vi.s#1" | "vii#1" | "v.rj" | "v.r.s" | "v.rh" | "ven" | "vyac"
-  | "vyadh" | "vraj" | "vrazc" | "za.ms" | "zak" | "zam#1" | "zam#2" | "zal" 
+  | "vyadh" | "vraj" | "vrazc" | "za.ms" | "zak" | "zam#1" | "zal" 
   | "zaz"  | "zas" | "zaas" | "zi.s" | "ziil" | "zuc#1" | "zudh" | "zumbh" 
   | "zu.s#1" | "zuu" | "zcut#1" | "zraa" | "zli.s" | "zvaa" | ".s.thiiv" 
   | "sad#1" | "sap#1" | "saa#1" | "sidh#1" | "sidh#2" | "siiv" 
@@ -73,6 +73,7 @@ value voices_of = fun
   | "karakaasaara" (* denominative of cpd resembling gana 1 - tentative *)
 (*| "k.subh" needed for k.subhyate *)
 (*| "k.s.nu" Atma needed for sa.mk.s.ute \Pan{1,3,65} *)
+(*| "khaad"  Atma needed for fum{khaadi.syate} and \pm{khaadate} Epics *)
 (*| "krii.d" Atma needed for aakrii.date \Pan{1,3,21} *)
 (*| "g.rr1"  Atma needed for avag.rr sa.mg.rr \Pan{1,3,51-52} *)
 (*| "ji"     Atma needed for eg vijayate paraajayate \Pan{1,3,19} *)
@@ -135,14 +136,15 @@ value voices_of = fun
   | ".r" | ".rj" | "ka.n.d" | "kal" | "ka.s" | "ku.n.d" | "k.r#1"
   | "k.r#2" | "k.r.s" | "kram" | "krii#1" | "krii.d" | "krudh#1" | "k.san" 
   | "k.sap#1" | "k.sam" | "k.sal" | "k.sip" | "k.sud" | "k.subh" | "k.s.nu"
-  | "khan" | "gam" | "garh" | "gaah" | "guh" | "g.rr#1" | "gras" | "grah" 
-  | "glaa" | "gha.t.t" | "cat" | "carc" | "ci" | "cint" | "cud" | "ce.s.t"
-  | "cyu" | "chad#1" | "chand" | "chid#1" | "jan" | "juu" | "j~naa#1" | "jyaa#1" 
-  | "jyut" | "ta.d" | "tan#1" | "tan#2" | "tap" | "tud#1" | "tul" | "t.rd" 
-  | "traa" | "daa#1" | "daaz#1" | "diz#1" | "dih" | "diip" | "duh#1" | "dev#1"
-  | "draa#2" | "dvi.s#1" | "dhaa#1" | "dhaav#1" | "dhaav#2" | "dhuu#1" | "dh.r"
-  | "dhyaa" | "dhva.ms" | "nabh" | "nam" | "nah" | "naath" | "nij" | "nii#1" 
-  | "nud" | "pac" | "paz" | "pa.th" | "pii.d" | "pu.s#1" | "puu#1" | "puuj" 
+  | "khan" | "khaad" | "gam" | "garh" | "gaah" | "guh" | "g.rr#1" | "gras" 
+  | "grah" | "glaa" | "gha.t.t" | "cat" | "carc" | "ci" | "cint" | "cud" 
+  | "ce.s.t" | "cyu" | "chad#1" | "chand" | "chid#1" | "jan" | "juu" 
+  | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d" | "tan#1" | "tan#2" | "tap" 
+  | "tud#1" | "tul" | "t.rd" | "traa" | "daa#1" | "daaz#1" | "diz#1" | "dih" 
+  | "diip" | "duh#1" | "dev#1" | "draa#2" | "dvi.s#1" | "dhaa#1" | "dhaav#1" 
+  | "dhaav#2" | "dhuu#1" | "dh.r" | "dhyaa" | "dhva.ms" | "nabh" | "nam" 
+  | "nah" | "naath" | "nij" | "nii#1" | "nud" | "pac" | "paz" | "pa.th" 
+  | "pii.d" | "pu.s#1" | "puu#1" | "puuj" 
   | "puuy" | "p.rth" | "prii" | "pru.s#1" | "budh#1" | "bruu" | "bhak.s"
   | "bhaj" | "bharts" | "bhaas#1" | "bhid#1" | "bhuj#2" | "bh.r" | "bh.rjj" 
   | "mantr" | "maa#4" | "maarg" | "mi" | "mith" | "mil" | "mii" 
@@ -363,8 +365,8 @@ value voices_of_pv upasarga gana = fun
             | "pari" | "ava" -> Atma 
             | _ -> Para (* \Pan{1,3,18} *)
             ]
-(* Next four equivalent to marking "unused" in lexicon *)
-| "ta~nc" | "saa#1" | "zam#2" | "zal" (* | "khyaa" ? *) ->
+(* Next three equivalent to marking "unused" in lexicon *)
+| "ta~nc" | "saa#1" | "zal" (* | "khyaa" ? *) ->
    match upasarga with 
    [ "" -> raise Unattested (* thus braa.hmasya "Ô Brahmane, tue" unrecognized *)
    | _ -> Para 

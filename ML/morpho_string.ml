@@ -242,19 +242,18 @@ and str_ind_kind_deva = fun
   | _    -> "अव्यय"
   ]
 and str_invar_deva = fun
-  [ Infi   -> "तुमुन्" 
-  | Absoya -> "ल्यप्"
+  [ Infi     -> "तुमुन्" 
+  | Absoya   -> "ल्यप्"
   | Absotvaa -> "क्त्वा"
-  | Namul -> "णमुल्"
-  | Perpft -> "लिट् (अनुप्रयोग)"
+  | Namul    -> "णमुल्"
+  | Perpft   -> "लिट् (अनुप्रयोग)"
   ]
 ;
 value str_paradigm_deva = fun
   [ Conjug t v    -> (str_tense_deva t) ^ " " ^ (str_voice_deva v)
-  | Presenta k pr -> "कर्तरि " ^ (str_pr_mode_deva pr) ^ " पप " ^ (gana_str_deva k)
-  | Presentm k pr -> "कर्तरि " ^ (str_pr_mode_deva pr) ^ " आप " ^ (gana_str_deva k)
+  | Presenta k pr -> "कर्तरि " ^ (str_pr_mode_deva pr) ^ " पप" ^ (gana_str_deva k)
+  | Presentm k pr -> "कर्तरि " ^ (str_pr_mode_deva pr) ^ " आप" ^ (gana_str_deva k)
   | Presentp pr   -> "कर्मणि " ^ (str_pr_mode_deva pr) ^ " आप"
-(* OBS  | Perfut v      -> "लुट्" ^ (str_voice_deva v) *)
   ]
 ;
 value str_finite_deva (c,p) = (str_conjugation_deva c) ^ (str_paradigm_deva p)
@@ -270,8 +269,8 @@ value str_morph_deva = fun
   | Ind_form k -> str_ind_kind_deva k
   | Gati -> "च्वि" 
   | Ind_verb m -> str_modal_deva m
-  | Unanalysed -> "?"
   | PV pvs -> "उपसर्ग" 
+  | Unanalysed -> "?"
   ]
 ;
 

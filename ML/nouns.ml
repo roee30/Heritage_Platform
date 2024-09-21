@@ -5053,7 +5053,7 @@ value build_num stem entry =
         ] in if entry = "a.s.tan" then 
         [ decline Nom "au" (* remains of dual form 8 as a pair of 4 (Vedic) *)
         ; decline Acc "au" 
-        ; decline Ins "aabhis"
+        ; decline Ins "aabhis" (* Pan{7,2,84} opt discussed Subrahmanyam p130 *)
         ; decline Dat "aabhyas"
         ; decline Abl "aabhyas"
         ; decline Loc "aasu"
@@ -5959,6 +5959,7 @@ value iic_indecl = (* should be lexicalized or completed *)
   ; "punar"     (* punarukta *)
   ; "puras"     (* (gati) pura.hstha *)
   ; "p.rthak"   (* p.rthagjana *)
+  ; "prati"     (* pratikuula *)
   ; "praatar"   (* praataraaza  *)
   ; "praayas"   (* praayazcitta *)
   ; "pha.t"     (* pha.dantena *)

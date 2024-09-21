@@ -3748,12 +3748,14 @@ and compute_perfect_desidm st root =
   let (_, weak, _, _, _) = redupl_perf (Canon.rdecode st) in
   compute_perfectm Desiderative weak root
 ;
+
 (*****************************)
 (* Periphrastic perfect li.t *)
 (*****************************)
 (* Construction of the periphrastic perfect, used for perfect of secondary 
 conjugations, denominative verbs and a few roots. It builds a form in -aam
-suffixed by a perfect form of the auxiliairies k.r bhuu and as \Pan{3,1,35-40} *)
+suffixed by a perfect form of the auxiliairies k.r bhuu and as \Pan{3,1,35-40}.
+\Pan{3,1,40-41} gives the construction in k.r, Pata~njali added  bhuu and as. *)
 value peri_perf_stem root = 
   let stem = match root with 
   [ "iik.s" | "ii.d" | "iir" | "iih" | "uk.s" | "uc" | "ujjh" | "uuh" | "edh" 
@@ -3763,19 +3765,21 @@ value peri_perf_stem root =
   | "kaas#1" -> "kaas" (* id \Pan{3,1,35} *)
   | "iiz#1"  -> "iiz" (* id MWG§385 *) 
   | "u.s"    -> "o.s" (* guna WR *) 
+(*| "k.sal"  -> "k.saalay" Bucknell from ca *)
   | "jaag.r" -> "jaagar" (* Macdonell§140a2 *)
+  | "pac  "  -> "pacay" (* Staal WO p30 *)
   | "palaay" -> "palaay" (* Wh§1087c *)
   | "bhii#1" -> "bibhay" (* Henry§242 *)
   | "bh.r"   -> "bibhar" (* Henry§242 *)
-  | "nii#1"  -> "nay" 
+  | "nii#1"  -> "nay"  (* v.rddhi *)
   | "i"      -> "ay" (* Whitney roots *)
-  | ".r"     -> "ar" (* id *)
-  | "vid#1"  -> "vid" (* Henry§242 *)
+  | ".r"     -> "ar" (* id guna  *)
+  | "vid#1"  -> "vid" (* trim Henry§242 *)
   | "vyaa"   -> "vye" (* Whitney roots *)
   | "hu"     -> "juhav" (* Henry§242 *)
   | "huu"    -> "hve" (* Macdonell§140a3 *)
   | "hrii#1" -> "jihre" (* Whitney roots *)
-  | _ -> raise Not_attested (* no known periphrastic perfect *)
+  | _ -> raise Not_attested (* no known periphrastic perfect - To complete *)
   ] in revcode stem
 ;
 value build_perpft c abstem root =
@@ -6095,7 +6099,10 @@ value compute_conjugs_stems root (vmorph,aa) = do (* main *)
          ] in
      let compute_causative stem = do (* both active and middle are generated *)
          { compute_causativea stem root (if active then third else [])
-         ; compute_causativem stem root (if active then [] else third)
+         ; match root with
+           [ "k.sal" -> () (* only Para *)
+           | _ -> compute_causativem stem root (if active then [] else third)
+           ]
          } in 
      do (* active, middle, passive present; active middle future, aor *)
      { compute_causative cstem
@@ -6452,8 +6459,13 @@ value compute_extra () = do (* Extra forms for specific roots *)
 (* Roots without present may be displayed with gana 0 *)
 value fake_compute_conjugs (gana : int) (root : string) = do
   { morpho_gen.val := False (* Do not generate phantom forms *) 
-  ; let no_third = [] and pada = True in (* hacks to disable check warning *)
-    let vmorph = Conj_infos.Prim gana pada no_third in do
+  ; let no_third = [] (* hack to disable check warning *)
+    and pada = True (* should be voices_of root *) in 
+    let vmorph = match root with (* we check if Primary conjug forms exist *)
+      [ "k.sal" -> Conj_infos.Causa (code "k.saalayati")
+      (* others without Primary conjugation to add or lexicalize *)
+      | _ -> Conj_infos.Prim gana pada no_third 
+      ] in do
     { compute_conjugs_stems root (vmorph,False) (* False since no-op in fake *)
     ; match root with (* extra forms - to be completed from [compute_extra] *)
       [ ".rc#1"  -> compute_extra_rc ()

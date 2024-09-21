@@ -69,7 +69,7 @@ and tense =
                                also Prohibitive with maa *) 
   | Benedictive (* (aazirlif) Precative: optative aorist *) 
   | Future (* (l.r.t) *)
-  | Future2 (* periphrastic futur (lu.t) *)
+  | Future2 (* (lu.t) periphrastic futur *)
   | Conditional (* (l.rf) Preterit of future *)
   | Subjunctive (* (le.t) Rare subjunctive, in-between Optative and Imperative *)
   ]

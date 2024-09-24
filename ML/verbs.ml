@@ -4214,7 +4214,8 @@ value redup_aor weak root =
            ]
         else if v = 6 then 5 (* uu \R u *)
         else match root with
-             [ "klid" | "tvar" | "tvi.s#1" | "zri" | "grah" | "vrazc" -> 3 
+             [ "klid" | "tvar" | "tvi.s#1" | "zri" | "grah" | "vrazc" | "sp.rz#1"
+             | "hras" (* ca *) -> 3 
              | "j~naa#1" | "sthaa#1" | "hlaad" (* hidden heavy since stem in i *)
                  -> 3 
              | "gaah" (* heavy exception *) -> 4  
@@ -4638,9 +4639,10 @@ value compute_aor_ca cpstem root =
   | "p.r#1" (* apiiparat *)
   | "t.rr" (* atiitarat *)
   | "vah#1" (* aviivahat *) 
+  | "hras" (* ajihrasat *) 
   | "hlaad" (* ajihladat *) 
-(*| "jan"  (* wrong *ajijiinat for ajiijanat *)
-  | "sp.rz#1" (* wrong *apii.spazat for apisp.rzat *) TODO *) ->
+  | "sp.rz#1" (* apisp.rzat *) 
+  | "jan" (* ajiijanat *) ->
       match cpstem with (* cpstem-ayati is the ca stem *)
      [ [ 37 :: [ 2 :: w ]] ->  (* w-aapayati *)
          let voy = if root = "daa#1" then 1 (* a *)
@@ -4653,6 +4655,10 @@ value compute_aor_ca cpstem root =
      | [ 37 :: [ 1 :: _ ]] -> 
          let stem = redup_aor cpstem root in do 
          { compute_redup_aorista_ca stem root (* ajij~napat *)
+         ; compute_redup_aoristm_ca stem root 
+         }
+     | [ 36; 1; 24 ] (* jan *) -> let stem = [ 36; 1; 24; 4; 24] in do
+         { compute_redup_aorista_ca stem root (* ajiijanat *)
          ; compute_redup_aoristm_ca stem root 
          }
      | [ c :: w ] -> 

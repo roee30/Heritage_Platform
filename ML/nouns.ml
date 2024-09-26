@@ -5246,7 +5246,21 @@ value compute_nouns_stem_form e stem d p =
                    -> build_mas_aac r1 e
                  | _ -> build_root Mas stem e
                  ]
-             | _ -> build_root Mas stem e
+            | [ 26 :: [ 1 :: r2 ] ] (* -a~nc *) -> build_mas_ac r2 e 
+                 (* for Declension using uda~nc ... *)
+            | [ 26 :: ([ 2 :: r2 ] as r)] (* -aa~nc *) -> match r2 with
+                 [ [ 37; 1 ] (* apa-ac *)
+                 | [ 42; 48; 1; 17 ] (* kasya-ac *)
+                 | [ 43; 1; 37 ] (* para-ac *)
+                 | [ 43; 37 ] (* pra-ac *)
+                 | [ 45; 1 ] (* ava-ac *)
+                 | [ 45; 34; 1; 10; 34 ] (* devadra-ac *)
+                 | [ 45; 43; 1 ] (* arva-ac *)
+                 | [ 45; 43; 1; 48 ] (* sarva-ac *)
+                   -> build_mas_aac r e
+                 | _ -> build_root Mas stem e
+                 ]
+            | _ -> build_root Mas stem e
             ] 
       | [ 24 :: r1 ] (* -j *) -> match r1 with (* mrijify *)
             [ [ 1 :: [ 42 :: _ ] ] (* -yaj2 upaya.t *) 
@@ -5464,6 +5478,9 @@ value compute_nouns_stem_form e stem d p =
                  |  _ (* udac ... *) -> build_neu_ac r2 e 
                  ]
             | [ 2 :: _ ] (* -aac *) -> build_neu_aac r1 e
+            | [ 26 :: [ 1 :: r2 ] ] (* -a~nc *) -> build_neu_ac r2 e 
+                 (* for Declension using uda~nc ... *)
+            | [ 26 :: ([ 2 :: r2 ] as r) ] (* -aa~nc *) -> build_neu_aac r e
             | _ -> build_root Neu stem e
             ]
       | [ 24 :: r1 ] (* -j *) -> match r1 with (* mrijify *)

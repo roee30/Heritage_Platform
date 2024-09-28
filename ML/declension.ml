@@ -19,7 +19,7 @@
 open Skt_morph;
 open Morphology; (* [Noun_form] etc. *)
 open Html; (* [narrow_screen html_red]  etc. *)
-open Web;  (* [ps pl font Deva Roma pr_font] etc. *)
+open Web;  (* [ps pl font Deva Roma pr_font abort] etc. *)
 open Cgi;  (* [create_env] etc. *)
 open Multilingual; (* [declension_title compound_name avyaya_name] *)
 

@@ -655,7 +655,7 @@ value build_mas_mahat stem entry =
         ])
    ]
    ; Bare Noun (wrap stem 2) (* mahaa- *)
-   ; Bare Noun (code "mahat") (* mahat- rarer *)
+   ; Bare Noun (mirror [ 32 :: [ 1 :: stem ] ]) (* mahat- rarer *) 
    ; Cvi (wrap stem 4)
    ; Avyayaf (fix stem "aantam") (* atam ? *)
    ]

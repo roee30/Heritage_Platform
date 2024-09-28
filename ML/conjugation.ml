@@ -22,7 +22,7 @@ open Morphology; (* [inflected Verb_form] etc. *)
 open Conj_infos; (* [vmorph Causa Inten Desid root_infos] *)
 open Inflected; (* [roots.val indecls.val] etc. *)
 open Html;
-open Web; (* [ps pl font Deva Roma pr_font] etc. *)
+open Web; (* [ps pl font Deva Roma pr_font abort] etc. *)
 open Cgi;
 open Multilingual; (* [gentense tense_name captions] *)
 

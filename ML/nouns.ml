@@ -5107,6 +5107,7 @@ value build_katicit entry = (* MW Gram§230 *)
 value pprvat = fun 
   [ "avat" | "aapnuvat" | "kurvat" | "jiivat" | "dhaavat" | "dhaavat#1"
   | "dhaavat#2" | "bhavat#1" | "z.r.nvat" | "zaknuvat" -> True
+  | "azaknuvat" -> True (* privative of ppr - to be completed *)
   | _ -> False
   ]
 and pprmat = fun 
@@ -6020,6 +6021,7 @@ value declined_indecls =
   ; "niicais" 
   ; "param"
   ; "raatrim"
+  ; "satatam" 
   ; "sahasaa" 
   ]
 ;

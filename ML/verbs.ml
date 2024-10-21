@@ -1395,7 +1395,7 @@ value compute_athematic_impft3a strong weak iiflag root =
    ; (Plural, let l = 
         [ conjugw First  "ma"
         ; conjugw Second "ta"
-        ; conjugw Third  "ur"
+        ; conjugw Third  "us" (* was "ur" *)
         ] in if haa_flag then l @
                 [ conjughaa First  "ma"
                 ; conjughaa Second "ta"
@@ -3174,8 +3174,7 @@ value redupl_perf root =
                     | [] -> [ 43; 1 ] (* ar for .r *)
                     | _ -> revw
                     ] in (strong w, w)
-                         
-         | _ (* aa ii uu *) -> (revs, revw)
+         | _ (* aa ii uu .rr *) -> (revs, revw)
          ] in let iopt = match root with (* form without i allowed Kale §508 *)
                   [ "ak.s" -> True (* more to add *)
                   | _ -> False (* default mandatory intercalate i *)
@@ -3330,7 +3329,7 @@ value compute_perfecta conj strong weak olengthened eweak iopt root =
         [ conjugw First  "ima"
         ; conjugw Second "a"
         ; if root="raaj#1" then (Third, code "rejur")
-          else conjugw Third "ur" (* Henry: paptur véd. pat1 Varenne§39 *)
+          else conjugw Third "us" (* Henry: paptur véd. pat1 Varenne§39 *)
         ] in l) (* [if iopt then [ conjugw First  "ma" :: l ] else l] NO *)
    ]) 
   ; let pstem = if root="raaj#1" then (revcode "rej") else weak in
@@ -3423,7 +3422,7 @@ value compute_perfecta_aa stem root =
    ; (Plural,
         [ conjug First  "ima"
         ; conjug Second "a"
-        ; conjug Third  "ur"
+        ; conjug Third  "us" (* was "ur" *)
         ])
    ])
   ; record_part (Ppfta_ Primary stem root)
@@ -3518,7 +3517,7 @@ value compute_perfecta_v strong weak root =
    ; (Plural, let l =
         [ conjugw First  "ma" 
         ; conjugw Second "a"
-        ; conjugw Third  "ur"
+        ; conjugw Third  "us" (* was "ur" *)
         ] in if iforb then l else [ conjugs First "ima" :: l ])
    ])
   ; record_part (Ppfta_ Primary weak root)
@@ -3543,7 +3542,7 @@ value compute_perfectar conj stem root =
    ; (Plural,
         [ conjugs First  "ima"
         ; conjugs Second "a"
-        ; conjugs Third  "ur"
+        ; conjugs Third  "us" (* was "ur" *)
         ])
    ])
   ; record_part (Ppfta_ conj stem root)
@@ -3622,7 +3621,7 @@ value compute_perfect_vid root = (* perfect in the sense of present *)
    ; (Plural,
         [ conjugw First  "ma"
         ; conjugw Second "a"
-        ; conjugw Third  "ur"
+        ; conjugw Third  "us" (* was "ur" *)
         ])
    ])
 ;
@@ -3665,7 +3664,7 @@ value compute_perfect_vyaa root =
    ; (Plural,
         [ conjugw First  "ma"
         ; conjugw Second "a" 
-        ; conjugw Third  "ur"
+        ; conjugw Third  "us" (* was "ur" *)
         ])
    ])
   ; record_part (Ppfta_ Primary weak root)
@@ -3821,7 +3820,7 @@ value sigma_paradigm conjug =
    ; (Plural, 
         [ conjug First  "ma"
         ; conjug Second "ta"
-        ; conjug Third  "ur"
+        ; conjug Third  "us" (* was "ur" *)
         ])
    ]
 ;
@@ -4065,9 +4064,9 @@ value compute_root_aorista weak strong root =
         ; conjugw Second "ta"
         ; (Third, match weak with
             [ [ 2 (* aa *) :: r ] 
-                -> fix_augment r "ur"
+                -> fix_augment r "us" (* was "ur" *)
             | [ 41; 1; 43; 17 ] (* kram *) (* Whitney§833a *)
-                -> fix_augment weak "ur" (* also yam dabh n.rt mand *)
+                -> fix_augment weak "us" (* also yam dabh n.rt mand *)
             | [ 6; 40 ] (* bhuu *) -> code "abhuuvan"
             | [ 41; 1; 19 ] (* gam *) -> code "agman"
             | _ -> fix_augment weak "an"
@@ -4097,7 +4096,7 @@ value compute_root_injuncta weak strong root =
         [ conjugw First  "ma"
         ; conjugw Second "ta"
         ; (Third, match weak with
-            [ [ 2 (* aa *) :: r ] -> fix r "ur"
+            [ [ 2 (* aa *) :: r ] -> fix r "us" (* was "ur" *)
             | [ 6; 40 ] (* bhuu *) -> code "bhuuvan"
             | [ 41; 1; 19 ] (* gam *) -> code "gman"
             | _ -> fix weak "an"
@@ -5288,7 +5287,7 @@ value compute_intensive_impfta strong weak iiflag root =
         ; conjugs Second "s" 
         ; conjugw Second "iis"
         ; conjugs Third  "t"
-        ; conjugw Third "iit"
+        ; conjugw Third  "iit"
         ])
    ; (Dual, 
         [ conjugw First  "va"
@@ -5298,7 +5297,7 @@ value compute_intensive_impfta strong weak iiflag root =
    ; (Plural,
         [ conjugw First  "ma"
         ; conjugw Second "ta"
-        ; conjugw Third  "ur"
+        ; conjugw Third  "us" (* was "ur" *)
         ])
    ])
 ;

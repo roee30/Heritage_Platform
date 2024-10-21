@@ -5,9 +5,9 @@
 #              Gérard Huet & Pawan Goyal & Sriram Krishnan                 #
 #                                                                          #
 ############################################################################
-# Makefile of Sanskrit Heritage Software  15-06-2022  Copyright INRIA 2022 #
+# Makefile of Sanskrit Heritage Software  21-10-2024  Copyright INRIA 2024 #
 ############################################################################
-# Prerequisites: Ocaml >= 4.07 and Camlp4 preprocessor
+# Prerequisites: Ocaml >= 4.07 and Camlp4 preprocessor with consistent version
 
 # For change of make in all recursive Makefiles
 MAKE=make
@@ -49,7 +49,7 @@ GRAM = index.ml phonetics.ml int_sandhi.ml skt_morph.mli morphology.mli \
        lexer.ml rank.ml scl_parser.ml reader.ml parser.ml constraints.mli \
        constraints.ml multilingual.ml paraphrase.mli paraphrase.ml \
        bank_lexer.ml checkpoints.ml morpho_analysis.ml graph_segmenter.ml \
-	   frequency.ml graph_segmenter2.ml interface.mli interface.ml \
+	   frequency.ml segmenter2.ml interface.mli interface.ml \
 	   interface2.mli interface2.ml user_aid.ml reset_caches.ml \
 	   restore_caches.ml params.mli params.ml make_word_freq.ml \
 	   make_trans_freq.ml make_morph_freq.ml
@@ -254,7 +254,7 @@ morpho_string.cmx morpho.cmx load_transducers.cmx pada.cmx phases.cmx \
 dispatcher.cmx order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx \
 load_morphs.cmx sandhi.cmx int_sandhi.cmx nouns.cmx share.cmx minimap.cmx \
 mini.cmx segmenter.cmx morpho_analysis.cmx graph_segmenter.cmx frequency.cmx \
-graph_segmenter2.cmx morpho_scl.cmx lexer.cmx scl_parser.cmx checkpoints.cmx \
+morpho_scl.cmx lexer.cmx scl_parser.cmx checkpoints.cmx \
 automaton.cmx params.cmx save_corpus_params.cmx dir.cmx corpus.cmx \
 web_corpus.cmx interface.cmx -o interface
 
@@ -267,7 +267,7 @@ morpho_string.cmx morpho.cmx load_transducers.cmx pada.cmx phases.cmx \
 dispatcher.cmx order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx \
 load_morphs.cmx sandhi.cmx int_sandhi.cmx nouns.cmx share.cmx minimap.cmx \
 mini.cmx segmenter.cmx morpho_analysis.cmx graph_segmenter.cmx frequency.cmx \
-graph_segmenter2.cmx morpho_scl.cmx lexer.cmx scl_parser.cmx checkpoints.cmx \
+segmenter2.cmx morpho_scl.cmx lexer.cmx scl_parser.cmx checkpoints.cmx \
 automaton.cmx params.cmx save_corpus_params.cmx dir.cmx corpus.cmx \
 web_corpus.cmx interface2.cmx -o interface2
 
@@ -302,7 +302,7 @@ corpus_manager: corpus_manager_cgi.cmx
 		cgi.cmx load_morphs.cmx sandhi.cmx int_sandhi.cmx	\
 		nouns.cmx share.cmx minimap.cmx mini.cmx $(LEGACY)	\
 		morpho_analysis.cmx graph_segmenter.cmx frequency.cmx	\
-		graph_segmenter2.cmx checkpoints.cmx automaton.cmx	\
+		segmenter2.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx save_corpus_params.cmx dir.cmx corpus.cmx	\
 		web_corpus.cmx multilingual.cmx mkdir_corpus_params.cmx	\
 		corpus_manager.cmx $< -o $@
@@ -319,7 +319,7 @@ save_corpus: save_corpus_cgi.cmx
 		cgi.cmx load_morphs.cmx sandhi.cmx int_sandhi.cmx	\
 		nouns.cmx share.cmx minimap.cmx mini.cmx $(LEGACY)	\
 		morpho_analysis.cmx graph_segmenter.cmx frequency.cmx	\
-		graph_segmenter2.cmx checkpoints.cmx automaton.cmx	\
+		segmenter2.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx save_corpus_params.cmx dir.cmx corpus.cmx	\
 		web_corpus.cmx multilingual.cmx				\
 		mkdir_corpus_params.cmx corpus_manager.cmx $< -o $@
@@ -336,7 +336,7 @@ mkdir_corpus: mkdir_corpus_cgi.cmx
 		cgi.cmx load_morphs.cmx sandhi.cmx int_sandhi.cmx	\
 		nouns.cmx share.cmx minimap.cmx mini.cmx $(LEGACY)	\
 		morpho_analysis.cmx graph_segmenter.cmx frequency.cmx	\
-		graph_segmenter2.cmx checkpoints.cmx automaton.cmx	\
+		segmenter2.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx save_corpus_params.cmx dir.cmx corpus.cmx	\
 		web_corpus.cmx multilingual.cmx mkdir_corpus_params.cmx	\
 		corpus_manager.cmx $< -o $@
@@ -353,7 +353,7 @@ mk_corpus: mk_corpus.cmx
 		cgi.cmx load_morphs.cmx sandhi.cmx int_sandhi.cmx	\
 		nouns.cmx share.cmx minimap.cmx mini.cmx $(LEGACY)	\
 		morpho_analysis.cmx graph_segmenter.cmx frequency.cmx	\
-		graph_segmenter2.cmx checkpoints.cmx automaton.cmx	\
+		segmenter2.cmx checkpoints.cmx automaton.cmx	\
 		params.cmx save_corpus_params.cmx dir.cmx corpus.cmx	\
 		web_corpus.cmx multilingual.cmx	\
 		mkdir_corpus_params.cmx $< -o $@

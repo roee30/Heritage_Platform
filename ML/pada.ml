@@ -52,7 +52,7 @@ value voices_of = fun
   | "nind" | "nu#1" | "n.rt" | "pa.t" | "pat#1" | "path" | "paa#1" | "paa#2" 
   | "piz#1" | "pi.s" | "pu.t" | "p.r#1" | "p.r#2" | "p.r.s" | "p.rr" 
   | "praa#1" | "phal" | "bal" | "b.rh#1" | "b.rh#2" | "bha~nj" | "bha.n" 
-  | "bha.s" | "bhas" | "bhaa#1" | "bhii#1" | "bhuj#1" | "bhuu#1" | "bhuu.s" 
+  | "bha.s" | "bhas" | "bhaa#1" | "bhii#1" | "bhuj#1" | "bhuu.s" 
   | "bhram" | "majj" | "ma.n.d" | "mad#1" | "manth" | "mah" | "maa#3" | "mi.s" 
   | "mih" | "miil" | "mu.s#1" | "muh" | "muurch" | "m.r.d" | "mnaa"
   | "mre.d" | "mluc" | "mlecch" | "yabh" | "yas" | "yaa#1" | "yu#2"
@@ -98,14 +98,14 @@ value voices_of = fun
 (*| "nam" Atma namate WR epic *)
 (*| "aap" Atma aapnute epic *)
 (*| "a~nj" also Atma afkte | "naath" "praz" "sp.rz#1" idem *)
-(*| Doubts: "bhuu1" could also be Atma bhavate Kale: rare vedic or epic *)
+(*| "bhuu1" Atma rare Nala bhavethaas *)
 (*| "z.rr" also Atma *)
 (*| "valg" Apte valgate *)
 (*| "zru" also Atma in Vedic eg z.r.nu.sva and SP. z.r.nudhvam *)
 (*| "yu#2" could be Atma in Maitreya S. yuyudhvam *)
 (*| "krudh#1" krudhyate pm or ps or both ? *)
       -> Para (* active only *) 
-  | "arth" | "az#1" | "aas#2" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" 
+  | "arth" | "az#1" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" 
   | "ii.s" | "iih"  | "edh" | "ka~nc" | "katth" | "kam" | "kamp" | "kaaz" 
   | "kaas#1" | "ku~nc" | "kuu" | "k.rp" | "k.lp" (* Z Henry: {cak.lpur} ils s'arrangèrent *)
   | "knuu" | "klav" | "k.sad" | "galbh" | "gur" | "glah" 
@@ -113,7 +113,7 @@ value voices_of = fun
   | "tandr" | "tij" | "trap" | "traa" | "tvar" | "dak.s" | "day" | "diik.s" 
   | "d.r#1" | "dhii#1" | "dhuk.s" | "pa.n" | "pad#1" | "pi~nj" | "pii" 
   | "pyaa" | "prath" | "pru" | "plu" | "ba.mh" | "baadh" | "bha.n.d" | "bhand" 
-  | "bhaam" | "bhaa.s" | "bhraaj" | "ma.mh" | "man" | "mand#1" | "yat#1" 
+  | "bhaam" | "bhaa.s" | "bhraaj" | "ma.mh" | "mand#1" | "yat#1" 
   | "rabh" | "ruc#1" | "lajj" | "lamb" | "lii" | "lok" | "loc" | "vand" 
   | "vas#2" | "vaaz" | "vip" | "ve.s.t" | "vrii.d" | "zafk" | "zad"
   | "zi~nj" | "zii#1" | "zrambh" | "zlaagh" | "zvit#1" | "sac" | "sev"
@@ -128,6 +128,8 @@ value voices_of = fun
 (*| "diip" Ubha needed for epics *)
 (*| "labh" labhati, laabhet occurs in epics *)
 (*| "v.rdh#1" v.rdhati needed for Vedic *)
+(*| "aas#2" aasat Nala but only in gana 1, to avoid imp. aa.h in gana 2 *)
+(*| "man" \fut{ma.msyati} Nala *)
    (* DRP restriction: "dyut1" *) 
       -> Atma (* deponent verbs: middle only *)
   | _ -> Ubha (* default *) 
@@ -144,10 +146,10 @@ value voices_of = fun
   | "diip" | "duh#1" | "dev#1" | "draa#2" | "dvi.s#1" | "dhaa#1" | "dhaav#1" 
   | "dhaav#2" | "dhuu#1" | "dh.r" | "dhyaa" | "dhva.ms" | "nabh" | "nam" 
   | "nah" | "naath" | "nij" | "nii#1" | "nud" | "pac" | "paz" | "pa.th" 
-  | "pii.d" | "pu.s#1" | "puu#1" | "puuj" 
-  | "puuy" | "p.rth" | "prii" | "pru.s#1" | "budh#1" | "bruu" | "bhak.s"
-  | "bhaj" | "bharts" | "bhaas#1" | "bhid#1" | "bhuj#2" | "bh.r" | "bh.rjj" 
-  | "mantr" | "maa#4" | "maarg" | "mi" | "mith" | "mil" | "mii" 
+  | "pii.d" | "pu.s#1" | "puu#1" | "puuj" | "puuy" | "p.rth" | "prii"
+  | "pru.s#1" | "budh#1" | "bruu" | "bhak.s" | "bhaj" | "bharts" | "bhaas#1"
+  | "bhid#1" | "bhuj#2" | "bhuu#1" | "bh.r" | "bh.rjj" | "man" | "mantr"
+  | "maa#4" | "maarg" | "mi" | "mith" | "mil" | "mii" 
   | "muc#1" | "mud#1" | "m.r" | "m.rj" | "m.rdh" | "m.rz" | "m.r.s" | "mlaa" 
   | "yaj#1" | "yam" | "yaac" | "yu#1" | "yuj#1" | "yudh#1" | "ra~nj" 
   | "ram" | "rah" | "raaj#1" | "ri" | "ric" | "rud#1" | "rudh#2" | "lafgh" 
@@ -225,7 +227,7 @@ value voices_of_gana g root = match g with
         [ "daa#1" | "dyaa" | "draa#2" | "maa#1" | "m.rj" | "rud#1" 
         | "zvas#1"
             -> Para
-        | "nij" | "vid#2" -> Atma
+        | "aas#2" | "nij" | "vid#2" -> Atma
         | _ -> voices_of root 
         ]
  | 3 -> match root with

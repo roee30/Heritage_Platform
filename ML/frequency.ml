@@ -7,7 +7,7 @@
 (* ©2022 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-(* Used by [Graph_segmenter2] while registering every segment in interface
+(* Used by [Segmenter2] while registering every segment in interface
    Gets the frequencies of each segment depending on whether the segment is
    a word or a compound component.  Loads frequency data from Resources:
    

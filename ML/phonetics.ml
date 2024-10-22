@@ -323,6 +323,21 @@ value asandhi = fun
 ;
 value vowel_or_phantom c = vowel c || phantom c 
 ;
+(* For treatment of phantom phonemes in Segmenter *)
+value sandhi_aa = fun
+  [ [ 48; 1 ] -> [ 1; 2 ] (* [a.h | aa -> a_aa] *) 
+  | [ 43; 1 ] -> [ 1; 48; 2 ] (* [ar | aa -> araa] *)
+  | [ c ] -> match c with
+             [ 1 | 2 -> [ 2 ]
+             | 3 | 4 -> [ 42; 2 ] (* "yaa" *)
+             | 5 | 6 -> [ 45; 2 ] (* "vaa" *)
+             | 7 | 8 | 48 -> [ 43; 2 ] (* "raa" *)
+             | 9 -> [ 44; 2 ] (* "laa" *)
+             | c -> [ voiced c; 2 ]
+             ]
+  | _ -> failwith "sandhi_aa"
+  ]
+;
 (* Tests whether a word starts with a phantom phoneme (precooked aa-prefixed
    finite or participial or infinitive or abs-ya root form) 
    Used by Morpho, Inflected. Copied in Dispatcher. *)

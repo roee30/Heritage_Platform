@@ -253,7 +253,7 @@ lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx web.cmx naming.cmx \
 morpho_string.cmx morpho.cmx load_transducers.cmx pada.cmx phases.cmx \
 dispatcher.cmx order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx \
 load_morphs.cmx sandhi.cmx int_sandhi.cmx nouns.cmx share.cmx minimap.cmx \
-mini.cmx segmenter.cmx morpho_analysis.cmx graph_segmenter.cmx frequency.cmx \
+mini.cmx segmenter.cmx graph_segmenter.cmx \
 morpho_scl.cmx lexer.cmx scl_parser.cmx checkpoints.cmx \
 automaton.cmx params.cmx save_corpus_params.cmx dir.cmx corpus.cmx \
 web_corpus.cmx interface.cmx -o interface

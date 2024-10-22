@@ -178,21 +178,6 @@ value check_id_sandhi revl first =
     check_id_sandhi st1 st2 = True]
 *)
 
-(* For treatment of phantom phonemes *)
-value sandhi_aa = fun
-  [ [ 48; 1 ] -> [ 1; 2 ] (* [a.h | aa -> a_aa] *) 
-  | [ 43; 1 ] -> Encode.code_string "araa" (* [ar | aa -> araa] *)
-  | [ c ] -> match c with
-             [ 1 | 2 -> [ 2 ]
-             | 3 | 4 -> Encode.code_string "yaa"
-             | 5 | 6 -> Encode.code_string "vaa"
-             | 7 | 8 | 48 -> Encode.code_string "raa"
-             | 9 -> Encode.code_string "laa"
-             | c -> [ Phonetics.voiced c; 2 ]
-             ]
-  | _ -> failwith "sandhi_aa"
-  ]
-;
 (* Expands phantom-initial or lopa-initial segments *)
 (* phase [(aa_phase ph)] of "aa" is Pv for verbal ph, Pvkv for nominal ones *)
 value accrue ((ph,revword,rule) as segment) previous_segments =
@@ -211,7 +196,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
      (* Then phantom phonemes *)
    | [ -3 (* *a *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[-3])) :: rest ] -> 
-         let w =sandhi_aa u in
+         let w = Phonetics.sandhi_aa u in
          [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2 ],[ 2 ],[ 1 ] )) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 1 :: r ],rule)
@@ -219,7 +204,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
        ]
   | [ -9 (* *A *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[-9])) :: rest ] -> 
-         let w =sandhi_aa u in
+         let w = Phonetics.sandhi_aa u in
          [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2 ],[ 2 ],[ 2 ] )) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 2 :: r ],rule)
@@ -227,7 +212,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
        ]
   | [ -4 (* *i *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[ -4 ])) :: rest ] -> 
-         let w =sandhi_aa u in
+         let w = Phonetics.sandhi_aa u in
          [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 10 ],[ 2 ],[ 3 ] )) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 3 :: r ],rule)
@@ -235,7 +220,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
        ]
   | [ -7 (* *I *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[ -7 ])) :: rest ] -> 
-         let w =sandhi_aa u in
+         let w = Phonetics.sandhi_aa u in
          [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 10 ],[ 2 ],[ 4 ] )) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 4 :: r ],rule)
@@ -243,7 +228,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
        ]
   | [ -5 (* *u *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[ -5 ])) :: rest ] -> 
-         let w =sandhi_aa u in
+         let w = Phonetics.sandhi_aa u in
          [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 12 ],[ 2 ],[ 5 ] )) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 5 :: r ],rule)
@@ -251,7 +236,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
        ]
   | [ -8 (* *U *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[ -8 ])) :: rest ] -> 
-         let w =sandhi_aa u in
+         let w = Phonetics.sandhi_aa u in
          [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 12 ],[ 2 ],[ 6 ] )) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 6 :: r ],rule)
@@ -259,7 +244,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
        ]
   | [ -6 (* *r *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[ -6 ])) :: rest ] -> 
-         let w =sandhi_aa u in
+         let w = Phonetics.sandhi_aa u in
          [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2; 43 ],[ 2 ],[ 7 ] )) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 7 :: r ],rule)
@@ -267,7 +252,7 @@ value accrue ((ph,revword,rule) as segment) previous_segments =
        ]
   | [ 123 (* *C *) :: r ] -> match previous_segments with
        [ [ (phase,rword,Euphony (_,u,[ 123 ])) :: rest ] -> 
-         let w = sandhi_aa u in
+         let w = Phonetics.sandhi_aa u in
          [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2; 22; 23 ],[ 2 ], [ 23 ])) 
                        :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
            where new_segment = (ph,Word.mirror [ 23 :: r ],rule)

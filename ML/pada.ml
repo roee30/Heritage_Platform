@@ -283,7 +283,7 @@ value voices_of_gana g root = match g with
         | "kelaa" | "k.siira" | "kha.da" | "khela" | "gadgada" | "go" | "gocara"
         | "gopaa" | "dhiira#1" 
             -> Para
-        | "ajira" | "apsaras" | "abhra" | "unmanas" | "upanimantra" | "uu.sman"
+        | "ajira" | "apsaras" | "abhra" | "unmanas" | "uu.sman"
         | "ka.nva" | "karu.na" | "kalaha" | "ka.s.ta" | "kuha" | "k.rcchra"
         | "k.rpa.na" | "kliiba" | "k.sepa" | "gomaya" | "citra" | "priya" 
             -> Atma

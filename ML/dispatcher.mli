@@ -55,5 +55,11 @@ value validate : output -> output (* consistency check and glueing *)
 ;
 value sanitize_sa : bool -> output -> output
 ;
+value check_id_sandhi : Word.word -> int -> bool
+;
+value accrue : segment -> output -> output
+;
+value access : phase -> Word.word -> option (auto * Word.word)
+;
 end;
 

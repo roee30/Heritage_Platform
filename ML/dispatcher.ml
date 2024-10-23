@@ -650,5 +650,140 @@ value sanitize_sa sa_check chunk = match chunk with
   | _ -> chunk
   ]
 ;
+(* Auxiliary functions shred by Segmenter, Graph_segmenter and Segmenter2 *)
+
+(* Checking for legitimate Id sandhi *)
+(* Uses [sandhis_id] computed by [Compile_sandhi] *)
+(* Side-effect : [Data.public_sandhis_id_file] loaded at load time. *)
+value allowed_trans =
+  (Gen.gobble Data.public_sandhis_id_file:Deco.deco Word.word)
+;
+value check_id_sandhi revl first = 
+  let match_right allowed = not (List.mem [ first ] allowed) in
+  try match revl with
+      [ [] -> True
+      | [ last :: before ] -> 
+          (Phonetics.n_or_f last && Phonetics.vowel first) ||
+          (* we allow an-s transition with s vowel-initial, ignoring nn rules *)
+          (* this is necessary not to block transitions from the An phase *)
+          (Phonetics.vowel last && Phonetics.consonant first) || (* 8-04-21 *)
+          (* above line necessary for last=ii or uu and first=r (deviiraajyam) *)
+          let allowed1 = Deco.assoc [ last ] allowed_trans in
+          match before with
+             [ [] -> match_right allowed1 
+             | [ penu :: _ ] -> 
+               let allowed2 = Deco.assoc [ last :: [ penu ] ] allowed_trans in
+               match_right allowed2 && match_right allowed1 
+             ]
+      ]
+  with [ Not_found -> True ]
+;
+(* Examples: 
+   [let st1 = Encode.code_revstring "raamas"
+    and st2 = Encode.code_string "asti" in
+    check_id_sandhi st1 st2 = False
+ && let st1 = Encode.code_revstring "raamaa" 
+    and st2 = Encode.code_string "arati" in
+    check_id_sandhi st1 st2 = False
+ && let st1 = Encode.code_revstring "phalam" 
+    and st2 = Encode.code_string "icchaami" in
+    check_id_sandhi st1 st2 = True]
+*)
+
+(* Expands phantom-initial or lopa-initial segments *)
+(* phase [(aa_phase ph)] of "aa" is Pv for verbal ph, Pvkv for nominal ones *)
+value accrue ((ph,revword,rule) as segment) previous_segments =
+  match Word.mirror revword with 
+  [ [ -2 (* [-] *) :: r ] -> match previous_segments with 
+      [ [ (phase,pv,Euphony ([],u,[-2])) :: rest ] -> (* phase=Pv,Pvkv,Pvkc *)
+          let v = match r with [ [ 10 (* e *) :: _ ] -> [ 10 ] 
+                               | [ 12 (* o *) :: _ ] -> [ 12 ]
+                               | _ -> failwith "accrue anomaly" 
+                               ] in 
+          (* u is [ a ] or [ aa ], v is [ e ] or [ o ] *)
+          [ un_lopa_segment :: [ (phase,pv,Euphony (v,u,v )) :: rest ] ]
+            where un_lopa_segment = (un_lopa ph,Word.mirror r,rule) 
+       | _ -> failwith "accrue anomaly"
+       ]
+     (* Then phantom phonemes *)
+   | [ -3 (* *a *) :: r ] -> match previous_segments with
+       [ [ (phase,rword,Euphony (_,u,[-3])) :: rest ] -> 
+         let w = Phonetics.sandhi_aa u in
+         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2 ],[ 2 ],[ 1 ] )) 
+                       :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
+           where new_segment = (ph,Word.mirror [ 1 :: r ],rule)
+       | _ -> failwith "accrue anomaly"
+       ]
+  | [ -9 (* *A *) :: r ] -> match previous_segments with
+       [ [ (phase,rword,Euphony (_,u,[-9])) :: rest ] -> 
+         let w = Phonetics.sandhi_aa u in
+         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2 ],[ 2 ],[ 2 ] )) 
+                       :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
+           where new_segment = (ph,Word.mirror [ 2 :: r ],rule)
+       | _ -> failwith "accrue anomaly"
+       ]
+  | [ -4 (* *i *) :: r ] -> match previous_segments with
+       [ [ (phase,rword,Euphony (_,u,[ -4 ])) :: rest ] -> 
+         let w = Phonetics.sandhi_aa u in
+         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 10 ],[ 2 ],[ 3 ] )) 
+                       :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
+           where new_segment = (ph,Word.mirror [ 3 :: r ],rule)
+       | _ -> failwith "accrue anomaly"
+       ]
+  | [ -7 (* *I *) :: r ] -> match previous_segments with
+       [ [ (phase,rword,Euphony (_,u,[ -7 ])) :: rest ] -> 
+         let w = Phonetics.sandhi_aa u in
+         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 10 ],[ 2 ],[ 4 ] )) 
+                       :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
+           where new_segment = (ph,Word.mirror [ 4 :: r ],rule)
+       | _ -> failwith "accrue anomaly"
+       ]
+  | [ -5 (* *u *) :: r ] -> match previous_segments with
+       [ [ (phase,rword,Euphony (_,u,[ -5 ])) :: rest ] -> 
+         let w = Phonetics.sandhi_aa u in
+         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 12 ],[ 2 ],[ 5 ] )) 
+                       :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
+           where new_segment = (ph,Word.mirror [ 5 :: r ],rule)
+       | _ -> failwith "accrue anomaly"
+       ]
+  | [ -8 (* *U *) :: r ] -> match previous_segments with
+       [ [ (phase,rword,Euphony (_,u,[ -8 ])) :: rest ] -> 
+         let w = Phonetics.sandhi_aa u in
+         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 12 ],[ 2 ],[ 6 ] )) 
+                       :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
+           where new_segment = (ph,Word.mirror [ 6 :: r ],rule)
+       | _ -> failwith "accrue anomaly"
+       ]
+  | [ -6 (* *r *) :: r ] -> match previous_segments with
+       [ [ (phase,rword,Euphony (_,u,[ -6 ])) :: rest ] -> 
+         let w = Phonetics.sandhi_aa u in
+         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2; 43 ],[ 2 ],[ 7 ] )) 
+                       :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
+           where new_segment = (ph,Word.mirror [ 7 :: r ],rule)
+       | _ -> failwith "accrue anomaly"
+       ]
+  | [ 123 (* *C *) :: r ] -> match previous_segments with
+       [ [ (phase,rword,Euphony (_,u,[ 123 ])) :: rest ] -> 
+         let w = Phonetics.sandhi_aa u in
+         [ new_segment :: [ (aa_phase ph,[ 2 ],Euphony ([ 2; 22; 23 ],[ 2 ], [ 23 ])) 
+                       :: [ (phase,rword,Euphony (w,u,[ 2 ])) :: rest ] ] ]
+           where new_segment = (ph,Word.mirror [ 23 :: r ],rule)
+       | _ -> failwith "accrue anomaly"
+       ]
+  | _ -> [ segment :: previous_segments ]
+  ]
+;
+(* access : phase -> word -> option (auto * word) *)
+value access phase = acc (transducer phase) []
+   where rec acc state w = fun
+      [ [] -> Some (state,w)  (* w is reverse of access input word *)
+      | [ c :: rest ] -> match state with
+           [ State (_,deter,_) -> match List2.ass c deter with 
+                [ Some next_state -> acc next_state [ c :: w ] rest
+                | None -> None 
+                ] 
+           ]
+      ]
+;
 
 end;

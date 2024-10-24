@@ -325,6 +325,7 @@ value morph_frequency word morph_str base_str base_morph_str freq_ref =
              else match_morph high tl
          ] in 
          float_of_int frq
+  | _ -> failwith "morph_frequency" 
   ]
 ;
 (* Updates the frequency based on whether the best of multi-tags are to be 

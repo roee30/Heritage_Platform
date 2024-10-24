@@ -84,7 +84,7 @@ value mode_id_of_mode mode =
   | Best_List -> "l"
   | First_Summary -> "f"
   | First_List -> "s"
-  | _ -> raise (Failure ("Unknown mode type"))
+(* | _ -> raise (Failure ("Unknown mode type")) *)
   ] 
 ;
 value mode_of_mode_id mode_id = 
@@ -765,15 +765,16 @@ value display_best_summary text deva_input roman_input checkpoints cpts wx_input
   { make_visual cur_chunk.offset
   ; find_conflict 0
   ; div_begin Latin16 |> ps
-  ; if (mode = First_Summary || count = 1 || ((List.length solution_list) = 1)) then do 
-    { match font with 
-      [ "roma" -> html_latin16 "Segmentation: " |> pl
-      | "deva" -> deva16_black "पदपाठ: " |> pl
-      ] (* The segmented string obtained from the ranked solutions 
-           is printed here *)
-    ; print_list_segmentations font 1 segmentations False
-    }
-    else () 
+  ; if mode = First_Summary || count = 1 || (List.length solution_list) = 1 
+       then do 
+         { match font_of_string font with 
+           [ Roma -> html_latin16 "Segmentation: " |> pl
+           | Deva -> deva16_black "पदपाठ: " |> pl
+           ] (* The segmented string obtained from the ranked solutions 
+                is printed here *)
+         ; print_list_segmentations font 1 segmentations False
+         }
+       else () 
   ; table_begin Spacing20 |> pl
   ; tr_begin |> pl (* tr begin *)
   ; if undo_enabled then 
@@ -862,26 +863,25 @@ value display_best_summary text deva_input roman_input checkpoints cpts wx_input
 (* Displays the input provided by the user in Devanagari and the output of the 
    chunker in IAST. This output contains the normalized input along with the introduction of the 
    underscore wherever the hiatus is ambiguous. *)
-value display_sentences raw_deva_input deva_input roma_input roma_output_chunks font = do 
+value display_sentences raw_deva_input deva_input roma_input roma_output_chunks font = let ft = font_of_string font in do 
   { html_break |> pl
-  ; match font with 
-    [ "roma" -> html_latin16 "Input: " |> pl
-    | "deva" -> deva16_black "इन्पुट्:‌" |> pl
+  ; match ft with 
+    [ Roma -> html_latin16 "Input: " |> pl
+    | Deva -> deva16_black "इन्पुट्:‌" |> pl
     ] (* raw input provided by the user *)
   ; deva16_blue raw_deva_input |> pl (* always produced in Devanagari *)
   ; html_break |> ps
   (* The normalized input which was printed earlier depending on the user's 
      output convention, is now discarded but kept commented here for future. *)
   (* ; html_latin16 "Normalized: " |> pl
-  ; match font with
-    [ "roma" -> roma16_blue roma_input |> ps (* romanized *)
-    | "deva" -> deva16_blue deva_input |> ps (* devanagari *)
-    | _ -> roma16_blue roma_input |> ps (* romanized by default*) 
+  ; match ft with
+    [ Roma -> roma16_blue roma_input |> ps (* romanized *)
+    | Deva -> deva16_blue deva_input |> ps (* devanagari *)
     ]
   ; html_break |> ps *)
-  ; match font with 
-    [ "roma" -> html_latin16 "Chunks: " |> pl
-    | "deva" -> deva16_black "वर्णक्रम: " |> pl
+  ; match ft with 
+    [ Roma -> html_latin16 "Chunks: " |> pl
+    | Deva -> deva16_black "वर्णक्रम: " |> pl
     ] (* The output of chunker which introduces underscores and normalization
        of anusvaara to anunaasika *)
   ; roma16_blue roma_output_chunks |> pl 
@@ -927,13 +927,13 @@ value check_sentence translit uns text checkpoints input undo_enabled
     match mode with 
     [ First_Summary | First_List -> (1, First_List, True)
     | Best_Summary | Best_List -> (default_max_best_solutions, Best_List, False)
-    | _ -> (default_max_best_solutions, mode, False)
+(*  | _ -> (default_max_best_solutions, mode, False) *)
     ] in 
   let (max_sols, collapse) = match fmode with 
-  [ "w" | "x" -> (max_solutions, False)
-  | "t" | "s" | "m" | "x" | "n" -> (if first then 1 else (max_solutions * 2), True)
-  | _ -> (max_solutions, False)
-  ] in 
+    [ "t" | "s" | "m" | "n" -> 
+      (if first then 1 else (max_solutions * 2), True)
+    | _ (* "w" | "x" *) -> (max_solutions, False) 
+    ] in 
   let _ = max_best_solutions.val := max_sols in 
   let (full,count,solution_list) = 
       best_mode_operations rcpts chunks in (* full iff all chunks segment *) 
@@ -973,13 +973,12 @@ value check_sentence translit uns text checkpoints input undo_enabled
   ; match mode with 
     [ Best_List | First_List -> 
         display_best_list text deva_input roma_input checkpoints cpts wx_input 
-                          undo_enabled font list_mode solution_list updated_rcpts 
-                          fmode 
+                  undo_enabled font list_mode solution_list updated_rcpts fmode 
     | Best_Summary | First_Summary -> 
-        display_best_summary text deva_input roma_input checkpoints cpts wx_input 
-                             chunks undo_enabled font mode full count solution_list
-                             updated_rcpts fmode segmentations 
-    | _ -> raise (Failure ("Incompatible mode")) 
+        display_best_summary text deva_input roma_input checkpoints cpts wx_input
+                  chunks undo_enabled font mode full count solution_list
+                  updated_rcpts fmode segmentations 
+ (* | _ -> raise (Failure ("Incompatible mode")) *)
     ]
   }
 ;

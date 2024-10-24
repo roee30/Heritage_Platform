@@ -29,7 +29,7 @@ exception Unattested (* when a root/pada is attested only for some pvs *)
 ;
 value voices_of = fun 
   (* Default: invariant when prefixing by preverbs *)
-  [ "ak.s" | "afg" | "aj" | "a.t" | "at" | "ad#1" | "an#2" | "am"| "argh" 
+  [ "ak.s" | "afg" | "aj" | "at" | "ad#1" | "an#2" | "am"| "argh" 
   | "ard" | "av" | "az#2" | "as#1" | "as#2" | "ifg" | "in" | "ind" 
   | "inv" | "il" | "i.s#2" | "iifkh" | "iir.s" | "uk.s" | "ujjh" | "u~nch"
   | "und" | "umbh" | "u.s" | ".rc#1" | ".rdh" | ".r.s" | "ej" | "kas" | "kiirt"
@@ -104,6 +104,7 @@ value voices_of = fun
 (*| "zru" also Atma in Vedic eg z.r.nu.sva and SP. z.r.nudhvam *)
 (*| "yu#2" could be Atma in Maitreya S. yuyudhvam *)
 (*| "krudh#1" krudhyate pm or ps or both ? *)
+(*| "a.t" Atma Nala{2,12} a.tamaanau *)
       -> Para (* active only *) 
   | "arth" | "az#1" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" 
   | "ii.s" | "iih"  | "edh" | "ka~nc" | "katth" | "kam" | "kamp" | "kaaz" 
@@ -134,7 +135,7 @@ value voices_of = fun
       -> Atma (* deponent verbs: middle only *)
   | _ -> Ubha (* default *) 
   (* Attested Ubha (over all ga.nas) : 
-  [ "a~nc" | "arh" | "aap" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" 
+  [ "a~nc" | "a.t" | "arh" | "aap" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" 
   | ".r" | ".rj" | "ka.n.d" | "kal" | "ka.s" | "ku.n.d" | "k.r#1"
   | "k.r#2" | "k.r.s" | "kram" | "krii#1" | "krii.d" | "krudh#1" | "k.san" 
   | "k.sap#1" | "k.sam" | "k.sal" | "k.sip" | "k.sud" | "k.subh" | "k.s.nu"

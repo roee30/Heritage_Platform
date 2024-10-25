@@ -306,7 +306,11 @@ value voices_of_pv upasarga gana = fun
 (* "zru" also Atma in Vedic eg z.r.nu.sva and SP. z.r.nudhvam *)
 (* "praz" used in Atma with aa- but also without pv in epics (MW) *)
 [ ".r" | "car" ->   if upasarga = "sam" then Ubha else Para (* \Pan{1,3,54} *)
-| "viz#1" -> if upasarga = "ni"  then Atma else Para (* \Pan{1,3,17} *)
+| "viz#1" ->  match upasarga with
+           [ "ni" -> Atma (* \Pan{1,3,17} *)
+           | "" -> Ubha (* Nala{2,13} vivizaate *)
+           | _ -> Para
+           ]
 | "k.s.nu" -> if upasarga = "sam"  then Atma else Para (* \Pan{1,3,65} *)
 | "huu" -> match upasarga with
            [ "ni" | "sam" | "upa" | "vi" -> Atma (* \Pan{1,3,30} *)

@@ -224,7 +224,7 @@ value build_mas_i stem trunc entry = (* declension of "ghi" class *)
         ; declines Ins "naa"
         ; declineg Dat "e"
         ; declineg Abl "s"
-        ; declineg Gen "s"
+        ; declineg Gen "s" (* but avi: avyas Burrow p177 ? *)
         ; declinau Loc 
         ])
    ; (Dual, 

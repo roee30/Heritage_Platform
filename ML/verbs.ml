@@ -6356,6 +6356,8 @@ and compute_extra_muc () = do
   }
 and compute_extra_yu2 () = (* Maitreya Sa.mhita MS{1,1.11} *)
   enter1 "yu#2" (Conju (imperm 3) [ (Plural,[ (Second, code "yuyudhvam") ]) ])
+and compute_extra_rudh2 () = (* anurudhyanti Nala{4,10} Oberlies p497 *)
+  enter1 "rudh#2" (Conju (presa 4) [ (Plural,[ (Third, code "rudhyanti") ]) ])
 and compute_extra_zaas () = 
    let e = "zaas" in do (* epics zaasyate + Renou gram §29 *) 
      { let stem = revcode e in compute_passive Primary e stem 
@@ -6431,6 +6433,7 @@ value compute_extra () = do (* Extra forms for specific roots *)
   ; compute_extra_mil () 
   ; compute_extra_muc () 
   ; compute_extra_yu2 ()
+  ; compute_extra_rudh2 ()
   ; compute_extra_zaas () 
   ; compute_extra_zru () 
   ; compute_extra_sanj ()
@@ -6495,6 +6498,7 @@ value fake_compute_conjugs (gana : int) (root : string) = do
       | "mil"    -> compute_extra_mil ()
       | "muc#1"  -> compute_extra_muc ()
       | "yu#2"   -> compute_extra_yu2 ()
+      | "rudh#2" -> compute_extra_rudh2 ()
       | "zaa"    -> record_part_ppp (revcode "zaata") root
       | "zaas"   -> compute_extra_zaas ()
       | "zru"    -> compute_extra_zru () 

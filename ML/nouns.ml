@@ -1188,6 +1188,7 @@ value build_mas_maghavan entry = (* \Pan{6,4,133} *)
    [ (Singular,
         [ decline Voc "avan"
         ; decline Nom "avaa"
+        ; decline Nom "avaan" (* Wh$428b Nala{3,3} *)
         ; decline Acc "avaanam"
         ; decline Ins "onaa"
         ; decline Dat "one"

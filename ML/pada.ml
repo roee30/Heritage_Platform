@@ -106,12 +106,12 @@ value voices_of = fun
 (*| "krudh#1" krudhyate pm or ps or both ? *)
 (*| "a.t" Atma Nala{2,12} a.tamaanau *)
       -> Para (* active only *) 
-  | "arth" | "az#1" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" 
-  | "ii.s" | "iih"  | "edh" | "ka~nc" | "katth" | "kam" | "kamp" | "kaaz" 
-  | "kaas#1" | "ku~nc" | "kuu" | "k.rp" | "k.lp" (* Z Henry: {cak.lpur} ils s'arrangèrent *)
+  | "az#1" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" | "ii.s" | "iih" 
+  | "edh" | "ka~nc" | "katth" | "kam" | "kamp" | "kaaz" | "kaas#1" 
+  | "ku~nc" | "kuu" | "k.rp" | "k.lp" (* Z Henry: {cak.lpur} ils s'arrangèrent *)
   | "knuu" | "klav" | "k.sad" | "galbh" | "gur" | "glah" 
   | "gha.t" | "jabh#1" | "ju.s#1" | "j.rmbh" | ".damb" | ".dii" | ".dhauk" 
-  | "tandr" | "tij" | "trap" | "traa" | "tvar" | "dak.s" | "day" | "diik.s" 
+  | "tandr" | "tij" | "trap" | "tvar" | "dak.s" | "day" | "diik.s" 
   | "d.r#1" | "dhii#1" | "dhuk.s" | "pa.n" | "pad#1" | "pi~nj" | "pii" 
   | "pyaa" | "prath" | "pru" | "plu" | "ba.mh" | "baadh" | "bha.n.d" | "bhand" 
   | "bhaam" | "bhaa.s" | "bhraaj" | "ma.mh" | "mand#1" | "yat#1" 
@@ -131,12 +131,14 @@ value voices_of = fun
 (*| "v.rdh#1" v.rdhati needed for Vedic *)
 (*| "aas#2" aasat Nala but only in gana 1, to avoid imp. aa.h in gana 2 *)
 (*| "man" \fut{ma.msyati} Nala *)
+(*| "arth" Para needed for praathayantas Nala *)
+(*| "traa" Para needed for traahi Nala{4,7} *)
    (* DRP restriction: "dyut1" *) 
       -> Atma (* deponent verbs: middle only *)
   | _ -> Ubha (* default *) 
   (* Attested Ubha (over all ga.nas) : 
-  [ "a~nc" | "a.t" | "arh" | "aap" | "i" | "i.s#1" | "uc" | "uurj#1" | "uuh" 
-  | ".r" | ".rj" | "ka.n.d" | "kal" | "ka.s" | "ku.n.d" | "k.r#1"
+  [ "a~nc" | "a.t" | "arth" | "arh" | "aap" | "i" | "i.s#1" | "uc" | "uurj#1"
+  | "uuh"  | ".r" | ".rj" | "ka.n.d" | "kal" | "ka.s" | "ku.n.d" | "k.r#1"
   | "k.r#2" | "k.r.s" | "kram" | "krii#1" | "krii.d" | "krudh#1" | "k.san" 
   | "k.sap#1" | "k.sam" | "k.sal" | "k.sip" | "k.sud" | "k.subh" | "k.s.nu"
   | "khan" | "khaad" | "gam" | "garh" | "gaah" | "guh" | "g.rr#1" | "gras" 

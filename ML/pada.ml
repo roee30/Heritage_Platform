@@ -46,7 +46,7 @@ value voices_of = fun
   | "tak.s" | "ta~nc" | "tam" | "tarj" | "tup" | "tu.s" | "t.rp#1" | "t.r.s#1"
   | "t.rh" | "t.rr" | "tyaj#1" | "tras" | "tru.t" | "tvak.s" | "tsar" | "da.mz"
   | "dagh" | "dabh" | "dam#1" | "dal" | "das" | "dah#1" | "daa#2" | "daa#3" 
-  | "du" | "du.s" | "d.rp" | "d.rbh" | "d.rz#1" | "d.rh" | "d.rr" 
+  | "du" | "du.s" | "d.rp" | "d.rbh" (*| "d.rz#1" *) | "d.rh" | "d.rr" 
   | "draa#1" | "dru#1" | "druh#1" | "dham" | "dhaa#2" | "dhmaa" | "dhru"
   | "dhvan" | "dhv.r" | "na.t" | "nad" | "nand" | "nard" | "naz#1" 
   | "nind" | "nu#1" | "n.rt" | "pa.t" | "pat#1" | "path" | "paa#1" | "paa#2" 
@@ -105,6 +105,7 @@ value voices_of = fun
 (*| "yu#2" could be Atma in Maitreya S. yuyudhvam *)
 (*| "krudh#1" krudhyate pm or ps or both ? *)
 (*| "a.t" Atma Nala{2,12} a.tamaanau *)
+(*| "d.rz#1" Atma needed for dad.rze middle/passive *)
       -> Para (* active only *) 
   | "az#1" | "indh" | "iik.s" | "ii.d" | "iir" | "iiz#1" | "ii.s" | "iih" 
   | "edh" | "ka~nc" | "katth" | "kam" | "kamp" | "kaaz" | "kaas#1" 
@@ -146,9 +147,9 @@ value voices_of = fun
   | "ce.s.t" | "cyu" | "chad#1" | "chand" | "chid#1" | "jan" | "juu" 
   | "j~naa#1" | "jyaa#1" | "jyut" | "ta.d" | "tan#1" | "tan#2" | "tap" 
   | "tud#1" | "tul" | "t.rd" | "traa" | "daa#1" | "daaz#1" | "diz#1" | "dih" 
-  | "diip" | "duh#1" | "dev#1" | "draa#2" | "dvi.s#1" | "dhaa#1" | "dhaav#1" 
-  | "dhaav#2" | "dhuu#1" | "dh.r" | "dhyaa" | "dhva.ms" | "nabh" | "nam" 
-  | "nah" | "naath" | "nij" | "nii#1" | "nud" | "pac" | "paz" | "pa.th" 
+  | "diip" | "duh#1" | "d.rz#1" | "dev#1" | "draa#2" | "dvi.s#1" | "dhaa#1"
+  | "dhaav#1" | "dhaav#2" | "dhuu#1" | "dh.r" | "dhyaa" | "dhva.ms" | "nabh" 
+  | "nam" | "nah" | "naath" | "nij" | "nii#1" | "nud" | "pac" | "paz" | "pa.th" 
   | "pii.d" | "pu.s#1" | "puu#1" | "puuj" | "puuy" | "p.rth" | "prii"
   | "pru.s#1" | "budh#1" | "bruu" | "bhak.s" | "bhaj" | "bharts" | "bhaas#1"
   | "bhid#1" | "bhuj#2" | "bhuu#1" | "bh.r" | "bh.rjj" | "man" | "mantr"

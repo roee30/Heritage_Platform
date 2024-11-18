@@ -2423,7 +2423,7 @@ value compute_future stem root =
        [ Para -> do (* active only *) 
          { compute_futurea Primary stem root 
          ; match root with (* conditional or Atma on demand *)
-           [ "ku.t" (* Kale *)| "jiiv" | "tyaj#1" | "d.rz#1" | "pat#1" | "paa#1"
+           [ "ku.t" (* Kale *)| "jiiv" | "tyaj#1" | "pat#1" | "paa#1"
            | "bha.n" | "bhii#1" |  "bhuu#1" | "zaas" | "stu" | "sm.r" 
                      -> compute_conda Primary stem root
            | "gad" | "vac" (* BhG pravak.sye *) 
@@ -2446,8 +2446,8 @@ value compute_future stem root =
          ; compute_futurem Primary stem root 
          ; match root with (* rare conditional *)
            [ "aap" | "i" | "k.r#1" | "gam" | "grah" | "ji" | "j~naa#1" | "tap"
-           | "daa#1" | "nii#1" | "bandh" | "budh#1" | "bhid#1" | "bh.r" | "m.r"
-           | "yaj#1" | "vad" | "sthaa#1"| "hu" -> do
+           | "daa#1" | "d.rz#1" | "nii#1" | "bandh" | "budh#1" | "bhid#1"
+           | "bh.r" | "m.r" | "yaj#1" | "vad" | "sthaa#1"| "hu" -> do
               { compute_conda Primary stem root 
               ; compute_condm Primary stem root 
               }
@@ -3775,6 +3775,7 @@ value peri_perf_stem root =
   | ".r"     -> "ar" (* id guna  *)
   | "vid#1"  -> "vid" (* trim Henry§242 *)
   | "vyaa"   -> "vye" (* Whitney roots *)
+  | "sm.r"   -> "smar" (* Garnier p3 *)
   | "hu"     -> "juhav" (* Henry§242 *)
   | "huu"    -> "hve" (* Macdonell§140a3 *)
   | "hrii#1" -> "jihre" (* Whitney roots *)
@@ -4328,6 +4329,8 @@ value compute_aorist root =
     | _ -> () 
     ]
   ; match root with (* 3. reduplicated aorist caf *)
+    (* Garnier: à valeur causative védique remplacé en classique par parfait 
+       périphrastique - eg ajiijanat -> janayaamaasa il a engendré *)
     [ "am" | ".rc#1" | "kath" | "k.r#1" | "k.r.s" | "k.lp" | "ga.n" | "gam"
     | "gaah" | "ghu.s" | "car" | "ce.s.t" | "jan" | "ji" | "tark" | "tul"
     | "tvar" | "tvi.s#1" | "dah#1" | "diz#1" | "dih" | "diip" | "dru#1" | "dh.r" 
@@ -5112,7 +5115,7 @@ value record_ppp_abs_den ystem root =
     ] in do  
   { record_part_ppp (rfix ppstem "ita") root 
   ; match root with
-    [ "aakar.na" -> record_abso_tvaa (fix ppstem "ya") root (* fake abso-ya! *)
+    [ "aakar.na" -> record_abso_tvaa (fix ppstem "ya") root (* fake abso_tvaa *)
     | _ -> record_abso_tvaa (fix ystem "itvaa") root 
     ]
   (* no general [record_abso_ya] since usually no preverb to denominatives *)

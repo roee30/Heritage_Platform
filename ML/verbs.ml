@@ -1259,7 +1259,7 @@ value compute_active_present2 sstem wstem set root third = do
   ; match wstem with 
     [ [ 2 :: _ ] -> (* Ppr of roots in -aa is complex and overgenerates *)
       match root with 
-      [ "bhaa#1" | "maa#1" | "yaa#1" -> () (* no known ppra *)
+      [ "bhaa#1" | "maa#1" -> () (* no known ppra ? but Deshpande maat/mimaana *)
       | _ -> let m_pstem = wstem and f_pstem = rev (fix2w wstem "at" set) in 
              record_part (Ppra_ 2 Primary m_pstem f_pstem root) 
       ]
@@ -3770,7 +3770,7 @@ value peri_perf_stem root =
   | "palaay" -> "palaay" (* Wh§1087c *)
   | "bhii#1" -> "bibhay" (* Henry§242 *)
   | "bh.r"   -> "bibhar" (* Henry§242 *)
-  | "nii#1"  -> "nay"  (* v.rddhi *)
+  | "nii#1"  -> "nay"  (* v.rddhi archaic Garnier p3 *)
   | "i"      -> "ay" (* Whitney roots *)
   | ".r"     -> "ar" (* id guna  *)
   | "vid#1"  -> "vid" (* trim Henry§242 *)

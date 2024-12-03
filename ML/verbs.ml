@@ -5449,10 +5449,10 @@ value compute_present_system root rstem gana pada third =
               | "d.rh"    -> revcode "d.r.mh" (* .rh -> .r.mh *)
               | "b.rh#1"  -> revcode "b.r.mh" (* WR; Bucknell adds barhati *)
               | "iir.s" | "gaa#2" (* = gai *)
-              | "daa#3" | "dyaa"  | "zyaa" | "sphaa" 
+              | "daa#3" | "dyaa"  | "pyaa" | "zyaa" | "sphaa" 
                         -> [ 42 (* y *) :: rstem ](* aa/ai add y *)
               | "maa#4" -> revcode "may" (* shorten add y *)
-              | "vyaa"  -> revcode "vyay"
+              | "vyaa"  -> revcode "vyay" (* id. *)
               | "zuu"   -> revcode "zve" (* zvayati - similar to huu/hve *)
               | "knuu"  -> revcode "knuuy" 
               | "guh"   -> revcode "guuh" (* lengthen \Pan{6,4,89} *)

@@ -5,7 +5,7 @@
 
 <title>The Sanskrit Heritage Site</title>
 <meta name="author" content="Gérard Huet">
-<meta property="dc:datecopyrighted" content="2023">
+<meta property="dc:datecopyrighted" content="2024">
 <meta property="dc:rightsholder" content="Gérard Huet">
 <meta name ="keywords" content="india,dictionary,indology,sanskrit,lexicography,linguistics,indo-european,dictionnaire,sanscrit,panini,indology,linguistics">
 <meta name="description" content="This site provides tools for Sanskrit processing: dictionary search, morphology generation and analysis, segmentation, tagging and parsing.">
@@ -87,6 +87,15 @@ may be found in its French version
 It allows you to read and understand a simple text, extracted from the
 Vikramacarita story. An updated version of the English lesson is available
  <a href="COURSE/Lessons/HST_1.html">here.</a> <br>
+</p>
+<p>
+<strong><span class="red">!!! NEW !!!</span></strong>
+The story of Nala, taken from the 3rd book of Mahābhārata, is now available
+in the Corpus repository, section Nala. Its French translation is available
+<a href="COURSE/Lessons/lesson2.fr.html">here</a> as the second lesson on
+using our tools. 
+</p>
+<p>
 A more extensive course on using Hypertext Sanskrit Tools, developed jointly
 with the Sanskrit Studies Department of the University of Hyderabad,
 was taught remotely in Spring 2024. Its video contents may be accessed 

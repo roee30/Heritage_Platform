@@ -4332,7 +4332,7 @@ value compute_aorist root =
     (* Garnier: à valeur causative védique remplacé en classique par parfait 
        périphrastique - eg ajiijanat -> janayaamaasa il a engendré *)
     [ "am" | ".rc#1" | "kath" | "k.r#1" | "k.r.s" | "k.lp" | "ga.n" | "gam"
-    | "gaah" | "ghu.s" | "car" | "ce.s.t" | "jan" | "ji" | "tark" | "tul"
+    | "gaah" | "ghu.s" | "car" | "ce.s.t" | "cyu" | "jan" | "ji" | "tark" | "tul"
     | "tvar" | "tvi.s#1" | "dah#1" | "diz#1" | "dih" | "diip" | "dru#1" | "dh.r" 
     | "naz#1" | "pac" | "pa.th" | "miil" | "muc#1" | "yaj#1" | "rak.s" | "ric"
     | "viz#1" | "v.r#1" | "v.rt#1" | "v.rdh#1" | "vyadh" | "zri" | "zru" 
@@ -4375,7 +4375,7 @@ value compute_aorist root =
     | _ -> () 
     ]
   ; match root with (* 4. sigma aorist sic *)
-    [ "aap" | "k.r#1" | "khan" | "gup" | "gh.r" | "ci" | "chid#1" | "ji"
+    [ "aap" | "k.r#1" | "khan" | "gup" | "gh.r" | "ci" | "cyu" | "chid#1" | "ji"
     | "tud#1" | "t.rr" | "tyaj#1" | "dah#1" | "daa#1" | "d.rz#1" | "draa#2" 
     | "dhaa#1" | "dhyaa" | "dhyai" | "dhv.r" | "nak.s" | "nii#1" | "pac" 
     | "bha~nj" | "bandh" | "bhid#1" 
@@ -4746,6 +4746,7 @@ value perif conj rstem root = do
              match root with (* should rather appear in rstems *)
              [ "g.rr#1" -> revcode "giri" (* giritum, not gariitum *) 
              | "cak.s"  -> revcode "ca.s" (* ca.s.tum *)
+             | "cyu"    -> revcode "cyavi" (* cyavitum *)
              | "jak.s"  -> revcode "jagh" (* jagdhum \Pan{2,4,36} *)
              | "dabh"   -> revcode "dabh" (* dabhdum WR *)
              | "p.rr"   -> revcode "puuri" (* puuritum \Pan{7,1,102} *)

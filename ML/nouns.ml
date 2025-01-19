@@ -5766,8 +5766,14 @@ value compute_nouns_stem_form e stem d p =
             [ [ 1 :: r2 ] (* -an *) -> match r2 with
                [ [ 41 :: r3 ] (* man *) -> match r3 with
                   [ [ 2; 48 ] (* saaman *) 
-                  | [ 4; 48 ] (* siiman *) -> build_man Fem r3 e (* check *)
+                  | [ 4; 48 ] (* siiman *) 
+                  | [ 43; 1; 22; 5; 48 ] (* sucarman *) -> build_man Fem r3 e
+(* Z : akarman and other bahus may use -karman as well as -karmaa for Fem stem *)
                   | _ -> report stem Fem
+                  ]
+               | [ 45 :: r3 ] (* van *) -> match r3 with 
+                  [ [ 43; 1; 37; 5; 48 ] (* suparvan *) -> build_van Fem r3 e
+                  |  _ -> report stem Fem
                   ]
                |  _ -> report stem Fem
                ]
@@ -5999,7 +6005,7 @@ value iic_indecl = (* should be lexicalized or completed *)
   ; "sarvatra"  (* sarvatraga *)
   ; "sarvathaa" (* sarvathaavi.saya *)
   ; "saha#2"    (* problematic -- overgenerates  *)
-  ; "saak.saat"  (* saak.saadd.r.s.ta *) (* G{saak.saat} *)
+  ; "saak.saat" (* saak.saadd.r.s.ta *) (* G{saak.saat} *)
   ; "saaci"
   ; "saamaanyatas" (* saamaanyatod.r.s.ta - tasil *)
   ; "saami"     (* saamipiita *)
@@ -6154,12 +6160,12 @@ value compute_extra_iiv = iter enter_iiv
 ;
 
 (* Gati forms used as prefixes of auxiliary verbs, like Iiv -- form Absya *)
-value gatis = (* G{saak.sat} \Pan{1,4,74} + G(uurii) \Pan{1,4,61} *)
+value gatis = (* G{saak.saat} \Pan{1,4,74} + G(uurii) \Pan{1,4,61} *)
   [ "saak.saat" (* in the sense of cvi - becoming Wh§1078a *)
   ; "mithyaa" 
   ; "cintaa"  
   ; "bhadraa" 
-  ; "locanaa" 
+  ; "rocanaa" 
   ; "vibhaa.saa" (* sampatkaa ? *) 
   ; "aasthaa" 
   ; "amaa"
@@ -6182,6 +6188,7 @@ value gatis = (* G{saak.sat} \Pan{1,4,74} + G(uurii) \Pan{1,4,61} *)
   ; "madhye" (* id. *)
   ; "nivacane" (* id. *)
   ; "haste" (* \Pan{1,4,77} upayamana (mariage) *)
+  ; "pratapane"
   ; "paa.nau" (* id. *)
   ; "svayam"
   ; "uurii" (* \Pan{1,4,61} G{uurii} uuriik.rtya but Wh§1094b says uriik.r *)

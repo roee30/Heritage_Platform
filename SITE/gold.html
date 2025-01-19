@@ -3647,6 +3647,123 @@ Thank you for all your help and swift replies.<br />
 All the best,<br />
 Casey<br />
 
+<hr />
+From Hrishikesh Terdalkar on
+https://groups.google.com/g/sanskrit-programmers<br>
+Date: Dec 3, 2024<br />
+<br />
+The word lists can be generated using Prof. Huet's Sanskrit Heritage platform.
+You can use my Python wrapper for it (install using `pip install heritage`)
+and then do<br /><br />
+
+import heritage<br />
+H = heritage.HeritagePlatform()<br />
+H.get_declensions('राम', 'm', False)<br />
+which will output<br />
+[[['रामः'], ['रामौ'], ['रामाः']],<br />
+
+ [['रामम्'], ['रामौ'], ['रामान्']],<br />
+
+ [['रामेण'], ['रामाभ्याम्'], ['रामैः', 'रामेभिः']],<br />
+
+ [['रामाय'], ['रामाभ्याम्'], ['रामेभ्यः']],<br />
+
+ [['रामात्'], ['रामाभ्याम्'], ['रामेभ्यः']],<br />
+
+ [['रामस्य'], ['रामयोः'], ['रामाणाम्']],<br />
+
+ [['रामे'], ['रामयोः'], ['रामेषु']],<br />
+
+ [['राम'], ['रामौ'], ['रामाः']]]<br />
+
+
+We can of course flatten this list<br />
+
+def flatten(l):<br />
+
+    '''Deep flatten any iterable'''<br />
+
+    for el in l:<br />
+
+        if (isinstance(el, Iterable) and not isinstance(el, (str, bytes))):<br />
+
+            yield from flatten(el)<br />
+
+        else:<br />
+
+            yield el<br />
+
+
+And then,<br />
+
+forms = list(flatten(H.get_declensions(word, gender, headers=False)))<br />
+
+
+You may check documentation at<br />
+https://heritage-py.readthedocs.io/en/latest/heritage.html#heritage.heritage.HeritagePlatform.get_declensions
+<br/>
+Hope this helps.<br />
+
+Regards,<br />
+Hrishikesh<br />
+<br />
+Hrishikesh Terdalkar<br />
+LIRIS Research Lab<br />
+Claude Bernard University Lyon 1<br />
+France<br />
+Homepage: https://hrishikeshrt.github.io<br />
+
+<p/>
+
+<hr />
+From Hrishikesh Terdalkar's PhD thesis on
+https://hrishikeshrt.github.io/publication/phd/thesis.pdf
+p. 159:<br/>
+
+6.3.2 Heritage.py: Python Interface to The Sanskrit Heritage Site
+Heritage.py is a Python package that serves as an interface to The Sanskrit Heritage
+Site [Goyal et al., 2012]. It makes a number of features offered by the Heritage Platform available to use in Python projects for working with Sanskrit. The features
+include morphological analysis, sandhi formation, declensions, and conjugations.
+Heritage.py offers two distinct modes of operation:<br/>
+• Web Mirror Mode: In this mode, the package utilizes a compatible web mirror of The Heritage Platform (i.e., https://sanskrit.inria.fr/index.en.
+html). This mode does not necessitate any installation steps but relies on HTTP
+requests for each task, which may introduce a slight delay in obtaining results.
+<br/>
+• Local Installation Mode: To leverage the full potential of Heritage.py with
+enhanced performance, a local installation¹⁰ of The Heritage Platform is required. This mode significantly accelerates result acquisition by eliminating
+the need for frequent HTTP requests.<br/>
+The detailed documentation is available at https://heritage-py.readthedocs.
+io/en/latest/. The Python package is available on PyPI at https://pypi.org/
+project/heritage/ and can be installed using ‘pip install heritage’ on the
+terminal. The source code is available at<br/>
+https://github.com/hrishikeshrt/heritage.
+
+<p/>
+<hr />
+
+Acknowledgment to Websites in the Digital Pali Dictionary site at
+https://digitalpalidictionary.github.io/bibliography.html
+(visited 15/10/2024) mentions:<p/>
+Sanskrit Grammarian , accessed through https://sanskrit.inria.fr/DICO/grammar.fr.html
+<p/>
+
+<hr />
+From sanscritoXXXX@gmail.com  <br />
+À : GH Huet <br />
+Date: 1 janvier 2025<br />
+<p />
+Bonjour Dr Huet<br />
+...<p />
+
+Votre dictionnaire en ligne fait partie des outils de travail quotidiens dans notre étude du sanskrit. Le professeur Angot lui-même nous a présenté à plusieurs reprises votre travail. Nous profitons de cette occasion pour vous exprimer nos remerciements.<br />
+...<p />
+
+Nous vous adressons nos meilleurs vœux pour 2025, bien cordialement<br />
+
+Gloriana, pour l'équipe <br />
+
+Amici del Sanscrito
+<p />
 
 <hr />
 

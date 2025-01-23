@@ -424,11 +424,11 @@ all:
 	$(MAKE) transducers
 	cd ML && $(MAKE) # make engine (testing the data stamp)
 	$(MAKE) web_services # then all Web services
-#	cd ML && $(MAKE) make_word_freq
+	cd ML && $(MAKE) make_word_freq
 	$(MAKE) word_freq
-#	cd ML && $(MAKE) make_trans_freq
+	cd ML && $(MAKE) make_trans_freq
 	$(MAKE) trans_freq
-#	cd ML && $(MAKE) make_morph_freq
+	cd ML && $(MAKE) make_morph_freq
 	$(MAKE) morph_freq
 
 # When master Makefile SETUP/MMakefile has been changed, do manually:
@@ -760,6 +760,8 @@ course:
 	cp -p $(SKTRESOURCES)COURSE/Lessons/style.css $(SERVERPUBLICDIR)COURSE/Lessons/style.css
 
 
-SAVED_VERSION=363
-save: # saving sources of Heritage_Platform (after make clean in ML)
-	tar cvf ../ARCHIVE/Heritage_Platform_$(SAVED_VERSION).tar ML SITE JAVASCRIPT SETUP configure INSTALLATION DOC IMAGES README 
+SAVED_VERSION=364
+save: # saving sources of Heritage_Platform 
+	cd ML; make clean
+	tar cvf ../ARCHIVE/Heritage_Platform/Heritage_Platform_$(SAVED_VERSION).tar ML SITE JAVASCRIPT SETUP configure INSTALLATION DOC IMAGES README 
+	gzip ../ARCHIVE/Heritage_Platform/Heritage_Platform_$(SAVED_VERSION).tar

@@ -130,7 +130,7 @@ value fmode_id_of_fmode fmode =
   | Frequency_Morph -> "m"
   | Frequency_Word_Transition -> "x"
   | Frequency_Stem_Morph -> "n"
-  | _ -> "n"
+(* | _ -> "n" *)
   ] 
 ;
 

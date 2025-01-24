@@ -731,9 +731,39 @@ value get_top_solutions top_segments =
   | [] -> acc
   ]
 ;
+(* Traverse through all the chunks recursively, choose the first solution
+   from each of the chunk segmentations and combine them in each step *)
+value get_first_solution top_segments = 
+  (* loop over the chunks *)
+  top_solutions (1.0,"",[],[]) top_segments
+  where rec top_solutions (conf,text,output_triplets,all_triplets) = fun
+  [ [ (_, chunk_segments) :: rest ] -> 
+       (* loop over the segments of the chunks *)
+       let (cur_conf,cur_text,cur_output_triplets,cur_all_triplets) = 
+         match chunk_segments with 
+         [ [] -> (1.0,"",[],[])
+         | [ (chunk_conf,chunk_text,_,_,_,
+              chunk_output_triplets,chunk_all_triplets) :: rest ] -> 
+                (chunk_conf, chunk_text, chunk_output_triplets, chunk_all_triplets)
+         ] in 
+       let new_text = 
+         if text = "" then cur_text 
+         else text ^ " " ^ cur_text 
+       and new_conf = conf *. cur_conf 
+       and new_output_triplets = 
+         List.append cur_output_triplets output_triplets 
+       and new_all_triplets = 
+         List.append cur_all_triplets all_triplets in 
+       top_solutions (new_conf, new_text, new_output_triplets, new_all_triplets) rest
+  | [] -> [ (conf,text,output_triplets,all_triplets) ]
+  ]
+;
 (* called from interface for getting top solutions *)
-value dove_tail segments = 
-  get_top_solutions chunk_solutions.total_sols
+value dove_tail first segments = 
+  match first with 
+  [ True -> get_first_solution chunk_solutions.total_sols
+  | _ -> get_top_solutions chunk_solutions.total_sols
+  ]
 ;
 (* Modified to update the global variable which stores the segmentations for all
    the chunks as a list of lists *)

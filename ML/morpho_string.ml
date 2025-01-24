@@ -196,7 +196,7 @@ and str_tense_deva = fun
   | Future2      -> "लुट्"
   | Perfect      -> "लिट् (द्वित्व)"
   | Aorist k     -> "लुङ् " ^ (aorist_type_deva k)
-  | Injunctive k -> "लुङ् " ^ (gana_str_deva k)
+  | Injunctive k -> "लुङ् " ^ (aorist_type_deva k)
   | Conditional  -> "लृङ्"
   | Benedictive  -> "आशीर्लिङ्"
   | Subjunctive  -> "लेट्"

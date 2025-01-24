@@ -888,7 +888,7 @@ value display_sentences raw_deva_input deva_input roma_input roma_output_chunks 
   ; html_break |> pl
   }
 ;
-value best_mode_operations cpts chunks = 
+value best_mode_operations cpts chunks first = 
   let _ = do {
     chkpts.all_checks := cpts
   ; chunk_solutions.total_sols := []
@@ -898,7 +898,7 @@ value best_mode_operations cpts chunks =
   ; chunk_solutions.solution := ""
   } in
   let (full,count) = segment_iter chunks
-  and solution_list = dove_tail chunk_solutions.total_sols in
+  and solution_list = dove_tail first chunk_solutions.total_sols in
   (full, count, solution_list)
 ;
 (* The main procedure for computing the graph segmentation structure *)
@@ -936,7 +936,7 @@ value check_sentence translit uns text checkpoints input undo_enabled
     ] in 
   let _ = max_best_solutions.val := max_sols in 
   let (full,count,solution_list) = 
-      best_mode_operations rcpts chunks in (* full iff all chunks segment *) 
+      best_mode_operations rcpts chunks first in (* full iff all chunks segment *) 
   let rebuild = (((List.length rcheckpoints) = 0) && 
                 (count >= max_best_solutions.val)) in 
   (* The graph is rebuilt only for the first call. 

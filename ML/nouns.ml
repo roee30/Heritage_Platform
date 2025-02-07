@@ -663,7 +663,7 @@ value build_mas_mahat stem entry =
 (* stems having a consonant before man or van have vocalic endings an *)
 value avocalic = fun
   [ [ last :: _ ] -> not (Phonetics.vowel last)
-  | [] -> failwith "Nouns.avocalic: empty stem"
+  | [] -> False (* to avoid fatal error in declension *)
   ]
 ;
 (* NB impossible to factorise with [build_van] because "mne" and not "nne" *) 

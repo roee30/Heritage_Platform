@@ -1137,7 +1137,7 @@ value compute_athematic_optative2m weak set root =
               else fix2w weak suff set)
   and conjugwmrij person suff = (person, fix2 (revcode "maarj") suff set) in
   enter1 root (Conju (optm 2)
-   [ (Singular, let l = (* ii below replaced by iyii for root i ? *)
+   [ (Singular, let l = (* ii below replaced by iyii for root i *)
         [ conjugw First  "iiya"
         ; conjugw Second "iithaas"
         ; conjugw Third  "iita"
@@ -1172,10 +1172,10 @@ value compute_athematic_optative2m weak set root =
 value compute_athematic_imperative2a strong weak set root =
   let conjugs person suff = 
       (person,if root = "bruu" then fix2sbruu suff 
-                                else fix2s strong suff set)
+                               else fix2s strong suff set)
   and conjugw person suff =
       (person,if root = "han#1" then fix2whan suff 
-                                 else fix2w weak suff set) in
+                                else fix2w weak suff set) in
   enter1 root (Conju (impera 2)
    [ (Singular, let l =
         [ conjugs First "aani"
@@ -1269,8 +1269,8 @@ value compute_active_present2 sstem wstem set root third = do
                          else rev (fix2w wstem "at" set) in 
            record_part (Ppra_ 2 Primary m_pstem f_pstem root)
     ]
-  ; if root = "m.rj" then let m_pstem = revstem "maarj" in
-                          let f_pstem = revstem "maarjat" in
+  ; if root = "m.rj" then let m_pstem = revstem "maarj"
+                          and f_pstem = revstem "maarjat" in
                           record_part (Ppra_ 2 Primary m_pstem f_pstem root)
     else ()
   }
@@ -1282,7 +1282,7 @@ and compute_middle_present2 sstem wstem set root third = do
   ; match root with
     [ "iiz#1" | "maa#1" -> () (* no pprm *)
     | "i" -> record_part_m_ath (pprm 2) [ 42; 3 ] root (* iyaana *)
-    | _ -> record_part_m_ath (pprm 2) (correct2 wstem) root
+    | _   -> record_part_m_ath (pprm 2) (correct2 wstem) root
     ]
   }
 ;
@@ -3125,7 +3125,7 @@ value compute_passive_11 root ps_stem =
    [e] is a boolean flag (True if 2nd sg weak) 
    [b] is a boolean flag (True if optional union-vowel i) *)
 (* NB b=iopt not sufficient. See Whitney§797 *)
-(* Warning: baroque code ahead *)
+(* Warning: complex code ahead *)
 value redupl_perf root = 
   let (revw,revs,revl) = match root with
       [ "ji"     -> stems "gi"    (* palatal -> velar *)
@@ -3170,12 +3170,12 @@ value redupl_perf root =
                         (rev st, rev wk)
          | 7 (* .r *) -> let w = match r with
                     [ [ 22 ] | [ 35 ] | [ 47 ] -> (* Whitney§788a *)
-                     (revw @ [ 36; 2 ]) (* aan- for [.rc1], [.rdh], [.r.s] *)
+                      (revw @ [ 36; 2 ]) (* aan- for [.rc1], [.rdh], [.r.s] *)
                     | [] -> [ 43; 1 ] (* ar for .r *)
                     | _ -> revw
                     ] in (strong w, w)
          | _ (* aa ii uu .rr *) -> (revs, revw)
-         ] in let iopt = match root with (* form without i allowed Kale §508 *)
+         ] in let iopt = match root with (* form without i allowed Kale§508 *)
                   [ "ak.s" -> True (* more to add *)
                   | _ -> False (* default mandatory intercalate i *)
                   ] in
@@ -3192,7 +3192,7 @@ value redupl_perf root =
                           and a = c2=1 (* a *) && l=1 in 
                           (c2,p,a)
                        else lookvoy r2
-                                                 ] in
+           ] in
       let (v,p,a) = lookvoy r in (* p = prosodically long, a = vriddhi augment *)
          (* lookvoy computes the vowel v, and the two booleans p and a *)
       let c = if sibilant c1 then match r with
@@ -3211,20 +3211,20 @@ value redupl_perf root =
           | ".dhauk" (* .du.dhauke *)
           | "lok" (* luloke idem } *)
               -> 5 (* u *)
-          | _ -> 1 (* a *) (* also bhuu elsewhere *)
+          | _ -> 1 (* a *) (* also bhuu treated elsewhere *)
           ]
         else match root with
           [ "maa#3" -> 3 (* i *) (* analogy with present *)
           | "vyath" | "vyadh" | "vyaa" | "jyaa#1" | "pyaa" | "syand" | "dyut#1"
           | "myak.s" -> 3 (* y before root vowel gives original i *)
-            (* Whitney§785 also "vyac" and ved. "tyaj#1"; "vyaa" treated other *)
+            (* Whitney§785 also "vyac" and ved. "tyaj#1"; "vyaa" treated elsew *)
           | "kan" | "mah" -> 2 (* ved lengthened redup vowel Whitney§786a *)
           | "pii" -> 4 (* piipaaya *)
-          | _ -> short v (* reduplicated vowel is short *)
+          | _ -> short v (* default: reduplicated vowel is short *)
           ]
       and rc = (* reduplicating consonant *) match c with
-        [ 17 | 18 (* k kh *) -> 22 (* c *)
-        | 19 | 20 | 49 (* g gh h *) -> 24 (* j *)
+        [ 17 | 18 (* k kh *) -> 22 (* c palatalization of velars *)
+        | 19 | 20 | 49 (* g gh h *) -> 24 (* j idem *)
         | 28 (* .th *) when root=".s.thiiv" -> 32 (* t *) (* preferably *)
         | 23 | 25 | 28 | 30 | 33 | 35 | 38 | 40 -> c-1 (* xh -> x *)
         | _ -> c (* c by default *)

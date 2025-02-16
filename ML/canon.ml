@@ -81,7 +81,6 @@ value canon = fun
             where mess = "Canon: Illegal char " ^ string_of_int n
          else "#" ^ Char.escaped (Char.chr (n-2)) (* homo index 1 to 9 *)
                                  (* n-2 above since (ASCII) Char.chr 48 = '0' *)
-
   ]
 ;
 (* Hiatus-conscious catenation [b=True] iff [s] starts with vowel *)

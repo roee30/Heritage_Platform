@@ -5820,7 +5820,7 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
    | "malina" | "mizra" | "mukula" | "mukhara" | "mu.n.da" | "muutra" 
    | "m.rga" | "yantra" | "rasa" | "ruuk.sa" | "lagha" (* u -> a *)
    (*| "var.na" now varn:10 *) | "vizada" | "vra.na" | "zaanta" | "zithila"
-   | "zyena" | ".sa.n.dha" | "sapi.n.da" | "saphala" | "sabhaaja" | "saantva" 
+   | "zyena" | ".sa.n.dha" | "sapi.n.da" | "saphala" | "saantva" 
    | "saavadhaana" | "suutra" | "stena" (* practice \Pan{3,1,15} *)
    | "u.sas" | "namas" | "varivas" (* do \Pan{3,1,19} *)
    | "utpuccha" (* do \Pan{3,1,20} *)

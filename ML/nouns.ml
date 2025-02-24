@@ -5106,8 +5106,9 @@ value build_katicit entry = (* MW Gram§230 *)
    disappear, when declension will be called with a fuller morphological tag, 
    and not just the gender *)
 value pprvat = fun 
-  [ "avat" | "aapnuvat" | "kurvat" | "jiivat" | "dhaavat" | "dhaavat#1"
-  | "dhaavat#2" | "bhavat#1" | "z.r.nvat" | "zaknuvat" -> True
+  [ "avat" | "aapnuvat" | "kurvat" | "tanvat" | "jiivat" | "dhaavat" 
+  | "dhaavat#1" | "dhaavat#2" | "bhavat#1" | "z.r.nvat" | "zaknuvat" 
+  | "sunvat" -> True
   | "azaknuvat" -> True (* privative of ppr - to be completed *)
   | _ -> False
   ]
@@ -5868,6 +5869,7 @@ value compute_nouns_stem_form e stem d p =
              [ (* pa~ncan *) [ 22; 26; 1; 37 ] 
              | (* saptan *) [ 32; 37; 1; 48 ]
              | (* a.s.tan *) [ 27; 47; 1 ] 
+             | (* tri.navan *) [ 45; 1; 31; 3; 43; 32 ]
              | (* navan *) [ 45; 1; 36 ]
              | (* .so.dazan *) [ 46; 1; 29; 12; 47 ] 
              | (* -dazan *) [ 46 :: [ 1 :: [ 34 :: _ ] ] ] -> build_num st e 

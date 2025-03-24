@@ -631,7 +631,7 @@ value anchor_pseudo url link =
 (***************************)
 
 value start_year = " 1994-"
-and current_year = "2024"
+and current_year = "2025"
 and author_name = "Gérard Huet"
 ;
 value copyright = "© " ^ author_name ^ start_year ^ current_year

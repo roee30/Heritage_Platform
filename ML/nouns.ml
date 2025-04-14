@@ -6149,7 +6149,9 @@ value iiv_krids =
   ; "ziita"
   ; "zuddha"
   ; "spa.s.ta"
-  ; "saaci" (* ind *) 
+    (* we add also a few indeclinables : *)
+  ; "afga#2" (* afgiik.rta *)
+  ; "saaci" (* saaciik.rta *)
   ]
 ;
 value enter_iiv entry = 

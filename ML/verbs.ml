@@ -5798,8 +5798,8 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
        -> [ 1 :: [ 37 :: [ 2 :: trunc rstem ]]] (* -aapayati - interc p *) 
    (* |  (* very rare Whitney§1059d e.g. "putra" *)
        -> [ 3 :: trunc_a rstem ] (* -()iyati *) *)
-   | "adhvara" | "tavi.sa" | "putra" | "praasaada" 
-   | "mitra" (* treat as \Pan{3,1,10} *)
+   | "adhvara" | "tavi.sa" | "paryafka" | "putra" | "praasaada" | "bhaaryaa" 
+   | "mitra" (* treat as \Pan{3,1,10} kyac *)
    | "udaka" | "kavi" | "dhana" | "maa.msa" | "vastra" (* desire Kale§643 *) 
    | "zaa.na#1" (* use as *)
        -> [ 4 :: trunc rstem ] (* -()iiyati *) (* \Pan{3,1,8} kyac *)
@@ -5848,19 +5848,19 @@ value den_stem_m root = (* in general intransitive or reflexive Whitney§1059c *
    [ "i.sa" | "utpuccha" | ".rta" | "kuha" | "manas" | "muutra" 
      (* "artha" | "mantra" now ga.na 10 arth mantr *)
    | "m.rga" | "viira" | "safgraama" | "suutra" (* also zithila below *)
-       -> rstem (* (a)-yate *) 
+       -> rstem (* (-yate *) 
    | "asuuya" (* "asu" lengthened *) | "vyaya" (* euphony *)
        -> trunc (trunc rstem) 
    | "tavi.sa" | "citra" (* do \Pan{3,1,19} *) | "sajja"
        -> [ 4 :: trunc_a rstem ] (* -()iiyate *)
 (* | "arth" -> [ 1 :: rstem ] - arthayate for lexicon access - now ga.na 10 *)
-   | "apsaras" | "sumanas" (* act as, become \Pan{3,1,11-12} *) 
-   | "unmanas" 
+   | "apsaras" | "sumanas" (* act as, become \Pan{3,1,11-12} s amui *) 
+   | "unmanas" (* also payas and ojas, with lopa of s optional ? *)
    | "uu.sman" (* emit \Pan{3,1,16} *)
    | "raajan" (* play the role of *)
        -> lengthen (trunc rstem) (* final consonant dropped *)
      (* now the general case: lengthen the nominal vowel stem *)
-   | "pa.tapa.taa" | "mahii#2" | "m.r.saa" 
+   | "kulyaa" | "pa.tapa.taa" | "mahii#2" | "m.r.saa" 
    | "laalaa" | "svalpazilaa" | "vimanaa" 
    | "ajira" | "kalu.sa" | "k.rpa.na" | "kliiba" | "garva" | "jala" | "jihma"
    | "taru.na" | "nika.sa" | "parok.sa" | "piiyuu.savar.sa" | "pu.spa" | "priya"
@@ -5868,7 +5868,7 @@ value den_stem_m root = (* in general intransitive or reflexive Whitney§1059c *
    | "zyaama" | "zyena" | "safka.ta"
    | "ka.n.du" | "karu.na" | "pratiipa"| "sukha" | "du.hkha" (* feel *)
    | "aliika" | "so.dhaaya"  | "t.rpta" (* -MW *)
-     (* \Pan{3,1,18} G{sukhaadi} take suffix kyaf in -aayate :
+     (* \Pan{3,1,18} G{sukha} take suffix kyaf in -aayate :
      {sukha,du.hkha,t.rpta,k.rcchra,asra,aasra,aliika,pratiipa,karu.na,so.dha} *)
    | "abhra" | "ka.nva" | "kalaha" | "k.sepa" | "megha" | "vaira" | "zabda" 
    | "z.rfga" (* do \Pan{3,1,17} *)
@@ -5876,12 +5876,12 @@ value den_stem_m root = (* in general intransitive or reflexive Whitney§1059c *
    | "ka.s.ta" | "k.rcchra" (* strive to \Pan{3,1,14} *)
    | "romantha" (* practice \Pan{3,1,15} *)
    | "dhuuma" | "baa.spa" | "phala" | "phena" (* emit \Pan{3,1,16} *)
-   | "kurafga" | "pu.skara" | "yuga" | "vi.sa" | "zizu"  | "samudra#1" 
+   | "kurafga" | "pu.skara" | "yuga" | "vi.sa" | "zizu" | "samudra#1" 
    | "gomaya" | "bh.rtya" | "sa.mdhyaa"  (* resemble *)
    | "puru.sa" (* imitate *)
-   | "k.r.s.na" | "bhuusvarga" (* to become *) | "manda" | "niila" | "lohita"
-   | "harita" | "piita" (* G{lohita} to become \Pan{3,1,13} *)
-       -> lengthen rstem (* -aayate *)
+   | "k.r.s.na" | "bhuusvarga" (* to become - also \Pan{3,1,13} for G{lohita}: *)
+   | "manda" | "niila" | "lohita" | "madra" | "harita" | "piita" (* kya.s *)
+       -> lengthen rstem (* -aayate kyaf *)
    | _ -> failwith ("Unknown denominative " ^ root)
    ] 
 ;

@@ -86,13 +86,18 @@ chunker.cmx sanskrit.cmx order.cmx data.cmx
 
 ANNOTFLAGS = -annot -bin-annot
 
-COMPILE=ocamlopt -pp "camlp4rf" -I $(ZEN) -I +camlp4 -c	\
-		$(ANNOTFLAGS)
+# COMPILE=ocamlopt -pp "camlp4rf" -I $(ZEN) -I +camlp4 -c $(ANNOTFLAGS)
+COMPILE=ocamlfind ocamlopt -package camlp-streams -package camlp4.extend -syntax camlp4r -I $(ZEN) -c 
 
-COMPILEI=ocamlc -pp "camlp4rf" -I $(ZEN) -I +camlp4 -c	\
-		$(ANNOTFLAGS)
+# COMPILEI=ocamlc -pp "camlp4rf" -I $(ZEN) -I +camlp4 -c $(ANNOTFLAGS)
+COMPILEI=ocamlfind ocamlc -package camlp-streams -package camlp4.extend -syntax camlp4r -I $(ZEN) -c 
 
-LINK=ocamlopt -I $(ZEN) -I +camlp4 dynlink.cmxa camlp4lib.cmxa
+# LINK=ocamlopt -I $(ZEN) -I +camlp4 dynlink.cmxa camlp4lib.cmxa
+# LINK=ocamlfind ocamlopt -I $(ZEN) -package camlp4 -package camlp-streams -linkpkg 
+# LINK=ocamlfind ocamlopt -I $(ZEN) -I . -package camlp4 -package camlp-streams -linkpkg dynlink.cmxa camlp4lib.cmxa
+#LINK=ocamlfind ocamlopt -I $(ZEN) -I . -I +dynlink -package camlp4 -package camlp-streams -linkpkg dynlink.cmxa camlp4lib.cmxa
+
+LINK=ocamlfind ocamlopt -I $(ZEN) -I . -I +dynlink -I +unix -I +str -package camlp4 -package camlp-streams -linkpkg dynlink.cmxa camlp4lib.cmxa
 
 # standard installation of Sanskrit Heritage platform - assumes ZEN library
 

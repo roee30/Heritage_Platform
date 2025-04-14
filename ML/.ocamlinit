@@ -1,2 +1,4 @@
-#load "dynlink.cma";; 
-#load "camlp4/camlp4r.cma";; 
+#use "topfind";;
+#require "compiler-libs.common";;
+#camlp4r;;
+

@@ -2401,6 +2401,7 @@ value build_aatman entry =
         ])
    ]             
    ; Bare Noun (code "aatma") 
+   ; Bare Noun (code "aatman") (* 4-05-2025 for antarātmannākāśaḥ (BAU 2.3.4) *)
    ; Avyayaf (code "aatmam") (* aatmaanam Acc ? *)
    ; Cvi (code "aatmii") 
    ]
@@ -6412,7 +6413,7 @@ value enter_indecl_ifcs () = do
         enter1 entry (Indifc Adv (code "purastaat")) (* fake abl postposition *) 
   ; let entry = "adhastaat" in (* similarly *)
         enter1 entry (Indifc Adv (code "adhastaat")) (* postposition *) 
-  ; let entry = "pazcaat" in (* dak.si.napazcaat *)
+  ; let entry = "pazcaat" in (* dak.si.napazcaat Pan{5,3,33} *)
         enter1 entry (Indifc Adv (code "pazcaat")) (* postposition *) 
   ; let entry = "naama" in (* devadatta-naama *)
         enter1 entry (Indifc Prep (code "naama")) (* postposition *) 

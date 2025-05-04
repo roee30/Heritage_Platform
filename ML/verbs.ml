@@ -5780,6 +5780,7 @@ value den_stem_a root = (* in general transitive Whitney§1059c *)
    (* but "sukha" forms also sukhayati *)
    | "i.sudhi" | "gadgada" (* \Pan{3,1,27} *)
    | "agada" (* Kale§660 *) | "iras" (* | "pu.spa" replaced by root pu.sp *)
+   | "saaman" (* saamayati *)
        -> trunc rstem (* -()yati *) (* lopa *) 
    (* | "maarg" | "mok.s" | "lak.s" | "suuc" 
     -> [ 1 :: rstem ] (* -ayati *) presently roots class 10 *)
@@ -5847,7 +5848,7 @@ value den_stem_m root = (* in general intransitive or reflexive Whitney§1059c *
    match root with 
    [ "i.sa" | "utpuccha" | ".rta" | "kuha" | "manas" | "muutra" 
      (* "artha" | "mantra" now ga.na 10 arth mantr *)
-   | "m.rga" | "viira" | "safgraama" | "suutra" (* also zithila below *)
+   | "m.rga" | "viira" | "zuura" | "safgraama" | "suutra" (* + zithila below *)
        -> rstem (* (-yate *) 
    | "asuuya" (* "asu" lengthened *) | "vyaya" (* euphony *)
        -> trunc (trunc rstem) 

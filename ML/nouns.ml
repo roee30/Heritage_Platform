@@ -3226,6 +3226,7 @@ value build_poly_ii g stem entry =
    ; Avyayaf (wrap stem 3) 
    ]
 ;
+(* Macdonell p61: special because originally polysyllabic *)
 value build_strii stem entry = 
   let decline case suff = (case,fix stem suff) in 
   enter entry 
@@ -5688,17 +5689,20 @@ value compute_nouns_stem_form e stem d p =
           else do
                { if r1=[ 22; 1 ] (* -acii *)  then () (* seulement avec px *)
                  else build_fem_ii r1 e (* nom. ii Pan{6,1,68} sulopa *)
-               ; match r1 with (* vedic forms Whitney§355-356 *) 
-                 [ [ 45; 1 ]             (* avii *)
+               ; match r1 with (* optional vedic forms Whitney§355-356 *) 
+                 [ [ 17; 7; 45 ]         (* v.rkii *) 
                  | [ 34; 1; 36 ]         (* nadii *) 
+                 | [ 34; 36; 2; 36 ]     (* naandii *) 
+                 | [ 36; 1; 37; 1; 32 ]  (* tapanii *) 
                  | [ 41; 43; 6; 48 ]     (* suurmii *) 
                  | [ 41; 47; 17; 1; 44 ] (* lak.smii *) 
-                 | [ 43; 1; 32 ] (* tarii *) (* Whitney§363a *)
+                 | [ 43; 1; 32 ]         (* tarii *) (* Wh§363a *)
+                 | [ 43; 2; 18 ]         (* khaarii *) 
                  | [ 43; 32; 36; 1; 32 ] (* tantrii *)
-                 | [ 43; 1; 32; 48 ] (* starii *) (* Deshpande u.naadisuutra *)
-(* HN Bhat: avii tantrii tarii lak.smii hrii dhii zrii in u.naadi *)
-(* autre liste: tantrii starii lak.smii tarii dhii hrii zrii *)
-(* ci-dessus: + nadii suurmii - dhii hrii traités par [build_mono_ii] *) 
+                 | [ 43; 34; 36; 1; 32 ] (* tandrii *)
+                 | [ 43; 1; 32; 48 ]     (* starii *) (* Deshpande u.n *)
+                 | [ 44; 2; 44; 1; 37 ]  (* palaalii *) 
+                 | [ 45; 1 ]             (* avii *)
                    -> build_poly_ii Fem r1 e (* nom. ii.h *)
                  | _ -> () 
                  ]

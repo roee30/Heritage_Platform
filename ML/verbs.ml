@@ -951,7 +951,7 @@ value fix2sbruu_augment suff = aug (fix2sbruu suff)
 ;
 (* \Pan{6,1,6} reduplicated roots dropping the n of 3rd pl -anti *)
 value abhyasta = fun 
-  [ "jak.s" | "jaag.r" | "cakaas" -> True (* zaas has special treatment *)
+  [ "jak.s" | "jaag.r" | "cakaas" -> True (* also zaas but special treatment *)
   | _ -> False
   ]
 ;
@@ -2444,6 +2444,13 @@ value compute_future stem root =
        | Ubha -> (* both *) do
          { compute_futurea Primary stem root 
          ; compute_futurem Primary stem root 
+         ; if root = "v.r#1" then (* extra derivations for "uur.nu" *)
+           let stem = revcode "uur.no" in do 
+           { compute_futurea Primary stem root (* Rajpopat: ūrṇaviṣyati *)
+           ; compute_futurem Primary stem root 
+           } (* Rajpopat: also optional ūrṇuviṣyati *)
+       else ()
+
          ; match root with (* rare conditional *)
            [ "aap" | "i" | "k.r#1" | "gam" | "grah" | "ji" | "j~naa#1" | "tap"
            | "daa#1" | "d.rz#1" | "nii#1" | "bandh" | "budh#1" | "bhid#1"
@@ -2537,17 +2544,17 @@ value intercalates root =
 | "uc" | "u~nch" | "umbh" | "uuh" | ".rc#1" | ".rj" | ".rdh" | "edh" | "kafk"
 | "kam" | "kamp" | "ka.s" | "kaafk.s" | "ku.n.th" | "ku.n.d" | "kup" | "krand" 
 | "krii.d" | "khan" | "khaad" | "gu~nj" | "gam" (* \Pan{7,2,37} *) | "ghu.s" 
-| "ghaat" | "ghuur.n"
-| "cand" | "cit#1" | "cumb" | "chand" | "jak.s" | "jap" | "jalp" | "jinv"
-| "j.rmbh" | "tak" | "tan#1" | "tan#2" | "tark" | "tvar" | "dagh" | "dabh" 
-| "dham" | "dhva.ms" | "dhvan" | "nand" | "nind" | "pa.th" | "pat#1" | "pi~nj"
-| "piz" | "ba.mh" | "bhand" | "bhaa.s" | "bhraaj" | "ma.mh" | "ma.n.d" | "mad#1"
-| "mand#1" | "mlecch" | "yat#1" | "yas" | "yaac" | "ra.mh" | "rak.s" | "raaj#1" 
-| "ruc#1" | "rud#1" | "lag" | "lafg" | "lafgh" | "lap" | "lamb" | "laa~nch" 
-| "la.s" | "lu.n.th" | "lok" | "loc" | "vad" | "vand" | "vam" | "vaz" | "vas#2"
-| "vaa~nch" | "vaaz" | "vip" | "ven" | "vyath" | "vraj" | "vrii.d" | "za.ms" 
-| "zafk" | "zas" | "zaas" | "zuc#1" | "san#1" | "skhal" | "stambh" | "spand" 
-| "spardh" | "sp.rh" | "sphu.t" | "svan" | "has" | "hi.ms" ] *) 
+| "ghaat" | "ghuur.n" | "cand" | "cit#1" | "cumb" | "chand" | "jak.s" | "jap" 
+| "jalp" | "jinv" | "j.rmbh" | "tak" | "tan#1" | "tan#2" | "tark" | "tvar" 
+| "dagh" | "dabh" | "dham" | "dhva.ms" | "dhvan" | "nand" | "nind" | "pa.th" 
+| "pat#1" | "pi~nj" | "piz" | "ba.mh" | "bhand" | "bhaa.s" | "bhraaj" | "ma.mh" 
+| "ma.n.d" | "mad#1" | "mand#1" | "mlecch" | "yat#1" | "yas" | "yaac" | "ra.mh" 
+| "rak.s" | "raaj#1" | "ruc#1" | "rud#1" | "lag" | "lafg" | "lafgh" | "lap" 
+| "lamb" | "laa~nch" | "la.s" | "lu.n.th" | "lok" | "loc" | "vad" | "vand" 
+| "vam" | "vaz" | "vas#2" | "vaa~nch" | "vaaz" | "vip" | "ven" | "vyath" 
+| "vraj" | "vrii.d" | "za.ms" | "zafk" | "zas" | "zaas" | "zuc#1" | "san#1" 
+| "skhal" | "stambh" | "spand" | "spardh" | "sp.rh" | "sphu.t" | "svan" | "has"
+| "hi.ms" ] *) 
             ]
   ] 
 ;
@@ -2590,10 +2597,10 @@ value intercalate_pp root rstem =
            | "kas" | "k.sam" | "gup" | "dyut#1" | "dham" | "nud" 
            | "m.rj" | "zuc#1" -> vet 
              (* NB zaas vet for stem zaas but admits also zi.s only anit *)
-           | "aj" | "a.t" | "at" | "an#2" | "az#2" | "aas#2" | "i.s#2"
-           | "ii.d" | "iir" | "iiz#1" | "ii.s" | "iih" | "uc" | ".rc#1" | ".rj" 
-           | "ej" | "edh" | "kath" | "kal" | "kaaz" | "kiil" | "kuc" | "ku~nc"
-           | "ku.t" | "kup" | "ku.s" | "kuuj" | "k.rz" | "krii.d" | "klav" | "kvath" 
+           | "aj" | "a.t" | "at" | "an#2" | "az#2" | "aas#2" | "i.s#2" | "ii.d"
+           | "iir" | "iiz#1" | "ii.s" | "iih" | "uc" | ".rc#1" | ".rj" | "ej" 
+           | "edh" | "kath" | "kal" | "kaaz" | "kiil" | "kuc" | "ku~nc" | "ku.t"
+           | "kup" | "ku.s" | "kuuj" | "k.rz" | "krii.d" | "klav" | "kvath" 
            | "k.sar" | "k.sudh#1" | "k.svi.d" | "khaad" | "ga.n" | "gad" | "gal" 
            | "granth" | "gha.t" | "ghaat" | "cak" | "ca.t" | "car" | "cal"
            | "cud" | "cur" | "chal" | "jiiv" | "jval" | "ta.d" | "tam" | "tul" 
@@ -2734,7 +2741,7 @@ value compute_ppp_stems root rstem =
       ]  (* end participles in -na *)
     | "pac" -> [ sVa "pak" ] (* exception \Pan{8.2.51} *)
     | "zu.s#1" -> [ Ka rstem ] (* exception \Pan{8.2.52} *)
-    | _ -> (* otherwise participle in -ta (Panini kta) *)
+    | _ -> (* otherwise participle in -ta (Panini k.rt suffix kta) *)
            let ppstems =
        let ppstem = match root with 
            [ "dhaa#1" -> revcode "hi" (* double weakening hi-ta \Pan{7,4,42} *)
@@ -6013,6 +6020,7 @@ value compute_other_systems root rstem = do
      [ "paz"  (* d.rz *) | "bruu" (* vac *) | "ma.mh" (* mah *) | "ind" 
      | "indh" | "inv" | "k.r#2" | "k.saa" | "cakaas" | "dhii#1" | "vidh#1" 
          -> () (* no perfect *)
+       (* "as#1" has perfect, although bhuu#1 should replace it \Pan{2.4.52} *)
      | "uuh" | "palaay" -> () (* use periphrastic perfect *)
      | _ -> compute_perfect root
      ] (* NB perfect forms may have a passive meaning *)

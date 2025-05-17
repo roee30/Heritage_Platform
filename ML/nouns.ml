@@ -184,7 +184,7 @@ value build_mas_a stem entry =
         [ decline Voc "au"
         ; decline Nom "au"
         ; decline Acc "au"
-        ; decline Ins "aabhyaam"
+        ; decline Ins "aabhyaam" (* \Pan{7,3,102} *)
         ; decline Dat "aabhyaam"
         ; decline Abl "aabhyaam"
         ; decline Gen "ayos"
@@ -197,7 +197,7 @@ value build_mas_a stem entry =
         ; decline Acc "aan"
         ; decline Ins "ais" 
         ; decline Ins "ebhis" (* Vedic eg kar.nebhi.h *) 
-        ; decline Dat "ebhyas"
+        ; decline Dat "ebhyas" (* \Pan{7,3,103} bleeds 102 *)
         ; decline Abl "ebhyas"
         ; decline Gen "aanaam"
         ; decline Loc "esu"
@@ -375,7 +375,7 @@ value build_mas_ri_v stem entry = (* vriddhi in strong cases *)
         ])
    ]
    ; Bare Noun bare
-   ; Avyayaf bare
+(* ; Avyayaf bare *)
    ]
 ;
 (* kro.s.t.r irregular with stem krostu Muller§236 \Pan{7,1,95-97} *)
@@ -423,7 +423,7 @@ value build_krostu stem entry =
         ])
    ]
    ; Bare Noun bare
-   ; Avyayaf bare
+(* ; Avyayaf bare *)
    ]
 ;
 value build_mas_ri_g stem entry = (* parenté avec gu.na *)
@@ -465,7 +465,7 @@ value build_mas_ri_g stem entry = (* parenté avec gu.na *)
    ]
    ; Bare Noun bare
    ; Bare Noun (wrap stem 2) (* for dvandva eg ved hotaapotarau \Pan{6,3,47} *)
-   ; Avyayaf bare
+(* ; Avyayaf bare *)
    ; Indecl Tas (fix stem ".rtas") (* pit.rtas *)
    ]
 ;

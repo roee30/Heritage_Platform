@@ -404,7 +404,7 @@ value voices_of_pv upasarga gana = fun
           ]
 | "mantr" -> match upasarga with 
    [ "" -> Ubha
-   | "aa" | "ni" -> Atma
+   | "abhi" | "aa" | "ni" -> Atma
    | "anu" | "sam" -> Para
    | _ -> raise Unattested
    ]  

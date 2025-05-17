@@ -634,7 +634,8 @@ value compute_thematic_presenta cl conj stem root third =
    [ (Singular, 
         [ conjug First  "aami"
         ; conjug Second "asi"
-        ; check root cl third (conjug Third "ati") 
+        ; check root cl third (conjug Third "ati") (* eg tudati and not todati *)
+(* since tud+Za+tiP (3.1.77) (1,2,4) (1,1,5) nitya vs (7,3,86) para but anitya *)
         ])
    ; (Dual,
         [ conjug First  "aavas"
@@ -3001,6 +3002,7 @@ value admits_ppp_abs = fun
   (* jak.s jagdha \Pan{2,4,36} *)
   | "ah" | "bruu" (* vac *) 
   | "paz"  (* d.rz *) 
+  | "aj" (* vedic ajita "led" clash with a-jita "unconquered" *)
   | "as#1" | "kan" | "k.r#2" | "k.si" | "gaa#1" | "ghas" | "chur" | "ta.d" 
   |" paa#2" | "praa#1" (* omit ved. praata *) | "bal" | "ma.mh" | "va~nc" 
   | "vadh" (* han *) | "vip" | "vyac" | "zaz" | "z.rdh" 

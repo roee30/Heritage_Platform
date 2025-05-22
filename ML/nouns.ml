@@ -4,7 +4,7 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2024 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2025 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
 (*i module Nouns = struct i*)
@@ -57,14 +57,14 @@ and nmorph = (string * declension_class)
 value fix rstem suff = 
   Int_sandhi.int_sandhi rstem (code suff) 
 ;
-(* raw affixing for [build_han] Whitney§195a *)
+(* raw affixing for [build_han] Wh§195a *)
 value fixno rstem suff = List2.unstack rstem (code suff) 
 ;
 value wrap rstem c = mirror [ c :: rstem ]
 ;
 (* monosyllabic stems, for feminine in ii or uu *)
 (* NB - condition not preserved by prefixing and compounding.
-   See Whitney§352 for differing opinions of grammarians *)
+   See Wh§352 for differing opinions of grammarians *)
 value monosyl = Phonetics.all_consonants (* Z NOT Phonetics monosyllabic *)
 ;
 (* An attempt at treating a few compounds of monosyllabic in -ii    *)
@@ -114,10 +114,11 @@ value compound_monosyl_uu = fun
   ]
 ;
 
-(* Stems with possible pronominal declension *)
+(* Stems with possible pronominal declension   *)
+(* Conversely see [pseudo_nominal_basis] below *)
 value pronominal_usage = fun 
   [ "prathama" | "dvitaya" | "t.rtiiya" | "apara" 
-  | "alpa" | "ardha" | "kevala" | "baahya" -> True (* Whitney§526 *)
+  | "alpa" | "ardha" | "kevala" | "baahya" -> True (* Wh§526 *)
   | _ -> False
   ]
 ;
@@ -254,7 +255,7 @@ value build_mas_i stem trunc entry = (* declension of "ghi" class *)
    ; Cvi (wrap trunc 4) (* "aadhi1" "pratinidhi" *)
    ])
 ;
-value build_sakhi stem entry sakhi = (* Whitney§343a *)
+value build_sakhi stem entry sakhi = (* Wh§343a *)
   let decline case suff = (case,fix stem suff) in
   enter entry (
    [ Declined Noun Mas 
@@ -270,7 +271,7 @@ value build_sakhi stem entry sakhi = (* Whitney§343a *)
         ])
    ; (Dual, 
         [ decline Voc "aayau"
-        ; decline Nom "aayaa" (* ved. Whitney§343b *)
+        ; decline Nom "aayaa" (* ved. Wh§343b *)
         ; decline Nom "aayau"
         ; decline Acc "aayau"
         ; decline Ins "ibhyaam"
@@ -455,7 +456,7 @@ value build_mas_ri_g stem entry = (* parenté avec gu.na *)
         [ decline Voc "aras"
         ; decline Nom "aras"
         ; decline Acc ".rrn"
-        ; decline Acc "aras" (* epics Whitney§373c *)
+        ; decline Acc "aras" (* epics Wh§373c *)
         ; decline Ins ".rbhis"
         ; decline Dat ".rbhyas"
         ; decline Abl ".rbhyas"
@@ -668,7 +669,7 @@ value avocalic = fun
 ;
 (* NB impossible to factorise with [build_van] because "mne" and not "nne" *) 
 value build_man g stem entry = 
-  let vedic_drop = match entry with (* Whitney§425e *)
+  let vedic_drop = match entry with (* Wh§425e *)
       [ "mahiman" | "prathiman" | "variman" | "daaman" | "preman" | "bhuuman"
           -> True 
       | _ -> False
@@ -928,7 +929,7 @@ value build_an_god stem entry = (* Whitney §426a Un{1,157} *)
    ] 
 ;
 value build_sp_an stem entry = 
-(* Whitney§432 these stems substitute the following for Voc Nom Acc :
+(* Wh§432 these stems substitute the following for Voc Nom Acc :
    "yakan" \R "yak.rt"
    "zakan" \R "zak.rt"
    "udan" \R "udaka"
@@ -967,7 +968,7 @@ value build_sp_an stem entry =
 (* ; Avyayaf ? *)
    ]
 ;
-value build_han stem entry = (* stem = ...-han Whitney§402 *)
+value build_han stem entry = (* stem = ...-han Wh§402 *)
   (* g=Mas only, since g=Neu is dubious specially -ha *)
   let decline case suff = (case,fix stem suff) 
   and declino case suff = (case,fixno stem suff) in (* no retroflexion of n *)
@@ -977,7 +978,7 @@ value build_han stem entry = (* stem = ...-han Whitney§402 *)
         [ decline Voc "han"
         ; decline Nom "haa"   (* if g=Neu then "ha" else "haa" *)
         ; decline Acc "hanam" (* if g=Neu then "ha" else "hanam" *)
-        ; declino Ins "ghnaa" (* v.rtraghnaa, not *v.rtragh.naa Whitney§195a *)
+        ; declino Ins "ghnaa" (* v.rtraghnaa, not *v.rtragh.naa Wh§195a *)
         ; declino Dat "ghne"
         ; declino Abl "ghnas"
         ; declino Gen "ghnas"
@@ -1021,7 +1022,7 @@ value build_han stem entry = (* stem = ...-han Whitney§402 *)
    ; Avyayaf (fix stem "hanam")
    ]
 ;
-value build_mas_zvan stem entry =  (* \Pan{6,4,133} Whitney§427 *)
+value build_mas_zvan stem entry =  (* \Pan{6,4,133} Wh§427 *)
   let decline case suff = (case,fix stem suff) in
   enter entry 
    [ Declined Noun Mas
@@ -1382,7 +1383,7 @@ value build_nas entry =
         ; decline Loc "nasi"
         ])
    ; (Dual,
-        [ decline Nom "naasaa" (* RV narines Whitney§397 *)
+        [ decline Nom "naasaa" (* RV narines Wh§397 *)
         ; decline Gen "nasos"
         ; decline Loc "nasos"
         ])
@@ -1827,7 +1828,7 @@ value build_mas_ac stem entry =
    ]
 ;
 value build_pums pum pums entry = (* for pu.ms et napu.ms *)
-(* hi.ms pu.ms no retroflexion of s - Whitney§183a Kale §113 *)
+(* hi.ms pu.ms no retroflexion of s - Wh§183a Kale §113 *)
   let decline case suff = (case,List2.unstack pum (code suff)) 
   and declines case suff = (case,List2.unstack pums (code suff)) in
   enter entry 
@@ -3917,14 +3918,14 @@ value build_root g stem entry =
         [ if g=Neu then decline_nasalise Voc "i" else decline Voc "as"
         ; if g=Neu then decline_nasalise Nom "i" else decline Nom "as"
         ; if g=Neu then decline_nasalise Acc "i" else decline Acc "as"
-   (* Voc Nom Acc Neu ought to have nasal : v.rnti Whitney§389c p. 145 *)
-   (* Acc. vaacas with accent on aa or on a        Whitney§391  p. 147 *)
+   (* Voc Nom Acc Neu ought to have nasal : v.rnti Wh§389c p. 145 *)
+   (* Acc. vaacas with accent on aa or on a        Wh§391  p. 147 *)
         ; declfin Ins "bhis"
         ; declfin Dat "bhyas"
         ; declfin Abl "bhyas"
         ; decline Gen "aam"
         ; declfin Loc "su" 
-         (* viz2 -> vi.tsu but also véd. vik.su Whitney§218a [compute_extra] *)
+         (* viz2 -> vi.tsu but also véd. vik.su Wh§218a [compute_extra] *)
         ])
    ]             
    ; Bare Noun bare (* thus hutabhuj -> hutabhuk+dik -> ...gdik *)
@@ -3968,14 +3969,14 @@ value build_root_pn g stem entry =
    ; (Plural, 
         [ if g=Neu then decline_nasalise Nom "i" else decline Nom "as"
         ; if g=Neu then decline_nasalise Acc "i" else decline Acc "as"
-   (* Voc Nom Acc Neu ought to have nasal : v.rnti Whitney§389c p. 145 *)
-   (* Acc. vaacas with accent on aa or on a        Whitney§391  p. 147 *)
+   (* Voc Nom Acc Neu ought to have nasal : v.rnti Wh§389c p. 145 *)
+   (* Acc. vaacas with accent on aa or on a        Wh§391  p. 147 *)
         ; declfin Ins "bhis"
         ; declfin Dat "bhyas"
         ; declfin Abl "bhyas"
         ; decline Gen "aam"
         ; declfin Loc "su" 
-         (* viz2 -> vi.tsu but also véd. vik.su Whitney§218a [compute_extra] *)
+         (* viz2 -> vi.tsu but also véd. vik.su Wh§218a [compute_extra] *)
         ])
    ]             
    ; Bare Noun bare
@@ -4022,7 +4023,7 @@ value build_root_m g trunc stem entry = (* Kale§107 prazaam *)
 ;
 value build_archaic_yuj stem (* yu~nj remnant nasal Kale§97 *) g entry =
   let decline case suff = (case,fix stem suff) 
-  and declfinal case = (case, [ 42; 5; 21 (* yuf *) ]) in (* Whitney§386 *)
+  and declfinal case = (case, [ 42; 5; 21 (* yuf *) ]) in (* Wh§386 *)
   enter entry  
    [ Declined Noun g 
    [ (Singular,
@@ -4031,7 +4032,7 @@ value build_archaic_yuj stem (* yu~nj remnant nasal Kale§97 *) g entry =
         ; if g=Neu then declfinal Acc else decline Acc "am" 
         ])
    ; (Dual, 
-        [ decline Voc "au" (* Kale§97 but Whitney§386 "aa" ? *)
+        [ decline Voc "au" (* Kale§97 but Wh§386 "aa" ? *)
         ; decline Nom "au"
         ; decline Acc "au" 
         ])
@@ -4042,7 +4043,7 @@ value build_archaic_yuj stem (* yu~nj remnant nasal Kale§97 *) g entry =
    ]             
    ]
 ;
-(* Root words opt. substitutes in weak cases \Pan{6,1,63} Whitney§397 *)
+(* Root words opt. substitutes in weak cases \Pan{6,1,63} Wh§397 *)
 value build_root_weak g stem entry = 
   let declinev case suff = (case,fix stem suff) 
   and declinec case suff = (case,fix (finalize stem) suff) (* ni.dbhyas *)
@@ -4359,7 +4360,7 @@ value pseudo_nominal_basis = fun
   [ [ 17; 10; 36; 1 ] (* aneka *) (* possibly also eka, anya ? *)
   | [ 31; 3; 47; 17; 1; 34 ] (* dak.si.na *) 
   | [ 41; 3; 22; 46; 1; 37 ] (* pazcima *) 
-  | [ 41; 10; 36 ] (* nema Whitney§525c *)
+  | [ 41; 10; 36 ] (* nema Wh§525c *)
   | [ 42; 1; 40; 5 ] (* ubhaya *) 
   | [ 43; 1; 32; 32; 5 ] (* uttara *) 
   | [ 43; 1; 32; 36; 1 ] (* antara *)
@@ -4367,10 +4368,11 @@ value pseudo_nominal_basis = fun
   | [ 43; 1; 37 ] (* para *)
   | [ 43; 1; 37; 1 ] (* apara *)
   | [ 43; 1; 45; 1 ] (* avara *)
+  | [ 43; 1; 45; 2; 43; 1; 37 ] (* paraavara *)
   | [ 45; 43; 1; 48 ] (* sarva *)
-  | [ 45; 43; 6; 37 ] (* puurva Whitney§524 *)
-(* NB ga.na {puurva, paraavara, dak.si.na, uttara, apara, adhara} -: paraavara 
-      +: aneka, pazcima, nema, ubhaya, antara, para, avara, sarva, vizva, sva *)
+  | [ 45; 43; 6; 37 ] (* puurva Wh§524 *)
+(* G{puurva}={puurva, paraavara, dak.si.na, uttara, apara, adhara} 
+   added: aneka, pazcima, nema, ubhaya, antara, para, avara, sarva, vizva, sva *)
   | [ 45; 46; 3; 45 ] (* vizva *) 
   | [ 45; 48 ] (* sva *) -> True
   | _ -> False
@@ -4387,6 +4389,7 @@ value tasil_gen = fun
 ;
 
 (* builds existentials with -cit and -cana from inflected forms of kim *)
+(* Caution: these stems must appear whole in text, without spaces *)
 value existential part =
   let entry = "ki~n" ^ part (* ad-hoc hand made e-sandhi *)
   and glue case form = (case,code (form ^ part)) in
@@ -4394,7 +4397,7 @@ value existential part =
     [ Declined Noun Mas  
     [ (Singular, 
          [ glue Nom "kaz" (* kazcit *)
-         ; glue Acc "ka~n" (* ? *)
+         ; glue Acc "ka~n" (* attested ? *)
          ; glue Ins "kena"
          ; glue Dat "kasmai"
          ; glue Abl "kasmaac"
@@ -4450,7 +4453,7 @@ value build_pron_a g stem entry = (* g=Mas ou g=Neu *)
       | [ 43; 1; 32; 3 ] (* itara *)
       | [ 42; 36; 1 ] (* anya *) 
       | [ 43; 1; 32; 1; 42; 36; 1 ] (* anyatara *)
-      | [ 45; 32 ] (* tva *)-> "at" (* Whitney§523 *)
+      | [ 45; 32 ] (* tva *)-> "at" (* Wh§523 *)
       | _ -> (* eka, ekatara, vizva, sva, sarva, ... *) "am"
       ] in
   let decline case suff = (case,fix stem suff) 
@@ -4497,7 +4500,7 @@ value build_pron_a g stem entry = (* g=Mas ou g=Neu *)
              let iic = match stem with 
                        [ [ 17 ] (* kim *) -> code "kim"
                        | [ 42 ] (* yad *) -> code "yat"
-                       | [ 42; 36; 1 ] (* anyad *) -> code "anyat"
+                       | [ 42; 36; 1 ] (* anyad *) -> code "anyat" (* Wh§523b *)
                        | _ -> mirror [ 1 :: stem ]
                        ] in 
              [ Bare phase iic ]
@@ -4750,7 +4753,7 @@ value build_asau_f () =
    ] ]
 ;
 value build_ena g entry = 
-  enter "idam" (* Whitney§500 *)
+  enter "idam" (* Wh§500 *)
    [ Declined Pron g
    [ (Singular, 
     (* No nominative - anaphoric pronoun - in non accented position *) 
@@ -4972,7 +4975,7 @@ value build_tri entry =
         ])
    ]             
    ; Bare Noun (code "tri")
-   ; Bare Noun (code "tis.r") (* tis.rdhanva Whitney§482f *)
+   ; Bare Noun (code "tis.r") (* tis.rdhanva Wh§482f *)
    ] 
 ;
 value build_catur entry = 
@@ -5046,7 +5049,7 @@ value build_num stem entry =
   enter entry (
    [ Declined Noun (Deictic Numeral)
    [ (Plural, let l =
-        [ decline Nom "a" (* plural although no proper plural form Whitney§483 *)
+        [ decline Nom "a" (* plural although no proper plural form Wh§483 *)
         ; decline Acc "a" 
         ; decline Ins "abhis"
         ; decline Dat "abhyas"
@@ -5138,15 +5141,17 @@ value compute_nouns_stem_form e stem d p =
             | [ 17; 10; 36; 1 ] (* aneka *) 
             | [ 31; 3; 47; 17; 1; 34 ] (* dak.si.na *)
             | [ 41; 1; 32; 1; 17 ] (* katama *)
+            | [ 41; 1; 32; 1; 42 ] (* yatama Wh$523 ved *)
             | [ 41; 3; 22; 46; 1; 37 ] (* pazcima *)
-            | [ 41; 10; 36 ] (* nema Whitney§525c *)
+            | [ 41; 10; 36 ] (* nema Wh§525c *)
             | [ 42 ] (* ya\#1 *) 
             | [ 42; 1; 40; 5 ] (* ubhaya *)
             | [ 42; 36; 1 ] (* anya *) 
             | [ 43; 1; 32; 1; 17 ] (* katara *)
+            | [ 43; 1; 32; 1; 42 ] (* yatara Wh$523 ved *)
             | [ 43; 1; 32; 1; 17; 10 ] (* ekatara *) 
             | [ 43; 1; 32; 3 ] (* itara *)
-            | [ 43; 1; 32; 1; 42; 36; 1 ] (* anyatara *) (* Whitney§523 *)
+            | [ 43; 1; 32; 1; 42; 36; 1 ] (* anyatara *) (* Wh§523 *)
             | [ 43; 1; 32; 32; 5 ] (* uttara *)
             | [ 43; 1; 32; 36; 1 ] (* antara *)
             | [ 43; 1; 35; 1 ] (* adhara *)
@@ -5288,7 +5293,7 @@ value compute_nouns_stem_form e stem d p =
                  [ [ 41 :: r3 ] (* -mat *) -> 
                    if p="Ppra" || pprmat e then build_mas_at r1 e
                                            else build_mas_mat r2 e
-                   (* Whitney§451 : yat iyat kiyat *)
+                   (* Wh§451 : yat iyat kiyat *)
                  | [ 42 ] | [ 42; 3 ] | [ 42; 3; 17 ] -> 
                    if p="Ppra" then build_mas_at r1 e (* yat2 *)
                    else build_mas_mat r2 e
@@ -5320,11 +5325,11 @@ value compute_nouns_stem_form e stem d p =
                          -> build_man_god r3 e (* Whitney §426a *)
                      | _ -> build_man Mas r3 e
                      ]
-               | [ 45 :: ([ 46 :: _ ] as r3) ] (* -zvan Whitney§427 *) 
+               | [ 45 :: ([ 46 :: _ ] as r3) ] (* -zvan Wh§427 *) 
                          -> build_mas_zvan r3 e (* takes care of eg dharmazvan *)
                | [ 45 :: r3 ] (* -van *) -> match e with
-                  [ "yuvan" -> build_mas_yuvan e (* Whitney§427 *)
-                  | "maghavan" -> build_mas_maghavan e (* Whitney§428 *)
+                  [ "yuvan" -> build_mas_yuvan e (* Wh§427 *)
+                  | "maghavan" -> build_mas_maghavan e (* Wh§428 *)
                     (* NB: entry is maghavat but interface allows maghavan *)
                   | _ -> build_van Mas r3 e
                   ]
@@ -5526,12 +5531,12 @@ value compute_nouns_stem_form e stem d p =
             | [ 42 ] (* yad *) 
             | [ 45; 32 ] (* tvad *) 
             | [ 42; 36; 1 ] (* anyad *) 
-            | [ 43; 1; 32; 1; 42; 36; 1 ] (* anyatarad *) (* Whitney§523 *)
+            | [ 43; 1; 32; 1; 42; 36; 1 ] (* anyatarad *) (* Wh§523 *)
                 -> build_pron_a Neu r2 e
             | _ -> build_root Neu stem e
             ] 
           | [ 7; 49 ] (* h.rd *)
-              -> build_root_weak Neu stem "h.rdaya" (* \Pan{6,1,63} Whitney§397 *)
+              -> build_root_weak Neu stem "h.rdaya" (* \Pan{6,1,63} Wh§397 *)
           | _ -> build_root Neu stem e
           ]
       | [ 36 :: r1 ] (* -n *) -> match r1 with
@@ -5546,11 +5551,11 @@ value compute_nouns_stem_form e stem d p =
                | [ 47; 6; 42 ] (* yuu.san *)
                | [ 47; 12; 34 ] (* do.san *)
                | [ 48; 1 ] (* asan *)
-               | [ 48; 2 ] (* aasan *) -> build_sp_an r2 e (* Whitney§432 *)
+               | [ 48; 2 ] (* aasan *) -> build_sp_an r2 e (* Wh§432 *)
                | [ 35; 6 ] (* uudhan *) -> build_uudhan r2 e
                | [ 41 :: r3 ] (* -man *) -> build_man Neu r3 e
                | [ 45 :: r3 ] (* -van *) -> match e with
-                  [ "yuvan" -> build_neu_yuvan e (* Whitney§427 *)
+                  [ "yuvan" -> build_neu_yuvan e (* Wh§427 *)
                   | _ -> build_van Neu r3 e
                   ]
                | [ 49 :: r3 ] (* -han *) -> match r3 with
@@ -5652,7 +5657,7 @@ value compute_nouns_stem_form e stem d p =
             | [ 42; 36; 1 ]            (* anyaa *) 
             | [ 43; 1; 32; 1; 17 ]     (* kataraa *)
             | [ 43; 1; 32; 1; 17; 10 ] (* ekataraa *) 
-            | [ 43; 1; 32; 1; 42; 36; 1 ] (* anyataraa *) (* Whitney§523 *)
+            | [ 43; 1; 32; 1; 42; 36; 1 ] (* anyataraa *) (* Wh§523 *)
             | [ 43; 1; 32; 3 ]         (* itaraa *)
             | [ 43; 1; 32; 32; 5 ]     (* uttaraa *)
             | [ 43; 1; 32; 36; 1 ]     (* antaraa *)
@@ -5689,7 +5694,7 @@ value compute_nouns_stem_form e stem d p =
           else do
                { if r1=[ 22; 1 ] (* -acii *)  then () (* seulement avec px *)
                  else build_fem_ii r1 e (* nom. ii Pan{6,1,68} sulopa *)
-               ; match r1 with (* optional vedic forms Whitney§355-356 *) 
+               ; match r1 with (* optional vedic forms Wh§355-356 *) 
                  [ [ 17; 7; 45 ]         (* v.rkii *) 
                  | [ 34; 1; 36 ]         (* nadii *) 
                  | [ 34; 36; 2; 36 ]     (* naandii *) 
@@ -5712,7 +5717,7 @@ value compute_nouns_stem_form e stem d p =
           if monosyl r1 || compound_monosyl_uu r1 then build_mono_uu Fem r1 e
           else do
                { build_fem_uu r1 e
-               ; match r1 with (* vedic forms Whitney§355-356 *)
+               ; match r1 with (* vedic forms Wh§355-356 *)
                  [ [ 35; 1; 45 ] (* vadhuu *) 
                  | [ 36; 1; 32 ] (* tanuu *) 
                  | [ 41; 1; 22 ] (* camuu *) 
@@ -6233,7 +6238,7 @@ value enter_gati gati = (* assumes gati has lexical entry *)
 value gati_products = (* on demand for gati in -saat *)
   [ "agni"; "aatma"; "cuur.na"; "dasyu"; "bhasma"; "bhuumi"; "braahma.na" ]
 ;
-(* Whitney§1108 -saat s does not go to retroflex .s *)
+(* Wh§1108 -saat s does not go to retroflex .s *)
 value enter_saat_gati product =  (* assumes gati has lexical entry *)
   let gati = product ^ "saat" in (* bhasmasaat = reducing to cinders *)
   let stem = normal_stem gati in 
@@ -6245,7 +6250,7 @@ auxiliary, such as yaa (bhasmasaat) or nii (Whitney) or sampad (gr.).
 Also necessary when non contiguous see cite{796} *)
 ;
 
-(* Tasils are treated as adverbs. Here are the lexicalized ones: Whitney§1098 
+(* Tasils are treated as adverbs. Here are the lexicalized ones: Wh§1098 
    First tasils of pronouns, not needed if lexicalised 
  [; enter1 "tad"    (Indecl Tas (code "tatas"))   (* tasil on tad \Pan{5,3,7} *) 
   ; enter1 "ya#1"   (Indecl Tas (code "yatas"))   (* tasil on ya \Pan{5,3,7} *) 
@@ -6312,7 +6317,7 @@ value compute_extra iic_only_stems = do
     where decl = Declined Noun Mas [ (Singular,[ (Dat,code "bhuumaaya") ]) ]
   ; enter1 "sudhii" (* Monier *) decl
     where decl = Declined Noun Mas [ (Singular,[ (Nom,code "sudhi") ]) ]
-  ; enter1 "viz#2" (* Vedic Whitney§218a *) decl
+  ; enter1 "viz#2" (* Vedic Wh§218a *) decl
     where decl = Declined Noun Fem [ (Plural,[ (Loc,code "vik.su") ]) ]
   ; iter enter_iic_avya iic_avyas
   ; enter1 "tva" (* but skipped in dico *) decl

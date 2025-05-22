@@ -47,6 +47,22 @@ open Transduction;
 #load "encode.cmo"; 
 open Encode;
 
+#load "inflected.cmo"; 
+open Inflected;
+
+#load "int_sandhi.cmo"; 
+open Int_sandhi;
+
+#load "parts.cmo"; 
+open Parts;
+#load "control.cmo"; 
+open Control;
+#load "pada.cmo"; 
+open Pada;
+#load "verbs.cmo"; 
+open Verbs;
+
+(* 
 #load "int_sandhi.cmo"; 
 open Int_sandhi; 
 
@@ -56,7 +72,6 @@ open Sandhi;
 #load "pv_sandhi.cmo"; 
 open Pv_sandhi; 
 
-(* 
 #load "data.cmo";
 
 (* testing geminations 

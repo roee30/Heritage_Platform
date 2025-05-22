@@ -4,10 +4,10 @@
 (*                                                                        *)
 (*                              Gérard Huet                               *)
 (*                                                                        *)
-(* ©2024 Institut National de Recherche en Informatique et en Automatique *)
+(* ©2025 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
 
-(* CGI-bin conjugation for computing root conjugations.                   *)
+(* CGI-bin conjugation for computing and displaying root finite forms.    *)
 (* This CGI is triggered by page [grammar_page] in [dico_dir].            *)
 (* Reads its input in shell variable [QUERY_STRING] URI-encoded.          *)
 (* Reads its grammatical information from [public_roots_infos_file]       *)
@@ -92,8 +92,8 @@ value display font ovoice l =
    and (f3,s3,t3) = persons_of p
    and caption = voice_name ovoice font
    and print_row = print_row_font font in do
-       { pl html_break
-       ; pl (table_begin_style Inflection [ ("border","2"); padding5 ])
+       { html_break |> pl
+       ; table_begin_style Inflection [ ("border","2"); padding5 ]  |> pl
        ; let sing = number_caption Singular font
          and dual = number_caption Dual font 
          and plur = number_caption Plural font in
@@ -110,46 +110,46 @@ value display font ovoice l =
             ; print_row (person_name Third Roma)  t1 t2 t3
             }
          ]
-       ; ps table_end 
-       ; pl html_break
+       ; table_end |> ps
+       ; html_break |> pl
        }
 ;
 value display_table font ovoice = fun
   [ [] -> ()
-  | l -> do { ps th_begin; display font ovoice l; ps th_end }
+  | l -> do { th_begin |> ps; display font ovoice l; th_end |> ps}
   ]
 ;
 value print_caption font tense = ps (tense_name tense font)
 ;
 value display_amp font otense da dm dp = do 
-  { pl (table_begin (centered Gris))
-  ; ps tr_begin
-  ; ps th_begin
+  { table_begin (centered Gris) |> pl
+  ; tr_begin |> ps
+  ; th_begin |> ps
   ; Gen.optional (print_caption font) otense
-  ; pl (xml_begin "table")
-  ; ps tr_begin
+  ; xml_begin "table" |> pl
+  ; tr_begin |> ps
   ; display_table font Active da 
   ; display_table font Middle dm
   ; display_table font Passive dp
-  ; pl tr_end
-  ; pl table_end
-  ; ps th_end
-  ; pl tr_end
-  ; pl table_end (* Gris *)
+  ; tr_end |> pl
+  ; table_end |> pl
+  ; th_end |> ps
+  ; tr_end |> pl
+  ; table_end |> pl (* Gris *)
   }
 and display_perfut font pfa = do
-  { pl (table_begin_style (centered Gris) [])
-  ; ps tr_begin
-  ; ps th_begin
-  ; ps (perfut_name font)
-  ; pl (xml_begin "table")
-  ; ps tr_begin
+  { table_begin_style (centered Gris) [] |> pl
+  ; tr_begin |> ps
+  ; th_begin |> ps
+  ; perfut_name font |> ps
+  ; xml_begin "table" |> pl
+  ; tr_begin |> ps
   ; display_table font Active pfa 
-  ; pl tr_end
-  ; pl table_end
-  ; ps th_end  
-  ; pl tr_end
-  ; pl table_end (* Gris *)
+  ; tr_end |> pl
+  ; table_end |> pl
+  ; th_end |> ps
+  ; tr_end |> pl
+  ; table_end |> pl (* Gris *)
   }
 ;
 value sort_out_v accu form = fun
@@ -628,7 +628,7 @@ value in_lexicon entry = (* entry as a string in VH transliteration *)
 and doubt s = "?" ^ s
 ; 
 (* Compute homonym index for a given present class. *)
-(* This is very fragile: lexicon update induces code adaptation. *)
+(* This is very fragile: lexicon update requires code adaptation. *)
 (* Temporary - should be subsumed by unique naming structure. *)
 value resolve_homonym entry = 
   let first e = e ^ "#1"

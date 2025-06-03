@@ -606,6 +606,7 @@ value hr = xml_empty "hr"
 value anchor_ref url link =
   (xml_begin_with_att "a" [ ("href",url) ]) ^ link ^ (xml_end "a")
 ;
+(*actual href*)
 value anchor cl url link =
   (elt_begin_attrs [ ("href",url) ] "a" cl) ^ link ^ (xml_end "a")
 ;

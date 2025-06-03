@@ -48,6 +48,7 @@ open Machine; (* [color_of_phase transition trim_tags] *)
 module Viccheda = Segment Phases Machine Lexer_control;
      (* [all_checks init_segment continue set_offset set_sa_contro resumption] *)
 
+value dd x = do {pl "XXX"; x;};
 value all_checks = Viccheda.all_checks
 and   set_offset = Viccheda.set_offset
 and   set_sa_control = Viccheda.set_sa_control
@@ -173,8 +174,11 @@ value print_morpho phase word = do
 (* Segment printing with phonetics without semantics for Reader *)
 value print_segment offset (phase,rword,transition) = do 
   { "[ " |> ps
+  ; ps "<span class='tooltip'>"
   ; Morpho_html.print_signifiant_off rword offset
+  ; pl "<span class='tooltiptext'>"
   ; print_morpho phase (mirror rword)
+  ; ps "</span></span>"
   (* Now we print the sandhi transition *)
   ; "&lang;" |> ps (* < *) 
   ; let correction = process_transition transition in do  

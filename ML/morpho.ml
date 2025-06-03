@@ -57,6 +57,8 @@ value print_morphs (seg_num,sub) morphs = match seg_num with
   | _ -> select_morphs (seg_num,sub) 1 morphs
   ]
 ; 
+value ddv x = do {ps "XXX "; ps x; ps " YYY"; x};
+value dd x = do {ps "XXX"; x};
 (* The following print functions insert in the HTML output links to entries 
    in the lexicon, also radio buttons and other marks for user choices. *)
 
@@ -83,7 +85,7 @@ value print_inv_morpho pe pne pu form (seg_num,sub) generative (delta,morphs) =
         } with [ _ -> bare_stem |> pu ]
       else match morphs with
 	   [ [ Unanalysed ] -> stem |> pu 
-	   | _ -> stem |> pe
+       | _ -> stem |> pe
 	   ]
     ; "]{" |> ps
     ; print_morphs (seg_num,sub) morphs
@@ -95,13 +97,15 @@ value decomp_pvs pvs =
   Deco.assoc pvs Naming.preverbs_structure
 ;
 (* Used in [Morpho_html] *)
-value print_inv_morpho_link pvs pe pne pu form =
+value print_inv_morpho_link (pvs: list int) pe pne pu form =
   let pv = if Phonetics.phantomatic form then [ 2 ] (* aa- *)(*i OBSOLETE i*)
            else pvs in
-  let encaps print e = (* encapsulates prefixing with possible preverbs *)
-     if pv = [] then print e 
-     else let pr_pv pv = do { pv |> pe; "-" |> ps } in do 
-              { List.iter pr_pv (decomp_pvs pvs); print e } in
+  let encaps print (e: list int) = (* encapsulates prefixing with possible preverbs *)
+     if pv = [] 
+        then print e 
+        else do 
+            { pe (pv @ e) } 
+     in
           print_inv_morpho (encaps pe) (encaps pne) pu form
 (* Possible overgeneration when derivative of a root non attested with pv 
    since only existential test in [Dispatcher.validate_pv]. Thus

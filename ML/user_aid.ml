@@ -364,7 +364,10 @@ value user_aid_engine () = do
 value safe_engine () =
   let abor = abort default_language in
   try user_aid_engine () with  
-  [ _ -> abor Control.fatal_err_mess "Unexpected anomaly - broken session" ]
+  [
+      (*_ -> abor Control.fatal_err_mess "Unexpected anomaly - broken session" *)
+      e -> raise e
+    ]
 ;
 safe_engine () (* Should always produce a valid xhtml page *)
 ;

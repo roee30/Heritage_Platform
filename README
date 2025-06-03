@@ -1,84 +1,40 @@
-############################################################################
-#                                                                          #
-#                       The Sanskrit Heritage Platform                     #
-#                                                                          #
-#                               Gérard Huet                                #
-#                                                                          #
-############################################################################
-# README                                        Copyright Gérard Huet 2018 #
-############################################################################
+# GoldenDict Sanskrit Assistant
+Complete Sanskrit word analysis and sandhi splitter for GoldenDict.
 
-This platform aims at computer treatment of Sanskrit, in view of diverse
-philological applications:
-- statistics on corpuses, stylistic analyses, vocabulary computations
-- establishment of concordance listings, morphology-driven search in corpus
-- diachronic simulation and dialect features correlation of texts
-- assistant for critical editions management
-- compilation of digitalized corpus in a fully tagged Sanskrit Library.
-It may also be used for interactive consulting of a Sanskrit Dictionary
-with grammatical knowledge, on the Web, on a computer workstation,
-or on a personal communicator device. 
-Finally, it may be used as support for teaching the language.
+A fork of the Sanskrit [Heritage Platform](https://gitlab.inria.fr/huet/Heritage_Platform) that builds an `interface(.exe)`.
+Uses [Heritage Resources](https://gitlab.inria.fr/huet/Heritage_Resources) as a submodule and the [Zen Package](https://gitlab.inria.fr/huet/Zen.git) as a literal part of 
+the repo itself.
 
-This project is the follow-up of two previous stages. 
+Released under the original packages' LGPL license.
 
-Gérard Huet started in 1994 the compilation of a Sanskrit to French lexicon
-for indological use (Lexique sanskrit-français à l'usage de glossaire 
-indianiste) as a personal project. By year 2017 it had grown to 10700 entries,
-and the scope had changed. Various standards of completeness and of
-consistency were enforced, and the algebraic structure of a bilingual
-dictionary provided with grammatical annotations was progressively
-established and enforced by computer tools.
+# Installation
 
-Starting from 2000, this project became a central object of research 
-on computational linguistics within Gérard Huet's research at the Paris
-Center of the Institut National de Recherche en Informatique et en Automatique
-(INRIA). A systematic reverse engineering of the TeX source of the lexicon
-produced a structured 
-lexicographic database appropriate for making various computations. 
+## Windows
 
-The first major contribution was the release in 2002 of the Zen toolkit
-for lexical, phonological and morphological treatment of natural language,
-a Pidgin ML library of finite-state machine tools. Zen was presented at
-ESSLLI in Trento in August 2002, and at the same time released on Internet 
-under the LGPL license. Zen, and its conceptual background the AuM model
-of transducers with reversible regular relations, are independent of Sanskrit,
-and thus a distinct Ocaml library was developed for Sanskrit specific
-processing.
+### Automatic
+Just download the zip from releases, unzip it anywhere, and run `install.ps1` from the command line.
+This will modify your GoldenDict configuration file to run Sanskrit analysis on selected words.
 
-During the years 2005-2009, Zen was developed further as a vehicle for
-a general paradigm of relational programming using effective Eilenberg machines.
-This constituted the thesis research of Benoît Razet. 
 
-From 2006 onwards, an international cooperation on Sanskrit Computational
-Linguistics was started between INRIA and the Sanskrit Studies Department
-at the University of Hyderabad, headed by Pr. Amba Kulkarni. The goal of this 
-joint team is to develop inter-operable packages for the processing of 
-Sanskrit corpus, as communicating Web services.
+### Manual
+If `install.ps1` does not work, Enter Edit > Dictionaries > Programs, press Add, and:
+1. Check the `enabled` box
+1. Select `type`: `HTML`
+1. Name: `heritage`
+1. Command line: `powershell -file Path\To\Heritage_Platform\arg.ps1 %GDWORD%`, where `Path\To` is replaced by your unzip location.
 
-In 2011-2012, Pawan Goyal spent a post-doctoral year working with
-Gérard Huet on the Sanskrit Platform. He contributed many new modules:
-a regression analysis facility, a hypertext version of the Monier-Williams
-Dictionary interfaced with the platform's grammatical tools, and a user-aid
-facility allowing an annotator to augment on the fly the generative lexicon
-for substantive stems missing from the Heritage Dictionary, but listed
-in Monier-Williams.
+All set!
 
-In 2013, Pawan Goyal and Gérard Huet designed and implemented an innovative
-new interface, sharing efficiently the segmentation solutions of
-the platform reader, which may run by billions. This allowed a much more
-productive use of the platform, that may now accommodate long sentences.
+## Linux
+Requirements: python, opam
 
-In 2017 A rehaul of the global architecture was achieved, separating
-the production of linguistic data resources issued from the generating lexicon
-and the platform Web services operations proper. The two packages
-are available at git repositories, namely
-git@gitlab.inria.fr/huet/Heritage_Resources.git
-git@gitlab.inria.fr/huet/Heritage_Platform.git
+Install opam, with it install OCaml 4.07.1 and required packages, and make:
+```bash
+opam switch create 4.07.1
+opam install camlp4 uutf camlp-streams
+make new
+```
 
-In summer 2017 Idir Lankri spent his Master internship implementing
-a Corpus Manager prototype, which is used by Gérard Huet to link
-citations of the Heritage Dictionary to selected readings stored in the corpus.
+The resulting binary is located in ML/interface. 
 
-May 21st 2018
-
+Then, follow the instructions for manual Windows installation, replacing `arg.ps1` with `arg.sh`.

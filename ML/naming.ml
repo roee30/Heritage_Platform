@@ -42,12 +42,17 @@ value look_up_homo homo = look_rec
   | [ (morpho,n) :: rest ] -> if n=homo then morpho else look_rec rest
   ] 
 ;
+value err e message = failwith (message ^ Printexc.to_string e);
 value unique_kridantas =  
   try (Gen.gobble Data.public_unique_kridantas_file : deco_krid) 
-  with [ _ -> failwith "unique_kridantas" ] 
+  with [ e -> do {
+    prerr_endline ("[unique_kridantas] EXCEPTION: " ^ Printexc.to_string e);
+    Printexc.print_backtrace stderr;
+    exit 1
+  } ]
 and lexical_kridantas =  
   try (Gen.gobble Data.public_lexical_kridantas_file : deco_krid) 
-  with [ _ -> failwith "lexical_kridantas" ] 
+  with [ e -> failwith ("lexical_kridantas :" ^ Printexc.to_string e)] 
 ;
 (* This mechanism is used by [Make_roots] at morphology generation time,
    and by [Morpho.print_inv_morpho] and [Morpho_ext.print_inv_morpho_ext]

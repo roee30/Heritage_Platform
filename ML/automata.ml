@@ -14,6 +14,7 @@ open Canon; (* decode rdecode *)
 open Phonetics; 
 open Auto.Auto; (* rule auto stack *)
 open Deco;
+(*#load "../ZEN/deco.cmo"; open Deco;*)
 
 (* Generalises the structure of trie, seen as a representation of
    deterministic automaton (recognizer for prefix-shared set of strings),

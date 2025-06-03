@@ -159,19 +159,20 @@ value process_input text us mode topic (input:string) encode cpts =
   let chunks = chunker encode input (* normalisation here *) in 
   let deva_chunks = List.map Canon.unidevcode chunks in
   let deva_input = String.concat " " deva_chunks in do
-  { pl (xml_begin_with_att "p" [ ("align","center") ])
-  ; ps (div_begin Latin16)
-  ; pl (call_graph text ^ " Show Summary of Solutions")
-  ; pl (xml_end "p")
-  ; pl "Input:" 
-  ; ps (roma16_red_sl romainput) (* romanisation *)
-  ; pl hr
-  ; pl html_break
-  ; pl "Sentence: "
-  ; ps (deva16_blue deva_input) (* devanagari *)
-  ; pl html_break
-  ; if mode = Analyse then () else ps "may be analysed as:"
-  ; ps div_end (* Latin16 *)
+  { 
+      (*pl (xml_begin_with_att "p" [ ("align","center") ])*)
+  (*; ps (div_begin Latin16)*)
+  (*; pl (call_graph text ^ " Show Summary of Solutions")*)
+  (*; pl (xml_end "p")*)
+  (*; pl "Input:" *)
+  (*; ps (roma16_red_sl romainput) (* romanisation *)*)
+  (*; pl hr*)
+  (*; pl html_break*)
+  (*; pl "Sentence: "*)
+  (*; ps (deva16_blue deva_input) (* devanagari *)*)
+  (*; pl html_break*)
+  (*; if mode = Analyse then () else ps "may be analysed as: ; "*)
+  ps div_end (* Latin16 *)
   ; let all_chunks = match topic with
         [ Some topic -> chunks @ [ code_string topic ]
         | None -> chunks
@@ -204,9 +205,10 @@ value arguments translit lex font cache st us input topic abs cpts =
   ^ ";mode=" (* mode to be filled later *)
 ;
 (* Faster if only segmenting: no loading of [nouns_file], [roots_file], ... *)
+value dd x = do {ps "XXX"; x};
 value reader_engine () = do
-  { Prel.prelude () 
-  ; let query = try Sys.getenv "QUERY_STRING" with 
+  { (*Prel.prelude () ; *)
+  let query = try Sys.getenv "QUERY_STRING" with 
                 [ Not_found -> failwith "Environment required" ] in
     let env = create_env query in
     let url_encoded_input = get "text" env "" 
@@ -253,11 +255,11 @@ value reader_engine () = do
     try let text = arguments translit lex font cache st us url_encoded_input
                              url_encoded_topic abs checkpoints in do
         { (* Now we call the lexer *)
-           process_input text uns mode topic input encode cpts 
+           process_input text uns mode topic input encode cpts
         ; pl hr
-	; pl html_break  
+	    ; pl html_break  
         ; close_page_with_margin () 
-        ; page_end lang True
+        (*; page_end lang True*)
         }
     with 
     [ Sys_error s         -> abortl Control.sys_err_mess s (* file pb *)

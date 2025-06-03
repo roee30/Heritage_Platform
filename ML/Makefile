@@ -13,7 +13,7 @@
 MAKE=make
 
 # ZEN computational linguistics toolkit Ocaml library 
-ZEN=../ZEN
+ZEN=../Zen/ML
 
 # Literate programming tool ocamlweb (available from Ocaml hump) J.C. Filliatre
 NOWEB=./ocamlweb 
@@ -80,14 +80,13 @@ min_lexer.cmx phonetics.cmx transduction.cmx encode.cmx skt_lexer.cmx \
 chunker.cmx sanskrit.cmx order.cmx data.cmx
 
 ANNOTFLAGS = -annot -bin-annot
+LIBS = -I C:/opam/.opam/4.14/lib/uutf -I +camlp4 -I $(ZEN)
+COMPILE=ocamlopt -pp "camlp4rf" $(LIBS) -c	$(ANNOTFLAGS)
 
-COMPILE=ocamlopt -pp "camlp4rf" -I $(ZEN) -I +camlp4 -c	\
+COMPILEI=ocamlc -pp "camlp4rf" $(LIBS) -c	\
 		$(ANNOTFLAGS)
 
-COMPILEI=ocamlc -pp "camlp4rf" -I $(ZEN) -I +camlp4 -c	\
-		$(ANNOTFLAGS)
-
-LINK=ocamlopt -I $(ZEN) -I +camlp4 dynlink.cmxa camlp4lib.cmxa
+LINK=ocamlopt $(LIBS) dynlink.cmxa camlp4lib.cmxa uutf.cmxa
 
 # standard installation of Sanskrit Heritage platform - assumes ZEN library
 
@@ -166,7 +165,7 @@ test_apte_tag: tag_apte
 debug_apte: share.cmo date.cmo deco.cmo segmenter.cmo canon.cmo encode.cmo naming.cmo \
 skt_lexer.cmo sanskrit.cmo load_transducers.cmo dispatcher.cmo stemmer.cmo \
 bank_lexer.cmo tag_tree.cmo tag_apte.cmo
-	(cat debug_apte.ml ; cat -) | ocaml -I +camlp4 -I . -I $(ZEN)
+	(cat debug_apte.ml ; cat -) | ocaml $(LIBS) -I .
 
 cgis: skt_morph.cmi auto.cmi indexer indexerd declension conjugation \
 lemmatizer reader parser sandhier reader interface user_aid \
@@ -392,12 +391,12 @@ sanskrit.cmo sandhi.cmo int_sandhi.cmo share.cmo trie.cmo deco.cmo \
 skt_lexer.cmo encode.cmo order.cmo lexmap.cmo inflected.cmo parts.cmo pada.cmo \
 verbs.cmo morpho_html.cmo cgi.cmo html.cmo web.cmo indexer.cmo declension.cmo \
 zen_lexer.cmo data.cmo automaton.cmo
-	(cat debug.ml ; cat -) | ocaml -I +camlp4 -I . -I $(ZEN)
+	(cat debug.ml ; cat -) | ocaml $(LIBS) -I .
 
 morpho_debug: list2.cmo word.cmo deco.cmo morpho_string.cmo paths.cmo \
 install.cmo canon.cmo min_lexer.cmo gen.cmo transduction.cmo phonetics.cmo \
 encode.cmo naming.cmo version.cmo date.cmo html.cmo morpho.cmo 
-	(cat morpho_debug.ml ; cat -) | ocaml -I +camlp4 -I . -I $(ZEN)
+	(cat morpho_debug.ml ; cat -) | ocaml $(LIBS) -I .
 
 # Documentation of the ML library - all packages 
 doc: 
@@ -411,9 +410,9 @@ Heritage_Platform.pdf: $(ENGINE)
 .depend depend:: # $(ENGINE) # remove dependency on sources to avoid depend comp
 	> .depend.new
 	for i in $(ZENSOURCES); do \
-	ocamldep -pp camlp4rf -I $(ZEN) -I . $(ZEN)/$$i >> .depend.new ; done
+	ocamldep -pp camlp4rf $(LIBS) -I . $(ZEN)/$$i >> .depend.new ; done
 	for i in $(ENGINE); do \
-	ocamldep -pp camlp4rf -I $(ZEN) -I . $$i >> .depend.new ; done
+	ocamldep -pp camlp4rf $(LIBS) -I . $$i >> .depend.new ; done
 	mv .depend.new .depend
 
 clean:

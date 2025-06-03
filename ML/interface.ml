@@ -330,16 +330,18 @@ value print_word last_ind text cpts (rword,phase,k,conflict) =
   ; let back = background (color_of_phase phase) in 
     table_begin back |> pl
   ; tr_begin |> ps
-  ; "<td " ^ display_morph_action ^ "=\"showBox('" |> ps
+  ; "<td class='tooltip'>" |> ps
+  ; Morpho_html.print_final rword (* visarga correction *)
+  ; ps "<span class='tooltiptext'>"
   ; print_morpho phase word 
   ; let close_box = 
-        "<a href=&quot;javascript:hideBox()&quot;> " ^ x_sign ^ "</a>', '" in 
-    close_box ^ rgb (color_of_phase phase) ^ "', this, event)\">" |> ps
-  ; Morpho_html.print_final rword (* visarga correction *)
+        "<a>" ^ x_sign ^ "</a>" in 
+    close_box |> ps
+  ; ps "</span>"
   ; td_end |> ps
   ; tr_end |> ps
   ; table_end |> ps 
-  ; call_back text cpts (k,(phase,rword)) conflict |> ps
+  (*; call_back text cpts (k,(phase,rword)) conflict |> ps*)
   ; td_end |> ps
   }
 ;
@@ -393,33 +395,33 @@ value check_sentence translit uns text checkpoints input undo_enabled =
   { make_visual cur_chunk.offset
   ; find_conflict 0
   ; html_break |> pl
-  ; html_latin16 "Sentence: " |> pl
-  ; deva16_blue deva_input |> ps (* devanagari *)
+  (*; html_latin16 "Sentence: " |> pl*)
+  (*; deva16_blue deva_input |> ps (* devanagari *)*)
   ; html_break |> ps
   ; div_begin Latin16 |> ps
   ; table_begin Spacing20 |> pl
   ; tr_begin |> pl (* tr begin *)
-  ; if undo_enabled then 
-       td_wrap (call_undo text checkpoints ^ "Undo") |> ps
-    else ()
+  (*; if undo_enabled then *)
+  (*     td_wrap (call_undo text checkpoints ^ "Undo") |> ps*)
+  (*  else ()*)
   ; let call_scl_parser () = (* invocation of scl parser *)
         if scl_toggle then
            td_wrap (call_reader text cpts "o" ^ "UoH Analysis Mode") |> ps
         else () (* [scl_parser] is not visible unless toggle is set *) in
-    if count > Web.max_count then 
-       (* too many solutions would choke the parsers *) 
-       td_wrap ("(" ^ string_of_int count ^ " Solutions)") |> ps
-    else if count=1 (* Unique remaining solution *) then do
-            { td_wrap (call_parser text cpts ^ "Unique Solution") |> ps
-            ; call_scl_parser ()
-            }
-         else do
-       { td_wrap (call_reader text cpts "p" ^ "Filtered Solutions") |> ps
-       ; let info = string_of_int count ^ if full then "" else " Partial" in 
-         td_wrap (call_reader text cpts "t" ^ "All " ^ info ^ " Solutions") |> ps
-       ; call_scl_parser ()
-       } 
-  ; tr_end |> pl   (* tr end *)
+    (*if count > Web.max_count then *)
+    (*   (* too many solutions would choke the parsers *) *)
+    (*   td_wrap ("(" ^ string_of_int count ^ " Solutions)") |> ps*)
+    (*else if count=1 (* Unique remaining solution *) then do*)
+    (*        { td_wrap (call_parser text cpts ^ "Unique Solution") |> ps*)
+    (*        ; call_scl_parser ()*)
+    (*        }*)
+    (*     else do*)
+    (*   { td_wrap (call_reader text cpts "p" ^ "Filtered Solutions") |> ps*)
+    (*   ; let info = string_of_int count ^ if full then "" else " Partial" in *)
+    (*     td_wrap (call_reader text cpts "t" ^ "All " ^ info ^ " Solutions") |> ps*)
+    (*   ; call_scl_parser ()*)
+    (*   } *)
+    tr_end |> pl   (* tr end *)
   ; table_end |> pl
   ; div_end |> ps (* Latin16 *)
   ; html_break |> pl
@@ -493,15 +495,20 @@ value quit_button corpmode corpdir sentno =
 ;
 (* Main body of sktgraph cgi *)
 value graph_engine () = do
-  { Prel.prelude () 
-  ; let query = Sys.getenv "QUERY_STRING" in
+  { 
+      (*Prel.prelude () ;*)
+    Printexc.record_backtrace True ;
+    let query = Sys.getenv "QUERY_STRING" in
     let env = create_env query in
     (* Multiple environment variables according to modes of use are: 
        text topic st us t lex font cache abs cpts (standard mode) 
        corpdir sentno corpmode (defined in Params) 
        guess gender revised [rev_off] [rev_ind] (User-aid) *)
-    let url_encoded_input = get "text" env "" 
-    and url_encoded_topic = get "topic" env "" (* topic carry-over *)
+    let _url_encoded_input = get "text" env "" in
+    (*let () = "<h1>" ^ _url_encoded_input ^ "</h1>" |> ps in*)
+    let url_encoded_input = Encode.devanagari_to_velthuis _url_encoded_input in
+    (*let () = "<h1>" ^ url_encoded_input ^ "</h1>" |> ps in*)
+    let url_encoded_topic = get "topic" env "" (* topic carry-over *)
     and st = get "st" env "t" (* sentence parse default *)
     and us = get "us" env "f" (* sandhied text default *)
     and translit = get "t" env Paths.default_transliteration (* translit input *)
@@ -608,7 +615,7 @@ value graph_engine () = do
                     (decode_url corpus_dir) (decode_url sentence_no) |> pl
      else ()
    ; close_page_with_margin ()
-   ; page_end lang True
+   (*; page_end lang True*)
    } 
    with 
  [ Sys_error s         -> abort lang Control.sys_err_mess s (* file pb *)
@@ -623,7 +630,8 @@ value graph_engine () = do
                           abort lang "Unset button in form - " s
  | Control.Fatal s     -> abort lang Control.fatal_err_mess s (* anomaly *)
  | Control.Anomaly s   -> abort lang Control.anomaly_err_mess s
- | _                   -> abort lang Control.fatal_err_mess "Unexpected anomaly" 
+ | e -> raise e
+ (*| _                   -> abort lang Control.fatal_err_mess "Unexpected anomaly" *)
  ]
  }
 ; 
@@ -632,7 +640,8 @@ value safe_engine () =
   let abor = abort default_language in
   try graph_engine () with  
   [ Failure s -> abor Control.fatal_err_mess s (* [parse_cpts phase_string] ? *)
-  | _ -> abor Control.fatal_err_mess "Unexpected anomaly - broken session" 
+  | e -> raise e
+  (*| _ -> abor Control.fatal_err_mess "Unexpected anomaly - broken session" *)
   ]
 ;
 end (* Interface *)

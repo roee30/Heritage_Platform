@@ -58,9 +58,8 @@ value skt_italics form =
   skt_html form |> italics
 ;
 value skt_anchor1 is_cache form = (* for Declension Conjugation *)
-  let s =  skt_italics form 
-  and url_function = if is_cache then url_cache else url in
-  anchor Navy_ (url_function form) s 
+  let s =  skt_italics form in
+  anchor Navy_ form s
 ;
 value skt_anchor is_cache = 
   skt_anchor1 is_cache (* for Declension, Indexer *)
@@ -86,7 +85,7 @@ value skt_anchor_M word entry page cache =
 ;
 value skt_graph_anchor is_cache form =
   let url_function = if is_cache then url_cache else url in
-  anchor_graph Navy_ (url_function form) (skt_italics form)
+  anchor_graph Navy_ (form) (form)
 ;
 (* This is an alternative to [skt_html] above - some cleaning-up is needed *)
 value skt_utf w = (* do not eta reduce ! *)
@@ -103,16 +102,17 @@ and print_graph_entry w = skt_graph_anchor False (Canon.decode w) |> ps
 and print_graph_cache w = skt_graph_anchor True (Canon.decode w) |> ps
 ;
 
+value dd x = do {ps "XXX"; x};
 (* Used in [Indexer] and [Lemmatizer] *)
 value print_inflected gen word inverse = do
-  { Morpho.print_inv_morpho print_entry print_stem print_chunk word (0,0) 
+  { Morpho.print_inv_morpho print_entry print_stem print_chunk word (0,0)
                             gen inverse 
   ; html_break |> pl
   }
 ;
 (* Used in [Lexer.print_morph] *)
 value print_inflected_link pvs cached = 
-  let print_fun = if cached then print_cache else print_entry in 
+  let print_fun = print_entry in
   Morpho.print_inv_morpho_link pvs print_fun print_stem print_chunk 
 ;
 (* Used in [Interface] to print the lemmas *)
@@ -167,6 +167,8 @@ value print_signifiant rword =
   html_blue (hdecode word) |> ps 
 ;
 (* used in [Lexer.print_segment] with offset indication *)
+
+(*ROEE: prints original word*)
 value print_signifiant_off rword offset = 
   let word = visargify rword in (* visarga form : final s and r visarged *) 
   blue_word_off word offset |> ps

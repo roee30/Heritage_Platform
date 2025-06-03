@@ -134,4 +134,101 @@ and skt_strip_to_deva str = try Canon.unidevcode (code_strip_raw str) with
 value diff_str str w = Word.diff w (code_string str) 
 ;
 (*i end; i*)
+value devanagari_to_velthuis s =
+  let open Uchar in
+  let buf = Buffer.create (String.length s) in
 
+  (* Tables *)
+  let consonant_map = Hashtbl.create 100
+  and vowel_map = Hashtbl.create 20
+  and matra_map = Hashtbl.create 20
+  and special_map = Hashtbl.create 10 in
+
+  let add tbl cp str = Hashtbl.add tbl (Uchar.of_int cp) str in
+
+  do {
+    List.iter (fun (cp, s) -> add vowel_map cp s)
+      [ (0x0905, "a"); (0x0906, "aa"); (0x0907, "i"); (0x0908, "ii");
+        (0x0909, "u"); (0x090A, "uu"); (0x090B, ".r"); (0x0960, ".rr");
+        (0x090C, ".l"); (0x0961, ".ll"); (0x090F, "e"); (0x0910, "ai");
+        (0x0913, "o"); (0x0914, "au") ];
+
+    List.iter (fun (cp, s) -> add consonant_map cp s)
+      [ (0x0915, "k"); (0x0916, "kh"); (0x0917, "g"); (0x0918, "gh"); (0x0919, "\"n");
+        (0x091A, "c"); (0x091B, "ch"); (0x091C, "j"); (0x091D, "jh"); (0x091E, "~n");
+        (0x091F, ".t"); (0x0920, ".th"); (0x0921, ".d"); (0x0922, ".dh"); (0x0923, ".n");
+        (0x0924, "t"); (0x0925, "th"); (0x0926, "d"); (0x0927, "dh"); (0x0928, "n");
+        (0x092A, "p"); (0x092B, "ph"); (0x092C, "b"); (0x092D, "bh"); (0x092E, "m");
+        (0x092F, "y"); (0x0930, "r"); (0x0932, "l"); (0x0935, "v");
+        (0x0936, "\"s"); (0x0937, ".s"); (0x0938, "s"); (0x0939, "h") ];
+
+    List.iter (fun (cp, s) -> add matra_map cp s)
+      [ (0x093E, "aa"); (0x093F, "i"); (0x0940, "ii"); (0x0941, "u"); (0x0942, "uu");
+        (0x0943, ".r"); (0x0944, ".rr"); (0x0962, ".l"); (0x0963, ".ll");
+        (0x0947, "e"); (0x0948, "ai"); (0x094B, "o"); (0x094C, "au") ];
+
+    add special_map 0x0902 ".m";
+    add special_map 0x0903 ".h";
+    add special_map 0x093D "'";
+
+    let decode = Uutf.decoder ~encoding:`UTF_8 (`String s) in
+    let virama = Uchar.of_int 0x094D in
+    let flush_pending pending next = match pending with
+        [ Some c -> if next = Some virama
+        then Buffer.add_string buf c
+        else Buffer.add_string buf (c ^ "a")
+        | None -> () ] in
+    let rec loop pending next = match Uutf.decode decode with
+        [ `Uchar u -> 
+            if Hashtbl.mem vowel_map u 
+            then do {
+                flush_pending pending None;
+                Buffer.add_string buf (Hashtbl.find vowel_map u);
+                loop None None
+            } else if Hashtbl.mem consonant_map u 
+            then do {
+                flush_pending pending None;
+                loop (Some (Hashtbl.find consonant_map u)) (Some u)
+            }
+            else if Hashtbl.mem matra_map u
+            then match pending with
+            [ 
+                Some cons -> do {
+                    Buffer.add_string buf (cons ^ Hashtbl.find matra_map u);
+                    loop None None
+                }
+                | None -> do {
+                    Buffer.add_string buf (Hashtbl.find matra_map u);
+                    loop None None
+                } 
+            ]
+            else if Hashtbl.mem special_map u
+            then do {
+                flush_pending pending None;
+                Buffer.add_string buf (Hashtbl.find special_map u);
+                loop None None
+            } 
+            else if u = virama
+            then do {
+                flush_pending pending (Some virama);
+                loop None None
+            }
+            else do {
+            flush_pending pending None;
+            Uutf.Buffer.add_utf_8 buf u;
+            loop None None
+            }
+
+        | `Malformed _ -> do {
+            flush_pending pending None;
+            Buffer.add_char buf '?';
+            loop None None
+        }
+
+        | `End -> do {
+            flush_pending pending None
+        } 
+        ] in 
+    loop None None;
+    Buffer.contents buf
+};

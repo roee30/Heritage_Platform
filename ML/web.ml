@@ -474,8 +474,8 @@ value corpus_read_only =
 (* NB Interface and Parser have their own prelude. *)
 (* [reader_prelude] is invoked by Parser through Rank and by [Mk_reader_page] *)
 value reader_prelude title = do 
-  { http_header |> pl
-  ; page_begin reader_meta_title 
+  { (*http_header |> pl ; *)
+  page_begin reader_meta_title 
   ; body_begin Chamois_back |> pl
   ; if scl_toggle then (* external call SCL (experimental) *)
        javascript (SCLpaths.scl_url ^ javascript_tooltip) |> pl

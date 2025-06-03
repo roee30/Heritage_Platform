@@ -1,0 +1,3 @@
+[submodule "Heritage_Resources"]
+	path = Heritage_Resources
+	url = https://gitlab.inria.fr/huet/Heritage_Resources.git

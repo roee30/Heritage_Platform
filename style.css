@@ -1,0 +1,122 @@
+a:link {color: Blue}
+a:visited {color: Purple}
+a:active {color: Fuchsia}
+img {border: 0}
+li {font-family: IndUni-T,Arial Unicode MS; color:#0000FF; font-size:12pt}
+a.blue {font-family: IndUni-T,Arial Unicode MS; color:#0000FF}
+a.green {font-family: IndUni-T,Arial Unicode MS; color:#008000}
+a.navy {font-family: IndUni-T,Arial Unicode MS; color:#000080}
+a.red {font-family: IndUni-T,Arial Unicode MS; color:#FF0000}
+h1.title {font-family: IndUni-T,Arial Unicode MS; color:#0000FF; font-size:24pt; text-align:center}
+h1.c1 {font-family: IndUni-T,Arial Unicode MS; color:#0000FF; font-size:20pt; text-align:center}
+h2.c2 {font-family: IndUni-T,Arial Unicode MS; color:#0000FF; font-size:16pt; text-align:center}
+h3.c3 {font-family: IndUni-T,Arial Unicode MS; color:#0000FF; font-size:12pt; text-align:center}
+h1.b1 {font-family: IndUni-T,Arial Unicode MS; color:#0000FF; font-size:20pt}
+h2.b2 {font-family: IndUni-T,Arial Unicode MS; color:#0000FF; font-size:16pt}
+h3.b3 {font-family: IndUni-T,Arial Unicode MS; color:#0000FF; font-size:12pt}
+p.g2 {font-family: IndUni-T,Arial Unicode MS; color:#008000; font-size:16pt}
+div.latin12 {font-family: IndUni-T,Arial Unicode MS; color:#000000; font-size:12pt}
+div.latin16 {font-family: IndUni-T,Arial Unicode MS; color:#000000; font-size:16pt}
+div.enpied {position: fixed; bottom: 0pt; width: 100%}
+div.center {text-align:center}
+span.alphabet {font-family: IndUni-T,Arial Unicode MS; font-size:24pt; text-align:center}
+span.deva {font-family: Arial Unicode MS; color:#800000; font-size:12pt}
+span.trans12 {font-family: IndUni-T,Arial Unicode MS; font-size:12pt}
+span.devared {font-family: Arial Unicode MS; color:#FF0000}
+span.red {font-family: IndUni-T,Arial Unicode MS; color:#FF0000}
+span.red16 {font-family: IndUni-T,Arial Unicode MS; color:#FF0000; font-size:16pt; font-style: oblique}
+span.magenta {font-family: IndUni-T,Arial Unicode MS; color:#FF00FF}
+span.blue {font-family: IndUni-T,Arial Unicode MS; color:#0000FF}
+span.green {font-family: IndUni-T,Arial Unicode MS; color:#008000}
+span.latin12 {font-family: IndUni-T,Arial Unicode MS; color:#000000; font-size:12pt}
+span.latin16 {font-family: IndUni-T,Arial Unicode MS; color:#000000; font-size:16pt}
+span.trans16 {font-family: IndUni-T,Arial Unicode MS; color:#000000; font-size:16pt}
+span.title {font-family: IndUni-T,Arial Unicode MS; color:#0000FF; font-size:24pt; text-align:center}
+span.c1 {font-family: IndUni-T,Arial Unicode MS; color:#0000FF; font-size:20pt; text-align:center}
+span.c2 {font-family: IndUni-T,Arial Unicode MS; color:#0000FF; font-size:16pt; text-align:center}
+span.c3 {font-family: IndUni-T,Arial Unicode MS; color:#0000FF; font-size:12pt; text-align:center}
+span.deva20c {font-family: Arial Unicode MS; color:#0000FF; font-size:20pt; text-align:center}
+span.b1 {font-family: IndUni-T,Arial Unicode MS; color:#0000FF; font-size:20pt}
+span.b2 {font-family: IndUni-T,Arial Unicode MS; color:#0000FF; font-size:16pt}
+span.b3 {font-family: IndUni-T,Arial Unicode MS; color:#0000FF; font-size:12pt}
+span.header_deva {font-family: Arial Unicode MS; color:#FF0000; font-size:24pt; text-align:left}
+span.math {font-family: Arial Unicode MS,Symbol; color:#000000; font-size:12pt}
+span.devac {font-family: Arial Unicode MS; color:#0000FF; font-size:12pt; text-align:center}
+span.header_tran {font-family: IndUni-T,Arial Unicode MS; color:#FF0000; font-size:24pt; text-align:left}
+span.deva16 {font-family: Arial Unicode MS; color:#0000FF; font-size:16pt}
+span.deva16c {font-family: Arial Unicode MS; color:#0000FF; font-size:16pt; text-align:center}
+body.mauve_back {background-color:#FF99FF}
+body.pink_back {background-color:#FFDDDD; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt}
+body.chamois_back {background-color:#F5F5DC; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; width:100%}
+table.bandeau {font-family: IndUni-T,Arial Unicode MS; background-color:#00FFFF; border-collapse:separate; border-spacing:10pt; width:100%}
+table.center {text-align:center}
+table.body {font-family: IndUni-T,Arial Unicode MS; background-color:#FFDDDD; border-collapse:separate; border-spacing:10pt; width:100%}
+table.pad60 {text-align:center; height:60pt; width:100%}
+table.yellow_back {background-color:#FFFF00}
+table.yellow_cent {background-color:#FFFF00; margin:0 auto; border: outset 5pt; padding:10pt}
+table.deep_sky_cent {background-color:#00C0FF; margin:0 auto; border: outset 5pt; padding:10pt}
+table.gris_back {background-color:#E2E6E9}
+table.gris_cent {background-color:#E2E6E9; margin:0 auto; border: outset 5pt; padding:10pt}
+table.aquamarine_back {background-color:#6FFFC3}
+table.mauve_back {background-color:#FF99FF}
+table.magenta_back {background-color:#FF00FF}
+table.mauve_cent {background-color:#FF99FF; margin:0 auto; border: outset 8pt; padding:10pt}
+table.cyan_back {background-color:#00FFFF}
+table.cyan_cent {background-color:#00FFFF; margin:0 auto; border: outset 5pt; padding:10pt}
+table.lavender_cent {background-color:#E6E6FA; margin:0 auto; border: outset 5pt; padding:10pt}
+table.gold_back {background-color:#A58959}
+table.gold_cent {background-color:#A58959; margin:0 auto; border: outset 0pt; padding:10pt}
+table.inflexion {background-color:#ADD8E6; margin:0 auto; border: outset 2pt; padding:5pt}
+table.chamois_back {background-color:#F5F5DC; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; width:100%}
+table.blue_back {background-color:#0000FF}
+table.green_back {background-color:#008000}
+table.brown_back {background-color:#A02820; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; padding:10pt; width:100%}
+table.lime_back {background-color:#00FF00}
+table.deep_sky_back {background-color:#00C0FF}
+table.carmin_back {background-color:#FF1975}
+table.orange_back {background-color:#FFA000}
+table.red_back {background-color:#FF0000}
+table.grey_back {background-color:#B8B8B8}
+table.pink_back {background-color:#FFDDDD; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt}
+table.spacing20 {border-collapse:separate; border-spacing:20pt}
+table.light_blue_back {background-color:#ADD8E6}
+table.lavender_back {background-color:#E6E6FA}
+table.lawngreen_back {background-color:#66FF99}
+td.yellow_back {background-color:#FFFF00}
+td.yellow_cent {background-color:#FFFF00; margin:0 auto; border: outset 5pt; padding:10pt}
+td.deep_sky_cent {background-color:#00C0FF; margin:0 auto; border: outset 5pt; padding:10pt}
+td.gris_back {background-color:#E2E6E9}
+td.gris_cent {background-color:#E2E6E9; margin:0 auto; border: outset 5pt; padding:10pt}
+td.aquamarine_back {background-color:#6FFFC3}
+td.mauve_back {background-color:#FF99FF}
+td.magenta_back {background-color:#FF00FF}
+td.mauve_cent {background-color:#FF99FF; margin:0 auto; border: outset 8pt; padding:10pt}
+td.cyan_back {background-color:#00FFFF}
+td.cyan_cent {background-color:#00FFFF; margin:0 auto; border: outset 5pt; padding:10pt}
+td.lavender_cent {background-color:#E6E6FA; margin:0 auto; border: outset 5pt; padding:10pt}
+td.gold_back {background-color:#A58959}
+td.gold_cent {background-color:#A58959; margin:0 auto; border: outset 0pt; padding:10pt}
+td.inflexion {background-color:#ADD8E6; margin:0 auto; border: outset 2pt; padding:5pt}
+td.chamois_back {background-color:#F5F5DC; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; width:100%}
+td.blue_back {background-color:#0000FF}
+td.green_back {background-color:#008000}
+td.brown_back {background-color:#A02820; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt; padding:10pt; width:100%}
+td.lime_back {background-color:#00FF00}
+td.deep_sky_back {background-color:#00C0FF}
+td.carmin_back {background-color:#FF1975}
+td.orange_back {background-color:#FFA000}
+td.red_back {background-color:#FF0000}
+td.grey_back {background-color:#B8B8B8}
+td.pink_back {background-color:#FFDDDD; margin-left: 0pt; margin-right: 0pt; margin-top: 0pt}
+td.spacing20 {border-collapse:separate; border-spacing:20pt}
+td.light_blue_back {background-color:#ADD8E6}
+td.lavender_back {background-color:#E6E6FA}
+td.lawngreen_back {background-color:#66FF99}
+th.cell5 {padding:5pt}
+th.cell10 {padding:10pt}
+th.border2 {border: outset 2pt}
+td.center {text-align:center}
+table.centered {margin:0 auto}
+table.center {margin:0 auto}
+.hidden {display: none}
+#popBox { position: absolute; z-index: 2; background: #FF99FF; padding: 0.3em; border: none; white-space: nowrap; }

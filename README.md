@@ -26,7 +26,10 @@ If `install.ps1` does not work, Enter Edit > Dictionaries > Programs, press Add,
 All set!
 
 ## Linux
-Requirements: python, opam
+Requirements: 
+- python
+- opam
+- opam packages: camlp4 camlp-streams uutf
 
 Install opam, with it install OCaml 4.07.1 and required packages, and make:
 ```bash
@@ -35,6 +38,14 @@ opam install camlp4 uutf camlp-streams
 make new
 ```
 
-The resulting binary is located in ML/interface. 
+The resulting binary is located in `ML/interface`. 
 
 Then, follow the instructions for manual Windows installation, replacing `arg.ps1` with `arg.sh`.
+
+# Building
+## Windows
+```
+docker run -it --rm -v .:c:\src -w c:\src make
+```
+## Linux
+See Installation > Linux

@@ -2,6 +2,7 @@ param([string]$text)
 [Console]::InputEncoding = [System.Text.UTF8Encoding]::new()
 [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
 
+$ErrorActionPreference = "Stop"
 # Ensure script runs in its directory
 Set-Location -LiteralPath $PSScriptRoot
 

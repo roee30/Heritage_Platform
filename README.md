@@ -12,7 +12,7 @@ Released under the original packages' LGPL license.
 ## Windows
 
 ### Automatic
-Just download the zip from releases, unzip it anywhere, and run `install.ps1` from the command line.
+Download `sanskrit-assistant.zip` from [releases](https://github.com/roee30/Heritage_Platform/releases), unzip it anywhere, and run `install.ps1` from the command line.
 This will modify your GoldenDict configuration file to run Sanskrit analysis on selected words.
 
 

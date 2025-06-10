@@ -20,7 +20,7 @@ value is_vowel c = vowel c || avagraha c
 ;
 (* anusvara substituted by nasal or normalized to 14 when original *)
 (* anunaasika after vowels treated as anusvaara *)
-value rec normalize = normal_rec False
+value rec normalize: (Word.word -> Word.word) = normal_rec False
   where rec normal_rec after_vow = fun
   [ [] -> []
   | [ 14 (* .m *) ] -> [ 14 ] (* and NOT m *)
@@ -56,7 +56,7 @@ and   code_skt_ref   str = normalize (code_rawu str) (* with upper letters *)
 and   code_skt_ref_d str = normalize (code_rawd str) (* no diacritics *)
 ;
 (* Switching code function according to transliteration convention *)
-value switch_code = fun (* normalizes anusvaara in its input *)
+value switch_code: (string -> string -> Word.word) = fun (* normalizes anusvaara in its input *)
   [ "VH" -> code_string    (* [Canon.decode]    *)
   | "WX" -> code_string_WX (* [Canon.decode_WX] *)
   | "KH" -> code_string_KH (* [Canon.decode_KH] *)
@@ -134,7 +134,7 @@ and skt_strip_to_deva str = try Canon.unidevcode (code_strip_raw str) with
 value diff_str str w = Word.diff w (code_string str) 
 ;
 (*i end; i*)
-value devanagari_to_velthuis s =
+value devanagari_to_velthuis (s: string): string =
   let open Uchar in
   let buf = Buffer.create (String.length s) in
 

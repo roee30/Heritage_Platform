@@ -83,19 +83,20 @@ value skt_anchor_M word entry page cache =
                      word ^ "#" ^ (String.sub entry pos 1) in
   anchor_mw (skt_italics vocable)
 ;
-value skt_graph_anchor is_cache form =
-  let url_function = if is_cache then url_cache else url in
-  anchor_graph Navy_ (form) (form)
-;
 (* This is an alternative to [skt_html] above - some cleaning-up is needed *)
-value skt_utf w = (* do not eta reduce ! *)
+value skt_utf (w: Word.word) = (* do not eta reduce ! *)
   match sanskrit_font.val with 
   [ Deva -> Canon.unidevcode w
   | Roma -> Canon.uniromcode w
   ]
 ;
+value skt_graph_anchor is_cache (form: string) =
+  let url_function = if is_cache then url_cache else url
+  and encode = Encode.switch_code "VH" in
+  anchor_graph Navy_ (form) (skt_utf (encode form))
+;
 value print_stem w = skt_utf w |> ps (* w in lexicon or not *)
-and print_chunk w = skt_utf w |> ps
+and print_chunk (w: Word.word) = skt_utf w |> ps
 and print_entry w = skt_anchor False (Canon.decode w) |> ps (* w in lexicon *)
 and print_cache w = skt_anchor True (Canon.decode w) |> ps
 and print_graph_entry w = skt_graph_anchor False (Canon.decode w) |> ps
@@ -126,7 +127,7 @@ value print_graph_link pvs cached =
    etc. For this reason the morphological tables do not keep forms in terminal 
    sandhi, and distinguish forms ended in -as and -ar.
    It should not be applied to stems, only to padas *)
-value visargify rw = Word.mirror
+value visargify (rw: Word.word): Word.word = Word.mirror
   (match rw with
       [ [ 48 (* s *) :: r ] | [ 43 (* r *) :: r ] -> [ 16 (* .h *) :: r ] 
       | _ -> rw
@@ -134,7 +135,7 @@ value visargify rw = Word.mirror
 ;
 value final w = visargify (Word.mirror w) (* Declension, Conjugation *)
 ; 
-value print_final rw = print_chunk (visargify rw) (* Interface *)
+value print_final (rw: Word.word): unit = print_chunk (visargify rw) (* Interface *)
 ;
 value hdecode word = 
   (* [Transduction.skt_to_html (Canon.decode word)] assumes Roma style (IAST) *)

@@ -762,7 +762,7 @@ and matra_unicode c =
 (* Gives the Unicode representation of devanagari form of word;          *)
 (* ligature construction is left to the font manager handling of halant. *)
 (* [unidevcode : word -> string] *)
-value unidevcode word = 
+value unidevcode (word: Word.word): string = 
   let ligature (s,b) c = (* b memorizes whether last char is consonant *)
      try let code = deva_unicode c in
          if c>16 && c<50 (* Phonetics.consonant c *) then 

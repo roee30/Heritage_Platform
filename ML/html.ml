@@ -616,6 +616,7 @@ value anchor_def label link =
 value anchor_define cl label link =
   (elt_begin_attrs [ ("name",label) ] "a" cl) ^ link ^ (xml_end "a")
 ;
+(*root dictionary link*)
 value anchor_graph cl url link =
   "<a href=\"" ^ url ^ "\">" ^ link ^ "</a>"
 ; (* NB: use [&quot;] and not quote sign for Javascript *)

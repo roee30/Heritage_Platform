@@ -114,7 +114,7 @@ end = struct
     | _ -> Velthuis
     ]
   ;
-  value encode encoding = encoding |> to_string |> Encode.switch_code
+  value encode (encoding: t): (string -> Word.word) = encoding |> to_string |> Encode.switch_code
   ;
   value decode = fun
   [ Velthuis | WX | KH | SLP1 as encoding ->

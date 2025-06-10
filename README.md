@@ -7,12 +7,25 @@ the repo itself.
 
 Released under the original packages' LGPL license.
 
+# For dummies on Windows
+1. Download and run the GoldenDict 32-bit Windows installer [here](http://goldendict.org/download.php)
+1. Recommended: install the Heritage Project's GoldenDict files
+    1. Download all tar archives linked in the bottom of [this page](https://sanskrit.inria.fr/goldendict.html)
+    1. Extract all archives in the same directory of your choice
+    1. In GoldenDict, go to Edit > Dictionaries > Sources > Files > Add, paste the directory path, and mark Recursive
+1. Download `sanskrit-assistant.zip` from [releases](https://github.com/roee30/Heritage_Platform/releases), unzip it anywhere, and run `install.exe`.
+This will modify your GoldenDict configuration file to run Sanskrit analysis on selected words.
+1. Select any Sanskirt word (in devanagari) and Press Ctrl+c twice. You should see something like this:
+![Image](https://github.com/user-attachments/assets/b59ff27b-1a9d-4407-8c87-0df9b3c8c79e)
+Hover on sandhi suggestions to show morphological analysis and dictionary entry link.
+
 # Installation
 
 ## Windows
 
 ### Automatic
-Download `sanskrit-assistant.zip` from [releases](https://github.com/roee30/Heritage_Platform/releases), unzip it anywhere, and run `install.ps1` from the command line.
+Download `sanskrit-assistant.zip` from [releases](https://github.com/roee30/Heritage_Platform/releases), unzip it anywhere, 
+and run `install.exe` (by double clicking) or `install.ps1` (from the command line).
 This will modify your GoldenDict configuration file to run Sanskrit analysis on selected words.
 
 
@@ -21,7 +34,8 @@ If `install.ps1` does not work, Enter Edit > Dictionaries > Programs, press Add,
 1. Check the `enabled` box
 1. Select `type`: `HTML`
 1. Name: `heritage`
-1. Command line: `powershell -file Path\To\Heritage_Platform\arg.ps1 %GDWORD%`, where `Path\To` is replaced by your unzip location.
+1. Command line: `powershell -ExecutionPolicy Unrestricted -file "Path\To\sanskrit-assistant\arg.ps1" "%GDWORD%"`, where `Path\To` is replaced by the path of
+the directory of the extracted archive.
 
 All set!
 

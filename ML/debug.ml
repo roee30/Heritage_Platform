@@ -188,6 +188,7 @@ parse "[S [INJ haa ] [ADV katham ] [NP1s [NP6 vi.s.no.h ]
 *)
 *)
 *)
+(* value const_debug = True; *)
 value const_debug = False;
 value decode word = List2.implode (List.map char_of_int word);
 value _debug x = if const_debug then print_endline ("\nDEBUG: " ^ x) else ();

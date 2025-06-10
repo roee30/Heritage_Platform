@@ -23,6 +23,7 @@ open Dispatcher; (* [transducer_vect Dispatch transition trim_tags] *)
 open Html; (* html constructors, escape *)
 open Web; (* [ps pl abort reader_cgi scl_toggle] etc. *) 
 open Cgi; (* [url get decode_url] *)
+open Debug;
 
 module Prel = struct (* Interface's lexer prelude *)
 
@@ -94,6 +95,12 @@ value print_tags pvs seg_num phase form tags =
   (* NB Existence of the segment warrants that [ok_tags] is not empty *)
   and ptag = print_morph pvs seg_num cached gen form in 
   fold_vert ptag ok_tags 
+;
+value ps s = output_string Web.output_channel.val s 
+; 
+value pl s = s ^ "\n" |> ps
+;
+value pr_word w = Canon.decode w |> ps
 ;
 (* This is called "printing morphology interface style". *)
 value print_morpho phase word = 
@@ -256,7 +263,7 @@ value rec find_conflict_seg acc l = fun
       find_conflict_seg [ seg_here :: acc ] l rest
   ]
 ;
-value rec find_conflict l = match visual.(l) with
+value rec find_conflict (l: int) = match visual.(l) with
   [ [] -> ()
   | segs -> do 
     { visual_conf.(l) := find_conflict_seg [] l segs
@@ -265,7 +272,7 @@ value rec find_conflict l = match visual.(l) with
   ]
 ;
 value make_visual n = vrec 0 
-  where rec vrec k = do
+  where rec vrec (k: int) = do
     { build_visual k graph.(k)
     ; if k = n-1 then () else vrec (succ k)
     } 
@@ -319,9 +326,8 @@ value rec print_all text cpts chunks index = match chunks with
       }
   ]
 ;
-open Debug;
-value print_word last_ind text cpts (rword,phase,k,conflict) = 
-  let word = Word.mirror rword in do
+value print_word last_ind text cpts ((rword: Word.word),phase,k,conflict) = 
+  let (word: Word.word) = Word.mirror rword in do
   { let extra_space = k-last_ind in 
     if extra_space > 0 then print_extra extra_space else ()
 (*i ZZ following not implementable with a fixed css -- not HTML5 compliant i*)
@@ -355,17 +361,21 @@ value print_row text cpts =  print_this text cpts 0
   [ [] -> let adjust = max_col.val - last_ind in
           if adjust > 0 then print_extra adjust else ()
   | [ (word,phase,k,conflict) :: rest ] -> do 
-      { print_word last_ind text cpts (word,phase,k,conflict)
+      { _debug "print_word2 {{{"
+      ; print_word last_ind text cpts (word,phase,k,conflict)
+      ; _debug "print_word2 }}}"
       ; print_this text cpts (k + seg_length word) rest
       }
   ]
 ;
 value print_interf text cpts () = vgrec 0 
-  where rec vgrec k = 
+  where rec vgrec (k: int) = 
   match visual_width.(k) with
   [ 0 -> ()
   | _ -> do
     { tr_begin |> ps
+    (*visual_conf: (Word.word * Phases.Phases.phase * int * bool) list*)
+    ; _debug (string_of_int (List.length visual_conf.(k)))
     ; print_row text cpts visual_conf.(k) 
     ; tr_end |> ps
     ; vgrec (succ k)
@@ -507,9 +517,9 @@ value graph_engine () = do
        text topic st us t lex font cache abs cpts (standard mode) 
        corpdir sentno corpmode (defined in Params) 
        guess gender revised [rev_off] [rev_ind] (User-aid) *)
-    let _url_encoded_input = get "text" env "" in
+    let _url_encoded_input: string = get "text" env "" in
     (*let () = "<h1>" ^ _url_encoded_input ^ "</h1>" |> ps in*)
-    let url_encoded_input = Encode.devanagari_to_velthuis _url_encoded_input in
+    let url_encoded_input: string = Encode.devanagari_to_velthuis _url_encoded_input in
     (*let () = "<h1>" ^ url_encoded_input ^ "</h1>" |> ps in*)
     let url_encoded_topic = get "topic" env "" (* topic carry-over *)
     and st = get "st" env "t" (* sentence parse default *)
@@ -525,7 +535,7 @@ value graph_engine () = do
     and () = cache_active.val := cache 
     and abs = get "abs" env "f" (* default local paths *) in 
     let lang = language_of_string lex (* lexicon indexing choice *)
-    and input = decode_url url_encoded_input (* unnormalized string *)
+    and input: string = decode_url url_encoded_input (* unnormalized string *)
     and uns = us="t" (* unsandhied vs sandhied corpus *) 
     and () = if st="f" then Lexer_control.star.val:=False 
              else () (* word vs sentence stemmer *)
@@ -540,7 +550,7 @@ value graph_engine () = do
     and sentence_no = get Params.sentence_no env "" in
     let undo_enabled = sentence_no = "" (* no undo in Reader corpus mode *)
                     || corpus_permission <> Web_corpus.Reader in
-    let text = arguments translit lex font cache st us url_encoded_input
+    let text: string = arguments translit lex font cache st us url_encoded_input
                          url_encoded_topic abs 
                          url_enc_corpus_permission corpus_dir sentence_no
     and checkpoints = 
@@ -594,8 +604,11 @@ value graph_engine () = do
        and new_text = arguments translit lex font cache st us updated_input
                                 url_encoded_topic abs 
                                 url_enc_corpus_permission corpus_dir sentence_no
-       and new_input = decode_url updated_input in
-       check_sentence translit uns new_text revised_check new_input undo_enabled
+        and new_input = decode_url updated_input in do {
+       _debug "check_sentence {{{"
+       ; check_sentence translit uns new_text revised_check new_input undo_enabled
+       ; _debug "check_sentence }}}"
+        }
      ]
      (* Rest of the code concerns Corpus mode *)
      (* automatically refreshing the page only if guess parameter *)
@@ -642,8 +655,9 @@ value safe_engine () =
   (* Problem: in case of error, we lose the current language of the session *)
   let abor = abort default_language in
   try graph_engine () with  
-  [ Failure s -> abor Control.fatal_err_mess s (* [parse_cpts phase_string] ? *)
-  | e -> raise e
+  [ 
+      (* Failure s -> abor Control.fatal_err_mess s (* [parse_cpts phase_string] ? *) |  *)
+      e -> raise e
   (*| _ -> abor Control.fatal_err_mess "Unexpected anomaly - broken session" *)
   ]
 ;

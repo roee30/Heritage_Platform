@@ -617,7 +617,7 @@ value anchor_define cl label link =
   (elt_begin_attrs [ ("name",label) ] "a" cl) ^ link ^ (xml_end "a")
 ;
 value anchor_graph cl url link =
-  "<a href=&quot;" ^ url ^ "&quot;>" ^ link ^ "</a>"
+  "<a href=\"" ^ url ^ "\">" ^ link ^ "</a>"
 ; (* NB: use [&quot;] and not quote sign for Javascript *)
 value anchor_begin = xml_begin_with_att "a" [ ("class", "navy") ]
 ;

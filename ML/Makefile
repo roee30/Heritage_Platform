@@ -227,17 +227,24 @@ bank_lexer.cmx scl_parser.cmx checkpoints.cmx reader.cmx -o reader
 LEGACY=
 # LEGACY= nums.cmxa 
 
-interface: interface.cmx minimap.cmx
-	$(LINK) str.cmxa unix.cmxa list2.cmx gen.cmx paths.cmx version.cmx \
-date.cmx control.cmx word.cmx canon.cmx min_lexer.cmx phonetics.cmx \
-transduction.cmx encode.cmx skt_lexer.cmx chunker.cmx sanskrit.cmx deco.cmx \
-lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx web.cmx naming.cmx \
-morpho_string.cmx morpho.cmx load_transducers.cmx pada.cmx phases.cmx \
-dispatcher.cmx order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx \
-load_morphs.cmx int_sandhi.cmx nouns.cmx share.cmx minimap.cmx mini.cmx \
-graph_segmenter.cmx checkpoints.cmx automaton.cmx params.cmx \
-save_corpus_params.cmx dir.cmx corpus.cmx web_corpus.cmx interface.cmx \
--o interface
+only:
+	ocamlopt -pp "camlp4rf" -I C:/opam/.opam/4.14/lib/uutf -I +camlp4 -I ../Zen/ML -I . -c \
+		-annot -bin-annot interface.ml
+	ocamlopt -I C:/opam/.opam/4.14/lib/uutf -I +camlp4 -I ../Zen/ML dynlink.cmxa \
+		camlp4lib.cmxa uutf.cmxa str.cmxa unix.cmxa \
+	list2.cmx debug.cmx gen.cmx paths.cmx version.cmx \
+	date.cmx control.cmx word.cmx canon.cmx min_lexer.cmx phonetics.cmx \
+	transduction.cmx encode.cmx skt_lexer.cmx chunker.cmx sanskrit.cmx deco.cmx \
+	lexmap.cmx inflected.cmx html.cmx SCLpaths.cmx data.cmx web.cmx naming.cmx \
+	morpho_string.cmx morpho.cmx load_transducers.cmx pada.cmx phases.cmx \
+	dispatcher.cmx order.cmx chapters.cmx morpho_html.cmx bank_lexer.cmx cgi.cmx \
+	load_morphs.cmx int_sandhi.cmx nouns.cmx share.cmx minimap.cmx mini.cmx \
+	graph_segmenter.cmx checkpoints.cmx automaton.cmx params.cmx \
+	save_corpus_params.cmx dir.cmx corpus.cmx web_corpus.cmx interface.cmx \
+	-o interface
+	cp interface interface.exe
+
+interface: interface.cmx minimap.cmx debug.cmx only
 
 user_aid: user_aid.cmx
 	$(LINK) str.cmxa list2.cmx gen.cmx paths.cmx version.cmx date.cmx \

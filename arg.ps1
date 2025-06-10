@@ -21,7 +21,8 @@ $processed = $text
 
 # Set QUERY_STRING and run interface
 $env:QUERY_STRING = "t=VH&text=$processed"
-$interfaceOutput = (& .\interface0.exe)
+$interfaceOutput = (& ML\interface.exe)
+# echo $interfaceOutput; exit 1
 
 # Read style files
 $style = Get-Content -Raw style.css,tooltip.css

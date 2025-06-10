@@ -62,6 +62,7 @@ value dd x = do {ps "XXX"; x};
 (* The following print functions insert in the HTML output links to entries 
    in the lexicon, also radio buttons and other marks for user choices. *)
 
+open Debug;
 (* [pe : word -> unit] is [Morpho_html.print_entry] with hyperlink,
    [pne : word -> unit] is [Morpho_html.print_stem],
    [pu : word -> unit] prints un-analysed chunks. *)

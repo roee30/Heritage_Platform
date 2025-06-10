@@ -319,6 +319,7 @@ value rec print_all text cpts chunks index = match chunks with
       }
   ]
 ;
+open Debug;
 value print_word last_ind text cpts (rword,phase,k,conflict) = 
   let word = Word.mirror rword in do
   { let extra_space = k-last_ind in 
@@ -333,10 +334,12 @@ value print_word last_ind text cpts (rword,phase,k,conflict) =
   ; "<td class='tooltip'>" |> ps
   ; Morpho_html.print_final rword (* visarga correction *)
   ; ps "<span class='tooltiptext'>"
+  ; _debug "print_word {{{"
   ; print_morpho phase word 
-  ; let close_box = 
-        "<a>" ^ x_sign ^ "</a>" in 
-    close_box |> ps
+  ; _debug "print_word }}}"
+  (* ; let close_box =  *)
+  (*       "<a>" ^ x_sign ^ "</a>" in  *)
+  (*   close_box |> ps *)
   ; ps "</span>"
   ; td_end |> ps
   ; tr_end |> ps

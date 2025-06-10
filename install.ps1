@@ -16,7 +16,7 @@ if (!(test-path $config)) {
 }
 $x=[xml](get-content $config)
 $name='heritage'
-$node=[xml]"<program commandLine=`"powershell -file $dir\arg.ps1 %GDWORD%`" enabled=`"1`" icon=`"`" id=`"$name`" name=`"$name`" type=`"2`"/>"
+$node=[xml]"<program commandLine=`"powershell -file &quot;$dir\arg.ps1&quot; &quot;%GDWORD%&quot;`" enabled=`"1`" icon=`"`" id=`"$name`" name=`"$name`" type=`"2`"/>"
 $x.GetElementsByTagName('programs').AppendChild($x.ImportNode($node.DocumentElement, $true)) | ignore
 $x.save($config)
 echo 'config update success'

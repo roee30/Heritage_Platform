@@ -15,15 +15,15 @@
 (* debugging context building - to adapt according to needs *)
 (* call with "make debug" to get interactive Ocaml loop and text *)
 
-#load "../ZEN/list2.cmo"; 
-#load "../ZEN/gen.cmo";
+#load "../ZEN/Ml/list2.cmo"; 
+#load "../ZEN/Ml/gen.cmo";
 open Gen;
-#load "../ZEN/word.cmo"; open Word;
-#load "../ZEN/share.cmo";    
-#load "../ZEN/trie.cmo";    
-#load "../ZEN/deco.cmo"; open Deco;   
-#load "../ZEN/lexmap.cmo"; open Lexmap;   
-#load "../ZEN/zen_lexer.cmo";  
+#load "../ZEN/Ml/word.cmo"; open Word;
+#load "../ZEN/Ml/share.cmo";    
+#load "../ZEN/Ml/trie.cmo";    
+#load "../ZEN/Ml/deco.cmo"; open Deco;   
+#load "../ZEN/Ml/lexmap.cmo"; open Lexmap;   
+#load "../ZEN/Ml/zen_lexer.cmo";  
 
 #load "paths.cmo"; 
 #load "version.cmo";
@@ -42,8 +42,8 @@ open List;
 
 #load "data.cmo";
 
-#load "automaton.cmo"; 
-open Automaton;
+(* #load "automaton.cmo";  *)
+(* open Automaton; *)
 
 (* 
 #load "min_lexer.cmo"; 
@@ -132,7 +132,7 @@ print_string "done";
 
 (* Morpho debug 
 
-(* #load "../ZEN/mini.cmo"; *)
+(* #load "../ZEN/Ml/mini.cmo"; *)
 (* #load "make_inflected.cmo"; open Make_inflected; -- costly *)
 (* #load "morpho_debug.cmo"; open Morpho_debug; *)
 
@@ -188,3 +188,7 @@ parse "[S [INJ haa ] [ADV katham ] [NP1s [NP6 vi.s.no.h ]
 *)
 *)
 *)
+value const_debug = False;
+value decode word = List2.implode (List.map char_of_int word);
+value _debug x = if const_debug then print_endline ("\nDEBUG: " ^ x) else ();
+value debug x = if const_debug then _debug (decode x) else ();

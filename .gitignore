@@ -82,3 +82,5 @@ SITE/xml.html
 # Mechanically OCaml generated files from ZEN/example.aut
 ZEN/example_dispatch.ml
 ZEN/sanskrit_dispatch.ml
+_build
+.vscode

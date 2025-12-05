@@ -36,6 +36,9 @@ module Interface =
     (* [url get decode_url] *)
     open Debug
       
+    let ps s = output_string !Web.output_channel s
+      
+    let pl s = (s ^ "\n") |> ps
     module Prel =
       struct
         (* Interface's lexer prelude *)
@@ -121,9 +124,6 @@ module Interface =
         ptag = print_morph pvs seg_num cached gen form
       in fold_vert ptag ok_tags
       
-    let ps s = output_string !Web.output_channel s
-      
-    let pl s = (s ^ "\n") |> ps
       
     let pr_word w = (Canon.decode w) |> ps
       

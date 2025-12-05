@@ -125,7 +125,7 @@ let int_input ?id ?value ?(step = 1) ?(min = min_int) ?(max = max_int) name =
     [ ("type", "number"); ("name", name); ("step", (string_of_int step));
       ("min", (string_of_int min)); ("max", (string_of_int max)) ] in
   let opt_attrs =
-    [ ("id", id); ("value", (Gen.opt_app string_of_int contents)) ] in
+    [ ("id", id); ("value", (Gen.opt_app string_of_int value)) ] in
   let attrs = add_opt_attrs opt_attrs attrs
   in xml_empty_with_att "input" attrs
   

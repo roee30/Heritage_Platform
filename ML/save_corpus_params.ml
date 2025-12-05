@@ -6,10 +6,10 @@
 (*                                                                        *)
 (* ©2017 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
+let state = "state"
+  
+let force = "force"
+  
+let nb_sols = "nbsols"
+  
 
-value state = "state"
-;
-value force = "force"
-;
-value nb_sols = "nbsols"
-;

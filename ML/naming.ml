@@ -6,13 +6,9 @@
 (*                                                                        *)
 (* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
-
 (* Unique naming mechanism. *)
-
 (*i module Naming = struct i*)
-
 (* Kridanta names management: namespace data structures *)
-
 (* The problem is to find the lexical entry, if any, that matches a stem
    and an etymology, corresponding to the morphological structure of a
    generated stem. For instance entry "k.rta" has etymology pp(k.r\#1). 
@@ -28,43 +24,44 @@
    generator from Inflected extends it as [unique_kridantas], accessed as
    [Inflected.acccess_krid] and [Inflected.register_krid], and used
    by [Parts.gen_stem]. *)
-
 (* Unique naming of kridantas *)
 (* associates to a pair (verbal,root) a homophony index for unique naming *)
-type homo_krid = ((Skt_morph.verbal * Word.word) * int)
-and deco_krid = Deco.deco homo_krid
-;
-value homo_undo w = Encode.decompose (Word.mirror w)
-;
-value look_up_homo homo = look_rec
-  where rec look_rec = fun
-  [ [] -> failwith "look_up_homo" 
-  | [ (morpho,n) :: rest ] -> if n=homo then morpho else look_rec rest
-  ] 
-;
-value err e message = failwith (message ^ Printexc.to_string e);
-value unique_kridantas =  
-  try (Gen.gobble Data.public_unique_kridantas_file : deco_krid) 
-  with [ e -> do {
-    prerr_endline ("[unique_kridantas] EXCEPTION: " ^ Printexc.to_string e);
-    Printexc.print_backtrace stderr;
-    exit 1
-  } ]
-and lexical_kridantas =  
-  try (Gen.gobble Data.public_lexical_kridantas_file : deco_krid) 
-  with [ e -> failwith ("lexical_kridantas :" ^ Printexc.to_string e)] 
-;
+type homo_krid =
+  ((Skt_morph.verbal * Word.word) * int)
+  and deco_krid =
+  homo_krid Deco.deco
+
+let homo_undo w = Encode.decompose (Word.mirror w)
+  
+let look_up_homo homo =
+  let rec look_rec =
+    function
+    | [] -> failwith "look_up_homo"
+    | (morpho, n) :: rest -> if n = homo then morpho else look_rec rest
+  in look_rec
+  
+let err e message = failwith (message ^ (Printexc.to_string e))
+  
+let unique_kridantas =
+  try (Gen.gobble Data.public_unique_kridantas_file : deco_krid)
+  with
+  | e ->
+      (prerr_endline
+         ("[unique_kridantas] EXCEPTION: " ^ (Printexc.to_string e));
+       Printexc.print_backtrace stderr;
+       exit 1)
+and lexical_kridantas =
+  try (Gen.gobble Data.public_lexical_kridantas_file : deco_krid)
+  with | e -> failwith ("lexical_kridantas :" ^ (Printexc.to_string e))
+  
 (* This mechanism is used by [Make_roots] at morphology generation time,
    and by [Morpho.print_inv_morpho] and [Morpho_ext.print_inv_morpho_ext]
    at segmenting time. *)
-
 (* Here we retrieve finer discrimination for verbs forms preceded by preverbs.
    This is experimental, and incurs too many conversions between strings
    and words, suggesting a restructuring of preverbs representation. *)
-value preverbs_structure = (* Used in Morpho for display of pvs *) 
-  try (Gen.gobble Data.public_preverbs_file : Deco.deco Word.word) 
-  with [ _ -> failwith "preverbs_structure" ]
-;
+let preverbs_structure = (* Used in Morpho for display of pvs *)
+  try (Gen.gobble Data.public_preverbs_file : Word.word Deco.deco)
+  with | _ -> failwith "preverbs_structure"
+  
 
-
-(*i end; i*)

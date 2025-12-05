@@ -1,0 +1,5 @@
+(executable
+ (modules_without_implementation auto automata_vector conj_infos morphology skt_morph)
+ (public_name interface)
+ (name interface)
+ )

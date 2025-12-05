@@ -6,45 +6,34 @@
 (*                                                                        *)
 (* ©2020 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
-
 (****************************************************************)
 (* Beware - remove foo.mli and make depend before debugging foo *)
-(* Better yet - remove *.mli (saving them) to get transparency. *) 
+(* Better yet - remove *.mli (saving them) to get transparency. *)
 (****************************************************************)
-
 (* debugging context building - to adapt according to needs *)
 (* call with "make debug" to get interactive Ocaml loop and text *)
-
-#load "../ZEN/Ml/list2.cmo"; 
-#load "../ZEN/Ml/gen.cmo";
-open Gen;
-#load "../ZEN/Ml/word.cmo"; open Word;
-#load "../ZEN/Ml/share.cmo";    
-#load "../ZEN/Ml/trie.cmo";    
-#load "../ZEN/Ml/deco.cmo"; open Deco;   
-#load "../ZEN/Ml/lexmap.cmo"; open Lexmap;   
-#load "../ZEN/Ml/zen_lexer.cmo";  
-
-#load "paths.cmo"; 
-#load "version.cmo";
-open Version;
-#load "date.cmo"; 
+open Gen
+  
+open Word
+  
+open Deco
+  
+open Lexmap
+  
+open Version
+  
 (* #load "html.cmo"; *)
 (* #load "web.cmo";
 open Web;
 #load "cgi.cmo"; *)
-#load "canon.cmo";
-open Canon;
-#load "phonetics.cmo";
-open Phonetics;   
-
-open List;
-
-#load "data.cmo";
-
+open Canon
+  
+open Phonetics
+  
+open List
+  
 (* #load "automaton.cmo";  *)
 (* open Automaton; *)
-
 (* 
 #load "min_lexer.cmo"; 
 #load "transduction.cmo"; 
@@ -189,7 +178,12 @@ parse "[S [INJ haa ] [ADV katham ] [NP1s [NP6 vi.s.no.h ]
 *)
 *)
 (* value const_debug = True; *)
-value const_debug = False;
-value decode word = List2.implode (List.map char_of_int word);
-value _debug x = if const_debug then print_endline ("\nDEBUG: " ^ x) else ();
-value debug x = if const_debug then _debug (decode x) else ();
+let const_debug = false
+  
+let decode word = List2.implode (List.map char_of_int word)
+  
+let _debug x = if const_debug then print_endline ("\nDEBUG: " ^ x) else ()
+  
+let debug x = if const_debug then _debug (decode x) else ()
+  
+

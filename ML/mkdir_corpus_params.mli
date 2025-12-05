@@ -6,10 +6,10 @@
 (*                                                                        *)
 (* ©2017 Institut National de Recherche en Informatique et en Automatique *)
 (**************************************************************************)
+val dirname : string
+  
+val parent_dir : string
+  
+val permission : string
+  
 
-value dirname : string
-;
-value parent_dir : string
-;
-value permission : string
-;

@@ -24,7 +24,7 @@ $processed | set-content -encoding utf8 output.txt
 # Set QUERY_STRING and run interface
 $env:QUERY_STRING = "t=VH&text=$processed"
 # $interfaceOutput = (& ML\interface.exe)
-$interfaceOutput = (& .\_build\default\interface0.exe)
+$interfaceOutput = (& .\_build\install\default\bin\interface.exe)
 # echo $interfaceOutput; exit 1
 
 # Read style files

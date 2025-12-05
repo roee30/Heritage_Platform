@@ -121,7 +121,7 @@ let add_sentence_form dir permission gap =
                  (Web_corpus.string_of_permission permission))
                 ^
                 ((int_input Params.sentence_no ~step: 1 ~min: gap.start
-                    ~max: gap.stop ~val: gap.start ~id: Params.sentence_no)
+                    ~max: gap.stop ~value: gap.start ~id: Params.sentence_no)
                    ^ (" " ^ ((submit_input "Add") ^ cgi_end)))))))
   
 let htmlify_group dir permission (group, gap) =

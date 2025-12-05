@@ -41,7 +41,7 @@ let pr_font_vis font word = (* visarga correction *)
   
 let prlist_font font =
   let pr = pr_font_vis font
-  and bar () = html_green " | "
+  and bar () = (html_green " | ") |> ps
   in List2.process_list_sep pr bar
   
 let display_subtitle title =

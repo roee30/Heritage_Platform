@@ -287,81 +287,10 @@ let check_tags current_sol_string tagging =
   let pos = (String.length current_sol_string) - 1 in
   let oc = parse_phase (String.sub current_sol_string 0 pos) in oc = tagging
   
-(* OBS Used to be in Lexer - to be adapted 
-value return_tagging output projs = 
-  let get_tags phase rword projs = (* adapted from [print_proj] *)
-     let form = mirror rword in  
-     match tags_of phase form with
-     [ Atomic polytag -> match projs with 
-           [ [] -> failwith "Projection missing"
-           | [ (n,m) :: rest ] -> 
-              let gen = generative phase in
-              let (delta,tags) = project n polytag in
-              let tagging = [ project m tags ] in 
-              let entry = get_morph gen phase form (delta,tagging) in
-              (rest, lex_cat phase, entry)
-           ]
-     | _ -> failwith "Not implemented yet" (*i TODO for Regression 
-         [ (projs, lex_cat Pv, (form, lex_cat Pv, Preverbs_list prevs, []))] i*)
-     ] in 
-  let rec taggings accu projs = fun
-     [ [] -> match projs with 
-             [ [] -> accu
-             | _ -> failwith "Too many projections"
-             ]
-     | [ (phase,rword,_) :: rest ] -> (* sandhi ignored *)
-          let (new_projs,phase,tags) = get_tags phase rword projs in
-          taggings [ tags :: accu ] new_projs rest 
-     ] in 
-  return_morph (List.rev (taggings [] projs output))
-;
-value record_tagging unsandhied mode_sent mode_trans all sentence output proj = 
-  let report = output_string Control.out_chan.val in
-  let print_proj1 phase rword proj prevs = do 
-  (* adapted from [print_proj] *)
-  { report "${"
-  ; let form = mirror rword in do 
-    { report (decode form)
-    ; let res = match proj with 
-           [ [] -> failwith "Projection missing"
-           | [ (n,m) :: rest ] -> 
-              let gen = generative phase in
-              let polytag = extract_lemma phase form in
-              let (delta,tags) = project n polytag in 
-              let tagging = [ project m tags ] in do 
-                { report ":"
-                ; report (string_of_phase phase ^ "")
-                ; Morpho_out.report_morph gen form (delta,tagging) 
-                ; (rest,[]) (* returns the rest of projections stream *)
-                }
-           ] in 
-      do { report "}$&"; res }
-    }
-  } in do
-  { report (if Control.full.val then "[{C}] " else "[{S}] ")
-  ; report (if unsandhied then "<{F}> " else "<{T}> ")
-  ; report (if mode_sent then "|{Sent}| " else "|{Word}| ")
-  ; report ("#{" ^ mode_trans ^ "}# ")
-  ; report ("({" ^ sentence ^ "})")
-  ; report (" [" ^ (string_of_int all) ^ "] ")
-  ; let rec pp (proj,prevs) = fun
-    [ [] -> match proj with 
-            [ [] -> () (* finished, projections exhausted *)
-            | _ -> failwith "Too many projections"
-            ]
-    | [ (phase,rword,_) :: rest ] -> (* sandhi ignored *)
-        let proj_prevs = print_proj1 phase rword proj prevs in
-        pp proj_prevs rest 
-    ] in pp (proj,[]) output
-  ; report "\n"
-  ; close_out Report_chan.chan.val
-  }
-;
-OBS *)
 let look_up_tags solution output tagging sol =
   let proj = List.fold_left extract "" sol in
   let p = parse_proj proj in
-  let current_sol_string = Lex.return_tagging (List.rev output) (List.rev p)
+  let current_sol_string = "" (* Lex.return_tagging (List.rev output) (List.rev p) *)
   in if check_tags current_sol_string tagging then Some solution else None
   
 let search_bucket solution output tagging (p, b_p) =
@@ -483,8 +412,8 @@ let pdiff sol modec modes mode_sent mode_trans sentence psol tagging cho chd
   
 let regression s cho chd =
   let (mc, ms, mst, mt, sc, solc, oc) = parse_solution s in
-  let _ = complete := mc = "C" and _ = iterate := mst = "Sent"
-  and us = ms = "F" in
+  (* let _ = complete := mc = "C" and _ = iterate := mst = "Sent" *)
+  let us = ms = "F" in
   let solr = verify_sentence true us topic sc (switch_code mt) oc
   in pdiff solr mc ms mst mt sc solc oc cho chd
   
@@ -496,6 +425,7 @@ let get_metadata input_info =
       (version ^
          ("}] <{" ^ (filename ^ ("}> ({" ^ (Version.version_date ^ "})")))))
   
+(* Disabled: uses undefined Web.var_dir
 let main_loop ic =
   let use_metadata = input_line ic and input_info = input_line ic
   and version = Date.version_id and date = Date.date_iso in
@@ -525,9 +455,12 @@ let main_loop ic =
          let s = input_line ic in (regression s cho chd; read_from_ic ic)
        in read_from_ic ic
      with | End_of_file -> (close_out cho; close_out chd))
+*)
   
 (* Now regression reads on stdin - no need of unsafe file opening *)
+(* Disabled: depends on main_loop
 let _ =
   try main_loop stdin with | Sys_error m -> print_string ("Sys_error " ^ m)
+*)
   
 

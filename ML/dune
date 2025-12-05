@@ -19,6 +19,7 @@
            save_corpus_params scl_parser SCLpaths segmenter skt_lexer
            test_stamp transduction user_aid verbs version web web_corpus
            auto automata_vector conj_infos morphology skt_morph)
+ (wrapped false)
  )
 
 (executable

@@ -1,7 +1,31 @@
-(executable
+(library
  (modules_without_implementation auto automata_vector conj_infos morphology skt_morph)
+ (flags (:standard -w -3-8-9-26-27-32-33-34-35-39-60-67))
+ (public_name Heritage_Platform.Lib)
+ (name Heritage_Platform_Lib)
+ (libraries Heritage_Platform.Zen str unix uutf)
+; (libraries camlp4 camlp4.lib camlp4.extend camlp4.quotations uutf str unix)
+ (modules automata automaton bank_lexer canon cgi chapters checkpoints chunker
+           conjugation constraints control corpus corpus_manager corpus_manager_cgi
+           css data date debug declension dir dispatcher encode graph_segmenter
+           html index indexer indexerd inflected int_sandhi interface_preprocessed
+           lemmatizer lexer load_morphs load_transducers make_automaton
+           make_preverb_automaton make_transducers make_xml_data min_lexer mk_corpus
+           mk_corpus_page mk_grammar_page mk_index_page mk_reader_page mk_sandhi_page
+           mkdir_corpus_cgi mkdir_corpus_params morpho morpho_html morpho_scl
+           morpho_string multilingual naming nouns order pada params paraphrase
+           parser parts paths phases phonetics rank reader regression reset_caches
+           restore_caches sandhi sandhi_test sandhier sanskrit save_corpus_cgi
+           save_corpus_params scl_parser SCLpaths segmenter skt_lexer
+           test_stamp transduction user_aid verbs version web web_corpus
+           auto automata_vector conj_infos morphology skt_morph)
+ )
+
+(executable
  (flags (:standard -w -3-8-9-26-27-32-33-34-35-39-60-67))
  (public_name interface)
  (name interface)
-(libraries zen_ml camlp4 camlp4.lib camlp4.extend camlp4.quotations uutf str unix)
+; (libraries camlp4 camlp4.lib camlp4.extend camlp4.quotations uutf str unix Heritage_Platform_Lib)
+(libraries Heritage_Platform_Lib Heritage_Platform.Zen)
+(modules interface)
  )

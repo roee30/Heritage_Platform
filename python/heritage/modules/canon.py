@@ -190,6 +190,46 @@ CANON_SLP1 = {
 }
 
 
+def iast_to_vh(text: str) -> str:
+    """Convert IAST (International Alphabet of Sanskrit Transliteration) to VH (Velthuis-Harvard).
+    
+    Args:
+        text: Text in IAST format
+        
+    Returns:
+        Text in VH format
+    """
+    # Mapping from IAST diacriticals to VH equivalents
+    iast_to_vh_map = {
+        'ā': 'aa',    # U+0101 - long a
+        'ī': 'ii',    # U+012B - long i
+        'ū': 'uu',    # U+016B - long u
+        'ṛ': '.r',    # U+1E5B - vocalic r
+        'ḷ': '.l',    # U+1E37 - vocalic l
+        'ñ': '~n',    # U+00F1 - tilde n
+        'ṭ': '.t',    # U+1E6D - dot below t
+        'ḍ': '.d',    # U+1E0D - dot below d
+        'ṇ': '.n',    # U+1E47 - dot below n
+        'ś': 'z',     # U+015B - acute s (palatal sibilant)
+        'ṣ': '.s',    # U+1E63 - dot below s (retroflex sibilant)
+        'ḥ': '.h',    # U+1E25 - dot below h (visarga marker)
+        'ṁ': '.m',    # U+1E41 - dot above m (anusvara)
+    }
+    
+    result = []
+    i = 0
+    while i < len(text):
+        char = text[i]
+        if char in iast_to_vh_map:
+            result.append(iast_to_vh_map[char])
+            i += 1
+        else:
+            result.append(char)
+            i += 1
+    
+    return ''.join(result)
+
+
 def is_vowel(code: int) -> bool:
     """Check if code represents a vowel (including diphthongs)."""
     return 1 <= code <= 13 or code == 50  # hiatus counts as vowel-like
@@ -205,6 +245,29 @@ def decode(word: Word, scheme: str = "VH") -> str:
     Returns:
         Transliterated string with hiatus handling
     """
+    # Mapping from Unicode IAST characters to VH transliteration
+    UTF8_TO_VH = {
+        'ā': 'aa',    # U+0101 - long a
+        'ī': 'ii',    # U+012B - long i
+        'ū': 'uu',    # U+016B - long u
+        'ṛ': '.r',    # U+1E5B - vocalic r
+        'ḷ': '.l',    # U+1E37 - vocalic l
+        'ñ': '~n',    # U+00F1 - tilde n
+        'ṭ': '.t',    # U+1E6D - dot below t
+        'ḍ': '.d',    # U+1E0D - dot below d
+        'ṇ': '.n',    # U+1E47 - dot below n
+        'ś': 'z',     # U+015B - acute s (palatal sibilant)
+        'ṣ': '.s',    # U+1E63 - dot below s (retroflex sibilant)
+        'ḥ': '.h',    # U+1E25 - dot below h (visarga marker)
+        'ṁ': '.m',    # U+1E41 - dot above m (anusvara)
+        'ṃ': '.m',    # U+1E43 - dot below m (anusvara variant)
+        'ė': 'e',     # variants
+        'ơ': 'o',
+    }
+    
+    # VH tokens that represent vowels
+    VH_VOWELS = {'a', 'aa', 'i', 'ii', 'u', 'uu', 'e', 'ai', 'o', 'au', '.r', '.l'}
+    
     schemes = {
         "VH": CANON_VH,
         "WX": CANON_WX,
@@ -220,11 +283,29 @@ def decode(word: Word, scheme: str = "VH") -> str:
         elem_int = int(elem) if not isinstance(elem, int) else elem
 
         if elem_int not in canon_map:
-            # Unknown character - render as #<ascii>
-            if -60 < elem_int < 0:
+            # Unknown character - handle special cases
+            if elem_int < 0:
+                # Negative codes encode UTF-8 characters by their Unicode code point
+                try:
+                    utf8_char = chr(-elem_int)
+                    # Convert UTF-8 IAST to VH if available
+                    if utf8_char in UTF8_TO_VH:
+                        vh_text = UTF8_TO_VH[utf8_char]
+                        result.append(vh_text)
+                        prev_is_vowel = vh_text in VH_VOWELS
+                    else:
+                        result.append(utf8_char)
+                        prev_is_vowel = False
+                except (ValueError, OverflowError):
+                    # Fallback for out-of-range codes
+                    result.append(f"#{elem_int}")
+                    prev_is_vowel = False
+            elif -60 < elem_int < 0:
                 result.append(f"#{chr(elem_int + 48)}")
+                prev_is_vowel = False
             else:
                 result.append(f"#{elem_int}")
+                prev_is_vowel = False
         else:
             text = canon_map[elem_int]
             # Add hiatus marker if current is vowel and previous was vowel
@@ -346,13 +427,16 @@ def unidevcode(word_list: List) -> str:
         ".n": "ण",
         "z": "श",
         ".s": "ष",
+        "~~": "ः",  # anusvara
     }
 
     # Helper to get VH token sequence from codes
     def codes_to_tokens(codes: List[int]) -> List[str]:
         tokens: List[str] = []
         for c in codes:
-            tokens.append(CANON_VH.get(c, f"#{c}"))
+            if c in CANON_VH:
+                tokens.append(CANON_VH[c])
+            # Skip unknown codes instead of including them as error markers
         return tokens
 
     def render_tokens(tokens: List[str]) -> str:
@@ -371,19 +455,32 @@ def unidevcode(word_list: List) -> str:
                     out.append(pending_consonant + VOWEL_MATRA.get(tok, ""))
                     pending_consonant = None
             elif tok in CONSONANT:
-                # If a consonant is pending with no explicit vowel, keep it (inherent 'a')
-                if pending_consonant is not None:
-                    out.append(pending_consonant)
-                pending_consonant = CONSONANT[tok]
+                # Special case: anusvara doesn't accumulate as pending
+                if tok == "~~":
+                    if pending_consonant is not None:
+                        out.append(pending_consonant)
+                        pending_consonant = None
+                    out.append(CONSONANT[tok])
+                else:
+                    # If a consonant is pending with no explicit vowel, keep it (inherent 'a')
+                    if pending_consonant is not None:
+                        out.append(pending_consonant)
+                    pending_consonant = CONSONANT[tok]
             else:
-                # Unknown token: append raw transliteration
+                # Unknown token: keep pending consonant if any, then append token as-is
                 if pending_consonant is not None:
-                    out.append(pending_consonant)
+                    out.append(pending_consonant + "a")  # Add inherent 'a' to pending consonant
                     pending_consonant = None
-                out.append(tok)
+                # For unknown tokens, try to find them in CONSONANT as fallback
+                # or append as raw string
+                if tok in CONSONANT:
+                    pending_consonant = CONSONANT[tok]
+                else:
+                    out.append(tok)
 
         if pending_consonant is not None:
-            out.append(pending_consonant)
+            # Append final pending consonant with virama (्) to suppress inherent vowel
+            out.append(pending_consonant + "्")
 
         return "".join(out)
 
@@ -396,67 +493,36 @@ def unidevcode(word_list: List) -> str:
             tokens = codes_to_tokens(word_list)
             return render_tokens(tokens)
         else:
-            # When given a list of words (e.g., raw_chunks), perform a
-            # sandhi-aware canonical merge on their VH transliterations.
-            # Strategy:
-            # 1. Decode each word into VH string (using `decode`).
-            # 2. Iteratively merge adjacent VH words by applying
-            #    `apply_all_sandhi_rules` and preferring the shortest
-            #    candidate (which typically represents vowel coalescence).
-            # 3. If no sandhi candidate shortens the form, fall back to the
-            #    consonant-leading-'a' suppression heuristic used previously.
-
-            # Build VH strings for each word
-            vh_words: List[str] = []
+            # When given a list of words, render each word separately with spaces
+            # This preserves word boundaries
+            rendered_words = []
             for w in word_list:
-                codes = w.elements if isinstance(w, Word) else w
-                vh_words.append(decode(Word(codes), "VH"))
-
-            # Iteratively merge using sandhi rules
-            merged = vh_words[0]
-            for next_word in vh_words[1:]:
-                candidates = apply_all_sandhi_rules(merged, next_word)
-                concat = merged + next_word
-                # Prefer candidates that are strictly shorter than concat
-                shorter = [c for c in candidates if len(c) < len(concat)]
-                if shorter:
-                    # Choose the shortest candidate (deterministic)
-                    chosen = sorted(shorter, key=len)[0]
+                # Render each word's VH to Devanagari
+                if isinstance(w, Word):
+                    vh_text = decode(w, "VH")
                 else:
-                    # Fallback: if previous ends with consonant and next starts
-                    # with 'a', drop leading 'a' from next_word.
-                    if (
-                        merged
-                        and next_word
-                        and next_word[0] == "a"
-                        and merged[-1] in CONSONANT
-                    ):
-                        chosen = merged + next_word[1:]
-                    else:
-                        chosen = concat
-                merged = chosen
-
-            # Helper to encode a VH string back into numeric codes (greedy)
-            REVERSE_VH = {v: k for k, v in CANON_VH.items()}
-            TOKENS = sorted(REVERSE_VH.keys(), key=lambda s: -len(s))
-
-            def encode_string_to_codes(s: str) -> List[int]:
+                    vh_text = decode(Word(w), "VH")
+                
+                # Parse VH text into tokens
+                REVERSE_VH = {v: k for k, v in CANON_VH.items()}
+                TOKENS = sorted(REVERSE_VH.keys(), key=lambda s: -len(s))
+                
                 i = 0
-                codes: List[int] = []
-                while i < len(s):
+                word_tokens: List[str] = []
+                while i < len(vh_text):
                     matched = False
                     for tok in TOKENS:
-                        if s.startswith(tok, i):
-                            codes.append(REVERSE_VH[tok])
+                        if vh_text.startswith(tok, i):
+                            word_tokens.append(tok)
                             i += len(tok)
                             matched = True
                             break
                     if not matched:
-                        codes.append(-ord(s[i]))
+                        word_tokens.append(vh_text[i])
                         i += 1
-                return codes
-
-            merged_codes = encode_string_to_codes(merged)
-            merged_tokens = codes_to_tokens(merged_codes)
-            return render_tokens(merged_tokens)
+                
+                # Render tokens to Devanagari
+                rendered_words.append(render_tokens(word_tokens))
+            
+            return " ".join(rendered_words)
     return ""

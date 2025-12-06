@@ -2,6 +2,8 @@
 
 Translated from interface.ml. This is the main entry point that processes CGI requests
 for Sanskrit text segmentation and morphological analysis.
+
+Integrates with the full OCaml morphological engine when available.
 """
 from __future__ import annotations
 
@@ -12,11 +14,18 @@ import urllib.parse
 
 from .word import Word
 from .config import Config, Params
-from .canon import uniromcode, unidevcode
+from .canon import uniromcode, unidevcode, iast_to_vh
 from .phases import Phase
 from .stubs import (
     Morphology, Dispatcher, Segmenter, Graph, Html, Web, Cgi, Encode, Sanskrit, Checkpoints, MaybeEnv, _DEFAULT_LEXICON
 )
+
+# Try to import the OCaml bridge for full morphological analysis
+try:
+    from .ocaml_bridge import get_morphology_bridge, segment_with_ocaml
+    OCAML_BRIDGE_AVAILABLE = True
+except (ImportError, FileNotFoundError):
+    OCAML_BRIDGE_AVAILABLE = False
 
 
 
@@ -241,6 +250,74 @@ class Interface:
                       checkpoints: List, input_text: str,
                       undo_enabled: bool = False) -> None:
         """Main segmentation procedure.
+        
+        Attempts to use the full OCaml morphological engine if available,
+        falls back to Python stubs otherwise.
+        
+        Args:
+            translit: Transliteration scheme (VH, WX, SLP1)
+            uns: Whether to process without sandhi splitting
+            text: Text parameters for CGI
+            checkpoints: Current checkpoint selections
+            input_text: The Sanskrit text to process
+            undo_enabled: Whether undo button is enabled
+        """
+        try:
+            # Try to use OCaml bridge for full morphological analysis
+            if OCAML_BRIDGE_AVAILABLE and not uns:
+                return self._check_sentence_ocaml(translit, text, checkpoints, input_text)
+            
+            # Fall back to Python implementation
+            return self._check_sentence_python(translit, uns, text, checkpoints, input_text, undo_enabled)
+        
+        except Exception as e:
+            raise
+            self.pl(f"<p><b>Error:</b> {Html.escape(str(e))}</p>")
+    
+    def _check_sentence_ocaml(self, translit: str, text: str,
+                             checkpoints: List, input_text: str) -> None:
+        """Segmentation using the full OCaml morphological engine.
+        
+        Args:
+            translit: Transliteration scheme
+            text: Text parameters
+            checkpoints: Checkpoint selections
+            input_text: Sanskrit text to process (IAST format)
+        """
+        try:
+            # Convert IAST to VH for OCaml interface
+            vh_text = iast_to_vh(input_text)
+            
+            encode = Encode.switch_code(translit)
+            raw_chunks = Sanskrit.read_raw_sanskrit(encode, input_text)
+            deva_input = unidevcode(raw_chunks) if raw_chunks else ""
+            
+            # Call OCaml interface with VH encoded text
+            bridge = get_morphology_bridge()
+            if bridge is None:
+                # Fall back to Python if bridge unavailable
+                return self._check_sentence_python(translit, False, text, checkpoints, input_text, False)
+            
+            html_output = bridge.bridge.call_interface_cgi(vh_text, 'VH')
+            
+            # Print results
+            self.pl(Html.h3_section("Sanskrit Text Analysis (OCaml Engine)"))
+            self.pl(f"<p>Input: {Html.escape(input_text)}</p>")
+            self.pl(f"<p>VH: {Html.escape(vh_text)}</p>")
+            self.pl(f"<p>Devanagari: {deva_input}</p>")
+            
+            # Embed the OCaml output directly
+            self.pl(html_output)
+            
+        except Exception as e:
+            # Fall back to Python implementation
+            self.pl(f"<p>Note: OCaml engine unavailable, using Python implementation: {Html.escape(str(e))}</p>")
+            self._check_sentence_python(translit, False, text, checkpoints, input_text, False)
+    
+    def _check_sentence_python(self, translit: str, uns: bool, text: str,
+                              checkpoints: List, input_text: str,
+                              undo_enabled: bool = False) -> None:
+        """Python implementation of segmentation (fallback).
         
         Args:
             translit: Transliteration scheme (VH, WX, SLP1)

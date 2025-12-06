@@ -17,7 +17,6 @@ from typing import List, Dict, Tuple, Set, Optional
 from dataclasses import dataclass
 from .transducers import Transducers, Node
 from .word import Word
-from .canon import to_code
 
 
 @dataclass
@@ -43,7 +42,7 @@ class TransducerMatcher:
     
     def match(self, codes: List[int]) -> List[Tuple[List[int], List[int]]]:
         """Match codes through transducer, returning [(input, output), ...]."""
-        results = []
+        results: List[Tuple[List[int], List[int]]] = []
         self._traverse(self.root_node, codes, 0, [], [])
         return results
     
@@ -96,19 +95,51 @@ class TransducerSegmenter:
         self.matchers = {name: TransducerMatcher(transducers, name) 
                         for name in transducers.roots.keys()}
     
-    def segment(self, text: str) -> List[Segmentation]:
-        """Segment text using transducers.
+    def segment(self, codes: List[int]) -> List[Segmentation]:
+        """Segment codes using transducers.
         
-        Returns list of complete segmentations from start to end of text.
+        Returns list of complete segmentations from start to end of codes.
         """
-        # Convert text to codes
-        codes = to_code(text)
-        
         # Find all segmentations
-        segmentations = []
+        segmentations: List[Segmentation] = []
         self._find_segmentations(codes, 0, [], segmentations)
         
         return segmentations
+    
+    def segment_greedy(self, text: str) -> Tuple[List[str], bool]:
+        """Segment text greedily using lexicon lookup.
+        
+        This is a simple greedy approach: match longest words first from left to right.
+        Works with words from the lexicon.
+        
+        Args:
+            text: Text to segment
+            
+        Returns:
+            (words_list, complete) where complete=True if entire text was covered
+        """
+        words = []
+        offset = 0
+        text_len = len(text)
+        
+        while offset < text_len:
+            found = False
+            # Try longest matches first
+            for length in range(text_len - offset, 0, -1):
+                substring = text[offset:offset+length]
+                if substring in self.lexicon:
+                    words.append(substring)
+                    offset += length
+                    found = True
+                    break
+            
+            if not found:
+                # No match found - skip this character
+                words.append(f"[?:{text[offset]}]")
+                offset += 1
+        
+        complete = (offset == text_len)
+        return words, complete
     
     def _find_segmentations(self, codes: List[int], offset: int,
                            path: List[Tuple[int, str]], results: List[Segmentation]) -> None:
@@ -164,22 +195,27 @@ class TransducerSegmenter:
     def get_possible_targets(self, word: str) -> Dict[str, bool]:
         """Get which transducers can process this word.
         
+        Requires word to be in lexicon (or provide codes directly).
+        
         Returns dict: transducer_name -> can_accept
         """
-        codes = to_code(word)
+        if word not in self.lexicon:
+            return {}
+        
+        word_codes = self.lexicon[word]
         results = {}
         for name, root_id in self.transducers.roots.items():
-            can_process = self.traverse_automaton(codes, root_id)
+            can_process = self.traverse_automaton(word_codes, root_id)
             results[name] = can_process
         return results
 
 
-def segment_with_transducers(text: str, transducers: Transducers, 
+def segment_with_transducers(codes: List[int], transducers: Transducers, 
                             lexicon: Dict[str, List[int]]) -> List[Segmentation]:
-    """Convenience function for segmentation.
+    """Convenience function for segmentation with codes.
     
     Args:
-        text: Sanskrit text to segment
+        codes: Code sequence to segment (use Word or canon module to convert)
         transducers: Loaded Transducers object
         lexicon: Dict mapping words -> code lists
     
@@ -187,4 +223,4 @@ def segment_with_transducers(text: str, transducers: Transducers,
         List of Segmentation objects
     """
     segmenter = TransducerSegmenter(transducers, lexicon)
-    return segmenter.segment(text)
+    return segmenter.segment(codes)

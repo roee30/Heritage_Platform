@@ -1,0 +1,7 @@
+(executable
+ ; (modules_without_implementation auto automata_vector conj_infos morphology skt_morph)
+ (flags (:standard -w -3-8-9-26-27-32-33-34-35-39-60-67))
+ (public_name dump)
+ (name dump_transducers)
+(libraries Heritage_Platform.Zen Heritage_Platform.Lib camlp4 camlp4.lib camlp4.extend camlp4.quotations uutf str unix)
+ )

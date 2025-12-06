@@ -3,7 +3,7 @@
  (flags (:standard -w -3-8-9-26-27-32-33-34-35-39-60-67))
  (public_name Heritage_Platform.Lib)
  (name Heritage_Platform_Lib)
- (libraries Heritage_Platform.Zen str unix uutf)
+ (libraries Heritage_Platform.Zen str unix uutf msgpack)
 ; (libraries camlp4 camlp4.lib camlp4.extend camlp4.quotations uutf str unix)
  (modules automata automaton bank_lexer canon cgi chapters checkpoints chunker
            conjugation constraints control corpus corpus_manager corpus_manager_cgi

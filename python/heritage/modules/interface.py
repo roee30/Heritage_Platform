@@ -8,6 +8,7 @@ Integrates with the full OCaml morphological engine when available.
 from __future__ import annotations
 
 import os
+from pathlib import Path
 from typing import Dict, List, Optional, Any
 from io import StringIO
 import urllib.parse
@@ -27,6 +28,7 @@ try:
 except (ImportError, FileNotFoundError):
     OCAML_BRIDGE_AVAILABLE = False
 
+ROOT = Path(__file__).parents[3]
 
 
 class Interface:
@@ -82,14 +84,8 @@ class Interface:
     <meta charset="UTF-8">
     <title>{title}</title>
     <style>
-        body {{ font-family: Arial, sans-serif; }}
-        table {{ border-collapse: collapse; }}
-        td {{ border: 1px solid #ccc; padding: 5px; }}
-        .tooltip {{ position: relative; display: inline-block; }}
-        .tooltiptext {{ visibility: hidden; background-color: #555; color: #fff; 
-                       text-align: center; padding: 5px; border-radius: 6px; 
-                       position: absolute; z-index: 1; }}
-        .tooltip:hover .tooltiptext {{ visibility: visible; }}
+        {(ROOT / 'style.css').read_text()}
+        {(ROOT / 'tooltip.css').read_text()}
     </style>
 </head>
 <body>
@@ -301,10 +297,10 @@ class Interface:
             html_output = bridge.bridge.call_interface_cgi(vh_text, 'VH')
             
             # Print results
-            self.pl(Html.h3_section("Sanskrit Text Analysis (OCaml Engine)"))
-            self.pl(f"<p>Input: {Html.escape(input_text)}</p>")
-            self.pl(f"<p>VH: {Html.escape(vh_text)}</p>")
-            self.pl(f"<p>Devanagari: {deva_input}</p>")
+            # self.pl(Html.h3_section("Sanskrit Text Analysis (OCaml Engine)"))
+            # self.pl(f"<p>Input: {Html.escape(input_text)}</p>")
+            # self.pl(f"<p>VH: {Html.escape(vh_text)}</p>")
+            self.pl(f"<p>{deva_input}</p>")
             
             # Embed the OCaml output directly
             self.pl(html_output)
@@ -420,11 +416,12 @@ class Interface:
         checkpoints = Checkpoints.parse_points(params['cpts'])
         
         # Generate page
-        self.pl(self.http_header())
-        self.pl(self.page_begin("Sanskrit Heritage Platform - Interface"))
+        # self.pl(self.http_header())
+        self.pl(self.page_begin(""))
+        # self.pl(self.page_begin("Sanskrit Heritage Platform - Interface"))
         
-        self.pl(Html.h3_section("Sanskrit Reader Interface"))
-        self.pl(f"<p>Processing: {Html.escape(input_text)}</p>")
+        # self.pl(Html.h3_section("Sanskrit Reader Interface"))
+        # self.pl(f"<p>Processing: {Html.escape(input_text)}</p>")
         
         # Main processing
         self.check_sentence(translit, uns, text, checkpoints, input_text, False)

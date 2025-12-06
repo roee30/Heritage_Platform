@@ -35,7 +35,6 @@ def main():
     """Main entry point."""
     # Get environment (either from command line or CGI)
     p=Path(__file__).parents[1]
-    os.system('chcp 65001')
     os.chdir(p)
     if len(sys.argv) > 1:
         # Command line invocation (e.g., from GoldenDict)

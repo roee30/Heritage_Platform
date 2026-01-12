@@ -1,5 +1,6 @@
 (lang dune 3.20)
 
+(map_workspace_root false)
 (name Heritage_Platform)
 
 (generate_opam_files true)

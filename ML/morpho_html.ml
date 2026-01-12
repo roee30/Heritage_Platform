@@ -88,15 +88,78 @@ let skt_utf (w : Word.word) = (* do not eta reduce ! *)
   match !sanskrit_font with
   | Deva -> Canon.unidevcode w
   | Roma -> Canon.uniromcode w
-  
+let apply_internal_sandhi s =
+  let len = String.length s in
+  let buf = Buffer.create len in
+
+  let rec loop i =
+    if i >= len then ()
+    (* ā + i → e *)
+    else if i + 3 < len
+         && s.[i] = 'a'
+         && s.[i+1] = 'a'
+         && s.[i+2] = '_'
+         && s.[i+3] = 'i'
+    then (
+      Buffer.add_char buf 'e';
+      loop (i + 4)
+    )
+    (* ā + u → o *)
+    else if i + 3 < len
+         && s.[i] = 'a'
+         && s.[i+1] = 'a'
+         && s.[i+2] = '_'
+         && s.[i+3] = 'u'
+    then (
+      Buffer.add_char buf 'o';
+      loop (i + 4)
+    )
+    else if i + 3 < len
+         && s.[i] = 'a'
+         && s.[i+1] = '_'
+         && s.[i+2] = 'i'
+         && s.[i+3] = 'i'
+    then (
+      Buffer.add_char buf 'e';
+      loop (i + 4)
+    )
+    (* a + i → e *)
+    else if i + 2 < len
+         && s.[i] = 'a'
+         && s.[i+1] = '_'
+         && s.[i+2] = 'i'
+    then (
+      Buffer.add_char buf 'e';
+      loop (i + 3)
+    )
+    (* a + u → o *)
+    else if i + 2 < len
+         && s.[i] = 'a'
+         && s.[i+1] = '_'
+         && s.[i+2] = 'u'
+    then (
+      Buffer.add_char buf 'o';
+      loop (i + 3)
+    )
+    else (
+      Buffer.add_char buf s.[i];
+      loop (i + 1)
+    )
+  in
+  loop 0;
+  Buffer.contents buf
+
 let skt_graph_anchor is_cache (form : string) =
   let url_function = if is_cache then url_cache else url
-  and encode = Encode.switch_code "VH"
-  in anchor_graph Navy_ form (skt_utf (encode form))
+  and encode = Encode.switch_code "VH" in
+  let desandhi = apply_internal_sandhi form in
+  let encoded = encode desandhi in
+  let as_roma = Canon.uniromcode encoded
+  in anchor_graph Navy_ as_roma (skt_utf encoded)
   
 let print_stem w = (skt_utf w) |> ps
 and (* w in lexicon or not *) print_chunk (w : Word.word) = (skt_utf w) |> ps
-and print_entry w = (skt_anchor false (Canon.decode w)) |> ps
+and print_entry w = (skt_anchor false (Canon.uniromcode w)) |> ps
 and (* w in lexicon *) print_cache w =
   (skt_anchor true (Canon.decode w)) |> ps
 and print_graph_entry w = (skt_graph_anchor false (Canon.decode w)) |> ps

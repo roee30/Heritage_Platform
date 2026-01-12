@@ -797,7 +797,7 @@ value invoke_SL text cpts corpus_id count sent_id link_num =
          | Exit -> (* Sanskrit *) abort lang "Wrong character in input" ""
          | Overflow -> abort lang "Maximum input size exceeded" ""
          | Invalid_argument s -> abort lang Control.fatal_err_mess s
-         | (* sub array *) Failure s -> abort lang Control.fatal_err_mess s
+         (*| (* sub array *) Failure s -> abort lang Control.fatal_err_mess s*)
          | (* anomaly *) End_of_file ->
              abort lang Control.fatal_err_mess "EOF"
          | (* EOF *) Not_found ->

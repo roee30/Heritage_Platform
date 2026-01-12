@@ -23,10 +23,11 @@
  )
 
 (executable
+  (modes exe byte)
  (flags (:standard -w -3-8-9-26-27-32-33-34-35-39-60-67))
  (public_name interface)
  (name interface)
 ; (libraries camlp4 camlp4.lib camlp4.extend camlp4.quotations uutf str unix Heritage_Platform_Lib)
-(libraries Heritage_Platform_Lib Heritage_Platform.Zen)
+(libraries Heritage_Platform_Lib Heritage_Platform.Zen camlp4 camlp4.lib)
 (modules interface)
  )

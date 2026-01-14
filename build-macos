@@ -1,0 +1,9 @@
+#!/bin/bash
+# https://github.com/dboris/opam-cross-macos
+
+opam switch create 4.14.2-macos 4.14.2
+eval $(opam env)
+opam repository add macos https://github.com/dboris/opam-cross-macos.git       # not git://
+uvx --from python-dotenv[cli] dotenv -f ./.env-mac run opam install conf-macos # intel macs
+opam install ocaml-macos dune uutf camlp4
+dune build
